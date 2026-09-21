@@ -1,0 +1,105 @@
+[
+  {
+    "id": "SURFACE_WAKE_GAMEPLAY_FILL_HC007A",
+    "build": "HC-021D",
+    "status": "runtime_active_systemic_play",
+    "sourceCellId": "CELL_MEMBRANE_NURSERY_001",
+    "blueprintRole": "Surface Wake",
+    "purpose": "Create continuous systemic play between awakening and the existing listening-fold completion trigger using movement, pulse, absorb, stabilize, environmental pressure, and small risk/reward choices.",
+    "flow": {
+      "baseVector": [
+        0.12,
+        0.02,
+        -0.18
+      ],
+      "swellDirection": [
+        0.72,
+        0.03,
+        -0.56
+      ],
+      "cycleSeconds": 6.2,
+      "swellSeconds": 2.4,
+      "basePressure": 0.24,
+      "swellPressure": 0.62,
+      "nearCurrentRange": 2.25,
+      "stabilizeDamping": 0.28,
+      "pulseAgitationSeconds": 2.2,
+      "pulseAgitationBonus": 0.32
+    },
+    "risk": {
+      "scarPlateId": "scar_contamination_plate_001",
+      "scarRange": 1.65,
+      "unsafePressureThreshold": 0.56,
+      "scarGainPerSecond": 0.0015
+    },
+    "worldRead": {
+      "signalThreadId": "signal_vapor_thread_001",
+      "currentRibbonId": "flux_current_ribbon_001",
+      "scarPlateId": "scar_contamination_plate_001",
+      "pulseReadRange": 3.3
+    },
+    "nutrientMotes": [
+      "surface_wake_membrane_mote_001",
+      "surface_wake_membrane_mote_002",
+      "surface_wake_membrane_mote_003"
+    ],
+    "moteIdentities": {
+      "surface_wake_membrane_mote_001": {
+        "role": "safe_filtered_nourishment",
+        "teaches": "compatible matter accepts the core",
+        "worldResponse": "tender_relaxed_and_opened_fronds"
+      },
+      "surface_wake_membrane_mote_002": {
+        "role": "current_carried_matter",
+        "teaches": "movement and nourishment share a rhythm",
+        "worldResponse": "current_bent_around_the_core"
+      },
+      "surface_wake_membrane_mote_003": {
+        "role": "scar_edge_risk_matter",
+        "teaches": "valuable matter can exist beside a wound",
+        "worldResponse": "watcher_warned_and_scar_boundary_hardened"
+      }
+    },
+    "triggerPolicy": {
+      "preserveExistingCompletionTrigger": true,
+      "safeSeedRemainsLockedUntilListeningFoldComplete": true,
+      "listeningFoldPulseRequiresLocalRange": true,
+      "systemicPlayDoesNotDirectlyCompleteSurfaceWake": true
+    },
+    "playerFacing": {
+      "guideLine": "The pocket is already moving. Learn what answers before you ask it to open.",
+      "objectiveLine": "Explore freely: X pulses, RT draws in compatible matter, LT braces against pressure.",
+      "nextAction": "Move through the nursery and follow whatever reacts; the deeper fold will answer when you reach it."
+    },
+    "interactionFamily": {
+      "familyId": "surface_nursery_matter_family",
+      "sequence": [
+        "teach_clean",
+        "repeat_read_change_commit",
+        "recognize_scar_contamination",
+        "vary_mixed_matter"
+      ],
+      "existingMatterSequence": [
+        "clean_nutrient_cluster",
+        "scar_touched_cluster",
+        "mixed_membrane_cluster"
+      ],
+      "newPrimaryMechanic": false,
+      "newRegion": false,
+      "objectiveAuthority": false
+    },
+    "mechanicalCombination": {
+      "id": "surface_carried_matter_combination",
+      "relationship": [
+        "current carries matter",
+        "Pulse reveals carried state",
+        "Stabilize changes unsafe carried state",
+        "Absorb commits resulting state or accepts risk"
+      ],
+      "designIntent": "reason about a relationship rather than match one verb to one object",
+      "newPrimaryMechanic": false,
+      "newRegion": false,
+      "objectiveAuthority": false
+    }
+  }
+]

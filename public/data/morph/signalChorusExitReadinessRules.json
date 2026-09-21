@@ -1,0 +1,35 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_EXIT_READINESS_001",
+    "sourceLoop": "SIGNAL_CHORUS_LOOP_001",
+    "sourceCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "nextMorphPlan": "MORPH_SIGNAL_CHORUS_TO_BLOOM_RESIDUE_FORK_001",
+    "readinessStages": [
+      {
+        "id": "not_ready",
+        "worldText": "The chorus hears you, but the bridge is still learning your rhythm."
+      },
+      {
+        "id": "nearly_ready",
+        "worldText": "The seed-signal bridge is warming. Growth and memory are beginning to separate into paths."
+      },
+      {
+        "id": "ready",
+        "worldText": "The chorus has tuned. A fork of bloom and residue is forming inside the host tissue."
+      },
+      {
+        "id": "triggerable",
+        "worldText": "Pulse the warmed bridge and let the next choice become matter."
+      }
+    ],
+    "futureRuntimeSignals": {
+      "listen": "from SignalChorusInteractionSystem choir_heard and pore_opened stages",
+      "answer": "from harmonic_wave_thread_001 response state",
+      "harmony": "from seed_signal_bridge_001 warmed/tuned state",
+      "forcedAbsorbRisk": "raised by trying to consume signal before listening",
+      "guideMode": "signal_interpreter_to_choice_witness"
+    },
+    "designWarning": "Do not make this an exit door. Readiness is a tissue state, not a portal.",
+    "alternateMorphPlan": "MORPH_SIGNAL_CHORUS_TO_SEED_BLOOM_LACUNA_001"
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "build": "HC-028R",
+  "parent": "HC-028Q",
+  "label": "Regional Ecology Distribution",
+  "populationModel": {
+    "instanceAware": true,
+    "recipeReuse": true,
+    "newOrganismRecipes": 0,
+    "existingSpeciesCount": 3,
+    "apertureEcologyMounted": false
+  },
+  "distribution": {
+    "CELL_VASCULAR_RHYTHM_ROUTE_001": [
+      "vascular_relay_001",
+      "vascular_relay_mid_001",
+      "vascular_relay_downstream_001"
+    ],
+    "CELL_GRAVE_MEMORY_RESIDUE_BED_001": [
+      "grave_memory_watcher_001"
+    ],
+    "CELL_SILT_PRESSURE_ROUTE_001": [
+      "silt_pressure_relay_001"
+    ],
+    "CELL_COMB_THRESHOLD_FILTER_001": [
+      "comb_filter_watcher_001",
+      "comb_filter_relay_001"
+    ],
+    "CELL_APERTURE_FIELDS_ARRIVAL_001": []
+  },
+  "authority": {
+    "entityMovementOwner": "EntitySystem",
+    "hostMatterOwner": "AmbientMaterialInteractionSystem",
+    "playerMovementAuthority": false,
+    "routeAuthority": false,
+    "progressionAuthority": false
+  },
+  "forbidden": {
+    "newOrganismType": false,
+    "newButton": false,
+    "combat": false,
+    "loot": false,
+    "affinityScore": false,
+    "routeGate": false,
+    "objectiveRequirement": false,
+    "newParticleField": false,
+    "saveStateEcology": false
+  }
+}

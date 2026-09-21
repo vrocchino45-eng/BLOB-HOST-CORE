@@ -1,0 +1,38 @@
+{
+  "id": "HC-027D1",
+  "version": "0.27.5",
+  "label": "Audio Reference Level / Dynamic Range Calibration",
+  "mode": "contained audio calibration / dynamic range ownership",
+  "parent": "HC-027D",
+  "buildRule": "Raise the usable procedural audio mix from the confirmed audible-but-faint HC027D reference so normal play is comfortable near 60-70% system output, while preserving spatial distance cues, HC027D sensory grammar, gameplay authority, and headroom for stronger future events.",
+  "sourceJsCount": 92,
+  "newSourceModules": 0,
+  "newRegions": 0,
+  "audioOwner": "EventAnchoredHostAudioSystem",
+  "referenceListeningCalibration": "primary_playtest_hearing",
+  "referenceSystemOutputPercent": "60-70",
+  "masterGain": 0.82,
+  "busGains": {
+    "core": 1.85,
+    "verbs": 2.15,
+    "world": 1.95,
+    "ambience": 1.35,
+    "event": 1.4
+  },
+  "pannerRefDistance": 4.2,
+  "pannerRolloff": 0.42,
+  "targetHeadroomDb": 8,
+  "safetyCompression": {
+    "thresholdDb": -4,
+    "kneeDb": 3,
+    "ratio": 8,
+    "attackSeconds": 0.003,
+    "releaseSeconds": 0.16
+  },
+  "gameplayAuthorityChanged": false,
+  "progressionChanged": false,
+  "movementOwnershipChanged": false,
+  "chemistryAuthorityChanged": false,
+  "engineGrammarChanged": false,
+  "sonarTimingChanged": false
+}

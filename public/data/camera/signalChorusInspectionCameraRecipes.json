@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_TIGHT_INSPECTION_CAMERA_HC006C",
+    "build": "HC-006C",
+    "status": "deprecated_compatibility_recipe",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "focusObjectId": "chorus_cadence_knot_001",
+    "purpose": "Provide a reversible close third-person inspection view that frames the player, cadence knot, and living tissue response together without changing interaction ownership or route state.",
+    "activation": {
+      "requiresLayeredInteractionActive": true,
+      "requiresActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "toggleRange": 4.4,
+      "autoExitRange": 5.8,
+      "controllerButtonIndex": 3,
+      "controllerButtonLabel": "Y",
+      "keyboardCode": "KeyF",
+      "keyboardLabel": "F",
+      "keyboardAliases": [
+        "KeyV"
+      ]
+    },
+    "framing": {
+      "distance": 3.35,
+      "fieldOfView": 46,
+      "targetBlendTowardFocus": 0.58,
+      "targetLift": 0.16,
+      "baseHeight": 0.48,
+      "pitch": 0.18,
+      "yawSensitivityScale": 0.62,
+      "pitchSensitivityScale": 0.58,
+      "occlusionPullbackScale": 0.12,
+      "followSmoothing": 8.4,
+      "fovSmoothing": 7.2
+    },
+    "behavior": {
+      "mode": "tight_third_person_inspection",
+      "optional": true,
+      "forced": false,
+      "firstPerson": false,
+      "preserveCameraRelativeMovement": true,
+      "preserveRightStickOrbit": true,
+      "r3RecentersInspection": true,
+      "instantReturnAvailable": true,
+      "autoExitOnCellChange": true,
+      "autoExitOutsideRange": true,
+      "routeActivated": false,
+      "targetRequired": false,
+      "interactionStateChanged": false
+    },
+    "copy": {
+      "available": "Tight inspection view available.",
+      "enter": "Press Y to enter tight inspection view.",
+      "exit": "Press Y to return to orbit view.",
+      "denied": "Move closer to the cadence knot before entering inspection view.",
+      "autoExit": "Inspection view released because the cadence knot is no longer in range."
+    },
+    "forbidden": [
+      "forced first-person camera",
+      "permanent camera lock",
+      "movement-reference change",
+      "interaction completion shortcut",
+      "target acquisition",
+      "route activation",
+      "Comb Threshold activation",
+      "Aperture Fields runtime",
+      "player relocation",
+      "gate",
+      "door",
+      "teleport"
+    ],
+    "replacedBy": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+    "runtimeImported": false
+  }
+]

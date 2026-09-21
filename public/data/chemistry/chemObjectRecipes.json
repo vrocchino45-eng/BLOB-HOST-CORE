@@ -1,0 +1,2107 @@
+[
+  {
+    "id": "dormant_seed_nutrient_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "membrane_layer",
+      "producedBy": "nursery_seed_filtration"
+    },
+    "chemistry": {
+      "domains": [
+        "seed",
+        "form"
+      ],
+      "matterState": "dormant_seed",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.18,
+      "instabilityRisk": 0.04
+    },
+    "behavior": {
+      "idle": "slow_internal_rotation",
+      "onPlayerNear": "warm_glow_increase",
+      "onPulse": "open_slightly",
+      "onAbsorb": "transfer_seed_and_form_mass"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "seed": 0.05,
+        "form": 0.03
+      }
+    },
+    "spawn": {
+      "position": [
+        2.42,
+        0.62,
+        -1.62
+      ],
+      "scale": 0.92
+    },
+    "visual": {
+      "visualRecipe": "dormant_seed_nutrient_v01",
+      "placeholderRecipe": "debug_nutrient_seed_001"
+    },
+    "meaning": "Safe early nourishment and protected future potential.",
+    "notes": {
+      "HC-002F": "Seed nutrient absorb tuned to reliably cross morph-readiness baseline in first slice.",
+      "HC-003C": "Moved into the initial camera pocket and slightly enlarged for first-minute reachability/readability."
+    }
+  },
+  {
+    "id": "scar_contamination_plate_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "wounded_membrane",
+      "producedBy": "old_scar_intrusion"
+    },
+    "chemistry": {
+      "domains": [
+        "scar",
+        "residue"
+      ],
+      "matterState": "scarred",
+      "bondTypes": [
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.82,
+      "instabilityRisk": 0.42
+    },
+    "behavior": {
+      "idle": "block_flow",
+      "onPulse": "delayed_echo_and_memory_fleck",
+      "onAbsorbAttempt": "resist_and_harden_player_if_forced",
+      "onRupture": "release_residue_motes"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "scar": 0.03
+      }
+    },
+    "spawn": {
+      "position": [
+        -3.12,
+        -1.22,
+        -1.82
+      ],
+      "scale": 0.85
+    },
+    "visual": {
+      "visualRecipe": "scar_contamination_plate_v01",
+      "placeholderRecipe": "debug_scar_plate_001"
+    },
+    "meaning": "Old pain intruding into a protective space."
+  },
+  {
+    "id": "flux_current_ribbon_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "vascular_pressure_leak",
+      "producedBy": "gentle_internal_flow"
+    },
+    "chemistry": {
+      "domains": [
+        "flux",
+        "signal"
+      ],
+      "matterState": "fluid",
+      "bondTypes": [
+        "flow_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.45,
+      "instabilityRisk": 0.18
+    },
+    "behavior": {
+      "idle": "directional_current",
+      "onPlayerEnter": "apply_soft_flow_force",
+      "onPulse": "increase_wave_motion",
+      "onTune": "stabilize_current"
+    },
+    "spawn": {
+      "position": [
+        0.0,
+        -0.38,
+        1.36
+      ],
+      "scale": 1.15
+    },
+    "visual": {
+      "visualRecipe": "flux_current_ribbon_v01",
+      "placeholderRecipe": "debug_flux_ribbon_001"
+    },
+    "meaning": "The host's internal movement gently carrying the player."
+  },
+  {
+    "id": "signal_vapor_thread_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "sensing_membrane",
+      "producedBy": "weak_signal_choir_leak"
+    },
+    "chemistry": {
+      "domains": [
+        "signal"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.0,
+      "instabilityRisk": 0.12
+    },
+    "behavior": {
+      "idle": "soft_wave_thread",
+      "onPulse": "answering_ring",
+      "onTune": "reveal_nearby_safe_matter",
+      "onRupture": "scatter_signal"
+    },
+    "spawn": {
+      "position": [
+        -2.72,
+        0.34,
+        -2.14
+      ],
+      "scale": 0.92
+    },
+    "visual": {
+      "visualRecipe": "signal_vapor_thread_v01",
+      "placeholderRecipe": "debug_signal_thread_001"
+    },
+    "meaning": "The host trying to communicate before the player understands language."
+  },
+  {
+    "id": "scar_memory_fleck_001",
+    "status": "authored_not_runtime_spawned",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_flow_fold",
+      "localCell": "CELL_SCAR_FLOW_FOLD_001",
+      "producedBy": "old_wound_memory_shedding"
+    },
+    "chemistry": {
+      "domains": [
+        "scar",
+        "residue",
+        "signal"
+      ],
+      "matterState": "residue",
+      "bondTypes": [
+        "scar_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.66,
+      "instabilityRisk": 0.34
+    },
+    "behavior": {
+      "idle": "drift_in_pressure_wake",
+      "onPulse": "show_memory_echo_direction",
+      "onAbsorbAttempt": "resist_then_release_small_residue_warning",
+      "onTune": "align_to_pressure_thread"
+    },
+    "spawn": {
+      "position": [
+        -0.55,
+        0.12,
+        -1.4
+      ],
+      "scale": 0.58
+    },
+    "visual": {
+      "visualRecipe": "scar_memory_fleck_v01",
+      "placeholderRecipe": "debug_scar_memory_fleck_001"
+    },
+    "meaning": "A small piece of old hurt loosened by pressure, readable but not safe as ordinary nourishment."
+  },
+  {
+    "id": "scar_flow_clot_001",
+    "status": "authored_not_runtime_spawned",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_flow_fold",
+      "localCell": "CELL_SCAR_FLOW_FOLD_001",
+      "producedBy": "scarred_flow_blockage"
+    },
+    "chemistry": {
+      "domains": [
+        "scar",
+        "flux",
+        "residue"
+      ],
+      "matterState": "scarred",
+      "bondTypes": [
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.88,
+      "instabilityRisk": 0.52
+    },
+    "behavior": {
+      "idle": "block_and_redirect_current",
+      "onPulse": "delayed_pressure_echo",
+      "onAbsorbAttempt": "harden_and_warn",
+      "onRupture": "release_pressure_burst"
+    },
+    "spawn": {
+      "position": [
+        0.8,
+        -0.18,
+        -1.75
+      ],
+      "scale": 0.82
+    },
+    "visual": {
+      "visualRecipe": "scar_flow_clot_v01",
+      "placeholderRecipe": "debug_scar_flow_clot_001"
+    },
+    "meaning": "A blockage where old defense has become a pressure valve."
+  },
+  {
+    "id": "resonant_path_thread_001",
+    "status": "authored_not_runtime_spawned",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_flow_fold",
+      "localCell": "CELL_SCAR_FLOW_FOLD_001",
+      "producedBy": "signal_choir_leak_following_wound_edge"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "flux"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.0,
+      "instabilityRisk": 0.16
+    },
+    "behavior": {
+      "idle": "trace_safe_pressure_route",
+      "onPulse": "answer_with_path_wave",
+      "onTune": "brighten_morph_direction",
+      "onRupture": "scatter_path_signal"
+    },
+    "spawn": {
+      "position": [
+        0.86,
+        0.55,
+        -1.85
+      ],
+      "scale": 0.92
+    },
+    "visual": {
+      "visualRecipe": "resonant_path_thread_v01",
+      "placeholderRecipe": "debug_resonant_path_thread_001"
+    },
+    "meaning": "Communication matter stretched along the wound, revealing a route without becoming a UI arrow."
+  },
+  {
+    "id": "pressure_fold_current_001",
+    "status": "authored_not_runtime_spawned",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "vascular_pressure_fold",
+      "localCell": "CELL_SCAR_FLOW_FOLD_001",
+      "producedBy": "scar_redirected_flux"
+    },
+    "chemistry": {
+      "domains": [
+        "flux",
+        "scar",
+        "signal"
+      ],
+      "matterState": "fluid",
+      "bondTypes": [
+        "flow_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.42,
+      "instabilityRisk": 0.28
+    },
+    "behavior": {
+      "idle": "directional_pressure_pull",
+      "onPlayerEnter": "carry_along_fold",
+      "onPulse": "reveal_current_beads",
+      "onTune": "stabilize_pressure_direction"
+    },
+    "spawn": {
+      "position": [
+        0.35,
+        -0.7,
+        -1.25
+      ],
+      "scale": 1.22
+    },
+    "visual": {
+      "visualRecipe": "pressure_fold_current_v01",
+      "placeholderRecipe": "debug_pressure_fold_current_001"
+    },
+    "meaning": "The host\u2019s pressure finding a route through old injury."
+  },
+  {
+    "id": "choir_resonance_node_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "signal_choir_tissue",
+      "producedBy": "scar_flow_path_softened_into_listening_node"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "form"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.92,
+      "instabilityRisk": 0.1
+    },
+    "behavior": {
+      "idle": "slow_answering_ring",
+      "onPlayerNear": "tone_brightens",
+      "onPulse": "answer_with_tuned_wave",
+      "onAbsorbAttempt": "not_food_listen_first"
+    },
+    "effects": {
+      "onPlayerComposition": {}
+    },
+    "spawn": {
+      "position": [
+        0.28,
+        0.18,
+        -1.75
+      ],
+      "scale": 0.86
+    },
+    "visual": {
+      "visualRecipe": "choir_resonance_node_v01",
+      "placeholderRecipe": "debug_choir_resonance_node_001"
+    },
+    "meaning": "A listening nerve-node that teaches pulse timing rather than absorption."
+  },
+  {
+    "id": "listening_pore_membrane_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "signal_choir_tissue",
+      "producedBy": "membrane_filter_becoming_ear_like"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "signal",
+        "seed"
+      ],
+      "matterState": "membrane",
+      "bondTypes": [
+        "soft_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.78,
+      "instabilityRisk": 0.07
+    },
+    "behavior": {
+      "idle": "opens_and_closes_to_rhythm",
+      "onPlayerNear": "listening_pores_turn_toward_player",
+      "onPulse": "filter_opens_for_signal",
+      "onAbsorbAttempt": "filters_not_consumes"
+    },
+    "effects": {
+      "onPlayerComposition": {}
+    },
+    "spawn": {
+      "position": [
+        -0.95,
+        0.05,
+        -1.45
+      ],
+      "scale": 0.78
+    },
+    "visual": {
+      "visualRecipe": "listening_pore_membrane_v01",
+      "placeholderRecipe": "debug_listening_pore_membrane_001"
+    },
+    "meaning": "A soft membrane ear that makes listening feel physical."
+  },
+  {
+    "id": "harmonic_wave_thread_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "signal_choir_tissue",
+      "producedBy": "resonant_path_thread_blooming_into_chorus_line"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "flux"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.88,
+      "instabilityRisk": 0.08
+    },
+    "behavior": {
+      "idle": "slow_wave_propagation",
+      "onPlayerNear": "wave_nodes_align",
+      "onPulse": "returns_delayed_call",
+      "onAbsorbAttempt": "disperses_if_forced"
+    },
+    "effects": {
+      "onPlayerComposition": {}
+    },
+    "spawn": {
+      "position": [
+        0.85,
+        0.36,
+        -2.05
+      ],
+      "scale": 0.98
+    },
+    "visual": {
+      "visualRecipe": "harmonic_wave_thread_v01",
+      "placeholderRecipe": "debug_harmonic_wave_thread_001"
+    },
+    "meaning": "A line of call-and-response signal that prepares future tuning play."
+  },
+  {
+    "id": "seed_signal_bridge_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "seed_organs_to_signal_choir_tissue",
+      "producedBy": "safe_seed_memory_answering_the_chorus"
+    },
+    "chemistry": {
+      "domains": [
+        "seed",
+        "signal",
+        "confluence"
+      ],
+      "matterState": "dormant_seed",
+      "bondTypes": [
+        "soft_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.55,
+      "instabilityRisk": 0.12
+    },
+    "behavior": {
+      "idle": "small_seed_pulse_between_threads",
+      "onPlayerNear": "bridge_glow_warms",
+      "onPulse": "seed_and_signal_answer_together",
+      "onAbsorb": "tiny_signal_seed_transfer_future_tuning"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "signal": 0.03,
+        "seed": 0.02
+      }
+    },
+    "spawn": {
+      "position": [
+        -0.18,
+        0.46,
+        -2.28
+      ],
+      "scale": 0.72
+    },
+    "visual": {
+      "visualRecipe": "seed_signal_bridge_v01",
+      "placeholderRecipe": "debug_seed_signal_bridge_001"
+    },
+    "meaning": "A small bridge between seed potential and listening, used later to justify tuning growth."
+  },
+  {
+    "id": "bloom_spore_lantern_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "bloom_organs",
+      "producedBy": "growth_pressure_after_chorus_tuning"
+    },
+    "chemistry": {
+      "domains": [
+        "bloom",
+        "seed"
+      ],
+      "matterState": "blooming",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.52,
+      "instabilityRisk": 0.34
+    },
+    "behavior": {
+      "idle": "slow_spore_breath",
+      "onPlayerNear": "lantern_opens_temptingly",
+      "onPulse": "sheds_safe_preview_spores",
+      "onAbsorbAttempt": "warn_overgrowth_if_untuned"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "bloom": 0.04,
+        "seed": 0.02
+      }
+    },
+    "spawn": {
+      "position": [
+        1.18,
+        0.34,
+        -1.04
+      ],
+      "scale": 0.92
+    },
+    "visual": {
+      "visualRecipe": "bloom_spore_lantern_v01",
+      "placeholderRecipe": "debug_bloom_spore_lantern_001"
+    },
+    "meaning": "Future growth calling to the player before they know what kind of future it makes."
+  },
+  {
+    "id": "residue_memory_silt_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "residue_beds",
+      "producedBy": "old_core_remains_settling_after_chorus"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "scar",
+        "signal"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "resonant_bond",
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.68,
+      "instabilityRisk": 0.28
+    },
+    "behavior": {
+      "idle": "memory_silt_settles",
+      "onPlayerNear": "old_core_shapes_flicker",
+      "onPulse": "reveals_prior_becoming_echo",
+      "onAbsorbAttempt": "slow_memory_drag"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.03,
+        "scar": 0.01,
+        "signal": 0.01
+      }
+    },
+    "spawn": {
+      "position": [
+        -1.22,
+        -0.54,
+        -0.98
+      ],
+      "scale": 1.04
+    },
+    "visual": {
+      "visualRecipe": "residue_memory_silt_v01",
+      "placeholderRecipe": "debug_residue_memory_silt_001"
+    },
+    "meaning": "Old becoming remains available as nourishment, warning, and inheritance."
+  },
+  {
+    "id": "seed_choice_braid_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "seed_organs + signal_choir_tissue",
+      "producedBy": "warmed_seed_signal_bridge_splitting_into_choice"
+    },
+    "chemistry": {
+      "domains": [
+        "seed",
+        "signal",
+        "bloom",
+        "residue"
+      ],
+      "matterState": "seed_signal_braid",
+      "bondTypes": [
+        "resonant_bond",
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.44,
+      "instabilityRisk": 0.18
+    },
+    "behavior": {
+      "idle": "holds_bloom_and_residue_paths_together",
+      "onPlayerNear": "braid_warms_without_selecting",
+      "onPulse": "shows_both_path_biases",
+      "onAbsorbAttempt": "refuses_binary_force"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "seed": 0.02,
+        "signal": 0.02
+      }
+    },
+    "spawn": {
+      "position": [
+        0.0,
+        0.14,
+        -1.32
+      ],
+      "scale": 1.12
+    },
+    "visual": {
+      "visualRecipe": "seed_choice_braid_v01",
+      "placeholderRecipe": "debug_seed_choice_braid_001"
+    },
+    "meaning": "The first choice organ: growth and memory are different paths, but neither must be erased."
+  },
+  {
+    "id": "overgrowth_warning_tendril_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "bloom_organs + scar_fields",
+      "producedBy": "unchecked_growth_pressure_touching_old_wound"
+    },
+    "chemistry": {
+      "domains": [
+        "bloom",
+        "scar"
+      ],
+      "matterState": "blooming",
+      "bondTypes": [
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.82,
+      "instabilityRisk": 0.56
+    },
+    "behavior": {
+      "idle": "twitches_at_edge_of_choice_fork",
+      "onPlayerNear": "curls_warning_hook",
+      "onPulse": "recoils_then_overextends",
+      "onAbsorbAttempt": "punishes_greedy_growth_attempt"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "bloom": 0.01,
+        "scar": 0.03
+      }
+    },
+    "spawn": {
+      "position": [
+        1.75,
+        -0.12,
+        -1.72
+      ],
+      "scale": 0.96
+    },
+    "visual": {
+      "visualRecipe": "overgrowth_warning_tendril_v01",
+      "placeholderRecipe": "debug_overgrowth_warning_tendril_001"
+    },
+    "meaning": "A warning that growth without integration can become another wound."
+  },
+  {
+    "id": "old_core_husk_memory_001",
+    "status": "runtime_spawned_by_grave_morph_prototype",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "residue_beds + marrow_interior",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "unfinished_core_becoming_left_in_residue_bed"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "scar",
+        "seed"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "scar_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.94,
+      "instabilityRisk": 0.68
+    },
+    "behavior": {
+      "idle": "half_collapsed_shell_breathes_old_memory_silt",
+      "onPlayerNear": "dim_seed_echo_pulses_once_then_settles",
+      "onPulse": "reveals_prior_core_silhouette_and_warning_rings",
+      "onAbsorbAttempt": "resists_and_sends_protective_scar_recoil",
+      "onCondense": "future_safe_memory_trace_source",
+      "onPostSeamReturn": "answers_the_read_seam_without_opening_a_branch"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.02,
+        "scar": 0.02,
+        "seed": 0.01
+      },
+      "warning": "Forced absorb should not be enabled in the first Grave runtime pass; this recipe exists for future read-before-absorb behavior."
+    },
+    "spawn": {
+      "position": [
+        -0.68,
+        -0.2,
+        -1.55
+      ],
+      "scale": 1.18
+    },
+    "visual": {
+      "visualRecipe": "old_core_husk_memory_v01",
+      "placeholderRecipe": "debug_old_core_husk_memory_001"
+    },
+    "meaning": "An old unfinished becoming attempt that should be read and respected before any nourishment is allowed.",
+    "runtimeActivation": {
+      "pass": "HC-004D",
+      "spawnMode": "destination_chem_object_after_no_gate_morph",
+      "interactionLoopStatus": "deferred",
+      "postSeamResponseStatus": "readable_protected_after_seam_return_HC004P",
+      "postSeamResponseLoop": "GRAVE_BED_POST_SEAM_RESPONSE_HC004P",
+      "postSeamConsumption": "forbidden_protected_remains_not_consumed"
+    }
+  },
+  {
+    "id": "residue_silt_cloud_001",
+    "status": "runtime_spawned_by_grave_morph_prototype",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "residue_beds + signal_choir_tissue",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "memory_silt_suspended_in_signal_vapor"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "signal"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.62,
+      "instabilityRisk": 0.34
+    },
+    "behavior": {
+      "idle": "slow_settling_ash_motes_in_signal_current",
+      "onPlayerNear": "drifts_away_from_greedy_movement",
+      "onPulse": "briefly_shapes_old_core_silhouettes",
+      "onTune": "aligns_into_listening_band",
+      "onAbsorbAttempt": "scatters_until_read"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.015,
+        "signal": 0.02
+      }
+    },
+    "spawn": {
+      "position": [
+        0.42,
+        0.16,
+        -1.2
+      ],
+      "scale": 1.35
+    },
+    "visual": {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    "meaning": "Memory silt suspended in vapor; it answers pulse before it should ever read as food.",
+    "runtimeActivation": {
+      "pass": "HC-004D",
+      "spawnMode": "destination_chem_object_after_no_gate_morph",
+      "interactionLoopStatus": "deferred",
+      "postSeamResponseStatus": "preserved_safe_transfer_trace_after_seam_return_HC004P",
+      "postSeamConsumption": "no_new_consumption_rule_added"
+    }
+  },
+  {
+    "id": "scar_lock_plate_001",
+    "status": "runtime_spawned_by_grave_morph_prototype",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_fields",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "protective_scar_layer_guarding_unready_remains"
+    },
+    "chemistry": {
+      "domains": [
+        "scar",
+        "form"
+      ],
+      "matterState": "scarred",
+      "bondTypes": [
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.98,
+      "instabilityRisk": 0.72
+    },
+    "behavior": {
+      "idle": "still_protective_plate_with_delayed_inner_pulse",
+      "onPlayerNear": "angles_between_player_and_old_husk",
+      "onPulse": "answers_late_showing_it_is_protecting_memory",
+      "onAbsorbAttempt": "hard_recoil_do_not_consume_warning",
+      "onRupture": "forbidden_early_wound_reopens",
+      "onPostSeamReturn": "answers_the_read_seam_without_opening_a_branch"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "scar": 0.03,
+        "form": 0.01
+      },
+      "warning": "Rupture must remain forbidden until later passes."
+    },
+    "spawn": {
+      "position": [
+        1.08,
+        -0.12,
+        -1.62
+      ],
+      "scale": 0.98
+    },
+    "visual": {
+      "visualRecipe": "scar_lock_plate_v01",
+      "placeholderRecipe": "debug_scar_lock_plate_001"
+    },
+    "meaning": "A scar that protects memory rather than merely blocking flow.",
+    "runtimeActivation": {
+      "pass": "HC-004D",
+      "spawnMode": "destination_chem_object_after_no_gate_morph",
+      "interactionLoopStatus": "deferred",
+      "postSeamResponseStatus": "readable_protected_after_seam_return_HC004P",
+      "postSeamResponseLoop": "GRAVE_BED_POST_SEAM_RESPONSE_HC004P",
+      "postSeamConsumption": "forbidden_protected_remains_not_consumed"
+    }
+  },
+  {
+    "id": "inheritance_seed_remnant_001",
+    "status": "runtime_spawned_by_grave_morph_prototype",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "marrow_interior + seed_organs",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "seed_potential_left_inside_old_core_remains"
+    },
+    "chemistry": {
+      "domains": [
+        "seed",
+        "residue",
+        "signal"
+      ],
+      "matterState": "dormant_seed",
+      "bondTypes": [
+        "soft_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.7,
+      "instabilityRisk": 0.3
+    },
+    "behavior": {
+      "idle": "dormant_seed_glow_buried_under_residue_shell",
+      "onPlayerNear": "stays_dim_until_silt_is_read",
+      "onPulse": "answers_with_small_inherited_rhythm",
+      "onTune": "warms_without_opening",
+      "onBind": "future_late_route_potential",
+      "onPostSeamReturn": "answers_the_read_seam_without_opening_a_branch"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "seed": 0.025,
+        "signal": 0.015,
+        "residue": 0.01
+      }
+    },
+    "spawn": {
+      "position": [
+        -1.24,
+        0.08,
+        -1.78
+      ],
+      "scale": 0.72
+    },
+    "visual": {
+      "visualRecipe": "inheritance_seed_remnant_v01",
+      "placeholderRecipe": "debug_inheritance_seed_remnant_001"
+    },
+    "meaning": "Future-host potential left inside old remains; not a pickup, not a reward, a responsibility.",
+    "runtimeActivation": {
+      "pass": "HC-004D",
+      "spawnMode": "destination_chem_object_after_no_gate_morph",
+      "interactionLoopStatus": "deferred",
+      "postSeamResponseStatus": "readable_protected_after_seam_return_HC004P",
+      "postSeamResponseLoop": "GRAVE_BED_POST_SEAM_RESPONSE_HC004P",
+      "postSeamConsumption": "forbidden_protected_remains_not_consumed"
+    }
+  },
+  {
+    "id": "scar_memory_seam_thread_001",
+    "status": "runtime_readable_by_seam_first_read_loop",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_fields + signal_choir_tissue",
+      "localCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+      "producedBy": "protective_scar_memory_threading_after_grave_readiness"
+    },
+    "chemistry": {
+      "domains": [
+        "scar",
+        "signal",
+        "residue"
+      ],
+      "matterState": "scarred",
+      "bondTypes": [
+        "scar_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.96,
+      "instabilityRisk": 0.66
+    },
+    "behavior": {
+      "idle": "thin_scar_thread_hums_with_old_memory",
+      "onPlayerNear": "tightens_without_opening",
+      "onPulse": "reveals_seam_direction_as_meaning_not_exit",
+      "onAbsorbAttempt": "recoils_and_restitches_closed"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "scar": 0.02,
+        "signal": 0.01,
+        "residue": 0.01
+      },
+      "warning": "Readable in HC-004N by pulse/proximity only; absorb attempts recoil and do not consume this seam object."
+    },
+    "spawn": {
+      "position": [
+        -0.44,
+        0.02,
+        -1.62
+      ],
+      "scale": 0.9
+    },
+    "visual": {
+      "visualRecipe": "scar_memory_seam_thread_v01",
+      "placeholderRecipe": "debug_scar_memory_seam_thread_001"
+    },
+    "meaning": "A stitched scar-signal thread that suggests deeper continuity without becoming an exit.",
+    "runtimeActivation": {
+      "pass": "HC-004N",
+      "spawnMode": "runtime_spawned_by_seam_arrival_prototype",
+      "interactionLoopStatus": "active_first_read_loop_no_absorb_consumption",
+      "targetFocusStatus": "active_via_TARGET_FOCUS_GRAVE_SCAR_MEMORY_SEAM_001"
+    }
+  },
+  {
+    "id": "residue_stitch_lattice_001",
+    "status": "runtime_readable_by_seam_first_read_loop",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "residue_beds + scar_fields",
+      "localCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+      "producedBy": "settled_memory_silt_stitched_into_closed_lattice"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "form",
+        "scar"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "soft_bond",
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.88,
+      "instabilityRisk": 0.5
+    },
+    "behavior": {
+      "idle": "settled_silt_forms_a_breathing_lattice",
+      "onPlayerNear": "holds_shape_and_invites_observation_only",
+      "onPulse": "briefly_shows_where_memory_was_repaired",
+      "onAbsorbAttempt": "muddies_and_loses_readability"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.02,
+        "form": 0.01
+      },
+      "warning": "Readable in HC-004N by pulse/proximity only; absorb attempts recoil and do not consume this seam object."
+    },
+    "spawn": {
+      "position": [
+        0.32,
+        -0.12,
+        -1.36
+      ],
+      "scale": 1.12
+    },
+    "visual": {
+      "visualRecipe": "residue_stitch_lattice_v01",
+      "placeholderRecipe": "debug_residue_stitch_lattice_001"
+    },
+    "meaning": "A residue lattice showing memory repaired enough to read, not enough to harvest.",
+    "runtimeActivation": {
+      "pass": "HC-004N",
+      "spawnMode": "runtime_spawned_by_seam_arrival_prototype",
+      "interactionLoopStatus": "active_first_read_loop_no_absorb_consumption",
+      "targetFocusStatus": "active_via_TARGET_FOCUS_GRAVE_SCAR_MEMORY_SEAM_001"
+    }
+  },
+  {
+    "id": "echo_husk_imprint_001",
+    "status": "runtime_readable_by_seam_first_read_loop",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "marrow_interior + residue_beds",
+      "localCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+      "producedBy": "old_core_husk_memory_left_as_imprint_not_body"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "seed",
+        "signal"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "resonant_bond",
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.9,
+      "instabilityRisk": 0.48
+    },
+    "behavior": {
+      "idle": "husk_shape_exists_as_echo_only",
+      "onPlayerNear": "fades_if_approached_greedily",
+      "onPulse": "answers_with_missing_inner_ring",
+      "onAbsorbAttempt": "collapses_into_silent_vapor"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.01,
+        "seed": 0.01,
+        "signal": 0.02
+      },
+      "warning": "Readable in HC-004N by pulse/proximity only; absorb attempts recoil and do not consume this seam object."
+    },
+    "spawn": {
+      "position": [
+        -1.02,
+        0.18,
+        -1.82
+      ],
+      "scale": 0.82
+    },
+    "visual": {
+      "visualRecipe": "echo_husk_imprint_v01",
+      "placeholderRecipe": "debug_echo_husk_imprint_001"
+    },
+    "meaning": "The old core is now an imprint; the player should read absence, not loot a shell.",
+    "runtimeActivation": {
+      "pass": "HC-004N",
+      "spawnMode": "runtime_spawned_by_seam_arrival_prototype",
+      "interactionLoopStatus": "active_first_read_loop_no_absorb_consumption",
+      "targetFocusStatus": "active_via_TARGET_FOCUS_GRAVE_SCAR_MEMORY_SEAM_001"
+    }
+  },
+  {
+    "id": "closed_inheritance_suture_001",
+    "status": "runtime_readable_by_seam_first_read_loop",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "seed_organs + scar_fields",
+      "localCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+      "producedBy": "inheritance_seed_remnant_kept_closed_by_scar_suture"
+    },
+    "chemistry": {
+      "domains": [
+        "seed",
+        "scar",
+        "form"
+      ],
+      "matterState": "dormant_seed",
+      "bondTypes": [
+        "scar_bond",
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.97,
+      "instabilityRisk": 0.7
+    },
+    "behavior": {
+      "idle": "dim_seed_pulse_inside_closed_suture",
+      "onPlayerNear": "stays_closed_even_when_warm",
+      "onPulse": "glows_once_then_seals",
+      "onAbsorbAttempt": "hard_warning_recoil_no_opening",
+      "onPostReadPulse": "folds_the_player_back_without_opening"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "seed": 0.02,
+        "scar": 0.015,
+        "form": 0.01
+      },
+      "warning": "Readable in HC-004N by pulse/proximity only; absorb attempts recoil and do not consume this seam object.",
+      "microExitWarning": "HC-004O pulse can trigger a no-gate fold-back only after first-read; the suture remains closed and unconsumed."
+    },
+    "spawn": {
+      "position": [
+        0.96,
+        0.04,
+        -1.74
+      ],
+      "scale": 0.7
+    },
+    "visual": {
+      "visualRecipe": "closed_inheritance_suture_v01",
+      "placeholderRecipe": "debug_closed_inheritance_suture_001"
+    },
+    "meaning": "Inheritance is present but deliberately closed; continuity requires restraint.",
+    "runtimeActivation": {
+      "pass": "HC-004N",
+      "spawnMode": "runtime_spawned_by_seam_arrival_prototype",
+      "interactionLoopStatus": "active_first_read_loop_no_absorb_consumption",
+      "targetFocusStatus": "active_via_TARGET_FOCUS_GRAVE_SCAR_MEMORY_SEAM_001",
+      "microExitStatus": "trigger_only_after_first_read_HC004O_no_opening_no_absorb"
+    }
+  },
+  {
+    "id": "surface_wake_membrane_mote_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "membrane_layer",
+      "producedBy": "nursery_micro_filtration"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "seed"
+      ],
+      "matterState": "dormant_seed",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.12,
+      "instabilityRisk": 0.02
+    },
+    "behavior": {
+      "idle": "soft_drift",
+      "onPlayerNear": "warm_glow_increase",
+      "onPulse": "brighten_and_drift",
+      "onAbsorb": "transfer_small_form_mass"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "form": 0.012,
+        "seed": 0.008
+      }
+    },
+    "spawn": {
+      "position": [
+        1.52,
+        0.86,
+        0.36
+      ],
+      "scale": 0.42
+    },
+    "visual": {
+      "visualRecipe": "dormant_seed_nutrient_v01",
+      "placeholderRecipe": "debug_nutrient_seed_001"
+    },
+    "meaning": "A small safe membrane nutrient that can be discovered and absorbed before the protected seed is ready."
+  },
+  {
+    "id": "surface_wake_membrane_mote_002",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "vascular_pressure_leak",
+      "producedBy": "current_swept_micro_filtration"
+    },
+    "chemistry": {
+      "domains": [
+        "flux",
+        "form"
+      ],
+      "matterState": "fluid",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.2,
+      "instabilityRisk": 0.06
+    },
+    "behavior": {
+      "idle": "current_carried_drift",
+      "onPlayerNear": "drift_with_current",
+      "onPulse": "flare_with_flow",
+      "onAbsorb": "transfer_small_flux_mass"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "flux": 0.012,
+        "form": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        0.58,
+        -0.18,
+        1.58
+      ],
+      "scale": 0.46
+    },
+    "visual": {
+      "visualRecipe": "dormant_seed_nutrient_v01",
+      "placeholderRecipe": "debug_nutrient_seed_001"
+    },
+    "meaning": "A nutrient held near the moving current; reaching it teaches that pressure can be worth entering."
+  },
+  {
+    "id": "surface_wake_membrane_mote_003",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "wounded_membrane",
+      "producedBy": "scar_edge_filtration"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "residue"
+      ],
+      "matterState": "membrane",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.28,
+      "instabilityRisk": 0.12
+    },
+    "behavior": {
+      "idle": "scar_edge_hover",
+      "onPlayerNear": "flicker_between_scar_and_membrane",
+      "onPulse": "brief_safe_glow",
+      "onAbsorb": "transfer_small_resilient_mass"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "form": 0.018,
+        "residue": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        -2.42,
+        -0.94,
+        -1.16
+      ],
+      "scale": 0.5
+    },
+    "visual": {
+      "visualRecipe": "dormant_seed_nutrient_v01",
+      "placeholderRecipe": "debug_nutrient_seed_001"
+    },
+    "meaning": "A slightly richer nutrient close to old scar pressure, offering an early voluntary risk-reward detour."
+  },
+  {
+    "id": "guide_threshold_flux_mote_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_flow_fold",
+      "producedBy": "pressure_current_shear"
+    },
+    "chemistry": {
+      "domains": [
+        "flux",
+        "form"
+      ],
+      "matterState": "fluid",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.22,
+      "instabilityRisk": 0.08
+    },
+    "behavior": {
+      "idle": "current_edge_drift",
+      "onPlayerNear": "pull_with_pressure",
+      "onPulse": "flare_with_current",
+      "onAbsorb": "transfer_small_flux_mass"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "flux": 0.014,
+        "form": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        1.55,
+        1.18,
+        -1.48
+      ],
+      "scale": 0.44
+    },
+    "visual": {
+      "visualRecipe": "dormant_seed_nutrient_v01",
+      "placeholderRecipe": "debug_nutrient_seed_001"
+    },
+    "meaning": "An optional flux-rich mote just outside the safest current line; taking it asks the player to leave the easy flow briefly."
+  },
+  {
+    "id": "guide_threshold_memory_mote_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "scar_flow_fold",
+      "producedBy": "scar_memory_filtration"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "residue"
+      ],
+      "matterState": "membrane",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.3,
+      "instabilityRisk": 0.14
+    },
+    "behavior": {
+      "idle": "scar_edge_hover",
+      "onPlayerNear": "flicker_with_memory",
+      "onPulse": "brief_memory_glow",
+      "onAbsorb": "transfer_small_resilient_mass"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "form": 0.014,
+        "residue": 0.008
+      }
+    },
+    "spawn": {
+      "position": [
+        -1.78,
+        -0.78,
+        -1.82
+      ],
+      "scale": 0.48
+    },
+    "visual": {
+      "visualRecipe": "dormant_seed_nutrient_v01",
+      "placeholderRecipe": "debug_nutrient_seed_001"
+    },
+    "meaning": "A richer memory-side mote placed beyond the main current, offering a voluntary turbulence detour before convergence."
+  },
+  {
+    "id": "grave_rupture_brittle_node_001",
+    "status": "runtime_spawned_hc031c_grave_ii_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "scar_memory_compression_in_second_octave"
+    },
+    "chemistry": {
+      "domains": [
+        "scar",
+        "residue",
+        "form"
+      ],
+      "matterState": "scarred",
+      "bondTypes": [
+        "soft_bond",
+        "scar_bond"
+      ],
+      "absorbDifficulty": 0.96,
+      "instabilityRisk": 0.58
+    },
+    "behavior": {
+      "idle": "compressed_memory_shell_under_resonant_load",
+      "onPulse": "build_brittle_rupture_pressure",
+      "onAbsorbAttempt": "intact_shell_resists_draw",
+      "onTune": "settle_fracture_pressure",
+      "onRupture": "release_memory_shards"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "scar": 0.01,
+        "residue": 0.01
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.62
+    },
+    "visual": {
+      "visualRecipe": "scar_flow_clot_v01",
+      "placeholderRecipe": "debug_scar_flow_clot_001"
+    },
+    "meaning": "A compacted Grave memory shell that must lose coherence before its recoverable pieces can be drawn."
+  },
+  {
+    "id": "grave_rupture_silt_sac_001",
+    "status": "runtime_spawned_hc031c_grave_ii_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "residue_pressure_pooled_between_memory_strata"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "form"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "soft_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.92,
+      "instabilityRisk": 0.46
+    },
+    "behavior": {
+      "idle": "silt_bladder_swells_against_memory_pressure",
+      "onPulse": "build_plume_rupture_pressure",
+      "onAbsorbAttempt": "intact_sac_slips_away",
+      "onTune": "settle_internal_pressure",
+      "onRupture": "release_silt_motes"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.01
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.54
+    },
+    "visual": {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    "meaning": "A soft pocket of accumulated memory silt whose rupture becomes a drifting harvest problem."
+  },
+  {
+    "id": "grave_rupture_echo_carrier_001",
+    "status": "runtime_spawned_hc031c_grave_ii_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "signal_echo_caught_in_return_octave"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "residue"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "soft_bond",
+        "resonant_bond"
+      ],
+      "absorbDifficulty": 0.9,
+      "instabilityRisk": 0.38
+    },
+    "behavior": {
+      "idle": "drift_between_grave_harmonics",
+      "onPulse": "overload_echo_carrier",
+      "onAbsorbAttempt": "whole_carrier_phases_away",
+      "onTune": "slow_echo_overload",
+      "onRupture": "scatter_signal_flecks"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "signal": 0.01,
+        "residue": 0.005
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.48
+    },
+    "visual": {
+      "visualRecipe": "resonant_path_thread_v01",
+      "placeholderRecipe": "debug_resonant_path_thread_001"
+    },
+    "meaning": "A mobile Grave echo that can be ruptured into brief signal fragments before they cool into ambient residue."
+  },
+  {
+    "id": "grave_memory_shard_001",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_brittle_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "scar",
+        "signal"
+      ],
+      "matterState": "residue",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.18,
+      "instabilityRisk": 0.179
+    },
+    "behavior": {
+      "idle": "brittle_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "signal": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "scar_memory_fleck_v01",
+      "placeholderRecipe": "debug_scar_memory_fleck_001"
+    },
+    "meaning": "A recoverable brittle fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_memory_shard_002",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_brittle_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "scar",
+        "signal"
+      ],
+      "matterState": "residue",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.24,
+      "instabilityRisk": 0.212
+    },
+    "behavior": {
+      "idle": "brittle_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "signal": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "scar_memory_fleck_v01",
+      "placeholderRecipe": "debug_scar_memory_fleck_001"
+    },
+    "meaning": "A recoverable brittle fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_memory_shard_003",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_brittle_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "scar",
+        "signal"
+      ],
+      "matterState": "residue",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.3,
+      "instabilityRisk": 0.245
+    },
+    "behavior": {
+      "idle": "brittle_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "signal": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "scar_memory_fleck_v01",
+      "placeholderRecipe": "debug_scar_memory_fleck_001"
+    },
+    "meaning": "A recoverable brittle fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_memory_shard_004",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_brittle_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "scar",
+        "signal"
+      ],
+      "matterState": "residue",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.38,
+      "instabilityRisk": 0.289
+    },
+    "behavior": {
+      "idle": "brittle_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "signal": 0.006
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "scar_memory_fleck_v01",
+      "placeholderRecipe": "debug_scar_memory_fleck_001"
+    },
+    "meaning": "A recoverable brittle fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_silt_mote_001",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_silt_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "form"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.16,
+      "instabilityRisk": 0.168
+    },
+    "behavior": {
+      "idle": "silt_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "form": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.18
+    },
+    "visual": {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    "meaning": "A recoverable silt fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_silt_mote_002",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_silt_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "form"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.22,
+      "instabilityRisk": 0.201
+    },
+    "behavior": {
+      "idle": "silt_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "form": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.18
+    },
+    "visual": {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    "meaning": "A recoverable silt fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_silt_mote_003",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_silt_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "form"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.28,
+      "instabilityRisk": 0.234
+    },
+    "behavior": {
+      "idle": "silt_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "form": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.18
+    },
+    "visual": {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    "meaning": "A recoverable silt fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_silt_mote_004",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_silt_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "residue",
+        "form"
+      ],
+      "matterState": "residue_silt",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.34,
+      "instabilityRisk": 0.267
+    },
+    "behavior": {
+      "idle": "silt_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "residue": 0.012,
+        "form": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.18
+    },
+    "visual": {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    "meaning": "A recoverable silt fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_echo_fleck_001",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_echo_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "residue"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.12,
+      "instabilityRisk": 0.146
+    },
+    "behavior": {
+      "idle": "echo_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "signal": 0.014,
+        "residue": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "signal_vapor_thread_v01",
+      "placeholderRecipe": "debug_signal_thread_001"
+    },
+    "meaning": "A recoverable echo fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_echo_fleck_002",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_echo_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "residue"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.18,
+      "instabilityRisk": 0.179
+    },
+    "behavior": {
+      "idle": "echo_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "signal": 0.014,
+        "residue": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "signal_vapor_thread_v01",
+      "placeholderRecipe": "debug_signal_thread_001"
+    },
+    "meaning": "A recoverable echo fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_echo_fleck_003",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_echo_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "residue"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.24,
+      "instabilityRisk": 0.212
+    },
+    "behavior": {
+      "idle": "echo_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "signal": 0.014,
+        "residue": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "signal_vapor_thread_v01",
+      "placeholderRecipe": "debug_signal_thread_001"
+    },
+    "meaning": "A recoverable echo fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  },
+  {
+    "id": "grave_echo_fleck_004",
+    "status": "runtime_spawned_hc031c_fragment_only",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "grave_memory_resonance_octave",
+      "localCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "producedBy": "hc031c_echo_rupture"
+    },
+    "chemistry": {
+      "domains": [
+        "signal",
+        "residue"
+      ],
+      "matterState": "signal_vapor",
+      "bondTypes": [
+        "soft_bond"
+      ],
+      "absorbDifficulty": 0.32,
+      "instabilityRisk": 0.256
+    },
+    "behavior": {
+      "idle": "echo_fragment_drift",
+      "onPulse": "scatter_fragment",
+      "onAbsorb": "transfer_rupture_fragment",
+      "onTune": "slow_fragment_drift"
+    },
+    "effects": {
+      "onPlayerComposition": {
+        "signal": 0.014,
+        "residue": 0.004
+      }
+    },
+    "spawn": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": 0.24
+    },
+    "visual": {
+      "visualRecipe": "signal_vapor_thread_v01",
+      "placeholderRecipe": "debug_signal_thread_001"
+    },
+    "meaning": "A recoverable echo fragment released by Grave II rupture; uncollected fragments cool into persistent residue."
+  }
+]

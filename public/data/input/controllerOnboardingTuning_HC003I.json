@@ -1,0 +1,109 @@
+{
+  "id": "HC003I_CONTROLLER_ONBOARDING_TUNING",
+  "build": "HC-003I",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "mode": "first_playable_minute_controller_comfort",
+  "scopeRule": "Tune feel and readability only. Do not add cells, morphs, gates, route runtime, combat, or dialogue.",
+  "deviceTargets": {
+    "primary": "Xbox-style controller through browser Gamepad API",
+    "fallback": "keyboard using WASD/arrows, Q/E, Space/X, F, IJKL, C"
+  },
+  "deadZones": {
+    "leftStick": 0.13,
+    "rightStick": 0.11,
+    "trigger": 0.08
+  },
+  "responseCurves": {
+    "leftStick": 1.18,
+    "rightStick": 1.32,
+    "trigger": 1.05
+  },
+  "movement": {
+    "baseAcceleration": 13.1,
+    "boostMultiplier": 1.8,
+    "verticalScale": 0.9,
+    "dragBase": 2.05,
+    "dragViscosityMultiplier": 3.95,
+    "flowPressureMultiplier": 0.7,
+    "speedLimit": 4.65,
+    "movementFeel": "embodied_viscous_current_swim",
+    "referenceMode": "camera_relative_embodied_free_3d",
+    "legacyReferenceMode": "camera_relative_free_3d",
+    "forwardStickMeaning": "left_stick_up_follows_true_camera_forward_including_pitch",
+    "rightStickRelationship": "camera_orbit_and_pitch_rotate_the_full_forward_movement_basis",
+    "verticalControl": "RB_rises_LB_descends_during_gameplay_with_dpad_and_keyboard_alternatives",
+    "cameraPitchAffectsPlanarMovement": false,
+    "cameraPitchAffectsForwardMovement": true,
+    "statusContextRule": "LB_RB_change_Status_tabs_while_Status_is_open",
+    "verticalBounds": [
+      -3.45,
+      3.45
+    ],
+    "verticalControlPass": "HC-009B",
+    "boostSpeedMultiplier": 1.85,
+    "hc016xPolicy": "normal traversal +24%; existing L3 boost owns fast traversal; no new button"
+  },
+  "camera": {
+    "yawSpeed": 1.82,
+    "pitchSpeed": 1.12,
+    "pitchMin": -0.3,
+    "pitchMax": 0.88,
+    "manualOverrideHoldSeconds": 2.2,
+    "manualInputThreshold": 0.035,
+    "defaultDistance": 8.2,
+    "followSmoothing": 6.2,
+    "recenterSmoothingHint": "R3/C snaps yaw/pitch back to readable default, then soft-follow resumes.",
+    "doNotOverrideManualLook": true
+  },
+  "absorbAssist": {
+    "formationRangeBonus": 0.22,
+    "absorbRangeBonus": 0.24,
+    "assistRangeBonus": 0.38,
+    "targetLockRangeBonus": 0.2,
+    "pullStrengthBase": 1.62,
+    "pullStrengthRangeBonus": 4.15,
+    "progressRateMultiplier": 1.14,
+    "progressDecayWhenNotHeld": 0.48,
+    "comfortNote": "RT absorb should feel like a guided bond, not a pickup hunt."
+  },
+  "targeting": {
+    "scoreDistanceRange": 6.8,
+    "lockDistance": 5.8,
+    "absorbStateDistance": 2.95,
+    "assistStateDistance": 5.65,
+    "preferredTargetBoost": 4.15,
+    "absorbHeldTargetBoost": 1.25,
+    "softBondBoost": 2.75
+  },
+  "pulseFeedback": {
+    "button": "X / Space",
+    "singlePressOnly": true,
+    "debugFlashSeconds": 0.35,
+    "comfortNote": "Pulse should feel like a deliberate answer, not an accidental held input."
+  },
+  "acceptance": [
+    "complete required opening chain with controller only",
+    "right stick helps rather than fights the camera",
+    "RT absorb feels forgiving near the safe seed",
+    "X pulse timing is readable",
+    "debug can be hidden without losing control understanding",
+    "left-stick up remains forward after right-stick camera orbit",
+    "left-stick forward follows the camera through pitch as well as yaw",
+    "RB/LB and D-Pad Up/Down provide deliberate rise/descent without changing LT/RT ability ownership",
+    "LB/RB return to Status tab ownership while Status is open"
+  ],
+  "forbidden": [
+    "new cells",
+    "new morphs",
+    "new runtime route",
+    "hard gates",
+    "doors",
+    "teleports",
+    "old chamber loading",
+    "combat",
+    "dialogue tree",
+    "quest log"
+  ],
+  "nextRecommendedPass": "HC-003J P0 Visual Lock Replacement Pass",
+  "lastAdjustedBy": "HC-005C"
+}

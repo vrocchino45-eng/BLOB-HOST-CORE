@@ -1,0 +1,33 @@
+[
+  {
+    "id": "SCAR_FLOW_EXIT_READINESS_001",
+    "sourceLoop": "SCAR_FLOW_LOOP_001",
+    "sourceCell": "CELL_SCAR_FLOW_FOLD_001",
+    "nextMorphPlan": "MORPH_SCAR_FLOW_TO_SIGNAL_CHORUS_001",
+    "readinessStages": [
+      {
+        "id": "not_ready",
+        "worldText": "The fold is still clenched around the old pressure."
+      },
+      {
+        "id": "nearly_ready",
+        "worldText": "The pressure is loosening. The path thread is beginning to listen."
+      },
+      {
+        "id": "ready",
+        "worldText": "The scar-flow has softened. A buried choir nerve is beginning to answer."
+      },
+      {
+        "id": "triggerable",
+        "worldText": "Pulse the listening thread and let the fold become signal."
+      }
+    ],
+    "futureRuntimeSignals": {
+      "stability": "from ScarFlowInteractionSystem progress",
+      "pathConfidence": "from resonant_path_thread_001 hook",
+      "pressureRelief": "from pressure_fold_current_001 hook",
+      "clotWarning": "from scar_flow_clot_001 hook",
+      "guideMode": "scar_flow_interpreter_to_signal_guide"
+    }
+  }
+]

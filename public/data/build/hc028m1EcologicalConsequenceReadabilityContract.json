@@ -1,0 +1,52 @@
+{
+  "id": "HC-028M1",
+  "parent": "HC-028M",
+  "mode": "convergence_readability",
+  "purpose": "Make the existing ecological causal chain readable as Core relationship -> organism -> retained response -> local Host matter -> decay, without adding gameplay mechanics.",
+  "scope": {
+    "newEntityTypes": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newProgression": false,
+    "newAffinity": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": false,
+    "routeLogicChanged": false,
+    "chemistryChanged": false,
+    "combReentryHotfixPreserved": true,
+    "startupScopeHotfixPreserved": true,
+    "newParticleFieldAdded": false,
+    "newGeometryAdded": false,
+    "newDrawCallsAdded": false,
+    "cameraModeAdded": false,
+    "cameraLockOnAdded": false
+  },
+  "readability": {
+    "causalStages": [
+      "forming",
+      "answering",
+      "expressing",
+      "releasing"
+    ],
+    "relationshipOwnsImmediateRead": true,
+    "localMatterAnswersAfterOrganism": true,
+    "matterPersistsAfterVerbRelease": true,
+    "usesExistingHostMotes": true,
+    "usesLocalMoteCohort": true,
+    "usesSoftAnchorShell": true,
+    "maxAuthoredFields": 2,
+    "ecologyCameraCorridor": "existing_camera_readability_soft_fade_and_pullback_only"
+  },
+  "authority": {
+    "playerMovement": false,
+    "entityMovement": false,
+    "collision": false,
+    "chemistry": false,
+    "bond": false,
+    "repair": false,
+    "combat": false,
+    "targeting": false,
+    "progression": false,
+    "route": false
+  }
+}

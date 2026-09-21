@@ -1,0 +1,20 @@
+{
+  "id": "HC-027C1",
+  "version": "0.27.3",
+  "label": "Playtest Audio Reliability Hotfix",
+  "mode": "hotfix / playtest observability",
+  "parent": "HC-027C",
+  "buildRule": "Do not change gameplay. Make Web Audio lock state impossible to miss, provide an explicit click/key unlock path with audible confirmation, and raise the procedural mix to a practical playtest level without changing audio gameplay authority.",
+  "sourceJsCount": 91,
+  "newSourceModules": 0,
+  "newRegions": 0,
+  "audioOwner": "EventAnchoredHostAudioSystem",
+  "unlockGateOwner": "PlaytestHudSystem",
+  "masterGain": 0.52,
+  "audibleConfirmation": true,
+  "gamepadOnlyUnlockGuaranteed": false,
+  "gameplayChanged": false,
+  "progressionChanged": false,
+  "corePerformanceChanged": false,
+  "engineGrammarChanged": false
+}

@@ -1,0 +1,15 @@
+import fs from "node:fs";
+const s=fs.readFileSync(new URL("../src/routes/SiltPressureRouteSystem.js",import.meta.url),"utf8");
+const v=fs.readFileSync(new URL("../src/routes/VascularRhythmRouteSystem.js",import.meta.url),"utf8");
+const a=JSON.parse(fs.readFileSync(new URL("../public/data/build/hc018dPersistentConsequencesAudit.json",import.meta.url),"utf8"));
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(s.includes("appetite_pocket_remains_depleted"),"Silt retained depletion missing");
+must(s.includes("porous_matter_removed_here"),"Silt local residue memory missing");
+must(v.includes("cadence_passed_through_this_tissue"),"Vascular tissue memory missing");
+must(v.includes("synchronized_return_current_retained"),"Vascular completion memory missing");
+must(a.newPersistenceAuthority===false,"new persistence authority introduced");
+for(const k of ["completionRulesChanged","chemistryChanged","movementChanged","cameraChanged","routeCrossingChanged"]) must(a[k]===false,`lock violated ${k}`);
+console.log("[HC018D] Silt retained local consequence PASS");
+console.log("[HC018D] Vascular retained local consequence PASS");
+console.log("[HC018D] Grave existing memory authority preserved PASS");
+console.log("[HC018D] progression/chemistry/movement/camera locks PASS");

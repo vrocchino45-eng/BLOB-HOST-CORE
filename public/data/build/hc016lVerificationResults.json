@@ -1,0 +1,115 @@
+{
+  "build": "HC-016L",
+  "checks": [
+    {
+      "name": "syntax:ScarFlowArrivalSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:TargetFocusRegistry.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GameRuntime.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:LocalCellMorphSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:SecondLocalCellMorphSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:LocalCellBoundaryMorphSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:FirstSliceTransitionCoordinator.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016LMutationDebtCleanup.mjs",
+      "status": "PASS",
+      "detail": "[HC016L] dead legacy mutation files deleted: 8\n[HC016L] dead legacy source bytes deleted: 142146\n[HC016L] remaining activeCell writers: 6\n[HC016L] unclassified activeCell writers: 0 PASS\n"
+    },
+    {
+      "name": "deleted-file-live-references-zero",
+      "status": "PASS",
+      "detail": "[]"
+    },
+    {
+      "name": "unclassified-activeCell-writers-zero",
+      "status": "PASS",
+      "detail": "[]"
+    },
+    {
+      "name": "js-file-count-reduced",
+      "status": "PASS",
+      "detail": "106->98"
+    },
+    {
+      "name": "source-bytes-reduced",
+      "status": "PASS",
+      "detail": "2032235->1889468"
+    }
+  ],
+  "sourceStats": {
+    "before": {
+      "files": 106,
+      "bytes": 2032235,
+      "lines": 47232
+    },
+    "after": {
+      "files": 98,
+      "bytes": 1889468,
+      "lines": 43812
+    }
+  },
+  "remainingActiveCellMutationSites": [
+    {
+      "file": "src/debug/DebugAreaJumpSystem.js",
+      "line": 30,
+      "code": "frameState.activeCellId = target.cellId;",
+      "classification": "debug_bypass"
+    },
+    {
+      "file": "src/morph/LocalCellMorphSystem.js",
+      "line": 397,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "authoritative_transition_owner"
+    },
+    {
+      "file": "src/morph/SecondLocalCellMorphSystem.js",
+      "line": 384,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "authoritative_transition_owner"
+    },
+    {
+      "file": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "line": 315,
+      "code": "frameState.activeCellId = recipe.destinationCellId;",
+      "classification": "authoritative_transition_owner"
+    },
+    {
+      "file": "src/core/GameRuntime.js",
+      "line": 1501,
+      "code": "this.frameState.activeCellId = cell.id;",
+      "classification": "initialization_owner"
+    },
+    {
+      "file": "src/core/FirstSliceTransitionCoordinator.js",
+      "line": 239,
+      "code": "this.frameState.activeCellId = activeCellBefore;",
+      "classification": "safety_rollback_only"
+    }
+  ]
+}

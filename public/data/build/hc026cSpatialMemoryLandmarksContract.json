@@ -1,0 +1,38 @@
+{
+  "id": "HC026C_SPATIAL_MEMORY_LANDMARKS",
+  "build": "HC-026C",
+  "parent": "HC-026B",
+  "owner": "LocalCellBoundaryMorphSystem",
+  "scope": "Surface Wake / Guide Threshold / Hub Chamber return-fold readability only",
+  "landmarkGrammar": {
+    "Surface": {
+      "cellId": "CELL_MEMBRANE_NURSERY_001",
+      "signature": "nursery_triad",
+      "meaning": "soft three-lobed nursery identity"
+    },
+    "Guide": {
+      "cellId": "CELL_SCAR_FLOW_FOLD_001",
+      "signature": "scar_double_rib",
+      "meaning": "paired scar-current ribs"
+    },
+    "Hub": {
+      "cellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "signature": "chorus_triad",
+      "meaning": "three-node chorus relationship"
+    }
+  },
+  "rule": "Each return fold shows the signature of the destination anatomy from the current side. In Guide this makes the Surface-facing and Hub-facing folds visually distinct without arrows or labels in-world.",
+  "locked": {
+    "returnSeamPositions": true,
+    "movementLed": true,
+    "teleport": false,
+    "progressionMutation": false,
+    "routeTopologyMutation": false,
+    "waypointArrows": false,
+    "hudNavigationRequired": false,
+    "newRegion": false,
+    "newSourceModule": false,
+    "chemistryRulesChanged": false,
+    "contactAuthorityChanged": false
+  }
+}

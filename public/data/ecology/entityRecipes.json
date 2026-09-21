@@ -1,0 +1,388 @@
+[
+  {
+    "id": "nursery_membrane_tender_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "membrane_layer",
+      "localCell": "CELL_MEMBRANE_NURSERY_001",
+      "hostFunction": "repair_filter_protect"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "seed",
+        "signal"
+      ],
+      "matterState": "membrane",
+      "bondPreferences": [
+        "soft_bond",
+        "symbiotic_bond"
+      ],
+      "rejects": [
+        "parasitic_bond",
+        "overactive_bloom"
+      ]
+    },
+    "behavior": {
+      "defaultDisposition": "cautious_helper",
+      "idleTask": "inspect_nearby_membrane",
+      "playerNear": "observe_then_drift_closer",
+      "playerPulseGentle": "open_fronds",
+      "playerRuptureNear": "curl_defensive_and_retreat",
+      "playerOverabsorbs": "increase_distance_and_warn"
+    },
+    "interaction": {
+      "canBeAbsorbed": false,
+      "canBond": true,
+      "canGuide": false,
+      "canRepairLocalCell": true,
+      "canAlertHost": true,
+      "companionBond": {
+        "pass": "HC-016Q",
+        "bondCondition": "safe nursery care retained with tenderTrust >= 0.56 and tenderIntegrity >= 0.62 before departure",
+        "postBondRole": "care_repair_companion",
+        "navigationAuthority": false,
+        "guideAuthority": "guide_orbiter_folded_lantern_001",
+        "passiveCare": "small scar recovery while bonded outside the nursery",
+        "pulseCare": "gentle nearby Pulse triggers a short stronger repair response",
+        "failurePolicy": "if trust bond is not earned, Tender remains in Surface Wake"
+      }
+    },
+    "spawn": {
+      "position": [
+        1.72,
+        0.96,
+        -1.48
+      ],
+      "scale": 0.84
+    },
+    "visual": {
+      "visualRecipe": "nursery_membrane_tender_v01",
+      "placeholderRecipe": "debug_tender_001"
+    },
+    "meaning": "Careful protection becoming reciprocal trust: if the Core helps the nursery safely, the Tender may leave with it as a repair companion."
+  },
+  {
+    "id": "membrane_watcher_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "membrane_layer",
+      "localCell": "CELL_MEMBRANE_NURSERY_001",
+      "hostFunction": "sense_warn_record"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "signal"
+      ],
+      "matterState": "membrane",
+      "bondPreferences": [
+        "resonant_bond"
+      ],
+      "rejects": [
+        "scar_agitation",
+        "parasitic_bond"
+      ]
+    },
+    "behavior": {
+      "defaultDisposition": "watchful_neutral",
+      "idleTask": "anchor_and_sense",
+      "playerNear": "rotate_sensing_bulbs",
+      "playerPulseGentle": "send_small_answering_pulse",
+      "playerRuptureNear": "warn_host",
+      "playerOverabsorbs": "increase_immune_alert"
+    },
+    "interaction": {
+      "canBeAbsorbed": false,
+      "canBond": true,
+      "canGuide": false,
+      "canRepairLocalCell": false,
+      "canAlertHost": true
+    },
+    "spawn": {
+      "position": [
+        -2.85,
+        2.18,
+        -2.45
+      ],
+      "scale": 0.82
+    },
+    "visual": {
+      "visualRecipe": "membrane_watcher_v01",
+      "placeholderRecipe": "debug_watcher_001"
+    },
+    "meaning": "The host noticing the player before judging them."
+  },
+  {
+    "id": "vascular_relay_001",
+    "origin": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomy": "vascular_fold",
+      "localCell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "hostFunction": "carry_align_release"
+    },
+    "chemistry": {
+      "domains": [
+        "form",
+        "flux",
+        "signal"
+      ],
+      "matterState": "fluid",
+      "bondPreferences": [
+        "flow_bond",
+        "resonant_bond"
+      ],
+      "rejects": [
+        "dense_scar_lock",
+        "stagnant_residue"
+      ]
+    },
+    "behavior": {
+      "defaultDisposition": "flow_bound_neutral",
+      "idleTask": "ride_current_and_pass_flow",
+      "playerNear": "yield_lane_without_fleeing",
+      "playerPulseGentle": "open_downstream_vanes",
+      "playerAbsorb": "cup_upstream_vanes",
+      "playerStabilize": "align_all_vane_pairs"
+    },
+    "interaction": {
+      "canBeAbsorbed": false,
+      "canBond": false,
+      "canGuide": false,
+      "canRepairLocalCell": false,
+      "canAlertHost": false
+    },
+    "spawn": {
+      "position": [
+        0.08,
+        0.16,
+        -2.72
+      ],
+      "scale": 0.78,
+      "coordinateSpace": "cell_entry_relative"
+    },
+    "visual": {
+      "visualRecipe": "vascular_relay_v01"
+    },
+    "ecologyGrammar": {
+      "role": "flow_relay",
+      "relationshipRange": 5.15,
+      "phaseOffset": 2.71,
+      "relationshipInterpretations": {
+        "project": "forward_signal",
+        "draw": "current_intake",
+        "cohere": "flow_alignment",
+        "cohere_project": "stable_transmission",
+        "cohere_draw": "held_intake",
+        "exchange": "recirculating_exchange",
+        "full_system": "full_conduit_alignment"
+      },
+      "memory": {
+        "commitThreshold": 0.44,
+        "defaultDuration": 7.6,
+        "durationByInterpretation": {
+          "recirculating_exchange": 8.8,
+          "full_conduit_alignment": 9.4,
+          "stable_transmission": 8.4,
+          "held_intake": 8.2
+        },
+        "modeByInterpretation": {
+          "forward_signal": "outbound_signal_retained",
+          "current_intake": "intake_current_retained",
+          "flow_alignment": "flow_alignment_retained",
+          "stable_transmission": "stable_transmission_retained",
+          "held_intake": "held_intake_retained",
+          "recirculating_exchange": "balanced_exchange_retained",
+          "full_conduit_alignment": "full_conduit_retained"
+        }
+      },
+      "behaviorDirectives": {
+        "outbound_signal_retained": {
+          "mode": "forward_relay",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 0.18,
+          "track01": 0.35,
+          "scan01": 0.05,
+          "hold01": 0.25
+        },
+        "intake_current_retained": {
+          "mode": "cup_current",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 0.32,
+          "track01": 0.22,
+          "scan01": 0.05,
+          "hold01": 0.62
+        },
+        "held_intake_retained": {
+          "mode": "cup_current",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 0.55,
+          "track01": 0.2,
+          "scan01": 0.02,
+          "hold01": 0.78
+        },
+        "flow_alignment_retained": {
+          "mode": "brace_current",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 1,
+          "track01": 0.12,
+          "scan01": 0,
+          "hold01": 0.82
+        },
+        "stable_transmission_retained": {
+          "mode": "aligned_relay",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 0.72,
+          "track01": 0.35,
+          "scan01": 0.04,
+          "hold01": 0.62
+        },
+        "balanced_exchange_retained": {
+          "mode": "exchange_relay",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 0.38,
+          "track01": 0.42,
+          "scan01": 0.18,
+          "hold01": 0.48
+        },
+        "full_conduit_retained": {
+          "mode": "full_relay",
+          "approach01": 0,
+          "distance01": 0,
+          "settle01": 0.66,
+          "track01": 0.5,
+          "scan01": 0.12,
+          "hold01": 0.72
+        }
+      },
+      "localMatterSignatures": {
+        "forward_relay": {
+          "mode": "downstream_wake",
+          "radius": 1.64,
+          "radiusLift": 0.32,
+          "radialBias": 0.006,
+          "tangentialBias": 0.052,
+          "verticalBias": 0.004,
+          "breathAmplitude": 0.018,
+          "oscillationRate": 1.58,
+          "dampingBias": 0.08,
+          "anchorRadius": 0.68,
+          "anchorTightness": 0.54,
+          "localCohortBias": 0.78
+        },
+        "cup_current": {
+          "mode": "caught_current",
+          "radius": 1.52,
+          "radiusLift": 0.28,
+          "radialBias": -0.03,
+          "tangentialBias": 0.03,
+          "verticalBias": 0.002,
+          "breathAmplitude": 0.01,
+          "oscillationRate": 1.1,
+          "dampingBias": 0.24,
+          "anchorRadius": 0.56,
+          "anchorTightness": 0.76,
+          "localCohortBias": 0.88
+        },
+        "brace_current": {
+          "mode": "flow_brace",
+          "radius": 1.46,
+          "radiusLift": 0.24,
+          "radialBias": -0.01,
+          "tangentialBias": 0.012,
+          "verticalBias": 0,
+          "breathAmplitude": 0.006,
+          "oscillationRate": 0.72,
+          "dampingBias": 0.44,
+          "anchorRadius": 0.54,
+          "anchorTightness": 0.88,
+          "localCohortBias": 0.91
+        },
+        "aligned_relay": {
+          "mode": "aligned_handoff",
+          "radius": 1.62,
+          "radiusLift": 0.3,
+          "radialBias": -0.006,
+          "tangentialBias": 0.048,
+          "verticalBias": 0.003,
+          "breathAmplitude": 0.014,
+          "oscillationRate": 1.34,
+          "dampingBias": 0.18,
+          "anchorRadius": 0.62,
+          "anchorTightness": 0.7,
+          "localCohortBias": 0.84
+        },
+        "exchange_relay": {
+          "mode": "recirculating_handoff",
+          "radius": 1.7,
+          "radiusLift": 0.34,
+          "radialBias": 0.004,
+          "tangentialBias": 0.06,
+          "verticalBias": 0.004,
+          "breathAmplitude": 0.024,
+          "oscillationRate": 1.76,
+          "dampingBias": 0.1,
+          "anchorRadius": 0.72,
+          "anchorTightness": 0.58,
+          "localCohortBias": 0.76
+        },
+        "full_relay": {
+          "mode": "full_conduit_handoff",
+          "radius": 1.74,
+          "radiusLift": 0.36,
+          "radialBias": -0.004,
+          "tangentialBias": 0.056,
+          "verticalBias": 0.005,
+          "breathAmplitude": 0.022,
+          "oscillationRate": 1.46,
+          "dampingBias": 0.16,
+          "anchorRadius": 0.7,
+          "anchorTightness": 0.68,
+          "localCohortBias": 0.82
+        }
+      },
+      "residue": {
+        "defaultDuration": 29,
+        "durationByMemoryMode": {
+          "balanced_exchange_retained": 34,
+          "full_conduit_retained": 36,
+          "flow_alignment_retained": 31,
+          "stable_transmission_retained": 33
+        },
+        "modeByMemoryMode": {
+          "outbound_signal_retained": "relay_wake",
+          "intake_current_retained": "caught_current_trace",
+          "held_intake_retained": "caught_current_trace",
+          "flow_alignment_retained": "aligned_flow_trace",
+          "stable_transmission_retained": "relay_wake",
+          "balanced_exchange_retained": "recirculation_trace",
+          "full_conduit_retained": "full_conduit_trace"
+        }
+      },
+      "recognition": {
+        "senseRadius": 3.45,
+        "roleGain": 1.04,
+        "interpretationByMode": {
+          "care_afterimage": "care_flow_detected",
+          "protective_hush": "guarded_flow_detected",
+          "settled_trace": "coherent_flow_detected",
+          "sample_imprint": "sample_flow_detected",
+          "counter_scan_echo": "counter_flow_detected",
+          "guarded_sensor_hush": "guarded_sensor_flow_detected",
+          "relay_wake": "known_relay_wake",
+          "caught_current_trace": "known_current_hold",
+          "aligned_flow_trace": "known_alignment_trace",
+          "recirculation_trace": "known_recirculation_trace",
+          "full_conduit_trace": "known_full_conduit_trace"
+        }
+      }
+    },
+    "meaning": "A current-borne relay organism that catches, aligns, and passes Host flow rather than caring for or observing the Core."
+  }
+]

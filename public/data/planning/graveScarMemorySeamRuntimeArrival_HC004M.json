@@ -1,0 +1,134 @@
+{
+  "id": "HC004M_GRAVE_SCAR_MEMORY_SEAM_RUNTIME_ARRIVAL",
+  "build": "HC-004M",
+  "version": "0.0.59",
+  "status": "runtime_arrival_prototype_active_loop_deferred",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceArrivalPlanning": "HC004L_GRAVE_SCAR_MEMORY_SEAM_ARRIVAL_PLANNING",
+  "sourceContinuityPlan": "GRAVE_ROUTE_CONTINUITY_PLANNING_HC004I",
+  "sourceExitReadinessPrototype": "GRAVE_EXIT_READINESS_PROTOTYPE_HC004H",
+  "sourceVisualComposerSupport": "HC004K_GRAVE_SCAR_MEMORY_SEAM_VISUAL_COMPOSER_SUPPORT",
+  "sourceRecipePack": "HC004J_GRAVE_SCAR_MEMORY_SEAM_RECIPE_PACK",
+  "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "destinationCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+  "triggerRules": {
+    "requiresActiveSourceCell": true,
+    "requiresGraveExitReadinessActive": true,
+    "requiresGraveExitReadinessMarkerVisible": true,
+    "requiresGraveLoopStabilityPlanningReady": true,
+    "requiresSafeMemoryTransferComplete": true,
+    "requiresProtectedRemainsVisible": true,
+    "requiresNoForcedAbsorb": true,
+    "requiresPulsePressed": true,
+    "preferredFocusObject": "scar_lock_plate_001",
+    "allowPulseIfMarkerVisibleWithoutHardLock": true,
+    "absorbStartsArrival": false,
+    "buttonLanguage": "Pulse the readable scar lock; do not absorb it."
+  },
+  "arrivalPrototype": {
+    "mode": "slow_no_gate_continuity_pull",
+    "playerRelocationThisPass": true,
+    "runtimeArrivalThisPass": true,
+    "newMorphPlanThisPass": false,
+    "runtimeExitArchitectureThisPass": false,
+    "targetFocusActivationThisPass": false,
+    "seamInteractionLoopThisPass": false,
+    "durationSeconds": 5.4,
+    "entryOffset": [
+      0.18,
+      0.02,
+      -1.14
+    ],
+    "sourceFadeTo": 0.26,
+    "destinationFadeFrom": 0.0,
+    "destinationFadeTo": 1.0,
+    "protectedRemainFadeTo": 0.44,
+    "arrivalCompletionActiveCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+  },
+  "seamSpawnPlan": {
+    "environmentObjects": [
+      {
+        "objectId": "grave_scar_memory_seam_surface_001",
+        "visualRecipeId": "grave_scar_memory_seam_surface_v01",
+        "position": [
+          0.12,
+          -0.02,
+          -2.1
+        ],
+        "scale": 1.0
+      },
+      {
+        "objectId": "grave_scar_memory_seam_haze_001",
+        "visualRecipeId": "grave_scar_memory_seam_haze_v01",
+        "position": [
+          0.12,
+          0.0,
+          -2.1
+        ],
+        "scale": 1.0
+      }
+    ],
+    "chemObjects": [
+      "scar_memory_seam_thread_001",
+      "residue_stitch_lattice_001",
+      "echo_husk_imprint_001",
+      "closed_inheritance_suture_001"
+    ],
+    "firstReadObject": "scar_memory_seam_thread_001",
+    "readabilityOrder": [
+      "scar_memory_seam_thread_001",
+      "residue_stitch_lattice_001",
+      "echo_husk_imprint_001",
+      "closed_inheritance_suture_001"
+    ],
+    "carryForwardProtectedRemains": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "safeTraceObject": "residue_silt_cloud_001"
+  },
+  "cameraPlan": {
+    "mode": "runtime_close_low_suture_arrival",
+    "yaw": -0.24,
+    "pitch": 0.5,
+    "distance": 7.05,
+    "lift": 0.36,
+    "blendStrength": 1.38,
+    "activeDuringArrival": true,
+    "activeAfterCompletionSeconds": 2.8
+  },
+  "playerFacingLanguage": {
+    "guideLine": "Now the scar can carry you, slowly. Pulse it; do not open it like a door.",
+    "objectiveLine": "Let the seam pull the core forward. Keep the husk, scar, and seed intact.",
+    "hudStatusReady": "Seam Arrival: pulse scar lock / no gate",
+    "hudStatusMoving": "Seam Arrival: slow continuity pull",
+    "hudStatusComplete": "Seam Arrival: arrived / loop deferred",
+    "nextActionReady": "Pulse the visible scar-readiness marker. Do not hold absorb.",
+    "nextActionMoving": "Stay with the pull. This is not a teleport or branch menu.",
+    "nextActionComplete": "Read the seam shape. No seam interaction loop exists yet."
+  },
+  "forbiddenScope": [
+    "old gates",
+    "doors",
+    "teleports",
+    "branch select menu",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "target focus activation for the seam",
+    "full seam interaction loop",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "new entity spawns",
+    "consuming old core husk",
+    "opening inheritance seed remnant",
+    "map menu jump",
+    "hard gate prompt"
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004N",
+    "label": "Grave Scar-Memory Seam Arrival Stabilization and Readability"
+  }
+}

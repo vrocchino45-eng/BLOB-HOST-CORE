@@ -1,0 +1,26 @@
+{
+  "id": "HC-024D0B",
+  "name": "Target-Owned A + Guide Hone",
+  "purpose": "Preserve world interaction inside Core Inspection while making the Guide an explicit, visually honed target for entering Core Work.",
+  "primaryActionRule": "A/E interacts with the currently honed target",
+  "ownership": {
+    "world": "world_interact",
+    "coreInspectionWorld": "world_interact",
+    "coreInspectionGuideHoned": "enter_core_work_via_guide",
+    "coreWork": "core_work_grab_place",
+    "statusUi": "reserved_no_world_or_core_action"
+  },
+  "guideHone": {
+    "visualCue": "subtle additive Guide glow",
+    "beginGlowDot": 0.9,
+    "honeDot": 0.965,
+    "maxHoneDistance": 5.6,
+    "onlyDuringExternalCoreInspection": true,
+    "futureTranslation": "same hone language may identify other Core/world targets"
+  },
+  "controllerRemap": false,
+  "chemistryAdded": false,
+  "progressionChanged": false,
+  "debugQuickTestbedPreserved": true,
+  "activeSourceModuleCount": 88
+}

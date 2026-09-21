@@ -1,0 +1,30 @@
+{
+  "id": "HC-028C1",
+  "label": "Phase Architecture Visual Readability",
+  "parent": "HC-028C",
+  "baseline": "HC027L1_GOLDEN_INQUIRY_BASELINE_01",
+  "sourceJsCount": 94,
+  "scope": [
+    "Make the existing 3 -> 6 -> 12 Core engine architecture visually distinguishable at ordinary play scale",
+    "Render 3-phase as a triangle, 6-phase as a hexagon, and 12-phase as a dodecagon",
+    "Preserve Pulse -> Absorb -> Stabilize sequencing and debug-only O cycling",
+    "Add a short architecture-change bloom so phase-resolution changes are immediately readable"
+  ],
+  "locked": [
+    "CoreEngineSystem sequencing and RPM law",
+    "O debug-cycle input ownership",
+    "HC028C Vascular world-rhythm grammar",
+    "HC028B1 transition/reachability repair",
+    "controller mapping",
+    "chemistry and Core Work placement",
+    "route progression"
+  ],
+  "forbidden": [
+    "gameplay advantage from 3/6/12 phase count",
+    "automatic phase architecture progression",
+    "new input mapping",
+    "route or objective changes",
+    "non-triadic geometry",
+    "phase-count timing gate"
+  ]
+}

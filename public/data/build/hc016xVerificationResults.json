@@ -1,0 +1,35 @@
+{
+  "build": "HC-016X",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "src/player/CoreEmbodimentSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/player/PlayerMovementController.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/ecology/OrbiterSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/ecology/EntitySystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "HC016X validator",
+      "status": "PASS",
+      "detail": "[HC016X] Core ~50% visual normalization PASS\n[HC016X] normal movement + existing L3 boost baseline PASS\n[HC016X] Guide/Tender/wake spacing normalization PASS\n[HC016X] interaction ranges + route dimensions locked PASS"
+    }
+  ],
+  "coreVisualScale": 0.52,
+  "normalSpeedLimit": 4.65,
+  "boostedSpeedLimit": 8.603,
+  "next": "player test before HC016Y"
+}

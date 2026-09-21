@@ -1,0 +1,52 @@
+{
+  "id": "OPENING_FLOW_TUNING_HC003C",
+  "build": "HC-003C",
+  "sourceBlueprint": "BLOB_HOST_CORE_REBUILD_BLUEPRINT_v0_1",
+  "mode": "first_playable_minute_trim",
+  "requiredFirstMinuteCells": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "beyondMinuteCells": [
+    "CELL_BLOOM_RESIDUE_FORK_001"
+  ],
+  "targetDurationSeconds": 90,
+  "debugDefaultMode": "compact",
+  "guidePromptCadence": {
+    "minHoldSeconds": 2.8,
+    "earlySeedHoldSeconds": 3.4,
+    "avoidDebugLanguage": true
+  },
+  "openingCamera": {
+    "autoBiasSeconds": 8.0,
+    "yaw": 0.1,
+    "pitch": 0.3,
+    "distance": 7.75,
+    "seedViewLift": 0.08,
+    "doNotOverrideManualLook": true
+  },
+  "safeSeedTuning": {
+    "objectId": "dormant_seed_nutrient_001",
+    "preferredOpeningPosition": [
+      0.62,
+      -0.08,
+      -0.96
+    ],
+    "focusBoost": 18.0,
+    "readabilityPulseScale": 0.075,
+    "holdAssistNote": "The first absorb should feel like a guided bond, not a pickup hunt."
+  },
+  "firstMorphTuning": {
+    "readinessLanguage": "The tissue is ready to fold.",
+    "pulseLanguage": "Pulse when the wound answers.",
+    "noGateReminder": true
+  },
+  "acceptance": [
+    "safe seed visible within first camera composition",
+    "RT absorb hold feels forgiving",
+    "first morph instruction is world-facing",
+    "debug hidden mode remains playable",
+    "no gates, doors, or region transitions"
+  ]
+}

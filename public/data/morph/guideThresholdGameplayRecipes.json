@@ -1,0 +1,111 @@
+[
+  {
+    "id": "GUIDE_THRESHOLD_GAMEPLAY_FILL_HC007B",
+    "sourceCellId": "CELL_SCAR_FLOW_FOLD_001",
+    "title": "Scar Current Traversal Play",
+    "purpose": "Fill the space before the proven Guide Threshold convergence trigger with systemic traversal: ride the living current, pulse to read flow, stabilize through turbulence, and choose optional off-current rewards.",
+    "triggerPolicy": {
+      "preserveExistingLayeredCompletionTrigger": true,
+      "neverDirectlyCompletesGuideThreshold": true,
+      "layeredTriggerBecomesReadableAtConvergence": true,
+      "convergencePathProgress": 0.58,
+      "minimumFamiliarity": 0.54
+    },
+    "path": {
+      "points": [
+        [
+          -0.15,
+          -0.42,
+          -0.72
+        ],
+        [
+          -0.82,
+          0.18,
+          -1.08
+        ],
+        [
+          -1.08,
+          0.92,
+          -1.58
+        ],
+        [
+          -0.45,
+          1.28,
+          -1.92
+        ],
+        [
+          0.28,
+          0.58,
+          -2.16
+        ],
+        [
+          0.72,
+          -0.38,
+          -2.42
+        ]
+      ],
+      "volumetricPath": true,
+      "verticalExcursion": 1.7,
+      "currentRange": 0.82,
+      "softRange": 1.34,
+      "pulseRevealRange": 2.2,
+      "mainCurrentStrength": 0.74,
+      "offCurrentTurbulence": 0.72,
+      "stabilizedTurbulenceMultiplier": 0.28,
+      "flowLookAhead": 0.08
+    },
+    "readiness": {
+      "pathWeight": 0.62,
+      "pulseWeight": 0.15,
+      "stabilizeWeight": 0.12,
+      "rewardWeight": 0.11,
+      "stabilizeSecondsForFullCredit": 1.3,
+      "minimumSecondsBeforeReady": 2.4
+    },
+    "optionalRewards": [
+      "guide_threshold_flux_mote_001",
+      "guide_threshold_memory_mote_001"
+    ],
+    "worldReads": {
+      "memoryFleckId": "scar_memory_fleck_001",
+      "pressureCurrentId": "pressure_fold_current_001",
+      "clotId": "scar_flow_clot_001"
+    },
+    "visual": {
+      "signalColor": 11137023,
+      "memoryColor": 16766634,
+      "pressureColor": 10354687,
+      "baseOpacity": 0.08,
+      "revealedOpacity": 0.34,
+      "strandCount": 4,
+      "moteCount": 20,
+      "eddyCount": 5,
+      "objectDefiningRings": false,
+      "authoredPressureBodies": true
+    },
+    "playerFacing": {
+      "guideLine": "The current is already moving. Read it by moving with it, not by waiting for instructions.",
+      "objectiveLine": "Explore the fold: X reveals flow, LT braces against turbulence, RT draws compatible matter.",
+      "nextAction": "Ride the main current or leave it briefly for side matter; return toward the bright convergence ahead."
+    },
+    "forbiddenScope": [
+      "direct Guide Threshold completion",
+      "new gate",
+      "teleport",
+      "forced route",
+      "new combat",
+      "Hub changes",
+      "Grave changes"
+    ],
+    "build": "HC-021A",
+    "interactionFamily": {
+      "familyId": "guide_living_current_family",
+      "inherits": "surface_nursery_matter_family grammar",
+      "variation": "continuous living flow rather than free matter",
+      "expectedLearning": "Pulse reads; Stabilize coheres turbulence; raw current rejects Absorb",
+      "newPrimaryMechanic": false,
+      "newRegion": false,
+      "objectiveAuthority": false
+    }
+  }
+]

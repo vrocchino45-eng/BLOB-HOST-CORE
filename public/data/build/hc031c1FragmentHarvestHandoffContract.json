@@ -1,0 +1,35 @@
+{
+  "build": "HC-031C1",
+  "parent": "HC-031C",
+  "label": "Fragment Harvest Handoff",
+  "purpose": "repair the rupture-to-harvest handoff so released fragments can actually be acquired by the existing relationship targeting and BondSystem",
+  "locks": [
+    "HC031C rupture archetypes and residue aftermath",
+    "HC029A TargetingSystem relationship rules",
+    "BondSystem soft-bond absorb authority",
+    "HC031A1 Grave II octave geometry",
+    "HC031B regional resonance",
+    "Grave exit safety"
+  ],
+  "fixLaw": {
+    "targetingSystemRewrite": false,
+    "bondSystemRewrite": false,
+    "newPickupButton": false,
+    "automaticCollection": false,
+    "absorbHeldFragmentFocusOverride": true,
+    "cameraStillChoosesFragment": true,
+    "captureWindowsExtended": true,
+    "missedFragmentsStillBecomeResidue": true,
+    "combatStillCannotBlockExit": true
+  },
+  "acceptanceTests": [
+    "after rupture, holding Absorb causes live fragments to become the active Grave focus set on the next frame",
+    "legacy Grave focus boosts cannot outrank loose fragments while Absorb is held",
+    "TargetingSystem still chooses among live fragments from camera/distance score and retains HC029A handoff rules",
+    "BondSystem remains byte-identical and performs the actual fragment absorb",
+    "capture windows allow deliberate collection of some fragments while still permitting misses",
+    "releasing Absorb immediately restores normal Grave focus hierarchy",
+    "missed fragments still cool into persistent residue",
+    "combat never blocks Grave exit or owns route progression"
+  ]
+}

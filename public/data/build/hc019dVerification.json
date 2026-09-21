@@ -1,0 +1,17 @@
+{
+  "build": "HC019D",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "validator": "[HC019D] continuous ambient interaction field PASS\n[HC019D] short-lived verb response memory PASS\n[HC019D] no progression/inventory/chemistry authority PASS\n[HC019D] locked gameplay authorities PASS",
+  "runtimeSyntax": "PASS: 101 JS modules",
+  "lockedSystems": {
+    "src/morph/LocalCellBoundaryMorphSystem.js": true,
+    "src/opening/SurfaceWakeGameplaySystem.js": true,
+    "src/opening/SurfaceWakeLayeredInteractionSystem.js": true,
+    "src/morph/GuideThresholdLayeredInteractionSystem.js": true,
+    "src/chemistry/BondSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/camera/InspectionCameraSystem.js": true
+  },
+  "bundler": "NOT_RUN: packaged source omits node_modules; npm install then npm run dev/build locally"
+}

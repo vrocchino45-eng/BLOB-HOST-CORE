@@ -1,0 +1,51 @@
+{
+  "build": "HC-029B",
+  "parent": "HC-029A",
+  "label": "Relationship Effect Ownership",
+  "lockedRelationshipModel": {
+    "targetingSystem": "HC029A behavior/hash locked",
+    "manualCycleButton": false,
+    "cameraSnap": false,
+    "relationshipPhases": [
+      "none",
+      "candidate",
+      "engaged",
+      "releasing"
+    ]
+  },
+  "effectOwnership": {
+    "pulse": {
+      "ambientInquiryPreserved": true,
+      "ambientResponseStrength": 0.22,
+      "focusedResponseStrength": 1.0,
+      "owner": "retained relationship when present; otherwise prior-frame soft candidate",
+      "legacyAffectedObjectsMeaning": "broad inquiry set preserved for discovery/morph readers"
+    },
+    "absorb": {
+      "owner": "BondSystem consumes frameState.targeting.targetId",
+      "behaviorChanged": false
+    },
+    "stabilize": {
+      "focusedOwner": "retained relationship target",
+      "ambientHostStillResponds": true,
+      "ambientScaleWhileFocused": 0.38,
+      "routeFallbackPreserved": true
+    },
+    "chords": "Pulse/Absorb/Stabilize consume the same retained targeting relationship; primitives compose rather than retarget independently"
+  },
+  "runtimeOrder": {
+    "reordered": false,
+    "pulseEdgeTruth": "ChemObjectSystem uses already-resolved prior-frame targeting state because it updates before TargetingSystem",
+    "stabilizeTruth": "CoreVerbPhysicalizationSystem runs after registry update and can consume same-frame retained relationship"
+  },
+  "forbidden": {
+    "newTargetingUI": false,
+    "newButton": false,
+    "targetCycle": false,
+    "cameraSnap": false,
+    "routeChange": false,
+    "progressionChange": false,
+    "ecologyChange": false,
+    "targetingThresholdRetune": false
+  }
+}

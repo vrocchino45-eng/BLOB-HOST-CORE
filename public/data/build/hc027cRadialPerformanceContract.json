@@ -1,0 +1,66 @@
+{
+  "pass": "HC-027C",
+  "owner": "CoreRadialPerformanceSystem",
+  "purpose": "Translate the existing three-zone Core topology into a continuous, testable power/endurance personality without changing the canonical 3→6→12 engine grammar.",
+  "source": {
+    "owner": "CoreEmbodimentSystem",
+    "state": "spatialCoreChemistry",
+    "zones": ["deep_core", "inner_body", "membrane"],
+    "pieceCount": 3,
+    "topologyStateCount": 10
+  },
+  "zoneTraits": {
+    "deep_core": {
+      "meaning": "diesel / reserve drive",
+      "output": 0.88,
+      "response": 0.88,
+      "enduranceCapacity": 1.55,
+      "recovery": 1.5,
+      "efficiency": 1.35,
+      "stability": 1.3
+    },
+    "inner_body": {
+      "meaning": "transmission / control drive",
+      "output": 1.0,
+      "response": 1.08,
+      "enduranceCapacity": 1.05,
+      "recovery": 1.05,
+      "efficiency": 1.12,
+      "stability": 1.05
+    },
+    "membrane": {
+      "meaning": "race / output drive",
+      "output": 1.18,
+      "response": 1.2,
+      "enduranceCapacity": 0.72,
+      "recovery": 0.65,
+      "efficiency": 0.72,
+      "stability": 0.7
+    }
+  },
+  "blendRule": "Each of the three retained anatomy pieces contributes one-third of the trait profile according to its current radial zone; 3:0:0, 2:1:0, 1:1:1, and all other legal distributions therefore share one continuous law.",
+  "endurance": {
+    "initialReserve01": 1,
+    "drainDemand": ["boost", "pulse transient", "absorb hold", "stabilize hold"],
+    "recoveryCondition": "no active performance demand",
+    "deepRecoversFastest": true,
+    "membraneConsumesFastest": true
+  },
+  "movement": {
+    "consumer": "PlayerMovementController",
+    "appliesTo": "boost acceleration and boost speed only",
+    "normalMovementMultiplier": 1,
+    "performanceSystemMovesPlayerDirectly": false
+  },
+  "locked": {
+    "engineArchitectures": [3, 6, 12],
+    "engineArchitectureChangesPerformance": false,
+    "architectureSelectionProgression": false,
+    "coreWorkPlacementOwnerChanges": false,
+    "chemistryOwnerChanges": false,
+    "randomMisfire": false,
+    "redlineFailure": false,
+    "nonTriadicGeometry": false,
+    "plasticity": false
+  }
+}

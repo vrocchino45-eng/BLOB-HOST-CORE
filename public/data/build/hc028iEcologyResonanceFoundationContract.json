@@ -1,0 +1,34 @@
+{
+  "id": "HC-028I",
+  "parent": "HC-028H2",
+  "title": "Ecology Resonance Foundation",
+  "purpose": "Carry the existing regional P/A/S composition and Core/world resonance into the two currently authored organisms without adding new entities, AI goals, combat, bond rules, repair rules, progression, route, movement, or input authority.",
+  "newSystem": "EntityEcologyResonanceSystem",
+  "liveAuthoredEntities": [
+    "nursery_membrane_tender_001",
+    "membrane_watcher_001"
+  ],
+  "newEntityTypeAdded": false,
+  "genericEnemyAdded": false,
+  "combatChanged": false,
+  "entityBehaviorChanged": false,
+  "entityMovementChanged": false,
+  "bondRulesChanged": false,
+  "repairRulesChanged": false,
+  "progressionChanged": false,
+  "routeChanged": false,
+  "inputChanged": false,
+  "verbPowerChanged": false,
+  "worldCompositionChanged": false,
+  "coreResonanceChanged": false,
+  "audioMixChanged": false,
+  "sharedHostClock": true,
+  "crossRegionProof": "bonded_tender_only",
+  "watcherRemainsNurseryBound": true,
+  "ecologyExpressionLaw": {
+    "pulse": "outward_expression",
+    "absorb": "inward_gathering",
+    "stabilize": "settle_anchor"
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.9"
+}

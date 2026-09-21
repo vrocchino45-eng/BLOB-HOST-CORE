@@ -1,0 +1,27 @@
+{
+  "id": "HC-028I1",
+  "parent": "HC-028I",
+  "rule": "proximity_returns_must_be_departed_before_they_can_return_and_revisited_returns_must_rearm",
+  "reportedFailure": "comb_entry_spawn_overlapped_comb_return_fold_and_immediately_ejected_player",
+  "rootCause": {
+    "combReturnOffsetFromEntry": 0.75,
+    "combReturnInteractionRange": 1.45,
+    "overlapAtArrival": true,
+    "previousProximityTriggerAlwaysFresh": true,
+    "previousReturnStateOneShotAfterCompletion": true
+  },
+  "repair": {
+    "departureArming": true,
+    "departureMargin": 0.3,
+    "rearmOnFreshSourceCellVisit": true,
+    "keepSpatialProximityReturns": true,
+    "moveCombGeometry": false,
+    "changeCombGameplay": false,
+    "changeHubCommitGrammar": false
+  },
+  "scope": {
+    "owner": "LocalCellBoundaryMorphSystem",
+    "appliesToAllProximityReturnRecipes": true,
+    "reason": "same_one_shot_return_state_was_latent_across_revisited_routes"
+  }
+}

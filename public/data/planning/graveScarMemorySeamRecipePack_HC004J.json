@@ -1,0 +1,106 @@
+{
+  "id": "HC004J_GRAVE_SCAR_MEMORY_SEAM_RECIPE_PACK",
+  "status": "recipe_pack_only_not_runtime_active",
+  "build": "HC-004J",
+  "version": "0.0.56",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceContinuityPlan": "GRAVE_ROUTE_CONTINUITY_PLANNING_HC004I",
+  "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "plannedLocalCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+  "plannedLocalCellStatus": "authored_recipe_pack_not_runtime_active",
+  "structuralMeaning": "The Grave bed scar-readiness now has an authored deeper seam recipe, but the seam is still closed data only: no exit, no relocation, no morph, no route branch.",
+  "localCell": {
+    "id": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+    "dominantDomains": [
+      "scar",
+      "residue",
+      "signal",
+      "seed"
+    ],
+    "matterStates": [
+      "scarred",
+      "residue_silt",
+      "signal_vapor",
+      "dormant_seed"
+    ],
+    "source": "deeper_grave_scar_memory_seam"
+  },
+  "chemObjects": [
+    "scar_memory_seam_thread_001",
+    "residue_stitch_lattice_001",
+    "echo_husk_imprint_001",
+    "closed_inheritance_suture_001"
+  ],
+  "visualRecipes": [
+    "grave_scar_memory_seam_surface_v01",
+    "grave_scar_memory_seam_haze_v01",
+    "scar_memory_seam_thread_v01",
+    "residue_stitch_lattice_v01",
+    "echo_husk_imprint_v01",
+    "closed_inheritance_suture_v01"
+  ],
+  "placeholderContracts": [
+    "debug_grave_scar_memory_seam_surface_001",
+    "debug_grave_scar_memory_seam_haze_001",
+    "debug_scar_memory_seam_thread_001",
+    "debug_residue_stitch_lattice_001",
+    "debug_echo_husk_imprint_001",
+    "debug_closed_inheritance_suture_001"
+  ],
+  "carryForwardProtectedRemains": [
+    "old_core_husk_memory_001",
+    "scar_lock_plate_001",
+    "inheritance_seed_remnant_001"
+  ],
+  "carryForwardSafeTransferObject": "residue_silt_cloud_001",
+  "runtimeActivation": {
+    "cellSpawn": "forbidden",
+    "exitActivation": "forbidden",
+    "playerRelocation": "forbidden",
+    "newMorphActivation": "forbidden",
+    "newRouteBranch": "forbidden",
+    "targetFocusRule": "forbidden_until_later_pass"
+  },
+  "allowedScope": [
+    "author CELL_GRAVE_SCAR_MEMORY_SEAM_001 local cell recipe as data only",
+    "author scar-memory seam chem object recipes",
+    "author seam visual recipes and placeholder contracts",
+    "update data loader and validators",
+    "document next composer-support pass"
+  ],
+  "forbiddenScope": [
+    "runtime route activation",
+    "new morph activation",
+    "runtime exit activation",
+    "player relocation",
+    "new route branch",
+    "target focus activation",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "new entity spawns",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion",
+    "consuming the old core husk",
+    "opening the inheritance seed remnant",
+    "moving the player to the scar-memory seam"
+  ],
+  "acceptanceTests": [
+    "CELL_GRAVE_SCAR_MEMORY_SEAM_001 exists as a local cell recipe with authored_recipe_pack_not_runtime_active status.",
+    "Seam chem objects exist as authored_recipe_pack_not_runtime_spawned and point back to CELL_GRAVE_SCAR_MEMORY_SEAM_001.",
+    "Seam visual recipes and placeholder contracts exist, but visual composer support is deferred.",
+    "No morph plan, target-focus rule, exit, gate, door, teleport, branch menu, stage-node loader, or player relocation targets the seam.",
+    "Original Grave protected remains remain unconsumed and the safe transfer remains limited to residue_silt_cloud_001."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004K",
+    "label": "Grave Scar-Memory Seam Visual Composer Support",
+    "mode": "visual_support_only_no_runtime_activation"
+  }
+}

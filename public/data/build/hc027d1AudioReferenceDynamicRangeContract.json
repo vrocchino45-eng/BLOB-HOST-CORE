@@ -1,0 +1,52 @@
+{
+  "id": "hc027d1_audio_reference_dynamic_range_calibration",
+  "owner": "EventAnchoredHostAudioSystem",
+  "purpose": "Establish a stable listening reference and internal mix hierarchy from primary playtest hearing feedback before additional audio content is added.",
+  "reference": {
+    "knownTooQuiet": "HC027D at 100% system output was audible but faint; zoom-in was louder but still faint.",
+    "targetSystemOutputPercent": "60-70",
+    "targetNormalRead": "comfortably audible without concentrating on it",
+    "targetHeadroomDb": 8
+  },
+  "mix": {
+    "masterGain": 0.82,
+    "buses": {
+      "core": 1.85,
+      "verbs": 2.15,
+      "world": 1.95,
+      "ambience": 1.35,
+      "event": 1.4
+    },
+    "pannerRefDistance": 4.2,
+    "pannerMaxDistance": 42,
+    "pannerRolloff": 0.42,
+    "distanceRule": "far_quiet_but_readable_medium_normal_close_intimate",
+    "zoomProximityStillMatters": true
+  },
+  "outputSafety": {
+    "type": "DynamicsCompressorNode",
+    "thresholdDb": -4,
+    "kneeDb": 3,
+    "ratio": 8,
+    "attackSeconds": 0.003,
+    "releaseSeconds": 0.16,
+    "purpose": "protect procedural overlap from clipping without flattening ordinary dynamics"
+  },
+  "busOwnership": {
+    "core": "engine cadence and Core Work manipulation",
+    "verbs": "Pulse emission plus Absorb/Stabilize processes",
+    "world": "Pulse returns, contact, landmarks, chemistry responses",
+    "ambience": "Host-cycle background pulse",
+    "event": "unlock confirmation and future rare high-importance events"
+  },
+  "locked": {
+    "pulseGameplayRangeChanged": false,
+    "pulseReturnTimingChanged": false,
+    "radialPhysiologyChanged": false,
+    "movementAuthorityChanged": false,
+    "chemistryAuthorityChanged": false,
+    "progressionAuthorityChanged": false,
+    "engineGrammarChanged": false,
+    "newGameplaySystems": false
+  }
+}

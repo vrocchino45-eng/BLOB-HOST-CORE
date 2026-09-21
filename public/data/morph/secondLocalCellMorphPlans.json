@@ -1,0 +1,63 @@
+[
+  {
+    "id": "MORPH_SCAR_FLOW_TO_SIGNAL_CHORUS_001",
+    "status": "runtime_second_morph_active_prototype",
+    "sourceCell": "CELL_SCAR_FLOW_FOLD_001",
+    "destinationCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "branch": "HC-002",
+    "morphType": "no_gate_chemistry_readiness_fold",
+    "designRule": "The player does not enter a door. Scar-flow stabilizes enough for buried signal tissue to become readable, and the local cell folds into a signal-chorus nerve pocket.",
+    "readiness": {
+      "requiresScarFlowLoopStage": "scar_flow_stable",
+      "minimumStability": 0.82,
+      "minimumPathConfidence": 0.72,
+      "minimumPressureRelief": 0.66,
+      "maximumClotWarning": 0.42,
+      "requiredPlayerComposition": {
+        "signal": 0.1,
+        "seed": 0.28,
+        "scarMax": 0.2
+      }
+    },
+    "triggerPrototype": {
+      "afterReady": "Pulse the resonant path thread or guide shimmer while the scar-flow fold is stable.",
+      "controller": "X",
+      "keyboard": "Space",
+      "notAllowed": [
+        "door_prompt",
+        "teleport_marker",
+        "press_E_gate",
+        "hard_threshold"
+      ]
+    },
+    "worldFacingRead": {
+      "beforeReady": "The fold is still holding old pressure. Read the scar, follow the path, and do not feed the clot.",
+      "ready": "The scar-flow has softened. A buried choir nerve is beginning to answer.",
+      "trigger": "Pulse the listening thread and let the fold become signal."
+    },
+    "expectedDestinationFeel": {
+      "dominantDomains": [
+        "signal",
+        "form",
+        "flux"
+      ],
+      "secondaryDomains": [
+        "seed",
+        "residue"
+      ],
+      "visualLanguage": [
+        "nerve_threads",
+        "choir_nodes",
+        "answering_waves",
+        "soft_signal_membrane",
+        "listening_pores"
+      ],
+      "movementFeel": "lighter than scar-flow, still viscous, pulled by rhythmic signal waves",
+      "playFunction": "teach pulse tuning and entity/orbiter synchrony after scar pressure has been respected"
+    },
+    "notes": {
+      "HC-002K": "Destination CELL_SIGNAL_CHORUS_NERVE_001 is now authored in localCellRecipes.json with chem objects, visual recipes, and placeholders. Runtime second morph remains inactive.",
+      "HC-002L": "Runtime second morph is active as a no-gate prototype. Trigger after scar-flow loop is stable, then pulse to let signal become readable."
+    }
+  }
+]

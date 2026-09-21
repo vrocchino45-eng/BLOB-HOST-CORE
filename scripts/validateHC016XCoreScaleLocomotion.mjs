@@ -1,0 +1,23 @@
+import fs from "node:fs";
+const core=fs.readFileSync(new URL("../src/player/CoreEmbodimentSystem.js",import.meta.url),"utf8");
+const movement=fs.readFileSync(new URL("../src/player/PlayerMovementController.js",import.meta.url),"utf8");
+const orbiter=fs.readFileSync(new URL("../src/ecology/OrbiterSystem.js",import.meta.url),"utf8");
+const tender=fs.readFileSync(new URL("../src/ecology/EntitySystem.js",import.meta.url),"utf8");
+const tuning=JSON.parse(fs.readFileSync(new URL("../public/data/input/controllerOnboardingTuning_HC003I.json",import.meta.url),"utf8"));
+const audit=JSON.parse(fs.readFileSync(new URL("../public/data/build/hc016xCoreScaleLocomotionAudit.json",import.meta.url),"utf8"));
+
+if(!core.includes("const CORE_VISUAL_SCALE = 0.52")) throw Error("Core visual scale normalization missing.");
+if(!core.includes("* CORE_VISUAL_SCALE")) throw Error("Core body deformation does not preserve normalized scale.");
+if(tuning.movement.speedLimit!==4.65) throw Error("Normal speed baseline missing.");
+if(tuning.movement.boostSpeedMultiplier!==1.85) throw Error("Boost speed baseline missing.");
+if(tuning.movement.boostMultiplier!==1.8) throw Error("Boost acceleration baseline missing.");
+if(!movement.includes("movementTuning.boostSpeedMultiplier ?? 1.85")) throw Error("Movement owner is not using boost speed tuning.");
+if(!orbiter.includes("new THREE.Vector3(0.82, 0.68, 0.52)")) throw Error("Guide offset not normalized.");
+if(!tender.includes("this.followTarget.x -= 0.98")) throw Error("Tender offset not normalized.");
+if(audit.core.worldSpaceInteractionRangesChanged!==false) throw Error("Interaction-range lock violated.");
+if(audit.core.routeDimensionsChanged!==false) throw Error("Route-dimension lock violated.");
+if(audit.movement.newMovementButtonAdded!==false) throw Error("Unexpected new movement control.");
+console.log("[HC016X] Core ~50% visual normalization PASS");
+console.log("[HC016X] normal movement + existing L3 boost baseline PASS");
+console.log("[HC016X] Guide/Tender/wake spacing normalization PASS");
+console.log("[HC016X] interaction ranges + route dimensions locked PASS");

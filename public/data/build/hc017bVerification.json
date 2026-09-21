@@ -1,0 +1,56 @@
+{
+  "build": "HC017B",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "checks": [
+    {
+      "name": "HC017B focused validator",
+      "status": "PASS",
+      "detail": "[HC017B] Pulse object recoil + single visual authority PASS\n[HC017B] Absorb target yielding PASS\n[HC017B] Stabilize target-local lattice/ordering PASS\n[HC017B] gameplay/range/route/camera/Core-scale locks PASS"
+    },
+    {
+      "name": "node --check runtime source (99 files)",
+      "status": "PASS",
+      "detail": "all runtime modules parse"
+    },
+    {
+      "name": "locked-system byte identity",
+      "status": "PASS",
+      "detail": "src/core/GameRuntime.js:unchanged, src/chemistry/BondSystem.js:unchanged, src/player/PlayerMovementController.js:unchanged, src/routes/GraveMemoryRouteSystem.js:unchanged, src/routes/VascularRhythmRouteSystem.js:unchanged, src/routes/SiltPressureRouteSystem.js:unchanged, src/camera/InspectionCameraSystem.js:unchanged"
+    },
+    {
+      "name": "bundler environment",
+      "status": "NOT_RUN",
+      "detail": "Packaged build does not include node_modules; run npm install before npm run dev/build, matching the normal local workflow."
+    }
+  ],
+  "lockedSystems": {
+    "src/core/GameRuntime.js": {
+      "unchanged": true,
+      "sha256": "899aa60ae94c583fc931f65e8e4d16fffe74dbbbf9d43ea62ccfacd071c13e22"
+    },
+    "src/chemistry/BondSystem.js": {
+      "unchanged": true,
+      "sha256": "df7d731feb101ef625e18168ba84edb5ebb5b576841a0f30001e3d4cb256e7fe"
+    },
+    "src/player/PlayerMovementController.js": {
+      "unchanged": true,
+      "sha256": "fc7b3f5d09bbf677284f97b0cc0b53a53a27dc7996ddf54e7e844f03c1151922"
+    },
+    "src/routes/GraveMemoryRouteSystem.js": {
+      "unchanged": true,
+      "sha256": "87c8b6be12c144cd2872ffa6eb305a980f3cf3965031ad6b11cda2fd5b1ee3f6"
+    },
+    "src/routes/VascularRhythmRouteSystem.js": {
+      "unchanged": true,
+      "sha256": "9f2266bf3c4110167a5f1918ed6ec0ae9670f987b5ae5abe21b7894cb1cff4e8"
+    },
+    "src/routes/SiltPressureRouteSystem.js": {
+      "unchanged": true,
+      "sha256": "cf0199f96b563c2bb7d8d265d7a56750f4d0b941ec3df960d953c2ece09226e4"
+    },
+    "src/camera/InspectionCameraSystem.js": {
+      "unchanged": true,
+      "sha256": "2e6244cb9207ab6df78c56fd4c2c6697c485e23792f1453d43fdf0baadfe25d4"
+    }
+  }
+}

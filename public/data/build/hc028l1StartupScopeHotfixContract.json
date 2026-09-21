@@ -1,0 +1,27 @@
+{
+  "id": "HC-028L1",
+  "parent": "HC-028L",
+  "rule": "first_slice_return_telemetry_must_not_reference_hub_route_recipe_scope",
+  "rootCause": {
+    "introducedIn": "HC-028F1",
+    "owner": "LocalCellBoundaryMorphSystem.publishEarlyReturnTraversal",
+    "failure": "ReferenceError: recipe is not defined during LocalCellBoundaryMorphSystem.init()",
+    "reason": "guided Hub commit telemetry fields were accidentally written into the older first-slice return publisher where no recipe variable exists"
+  },
+  "fix": {
+    "samePlayerPositionRetained": true,
+    "deliberateGuidedApproach": false,
+    "hubGuidedCommitBehaviorChanged": false,
+    "firstSliceReturnGameplayChanged": false,
+    "combReentryHotfixChanged": false,
+    "ecologyBehaviorChanged": false,
+    "routeProgressionChanged": false,
+    "playerMovementChanged": false
+  },
+  "regression": {
+    "publishEarlyReturnTraversalMustExecuteWithoutRecipeScope": true,
+    "methodMayReferenceRecipeIdentifier": false,
+    "startupScopeSmokeTestAdded": true
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.12"
+}

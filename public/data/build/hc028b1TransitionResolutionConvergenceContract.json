@@ -1,0 +1,22 @@
+{
+  "pass": "HC-028B1",
+  "authority": {
+    "gameplay": true,
+    "transitionOwner": "LocalCellBoundaryMorphSystem",
+    "movementOwner": "PlayerMovementController",
+    "hubConvergenceOwner": "HubInvestigationGameplaySystem",
+    "telemetryOwner": "SessionTelemetrySystem"
+  },
+  "returnActivation": {
+    "vascular": "proximity_after_route_resolved",
+    "silt": "proximity_after_route_resolved",
+    "grave": "unchanged_interact_locked"
+  },
+  "reachability": {
+    "forcedRelocation": false,
+    "stabilizeRequired": false,
+    "attachmentSuppressedOnlyDuringAvailableIncompleteHubConvergence": true,
+    "environmentFlowMinimumScaleAtCenter": 0.18
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.2"
+}

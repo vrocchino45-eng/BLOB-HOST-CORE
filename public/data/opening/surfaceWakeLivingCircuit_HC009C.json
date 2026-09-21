@@ -1,0 +1,125 @@
+{
+  "id": "SURFACE_WAKE_LIVING_NURSERY_CIRCUIT_HC009C",
+  "build": "HC-009C",
+  "status": "runtime_active_repeatable_ecology",
+  "sourceCellId": "CELL_MEMBRANE_NURSERY_001",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Turn Surface Wake into one repeatable biological circuit in which circulation carries matter, the Watcher reads risk, the Tender filters and feeds, the scar contaminates, and the Core changes the next cycle through Pulse, Absorb, or Stabilize.",
+  "agencyLock": {
+    "pass": "HC-009E",
+    "pulseRequiredBeforeFiltering": true,
+    "passiveCyclesRemainEcologicallyActive": true,
+    "passiveCyclesDoNotCountAsPlayerSuccess": true,
+    "successfulPlayerAuthoredCyclesRequiredForFold": 1,
+    "meaning": "The nursery may feed or suffer without the Core, but only a deliberate Pulse-led intervention proves agency, shapes growth, and causes the Watcher to reveal the existing Listening Fold."
+  },
+  "authority": {
+    "gameplayOwner": "SurfaceWakeGameplaySystem",
+    "presentationObserver": "SurfaceWakeEcologicalCausalitySystem",
+    "entityObserver": "EntitySystem",
+    "progressionOwnersPreserved": [
+      "SurfaceWakeLayeredInteractionSystem",
+      "BondSystem",
+      "LocalCellMorphSystem"
+    ]
+  },
+  "cycle": {
+    "initialDelaySeconds": 2.4,
+    "travelSeconds": 8.6,
+    "restSeconds": 2.2,
+    "matterSequence": [
+      "clean_nutrient_cluster",
+      "scar_touched_cluster",
+      "mixed_membrane_cluster"
+    ],
+    "pathPoints": [
+      [-4.25, -0.72, 1.65],
+      [-2.55, -0.18, 0.88],
+      [-0.55, 0.62, -0.18],
+      [0.72, 1.08, -0.92],
+      [1.72, 0.96, -1.48]
+    ],
+    "filterWindow": [0.28, 0.76],
+    "packetReadRange": 3.4,
+    "packetInteractRange": 1.2,
+    "stabilizeRange": 1.75,
+    "stabilizePurificationPerSecond": 0.56
+  },
+  "matter": {
+    "clean_nutrient_cluster": {
+      "basePurity": 0.94,
+      "color": "#9ff2bd",
+      "emissive": "#4fbf83",
+      "silhouette": "soft_lobed_seed_cluster",
+      "watcherRead": "compatible_nourishment",
+      "scarRelation": "clear"
+    },
+    "scar_touched_cluster": {
+      "basePurity": 0.14,
+      "color": "#ff806f",
+      "emissive": "#d43e48",
+      "silhouette": "spined_rupture_fragment",
+      "watcherRead": "scar_contamination",
+      "scarRelation": "contaminated"
+    },
+    "mixed_membrane_cluster": {
+      "basePurity": 0.48,
+      "color": "#e8b46d",
+      "emissive": "#b6783e",
+      "silhouette": "split_membrane_cluster",
+      "watcherRead": "filterable_mixed_matter",
+      "scarRelation": "recoverable"
+    }
+  },
+  "outcomes": {
+    "cleanDeliveryThreshold": 0.68,
+    "tenderTrustGain": 0.12,
+    "tenderIntegrityGain": 0.08,
+    "tenderIntegrityLoss": 0.14,
+    "scarLoadGain": 0.13,
+    "scarLoadRecovery": 0.07,
+    "passiveIntegrityMaintenance": 0.015,
+    "passiveScarRecovery": 0.01,
+    "coreScarGainOnUnsafeAbsorb": 0.025,
+    "coreAbsorbIntegrityCost": 0.06,
+    "coreAbsorbTrustCost": 0.02,
+    "unsafeCoreAbsorbScarLoadGain": 0.08
+  },
+  "livingStates": {
+    "derivationOwner": "SurfaceWakeGameplaySystem",
+    "addsProgressionGate": false,
+    "bloomSeconds": 3.4,
+    "panicSeconds": 4.8,
+    "witherIntegrityMax": 0.52,
+    "witherScarLoadMin": 0.58,
+    "embraceTrustMin": 0.42,
+    "embraceIntegrityMin": 0.65,
+    "embraceScarLoadMax": 0.38,
+    "growthFedCycles": 2,
+    "growthTrustMin": 0.5,
+    "growthIntegrityMin": 0.76,
+    "states": ["cautious", "blooming", "withered", "panic", "embrace", "growth"]
+  },
+  "startingState": {
+    "tenderTrust": 0.32,
+    "tenderIntegrity": 0.72,
+    "scarLoad": 0.22
+  },
+  "foldEmergence": {
+    "successfulCycleCount": 1,
+    "requiresPlayerAuthoredOutcome": true,
+    "requiresPulseRead": true,
+    "meaning": "After the Core deliberately reads and successfully alters one nursery cycle, the Watcher turns toward the existing Listening Fold. The Fold interaction sequence itself does not change."
+  },
+  "constraints": {
+    "addsEntity": false,
+    "addsAbility": false,
+    "addsGate": false,
+    "changesFoldRequirements": false,
+    "changesSeedOwnership": false,
+    "changesMorphOwnership": false,
+    "passiveSuccessCanRevealFold": false,
+    "mistakesRecoverable": true,
+    "repeatableUntilDeparture": true
+  }
+}

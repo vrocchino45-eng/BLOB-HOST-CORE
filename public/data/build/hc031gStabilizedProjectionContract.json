@@ -1,0 +1,47 @@
+{
+  "pass": "HC-031G",
+  "title": "Stabilized Projection / Focused Pulse V1",
+  "parent": "HC-031F1B",
+  "lockedTruth": {
+    "compositionChord": "cohere_project",
+    "compositionMeaningOwner": "VerbCompositionSystem / HC029C",
+    "focusedProjectionRequiresSurfaceAnchor": false,
+    "focusedProjectionRequiresRetainedTarget": false,
+    "addsNewAbility": false,
+    "addsNewButton": false,
+    "changesTargetingAuthority": false,
+    "movementAuthority": "PlayerMovementController",
+    "surfaceTruthAuthority": "CoreSurfaceTruthSystem",
+    "tendrilCount": 3,
+    "freeSpaceMode": "self_braced",
+    "surfaceAnchorRole": "enhance_same_function_not_unlock_it"
+  },
+  "expressions": {
+    "freeSpace": {
+      "mode": "self_braced",
+      "selfBrace01": 0.62,
+      "focusedResponseMultiplier": 1.04,
+      "ambientResponseMultiplier": 0.52
+    },
+    "surfaceBraced": {
+      "uses": ["adhesion", "loadTolerance", "pulseTransmission", "anchorCount"],
+      "sameInput": "stabilize_plus_pulse",
+      "maximumProjectionMultiplier": 1.28
+    }
+  },
+  "visualLaw": {
+    "freeSpace": "three tendrils spread into a counter-force triad while the Pulse field narrows forward",
+    "surfaceBraced": "sealed tendrils visibly tighten and flatten their suckers as recoil transfers into Host anatomy",
+    "pulseFront": "directional elongated projection rather than a purely radial sphere"
+  },
+  "forbiddenScope": [
+    "new ability button",
+    "surface anchor gating",
+    "target cycling",
+    "targeting threshold changes",
+    "movement rewrite",
+    "new collider",
+    "new progression gate",
+    "Grave progression changes"
+  ]
+}

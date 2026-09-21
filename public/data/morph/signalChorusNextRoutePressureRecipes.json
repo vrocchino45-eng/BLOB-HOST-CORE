@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_NEXT_ROUTE_PRESSURE_HC005D",
+    "build": "HC-005D",
+    "status": "runtime_active_passive_pressure_only",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "blueprintRole": "Comb Threshold pressure preview without threshold activation",
+    "purpose": "Make the next Act 1 direction spatially readable after the verified Grave reading returns, while keeping the current Signal Chorus state stable and non-interactive.",
+    "activation": {
+      "requiresReturnState": "signal_chorus_return_state_held",
+      "minimumHeldSeconds": 1.25,
+      "requiresActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001"
+    },
+    "geometry": {
+      "start": [1.05, 0.26, -1.92],
+      "controlA": [1.72, 0.34, -2.18],
+      "controlB": [2.72, 0.48, -2.38],
+      "combCenter": [3.72, 0.52, -2.58],
+      "strandCount": 4,
+      "ribCount": 5,
+      "beadCount": 3,
+      "curveTension": 0.34
+    },
+    "visual": {
+      "signalColor": 12312575,
+      "graveMemoryColor": 16766414,
+      "combPressureColor": 16774192,
+      "strandOpacity": 0.24,
+      "ribOpacity": 0.31,
+      "beadOpacity": 0.58,
+      "tubeRadius": 0.018,
+      "pulseSpeed": 0.19,
+      "revealSeconds": 1.15,
+      "renderOrder": 7
+    },
+    "playerFacingLanguage": {
+      "hudStatus": "Signal Chorus: combward pressure readable",
+      "guideLine": "The returned Grave reading bends one side of the Chorus into a combed cadence.",
+      "objectiveLine": "Observe the combward pressure. It is readable, but it is not open.",
+      "nextAction": "Hold the reading and learn the direction. No route input is accepted in this pass."
+    },
+    "completion": {
+      "pressureReadable": true,
+      "routeActivated": false,
+      "thresholdOpened": false,
+      "targetActivated": false,
+      "inputRequired": false,
+      "activeCellChanges": false,
+      "nextRecommendedPass": "HC-005E — Combward Pressure Readability Lock"
+    },
+    "forbidden": [
+      "Comb Threshold runtime",
+      "Aperture Fields runtime",
+      "new local cell",
+      "new morph destination",
+      "target lock",
+      "pulse activation",
+      "absorb activation",
+      "gate",
+      "door",
+      "teleport",
+      "branch menu",
+      "player relocation",
+      "reopening Grave",
+      "replaying original Signal Chorus loop"
+    ]
+  }
+]

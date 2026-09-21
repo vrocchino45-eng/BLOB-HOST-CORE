@@ -1,0 +1,156 @@
+{
+  "build": "HC-016M",
+  "checks": [
+    {
+      "name": "syntax:RecipeDataSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:ModeController.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:SystemRegistry.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016MRuntimeBudget.mjs",
+      "status": "PASS",
+      "detail": "[HC016M] runtime mount profile + sampled updater telemetry PASS\n[HC016M] aperture region systems: 3\n[HC016M] dormant compatibility ids retained: 12\n"
+    },
+    {
+      "name": "profile-retired-gate-absent",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "membrane-ridge-mounted",
+      "status": "PASS",
+      "detail": ""
+    }
+  ],
+  "runtimeBudgetAudit": {
+    "build": "HC-016M",
+    "registeredSystemCount": 47,
+    "globalUpdaterCount": 15,
+    "regionScopedUpdaterCount": 32,
+    "globalSystemIds": [
+      "input",
+      "debugAreaJumpSystem",
+      "controllerComfortSystem",
+      "modeController",
+      "statusPageSystem",
+      "debugDisplaySystem",
+      "localCellBoundaryMorphSystem",
+      "runtimeStateLedgerSystem",
+      "objectiveSystem",
+      "guidePromptSystem",
+      "playerMovement",
+      "coreGrowthSystem",
+      "visualComposer",
+      "motionSignatureSystem",
+      "playtestHudSystem"
+    ],
+    "regionScopedSystemIds": [
+      "chemObjectSystem",
+      "surfaceWakeGameplaySystem",
+      "openingPacingSystem",
+      "surfaceWakeLayeredInteractionSystem",
+      "surfaceWakeEcologicalCausalitySystem",
+      "cinematicAwakeningSystem",
+      "localCellMorphSystem",
+      "morphCompletionSystem",
+      "entitySystem",
+      "scarFlowArrivalSystem",
+      "guideThresholdGameplaySystem",
+      "guideThresholdLayeredInteractionSystem",
+      "scarFlowInteractionSystem",
+      "secondLocalCellMorphSystem",
+      "morphReadabilitySystem",
+      "targetFocusRegistry",
+      "targetingSystem",
+      "orbiterSystem",
+      "bondSystem",
+      "hubChamberFoundationSystem",
+      "hubInvestigationGameplaySystem",
+      "firstSliceCohesionSystem",
+      "graveMemoryRouteSystem",
+      "act1RouteContractSystem",
+      "vascularRhythmRouteSystem",
+      "siltPressureRouteSystem",
+      "combThresholdFoundationSystem",
+      "combThresholdPlayableSystem",
+      "apertureFieldsArrivalSystem",
+      "signalPlainEcologySystem",
+      "membraneRidgeGameplaySystem",
+      "inspectionCameraSystem"
+    ],
+    "softRegionScopedSystemIds": [
+      "openingPacingSystem",
+      "cinematicAwakeningSystem",
+      "morphReadabilitySystem"
+    ],
+    "regionMountBudgets": {
+      "surface_wake": {
+        "shared": 6,
+        "local": 9,
+        "activeRegionScopedTotal": 15,
+        "authoredBudget": 15
+      },
+      "guide_threshold": {
+        "shared": 6,
+        "local": 7,
+        "activeRegionScopedTotal": 13,
+        "authoredBudget": 13
+      },
+      "hub_chamber": {
+        "shared": 6,
+        "local": 2,
+        "activeRegionScopedTotal": 8,
+        "authoredBudget": 8
+      },
+      "grave_memory_route": {
+        "shared": 6,
+        "local": 1,
+        "activeRegionScopedTotal": 7,
+        "authoredBudget": 7
+      },
+      "vascular_route": {
+        "shared": 6,
+        "local": 2,
+        "activeRegionScopedTotal": 8,
+        "authoredBudget": 8
+      },
+      "silt_burrow_route": {
+        "shared": 6,
+        "local": 2,
+        "activeRegionScopedTotal": 8,
+        "authoredBudget": 8
+      },
+      "comb_threshold": {
+        "shared": 6,
+        "local": 2,
+        "activeRegionScopedTotal": 8,
+        "authoredBudget": 8
+      },
+      "aperture_fields": {
+        "shared": 6,
+        "local": 3,
+        "activeRegionScopedTotal": 9,
+        "authoredBudget": 9
+      }
+    },
+    "findings": [
+      "SystemRegistry already suppresses active_region systems not listed in firstSliceRuntimeMount.activeSystemIds.",
+      "Loaded runtime profile was stale and still declared GateSystem as global/transition owner.",
+      "Loaded runtime profile omitted membraneRidgeGameplaySystem from aperture_fields, causing that active_region system to be skipped by registry policy.",
+      "HC016M corrects the mount profile before attempting additional suppression.",
+      "Sampled per-system timing runs only every 60 frames to avoid turning profiling into a new performance cost."
+    ],
+    "nextPerformanceDecision": "Use runtimeExecution.slowestSampledSystems and slowSystemIds during real play to target global systems only if measurements justify it."
+  },
+  "profileId": "ACT1_RUNTIME_PROFILE_HC016M"
+}

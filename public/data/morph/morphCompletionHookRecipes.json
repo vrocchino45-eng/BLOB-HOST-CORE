@@ -1,0 +1,53 @@
+[
+  {
+    "id": "HOOK_SCAR_MEMORY_FLECK_ECHO",
+    "cellId": "CELL_SCAR_FLOW_FOLD_001",
+    "sourceObject": "scar_memory_fleck_001",
+    "trigger": "pulse_after_morph_completion",
+    "effect": {
+      "memoryEcho": 0.22,
+      "stability": 0.08,
+      "pressureRelief": 0.03,
+      "compositionResidue": 0.006
+    },
+    "meaning": "The player reads old wound residue without consuming it as ordinary food."
+  },
+  {
+    "id": "HOOK_RESONANT_PATH_THREAD_ALIGN",
+    "cellId": "CELL_SCAR_FLOW_FOLD_001",
+    "sourceObject": "resonant_path_thread_001",
+    "trigger": "pulse_after_morph_completion",
+    "effect": {
+      "pathConfidence": 0.28,
+      "stability": 0.11,
+      "pressureRelief": 0.04,
+      "compositionSignal": 0.008
+    },
+    "meaning": "Signal matter shows a pressure-safe route through the wound."
+  },
+  {
+    "id": "HOOK_PRESSURE_FOLD_CURRENT_RELIEF",
+    "cellId": "CELL_SCAR_FLOW_FOLD_001",
+    "sourceObject": "pressure_fold_current_001",
+    "trigger": "pulse_or_enter_after_morph_completion",
+    "effect": {
+      "pressureRelief": 0.26,
+      "stability": 0.09,
+      "flowConfidence": 0.22,
+      "compositionFlux": 0.008
+    },
+    "meaning": "The host pressure finds a usable current instead of a hard gate."
+  },
+  {
+    "id": "HOOK_SCAR_FLOW_CLOT_WARNING",
+    "cellId": "CELL_SCAR_FLOW_FOLD_001",
+    "sourceObject": "scar_flow_clot_001",
+    "trigger": "pulse_after_morph_completion",
+    "effect": {
+      "clotWarning": 0.22,
+      "stability": -0.04,
+      "compositionScar": 0.004
+    },
+    "meaning": "The clot is a warning/pressure valve, not a safe pickup."
+  }
+]

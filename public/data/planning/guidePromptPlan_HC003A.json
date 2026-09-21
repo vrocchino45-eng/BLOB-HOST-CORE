@@ -1,0 +1,62 @@
+{
+  "id": "HC003A_GUIDE_PROMPT_PLAN",
+  "build": "HC-003A",
+  "status": "planned_for_HC003B",
+  "rules": [
+    "prompts must be short",
+    "prompts must describe embodied action, not debug state",
+    "prompts should appear at moments of uncertainty",
+    "do not implement dialogue trees in HC-003B",
+    "keep debug fallback separate from player-facing language"
+  ],
+  "promptBeats": [
+    {
+      "beat": "awakening",
+      "when": "player starts in Membrane Nursery",
+      "draftPrompts": [
+        "You are small. Stay near the warmth.",
+        "The lantern is watching. Move slowly."
+      ]
+    },
+    {
+      "beat": "first_seed",
+      "when": "safe seed nutrient is targetable",
+      "draftPrompts": [
+        "That seed is safe. Hold close and let it enter.",
+        "Do not rush the bond."
+      ]
+    },
+    {
+      "beat": "scar_warning",
+      "when": "scar object is near/targeted",
+      "draftPrompts": [
+        "That is scar. It remembers pressure. Do not eat it yet.",
+        "Listen with pulse before taking."
+      ]
+    },
+    {
+      "beat": "first_fold",
+      "when": "first morph readiness becomes high",
+      "draftPrompts": [
+        "The tissue is ready to fold.",
+        "Pulse when the wound answers."
+      ]
+    },
+    {
+      "beat": "scar_flow",
+      "when": "Scar-Flow arrival stabilizes",
+      "draftPrompts": [
+        "This place is flow caught in scar.",
+        "Follow the pressure. Respect the clot."
+      ]
+    },
+    {
+      "beat": "signal_chorus_reveal",
+      "when": "Signal Chorus becomes readable",
+      "draftPrompts": [
+        "The host is not silent.",
+        "This is not a path. It is an answer."
+      ]
+    }
+  ]
+}

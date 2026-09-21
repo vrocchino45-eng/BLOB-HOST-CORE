@@ -1,0 +1,91 @@
+{
+  "build": "HC-016L",
+  "deletedFiles": [
+    {
+      "file": "src/morph/ThirdLocalCellMorphSystem.js",
+      "bytes": 20569,
+      "lines": 490
+    },
+    {
+      "file": "src/morph/GraveRouteMorphSystem.js",
+      "bytes": 18873,
+      "lines": 463
+    },
+    {
+      "file": "src/morph/SignalChorusReturnStateSystem.js",
+      "bytes": 13218,
+      "lines": 323
+    },
+    {
+      "file": "src/morph/GraveSeamContinuityMicroExitSystem.js",
+      "bytes": 18309,
+      "lines": 427
+    },
+    {
+      "file": "src/morph/BloomResidueArrivalSystem.js",
+      "bytes": 16270,
+      "lines": 383
+    },
+    {
+      "file": "src/morph/SignalChorusArrivalSystem.js",
+      "bytes": 15489,
+      "lines": 377
+    },
+    {
+      "file": "src/morph/GraveScarMemorySeamArrivalSystem.js",
+      "bytes": 21537,
+      "lines": 494
+    },
+    {
+      "file": "src/morph/GraveReturnContinuitySystem.js",
+      "bytes": 17881,
+      "lines": 446
+    }
+  ],
+  "deletedTotals": {
+    "files": 8,
+    "bytes": 142146,
+    "lines": 3403
+  },
+  "removedDeadReaderBranch": "TargetFocusRegistry SignalChorusReturnStateSystem / GraveReturnContinuitySystem branch",
+  "remainingMutationSites": [
+    {
+      "file": "src/debug/DebugAreaJumpSystem.js",
+      "line": 30,
+      "code": "frameState.activeCellId = target.cellId;",
+      "classification": "debug_bypass"
+    },
+    {
+      "file": "src/morph/LocalCellMorphSystem.js",
+      "line": 397,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "authoritative_transition_owner"
+    },
+    {
+      "file": "src/morph/SecondLocalCellMorphSystem.js",
+      "line": 384,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "authoritative_transition_owner"
+    },
+    {
+      "file": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "line": 315,
+      "code": "frameState.activeCellId = recipe.destinationCellId;",
+      "classification": "authoritative_transition_owner"
+    },
+    {
+      "file": "src/core/GameRuntime.js",
+      "line": 1501,
+      "code": "this.frameState.activeCellId = cell.id;",
+      "classification": "initialization_owner"
+    },
+    {
+      "file": "src/core/FirstSliceTransitionCoordinator.js",
+      "line": 239,
+      "code": "this.frameState.activeCellId = activeCellBefore;",
+      "classification": "safety_rollback_only"
+    }
+  ],
+  "unclassifiedMutationSites": [],
+  "referenceFailures": []
+}

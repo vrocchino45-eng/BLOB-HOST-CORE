@@ -1,0 +1,256 @@
+import * as THREE from "three";
+import { readCrawlableSurfaceMetadata } from "../world/CrawlableSurfaceRegistry.js";
+
+const WORLD_X = new THREE.Vector3(1, 0, 0);
+const WORLD_Y = new THREE.Vector3(0, 1, 0);
+const WORLD_Z = new THREE.Vector3(0, 0, 1);
+
+/**
+ * HC031F1B — Crawlable Surface Authority
+ *
+ * Only explicitly authored ecological surfaces may become mechanical contact
+ * truth. Large translucent region shells, decorative volumes, route geometry,
+ * VFX, and incidental meshes are no longer eligible merely because they are
+ * visible or close to the Core.
+ *
+ * This system still does not move the player, own adhesion, create colliders,
+ * alter progression, or modify verb strength. It publishes one local contact
+ * point/normal plus ecological surface metadata for existing owners to consume.
+ */
+export class CoreSurfaceTruthSystem {
+  constructor({ scene, playerRoot, frameState }) {
+    if (!scene) throw new Error("[CoreSurfaceTruthSystem] scene is required.");
+    if (!playerRoot) throw new Error("[CoreSurfaceTruthSystem] playerRoot is required.");
+    if (!frameState) throw new Error("[CoreSurfaceTruthSystem] frameState is required.");
+
+    this.scene = scene;
+    this.playerRoot = playerRoot;
+    this.frameState = frameState;
+
+    this.raycaster = new THREE.Raycaster();
+    this.raycaster.near = 0.015;
+    this.raycaster.far = 1.28;
+    this.playerPosition = new THREE.Vector3();
+    this.boundaryNormal = new THREE.Vector3(0, 1, 0);
+    this.tempNormal = new THREE.Vector3();
+    this.tempToPlayer = new THREE.Vector3();
+    this.normalMatrix = new THREE.Matrix3();
+    this.candidates = [];
+    this.candidateRefreshAge = 999;
+    this.candidateRefreshInterval = 0.24;
+    this.lastSurfaceUuid = null;
+    this.lastPoint = new THREE.Vector3();
+    this.lastNormal = new THREE.Vector3(0, 1, 0);
+    this.lastMetadata = null;
+    this.lastValidAge = 999;
+    this.lastActiveCellId = "none";
+
+    this.directions = [
+      new THREE.Vector3(), new THREE.Vector3(),
+      WORLD_Y.clone(), WORLD_Y.clone().negate(),
+      WORLD_X.clone(), WORLD_X.clone().negate(),
+      WORLD_Z.clone(), WORLD_Z.clone().negate()
+    ];
+  }
+
+  init() {
+    this.publishInvalid("initializing");
+  }
+
+  update(dt, frameState = this.frameState) {
+    const safeDt = Math.max(0, Math.min(dt, 0.05));
+    this.playerRoot.getWorldPosition(this.playerPosition);
+    this.candidateRefreshAge += safeDt;
+    this.lastValidAge += safeDt;
+
+    const activeCellId = frameState.activeCellId ?? "none";
+    if (activeCellId !== this.lastActiveCellId) {
+      this.lastActiveCellId = activeCellId;
+      this.candidateRefreshAge = 999;
+      this.lastSurfaceUuid = null;
+      this.lastMetadata = null;
+      this.lastValidAge = 999;
+    }
+
+    if (this.candidateRefreshAge >= this.candidateRefreshInterval || this.candidates.length === 0) {
+      this.refreshCandidates(activeCellId);
+      this.candidateRefreshAge = 0;
+    }
+
+    const boundary = frameState.playerKinematics?.movementBoundary ?? {};
+    const n = boundary.surfaceNormal ?? {};
+    this.boundaryNormal.set(n.x ?? 0, n.y ?? 1, n.z ?? 0);
+    if (this.boundaryNormal.lengthSq() < 0.0001) this.boundaryNormal.set(0, 1, 0);
+    else this.boundaryNormal.normalize();
+
+    this.directions[0].copy(this.boundaryNormal);
+    this.directions[1].copy(this.boundaryNormal).negate();
+
+    const hit = this.sampleNearestSurface();
+    if (!hit) {
+      // Short edge grace only retains a surface already proven to be authored.
+      if (this.lastValidAge < 0.10 && this.lastSurfaceUuid && this.lastMetadata) {
+        this.publishSurface({
+          point: this.lastPoint,
+          normal: this.lastNormal,
+          distance: this.playerPosition.distanceTo(this.lastPoint),
+          object: null,
+          metadata: this.lastMetadata,
+          retained: true
+        });
+      } else {
+        this.publishInvalid("no_authored_crawlable_surface_within_probe");
+      }
+      return;
+    }
+
+    this.lastSurfaceUuid = hit.object?.uuid ?? this.lastSurfaceUuid;
+    this.lastPoint.copy(hit.point);
+    this.lastNormal.copy(hit.normal);
+    this.lastMetadata = { ...hit.metadata, verbTransmission: { ...hit.metadata.verbTransmission } };
+    this.lastValidAge = 0;
+    this.publishSurface(hit);
+  }
+
+  refreshCandidates(activeCellId) {
+    const next = [];
+    this.scene.traverse((object) => {
+      if (!object?.isMesh || !object.geometry) return;
+      if (object === this.playerRoot || this.isPlayerDescendant(object)) return;
+      if (!this.isEffectivelyVisible(object)) return;
+      if (object.userData?.surfaceContactDisabled === true) return;
+      const metadata = readCrawlableSurfaceMetadata(object);
+      if (!metadata) return;
+      if (metadata.cellId !== "shared" && metadata.cellId !== activeCellId) return;
+      const material = Array.isArray(object.material) ? object.material[0] : object.material;
+      if (!material || material.visible === false) return;
+      next.push({ object, metadata });
+    });
+    this.candidates = next;
+  }
+
+  isEffectivelyVisible(object) {
+    let cursor = object;
+    while (cursor) {
+      if (cursor.visible === false) return false;
+      cursor = cursor.parent;
+    }
+    return true;
+  }
+
+  isPlayerDescendant(object) {
+    let cursor = object.parent;
+    while (cursor) {
+      if (cursor === this.playerRoot) return true;
+      cursor = cursor.parent;
+    }
+    return false;
+  }
+
+  sampleNearestSurface() {
+    let best = null;
+    for (const direction of this.directions) {
+      if (direction.lengthSq() < 0.0001) continue;
+      this.raycaster.set(this.playerPosition, direction);
+      for (const candidate of this.candidates) {
+        const hits = this.raycaster.intersectObject(candidate.object, false);
+        for (const hit of hits) {
+          if (!hit?.face || hit.distance > this.raycaster.far) continue;
+          this.tempNormal.copy(hit.face.normal);
+          this.normalMatrix.getNormalMatrix(hit.object.matrixWorld);
+          this.tempNormal.applyMatrix3(this.normalMatrix).normalize();
+          this.tempToPlayer.copy(this.playerPosition).sub(hit.point);
+          if (this.tempToPlayer.dot(this.tempNormal) < 0) this.tempNormal.negate();
+
+          const continuityBonus = hit.object.uuid === this.lastSurfaceUuid ? 0.075 : 0;
+          const priorityBonus = THREE.MathUtils.clamp(candidate.metadata.contactPriority ?? 0, -0.25, 0.25);
+          const score = hit.distance - continuityBonus - priorityBonus;
+          if (!best || score < best.score) {
+            best = {
+              score,
+              point: hit.point.clone(),
+              normal: this.tempNormal.clone(),
+              distance: hit.distance,
+              object: hit.object,
+              metadata: candidate.metadata,
+              retained: false
+            };
+          }
+        }
+      }
+    }
+    return best;
+  }
+
+  publishSurface(hit) {
+    const object = hit.object;
+    const metadata = hit.metadata ?? this.lastMetadata ?? {};
+    const adhesion = THREE.MathUtils.clamp(metadata.adhesion ?? 0.75, 0, 1);
+    const loadTolerance = THREE.MathUtils.clamp(metadata.loadTolerance ?? 0.70, 0, 1);
+    const compliance = THREE.MathUtils.clamp(metadata.compliance ?? 0.50, 0, 1);
+    const mechanicalEligible = hit.distance <= 0.78;
+
+    this.frameState.coreSurfaceTruth = {
+      pass: "HC-031F1B",
+      valid: true,
+      source: "authored_crawlable_surface_raycast",
+      owner: "CoreSurfaceTruthSystem",
+      authority: "explicit_ecological_surface_metadata",
+      point: {
+        x: Number(hit.point.x.toFixed(4)),
+        y: Number(hit.point.y.toFixed(4)),
+        z: Number(hit.point.z.toFixed(4))
+      },
+      normal: {
+        x: Number(hit.normal.x.toFixed(4)),
+        y: Number(hit.normal.y.toFixed(4)),
+        z: Number(hit.normal.z.toFixed(4))
+      },
+      distance: Number(hit.distance.toFixed(4)),
+      meshName: object?.name ?? metadata.surfaceId ?? "retained_authored_surface",
+      meshUuid: object?.uuid ?? this.lastSurfaceUuid ?? "retained",
+      surfaceId: metadata.surfaceId ?? "unknown_authored_surface",
+      profileId: metadata.profileId ?? "unknown_profile",
+      materialFamily: metadata.materialFamily ?? "unknown",
+      regionalRole: metadata.regionalRole ?? "contact_field",
+      adhesion: Number(adhesion.toFixed(3)),
+      loadTolerance: Number(loadTolerance.toFixed(3)),
+      compliance: Number(compliance.toFixed(3)),
+      verbTransmission: {
+        pulse: Number(THREE.MathUtils.clamp(metadata.verbTransmission?.pulse ?? 0.5, 0, 1).toFixed(3)),
+        absorb: Number(THREE.MathUtils.clamp(metadata.verbTransmission?.absorb ?? 0.5, 0, 1).toFixed(3)),
+        stabilize: Number(THREE.MathUtils.clamp(metadata.verbTransmission?.stabilize ?? 0.5, 0, 1).toFixed(3))
+      },
+      candidateCount: this.candidates.length,
+      probeCount: this.directions.length,
+      retainedAcrossEdgeGrace: Boolean(hit.retained),
+      mechanicalEligible,
+      localPlanarApproximation: true,
+      authoredEcologicalSurface: true,
+      genericVisibleMeshEligible: false,
+      addsCollider: false,
+      progressionAuthority: false,
+      verbStrengthAuthority: false
+    };
+  }
+
+  publishInvalid(reason) {
+    this.frameState.coreSurfaceTruth = {
+      pass: "HC-031F1B",
+      valid: false,
+      source: "authored_crawlable_surface_raycast",
+      owner: "CoreSurfaceTruthSystem",
+      authority: "explicit_ecological_surface_metadata",
+      reason,
+      candidateCount: this.candidates.length,
+      probeCount: this.directions.length,
+      mechanicalEligible: false,
+      authoredEcologicalSurface: false,
+      genericVisibleMeshEligible: false,
+      localPlanarApproximation: true,
+      addsCollider: false,
+      progressionAuthority: false,
+      verbStrengthAuthority: false
+    };
+  }
+}

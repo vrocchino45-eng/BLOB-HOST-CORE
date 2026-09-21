@@ -1,0 +1,47 @@
+{
+  "id": "HC024C2_RETAINED_ANATOMY_MANIPULATION_CONTRACT",
+  "build": "HC-024C2",
+  "parent": "HC-024C1",
+  "purpose": "Correct Core Work ownership so the proven Guide/input manipulation loop visibly repositions recognizable retained route anatomy rather than small hidden binding nodes.",
+  "allowedScope": [
+    "reuse Grave Memory retention anatomy as one manipulable unit",
+    "reuse Vascular Rhythm retention anatomy as one manipulable unit",
+    "reuse Silt Pressure retention anatomy as one manipulable unit",
+    "store persistent placement offsets on existing retained anatomy roots",
+    "keep D-Pad/A/Left Stick/RT/LT/Right Stick interaction vocabulary",
+    "Guide attends the visible center of the selected retained anatomy"
+  ],
+  "forbiddenScope": [
+    "chemistry reaction",
+    "new Core geometry",
+    "new Guide geometry",
+    "new controller mapping",
+    "new region or geography",
+    "progression mutation",
+    "contact physics",
+    "return traversal"
+  ],
+  "pieceSet": {
+    "family": "recognizable_retained_route_anatomy_groups",
+    "maximumCount": 3,
+    "spawnNewPieces": false,
+    "labels": [
+      "Grave Memory",
+      "Vascular Rhythm",
+      "Silt Pressure"
+    ],
+    "placementPersistsAfterViewExit": true,
+    "chemistryMeaning": "none_in_HC024C2"
+  },
+  "acceptanceTests": [
+    "Core Work shows zero pieces before any route-retention anatomy exists",
+    "retained Grave/Vascular/Silt anatomy appears as it is earned",
+    "D-Pad selects the recognizable retained anatomy units",
+    "A grabs/places the whole selected anatomy unit",
+    "Left Stick visibly relocates the selected retained anatomy",
+    "RT/LT visibly moves the actual retained anatomy inward/outward",
+    "Guide and shimmer target the selected anatomy's visible center",
+    "placed anatomy keeps its biological animation relative to the new position",
+    "chemistry remains disabled"
+  ]
+}

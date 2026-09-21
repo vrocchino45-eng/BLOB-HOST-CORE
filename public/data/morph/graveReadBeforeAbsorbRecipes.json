@@ -1,0 +1,121 @@
+[
+  {
+    "id": "GRAVE_READ_BEFORE_ABSORB_LOOP_001",
+    "build": "HC-004G",
+    "status": "runtime_active_minimal_read_before_absorb_loop_stability_tuned",
+    "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "sourceArrivalReadability": "GRAVE_ARRIVAL_READABILITY_HC004E",
+    "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "route": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+    "loopType": "read_first_then_one_safe_residue_transfer",
+    "sequence": [
+      {
+        "stage": "husk_memory_read",
+        "focusObject": "old_core_husk_memory_001",
+        "verb": "pulse_read",
+        "objective": "Read the old core husk before touching any residue.",
+        "nextWhen": "huskMemoryRead >= minimumHuskMemoryRead"
+      },
+      {
+        "stage": "silt_memory_settled",
+        "focusObject": "residue_silt_cloud_001",
+        "verb": "pulse_settle",
+        "objective": "Settle the residue silt until it shows what can safely enter.",
+        "nextWhen": "residueSiltSettled >= minimumResidueSiltSettled"
+      },
+      {
+        "stage": "scar_lock_understood",
+        "focusObject": "scar_lock_plate_001",
+        "verb": "pulse_respect",
+        "objective": "Understand the scar lock as protection, not a door.",
+        "nextWhen": "scarLockUnderstood >= minimumScarLockUnderstood"
+      },
+      {
+        "stage": "seed_remnant_warmed",
+        "focusObject": "inheritance_seed_remnant_001",
+        "verb": "pulse_warm_without_opening",
+        "objective": "Warm the inheritance seed remnant without opening it.",
+        "nextWhen": "seedRemnantWarmth >= minimumSeedRemnantWarmth"
+      },
+      {
+        "stage": "safe_silt_transfer",
+        "focusObject": "residue_silt_cloud_001",
+        "verb": "hold_absorb_after_reading",
+        "objective": "Only the settled silt trace may enter. The husk, scar, and seed stay intact.",
+        "nextWhen": "safeMemoryTransferComplete === true"
+      }
+    ],
+    "metrics": {
+      "minimumArrivalReadConfidence": 0.58,
+      "minimumHuskMemoryRead": 0.62,
+      "minimumResidueSiltSettled": 0.58,
+      "minimumScarLockUnderstood": 0.54,
+      "minimumSeedRemnantWarmth": 0.42,
+      "safeAbsorbHoldSeconds": 1.45,
+      "maximumRecoilRisk": 0.38
+    },
+    "safeTransfer": {
+      "allowedObject": "residue_silt_cloud_001",
+      "transferLabel": "settled_memory_silt_trace",
+      "objectBehavior": "silt trace enters while the old husk, scar lock, and inheritance seed remain visibly respected",
+      "compositionReward": {
+        "residue": 0.012,
+        "signal": 0.012,
+        "scar": -0.002
+      },
+      "mustNotConsume": [
+        "old_core_husk_memory_001",
+        "scar_lock_plate_001",
+        "inheritance_seed_remnant_001"
+      ]
+    },
+    "worldFacingRead": {
+      "start": "The Grave will not feed you until you understand what is buried here.",
+      "husk": "Pulse the husk; read the unfinished becoming without claiming it.",
+      "silt": "Settle the silt. It carries trace memory, not treasure.",
+      "scar": "The scar lock is protecting memory, not hiding a door.",
+      "seed": "Warm the inheritance seed. Do not open it yet.",
+      "transferReady": "Only the settled silt trace is safe to receive. Hold absorb gently near it.",
+      "complete": "The Grave has given a trace, not a reward. Let the remains settle; exit readiness is only being prepared, not opened."
+    },
+    "allowedScope": [
+      "minimal Grave read-before-absorb sequence",
+      "target focus rule for Grave objects",
+      "guide/HUD read-loop language",
+      "one safe silt memory transfer after reading",
+      "Grave loop validation and documentation"
+    ],
+    "forbiddenScope": [
+      "combat",
+      "dialogue tree",
+      "quest log",
+      "new entity spawns",
+      "new route branch",
+      "new morph activation",
+      "gates",
+      "doors",
+      "teleports",
+      "old chamber runtime",
+      "old exit registries",
+      "stage-node loaders",
+      "branch select menu",
+      "Act expansion",
+      "consuming the old core husk",
+      "opening the inheritance seed remnant"
+    ],
+    "acceptanceTests": [
+      "The loop activates only in CELL_GRAVE_MEMORY_RESIDUE_BED_001 after the Grave arrival readability system is active.",
+      "Pulse/proximity reading must advance husk, silt, scar lock, and seed remnant understanding before any safe transfer is possible.",
+      "Holding absorb before the sequence is ready must be refused with read-before-absorb messaging.",
+      "Only residue_silt_cloud_001 may complete a safe memory-silt transfer in this pass.",
+      "The old core husk, scar lock plate, and inheritance seed remnant must not be consumed or hidden by HC-004F.",
+      "No combat, dialogue tree, quest log, gate, door, teleport, branch menu, stage-node loader, old exit registry, or Act expansion is added."
+    ],
+    "nextRecommendedPass": {
+      "id": "HC-004H",
+      "label": "Grave Exit Readiness Prototype",
+      "mode": "only_after_HC004G_stability_lock"
+    },
+    "sourceStabilityPlanning": "GRAVE_LOOP_STABILITY_EXIT_READINESS_HC004G"
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "pass": "HC-027K1 HOTFIX2",
+  "law": "playtest_trace_prioritizes_readable_physical_and_interpreted_input_while_deep_system_telemetry_moves_to_separate_debug_mode",
+  "modes": {
+    "F1": {
+      "mode": "trace",
+      "role": "recording_friendly_playtest_trace",
+      "largeInputPanel": true,
+      "smallContextPanel": true,
+      "holdsLastInterpretedActionSeconds": 3.0
+    },
+    "F2": {
+      "mode": "full",
+      "role": "deep_system_debug",
+      "largeInputPanel": false
+    },
+    "F3": {
+      "mode": "hidden",
+      "role": "clean_play"
+    }
+  },
+  "inputTrace": {
+    "physicalInputVisible": true,
+    "interpretedActionVisible": true,
+    "pulseHoldChargeReleaseVisible": true,
+    "analogTriggersVisible": true,
+    "recentPhysicalEventsVisible": true,
+    "lastActionPersistsForVideoReadability": true
+  },
+  "authority": {
+    "changesControls": false,
+    "changesGameplay": false,
+    "changesVerbBalance": false,
+    "changesPulseRange": false,
+    "changesMovement": false,
+    "changesPhysiology": false,
+    "changesProgression": false
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "build": "HC-016I",
+  "checks": [
+    {
+      "name": "LocalCellBoundaryRecipeRegistry.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "LocalCellBoundaryMorphSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "GateSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016IApertureBoundaryMigration.mjs",
+      "status": "PASS",
+      "detail": "[HC016I] authored GateSystem boundaries now observer-only: 10/10 PASS\n[HC016I] Surface/Guide dedicated morph owners retained PASS\n[HC016I] normal-play GateSystem activeCell mutation authority: NONE\n"
+    },
+    {
+      "name": "runtime-registration-count-stable",
+      "status": "PASS",
+      "detail": "48->48"
+    },
+    {
+      "name": "activeCell-writer-count-stable",
+      "status": "PASS",
+      "detail": "19->19"
+    },
+    {
+      "name": "all-authored-GateSystem-boundaries-return-before-mutation-path",
+      "status": "PASS",
+      "detail": "{'hub_to_grave_memory_route': 20170, 'hub_to_vascular_route': 18720, 'hub_to_silt_burrow_route': 19442, 'grave_memory_to_hub_chamber': 20531, 'vascular_route_to_hub_chamber': 19077, 'silt_burrow_route_to_hub_chamber': 19802, 'hub_to_comb_threshold': 20894, 'comb_threshold_to_hub_chamber': 21251, 'comb_threshold_to_aperture_fields': 21616, 'aperture_fields_to_comb_threshold': 21985}"
+    }
+  ],
+  "runtimeRegistrations": {
+    "before": 48,
+    "after": 48
+  },
+  "activeCellMutationSites": {
+    "before": 19,
+    "after": 19
+  },
+  "authoredGateSystemBoundaryCount": 10,
+  "authoredGateSystemObserverOnlyCount": 10,
+  "normalPlayGateSystemMutationAuthority": false,
+  "nextRemovalCandidate": "GateSystem.completeCrossing + input-consuming crossing branches"
+}

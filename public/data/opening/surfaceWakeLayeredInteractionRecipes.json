@@ -1,0 +1,119 @@
+[
+  {
+    "id": "SURFACE_WAKE_LAYERED_INTERACTION_HC006E",
+    "build": "HC-007A",
+    "status": "runtime_active_opening_foundation",
+    "sourceCellId": "CELL_MEMBRANE_NURSERY_001",
+    "blueprintRole": "Surface Wake",
+    "focusObjectId": "surface_wake_listening_fold_001",
+    "purpose": "Preserve the existing Surface Wake convergence trigger while placing it at the far side of a systemic nursery play space.",
+    "activation": {
+      "requiresActiveCell": "CELL_MEMBRANE_NURSERY_001",
+      "blocksSafeSeedAbsorbUntilComplete": true,
+      "routeActivated": false,
+      "targetRequired": false
+    },
+    "geometry": {
+      "anchor": [
+        -3.85,
+        1.18,
+        -3.05
+      ],
+      "approachRange": 2.25,
+      "interactionRange": 2.35,
+      "sustainRange": 2.5,
+      "foldRadius": 0.34,
+      "readingRingRadius": 0.56,
+      "responseRingCount": 3,
+      "lobeCount": 5,
+      "tendrilCount": 7
+    },
+    "inspection": {
+      "toggleRange": 4.4,
+      "autoExitRange": 5.9,
+      "distance": 4.35,
+      "fieldOfView": 54,
+      "targetBlendTowardFocus": 0.69,
+      "targetLift": 0.1,
+      "baseHeight": 0.88,
+      "pitch": 0.22,
+      "shoulderOffset": 0.58,
+      "forwardOffset": 0.12
+    },
+    "timing": {
+      "approachHoldSeconds": 0.42,
+      "sustainSeconds": 1.35,
+      "responseSeconds": 0.62,
+      "releaseSettleSeconds": 0.95,
+      "outOfRangeDecayPerSecond": 0.22
+    },
+    "visual": {
+      "membraneColor": 11393254,
+      "signalColor": 11202815,
+      "memoryColor": 16766888,
+      "settledColor": 13565918,
+      "baseOpacity": 0.2,
+      "activeOpacity": 0.68,
+      "responseOpacity": 0.48,
+      "renderOrder": 8
+    },
+    "stages": [
+      {
+        "id": "approach_listening_fold",
+        "guideLine": "The pocket is already alive. Move through it before deciding what the deeper fold means.",
+        "objectiveLine": "Explore freely. X pulses; RT absorbs compatible matter; LT braces against pressure.",
+        "nextAction": "Move through the nursery and follow reactions toward the deeper listening fold."
+      },
+      {
+        "id": "observe_first_answer",
+        "guideLine": "You found the deeper fold. Ask it once from nearby, then watch where the answer travels.",
+        "objectiveLine": "Press X once to pulse-read the fold.",
+        "nextAction": "Pulse once with X."
+      },
+      {
+        "id": "sustain_first_resonance",
+        "guideLine": "The fold answered. Stay with the answer long enough for it to become visible.",
+        "objectiveLine": "Hold LT to stabilize the resonance. This is not absorption.",
+        "nextAction": "Hold LT while remaining near the fold."
+      },
+      {
+        "id": "watch_tissue_response",
+        "guideLine": "The world is changing because you stayed, not because you struck it again.",
+        "objectiveLine": "Keep still and watch the response pass through the membrane.",
+        "nextAction": "Observe the visible tissue response."
+      },
+      {
+        "id": "release_and_settle",
+        "guideLine": "Now let go. A living answer needs room to settle.",
+        "objectiveLine": "Release LT and remain nearby until the fold becomes calm.",
+        "nextAction": "Release resonance and let the tissue settle."
+      },
+      {
+        "id": "surface_wake_complete",
+        "guideLine": "The fold remembers how you approached, listened, stayed, and released.",
+        "objectiveLine": "The safe seed is now readable. Approach it and hold RT to absorb.",
+        "nextAction": "Find the warmed safe seed; Y may still inspect the settled fold."
+      }
+    ],
+    "completion": {
+      "unlocksSafeSeedReadability": true,
+      "safeSeedObjectId": "dormant_seed_nutrient_001",
+      "routeActivated": false,
+      "activeCellChanges": false,
+      "targetCreated": false,
+      "nextRecommendedPass": "HC-007B \u2014 Guide Threshold Gameplay Fill"
+    },
+    "forbidden": [
+      "gate",
+      "door",
+      "teleport",
+      "branch menu",
+      "combat",
+      "forced first-person camera",
+      "automatic safe-seed absorption",
+      "Signal Chorus outcome change",
+      "Grave route outcome change"
+    ],
+    "controlMap": "HOST_CORE_CANONICAL_CONTROLS_V1"
+  }
+]

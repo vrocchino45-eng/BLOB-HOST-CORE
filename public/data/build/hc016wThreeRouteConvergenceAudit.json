@@ -1,0 +1,43 @@
+{
+  "build": "HC-016W",
+  "mode": "three_route_gameplay_convergence",
+  "coreScaleChanged": false,
+  "newGameplayAdded": false,
+  "finding": "Vascular's expanded recipe used a deep movement envelope, but the active HC012A route contract still held the old short envelope. Because Act1RouteContractSystem installs the contract envelope, HC016W synchronizes the owning authority instead of adding another boundary system.",
+  "routes": {
+    "grave": {
+      "depth": 18.0,
+      "bounds": [
+        5.4,
+        3.5,
+        19.2
+      ],
+      "identity": "broad sparse memory field"
+    },
+    "vascular": {
+      "pathLength": 23.981,
+      "boundsBefore": [
+        4.8,
+        3.35,
+        7.2
+      ],
+      "boundsAfter": [
+        4.5,
+        3.2,
+        22.5
+      ],
+      "identity": "long directional rhythmic current"
+    },
+    "silt": {
+      "pathLength": 24.204,
+      "bounds": [
+        6.8,
+        4.25,
+        21.2
+      ],
+      "identity": "compressed \u2192 open choice pocket \u2192 compressed/deep \u2192 release"
+    }
+  },
+  "decision": "No further spatial expansion. Test the three routes together and tune only demonstrated pacing/readability problems next.",
+  "nextPass": "HC-016X route feel/readability tuning after player test"
+}

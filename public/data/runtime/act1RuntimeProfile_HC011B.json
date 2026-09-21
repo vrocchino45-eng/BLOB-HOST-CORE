@@ -1,0 +1,540 @@
+{
+  "id": "ACT1_RUNTIME_PROFILE_HC011B",
+  "pass": "HC-011B",
+  "version": "1.14.0",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "scope": "golden_first_slice_plus_grave_and_vascular_playable_return_consequence_plus_silt_runtime_contract",
+  "bootPolicy": "first_slice_plus_grave_playable_plus_vascular_playable_plus_silt_mounted_contract",
+  "firstSlicePath": [
+    "surface_wake",
+    "guide_threshold",
+    "hub_chamber"
+  ],
+  "runtimeCellPath": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "act1PreviewPath": [
+    "surface_wake",
+    "guide_threshold",
+    "hub_chamber",
+    "grave_memory_route",
+    "vascular_route",
+    "silt_burrow_route"
+  ],
+  "act1PreviewCellPath": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001",
+    "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "CELL_SILT_PRESSURE_ROUTE_001"
+  ],
+  "globalSystemIds": [
+    "input",
+    "controllerComfortSystem",
+    "modeController",
+    "statusPageSystem",
+    "debugDisplaySystem",
+    "objectiveSystem",
+    "gateSystem",
+    "guidePromptSystem",
+    "playerMovement",
+    "coreGrowthSystem",
+    "visualComposer",
+    "motionSignatureSystem",
+    "playtestHudSystem",
+    "recipeDebugOverlay",
+    "chemistryDebugPanel"
+  ],
+  "sharedSystemIds": [
+    "chemObjectSystem",
+    "targetFocusRegistry",
+    "targetingSystem",
+    "orbiterSystem",
+    "inspectionCameraSystem",
+    "firstSliceCohesionSystem"
+  ],
+  "regions": {
+    "surface_wake": {
+      "modeId": "landing_mode",
+      "modeOwner": "LandingMode",
+      "gameplayOwner": "LandingMode",
+      "presentationOwner": "SurfaceWakeEcologicalCausalitySystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_surface_wake_landing]",
+      "systemIds": [
+        "surfaceWakeGameplaySystem",
+        "openingPacingSystem",
+        "surfaceWakeLayeredInteractionSystem",
+        "surfaceWakeEcologicalCausalitySystem",
+        "cinematicAwakeningSystem",
+        "localCellMorphSystem",
+        "entitySystem",
+        "bondSystem",
+        "morphReadabilitySystem"
+      ],
+      "activeUpdateBudget": 15,
+      "transitionOwner": "LocalCellMorphSystem",
+      "destinationRegionId": "guide_threshold"
+    },
+    "guide_threshold": {
+      "modeId": "threshold_mode",
+      "modeOwner": "ThresholdMode",
+      "gameplayOwner": "ThresholdMode",
+      "presentationOwner": "GuideThresholdLayeredInteractionSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_guide_threshold_directional]",
+      "systemIds": [
+        "morphCompletionSystem",
+        "scarFlowArrivalSystem",
+        "guideThresholdGameplaySystem",
+        "guideThresholdLayeredInteractionSystem",
+        "scarFlowInteractionSystem",
+        "secondLocalCellMorphSystem",
+        "morphReadabilitySystem"
+      ],
+      "activeUpdateBudget": 13,
+      "transitionOwner": "SecondLocalCellMorphSystem",
+      "destinationRegionId": "hub_chamber"
+    },
+    "hub_chamber": {
+      "modeId": "hub_mode",
+      "modeOwner": "HubMode",
+      "gameplayOwner": "HubMode",
+      "presentationOwner": "HubChamberFoundationSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_hub_chamber_interpretive]",
+      "systemIds": [
+        "hubChamberFoundationSystem",
+        "hubInvestigationGameplaySystem"
+      ],
+      "activeUpdateBudget": 8,
+      "transitionOwner": "GateSystem",
+      "destinationRegionId": "grave_memory_route",
+      "destinationRegionIds": [
+        "grave_memory_route",
+        "vascular_route",
+        "silt_burrow_route"
+      ]
+    },
+    "grave_memory_route": {
+      "modeId": "memory_route_mode",
+      "modeOwner": "MemoryRouteMode",
+      "gameplayOwner": "GraveMemoryRouteSystem",
+      "presentationOwner": "GraveMemoryRouteSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_grave_memory_route]",
+      "systemIds": [
+        "graveMemoryRouteSystem"
+      ],
+      "activeUpdateBudget": 7,
+      "transitionOwner": "GateSystem",
+      "destinationRegionId": "hub_chamber"
+    },
+    "vascular_route": {
+      "modeId": "vascular_rhythm_mode",
+      "modeOwner": "VascularRhythmMode",
+      "gameplayOwner": "VascularRhythmRouteSystem",
+      "presentationOwner": "VascularRhythmRouteSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_vascular_rhythm_contract]",
+      "systemIds": [
+        "act1RouteContractSystem",
+        "vascularRhythmRouteSystem"
+      ],
+      "activeUpdateBudget": 8,
+      "transitionOwner": "GateSystem",
+      "destinationRegionId": "hub_chamber",
+      "gameplayReady": true
+    },
+    "silt_burrow_route": {
+      "modeId": "silt_route_contract_mode",
+      "modeOwner": "RouteContractMode",
+      "gameplayOwner": "Act1RouteContractSystem",
+      "presentationOwner": "Act1RouteContractSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_silt_pressure_contract]",
+      "systemIds": [
+        "act1RouteContractSystem"
+      ],
+      "activeUpdateBudget": 7,
+      "transitionOwner": "GateSystem",
+      "destinationRegionId": "hub_chamber",
+      "gameplayReady": false
+    }
+  },
+  "transitionPreparation": {
+    "owner": "FirstSliceTransitionCoordinator",
+    "registeredUpdater": false,
+    "schedule": "one_hidden_resource_job_per_idle_window",
+    "idleTimeoutMs": 1200,
+    "prepareDestinations": [
+      "surface_to_guide",
+      "guide_to_hub",
+      "hub_to_grave",
+      "hub_to_vascular",
+      "hub_to_silt"
+    ],
+    "prepareRegionSystemIds": [
+      "morphCompletionSystem",
+      "scarFlowArrivalSystem",
+      "guideThresholdGameplaySystem",
+      "guideThresholdLayeredInteractionSystem",
+      "scarFlowInteractionSystem",
+      "secondLocalCellMorphSystem",
+      "hubChamberFoundationSystem",
+      "hubInvestigationGameplaySystem",
+      "graveMemoryRouteSystem",
+      "act1RouteContractSystem",
+      "vascularRhythmRouteSystem"
+    ],
+    "shaderWarmup": "one_hidden_clone_compile_batch_per_prepared_boundary",
+    "synchronousFallback": true,
+    "mutatesProgression": false,
+    "baseBlendRate": 0.2,
+    "frameGapDiagnosticThresholdMs": 80
+  },
+  "threeRouteRuntimeContract": {
+    "pass": "HC-011A",
+    "foundationPass": "HC-010G",
+    "recipeId": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC011A",
+    "regionOwner": "ModeController/RegionRegistry",
+    "destinationOwner": "Act1RouteContractSystem",
+    "crossingOwner": "GateSystem",
+    "persistenceOwner": "GateSystem",
+    "wakeCondition": "graveReturned",
+    "routeIds": [
+      "grave_memory_route",
+      "vascular_route",
+      "silt_burrow_route"
+    ],
+    "mountedContractRouteIds": [
+      "vascular_route",
+      "silt_burrow_route"
+    ],
+    "playableRouteIds": [
+      "vascular_route"
+    ],
+    "gameplayPendingRouteIds": [
+      "silt_burrow_route"
+    ],
+    "entryGateIds": [
+      "hub_to_vascular_route",
+      "hub_to_silt_burrow_route"
+    ],
+    "returnGateIds": [
+      "vascular_route_to_hub_chamber",
+      "silt_burrow_route_to_hub_chamber"
+    ],
+    "destinationMountRequiredBeforeWake": true,
+    "gameplayReadyRequiredBeforeCrossing": true,
+    "emptyPlayerFacingCrossings": false,
+    "onlyActiveRegionUpdates": true,
+    "playerPositionPreserved": true,
+    "historySnapshotSerializable": true,
+    "historySnapshotRestorable": true,
+    "foundationRegisteredSystemCount": 1,
+    "registeredDestinationSystemCount": 2,
+    "newRegisteredSystemCountThisPass": 1,
+    "newAbilityUnlocks": 0,
+    "archivedCompatibilitySystemsActivated": 0,
+    "mutatesExistingRouteCompletion": false
+  },
+  "vascularRhythmPlayableCircuit": {
+    "pass": "HC-011A1",
+    "referencePlayablePass": "HC-011A",
+    "recipeId": "VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1",
+    "regionId": "vascular_route",
+    "runtimeCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "gameplayOwner": "VascularRhythmRouteSystem",
+    "presentationOwner": "VascularRhythmRouteSystem",
+    "movementOwner": "PlayerMovementController",
+    "objectiveOwner": "ObjectiveSystem",
+    "crossingOwner": "GateSystem",
+    "entryGateId": "hub_to_vascular_route",
+    "returnGateId": "vascular_route_to_hub_chamber",
+    "objectiveId": "vascular_route_playable_circuit",
+    "continuousMovementRequired": true,
+    "visibleMovingCharge": true,
+    "requiredCadenceReads": 3,
+    "stabilizeRequired": true,
+    "failureRecoverable": true,
+    "lockedCadenceReadsIrreversible": true,
+    "postReadPulseCanDesynchronize": false,
+    "maximumWorstStatePostReadRecoverySeconds": 3.5,
+    "authoredValveDepthIsCanonical": true,
+    "cleanRunMayAvoidFailure": true,
+    "currentReversesTowardEntryAfterSynchronization": true,
+    "returnFoldLockedUntilObjectiveComplete": true,
+    "genericRings": 0,
+    "triggerMarkers": 0,
+    "forcedPlayerRelocation": false,
+    "newRegisteredSystemCount": 1,
+    "newAbilityUnlocks": 0,
+    "newEntities": 0,
+    "combat": false,
+    "permanentClass": false,
+    "siltGameplayActivated": false,
+    "archivedCompatibilitySystemsActivated": 0,
+    "vascularRouteUpdateBudget": 8
+  },
+  "vascularRhythmReturnConsequence": {
+    "pass": "HC-011B",
+    "recipeId": "VASCULAR_RHYTHM_RETURN_CONSEQUENCE_HC011B",
+    "historyOwner": "GateSystem",
+    "coreStateOwner": "CoreGrowthSystem",
+    "corePresentationOwner": "CoreEmbodimentSystem",
+    "hubPresentationOwner": "HubChamberFoundationSystem",
+    "promptSelectionOwner": "GuidePromptSystem",
+    "retainedCadenceReadCount": 3,
+    "coreFilamentCount": 3,
+    "hubEchoFilamentCount": 3,
+    "hubEchoValveCount": 3,
+    "newRegisteredSystemCount": 0,
+    "newAbilityUnlocks": 0,
+    "newEntities": 0,
+    "routeMechanicMutation": false,
+    "siltGameplayActivated": false,
+    "archivedCompatibilitySystemsActivated": 0
+  },
+  "renderTruth": {
+    "pass": "HC-010C",
+    "owner": "HubChamberFoundationSystem",
+    "targetLifecycleOwners": [
+      "TargetFocusRegistry",
+      "TargetingSystem"
+    ],
+    "hubGenericTargetingSuppressed": true,
+    "clearTargetOnRegionOwnershipChange": true,
+    "timerOnlyReadabilityDisabled": true,
+    "requiredSpatialChecks": [
+      "three physically separated route centers",
+      "clear comparison cradle",
+      "three distinct altitude bands",
+      "three distinct solid territory silhouettes",
+      "one active and two dormant route bodies",
+      "zero visible non-Hub environment roots",
+      "zero stale generic chemistry targets",
+      "all route centers and territory silhouettes visible in the authored exploration camera",
+      "minimum camera-space separation with bounded silhouette overlap",
+      "distant Host projected viewport coverage below the dominance limit"
+    ],
+    "screenSpaceRequired": true,
+    "minimumScreenSeparation": 0.25,
+    "maximumScreenOverlapRatio": 0.48,
+    "screenTruthStableFrames": 6,
+    "distantHostViewportDominanceLimit": 0.33,
+    "worldSpaceOnlyReadabilityForbidden": true,
+    "projectedDistantHostMeasurementRequired": true,
+    "playerFacingTechnicalIds": false,
+    "normalHudPrimaryInstructionCount": 1,
+    "distantHostRoleInHub": "background_anatomy_suggestion",
+    "mutatesProgression": false
+  },
+  "promptOwnership": {
+    "pass": "HC-010C",
+    "selectionOwner": "GuidePromptSystem",
+    "activeRegionOverridesRetainedGuidance": true,
+    "activeCellOverridesPreviousMountDuringGateFrame": true,
+    "regionChangeClearsPromptHold": true,
+    "atomicClearAndRepublish": true,
+    "graveContentOwner": "GraveMemoryRouteSystem",
+    "hubContentOwner": "HubChamberFoundationSystem",
+    "internalStagePlayerFacing": false,
+    "staleHubGuidanceAllowedInGrave": false,
+    "mutatesProgression": false
+  },
+  "firstRoutePreview": {
+    "pass": "HC-010A",
+    "owner": "GraveMemoryRouteSystem",
+    "entryGateOwner": "GateSystem",
+    "returnGateOwner": "GateSystem",
+    "regionId": "grave_memory_route",
+    "runtimeCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "objectiveId": "grave_memory_read_and_stabilize",
+    "entryGateId": "hub_to_grave_memory_route",
+    "returnGateId": "grave_memory_to_hub_chamber",
+    "readBeforeAbsorb": true,
+    "protectedRemainsConsumable": false,
+    "forcedRelocation": false,
+    "archivedCompatibilitySystemsActivated": 0,
+    "registeredRouteSystemCount": 1
+  },
+  "firstRouteCircuit": {
+    "pass": "HC-010B",
+    "owner": "GraveMemoryRouteSystem",
+    "growthObserver": "CoreGrowthSystem",
+    "bodyLanguageOwner": "CoreEmbodimentSystem",
+    "hubReflectionOwner": "HubChamberFoundationSystem",
+    "objectiveOwner": "ObjectiveSystem",
+    "crossingOwner": "GateSystem",
+    "recipeId": "GRAVE_MEMORY_SAFE_TRANSFER_CIRCUIT_HC010B",
+    "safeTransferRequired": true,
+    "prematureAbsorbHasConsequence": true,
+    "failureRecoverable": true,
+    "protectedRemainsConsumable": false,
+    "persistentCoreImprint": true,
+    "persistentHubImprint": true,
+    "newAbilityUnlocks": 0,
+    "permanentClass": false,
+    "newRegisteredSystemCount": 0,
+    "archivedCompatibilitySystemsActivated": 0,
+    "graveMemoryRouteUpdateBudget": 7
+  },
+  "movementBoundaryRepair": {
+    "pass": "HC-010D",
+    "collisionOwner": "PlayerMovementController",
+    "regionTuningOwner": "GraveMemoryRouteSystem",
+    "regionId": "grave_memory_route",
+    "mode": "entry_anchored_ellipsoid",
+    "centerSource": "preserved_gate_entry_position",
+    "radii": [4.25, 3.1, 6.8],
+    "legacyWorldOriginClampDisabledInGrave": true,
+    "allAuthoredObjectsApproachable": true,
+    "priorBoundaryRestoredOnExit": true,
+    "forcedPlayerRelocation": false,
+    "interactionRangesChanged": false,
+    "newRegisteredSystemCount": 0,
+    "mutatesProgression": false
+  },
+  "visualConsequenceReadability": {
+    "pass": "HC-010E",
+    "gravePresentationOwner": "GraveMemoryRouteSystem",
+    "coreImprintOwner": "CoreEmbodimentSystem",
+    "hubReflectionOwner": "HubChamberFoundationSystem",
+    "guidePerchOwner": "OrbiterSystem",
+    "diagnosticOwner": "ChemistryDebugPanel",
+    "phaseOrder": [
+      "recoil_scatter",
+      "stabilization_reweave",
+      "safe_trace_transfer",
+      "retained_memory_imprint"
+    ],
+    "postReturnLayerHierarchy": [
+      "immediate_core_and_guide",
+      "objective_grave_echo",
+      "background_host_anatomy"
+    ],
+    "minimumPlayerEchoWorldSeparation": 1.35,
+    "minimumGuideEchoWorldSeparation": 2.1,
+    "minimumGuidePlayerWorldSeparation": 1.85,
+    "minimumPlayerEchoScreenSeparation": 0.14,
+    "minimumGuideEchoScreenSeparation": 0.28,
+    "minimumGuidePlayerScreenSeparation": 0.24,
+    "centralCradleQuietedAfterReturn": true,
+    "internalDiagnosticScopeErrorFixed": true,
+    "objectDefiningRingsAdded": false,
+    "newRegisteredSystemCount": 0,
+    "newAbilityUnlocks": 0,
+    "newRouteContent": false,
+    "mutatesProgression": false
+  },
+  "graveLandmarkVisualLock": {
+    "pass": "HC-010F",
+    "geometryOwner": "ChemObjectVisualComposer",
+    "motionOwner": "GraveMemoryRouteSystem",
+    "regionId": "grave_memory_route",
+    "runtimeCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "landmarkIds": [
+      "old_core_husk_memory_001",
+      "residue_silt_cloud_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "replacementRecipeIds": [
+      "old_core_husk_memory_v01",
+      "residue_silt_cloud_v01",
+      "scar_lock_plate_v01",
+      "inheritance_seed_remnant_v01"
+    ],
+    "retiredPlaceholderIds": [
+      "debug_old_core_husk_memory_001",
+      "debug_residue_silt_cloud_001",
+      "debug_scar_lock_plate_001",
+      "debug_inheritance_seed_remnant_001"
+    ],
+    "distinctSilhouetteCount": 4,
+    "distinctMotionLanguageCount": 4,
+    "pulseResponseVisible": true,
+    "stabilizeResponseVisible": true,
+    "riskResponseVisible": true,
+    "idleObjectDefiningRings": false,
+    "transientVerbCuesOnly": true,
+    "interactionRangesChanged": false,
+    "objectPositionsChanged": false,
+    "newRegisteredSystemCount": 0,
+    "newAbilityUnlocks": 0,
+    "newRouteContent": false,
+    "mutatesProgression": false
+  },
+  "dormantCompatibilitySystemIds": [
+    "signalChorusArrivalSystem",
+    "signalChorusInteractionSystem",
+    "thirdLocalCellMorphSystem",
+    "bloomResidueArrivalSystem",
+    "bloomResidueInteractionSystem",
+    "graveRouteMorphSystem",
+    "graveArrivalReadabilitySystem",
+    "graveReadBeforeAbsorbSystem",
+    "graveLoopStabilitySystem",
+    "graveExitReadinessSystem",
+    "graveScarMemorySeamArrivalSystem",
+    "graveScarMemorySeamFirstReadSystem",
+    "graveSeamContinuityMicroExitSystem",
+    "graveBedPostSeamResponseSystem",
+    "graveRouteLockSystem",
+    "graveReturnContinuitySystem",
+    "signalChorusReturnStateSystem",
+    "signalChorusNextRoutePressureSystem",
+    "signalChorusVisualIdentitySystem",
+    "signalChorusLayeredInteractionSystem"
+  ],
+  "archivePolicy": {
+    "sourceAndAuthoredDataRetained": true,
+    "registeredDuringFirstSliceBoot": false,
+    "initializedDuringFirstSliceBoot": false,
+    "updatedDuringFirstSliceBoot": false,
+    "referenceBuild": "HC-008G",
+    "reactivationRule": "Only a later milestone may explicitly promote an archived system into an authored region mount."
+  },
+  "ownershipRule": "The active mode remains the only region-mount authority. FirstSliceTransitionCoordinator may prepare hidden resources during idle time but cannot mount systems, complete triggers, mutate objectives, open gates, or change destinations. GuidePromptSystem selects only the active region's content and atomically clears stale prompt holds on ownership changes. GraveMemoryRouteSystem owns Grave content. Act1RouteContractSystem owns the bounded Vascular and Silt destination foundations; VascularRhythmRouteSystem owns only Vascular gameplay and presentation while mounted. GateSystem retains the completed return, CoreGrowthSystem translates retained history into body state, CoreEmbodimentSystem renders the attached Core filament, and HubChamberFoundationSystem renders the matching Hub response without changing mechanics. ObjectiveSystem owns completion, PlayerMovementController owns translation and collision, and GateSystem alone owns all route crossings and route-history persistence.",
+  "forbiddenRuntimeFallbacks": [
+    "timer_elapsed_claims_hub_routes_are_readable_without_spatial_verification",
+    "stale_cross_region_target_or_targeting_artifact_in_hub",
+    "surface_or_guide_environment_visible_under_hub_authority",
+    "internal_object_ids_in_normal_player_facing_hud",
+    "multiple_competing_normal_hud_instructions",
+    "distant_host_used_as_enclosing_hub_shell",
+    "transition_coordinator_mutates_progression",
+    "prepared_destination_visible_or_targetable_before_existing_trigger",
+    "prepared_region_system_updates_before_authored_mount",
+    "new_registered_transition_updater",
+    "passive_nursery_cycle_counted_as_player_agency",
+    "listening_fold_accessible_before_authored_nursery_success",
+    "stabilize_identifies_unread_matter",
+    "signal_chorus_prepared_for_next_branch_as_first_slice_lock",
+    "decorative_practice_rings_as_growth_evidence",
+    "global_update_of_inactive_region_systems",
+    "parallel_core_growth_and_embodiment_registry_updaters",
+    "signal_chorus_as_parallel_hub_presentation",
+    "bloom_or_grave_runtime_boot",
+    "historical_pass_validation_as_game_boot_logic",
+    "renderer_owned_progression"
+    ,"archived_grave_or_bloom_compatibility_system_promoted_into_live_mount"
+    ,"grave_route_system_mutates_objective_gate_or_active_cell"
+    ,"protected_grave_remains_become_generic_loot"
+    ,"grave_read_checklist_completes_without_safe_trace_transfer"
+    ,"premature_absorb_has_no_recoverable_world_consequence"
+    ,"grave_imprint_unlocks_an_ability_or_permanent_class"
+    ,"grave_imprint_makes_vascular_silt_comb_aperture_or_act2_player_crossable"
+    ,"retained_hub_or_guide_prompt_outvotes_active_grave_region"
+    ,"prompt_hold_survives_region_ownership_change"
+    ,"world_space_only_hub_readability_passes_camera_collapsed_routes"
+    ,"distant_host_role_label_substitutes_for_projected_viewport_measurement"
+    ,"grave_objects_rebased_beyond_world_origin_movement_membrane"
+    ,"grave_route_or_object_system_directly_clamps_or_relocates_player"
+    ,"vascular_route_system_directly_moves_relocates_or_clamps_player"
+    ,"vascular_route_completes_from_touching_a_trigger_marker"
+    ,"vascular_desynchronization_causes_death_loss_or_forced_restart"
+    ,"vascular_playable_pass_activates_silt_gameplay"
+    ,"vascular_return_consequence_unlocks_an_ability_or_class"
+    ,"vascular_return_consequence_reopens_or_auto_completes_the_route"
+    ,"vascular_return_consequence_activates_silt_gameplay"
+  ]
+}

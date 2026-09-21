@@ -1,0 +1,103 @@
+{
+  "id": "HC024C_PHYSICAL_CORE_PIECE_MANIPULATION_CONTRACT",
+  "build": "HC-024C",
+  "mode": "Guide-assisted embodied manipulation prototype",
+  "purpose": "Prove that the Guide can select, grab, reposition, and place a very small set of existing visible Core pieces inside the HC024B Core Work view without enabling chemistry, spawning new pieces, or opening a detached editor.",
+  "playerEvidence": [
+    "HC024A external Core inspection works as a useful close view",
+    "HC024B Guide/Core Work third view works mechanically even though the entry button sequence is still prototype ergonomics",
+    "player wants the Guide to help manipulate accumulated Core anatomy rather than use a conventional crafting menu"
+  ],
+  "entryFlow": {
+    "worldToCoreInspection": "Y controller / F keyboard / V alias",
+    "coreInspectionToCoreWork": "A controller / E keyboard",
+    "selectPiece": "D-Pad Left/Right while not holding a piece",
+    "grabPlace": "A controller / E keyboard",
+    "moveHeldPiece": "Left Stick / WASD",
+    "shiftDepth": "RT outward / LT inward",
+    "orbitCamera": "Right Stick / IJKL",
+    "coreWorkToCoreInspection": "B controller / Escape keyboard",
+    "coreWorkToWorld": "Y controller / F keyboard / V alias"
+  },
+  "allowedScope": [
+    "reuse the four existing player_growth_connection_node objects as the prototype piece set",
+    "persist placement offsets on those existing objects during the runtime session",
+    "reuse A/E contextually as grab/place once Core Work is active",
+    "reuse D-Pad Left/Right to select a visible piece inside Core Work",
+    "reuse Left Stick as piece movement while Core Work temporarily suppresses world traversal",
+    "reuse RT/LT as outward/inward piece depth while Core Work suppresses world absorb/stabilize",
+    "reuse Right Stick as camera orbit",
+    "move the existing Guide pose toward the currently selected piece",
+    "reuse the existing Guide shimmer line to connect Guide and selected piece",
+    "update compact HUD and debug state"
+  ],
+  "forbiddenScope": [
+    "new region or geography",
+    "new world geometry",
+    "new Core piece geometry",
+    "new Guide geometry",
+    "new chemistry recipe",
+    "chemistry reaction or stat modifier",
+    "inventory slots or crafting menu",
+    "detached editor scene",
+    "permanent progression unlock from rearrangement",
+    "contact or attachment physics",
+    "return-traversal topology change",
+    "new physical controller mapping"
+  ],
+  "pieceSet": {
+    "family": "existing_visible_binding_connection_nodes",
+    "maximumCount": 4,
+    "spawnNewPieces": false,
+    "selectionIsVisual": true,
+    "placementPersistsAfterViewExit": true,
+    "chemistryMeaning": "none_in_HC024C"
+  },
+  "guide": {
+    "manipulationAgent": true,
+    "usesExistingOrbiterBody": true,
+    "newGeometry": false,
+    "movesTowardSelectedPiece": true,
+    "shimmerLineTargetsSelectedPiece": true
+  },
+  "inputOwnership": {
+    "physicalMapChanged": false,
+    "worldPulseSuppressedOnlyInCoreWork": true,
+    "worldAbsorbSuppressedOnlyInCoreWork": true,
+    "worldStabilizeSuppressedOnlyInCoreWork": true,
+    "cameraOrbitPreserved": true,
+    "worldTraversalInputSuppressedOnlyInCoreWork": true,
+    "existingMomentumMaySettleDuringCoreWork": true
+  },
+  "chemistry": {
+    "enabled": false,
+    "reactionCount": 0,
+    "statMutation": false,
+    "progressionMutation": false
+  },
+  "locks": {
+    "cameraTransformOwner": "GameRuntime",
+    "inspectionAndWorkStateOwner": "InspectionCameraSystem",
+    "guidePoseOwner": "OrbiterSystem",
+    "piecePlacementOwner": "CoreEmbodimentSystem",
+    "movementOwner": "PlayerMovementController",
+    "controlMapRemapped": false,
+    "newSourceModules": 0,
+    "sourceJsCount": 88
+  },
+  "acceptanceTests": [
+    "HC024A World/Core inspection toggle remains intact",
+    "HC024B A/E Core Work entry remains intact",
+    "visible binding nodes become a selectable four-piece prototype set",
+    "D-Pad Left/Right changes the selected visible node",
+    "A grabs the selected node and A again places it",
+    "Left Stick moves the held node relative to the current camera composition",
+    "RT moves the held node outward and LT moves it inward within a bounded radius",
+    "Right Stick continues to orbit the camera while a node is held",
+    "Guide visibly attends the selected/held node",
+    "B/Y exits remain intact",
+    "piece placement remains visible after leaving Core Work",
+    "no chemistry, stat, progression, geography, or new-geometry effect occurs"
+  ],
+  "nextIfPasses": "HC024C1 should first lock selection/depth readability if live play finds manipulation too subtle; only after that may HC024D attach at most two temporary chemistry reactions."
+}

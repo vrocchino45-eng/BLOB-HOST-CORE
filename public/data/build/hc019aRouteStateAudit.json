@@ -1,0 +1,71 @@
+{
+  "build": "HC019A",
+  "mode": "AUDIT_ONLY",
+  "purpose": "Trace the first-playable route and prove progression/return ownership before conversion to matter-state traversal.",
+  "sourceCheckpoint": "HC018E-HOTFIX1",
+  "changesToGameplay": false,
+  "boundaryAuthority": {
+    "file": "src/morph/LocalCellBoundaryMorphSystem.js",
+    "recipeIdsFound": [
+      "guide_to_hub_chamber",
+      "none",
+      "surface_to_guide_threshold"
+    ],
+    "directionsFound": [],
+    "triggersFound": [],
+    "hotfixReturnGuardPresent": true
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "HIGH",
+      "finding": "Route crossing remains centralized in LocalCellBoundaryMorphSystem rather than in Grave/Vascular/Silt route gameplay systems.",
+      "implication": "HC019B must preserve this crossing authority and make it consume material/world state; it should not create a second transition owner."
+    },
+    {
+      "id": "F02",
+      "severity": "HIGH",
+      "finding": "Interact-driven return recipes share generic boundary handling.",
+      "implication": "The HOTFIX1 re-arm guard addresses same-press return risk globally, but the next playtest must verify the exact route that returned to Hub because multiple return recipes can pass through the same authority."
+    },
+    {
+      "id": "F03",
+      "severity": "MEDIUM",
+      "finding": "The current route architecture still separates route completion truth from crossing truth.",
+      "implication": "This is structurally useful, but it is also the source of the 'objective/flag then transition' feel. HC019B should change what completion observes, not who owns crossing."
+    },
+    {
+      "id": "F04",
+      "severity": "MEDIUM",
+      "finding": "HC018 material/verb systems are presentation and local-state layers around existing progression rather than the sole progression cause.",
+      "implication": "The next implementation pass should convert exactly one early-route obstacle so material state becomes the causal prerequisite."
+    },
+    {
+      "id": "F05",
+      "severity": "LOCK",
+      "finding": "No evidence justifies deleting generic boundary authority or rewriting all routes in HC019A.",
+      "implication": "This pass intentionally makes no gameplay fix beyond the already-applied HC018E HOTFIX1."
+    }
+  ],
+  "nextPassContract": {
+    "id": "HC019B",
+    "mode": "CONVERSION",
+    "scope": "one early-route obstacle only",
+    "causalChain": [
+      "player reads material condition",
+      "player applies Pulse/Absorb/Stabilize",
+      "material state changes",
+      "traversable condition changes",
+      "existing objective observes resulting state",
+      "existing boundary authority permits crossing"
+    ],
+    "forbidden": [
+      "new route",
+      "new verb",
+      "new progression database",
+      "second crossing authority",
+      "region expansion",
+      "global route rewrite"
+    ]
+  }
+}

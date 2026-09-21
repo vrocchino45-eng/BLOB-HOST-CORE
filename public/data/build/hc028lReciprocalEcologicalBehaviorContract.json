@@ -1,0 +1,38 @@
+{
+  "id": "HC-028L",
+  "parent": "HC-028K",
+  "rule": "retained_relationship_memory_may_bias_existing_entity_spacing_and_attention_without_affinity_scores_or_new_progression_authority",
+  "scope": {
+    "entityTypesAdded": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newTargeting": false,
+    "newBondRules": false,
+    "newRepairRules": false,
+    "newProgression": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": true,
+    "verbPowerChanged": false,
+    "routeLogicChanged": false,
+    "combReentryHotfixPreserved": true,
+    "entitySystemRemainsMovementOwner": true,
+    "newEntityAiOwnerAdded": false
+  },
+  "behavior": {
+    "directiveOwner": "EntityReciprocalBehaviorSystem",
+    "movementOwner": "EntitySystem",
+    "source": "EntityReciprocalMemorySystem",
+    "hiddenAffinityScore": false,
+    "preciseBeatTimingRequired": false,
+    "memoryDecayStillAuthoritative": true,
+    "tenderOutsideNurseryOnlyMovementBias": true,
+    "tenderRepairRateMayBeChangedByThisPass": false,
+    "tenderBondMayBeChangedByThisPass": false,
+    "watcherPositionMayBeChangedByThisPass": false,
+    "watcherAttentionMayBeChangedByThisPass": true,
+    "maxTenderSpacingOffsetApprox": 0.42,
+    "routeGuidanceAuthorityAdded": false,
+    "progressionMayBeChangedByThisPass": false
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.12"
+}

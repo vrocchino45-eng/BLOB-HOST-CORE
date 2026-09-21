@@ -1,0 +1,54 @@
+{
+  "id": "HC024A_CORE_INSPECTION_CONTRACT",
+  "build": "HC-024A",
+  "mode": "camera / embodiment / convergence",
+  "purpose": "Turn the existing global tight camera into a deliberate Core-centered self-inspection orbit so the player can study accumulated anatomy from multiple angles while remaining inside the continuous Host space.",
+  "playerEvidence": [
+    "long playtest repeatedly reframed the Core from multiple spatial layers",
+    "close accidental compositions made accumulated Core anatomy worth studying",
+    "cinematic geometry is emerging from player-controlled alignment rather than hard camera modes"
+  ],
+  "allowedScope": [
+    "change free inspection framing only",
+    "center free inspection on the Core",
+    "bring camera closer while remaining third-person",
+    "widen vertical orbit enough to inspect overhead and underside",
+    "preserve entry angle when Y/F is toggled",
+    "R3 may return to a readable rear view of the Core",
+    "update camera/control wording and diagnostics"
+  ],
+  "forbiddenScope": [
+    "new region or geography",
+    "new progression requirement",
+    "new movement physics or collision rule",
+    "new gameplay verb or button mapping",
+    "freeze player movement during inspection",
+    "detached free/photo camera",
+    "first-person mode",
+    "Core chemistry manipulation",
+    "return-traversal topology changes",
+    "contact/attachment physics changes"
+  ],
+  "camera": {
+    "toggle": "Y controller / F keyboard / V alias",
+    "defaultMode": "core_centered_orbit",
+    "distance": 2.65,
+    "fov": 48,
+    "pitchMin": -1.0,
+    "pitchMax": 1.22,
+    "yaw": "full orbit",
+    "entry": "preserve current player-framed yaw/pitch where valid",
+    "recenter": "R3/R returns behind current Core facing",
+    "authoredFocusAssist": "retained when player look intent aligns"
+  },
+  "locks": {
+    "cameraTransformOwner": "GameRuntime",
+    "inspectionStateOwner": "InspectionCameraSystem",
+    "bodyOrientationOwner": "CoreEmbodimentSystem",
+    "movementOwner": "PlayerMovementController",
+    "controlMapRemapped": false,
+    "newSourceModules": 0,
+    "sourceJsCount": 88
+  },
+  "nextIfPasses": "HC024B should address physical contact-language readability only after live play confirms the Core inspection distance and orbit arc."
+}

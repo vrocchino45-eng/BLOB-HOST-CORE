@@ -1,0 +1,66 @@
+{
+  "id": "HC-028N",
+  "parent": "HC-028M1",
+  "mode": "bounded_ecological_world_memory",
+  "purpose": "Let a completed meaningful organism interaction leave one faint temporary cell-scoped Host-matter trace after immediate ecology has finished, without gameplay, affinity, route, or save-state authority.",
+  "scope": {
+    "newEntityTypes": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newProgression": false,
+    "newAffinity": false,
+    "persistentSaveStateEcology": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": false,
+    "routeLogicChanged": false,
+    "chemistryChanged": false,
+    "combReentryHotfixPreserved": true,
+    "startupScopeHotfixPreserved": true,
+    "newParticleFieldAdded": false,
+    "newGeometryAdded": false,
+    "newDrawCallsAdded": false
+  },
+  "residue": {
+    "durationRangeSeconds": [
+      20,
+      45
+    ],
+    "maxStoredResidues": 2,
+    "worldSpaceFrozen": true,
+    "cellScoped": true,
+    "decaysWhileAway": true,
+    "beginsAfterImmediateEcologyEnds": true,
+    "usesExistingHostMotes": true,
+    "leavesNoPermanentWorldState": true,
+    "stages": [
+      "settling_imprint",
+      "retained_trace",
+      "fading_trace"
+    ],
+    "tenderModes": [
+      "care_afterimage",
+      "protective_hush",
+      "settled_trace",
+      "tender_presence_trace"
+    ],
+    "watcherModes": [
+      "sample_imprint",
+      "counter_scan_echo",
+      "guarded_sensor_hush",
+      "watcher_observation_trace"
+    ]
+  },
+  "authority": {
+    "saveState": false,
+    "playerMovement": false,
+    "entityMovement": false,
+    "collision": false,
+    "chemistry": false,
+    "bond": false,
+    "repair": false,
+    "combat": false,
+    "targeting": false,
+    "progression": false,
+    "route": false
+  }
+}

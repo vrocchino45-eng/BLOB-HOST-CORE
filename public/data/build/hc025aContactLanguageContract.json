@@ -1,0 +1,23 @@
+{
+  "id": "HC025A_CONTACT_LANGUAGE",
+  "parent": "HC-024E",
+  "states": [
+    "suspended",
+    "brushing",
+    "attached",
+    "releasing"
+  ],
+  "signalSource": "PlayerMovementController existing authored movement-boundary telemetry",
+  "visualOwner": "CoreEmbodimentSystem",
+  "hudOwner": "PlaytestHudSystem debug/status read only",
+  "usesExistingCoreGeometry": true,
+  "usesExistingMovementBoundary": true,
+  "addsCollider": false,
+  "addsRaycastSystem": false,
+  "chemistryAdhesionSkinAmplifiesVisualAttachment": true,
+  "movementConsequencesEnabled": false,
+  "collisionConsequencesEnabled": false,
+  "adhesionPhysicsEnabled": false,
+  "progressionAuthority": false,
+  "acceptance": "near authored Host boundary the Core visibly transitions suspended -> brushing/attached -> releasing while player translation/collision remain unchanged"
+}

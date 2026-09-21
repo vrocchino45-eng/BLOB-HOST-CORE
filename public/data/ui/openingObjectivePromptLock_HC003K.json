@@ -1,0 +1,75 @@
+{
+  "id": "HC003K_OPENING_OBJECTIVE_PROMPT_LOCK",
+  "pass": "HC-003K",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Make the first playable minute understandable with debug hidden by making the Guide the primary instruction layer and Tissue Shift a secondary no-gate status strip.",
+  "firstPlayableMinuteRequiredChain": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "beyondMinuteOptionalFork": "CELL_BLOOM_RESIDUE_FORK_001",
+  "playerFacingLayer": {
+    "primary": "GuidePromptSystem",
+    "secondary": "MorphReadabilitySystem",
+    "debugHiddenRequirement": "The player can complete the required first-minute chain using only the Guide prompt, target reticle, camera, and tissue status strip."
+  },
+  "promptRules": [
+    {
+      "id": "guide_primary_world_facing",
+      "rule": "Guide text owns the action verb and meaning for the current step."
+    },
+    {
+      "id": "tissue_shift_secondary",
+      "rule": "Tissue Shift may show no-gate progress and tissue state, but should not duplicate Guide objective text."
+    },
+    {
+      "id": "first_minute_separate",
+      "rule": "First playable minute lock status is separate from the optional Bloom Residue fork."
+    },
+    {
+      "id": "signal_action_clarity",
+      "rule": "Signal Chorus prompts must say what to pulse or wait for without requiring debug panels."
+    },
+    {
+      "id": "debug_not_required",
+      "rule": "Debug panels are build tools, not final HUD."
+    }
+  ],
+  "requiredGuidePrompts": [
+    "GUIDE_PROMPT_AWAKENING_001",
+    "GUIDE_PROMPT_OPENING_FLOW_001",
+    "GUIDE_PROMPT_SAFE_SEED_001",
+    "GUIDE_PROMPT_SCAR_WARNING_001",
+    "GUIDE_PROMPT_FIRST_FOLD_READY_001",
+    "GUIDE_PROMPT_SCAR_FLOW_ARRIVAL_001",
+    "GUIDE_PROMPT_SCAR_MEMORY_001",
+    "GUIDE_PROMPT_SCAR_CLOT_001",
+    "GUIDE_PROMPT_SIGNAL_REVEAL_001",
+    "GUIDE_PROMPT_CHOIR_NODE_001",
+    "GUIDE_PROMPT_SIGNAL_BRIDGE_001",
+    "GUIDE_PROMPT_FIRST_MINUTE_COMPLETE_001",
+    "GUIDE_PROMPT_BLOOM_AFTERFORK_001",
+    "GUIDE_PROMPT_FALLBACK_001"
+  ],
+  "forbidden": [
+    "dialogue tree",
+    "quest log",
+    "new cells",
+    "new morphs",
+    "route runtime",
+    "combat",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime"
+  ],
+  "lockReadouts": {
+    "firstMinuteIncomplete": "First Minute: required chain in progress",
+    "firstMinuteComplete": "First Minute: lock candidate complete",
+    "optionalForkNotReached": "Beyond-Minute Fork: optional / not reached",
+    "optionalForkActive": "Beyond-Minute Fork: optional active",
+    "optionalForkComplete": "Beyond-Minute Fork: optional stable / complete"
+  },
+  "nextRecommendedPass": "HC-003L Opening Slice Gold Candidate"
+}

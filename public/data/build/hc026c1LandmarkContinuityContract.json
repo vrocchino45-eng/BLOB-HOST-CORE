@@ -1,0 +1,25 @@
+{
+  "id": "HC026C1_LANDMARK_CONTINUITY",
+  "build": "HC-026C1",
+  "owner": "LocalCellBoundaryMorphSystem",
+  "parent": "HC-026C",
+  "purpose": "Turn destination signatures into recurring approach anatomy so Surface/Guide/Hub direction becomes learned environmental grammar rather than a special seam marker.",
+  "destinationSignatures": {
+    "surface": "nursery_triad",
+    "guide": "scar_double_rib",
+    "hub": "chorus_triad"
+  },
+  "approachEchoCountPerDestination": 3,
+  "continuityRule": "Each active destination motif repeats sourceward from the unchanged seam in three progressively softer echoes; the seam motif remains the clearest local expression.",
+  "locked": {
+    "newSourceModule": false,
+    "seamAnchorsMoved": false,
+    "crossingThresholdsChanged": false,
+    "waypointArrows": false,
+    "hudNavigationRequired": false,
+    "teleport": false,
+    "progressionMutation": false,
+    "routeTopologyMutation": false,
+    "newGeometryOutsideExistingReturnPresentationOwner": false
+  }
+}

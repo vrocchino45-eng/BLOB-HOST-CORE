@@ -1,0 +1,91 @@
+{
+  "id": "GRAVE_LOOP_STABILITY_EXIT_READINESS_HC004G",
+  "build": "HC-004G",
+  "status": "runtime_stability_readout_active_exit_planning_only",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceLoop": "GRAVE_READ_BEFORE_ABSORB_LOOP_001",
+  "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "sourceRoute": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+  "mode": "stabilize_read_before_absorb_loop_before_any_exit_prototype",
+  "stabilityRules": {
+    "minimumStableSecondsAfterSafeTransfer": 3.5,
+    "maximumAllowedRecoilRisk": 0.32,
+    "requiredProtectedRemainsVisible": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "safeTransferObject": "residue_silt_cloud_001",
+    "requiresSafeMemoryTransferComplete": true,
+    "requiresReadLoopActive": true,
+    "readinessOutput": "planning_ready_no_exit_activation",
+    "readinessDoesNotActivate": [
+      "new_morph_activation",
+      "runtime_exit_activation",
+      "gate",
+      "door",
+      "teleport",
+      "branch_select_menu",
+      "old_chamber_runtime"
+    ]
+  },
+  "safeTransferTuning": {
+    "safeAbsorbHoldSeconds": 1.45,
+    "postTransferSettleSeconds": 3.5,
+    "recoilDecayAfterCompletion": 0.075,
+    "readLoopPromptPriority": "stability_then_exit_later"
+  },
+  "exitReadinessPlan": {
+    "plannedNextPass": "HC-004H",
+    "candidateLabel": "Grave Exit Readiness Prototype",
+    "readinessCondition": "safe silt transfer complete, protected remains visible, recoil settled, and player stabilized in Grave bed for minimum stable seconds",
+    "runtimeActivationThisPass": "none",
+    "newRouteBranchThisPass": false,
+    "morphActivationThisPass": false,
+    "exitPrototypeDeferred": true,
+    "worldFacingMeaning": "The Grave has answered enough to prepare the player, but the scar lock has not opened as a route yet."
+  },
+  "hudLanguage": {
+    "stabilizing": "Let the Grave settle. Do not force the remains.",
+    "readinessReady": "Grave loop stable. Exit readiness is planned for the next pass; no exit opens yet.",
+    "remainsProtected": "The husk, scar, and inheritance seed must remain visible.",
+    "forcedAbsorbWarning": "Forcing absorb after transfer increases recoil and delays readiness."
+  },
+  "allowedScope": [
+    "safe-transfer timing tuning",
+    "read-loop prompt clarity",
+    "Grave camera/readability tuning",
+    "exit-readiness planning data",
+    "runtime stability readout with no exit activation",
+    "validators for stability and readiness"
+  ],
+  "forbiddenScope": [
+    "full Grave route branch",
+    "new morph activation",
+    "runtime exit activation",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion",
+    "consuming the old core husk",
+    "opening the inheritance seed remnant"
+  ],
+  "acceptanceTests": [
+    "The stability layer activates only in CELL_GRAVE_MEMORY_RESIDUE_BED_001 when the HC-004F read loop is active.",
+    "Exit readiness can become planning-ready only after safeMemoryTransferComplete is true.",
+    "Protected remains must remain visible and unconsumed.",
+    "The pass must not add any new morph activation, route branch, gate, door, teleport, branch menu, old chamber runtime, dialogue tree, quest log, combat, or Act expansion.",
+    "HC-004H may be named only as a later planned prototype, not as active runtime."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004H",
+    "label": "Grave Exit Readiness Prototype",
+    "mode": "prototype_exit_readiness_only_after_stability_lock"
+  }
+}

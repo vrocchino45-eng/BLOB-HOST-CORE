@@ -1,0 +1,20 @@
+{
+  "id": "HC-025C",
+  "version": "0.25.2",
+  "label": "Contact Surface Coverage Lock",
+  "mode": "audit and lock current contactable movement-envelope coverage before any decorative Host geometry gains physical authority",
+  "parent": "HC-025B",
+  "buildRule": "Attachment remains on existing authored movement envelopes only. Current visible/interior Host geometry is not silently promoted to collision/contact authority; each active envelope publishes its region, mode, tuning owner, and coverage class for playtest evidence.",
+  "sourceJsCount": 88,
+  "contactLanguageEnabled": true,
+  "adhesionPhysicsEnabled": true,
+  "surfaceCoverageAuditEnabled": true,
+  "usesExistingMovementBoundary": true,
+  "interiorDecorativeGeometryContactable": false,
+  "surfaceExpansionThisPass": false,
+  "addsCollider": false,
+  "addsRaycastSystem": false,
+  "progressionAuthority": false,
+  "newRegions": 0,
+  "newSourceModules": 0
+}

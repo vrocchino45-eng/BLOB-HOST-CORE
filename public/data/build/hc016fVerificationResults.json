@@ -1,0 +1,254 @@
+{
+  "build": "HC-016F",
+  "summary": {
+    "graveRoundtripMigrated": true,
+    "hubRouteMigratedBoundaryCount": 6,
+    "remainingGateOwnedMacroBoundaries": [
+      "hub_to_comb",
+      "comb_to_hub",
+      "comb_to_aperture",
+      "aperture_to_comb"
+    ],
+    "trueActiveCellAssignmentCount": 24,
+    "unclassifiedActiveCellAssignmentCount": 0,
+    "nodeModulesPresent": false
+  },
+  "activeCellMutationSites": [
+    {
+      "file": "src/debug/DebugAreaJumpSystem.js",
+      "line": 30,
+      "code": "frameState.activeCellId = target.cellId;",
+      "classification": "debug_bypass"
+    },
+    {
+      "file": "src/morph/HubSiltMorphTransitionSystem.js",
+      "line": 124,
+      "code": "frameState.activeCellId = SILT_CELL_ID;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/ThirdLocalCellMorphSystem.js",
+      "line": 354,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/GraveRouteMorphSystem.js",
+      "line": 340,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/SignalChorusReturnStateSystem.js",
+      "line": 86,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/GraveSeamContinuityMicroExitSystem.js",
+      "line": 192,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/GraveSeamContinuityMicroExitSystem.js",
+      "line": 204,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/SiltHubMorphReturnSystem.js",
+      "line": 133,
+      "code": "frameState.activeCellId = HUB_CELL_ID;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/HubGraveMorphTransitionSystem.js",
+      "line": 102,
+      "code": "frameState.activeCellId = GRAVE_CELL_ID;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/BloomResidueArrivalSystem.js",
+      "line": 62,
+      "code": "if (active) frameState.activeCellId = this.cellId;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/BloomResidueArrivalSystem.js",
+      "line": 198,
+      "code": "frameState.activeCellId = this.cellId;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/VascularHubMorphReturnSystem.js",
+      "line": 140,
+      "code": "frameState.activeCellId = HUB_CELL_ID;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/LocalCellMorphSystem.js",
+      "line": 397,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/SecondLocalCellMorphSystem.js",
+      "line": 384,
+      "code": "frameState.activeCellId = this.destinationCell.id;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/ScarFlowArrivalSystem.js",
+      "line": 119,
+      "code": "frameState.activeCellId = this.cellId;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/SignalChorusArrivalSystem.js",
+      "line": 177,
+      "code": "frameState.activeCellId = this.cellId;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/GraveScarMemorySeamArrivalSystem.js",
+      "line": 254,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/GraveScarMemorySeamArrivalSystem.js",
+      "line": 266,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/morph/GraveHubMorphReturnSystem.js",
+      "line": 111,
+      "code": "frameState.activeCellId = HUB_CELL_ID;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/HubVascularMorphTransitionSystem.js",
+      "line": 125,
+      "code": "frameState.activeCellId = VASCULAR_CELL_ID;",
+      "classification": "authoritative_morph_owner"
+    },
+    {
+      "file": "src/morph/GraveReturnContinuitySystem.js",
+      "line": 282,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;",
+      "classification": "legacy_transition_migration_debt"
+    },
+    {
+      "file": "src/core/GameRuntime.js",
+      "line": 1513,
+      "code": "this.frameState.activeCellId = cell.id;",
+      "classification": "initialization_or_safety_rollback"
+    },
+    {
+      "file": "src/core/FirstSliceTransitionCoordinator.js",
+      "line": 239,
+      "code": "this.frameState.activeCellId = activeCellBefore;",
+      "classification": "initialization_or_safety_rollback"
+    },
+    {
+      "file": "src/systems/GateSystem.js",
+      "line": 574,
+      "code": "frameState.activeCellId = destinationCellId;",
+      "classification": "legacy_gate_compatibility"
+    }
+  ],
+  "results": [
+    {
+      "name": "syntax:HubGraveMorphTransitionSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GraveHubMorphReturnSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GameRuntime.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:RuntimeStateLedgerSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:FirstSliceTransitionCoordinator.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GateSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016FGraveRoundtrip.mjs",
+      "status": "PASS",
+      "detail": "[HC016F] Hub <-> Grave roundtrip migration PASS\n"
+    },
+    {
+      "name": "verifyHC016FSystemArchitecture.mjs",
+      "status": "PASS",
+      "detail": "[HC016F VERIFY] six migrated Hub-route boundaries are observer-only in GateSystem: PASS\n[HC016F VERIFY] runtime registrations and ledger firewalls: PASS\n"
+    },
+    {
+      "name": "activeCellId ownership classification",
+      "status": "PASS",
+      "detail": "classified 24 true assignments; unclassified=0"
+    },
+    {
+      "name": "validate:first-slice-ownership",
+      "status": "STALE_VALIDATOR",
+      "detail": "\n> blob-host-core-rebuild@0.15.4 validate:first-slice-ownership\n> node scripts/validateFirstSliceRuntimeOwnershipRebindHC006I.mjs\n\n\nfile:///mnt/data/BLOB_HOST_CORE_REBUILD_HC016F_GRAVE_ROUNDTRIP_VERIFIED/scripts/validateFirstSliceRuntimeOwnershipRebindHC006I.mjs:16\n  if (!condition) throw new Error(`[validateFirstSliceRuntimeOwnershipRebindHC006I] ${message}`);\n                        ^\n\nError: [validateFirstSliceRuntimeOwnershipRebindHC006I] manifest must preserve HC-006I ownership through HC-014A.\n    at assert \u001b[90m(file:///mnt/data/BLOB_HOST_CORE_REBUILD_HC016F_GRAVE_ROUNDTRIP_VERIFIED/\u001b[39mscripts/validateFirstSliceRuntimeOwnershipRebindHC006I.mjs:16:25\u001b[90m)\u001b[39m\n    at \u001b[90mfile:///mnt/data/BLOB_HOST_CORE_REBUILD_HC016F_GRAVE_ROUNDTRIP_VERIFIED/\u001b[39mscripts/validateFirstSliceRuntimeOwnershipRebindHC006I.mjs:94:1\n\u001b[90m    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)\u001b[39m\n\u001b[90m    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\u001b[39m\n\u001b[90m    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\u001b[39m\n\nNode.js v22.16.0\n"
+    },
+    {
+      "name": "validate:transition-continuity-prewarm",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "validate:three-route-runtime-contract",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "validate:grave-memory-safe-transfer",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "validate:vascular-rhythm-playable",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "validate:silt-pressure-playable",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "validate:three-route-hub-convergence",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "validate:transition-performance-consolidation",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    },
+    {
+      "name": "npm run build",
+      "status": "ENVIRONMENT_BLOCKED",
+      "detail": "node_modules are not included in the source ZIP; Three/Vite imports cannot execute until npm install is run."
+    }
+  ]
+}

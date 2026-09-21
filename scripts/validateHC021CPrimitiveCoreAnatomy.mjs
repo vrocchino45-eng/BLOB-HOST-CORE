@@ -1,0 +1,13 @@
+import fs from "node:fs";
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), emb=read("../src/player/CoreEmbodimentSystem.js"), growth=read("../src/player/CoreGrowthSystem.js");
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-021C"'),"identity");
+for(const x of ["primitive_membrane_and_nucleus","membrane_differentiation","internal_axis_and_locomotor_organization","young_organized_core","retention_memory_anatomy","circulation_transport_anatomy","filtration_boundary_anatomy"]) must(emb.includes(x),x);
+must(emb.includes("gameplayBodyUnchanged: true"),"gameplay body lock");
+must(growth.includes("hubBranchIntegrationComplete"),"integration state");
+must(growth.includes("futureEvolutionPolicy"),"future evolution policy");
+must(emb.includes("graveMemoryImprintCommitted")&&emb.includes("vascularRhythmRetained")&&emb.includes("siltPressureRetained"),"route anatomy");
+console.log("[HC021C] primitive core chronology PASS");
+console.log("[HC021C] Grave/Vascular/Silt anatomical retention PASS");
+console.log("[HC021C] gameplay body unchanged contract PASS");

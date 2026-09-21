@@ -1,0 +1,40 @@
+{
+  "id": "HC-027E",
+  "version": "0.27.6",
+  "label": "Consequence Rhythm / System Turn-Taking",
+  "mode": "presentation convergence / consequence legibility",
+  "parent": "HC-027D1",
+  "buildRule": "Existing systems take turns being important: action resolves, world consequence receives bounded readable time, then quiet traversal lets existing Host ecology re-emerge. No new progression, targets, verbs, routes or gameplay authority.",
+  "sourceJsCount": 92,
+  "newSourceModules": 0,
+  "newRegions": 0,
+  "modifiedPresentationOwners": [
+    "InteractionCompositionSystem",
+    "AmbientMaterialInteractionSystem",
+    "CoreVerbPhysicalizationSystem",
+    "EntitySystem",
+    "OrbiterSystem",
+    "PlaytestHudSystem"
+  ],
+  "consequenceKinds": [
+    "pulse_return",
+    "absorb_capture",
+    "stabilize_lock",
+    "core_work_commit",
+    "route_state_change"
+  ],
+  "coreWorkAmbientSuppression": {
+    "selected": 0.76,
+    "held": 0.84
+  },
+  "quietTraversalWorldNoticeLiftMax": 0.24,
+  "audioMixChanged": false,
+  "audioReferenceBuild": "HC-027D1",
+  "gameplayAuthorityChanged": false,
+  "progressionChanged": false,
+  "movementOwnershipChanged": false,
+  "chemistryAuthorityChanged": false,
+  "routeTopologyChanged": false,
+  "engineGrammarChanged": false,
+  "sonarRangeOrTimingChanged": false
+}

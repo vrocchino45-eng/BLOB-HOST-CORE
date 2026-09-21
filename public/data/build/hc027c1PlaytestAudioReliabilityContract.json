@@ -1,0 +1,45 @@
+{
+  "id": "hc027c1_playtest_audio_reliability",
+  "owner": "EventAnchoredHostAudioSystem",
+  "hudOwner": "PlaytestHudSystem",
+  "purpose": "Remove ambiguity between browser audio lock and in-game audio tuning during recorded playtests.",
+  "unlock": {
+    "acceptedTrustedInputs": [
+      "pointerdown",
+      "keydown",
+      "touchstart",
+      "explicit_audio_gate_pointer"
+    ],
+    "gamepadOnlyUnlockGuaranteed": false,
+    "lockedStateMustBeProminent": true,
+    "confirmationToneRequired": true,
+    "confirmationEventId": "audio_unlock_confirmation"
+  },
+  "mix": {
+    "masterGain": 0.52,
+    "pannerRefDistance": 2.4,
+    "pannerRolloff": 0.72,
+    "coreEnginePhaseGainRange": [
+      0.03,
+      0.045
+    ],
+    "coreEngineCycleGainRange": [
+      0.028,
+      0.04
+    ],
+    "musicLayerEnabled": false,
+    "externalAudioAssetsRequired": false
+  },
+  "locked": {
+    "gameplayAuthority": false,
+    "progressionAuthority": false,
+    "movementTuningChanged": false,
+    "radialPerformanceLawChanged": false,
+    "triadicEngineGrammarChanged": false
+  },
+  "playtest": {
+    "preferredRuntime": "external Chrome/Edge browser opened from Vite/Live Server",
+    "firstCheck": "Click AUDIO LOCKED banner once and verify the three-note confirmation triad.",
+    "recordingCheck": "Confirm operating-system/browser audio is captured before a long gameplay recording."
+  }
+}

@@ -1,0 +1,207 @@
+[
+  {
+    "id": "TARGET_FOCUS_NURSERY_001",
+    "cellId": "CELL_MEMBRANE_NURSERY_001",
+    "baseCellBoost": 2.2,
+    "preferredObjects": {
+      "dormant_seed_nutrient_001": 12.0,
+      "signal_vapor_thread_001": 2.0,
+      "scar_contamination_plate_001": -0.4
+    },
+    "providers": [],
+    "targetKinds": {
+      "dormant_seed_nutrient_001": "absorbable",
+      "scar_contamination_plate_001": "scar_resists",
+      "flux_current_ribbon_001": "pressure_current",
+      "signal_vapor_thread_001": "signal_listen"
+    }
+  },
+  {
+    "id": "TARGET_FOCUS_SCAR_FLOW_001",
+    "cellId": "CELL_SCAR_FLOW_FOLD_001",
+    "baseCellBoost": 6.8,
+    "preferredObjects": {
+      "scar_memory_fleck_001": 2.5,
+      "resonant_path_thread_001": 2.2,
+      "pressure_fold_current_001": 2.0,
+      "scar_flow_clot_001": 1.6
+    },
+    "providers": [
+      {
+        "statePath": "scarFlowArrival.focusObjectId",
+        "boost": 7.0,
+        "label": "scar_flow_arrival_focus"
+      },
+      {
+        "statePath": "scarFlowInteraction.currentFocus",
+        "boost": 10.5,
+        "label": "scar_flow_loop_focus"
+      },
+      {
+        "statePath": "morphCompletion.nearestHook",
+        "boost": 3.2,
+        "label": "scar_flow_completion_hook"
+      }
+    ],
+    "targetKinds": {
+      "scar_flow_clot_001": "scar_flow_clot_warning",
+      "pressure_fold_current_001": "pressure_current",
+      "resonant_path_thread_001": "path_thread",
+      "scar_memory_fleck_001": "memory_echo"
+    }
+  },
+  {
+    "id": "TARGET_FOCUS_SIGNAL_CHORUS_001",
+    "cellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "baseCellBoost": 8.0,
+    "preferredObjects": {
+      "choir_resonance_node_001": 2.0,
+      "listening_pore_membrane_001": 2.0,
+      "harmonic_wave_thread_001": 2.0,
+      "seed_signal_bridge_001": 2.5
+    },
+    "providers": [
+      {
+        "statePath": "signalChorusInteraction.currentFocus",
+        "boost": 10.5,
+        "label": "signal_chorus_loop_focus"
+      },
+      {
+        "statePath": "thirdLocalCellMorph.triggerReady",
+        "targetId": "seed_signal_bridge_001",
+        "boost": 6.2,
+        "label": "third_morph_bridge_trigger"
+      },
+      {
+        "statePath": "signalChorusInteraction.preparedForNextBranch",
+        "targetId": "seed_signal_bridge_001",
+        "boost": 5.8,
+        "label": "signal_chorus_prepared_bridge"
+      }
+    ],
+    "targetKinds": {
+      "choir_resonance_node_001": "choir_resonance",
+      "listening_pore_membrane_001": "listening_pore",
+      "harmonic_wave_thread_001": "harmonic_wave",
+      "seed_signal_bridge_001": "seed_signal_bridge"
+    },
+    "handoffOwnership": "signalChorusInteraction.currentFocus"
+  },
+  {
+    "id": "TARGET_FOCUS_BLOOM_RESIDUE_001",
+    "cellId": "CELL_BLOOM_RESIDUE_FORK_001",
+    "baseCellBoost": 9.2,
+    "preferredObjects": {
+      "residue_memory_silt_001": 2.6,
+      "bloom_spore_lantern_001": 2.4,
+      "seed_choice_braid_001": 2.5,
+      "overgrowth_warning_tendril_001": 2.0
+    },
+    "providers": [
+      {
+        "statePath": "bloomResidueInteraction.currentFocus",
+        "boost": 10.5,
+        "label": "bloom_residue_loop_focus"
+      },
+      {
+        "statePath": "bloomResidueInteraction.preparedForNextBranch",
+        "targetId": "seed_choice_braid_001",
+        "boost": 2.5,
+        "label": "bloom_residue_prepared_braid"
+      },
+      {
+        "statePath": "bloomResidueInteraction.overgrowthRisk",
+        "threshold": 0.32,
+        "targetId": "overgrowth_warning_tendril_001",
+        "boost": 5.0,
+        "label": "overgrowth_warning_risk_focus"
+      }
+    ],
+    "targetKinds": {
+      "bloom_spore_lantern_001": "bloom_growth_path",
+      "residue_memory_silt_001": "residue_memory_path",
+      "seed_choice_braid_001": "seed_choice_braid",
+      "overgrowth_warning_tendril_001": "overgrowth_warning"
+    },
+    "handoffOwnership": "bloomResidueInteraction.currentFocus"
+  },
+  {
+    "id": "TARGET_FOCUS_GRAVE_MEMORY_001",
+    "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "baseCellBoost": 9.8,
+    "preferredObjects": {
+      "old_core_husk_memory_001": 2.8,
+      "residue_silt_cloud_001": 2.6,
+      "scar_lock_plate_001": 2.4,
+      "inheritance_seed_remnant_001": 2.0
+    },
+    "providers": [
+      {
+        "statePath": "graveArrivalReadability.currentFocus",
+        "boost": 7.2,
+        "label": "grave_arrival_focus"
+      },
+      {
+        "statePath": "graveReadBeforeAbsorb.currentFocus",
+        "boost": 11.0,
+        "label": "grave_read_loop_focus"
+      },
+      {
+        "statePath": "graveReadBeforeAbsorb.safeAbsorbReady",
+        "targetId": "residue_silt_cloud_001",
+        "boost": 8.5,
+        "label": "grave_safe_silt_transfer_ready"
+      },
+      {
+        "statePath": "graveReadBeforeAbsorb.recoilRisk",
+        "threshold": 0.3,
+        "targetId": "scar_lock_plate_001",
+        "boost": 5.2,
+        "label": "grave_recoil_risk_focus"
+      }
+    ],
+    "targetKinds": {
+      "old_core_husk_memory_001": "grave_memory_husk",
+      "residue_silt_cloud_001": "grave_silt_trace",
+      "scar_lock_plate_001": "grave_scar_lock",
+      "inheritance_seed_remnant_001": "grave_inheritance_seed"
+    }
+  },
+  {
+    "id": "TARGET_FOCUS_GRAVE_SCAR_MEMORY_SEAM_001",
+    "cellId": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+    "baseCellBoost": 10.4,
+    "preferredObjects": {
+      "scar_memory_seam_thread_001": 2.8,
+      "residue_stitch_lattice_001": 2.6,
+      "echo_husk_imprint_001": 2.4,
+      "closed_inheritance_suture_001": 2.2
+    },
+    "providers": [
+      {
+        "statePath": "graveScarMemorySeamFirstRead.currentFocus",
+        "boost": 11.5,
+        "label": "seam_first_read_focus"
+      },
+      {
+        "statePath": "graveScarMemorySeamFirstRead.recoilRisk",
+        "threshold": 0.3,
+        "targetId": "closed_inheritance_suture_001",
+        "boost": 5.4,
+        "label": "seam_recoil_respect_suture"
+      },
+      {
+        "statePath": "graveScarMemorySeamFirstRead.firstReadComplete",
+        "targetId": "closed_inheritance_suture_001",
+        "boost": 2.2,
+        "label": "seam_first_read_complete_hold_closed"
+      }
+    ],
+    "targetKinds": {
+      "scar_memory_seam_thread_001": "seam_scar_thread",
+      "residue_stitch_lattice_001": "seam_residue_lattice",
+      "echo_husk_imprint_001": "seam_echo_imprint",
+      "closed_inheritance_suture_001": "seam_closed_suture"
+    }
+  }
+]

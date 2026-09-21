@@ -1,0 +1,268 @@
+[
+  {
+    "id": "surface_wake",
+    "displayName": "Surface Wake",
+    "act": 1,
+    "regionType": "nursery_pocket",
+    "hostFunction": "first conscious awakening inside a Host nursery layer",
+    "movementMode": "landing",
+    "cameraProfile": "camera_surface_wake_landing",
+    "dominantChemistry": [
+      "form",
+      "seed",
+      "signal"
+    ],
+    "verbsIntroduced": [
+      "move",
+      "pulse",
+      "absorb",
+      "guide_scan"
+    ],
+    "objective": "surface_absorb_first_nutrient",
+    "gateOut": "surface_to_guide_threshold",
+    "cinematicBeat": "first_awakening",
+    "visualLanguage": "surface_wake_embryonic_membrane",
+    "runtimeCellIds": [
+      "CELL_MEMBRANE_NURSERY_001"
+    ],
+    "implementationStatus": "runtime_active",
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "guide_threshold",
+    "displayName": "Guide Threshold",
+    "act": 1,
+    "regionType": "directed_threshold",
+    "hostFunction": "living route organ that tests passage intent",
+    "movementMode": "threshold",
+    "cameraProfile": "camera_guide_threshold_directional",
+    "dominantChemistry": [
+      "signal",
+      "flux",
+      "scar"
+    ],
+    "verbsIntroduced": [
+      "guide_scan",
+      "stabilize",
+      "cross"
+    ],
+    "objective": "guide_stabilize_and_cross",
+    "gateOut": "guide_to_hub_chamber",
+    "cinematicBeat": "first_threshold_crossing",
+    "visualLanguage": "guide_threshold_pressurized_current",
+    "runtimeCellIds": [
+      "CELL_SCAR_FLOW_FOLD_001"
+    ],
+    "implementationStatus": "runtime_active",
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "hub_chamber",
+    "displayName": "Hub Chamber",
+    "act": 1,
+    "regionType": "hub_junction",
+    "hostFunction": "internal Host junction for authored route identity",
+    "movementMode": "hub",
+    "cameraProfile": "camera_hub_chamber_interpretive",
+    "dominantChemistry": [
+      "signal",
+      "form",
+      "scar"
+    ],
+    "verbsIntroduced": [
+      "guide_scan",
+      "interact",
+      "route_read"
+    ],
+    "objective": "hub_read_route_gates",
+    "gateOut": "hub_first_route_gate_set",
+    "cinematicBeat": "first_route_realization",
+    "visualLanguage": "hub_chamber_route_chorus",
+    "runtimeCellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "implementationStatus": "runtime_active_first_slice",
+    "runtimeProxy": "none",
+    "legacyRuntimeCellAdapter": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "fullRegionPending": false,
+    "foundationBuild": "HC-006J",
+    "spatialReferenceBuild": "HC-008G",
+    "runtimeRebaselineBuild": "HC-011A",
+    "foundationCompleteWhenReadable": true,
+    "remainingBlueprintRequirement": "first_status_page_use",
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "grave_memory_route",
+    "displayName": "Grave Memory",
+    "act": 1,
+    "regionType": "route_chamber",
+    "hostFunction": "residue bed where unfinished Core memory can be read without becoming loot",
+    "movementMode": "memory_route",
+    "cameraProfile": "camera_grave_memory_route",
+    "dominantChemistry": [
+      "residue",
+      "scar",
+      "signal",
+      "seed"
+    ],
+    "verbsIntroduced": [
+      "pulse_read",
+      "stabilize",
+      "recover_residue_recoil",
+      "accept_settled_memory_trace",
+      "respect_protected_remains",
+      "return"
+    ],
+    "objective": "grave_memory_read_and_stabilize",
+    "gateOut": "grave_memory_to_hub_chamber",
+    "cinematicBeat": "first_route_memory_reading",
+    "visualLanguage": "grave_memory_residue_bed",
+    "runtimeCellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "implementationStatus": "runtime_active_first_route_consequence_circuit",
+    "runtimeProxy": "none",
+    "fullRegionPending": true,
+    "routePreviewBuild": "HC-010A",
+    "routeCircuitBuild": "HC-010B",
+    "promptOwnershipBuild": "HC-010C",
+    "approachBoundaryRepairBuild": "HC-010D",
+    "visualConsequenceReadabilityBuild": "HC-010E",
+    "landmarkAnatomyVisualLockBuild": "HC-010F",
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "vascular_route",
+    "displayName": "Vascular Rhythm",
+    "act": 1,
+    "regionType": "route_chamber",
+    "hostFunction": "circulation route that tests timing, alignment, contraction stability, and recoverable desynchronization",
+    "movementMode": "vascular_rhythm",
+    "cameraProfile": "camera_vascular_rhythm_contract",
+    "dominantChemistry": [
+      "flux",
+      "signal",
+      "form"
+    ],
+    "verbsIntroduced": [
+      "ride_current",
+      "pulse_read_cadence",
+      "stabilize_contraction",
+      "recover_desynchronization",
+      "return"
+    ],
+    "objective": "vascular_route_playable_circuit",
+    "gateOut": "vascular_route_to_hub_chamber",
+    "cinematicBeat": "first_systemic_rhythm_route",
+    "visualLanguage": "vascular_rhythm_contract",
+    "runtimeCellIds": [
+      "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    ],
+    "implementationStatus": "runtime_playable_vascular_rhythm_HC011A",
+    "runtimeProxy": "none",
+    "fullRegionPending": false,
+    "routeContractBuild": "HC-010G",
+    "playableRouteBuild": "HC-011A",
+    "gameplayReady": true,
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "silt_burrow_route",
+    "displayName": "Silt Pressure",
+    "act": 1,
+    "regionType": "route_chamber",
+    "hostFunction": "compressed route that will test pressure, appetite, and selective response",
+    "movementMode": "silt_route_contract",
+    "cameraProfile": "camera_silt_pressure_contract",
+    "dominantChemistry": [
+      "residue",
+      "scar",
+      "form"
+    ],
+    "verbsIntroduced": [
+      "pulse_read_pressure",
+      "stabilize_living_ribs",
+      "absorb_porous_matter",
+      "respect_packed_residue",
+      "recover_compression",
+      "return"
+    ],
+    "objective": "silt_route_playable_circuit",
+    "gateOut": "silt_burrow_route_to_hub_chamber",
+    "cinematicBeat": "first_appetite_pressure_route",
+    "visualLanguage": "silt_pressure_contract",
+    "runtimeCellIds": [
+      "CELL_SILT_PRESSURE_ROUTE_001"
+    ],
+    "implementationStatus": "runtime_playable_silt_pressure_HC012A",
+    "runtimeProxy": "none",
+    "fullRegionPending": false,
+    "routeContractBuild": "HC-010G",
+    "playableRouteBuild": "HC-012A",
+    "gameplayReady": true,
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "comb_threshold",
+    "displayName": "Comb Threshold",
+    "act": 1,
+    "regionType": "ceremonial_filter_threshold",
+    "hostFunction": "living synthesis and filter organ that carries the three first-route readings toward the first open field",
+    "movementMode": "comb_threshold",
+    "cameraProfile": "camera_comb_threshold_filter",
+    "dominantChemistry": [
+      "signal",
+      "scar",
+      "form",
+      "residue"
+    ],
+    "verbsIntroduced": [],
+    "objective": "comb_threshold_playable_synthesis",
+    "gateOut": "comb_threshold_exit_contracts",
+    "cinematicBeat": "threshold_crossing_preparation",
+    "visualLanguage": "comb_threshold_living_filter",
+    "runtimeCellIds": [
+      "CELL_COMB_THRESHOLD_FILTER_001"
+    ],
+    "implementationStatus": "playable_threshold_to_first_field_boundary_HC014A",
+    "runtimeProxy": "none",
+    "fullRegionPending": false,
+    "foundationBuild": "HC-013A",
+    "gameplayReady": true,
+    "apertureFieldsMounted": true,
+    "apertureCrossable": true,
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G",
+    "runtimeProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  },
+  {
+    "id": "aperture_fields",
+    "displayName": "Aperture Fields \u2014 Arrival Shelf",
+    "act": 2,
+    "regionType": "first_open_ecology_arrival_boundary",
+    "hostFunction": "decompression shelf that converts chamber-scale reading into field-scale orientation without mounting full ecology",
+    "movementMode": "aperture_fields_arrival",
+    "cameraProfile": "camera_aperture_fields_arrival",
+    "dominantChemistry": [
+      "signal",
+      "membrane",
+      "form",
+      "residue"
+    ],
+    "verbsIntroduced": [],
+    "objective": "aperture_fields_arrival_read",
+    "gateOut": "aperture_fields_arrival_return_contract",
+    "cinematicBeat": "first_field_arrival",
+    "visualLanguage": "aperture_fields_arrival_shelf",
+    "runtimeCellIds": [
+      "CELL_APERTURE_FIELDS_ARRIVAL_001"
+    ],
+    "implementationStatus": "arrival_boundary_foundation_HC014A",
+    "runtimeProxy": "none",
+    "fullRegionPending": true,
+    "gameplayReady": true,
+    "ecologyGameplayReady": false,
+    "runtimeMountProfile": "ACT1_RUNTIME_PROFILE_HC014G",
+    "runtimeProfile": "ACT1_RUNTIME_PROFILE_HC014G"
+  }
+]

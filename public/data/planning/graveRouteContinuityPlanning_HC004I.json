@@ -1,0 +1,127 @@
+{
+  "id": "GRAVE_ROUTE_CONTINUITY_PLANNING_HC004I",
+  "build": "HC-004I",
+  "status": "authored_route_continuity_planning_only_no_transition",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceExitReadinessPrototype": "GRAVE_EXIT_READINESS_PROTOTYPE_HC004H",
+  "sourceStabilityPlan": "GRAVE_LOOP_STABILITY_EXIT_READINESS_HC004G",
+  "sourceLoop": "GRAVE_READ_BEFORE_ABSORB_LOOP_001",
+  "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "sourceRoute": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+  "mode": "decide_next_route_continuity_before_runtime_activation",
+  "continuityDecision": {
+    "chosenOptionId": "deeper_grave_scar_memory_seam",
+    "chosenOptionLabel": "Deeper Grave / Scar-Memory Seam",
+    "structuralMeaning": "The scar-lock readiness marker means the Grave can later resolve into a controlled scar-memory seam, not a door, menu, teleport, or instant return.",
+    "worldFacingMeaning": "The Grave is not finished after the safe silt transfer. The next authored pressure should ask the player to understand why the scar protected the remains before any route can continue.",
+    "whyNotReturnImmediately": "Returning to Bloom would resolve pressure too quickly and would make Grave feel like a side pickup instead of the first real route of memory and unfinished becoming.",
+    "whyNotRouteHandoffYet": "A wider route handoff would require new branch architecture before the Grave pocket has earned its own continuity grammar."
+  },
+  "candidateContinuityOptions": [
+    {
+      "id": "return_to_bloom_residue",
+      "label": "Return to Bloom Residue",
+      "decision": "defer",
+      "reason": "Useful as a later recovery or loopback, but not the next pass because it does not deepen the Grave meaning."
+    },
+    {
+      "id": "deeper_grave_scar_memory_seam",
+      "label": "Deeper Grave / Scar-Memory Seam",
+      "decision": "selected_for_next_data_pass",
+      "plannedFutureCellId": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+      "plannedFutureCellStatus": "not_authored_not_runtime_active",
+      "activationStatusThisPass": "none",
+      "reason": "Best continuation because it keeps the first Grave route focused on memory, scar protection, inheritance restraint, and read-before-consume meaning."
+    },
+    {
+      "id": "route_handoff_to_first_act_memory_route",
+      "label": "Route Handoff / Wider Memory Route",
+      "decision": "defer",
+      "reason": "Too wide for HC-004I. Requires a locked next-cell recipe and another acceptance pass before runtime activation."
+    }
+  ],
+  "continuityRules": {
+    "requiresHC004HExitReadinessVisible": true,
+    "requiresSafeMemoryTransferComplete": true,
+    "requiresProtectedRemainsVisible": true,
+    "requiresNoForcedAbsorb": true,
+    "keepExitReadinessReadoutOnly": true,
+    "nextCellRecipeAuthoredThisPass": false,
+    "runtimeTransitionThisPass": false,
+    "playerRelocationThisPass": false,
+    "newRouteBranchThisPass": false,
+    "newMorphActivationThisPass": false,
+    "noGateDoorTeleportMenu": true,
+    "futureContinuityActivationRequiresSeparateLockDecision": true
+  },
+  "carryForwardState": {
+    "safeTransferObject": "residue_silt_cloud_001",
+    "protectedRemains": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "mustRemainUnconsumed": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "unresolvedMeanings": [
+      "why the old core failed",
+      "why scar can protect instead of only blocking",
+      "why inheritance seed warmth is not permission to open it",
+      "how memory residue becomes route continuity without becoming loot"
+    ]
+  },
+  "plannedNextPrototype": {
+    "id": "HC-004J",
+    "label": "Grave Scar-Memory Seam Recipe Pack",
+    "mode": "author_future_deeper_grave_cell_recipe_only_no_runtime_activation",
+    "plannedFutureCellId": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+    "runtimeActivation": "forbidden_until_later_lock_decision"
+  },
+  "hudLanguage": {
+    "planningLoaded": "Grave route continuity is planned: deeper Grave / scar-memory seam. No transition is active.",
+    "readinessMeaning": "The scar lock points toward a later seam, not a doorway in this pass.",
+    "nextPass": "Next safe pass: author the scar-memory seam recipe, still without runtime activation."
+  },
+  "allowedScope": [
+    "route-continuity planning after HC-004H exit-readiness",
+    "choose deeper Grave / scar-memory seam as the next authored direction",
+    "document return-to-Bloom and route-handoff as deferred alternatives",
+    "define HC-004J acceptance criteria before any runtime activation",
+    "Guide/HUD clarity that readiness is planning-only"
+  ],
+  "forbiddenScope": [
+    "full Grave route branch",
+    "new morph activation",
+    "runtime exit activation",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion",
+    "consuming the old core husk",
+    "opening the inheritance seed remnant",
+    "moving the player to a new cell",
+    "player relocation",
+    "exit transition"
+  ],
+  "acceptanceTests": [
+    "HC-004I adds planning data only and does not author CELL_GRAVE_SCAR_MEMORY_SEAM_001 as a local cell recipe yet.",
+    "HC-004I chooses deeper Grave / Scar-Memory Seam as the next continuity direction while deferring return-to-Bloom and wider route handoff.",
+    "HC-004H exit-readiness remains readout-only and no transition is active.",
+    "Protected remains remain visible and unconsumed.",
+    "No gates, doors, teleports, branch menus, stage-node loaders, old chamber runtime, player relocation, new morph activation, new route branch, combat, dialogue tree, quest log, or Act expansion are added."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004J",
+    "label": "Grave Scar-Memory Seam Recipe Pack",
+    "mode": "recipe_pack_only_no_runtime_activation"
+  }
+}

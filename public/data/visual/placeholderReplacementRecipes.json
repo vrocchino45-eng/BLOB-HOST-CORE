@@ -1,0 +1,853 @@
+[
+  {
+    "id": "debug_player_core_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "icosahedron",
+      "reason": "boot reference object before final player seed core asset exists; HC-003J replaced by p0 locked recipe composition.",
+      "allowedUntilPass": "HC-003J",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "player_seed_core_stage_01",
+      "replacementCategory": "player_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "small_protected_core",
+        "soft_membrane_shell",
+        "inner_seed_light",
+        "subtle_breathing_wobble"
+      ],
+      "lockedVisualTraits": [
+        "recipe_composed",
+        "not_generic_primitive",
+        "opening_readability_locked"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-003J",
+      "recipeId": "player_seed_core_stage_01",
+      "replacementCategory": "player_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_nutrient_seed_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "sphere",
+      "reason": "early collision/readability test for safe seed nutrient; HC-003J replaced by p0 locked recipe composition.",
+      "allowedUntilPass": "HC-003J",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "dormant_seed_nutrient_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "protected_seed_pod",
+        "warm_inner_seed_glow",
+        "opens_slightly_when_pulsed"
+      ],
+      "lockedVisualTraits": [
+        "recipe_composed",
+        "not_generic_primitive",
+        "opening_readability_locked"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-003J",
+      "recipeId": "dormant_seed_nutrient_v01",
+      "replacementCategory": "chem_object_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_scar_plate_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "flat_irregular_cube",
+      "reason": "early collision/readability test for scar matter",
+      "allowedUntilPass": "HC_VIS_003",
+      "severityAfterExpiration": "error"
+    },
+    "replacement": {
+      "recipeId": "scar_contamination_plate_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "irregular_hardened_plate",
+        "dark_scar_layer",
+        "delayed_echo_fracture_ring"
+      ]
+    }
+  },
+  {
+    "id": "debug_flux_ribbon_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "transparent_curve_strip",
+      "reason": "early local flow visual before final ribbon shader",
+      "allowedUntilPass": "HC_VIS_003",
+      "severityAfterExpiration": "error"
+    },
+    "replacement": {
+      "recipeId": "flux_current_ribbon_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "transparent_ribbon_stream",
+        "moving_bead_particles",
+        "directional_swirl_and_pull"
+      ]
+    }
+  },
+  {
+    "id": "debug_signal_thread_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "thin_line",
+      "reason": "early signal readability test before final thread VFX",
+      "allowedUntilPass": "HC_VIS_003",
+      "severityAfterExpiration": "error"
+    },
+    "replacement": {
+      "recipeId": "signal_vapor_thread_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "thin_luminous_thread",
+        "answering_ring",
+        "brief_path_reveal"
+      ]
+    }
+  },
+  {
+    "id": "debug_tender_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "crescent_oval_with_fronds",
+      "reason": "entity recipe present before EntitySystem procedural body implementation",
+      "allowedUntilPass": "HC_VIS_004",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "nursery_membrane_tender_v01",
+      "replacementCategory": "entity_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "crescent_manta_body",
+        "filter_fronds",
+        "seed_sacs",
+        "slow_breath_hover",
+        "curl_defensive_reaction"
+      ]
+    }
+  },
+  {
+    "id": "debug_watcher_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "anchored_capsule_with_sensing_bulbs",
+      "reason": "entity recipe present before EntitySystem procedural body implementation",
+      "allowedUntilPass": "HC_VIS_004",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "membrane_watcher_v01",
+      "replacementCategory": "entity_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "anchored_thread_body",
+        "sensing_bulbs",
+        "lens_membrane",
+        "warning_pulse_threads"
+      ]
+    }
+  },
+  {
+    "id": "debug_guide_orbiter_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "folded_lantern_orbiter_shell",
+      "reason": "guide orbiter recipe present before full authored hero asset; HC-003J replaced by p0 locked recipe composition.",
+      "allowedUntilPass": "HC-003J",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "guide_orbiter_folded_lantern_v01",
+      "replacementCategory": "orbiter_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "folded_lantern_organ",
+        "protective_crescent_shell",
+        "single_luminous_sensing_membrane",
+        "thread_tail_to_host_tissue",
+        "path_shimmer"
+      ],
+      "lockedVisualTraits": [
+        "recipe_composed",
+        "not_generic_primitive",
+        "opening_readability_locked"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-003J",
+      "recipeId": "guide_orbiter_folded_lantern_v01",
+      "replacementCategory": "orbiter_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_scar_memory_fleck_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "residue_chip_with_signal_edge",
+      "reason": "HC-002B authored destination cell recipe before runtime morph implementation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "scar_memory_fleck_v01",
+      "replacementCategory": "morph_cell_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "floating_chip",
+        "signal_edge",
+        "pressure_drift"
+      ]
+    }
+  },
+  {
+    "id": "debug_scar_flow_clot_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "scarred_clot_placeholder",
+      "reason": "HC-002B authored destination cell recipe before runtime morph implementation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "scar_flow_clot_v01",
+      "replacementCategory": "morph_cell_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "hardened_clot",
+        "crack_glow",
+        "pressure_pulse"
+      ]
+    }
+  },
+  {
+    "id": "debug_resonant_path_thread_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "thread_line_placeholder",
+      "reason": "HC-002B authored destination cell recipe before runtime morph implementation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "resonant_path_thread_v01",
+      "replacementCategory": "morph_cell_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "thin_signal_path",
+        "pressure_beads",
+        "answering_wave"
+      ]
+    }
+  },
+  {
+    "id": "debug_pressure_fold_current_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "current_ribbon_placeholder",
+      "reason": "HC-002B authored destination cell recipe before runtime morph implementation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "pressure_fold_current_v01",
+      "replacementCategory": "morph_cell_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "directional_ribbon",
+        "scarred_edges",
+        "moving_current_beads"
+      ]
+    }
+  },
+  {
+    "id": "debug_scar_flow_fold_surface_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "folded_membrane_surface_placeholder",
+      "reason": "HC-002B authored destination cell recipe before runtime morph implementation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "scar_flow_fold_surface_v01",
+      "replacementCategory": "morph_cell_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "folded_surface",
+        "route_cracks",
+        "flow_veins"
+      ]
+    }
+  },
+  {
+    "id": "debug_scar_pressure_haze_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "pressure_haze_placeholder",
+      "reason": "HC-002B authored destination cell recipe before runtime morph implementation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "scar_pressure_haze_v01",
+      "replacementCategory": "morph_cell_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "directional_fog",
+        "residue_motes"
+      ]
+    }
+  },
+  {
+    "id": "debug_signal_chorus_surface_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "procedural_signal_recipe_composition",
+      "reason": "second morph destination authored before runtime activation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "signal_chorus_nerve_surface_v01",
+      "replacementCategory": "signal_cell_environment",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "nerve_thread_surface",
+        "choir_nodes",
+        "answering_wave_membrane"
+      ]
+    }
+  },
+  {
+    "id": "debug_signal_chorus_haze_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "procedural_signal_recipe_composition",
+      "reason": "second morph destination authored before runtime activation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "signal_chorus_soft_haze_v01",
+      "replacementCategory": "signal_cell_atmosphere",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "soft_signal_mist",
+        "low_density_wave_haze"
+      ]
+    }
+  },
+  {
+    "id": "debug_choir_resonance_node_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "procedural_signal_recipe_composition",
+      "reason": "second morph destination authored before runtime activation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "choir_resonance_node_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "ring_cluster",
+        "answering_wave",
+        "resonant_center"
+      ]
+    }
+  },
+  {
+    "id": "debug_listening_pore_membrane_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "procedural_signal_recipe_composition",
+      "reason": "second morph destination authored before runtime activation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "listening_pore_membrane_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "listening_pores",
+        "signal_cilia",
+        "soft_membrane_filter"
+      ]
+    }
+  },
+  {
+    "id": "debug_harmonic_wave_thread_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "procedural_signal_recipe_composition",
+      "reason": "second morph destination authored before runtime activation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "harmonic_wave_thread_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "travelling_wave_nodes",
+        "thin_signal_route",
+        "delayed_answer"
+      ]
+    }
+  },
+  {
+    "id": "debug_seed_signal_bridge_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "procedural_signal_recipe_composition",
+      "reason": "second morph destination authored before runtime activation",
+      "allowedUntilPass": "HC_VIS_005",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "seed_signal_bridge_v01",
+      "replacementCategory": "chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "small_seed_bridge",
+        "dual_signal_threads",
+        "future_tuning_glow"
+      ]
+    }
+  },
+  {
+    "id": "debug_bloom_residue_fork_surface_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "split_living_choice_pocket",
+      "reason": "HC-002P recipe pack authoring before runtime third morph and final authored asset",
+      "allowedUntilPass": "HC_VIS_006",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "bloom_residue_fork_surface_v01",
+      "replacementCategory": "bloom_residue_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "forked_membrane",
+        "bloom_path",
+        "residue_path",
+        "no_door_read"
+      ]
+    }
+  },
+  {
+    "id": "debug_bloom_residue_choice_haze_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "bloom_residue_haze",
+      "reason": "HC-002P recipe pack authoring before runtime third morph and final authored asset",
+      "allowedUntilPass": "HC_VIS_006",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "bloom_residue_choice_haze_v01",
+      "replacementCategory": "bloom_residue_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "spore_dust",
+        "memory_motes",
+        "two_streams"
+      ]
+    }
+  },
+  {
+    "id": "debug_bloom_spore_lantern_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "spore_lantern_sac",
+      "reason": "HC-002P recipe pack authoring before runtime third morph and final authored asset",
+      "allowedUntilPass": "HC_VIS_006",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "bloom_spore_lantern_v01",
+      "replacementCategory": "bloom_residue_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "spore_lantern",
+        "wet_membrane",
+        "growth_glow",
+        "not_coin"
+      ]
+    }
+  },
+  {
+    "id": "debug_residue_memory_silt_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "memory_silt_pool",
+      "reason": "HC-002P recipe pack authoring before runtime third morph and final authored asset",
+      "allowedUntilPass": "HC_VIS_006",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "residue_memory_silt_v01",
+      "replacementCategory": "bloom_residue_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "granular_silt",
+        "old_core_echoes",
+        "memory_motes"
+      ]
+    }
+  },
+  {
+    "id": "debug_seed_choice_braid_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "seed_signal_choice_braid",
+      "reason": "HC-002P recipe pack authoring before runtime third morph and final authored asset",
+      "allowedUntilPass": "HC_VIS_006",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "seed_choice_braid_v01",
+      "replacementCategory": "bloom_residue_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "braided_paths",
+        "seed_light",
+        "signal_thread",
+        "no_menu_choice"
+      ]
+    }
+  },
+  {
+    "id": "debug_overgrowth_warning_tendril_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "overgrowth_warning_tendril",
+      "reason": "HC-002P recipe pack authoring before runtime third morph and final authored asset",
+      "allowedUntilPass": "HC_VIS_006",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "overgrowth_warning_tendril_v01",
+      "replacementCategory": "bloom_residue_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "scarred_hook",
+        "growth_sac",
+        "warning_curl"
+      ]
+    }
+  },
+  {
+    "id": "debug_grave_memory_residue_bed_surface_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "grave_memory_basin_surface",
+      "reason": "HC-004B recipe pack before Grave runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004D",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "grave_memory_residue_bed_surface_v01",
+      "replacementCategory": "grave_route_environment_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "settling_residue_basin",
+        "half_buried_core_shells",
+        "non_gate_scar_boundary"
+      ]
+    }
+  },
+  {
+    "id": "debug_grave_memory_silt_haze_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "grave_memory_silt_haze",
+      "reason": "HC-004B recipe pack before Grave runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004D",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "grave_memory_silt_haze_v01",
+      "replacementCategory": "grave_route_atmosphere_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "ash_motes",
+        "signal_threads",
+        "memory_silhouette_echo"
+      ]
+    }
+  },
+  {
+    "id": "debug_old_core_husk_memory_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "collapsed_core_husk",
+      "reason": "HC-004B Grave proxy; HC-010F replaced it with a locked collapsed bilateral shell, empty cavity, reactive scar cracks, and transient Pulse/Absorb response.",
+      "allowedUntilPass": "HC-004D",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "old_core_husk_memory_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "collapsed_seed_core_shell",
+        "scar_lit_cracks",
+        "do_not_absorb_first_halo"
+      ],
+      "lockedVisualTraits": [
+        "collapsed_bilateral_shell_with_empty_cavity",
+        "asymmetric_failing_breath",
+        "transient_warning_only_no_idle_object_ring"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-010F",
+      "recipeId": "old_core_husk_memory_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_residue_silt_cloud_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "residue_silt_cloud",
+      "reason": "HC-004B Grave proxy; HC-010F replaced it with locked settling ash, threaded signal voids, aligned stabilization strands, and a brief Pulse-memory silhouette.",
+      "allowedUntilPass": "HC-004D",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "residue_silt_cloud_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "settling_ash_motes",
+        "threaded_signal_voids",
+        "pulse_memory_silhouettes"
+      ],
+      "lockedVisualTraits": [
+        "wide_settling_cloud",
+        "downward_ash_drift",
+        "stabilization_aligns_signal_threads"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-010F",
+      "recipeId": "residue_silt_cloud_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_scar_lock_plate_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "scar_lock_plate",
+      "reason": "HC-004B Grave proxy; HC-010F replaced it with a locked low guard shell whose delayed cracks and recoil teeth communicate protection without reading as a portal.",
+      "allowedUntilPass": "HC-004D",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "scar_lock_plate_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "protective_dark_plate",
+        "delayed_inner_crack_light",
+        "not_a_gate_lock"
+      ],
+      "lockedVisualTraits": [
+        "low_interlocking_guard_shell",
+        "delayed_pulse_answer",
+        "recoil_teeth_only_during_risk"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-010F",
+      "recipeId": "scar_lock_plate_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_inheritance_seed_remnant_001",
+    "placeholder": {
+      "active": false,
+      "primitiveShape": "seed_remnant_in_residue_ring",
+      "reason": "HC-004B Grave proxy; HC-010F replaced it with a locked upright warm seed held by residue petals, memory skin, and rooted future-potential filaments.",
+      "allowedUntilPass": "HC-004D",
+      "severityAfterExpiration": "resolved"
+    },
+    "replacement": {
+      "recipeId": "inheritance_seed_remnant_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "requiredBeforeLock": false,
+      "requiredVisualTraits": [
+        "dim_seed_core",
+        "residue_ring",
+        "future_bind_glow"
+      ],
+      "lockedVisualTraits": [
+        "upright_warm_seed_in_dark_residue_nest",
+        "slow_sleeping_pulse_without_opening",
+        "future_glow_is_body_envelope_not_reward_ring"
+      ]
+    },
+    "visualLock": {
+      "status": "replaced_by_recipe_composition",
+      "pass": "HC-010F",
+      "recipeId": "inheritance_seed_remnant_v01",
+      "replacementCategory": "grave_route_chem_object_visual",
+      "remainingStatus": "inactive_placeholder_contract_kept_for_history_and_validation"
+    }
+  },
+  {
+    "id": "debug_grave_scar_memory_seam_surface_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "scar_memory_seam_surface",
+      "reason": "HC-004J scar-memory seam recipe pack before runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004L",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "grave_scar_memory_seam_surface_v01",
+      "replacementCategory": "grave_scar_memory_seam_environment_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "closed_scar_seam",
+        "residue_lattice",
+        "not_a_gate"
+      ]
+    }
+  },
+  {
+    "id": "debug_grave_scar_memory_seam_haze_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "scar_memory_seam_haze",
+      "reason": "HC-004J scar-memory seam recipe pack before runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004L",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "grave_scar_memory_seam_haze_v01",
+      "replacementCategory": "grave_scar_memory_seam_atmosphere_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "thin_haze",
+        "signal_imprint",
+        "not_exit_marker"
+      ]
+    }
+  },
+  {
+    "id": "debug_scar_memory_seam_thread_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "scar_memory_seam_thread",
+      "reason": "HC-004J scar-memory seam recipe pack before runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004L",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "scar_memory_seam_thread_v01",
+      "replacementCategory": "grave_scar_memory_seam_chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "suture_thread",
+        "memory_knots",
+        "not_gate_rope"
+      ]
+    }
+  },
+  {
+    "id": "debug_residue_stitch_lattice_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "residue_stitch_lattice",
+      "reason": "HC-004J scar-memory seam recipe pack before runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004L",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "residue_stitch_lattice_v01",
+      "replacementCategory": "grave_scar_memory_seam_chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "residue_lattice",
+        "scar_stitches",
+        "do_not_absorb"
+      ]
+    }
+  },
+  {
+    "id": "debug_echo_husk_imprint_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "echo_husk_imprint",
+      "reason": "HC-004J scar-memory seam recipe pack before runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004L",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "echo_husk_imprint_v01",
+      "replacementCategory": "grave_scar_memory_seam_chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "transparent_husk_imprint",
+        "missing_inner_ring",
+        "absence_not_loot"
+      ]
+    }
+  },
+  {
+    "id": "debug_closed_inheritance_suture_001",
+    "placeholder": {
+      "active": true,
+      "primitiveShape": "closed_inheritance_suture",
+      "reason": "HC-004J scar-memory seam recipe pack before runtime activation and final authored asset",
+      "allowedUntilPass": "HC-004L",
+      "severityAfterExpiration": "warning"
+    },
+    "replacement": {
+      "recipeId": "closed_inheritance_suture_v01",
+      "replacementCategory": "grave_scar_memory_seam_chem_object_visual",
+      "requiredBeforeLock": true,
+      "requiredVisualTraits": [
+        "closed_seed_suture",
+        "dim_seed_core",
+        "no_reward_prompt"
+      ]
+    }
+  }
+]

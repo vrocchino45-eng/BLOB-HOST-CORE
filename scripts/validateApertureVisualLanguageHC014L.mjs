@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const src=fs.readFileSync('src/fields/ApertureFieldsArrivalSystem.js','utf8');
+const manifest=JSON.parse(fs.readFileSync('public/data/build/buildManifest.json','utf8'));
+assert.equal(manifest.id,'HC-014L');
+for(const marker of ['signal_plain_living_lobe_','integrated_arrival_tissue_to_living_signal_plain_to_macro_host','HC-014L','baseScaleY']) assert.ok(src.includes(marker),marker);
+assert.ok(src.includes('? 0.10 : 0.025'),'Guide sightline must be subordinate');
+assert.ok(src.includes('2.45 + depth * 0.82'),'cradle must use asymmetric arc construction');
+assert.ok(src.includes('0.72 + Math.abs(offset) * 0.13'),'ridge proportions must vary');
+assert.ok(manifest.forbiddenScope.some(x=>x.includes('must not add ecology gameplay')));
+console.log('HC-014L Aperture visual-language convergence validation passed.');

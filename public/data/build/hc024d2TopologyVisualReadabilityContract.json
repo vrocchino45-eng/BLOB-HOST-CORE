@@ -1,0 +1,166 @@
+{
+  "id": "HC-024D2",
+  "name": "Whole-Core Topology Visual Readability",
+  "purpose": "Strengthen the existing nine component-zone chemistry reads and ten whole-Core topology states so Deep-heavy, Inner-heavy, Membrane-heavy, 2:1, and 1:1:1 arrangements are recognizable from the Core body itself with HUD text treated as secondary confirmation.",
+  "inputOwnership": {
+    "coreInspection": "Y",
+    "coreWorkEntry": "D-Pad Down",
+    "selectRetainedAnatomy": "D-Pad Left/Right",
+    "grabPlace": "A",
+    "moveAcrossBody": "Left Stick",
+    "moveOutward": "RT",
+    "moveInward": "LT",
+    "orbitCamera": "Right Stick",
+    "back": "B"
+  },
+  "bodyZones": [
+    {
+      "id": "deep_core",
+      "label": "Deep Core",
+      "normalizedDepthMaxExclusive": 0.28,
+      "visualPrinciple": "compact, concentrated, nucleus-dominant"
+    },
+    {
+      "id": "inner_body",
+      "label": "Inner Body",
+      "normalizedDepthMinInclusive": 0.28,
+      "normalizedDepthMaxExclusive": 0.58,
+      "visualPrinciple": "circulating, metabolically active, mantle-dominant"
+    },
+    {
+      "id": "membrane",
+      "label": "Membrane",
+      "normalizedDepthMinInclusive": 0.58,
+      "visualPrinciple": "expanded, externally expressive, boundary-dominant"
+    }
+  ],
+  "fundamentalInteractions": [
+    {
+      "piece": "Grave Memory",
+      "zone": "deep_core",
+      "id": "grave_memory_knot",
+      "label": "Memory Knot"
+    },
+    {
+      "piece": "Grave Memory",
+      "zone": "inner_body",
+      "id": "grave_memory_echo",
+      "label": "Memory Echo"
+    },
+    {
+      "piece": "Grave Memory",
+      "zone": "membrane",
+      "id": "grave_residue_sense",
+      "label": "Residue Sense"
+    },
+    {
+      "piece": "Vascular Rhythm",
+      "zone": "deep_core",
+      "id": "vascular_cadence_anchor",
+      "label": "Cadence Anchor"
+    },
+    {
+      "piece": "Vascular Rhythm",
+      "zone": "inner_body",
+      "id": "vascular_circulation_drive",
+      "label": "Circulation Drive"
+    },
+    {
+      "piece": "Vascular Rhythm",
+      "zone": "membrane",
+      "id": "vascular_signal_skin",
+      "label": "Signal Skin"
+    },
+    {
+      "piece": "Silt Pressure",
+      "zone": "deep_core",
+      "id": "silt_ballast",
+      "label": "Ballast"
+    },
+    {
+      "piece": "Silt Pressure",
+      "zone": "inner_body",
+      "id": "silt_body_brace",
+      "label": "Body Brace"
+    },
+    {
+      "piece": "Silt Pressure",
+      "zone": "membrane",
+      "id": "silt_adhesion_skin",
+      "label": "Adhesion Skin"
+    }
+  ],
+  "wholeCoreTopologies": [
+    {
+      "distribution": "3:0:0",
+      "id": "deep_concentration",
+      "label": "Deep Concentration"
+    },
+    {
+      "distribution": "0:3:0",
+      "id": "inner_saturation",
+      "label": "Inner Saturation"
+    },
+    {
+      "distribution": "0:0:3",
+      "id": "membrane_saturation",
+      "label": "Membrane Saturation"
+    },
+    {
+      "distribution": "2:1:0",
+      "id": "deep_dominant_inner",
+      "label": "Deep-Dominant / Inner"
+    },
+    {
+      "distribution": "2:0:1",
+      "id": "deep_dominant_membrane",
+      "label": "Deep-Dominant / Membrane"
+    },
+    {
+      "distribution": "1:2:0",
+      "id": "inner_dominant_deep",
+      "label": "Inner-Dominant / Deep"
+    },
+    {
+      "distribution": "0:2:1",
+      "id": "inner_dominant_membrane",
+      "label": "Inner-Dominant / Membrane"
+    },
+    {
+      "distribution": "1:0:2",
+      "id": "membrane_dominant_deep",
+      "label": "Membrane-Dominant / Deep"
+    },
+    {
+      "distribution": "0:1:2",
+      "id": "membrane_dominant_inner",
+      "label": "Membrane-Dominant / Inner"
+    },
+    {
+      "distribution": "1:1:1",
+      "id": "three_way_balance",
+      "label": "Three-Way Balance"
+    }
+  ],
+  "visualAcceptance": [
+    "3:0:0, 0:3:0, and 0:0:3 are visually distinguishable without HUD text.",
+    "All six 2:1 states visibly preserve a dominant layer and a secondary layer rather than collapsing to one generic mixed state.",
+    "1:1:1 visibly reads as three-layer balance rather than another saturation state.",
+    "Retained anatomy keeps its Grave/Vascular/Silt identity and its authored living animation after placement.",
+    "Presentation changes do not alter collision, movement envelope, progression, geography, or world gameplay consequences."
+  ],
+  "gameplayConsequencesEnabled": false,
+  "recipeMenuUsed": false,
+  "inventorySlotsUsed": false,
+  "progressionChanged": false,
+  "geographyChanged": false,
+  "debugQuickTestbedPreserved": true,
+  "activeSourceModuleCount": 88,
+  "visualTopologyLanguage": {
+    "deep_core": "contracted boundary + enlarged/brighter nucleus + folded surface anatomy",
+    "inner_body": "fuller active mantle + circulating middle-body pulse + moderate exterior",
+    "membrane": "expanded brighter boundary + wider surface silhouette + quieter nucleus",
+    "two_to_one": "dominant layer carries primary silhouette/read while minority layer remains visibly present as secondary body behavior",
+    "three_way_balance": "nucleus, mantle, and membrane remain simultaneously legible with a coordinated rhythm"
+  }
+}

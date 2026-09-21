@@ -1,0 +1,54 @@
+{
+  "pass": "HC-031F1",
+  "title": "Attached Pull Prototype",
+  "mode": "movement integration / bounded locomotion proof",
+  "purpose": "Make the existing three suction tendrils mechanically causal during surface traversal: planted anchors publish support/load state and PlayerMovementController consumes those anchors to pull the Core tangentially while preserving the trusted authored movement boundary.",
+  "allowedScope": [
+    "surface tendril anchor telemetry and load cadence",
+    "attached movement acceleration source",
+    "surface-tangent traction",
+    "world-space stand-off distance from trusted authored boundary",
+    "organic tension tuning of existing tendrils",
+    "build telemetry/validation"
+  ],
+  "forbiddenScope": [
+    "new player buttons or manual tendril selection",
+    "new raycasts, colliders, mesh-surface solvers, or navmeshes",
+    "wall/ceiling traversal guarantees or edge wrapping",
+    "chemistry adhesion redesign",
+    "targeting/Bond/verb changes",
+    "Grave octave/resonance/rupture/consequence/progression changes",
+    "new region history synthesis"
+  ],
+  "lockedTruth": {
+    "tendrilCount": 3,
+    "movementAuthority": "PlayerMovementController",
+    "anchorAuthority": "CoreTendrilSurfaceContactSystem",
+    "surfaceSource": "trusted_authored_movement_boundary",
+    "locomotionDrivenByTendrils": true,
+    "addsCollider": false,
+    "addsRaycast": false,
+    "changesControls": false,
+    "directInputAccelerationScaleWhileTendrilDriven": 0.12,
+    "standOffDistance": 0.3,
+    "oneFrameCausalHandoff": true,
+    "visualFamily": "core_suction_tendril_v1"
+  },
+  "movementGrammar": [
+    "free float: existing camera-relative movement remains unchanged",
+    "acquire: existing chemistry/contact rules attach to trusted movement boundary",
+    "support: one to three sealed tendrils publish world-space anchors",
+    "pull: PlayerMovementController selects the leading sealed anchor aligned with current tangent intent and accelerates toward it",
+    "handoff: traction softens while one tendril peels/reaches and the other supports remain planted",
+    "rest: with no stick intent, tangential velocity settles while suction remains engaged",
+    "release: existing pull-away/chemistry-loss rules return the Core to free movement"
+  ],
+  "acceptanceTests": [
+    "on a broad surface, holding movement produces repeated visible anchor handoffs while the Core advances",
+    "surface motion slows during handoff and regains pull after support reseals",
+    "releasing the stick settles the Core instead of letting it skate indefinitely",
+    "the Core keeps a readable stand-off from the authored surface envelope",
+    "free-space movement and controls remain unchanged",
+    "no exit, route, combat, targeting, Bond, or verb regression"
+  ]
+}

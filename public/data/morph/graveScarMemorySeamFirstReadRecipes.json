@@ -1,0 +1,84 @@
+[
+  {
+    "id": "GRAVE_SCAR_MEMORY_SEAM_FIRST_READ_LOOP_HC004N",
+    "build": "HC-004N",
+    "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "status": "runtime_active_first_read_loop_no_exit_no_absorb_consumption",
+    "cellId": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+    "sourceRuntimeArrival": "HC004M_GRAVE_SCAR_MEMORY_SEAM_RUNTIME_ARRIVAL",
+    "purpose": "Make the arrived seam playable immediately: target and pulse the scar thread, stitch lattice, echo imprint, and closed inheritance suture to understand the seam without opening an exit or consuming anything.",
+    "sequence": [
+      {
+        "stage": "thread_found",
+        "focusObject": "scar_memory_seam_thread_001",
+        "readKey": "threadRead",
+        "pulseGain": 0.24,
+        "proximityRate": 0.048,
+        "nextAction": "Pulse the scar-memory thread; read direction as memory, not a doorway."
+      },
+      {
+        "stage": "lattice_settled",
+        "focusObject": "residue_stitch_lattice_001",
+        "readKey": "latticeRead",
+        "pulseGain": 0.22,
+        "proximityRate": 0.046,
+        "nextAction": "Pulse the residue stitch lattice until the repaired shape settles."
+      },
+      {
+        "stage": "echo_answered",
+        "focusObject": "echo_husk_imprint_001",
+        "readKey": "echoRead",
+        "pulseGain": 0.2,
+        "proximityRate": 0.04,
+        "nextAction": "Pulse the echo husk imprint. Read absence without trying to harvest it."
+      },
+      {
+        "stage": "suture_respected",
+        "focusObject": "closed_inheritance_suture_001",
+        "readKey": "sutureRead",
+        "pulseGain": 0.18,
+        "proximityRate": 0.034,
+        "nextAction": "Warm the closed inheritance suture. Let it stay closed."
+      }
+    ],
+    "metrics": {
+      "minimumThreadRead": 0.58,
+      "minimumLatticeRead": 0.56,
+      "minimumEchoRead": 0.52,
+      "minimumSutureRead": 0.46,
+      "maximumRecoilRisk": 0.42,
+      "completionStableSeconds": 1.35,
+      "pulseRange": 4.75,
+      "readRange": 3.55,
+      "absorbRecoilRange": 3.0
+    },
+    "completion": {
+      "stage": "seam_first_read_complete",
+      "status": "ready_for_later_grave_continuity_but_no_exit_this_pass",
+      "compositionReward": {
+        "scar": 0.0012,
+        "residue": 0.0008,
+        "signal": 0.0006,
+        "seed": 0.0004
+      },
+      "nextAction": "The seam is read. Keep it closed; no exit or new route activates in HC-004N."
+    },
+    "forbidden": [
+      "runtime exit activation",
+      "new morph activation",
+      "route branch activation",
+      "combat",
+      "dialogue tree",
+      "quest log",
+      "gates",
+      "doors",
+      "teleports",
+      "old chamber runtime",
+      "stage-node loaders",
+      "branch select menu",
+      "seam object absorption",
+      "opening closed inheritance suture",
+      "consuming the old core husk"
+    ]
+  }
+]

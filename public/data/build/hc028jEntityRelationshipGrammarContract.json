@@ -1,0 +1,43 @@
+{
+  "id": "HC-028J",
+  "parent": "HC-028I1",
+  "rule": "existing_organisms_interpret_existing_core_chords_through_authored_role_without_new_gameplay_authority",
+  "scope": {
+    "entityTypesAdded": 0,
+    "liveEntityIds": [
+      "nursery_membrane_tender_001",
+      "membrane_watcher_001"
+    ],
+    "newControls": false,
+    "newCombat": false,
+    "newTargeting": false,
+    "newBondRules": false,
+    "newRepairRules": false,
+    "newProgression": false,
+    "entityMovementChanged": false,
+    "entityBehaviorOwnerChanged": false,
+    "verbPowerChanged": false,
+    "routeLogicChanged": false,
+    "combReentryHotfixPreserved": true
+  },
+  "grammar": {
+    "source": "CoreVerbEngineCouplingSystem.chord",
+    "singleVerbs": ["project", "draw", "cohere"],
+    "pairedChords": ["cohere_project", "cohere_draw", "exchange"],
+    "fullChord": "full_system",
+    "tenderRole": "care_filter",
+    "watcherRole": "anchored_sensor",
+    "bondMayChangeInterpretation": true,
+    "bondMayBeChangedByThisPass": false,
+    "proximityIsPresentationStrengthOnly": true,
+    "inputTimingGate": false
+  },
+  "presentation": {
+    "owner": "EntityEcologyResonanceSystem",
+    "worldEntrainmentPreserved": true,
+    "relationshipGestureOverlay": true,
+    "newHudPrompt": false,
+    "dialogueAdded": false
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.10"
+}

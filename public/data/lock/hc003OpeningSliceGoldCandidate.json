@@ -1,0 +1,21 @@
+{
+  "id": "HC003N_OPENING_SLICE_GOLD_PACKAGE",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "status": "gold_candidate_pending_user_playtest",
+  "requiredChain": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "optionalExtension": "CELL_BLOOM_RESIDUE_FORK_001",
+  "forbiddenRuntimeArchitecture": [
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node runtime logic"
+  ],
+  "nextIfPasses": "HC-004A Grave Route Runtime Planning",
+  "nextIfFails": "HC-003NA Opening Gold Candidate Fix Pass"
+}

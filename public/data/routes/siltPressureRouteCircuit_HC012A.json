@@ -1,0 +1,196 @@
+{
+  "id": "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A",
+  "pass": "HC-012A",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "referenceContract": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC010G",
+  "routeId": "silt_burrow_route",
+  "runtimeCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+  "entryGateId": "hub_to_silt_burrow_route",
+  "returnGateId": "silt_burrow_route_to_hub_chamber",
+  "objectiveId": "silt_route_playable_circuit",
+  "gameplayOwner": "SiltPressureRouteSystem",
+  "presentationOwner": "SiltPressureRouteSystem",
+  "movementBoundaryOwner": "PlayerMovementController",
+  "crossingOwner": "GateSystem",
+  "objectiveOwner": "ObjectiveSystem",
+  "premise": "Read the direction of compression with Pulse, brace living ribs with Stabilize, selectively Absorb porous nourishment, and recover if packed residue closes the route.",
+  "anatomy": {
+    "pathPoints": [
+      [
+        0.0,
+        -0.04,
+        0.45
+      ],
+      [
+        -0.7,
+        -0.22,
+        -2.35
+      ],
+      [
+        0.95,
+        -0.68,
+        -5.15
+      ],
+      [
+        -1.35,
+        -1.02,
+        -7.95
+      ],
+      [
+        1.55,
+        -0.62,
+        -10.85
+      ],
+      [
+        2.15,
+        -0.18,
+        -13.3
+      ],
+      [
+        -1.1,
+        -0.48,
+        -16.25
+      ],
+      [
+        0.05,
+        -0.34,
+        -19.35
+      ]
+    ],
+    "passageRadius": 1.22,
+    "ribProgress": [
+      0.14,
+      0.29,
+      0.43,
+      0.68,
+      0.83
+    ],
+    "siltMoteCount": 46,
+    "deepOrganProgress": 0.91
+  },
+  "pressure": {
+    "readProgressMin": 0.08,
+    "readProgressMax": 0.46,
+    "pulseReadRangeFromPassage": 1.55,
+    "requiredBraceSeconds": 1.05,
+    "braceReleasePerSecond": 0.28,
+    "earnedReadIrreversible": true,
+    "earnedBraceIrreversible": true
+  },
+  "appetite": {
+    "chamberProgress": 0.6,
+    "safeOffset": [
+      1.75,
+      0.28,
+      0.05
+    ],
+    "denseOffsets": [
+      [
+        -1.7,
+        -0.16,
+        0.12
+      ],
+      [
+        0.25,
+        1.45,
+        -0.28
+      ]
+    ],
+    "safeAbsorbRange": 0.92,
+    "denseRiskRange": 0.9,
+    "selectionDistanceAdvantage": 0.08,
+    "requiredSafeAbsorbSeconds": 0.68,
+    "greedyFailureSeconds": 0.38,
+    "safeMatter": "porous_nutrient",
+    "unsafeMatter": "packed_residue",
+    "protectedDenseMatterConsumed": false
+  },
+  "recovery": {
+    "stabilizeRangeFromPassage": 1.9,
+    "compressionRecoveryPerSecond": 0.5,
+    "recoveredCompressionThreshold": 0.22,
+    "maximumWorstStateRecoverySeconds": 2.5,
+    "failureErasesPressureRead": false,
+    "failureErasesBrace": false,
+    "death": false,
+    "forcedRestart": false
+  },
+  "completion": {
+    "minimumDeepProgress": 0.82,
+    "maximumSettledCompression": 0.34,
+    "pressureReadRequired": true,
+    "ribsReleasedRequired": true,
+    "selectiveAbsorbRequired": true,
+    "packedResidueMustRemain": true,
+    "failureMustRemainRecoverable": true,
+    "cleanRunMayCompleteWithoutFailure": true
+  },
+  "returnFold": {
+    "position": [
+      0.0,
+      -0.04,
+      0.62
+    ],
+    "interactionRange": 1.35,
+    "formsAfterDeepPressureRelease": true,
+    "siltBreathReversesTowardHub": true,
+    "input": "interact"
+  },
+  "visual": {
+    "siltColor": 5719087,
+    "deepColor": 2432283,
+    "porousNutrientColor": 13802059,
+    "packedResidueColor": 3880006,
+    "failureColor": 10566189,
+    "recoveryColor": 9555238,
+    "returnColor": 13210965,
+    "motionLanguages": [
+      "asymmetric rib compression",
+      "pressure-reading echo",
+      "selective porous draw",
+      "greedy packed-residue collapse",
+      "stabilized passage reopening",
+      "outward silt return breath"
+    ],
+    "genericRings": 0,
+    "triggerMarkers": 0,
+    "permanentHalos": 0
+  },
+  "constraints": {
+    "newAbilities": 0,
+    "newEntities": 0,
+    "combat": false,
+    "death": false,
+    "forcedRestart": false,
+    "forcedPlayerRelocation": false,
+    "permanentClass": false,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "directActiveCellMutation": false,
+    "directRouteHistoryMutation": false,
+    "vascularGameplayMutation": false,
+    "graveGameplayMutation": false,
+    "archivedCompatibilitySystemsActivated": 0
+  },
+  "spatialExpansion": {
+    "pass": "HC-016V",
+    "sourceAudit": "HC-016S",
+    "coreScaleChanged": false,
+    "gameplayRulesChanged": false,
+    "previousPathLength": 7.453,
+    "expandedPathLength": 24.204,
+    "targetPrimaryPathLength": 20.0,
+    "decisionPocketApproxBreadth": 5.0,
+    "grammar": [
+      "compressed entry throat",
+      "pressure-reading approach",
+      "rib-brace corridor",
+      "widening porous-choice pocket",
+      "recompressed deep passage",
+      "deep pressure-release organ",
+      "reverse silt breath to return fold"
+    ],
+    "identity": "tight-to-open-to-tight, sedimentary, compressive, selective",
+    "rule": "space is inserted between existing mechanics; pressure read, brace, selective absorb, recoverable failure, deep release, and return remain the same gameplay contract"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "build": "HC-016N",
+  "checks": [
+    {
+      "name": "syntax:SystemRegistry.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:RecipeDebugOverlay.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GameRuntime.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016NPerformanceCapture.mjs",
+      "status": "PASS",
+      "detail": "[HC016N] hitch-triggered updater capture + readable debug panel PASS\n"
+    }
+  ],
+  "capture": {
+    "periodicSampleEveryFrames": 60,
+    "hitchSampleThresholdMs": 45,
+    "slowSystemThresholdMs": 2,
+    "classifications": [
+      "normal_sample",
+      "update_bound",
+      "mixed",
+      "non_update_bound"
+    ]
+  }
+}

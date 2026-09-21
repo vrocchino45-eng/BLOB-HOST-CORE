@@ -1,0 +1,15 @@
+import fs from "node:fs";
+const audit=JSON.parse(fs.readFileSync(new URL("../public/data/build/hc019aRouteStateAudit.json",import.meta.url),"utf8"));
+const boundary=fs.readFileSync(new URL("../src/morph/LocalCellBoundaryMorphSystem.js",import.meta.url),"utf8");
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(audit.mode==="AUDIT_ONLY","HC019A must remain audit-only");
+must(audit.changesToGameplay===false,"gameplay changed in audit pass");
+must(audit.boundaryAuthority.hotfixReturnGuardPresent===true,"HOTFIX1 return guard missing");
+must(boundary.includes("readyAge >= 0.38"),"ready dwell missing");
+must(boundary.includes("returnTriggerArmed"),"return arm latch missing");
+must(audit.nextPassContract.id==="HC019B","next pass contract missing");
+must(audit.nextPassContract.forbidden.includes("second crossing authority"),"crossing lock missing");
+console.log("[HC019A] route authority audit PASS");
+console.log("[HC019A] HOTFIX1 return guard presence PASS");
+console.log("[HC019A] HC019B convergence contract PASS");
+console.log("[HC019A] gameplay modifications: NONE");

@@ -1,0 +1,43 @@
+{
+  "pass": "HC-031E1",
+  "title": "Suction Contact Readability",
+  "mode": "visual convergence / contact embodiment",
+  "purpose": "Make a still frame read as Core -> tensioned tendril -> compressed sucker -> authored surface before tendrils gain locomotion authority.",
+  "allowedScope": [
+    "CoreTendrilSurfaceContactSystem presentation geometry and timing",
+    "compact reach and step thresholds",
+    "surface-planted suction pad and compression patch",
+    "root/tendon taper, tension, and peel readability"
+  ],
+  "forbiddenScope": [
+    "movement force or translation ownership",
+    "new collision or raycast authority",
+    "new controls",
+    "targeting or verb changes",
+    "Grave octave/resonance/combat/history progression changes"
+  ],
+  "lockedTruth": {
+    "movementAuthority": "PlayerMovementController",
+    "surfaceSource": "trusted_authored_movement_boundary",
+    "tendrilCount": 3,
+    "locomotionDrivenByTendrils": false,
+    "addsMovementForce": false,
+    "addsCollider": false,
+    "addsRaycast": false,
+    "changesControls": false
+  },
+  "visualTargets": [
+    "suction pad never rides through free space on the reaching tip",
+    "broad sucker face terminates on the authored surface shell",
+    "ordinary attached tendrils remain short; long reach occurs only during a step",
+    "root is visibly thicker than pad-side tendon",
+    "peel keeps sucker planted while tendon lifts and seal breaks",
+    "faint surface compression patch confirms contact without adding a ring/cage"
+  ],
+  "acceptanceTests": [
+    "a still frame can be read as physically attached without debug text",
+    "at least two support pads remain clearly planted while one tendril reaches",
+    "reversing direction causes peel/replant rather than trailing whiskers",
+    "pulling away shows a readable planted-pad peel before disappearance"
+  ]
+}

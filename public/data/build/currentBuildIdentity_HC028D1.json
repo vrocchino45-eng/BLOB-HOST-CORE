@@ -1,0 +1,36 @@
+{
+  "id": "HC-028D1",
+  "label": "Verb-Engine Coupling",
+  "parent": "HC-028D",
+  "baseline": "HC027L1_GOLDEN_INQUIRY_BASELINE_01",
+  "sourceJsCount": 96,
+  "scope": [
+    "Add one read-only CoreVerbEngineCouplingSystem between canonical verb intent and the existing Core engine",
+    "Route Pulse outward through the Pulse gyroscopic plane without changing Pulse power",
+    "Route Absorb inward through the Absorb gyroscopic plane without changing Absorb power",
+    "Let Stabilize visibly cohere the gyroscope without freezing orientation or changing movement",
+    "Allow simultaneous verb intent to appear as multiple internal pathways/chords",
+    "Extend read-only telemetry with verb-engine chord changes"
+  ],
+  "locked": [
+    "CoreEngineSystem P -> A -> S sequencing, RPM and 3 -> 6 -> 12 architecture truth",
+    "HC028D Core-World resonance relationship and Vascular world signature",
+    "HC028C Vascular 4/4 tempo/key and 0.96-1.06 movement force range",
+    "HC028B1 transition and Hub convergence reachability",
+    "verb gameplay strength/range/cost",
+    "targeting and bond logic",
+    "Silt and Grave gameplay",
+    "controller mapping",
+    "A-button ownership",
+    "chemistry and Core Work placement"
+  ],
+  "forbidden": [
+    "verb damage/power/range changes",
+    "engine retiming or phase snapping",
+    "movement/stat bonus from chord state",
+    "beat-timed input requirement",
+    "new route completion condition",
+    "A/Commit redesign in this pass",
+    "automatic 3/6/12 progression"
+  ]
+}

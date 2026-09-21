@@ -1,0 +1,71 @@
+{
+  "build": "HC016A",
+  "strategy": "R0_REBUILD_ARCHITECTURE_REBASELINE",
+  "gameplayChanges": false,
+  "sourceCheckpoint": "HC015N_HOTFIX2",
+  "keep": [
+    "SystemRegistry",
+    "RecipeDataSystem:data_loading",
+    "ChemObjectSystem",
+    "BondSystem",
+    "ChemObjectVisualComposer",
+    "EnvironmentVisualComposer",
+    "PlayerMovementController",
+    "CoreEmbodimentSystem",
+    "LocalCellMorphSystem:concept",
+    "MorphStateSelector",
+    "TargetFocusRegistry",
+    "TargetingSystem",
+    "InputSystem",
+    "ControllerComfortSystem",
+    "DebugAreaJumpSystem:tooling_only",
+    "SignalPlainEcologySystem:gameplay_concept",
+    "MembraneRidgeGameplaySystem:gameplay_concept"
+  ],
+  "migrate": [
+    "ObjectiveSystem",
+    "GuidePromptSystem",
+    "PlaytestHudSystem",
+    "FirstSliceTransitionCoordinator",
+    "HubChamberFoundationSystem",
+    "HubInvestigationGameplaySystem",
+    "GraveMemoryRouteSystem",
+    "VascularRhythmRouteSystem",
+    "SiltPressureRouteSystem",
+    "CombThresholdFoundationSystem",
+    "CombThresholdPlayableSystem",
+    "ApertureFieldsArrivalSystem",
+    "SignalPlainEcologySystem:ownership",
+    "MembraneRidgeGameplaySystem:ownership",
+    "CoreGrowthSystem",
+    "region_runtime_profiles"
+  ],
+  "retire_after_dependency_removal": [
+    "GateSystem:transition_owner",
+    "hard_gate_progression",
+    "GateSystem_runtimeTransitionAdapter",
+    "hub_level_select_semantics",
+    "threshold_hard_gate_semantics",
+    "chamber_route_primary_ownership",
+    "build_pass_gameplay_whitelists"
+  ],
+  "unknown": [
+    "legacy_chamber_registry_reachability",
+    "visual_recipe_provenance_all_route_geometry",
+    "route_flags_chemistry_dependencies",
+    "local_cell_streaming_full_replacement",
+    "player_composition_material_effects",
+    "generic_chemistry_expression_signal_and_membrane"
+  ],
+  "r1DependencyOrder": [
+    "state_ledger",
+    "transition_ownership_split",
+    "local_cell_coordinator",
+    "gate_compatibility_adapter",
+    "objective_demotion",
+    "guide_hud_demotion_verification",
+    "hub_threshold_migration_seam",
+    "regression_run",
+    "remove_first_gate_dependency"
+  ]
+}

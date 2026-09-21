@@ -1,0 +1,85 @@
+{
+  "id": "HC003A_FIRST_PLAYABLE_MINUTE_DESIGN_LOCK",
+  "build": "HC-003A",
+  "status": "design_locked_pending_implementation",
+  "selectedOption": "OPTION_C_THREE_CELL_OPENING_WITH_BLOOM_AS_AFTERFORK",
+  "oneSentenceGoal": "Turn the working no-gate tissue chain into a readable first playable minute where the player awakens, absorbs safely, learns scar caution, folds into Scar-Flow, and hears Signal Chorus as the first larger response.",
+  "openingPromise": "The player should feel like a small becoming inside living tissue, guided by a watching lantern, learning that the world changes by relation rather than doors.",
+  "primaryOpeningRoute": [
+    {
+      "cellId": "CELL_MEMBRANE_NURSERY_001",
+      "role": "awakening and first nourishment",
+      "requiredPlayerUnderstanding": [
+        "I am the small core.",
+        "The seed is safe.",
+        "Absorb is relational and gradual.",
+        "Scarred matter is not food yet."
+      ],
+      "requiredActions": [
+        "move",
+        "target safe seed",
+        "hold absorb"
+      ],
+      "guideTone": "protective, simple, immediate"
+    },
+    {
+      "cellId": "CELL_SCAR_FLOW_FOLD_001",
+      "role": "first tissue shift and first memory/pressure reading",
+      "requiredPlayerUnderstanding": [
+        "The world folded; I did not go through a door.",
+        "Scar-Flow is memory and pressure, not enemy space.",
+        "Pulse is a listening action as much as a force action."
+      ],
+      "requiredActions": [
+        "pulse scar-flow focus",
+        "follow pressure cue",
+        "respect clot warning"
+      ],
+      "guideTone": "cautious, interpretive, embodied"
+    },
+    {
+      "cellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "role": "first signal response and first sense of larger host communication",
+      "requiredPlayerUnderstanding": [
+        "The host can answer.",
+        "Tone/signals are part of tissue logic.",
+        "The next fold is possible but not required for the first playable minute."
+      ],
+      "requiredActions": [
+        "hear choir",
+        "open listening pore",
+        "warm bridge"
+      ],
+      "guideTone": "wonder, restraint, invitation"
+    }
+  ],
+  "postMinuteFork": {
+    "cellId": "CELL_BLOOM_RESIDUE_FORK_001",
+    "role": "first beyond-minute proof of branching growth",
+    "requiredForFirstMinute": false,
+    "use": "available in the current chain, but not used as required onboarding load in the first playable minute",
+    "playerFeeling": "I crossed out of the first lesson and found the world can fork."
+  },
+  "timingTargets": {
+    "firstNourishmentSeconds": "10-20",
+    "firstMorphSeconds": "25-45",
+    "scarFlowUnderstandingSeconds": "45-75",
+    "signalChorusRevealSeconds": "75-110",
+    "bloomResidueAfterforkSeconds": "optional after first playable minute"
+  },
+  "doNotTeachYet": [
+    "full crafting",
+    "combat",
+    "boss logic",
+    "faction logic",
+    "long dialogue",
+    "Act 2 region navigation",
+    "Inversion Strand B",
+    "ending state logic"
+  ],
+  "hc003bHandoff": {
+    "nextPass": "HC-003B",
+    "title": "Guide Prompt / World-Facing Objective Layer",
+    "need": "replace debug-like instructions with short embodied Guide prompts and objective beats for the selected first playable minute route"
+  }
+}

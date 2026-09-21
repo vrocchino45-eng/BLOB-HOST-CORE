@@ -1,0 +1,24 @@
+{
+  "build": "HC018E-HOTFIX1",
+  "videoEvidence": {
+    "runtimeFolder": "HC018E_GAMEPLAY_RHYTHM_CONVERGENCE",
+    "staleBrowserTitle": "HC-017A",
+    "staleRuntimeBuildId": "HC-015N",
+    "observedReturnIssue": "route endpoint can transition back to Hub too readily"
+  },
+  "identity": {
+    "runtimeBuildId": "HC-018E",
+    "sourceManifestCompatibilityId": "HC-015N",
+    "sourceManifestRewritten": false
+  },
+  "returnGuard": {
+    "scope": "interact-triggered return recipes",
+    "readyDwellSeconds": 0.38,
+    "requiresReleaseBeforeFreshPress": true
+  },
+  "routeCompletionRulesChanged": false,
+  "movementChanged": false,
+  "cameraChanged": false,
+  "chemistryChanged": false,
+  "interactionRangeChanged": false
+}

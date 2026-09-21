@@ -1,0 +1,22 @@
+{
+  "build": "HC-024D0",
+  "mode": "debug_testbed_only",
+  "purpose": "Expose and reset Grave Memory, Vascular Rhythm, and Silt Pressure retained anatomy immediately for Core Work iteration without replaying routes.",
+  "command": "P",
+  "normalProgressionUnchanged": true,
+  "routeCompletionMutation": false,
+  "retainedRouteFlagMutation": false,
+  "newGameplayVerb": false,
+  "chemistryEnabled": false,
+  "controls": {
+    "seedReset": "P",
+    "inspect": "Y/F",
+    "coreWork": "A/E"
+  },
+  "acceptanceTests": [
+    "P from Surface exposes all three retained anatomy groups after reveal easing.",
+    "No Grave/Vascular/Silt authored completion or retained flags are set by the shortcut.",
+    "Y then A enters Core Work and offers three candidates without traveling to Hub.",
+    "P resets Core Work offsets so repeated manipulation tests begin from authored placements."
+  ]
+}

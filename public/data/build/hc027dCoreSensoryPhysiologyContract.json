@@ -1,0 +1,75 @@
+{
+  "id": "hc027d_core_sensory_physiological_expression",
+  "owner": "CoreSensoryResponseSystem",
+  "visualOwner": "CoreVerbPhysicalizationSystem",
+  "audioOwner": "EventAnchoredHostAudioSystem",
+  "purpose": "Turn the three foundational Core verbs into embodied audiovisual processes, beginning with sonar-like Pulse return timing, without changing their gameplay authority.",
+  "pulse": {
+    "grammar": [
+      "emit",
+      "travel",
+      "contact",
+      "return"
+    ],
+    "gameplayRange": 4.25,
+    "gameplayRangeChanged": false,
+    "hiddenStateRevealEnabled": false,
+    "targetingAuthority": false,
+    "materialEchoLimit": 6,
+    "localBoundaryEchoEnabled": true,
+    "distanceAffectsReturnDelay": true,
+    "radialWaveSpeed": {
+      "deep": 5.2,
+      "inner": 6.6,
+      "membrane": 8.2
+    },
+    "responseClasses": [
+      "host_membrane",
+      "living_seed",
+      "scar_memory",
+      "signal_resonant",
+      "fluid_current",
+      "dense_structure",
+      "living_material"
+    ]
+  },
+  "absorb": {
+    "processAudio": [
+      "intake",
+      "flow_or_empty_draw",
+      "capture",
+      "release"
+    ],
+    "gameplayChanged": false
+  },
+  "stabilize": {
+    "processAudio": [
+      "begin",
+      "converging",
+      "locked",
+      "release"
+    ],
+    "gameplayChanged": false
+  },
+  "radialExpression": {
+    "deep": "lower_slower_longer",
+    "inner": "clean_controlled_middle",
+    "membrane": "brighter_faster_sharper",
+    "sameVerbGrammar": true,
+    "engineResolutionIndependent": true
+  },
+  "mix": {
+    "masterGain": 0.68,
+    "pannerRefDistance": 2.8,
+    "pannerRolloff": 0.62,
+    "musicLayerEnabled": false,
+    "externalAudioAssetsRequired": false
+  },
+  "locked": {
+    "movementAuthorityChanged": false,
+    "chemistryAuthorityChanged": false,
+    "progressionAuthorityChanged": false,
+    "engineGrammarChanged": false,
+    "randomFailureEnabled": false
+  }
+}

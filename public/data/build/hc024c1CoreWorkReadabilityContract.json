@@ -1,0 +1,43 @@
+{
+  "id": "HC024C1_CORE_WORK_READABILITY_CONTRACT",
+  "build": "HC-024C1",
+  "parent": "HC-024C",
+  "purpose": "Make existing Core Work piece selection and radial depth manipulation unmistakable without changing controls, chemistry, topology, or piece ownership.",
+  "allowedScope": [
+    "increase bounded RT/LT radial travel",
+    "stronger selected/held visual separation using existing materials",
+    "dim nonselected binding anatomy during manipulation",
+    "move existing Guide pose along selected piece radial direction",
+    "strengthen existing Guide shimmer while holding/moving depth",
+    "add compact depth band/percent telemetry"
+  ],
+  "forbiddenScope": [
+    "chemistry reaction",
+    "new Core or Guide geometry",
+    "new controller mapping",
+    "new region or geography",
+    "progression mutation",
+    "contact physics",
+    "return traversal"
+  ],
+  "depth": {
+    "minimumRadius": 0.26,
+    "maximumRadius": 1.08,
+    "speed": 0.72,
+    "bands": [
+      "deep_core",
+      "inner_ring",
+      "membrane",
+      "outer_edge"
+    ]
+  },
+  "acceptanceTests": [
+    "selected piece is visually obvious before grab",
+    "held piece remains trackable against surrounding Core anatomy",
+    "RT outward and LT inward produce visible radial displacement",
+    "Guide pose reads as pulling/pushing the selected piece",
+    "Right Stick orbit remains independent",
+    "placed arrangement persists after leaving Core Work",
+    "chemistry remains disabled"
+  ]
+}

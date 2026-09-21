@@ -1,0 +1,85 @@
+[
+  {
+    "id": "GRAVE_SEAM_CONTINUITY_MICRO_EXIT_HC004O",
+    "build": "HC-004O",
+    "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "status": "runtime_active_no_gate_micro_exit_return_to_grave_bed",
+    "sourceFirstReadLoop": "GRAVE_SCAR_MEMORY_SEAM_FIRST_READ_LOOP_HC004N",
+    "sourceCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+    "destinationCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "triggerObject": "closed_inheritance_suture_001",
+    "purpose": "After the scar-memory seam has been read, give the player a small usable continuity response: pulse the closed inheritance suture to fold back into the Grave Memory Residue Bed without opening the suture, adding a new branch, or reviving legacy exit architecture.",
+    "triggerRules": {
+      "requiresActiveSourceCell": true,
+      "requiresFirstReadComplete": true,
+      "requiresClosedSutureVisible": true,
+      "requiresPulsePressed": true,
+      "requiresNoAbsorbHeld": true,
+      "preferredFocusObject": "closed_inheritance_suture_001",
+      "absorbStartsMicroExit": false,
+      "holdInputRequired": false
+    },
+    "microExitPrototype": {
+      "mode": "short_no_gate_continuity_fold_back",
+      "durationSeconds": 2.2,
+      "entryOffset": [-0.18, 0.0, 1.05],
+      "destinationFadeTo": 1.0,
+      "sourceSeamFadeTo": 0.28,
+      "closedSutureCarryForwardOpacity": 0.42,
+      "playerRelocationThisPass": true,
+      "legacyExitArchitectureThisPass": false,
+      "doorTeleportOrGateThisPass": false,
+      "newMorphPlanThisPass": false,
+      "newRouteBranchThisPass": false,
+      "combatThisPass": false,
+      "dialogueTreeThisPass": false,
+      "questLogThisPass": false
+    },
+    "cameraPlan": {
+      "mode": "micro_exit_fold_back_low_scar_read",
+      "yaw": -0.12,
+      "pitch": 0.44,
+      "distance": 7.2,
+      "lift": 0.32,
+      "blendStrength": 1.45
+    },
+    "playerFacingLanguage": {
+      "hudStatusReady": "Seam Micro-Exit: pulse closed suture / fold back",
+      "hudStatusMoving": "Seam Micro-Exit: folding back, no gate",
+      "hudStatusComplete": "Seam Micro-Exit: returned to Grave bed",
+      "nextActionReady": "Pulse the closed suture to fold back to the Grave bed. Do not hold absorb.",
+      "nextActionMoving": "Stay with the fold-back. This is a continuity response, not a door or teleport.",
+      "nextActionComplete": "Back in the Grave bed. The seam is understood, but no new branch opens yet."
+    },
+    "completion": {
+      "status": "returned_to_grave_bed_seam_understood_no_branch_opened",
+      "setsActiveCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "seamObjectsConsumed": false,
+      "closedInheritanceSutureOpened": false,
+      "newRouteBranchActivated": false,
+      "compositionReward": {
+        "scar": 0.0008,
+        "residue": 0.0006,
+        "signal": 0.0004
+      }
+    },
+    "forbidden": [
+      "old gates",
+      "doors",
+      "teleports",
+      "branch select menu",
+      "old chamber runtime",
+      "old exit registries",
+      "stage-node loaders",
+      "new morph activation",
+      "new route branch",
+      "combat",
+      "dialogue tree",
+      "quest log",
+      "seam object absorption",
+      "opening closed inheritance suture",
+      "consuming the old core husk",
+      "opening inheritance seed remnant"
+    ]
+  }
+]

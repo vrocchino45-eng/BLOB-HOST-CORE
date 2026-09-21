@@ -1,0 +1,52 @@
+{
+  "id": "hc027g_host_material_reply_grammar",
+  "owner": "AmbientMaterialInteractionSystem",
+  "parent": "HC-027F",
+  "purpose": "Differentiate legitimate HC027F remembered sonar answers through class-specific local Host motion so material can be inferred by observation before optional text confirmation.",
+  "loop": [
+    "pulse_probe",
+    "return_answer",
+    "answer_memory",
+    "approach",
+    "observe_material_reply",
+    "optional_scan_confirm",
+    "world_releases"
+  ],
+  "materialReply": {
+    "localRadius": 2.35,
+    "usesExistingMotes": true,
+    "addsGeometry": false,
+    "addsDrawCalls": false,
+    "classes": {
+      "host_membrane": "broad_tangential_enclosure",
+      "living_seed": "cluster_and_breathe",
+      "scar_memory": "lagged_settle_and_hold",
+      "signal_resonant": "coherent_resonant_oscillation",
+      "fluid_current": "directional_stream_through",
+      "dense_structure": "compact_damped_stillness",
+      "living_material": "soft_irregular_orbit"
+    },
+    "scanRequiredToPerceive": false,
+    "scanConfirmsObservedClass": true
+  },
+  "answerMemory": {
+    "maxRecords": 4,
+    "defaultTtlSeconds": 7.2,
+    "approachRange": 3.6,
+    "readRange": 1.65,
+    "changedFromHC027F": false
+  },
+  "locked": {
+    "audioMixChanged": false,
+    "pulseGameplayRangeChanged": false,
+    "pulseReturnTimingChanged": false,
+    "answerMemoryLawChanged": false,
+    "radialPhysiologyChanged": false,
+    "movementAuthorityChanged": false,
+    "chemistryAuthorityChanged": false,
+    "progressionAuthorityChanged": false,
+    "routeTopologyChanged": false,
+    "engineGrammarChanged": false,
+    "newGameplaySystems": false
+  }
+}

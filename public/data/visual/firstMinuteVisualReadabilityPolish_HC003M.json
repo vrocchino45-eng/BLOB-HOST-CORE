@@ -1,0 +1,142 @@
+{
+  "id": "HC003M_FIRST_MINUTE_VISUAL_READABILITY_POLISH",
+  "pass": "HC-003M",
+  "label": "First-Minute Visual Readability Polish",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Make the required opening slice readable without debug panels by strengthening only the existing first-minute object identities and focus cues.",
+  "requiredChain": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "optionalBeyondMinuteFork": "CELL_BLOOM_RESIDUE_FORK_001",
+  "visualTargets": [
+    {
+      "id": "player_seed_core_stage_01",
+      "role": "player_identity_anchor",
+      "status": "polished",
+      "mustReadAs": [
+        "you_are_here",
+        "protected_seed_core",
+        "future_host_potential"
+      ],
+      "changes": [
+        "stronger halo/glint retained",
+        "identity motes kept visible",
+        "target pointer starts from core center"
+      ]
+    },
+    {
+      "id": "dormant_seed_nutrient_v01",
+      "role": "safe_first_absorb",
+      "status": "polished",
+      "mustReadAs": [
+        "safe_nourishment",
+        "protected_future_potential",
+        "first_absorb_object"
+      ],
+      "changes": [
+        "safe ring expanded",
+        "warm glow strengthened",
+        "split pod shell clarified"
+      ]
+    },
+    {
+      "id": "scar_contamination_plate_v01",
+      "role": "unsafe_warning",
+      "status": "polished",
+      "mustReadAs": [
+        "old_wound",
+        "unsafe_to_absorb",
+        "resistant_scar"
+      ],
+      "changes": [
+        "warning halo added",
+        "jagged scar teeth added",
+        "crack glow made clearer"
+      ]
+    },
+    {
+      "id": "seed_signal_bridge_v01",
+      "role": "signal_chorus_action_target",
+      "status": "polished",
+      "mustReadAs": [
+        "bridge",
+        "pulse_target",
+        "seed_signal_connection"
+      ],
+      "changes": [
+        "bridge halo added",
+        "two-thread span clarified",
+        "focus bead and tiny confluence knot added"
+      ]
+    },
+    {
+      "id": "guide_orbiter_folded_lantern_v01",
+      "role": "interpreter_not_target_blocker",
+      "status": "polished",
+      "mustReadAs": [
+        "Guide",
+        "folded_lantern",
+        "protective_interpreter"
+      ],
+      "changes": [
+        "guide placement offset adjusted",
+        "path shimmer remains secondary",
+        "lantern glow retained"
+      ]
+    },
+    {
+      "id": "target_lock_reticle",
+      "role": "organic_focus_cue",
+      "status": "polished",
+      "mustReadAs": [
+        "focus",
+        "relationship",
+        "current_action_target"
+      ],
+      "changes": [
+        "line opacity softened",
+        "reticle pulse tuned by target kind",
+        "selected halo kept as organic ring"
+      ]
+    }
+  ],
+  "hudReadabilityRules": [
+    {
+      "id": "debug_hidden_must_work",
+      "rule": "Required first-minute instruction cannot depend on debug panels."
+    },
+    {
+      "id": "guide_primary",
+      "rule": "Guide line is the player-facing objective; target/reticle shows where to act."
+    },
+    {
+      "id": "scar_not_food",
+      "rule": "Scar must never read like a safe pickup."
+    },
+    {
+      "id": "bridge_visible_when_needed",
+      "rule": "Seed-signal bridge must become visually obvious during Signal Chorus bridge-warming stage."
+    }
+  ],
+  "forbiddenScope": [
+    "new cells",
+    "new morphs",
+    "new gameplay systems",
+    "route runtime",
+    "old gates",
+    "old chamber loading",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "full visual replacement campaign"
+  ],
+  "nextRecommendedPass": "HC-003N Opening Slice Gold Candidate",
+  "humanReadableMarkers": [
+    "safe seed",
+    "scar",
+    "bridge",
+    "guide"
+  ]
+}

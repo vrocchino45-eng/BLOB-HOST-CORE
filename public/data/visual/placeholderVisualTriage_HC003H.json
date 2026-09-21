@@ -1,0 +1,119 @@
+{
+  "id": "HC003H_PLACEHOLDER_VISUAL_TRIAGE",
+  "pass": "HC-003H",
+  "label": "Placeholder Visual Triage Pass",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Categorize expired placeholder pressure before deeper route expansion without replacing the entire visual layer in one broad pass.",
+  "governanceRule": "A placeholder may remain only when it has a replacement recipe, meaning declaration, expiration pressure, and a triage status. Triage is not replacement; it is visual governance.",
+  "currentVisualStatus": {
+    "totalPlaceholders": 26,
+    "expiredPlaceholders": 26,
+    "triageDecision": "continue prototype with targeted visual-lock replacements before a future visual lock",
+    "notABlockerForHC003OpeningLock": true,
+    "blockerForFutureVisualLock": true
+  },
+  "visualLockRequiredFirst": [
+    {
+      "placeholderId": "debug_player_core_001",
+      "replacementRecipe": "player_seed_core_stage_01",
+      "priority": "P0",
+      "reason": "The player core is the user's anchor. It must never read as a generic sphere or be lost in tissue mass.",
+      "requiredBefore": "HC-003K opening slice gold candidate or next visual-lock pass"
+    },
+    {
+      "placeholderId": "debug_guide_orbiter_001",
+      "replacementRecipe": "guide_orbiter_folded_lantern_v01",
+      "priority": "P0",
+      "reason": "The Guide is now the primary world-facing instruction source. Its silhouette must read as folded lantern / interpreter, not helper dot.",
+      "requiredBefore": "HC-003K opening slice gold candidate or next visual-lock pass"
+    },
+    {
+      "placeholderId": "debug_nutrient_seed_001",
+      "replacementRecipe": "dormant_seed_nutrient_v01",
+      "priority": "P0",
+      "reason": "The first safe seed teaches absorb, trust, and future-potential matter. It must be visually distinct from hazards.",
+      "requiredBefore": "HC-003K opening slice gold candidate or next visual-lock pass"
+    },
+    {
+      "placeholderId": "debug_scar_plate_001",
+      "replacementRecipe": "scar_contamination_plate_v01",
+      "priority": "P1",
+      "reason": "The first unsafe scar teaches that old wound matter should be listened to or pulsed, not simply eaten.",
+      "requiredBefore": "first route runtime work"
+    },
+    {
+      "placeholderId": "debug_signal_thread_001",
+      "replacementRecipe": "signal_vapor_thread_v01",
+      "priority": "P1",
+      "reason": "Signal is the bridge to Guide / Chorus readability. It needs a cleaner thread/wave language before route expansion.",
+      "requiredBefore": "first route runtime work"
+    }
+  ],
+  "prototypeAcceptedForNow": [
+    {
+      "group": "Scar-Flow support visuals",
+      "placeholderIds": [
+        "debug_scar_memory_fleck_001",
+        "debug_scar_flow_clot_001",
+        "debug_resonant_path_thread_001",
+        "debug_pressure_fold_current_001",
+        "debug_scar_flow_fold_surface_001",
+        "debug_scar_pressure_haze_001"
+      ],
+      "reason": "Readable enough for current chain testing; replace when Scar/Grave route becomes runtime-active."
+    },
+    {
+      "group": "Signal Chorus support visuals",
+      "placeholderIds": [
+        "debug_signal_chorus_surface_001",
+        "debug_signal_chorus_haze_001",
+        "debug_choir_resonance_node_001",
+        "debug_listening_pore_membrane_001",
+        "debug_harmonic_wave_thread_001",
+        "debug_seed_signal_bridge_001"
+      ],
+      "reason": "Readable enough for opening lock; replace with stronger tone/choir language during Signal visual pass."
+    },
+    {
+      "group": "Bloom Residue beyond-minute visuals",
+      "placeholderIds": [
+        "debug_bloom_residue_fork_surface_001",
+        "debug_bloom_residue_choice_haze_001",
+        "debug_bloom_spore_lantern_001",
+        "debug_residue_memory_silt_001",
+        "debug_seed_choice_braid_001",
+        "debug_overgrowth_warning_tendril_001"
+      ],
+      "reason": "Bloom is optional beyond-minute content in HC-003. Keep prototype-accepted until the beyond-minute branch becomes primary."
+    },
+    {
+      "group": "Secondary environment/entity support",
+      "placeholderIds": [
+        "debug_flux_ribbon_001",
+        "debug_tender_001",
+        "debug_watcher_001"
+      ],
+      "reason": "Important, but less urgent than player/guide/seed/scar/signal for first-minute readability."
+    }
+  ],
+  "removeOrMergeCandidates": [],
+  "futureReplacementOrder": [
+    "player_seed_core_stage_01",
+    "guide_orbiter_folded_lantern_v01",
+    "dormant_seed_nutrient_v01",
+    "scar_contamination_plate_v01",
+    "signal_vapor_thread_v01",
+    "nursery_membrane_tender_v01",
+    "membrane_watcher_v01"
+  ],
+  "forbiddenScope": [
+    "replace all 26 visuals in one pass",
+    "new cells",
+    "new morphs",
+    "new gameplay systems",
+    "gates",
+    "old chamber runtime",
+    "asset-heavy visual campaign before opening flow is stable"
+  ],
+  "nextRecommendedPass": "HC-003I Controller Onboarding / Comfort Pass"
+}

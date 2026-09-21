@@ -1,0 +1,21 @@
+{
+  "id": "HC-026B",
+  "version": "0.26.2",
+  "label": "Return Traversal / Refinding Hub",
+  "mode": "movement-led reversible first-slice revisit proof after Hub arrival",
+  "parent": "HC-026A1",
+  "buildRule": "After the Hub has been reached once, Surface, Guide, and Hub may be physically revisited through two remembered anatomical folds. Crossing is movement-led, retains player position, does not teleport, does not mutate progression, and does not move Hub route gates/corridors. The transformed Hub mirror remains intact on return.",
+  "sourceJsCount": 88,
+  "earlyRegionReturnTraversalEnabled": true,
+  "movementLed": true,
+  "requiresHubReached": true,
+  "surfaceGuideBidirectional": true,
+  "guideHubBidirectional": true,
+  "samePlayerPositionRetained": true,
+  "teleport": false,
+  "progressionMutation": false,
+  "routeTopologyMutation": false,
+  "hubCoreSpatialMirrorPreserved": true,
+  "newRegions": 0,
+  "newSourceModules": 0
+}

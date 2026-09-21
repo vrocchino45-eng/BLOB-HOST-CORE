@@ -1,0 +1,51 @@
+{
+  "build": "HC-023D",
+  "milestone": "Hub Living-State Memory Echo",
+  "strategy": "preserve state history while reducing its presentation authority as the world opens",
+  "sourceStateOwner": "SurfaceWakeGameplaySystem",
+  "hubPolicy": {
+    "derivesNewStates": false,
+    "presentationOnly": true,
+    "changesRoutes": false,
+    "changesProgression": false,
+    "changesCamera": false,
+    "changesMovement": false,
+    "changesInvestigationRules": false,
+    "maximumPresentationWeight": 0.24
+  },
+  "presentationOwner": "HubChamberFoundationSystem",
+  "existingAnatomyReused": [
+    "junction anchor petals",
+    "junction basin",
+    "depth tissue bodies",
+    "ambient drift motes"
+  ],
+  "protectedHubAnatomy": [
+    "route corridors",
+    "route gates",
+    "comparison leaves",
+    "memory fragment",
+    "route-return echoes",
+    "three-route convergence",
+    "Combward body"
+  ],
+  "stateReads": {
+    "cautious": "baseline Hub presentation",
+    "blooming": "slightly livelier central cradle and drift",
+    "withered": "slightly contracted quieter central cradle and drift",
+    "panic": "faster tighter central memory pulse without changing route behavior",
+    "embrace": "broader calmer central memory pulse",
+    "growth": "slightly fuller persistent central cradle"
+  },
+  "performance": {
+    "newSystems": 0,
+    "newSourceModules": 0,
+    "newParticles": 0,
+    "newGeometry": false,
+    "newRaycasts": 0
+  },
+  "bodyLock": {
+    "coreRemainsLimbless": true,
+    "matureTendrilsRemainDeferred": true
+  }
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "SCAR_FLOW_LOOP_001",
+    "cellId": "CELL_SCAR_FLOW_FOLD_001",
+    "title": "Read, Route, Relieve",
+    "purpose": "Make the first post-morph scar-flow cell playable without combat or gate logic.",
+    "stages": [
+      {
+        "id": "memory_read",
+        "sourceObject": "scar_memory_fleck_001",
+        "verb": "pulse",
+        "gain": "memoryEcho",
+        "instruction": "Pulse the memory fleck; let the scar show what it is holding."
+      },
+      {
+        "id": "path_aligned",
+        "sourceObject": "resonant_path_thread_001",
+        "verb": "pulse",
+        "gain": "pathConfidence",
+        "instruction": "Pulse the resonant path thread; let signal draw a safer route."
+      },
+      {
+        "id": "pressure_relieved",
+        "sourceObject": "pressure_fold_current_001",
+        "verb": "ride_or_pulse",
+        "gain": "pressureRelief",
+        "instruction": "Move with the pressure current; let the fold breathe."
+      },
+      {
+        "id": "clot_respected",
+        "sourceObject": "scar_flow_clot_001",
+        "verb": "avoid_absorb_then_pulse",
+        "gain": "clotWarning_control",
+        "instruction": "Do not consume the clot. Pulse it only after the path is readable."
+      }
+    ],
+    "completionThresholds": {
+      "memoryEcho": 0.22,
+      "pathConfidence": 0.28,
+      "pressureRelief": 0.26,
+      "stability": 0.55,
+      "clotWarningMax": 0.4
+    },
+    "nextIfCompleted": "HC-002J Scar-Flow Exit Readiness / Second Morph Planning",
+    "meaning": "The player learns that scar matter is not solved by eating it; it is read, routed, relieved, and respected."
+  }
+]

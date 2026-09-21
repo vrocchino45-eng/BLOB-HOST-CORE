@@ -1,0 +1,54 @@
+{
+  "build": "HC-016Y",
+  "mode": "route_physical_feel",
+  "sourceBuild": "HC-016X",
+  "newGameplaySystemAdded": false,
+  "routeDimensionsChanged": false,
+  "coreScaleChanged": false,
+  "locomotionBaselineChanged": false,
+  "movementOwner": "PlayerMovementController",
+  "routeFeelContract": {
+    "optionalFields": [
+      "accelerationScale",
+      "speedScale",
+      "boostScale",
+      "flowCouplingScale",
+      "withFlowSpeedBonus",
+      "againstFlowSpeedPenalty",
+      "routeFeelProfile",
+      "spatialFeel"
+    ],
+    "fallback": "all modifiers default to neutral 1/0 outside routes"
+  },
+  "grave": {
+    "identity": "quiet weighted memory bed",
+    "continuousEffect": "subtle settling drag; recoil increases resistance; completion provides faint return drift",
+    "speedScale": "0.93 minus recoil contribution",
+    "boostScale": "0.90 minus recoil contribution"
+  },
+  "vascular": {
+    "identity": "directional circulation",
+    "continuousEffect": "stronger centerline current; moving with flow increases usable speed; moving against flow reduces it",
+    "withFlowSpeedBonus": 0.24,
+    "againstFlowSpeedPenalty": 0.2,
+    "flowCouplingScale": 1.34
+  },
+  "silt": {
+    "identity": "compression/release gradient",
+    "continuousEffect": "tight sections suppress acceleration/speed/boost; appetite pocket releases pressure; completed return breath accelerates",
+    "openPocketCenterProgress": 0.6,
+    "completedSpeedScale": 1.1
+  },
+  "locked": [
+    "Core visual scale 0.52",
+    "normal speed 4.65",
+    "L3 boost baseline",
+    "Grave/Vascular/Silt dimensions",
+    "route progression",
+    "chemistry",
+    "interaction ranges",
+    "camera architecture",
+    "Surface\u2192Guide\u2192Hub"
+  ],
+  "nextPass": "HC-016Z convergence decision after gameplay video"
+}

@@ -1,0 +1,16 @@
+import fs from "node:fs";
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), growth=read("../src/player/CoreGrowthSystem.js"), emb=read("../src/player/CoreEmbodimentSystem.js"), combo=read("../src/opening/SurfaceWakeGameplaySystem.js");
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-021E"'),"identity");
+for(const x of ["filtering_care_trace","scar_tolerance_trace","nutrient_binding_trace"]) must(growth.includes(x)&&emb.includes(x),x);
+must(growth.includes("gameplayAuthority: false"),"memory gameplay authority");
+must(growth.includes("abilityUnlockAuthority: false"),"memory ability authority");
+must(growth.includes("retention_memory")&&growth.includes("circulation_transport")&&growth.includes("filtration_boundary"),"route memory anatomy");
+must(emb.includes("surfaceMemoryVisualRule"),"visible trace");
+must(combo.includes('id: "surface_carried_matter_combination"'),"HC021D regression");
+must(combo.includes("requiredNewVerb: false"),"combination scope regression");
+console.log("[HC021E] consequence -> anatomical memory PASS");
+console.log("[HC021E] three early Surface memory traces PASS");
+console.log("[HC021E] HC021D mechanical combination retained PASS");
+console.log("[HC021E] no new gameplay/ability authority PASS");

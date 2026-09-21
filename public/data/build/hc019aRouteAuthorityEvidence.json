@@ -1,0 +1,412 @@
+{
+  "runtime": [
+    {
+      "line": 3,
+      "context": "import * as THREE from \"three\";\nimport { SystemRegistry } from \"./SystemRegistry.js\";\nimport { FirstSliceTransitionCoordinator } from \"./FirstSliceTransitionCoordinator.js\";\nimport { RuntimeStateLedgerSystem } from \"./RuntimeStateLedgerSystem.js\";\nimport { LocalCellBoundaryMorphSystem } from \"../morph/LocalCellBoundaryMorphSystem.js\";"
+    },
+    {
+      "line": 15,
+      "context": "import { CoreEmbodimentSystem } from \"../player/CoreEmbodimentSystem.js\";\nimport { CoreVerbPhysicalizationSystem } from \"../player/CoreVerbPhysicalizationSystem.js\";\nimport { AmbientMaterialInteractionSystem } from \"../world/AmbientMaterialInteractionSystem.js\";\nimport { InteractionCompositionSystem } from \"../presentation/InteractionCompositionSystem.js\";\nimport { CoreGrowthSystem } from \"../player/CoreGrowthSystem.js\";"
+    },
+    {
+      "line": 16,
+      "context": "import { CoreVerbPhysicalizationSystem } from \"../player/CoreVerbPhysicalizationSystem.js\";\nimport { AmbientMaterialInteractionSystem } from \"../world/AmbientMaterialInteractionSystem.js\";\nimport { InteractionCompositionSystem } from \"../presentation/InteractionCompositionSystem.js\";\nimport { CoreGrowthSystem } from \"../player/CoreGrowthSystem.js\";\nimport { PlaceholderValidator } from \"../visual/PlaceholderValidator.js\";"
+    },
+    {
+      "line": 32,
+      "context": "import { MorphCompletionSystem } from \"../morph/MorphCompletionSystem.js\";\nimport { ScarFlowArrivalSystem } from \"../morph/ScarFlowArrivalSystem.js\";\nimport { ScarFlowInteractionSystem } from \"../morph/ScarFlowInteractionSystem.js\";\nimport { GuideThresholdGameplaySystem } from \"../morph/GuideThresholdGameplaySystem.js\";\nimport { GuideThresholdLayeredInteractionSystem } from \"../morph/GuideThresholdLayeredInteractionSystem.js\";"
+    },
+    {
+      "line": 34,
+      "context": "import { ScarFlowInteractionSystem } from \"../morph/ScarFlowInteractionSystem.js\";\nimport { GuideThresholdGameplaySystem } from \"../morph/GuideThresholdGameplaySystem.js\";\nimport { GuideThresholdLayeredInteractionSystem } from \"../morph/GuideThresholdLayeredInteractionSystem.js\";\nimport { SecondLocalCellMorphSystem } from \"../morph/SecondLocalCellMorphSystem.js\";\nimport { CameraReadabilitySystem } from \"../camera/CameraReadabilitySystem.js\";"
+    },
+    {
+      "line": 41,
+      "context": "import { GuidePromptSystem } from \"../guide/GuidePromptSystem.js\";\nimport { OpeningPacingSystem } from \"../opening/OpeningPacingSystem.js\";\nimport { SurfaceWakeLayeredInteractionSystem } from \"../opening/SurfaceWakeLayeredInteractionSystem.js\";\nimport { SurfaceWakeGameplaySystem } from \"../opening/SurfaceWakeGameplaySystem.js\";\nimport { SurfaceWakeEcologicalCausalitySystem } from \"../opening/SurfaceWakeEcologicalCausalitySystem.js\";"
+    },
+    {
+      "line": 49,
+      "context": "import { RegionRegistry } from \"../world/RegionRegistry.js\";\nimport { GateRegistry } from \"../world/GateRegistry.js\";\nimport { ObjectiveRegistry } from \"../world/ObjectiveRegistry.js\";\nimport { CameraProfileRegistry } from \"../world/CameraProfileRegistry.js\";\nimport { VisualLanguageRegistry } from \"../world/VisualLanguageRegistry.js\";"
+    },
+    {
+      "line": 53,
+      "context": "import { VisualLanguageRegistry } from \"../world/VisualLanguageRegistry.js\";\nimport { ModeController } from \"../modes/ModeController.js\";\nimport { ObjectiveSystem } from \"../systems/ObjectiveSystem.js\";\nimport { HubChamberFoundationSystem } from \"../hub/HubChamberFoundationSystem.js\";\nimport { HubInvestigationGameplaySystem } from \"../hub/HubInvestigationGameplaySystem.js\";"
+    },
+    {
+      "line": 54,
+      "context": "import { ModeController } from \"../modes/ModeController.js\";\nimport { ObjectiveSystem } from \"../systems/ObjectiveSystem.js\";\nimport { HubChamberFoundationSystem } from \"../hub/HubChamberFoundationSystem.js\";\nimport { HubInvestigationGameplaySystem } from \"../hub/HubInvestigationGameplaySystem.js\";\nimport { FirstSliceCohesionSystem } from \"./FirstSliceCohesionSystem.js\";"
+    },
+    {
+      "line": 55,
+      "context": "import { ObjectiveSystem } from \"../systems/ObjectiveSystem.js\";\nimport { HubChamberFoundationSystem } from \"../hub/HubChamberFoundationSystem.js\";\nimport { HubInvestigationGameplaySystem } from \"../hub/HubInvestigationGameplaySystem.js\";\nimport { FirstSliceCohesionSystem } from \"./FirstSliceCohesionSystem.js\";\nimport { GraveMemoryRouteSystem } from \"../routes/GraveMemoryRouteSystem.js\";"
+    },
+    {
+      "line": 57,
+      "context": "import { HubInvestigationGameplaySystem } from \"../hub/HubInvestigationGameplaySystem.js\";\nimport { FirstSliceCohesionSystem } from \"./FirstSliceCohesionSystem.js\";\nimport { GraveMemoryRouteSystem } from \"../routes/GraveMemoryRouteSystem.js\";\nimport { Act1RouteContractSystem } from \"../routes/Act1RouteContractSystem.js\";\nimport { VascularRhythmRouteSystem } from \"../routes/VascularRhythmRouteSystem.js\";"
+    },
+    {
+      "line": 58,
+      "context": "import { FirstSliceCohesionSystem } from \"./FirstSliceCohesionSystem.js\";\nimport { GraveMemoryRouteSystem } from \"../routes/GraveMemoryRouteSystem.js\";\nimport { Act1RouteContractSystem } from \"../routes/Act1RouteContractSystem.js\";\nimport { VascularRhythmRouteSystem } from \"../routes/VascularRhythmRouteSystem.js\";\nimport { SiltPressureRouteSystem } from \"../routes/SiltPressureRouteSystem.js\";"
+    },
+    {
+      "line": 59,
+      "context": "import { GraveMemoryRouteSystem } from \"../routes/GraveMemoryRouteSystem.js\";\nimport { Act1RouteContractSystem } from \"../routes/Act1RouteContractSystem.js\";\nimport { VascularRhythmRouteSystem } from \"../routes/VascularRhythmRouteSystem.js\";\nimport { SiltPressureRouteSystem } from \"../routes/SiltPressureRouteSystem.js\";\nimport { CombThresholdFoundationSystem } from \"../thresholds/CombThresholdFoundationSystem.js\";"
+    },
+    {
+      "line": 60,
+      "context": "import { Act1RouteContractSystem } from \"../routes/Act1RouteContractSystem.js\";\nimport { VascularRhythmRouteSystem } from \"../routes/VascularRhythmRouteSystem.js\";\nimport { SiltPressureRouteSystem } from \"../routes/SiltPressureRouteSystem.js\";\nimport { CombThresholdFoundationSystem } from \"../thresholds/CombThresholdFoundationSystem.js\";\nimport { CombThresholdPlayableSystem } from \"../thresholds/CombThresholdPlayableSystem.js\";"
+    },
+    {
+      "line": 97,
+      "context": "    this.morphCompletionSystem = null;\n    this.scarFlowArrivalSystem = null;\n    this.scarFlowInteractionSystem = null;\n    this.guideThresholdGameplaySystem = null;\n    this.guideThresholdLayeredInteractionSystem = null;"
+    },
+    {
+      "line": 99,
+      "context": "    this.scarFlowInteractionSystem = null;\n    this.guideThresholdGameplaySystem = null;\n    this.guideThresholdLayeredInteractionSystem = null;\n    this.secondLocalCellMorphSystem = null;\n    this.debugDisplaySystem = null;"
+    },
+    {
+      "line": 107,
+      "context": "    this.guidePromptSystem = null;\n    this.openingPacingSystem = null;\n    this.surfaceWakeLayeredInteractionSystem = null;\n    this.surfaceWakeGameplaySystem = null;\n    this.surfaceWakeEcologicalCausalitySystem = null;"
+    },
+    {
+      "line": 115,
+      "context": "    this.regionRegistry = null;\n    this.gateRegistry = null;\n    this.objectiveRegistry = null;\n    this.cameraProfileRegistry = null;\n    this.visualLanguageRegistry = null;"
+    },
+    {
+      "line": 119,
+      "context": "    this.visualLanguageRegistry = null;\n    this.modeController = null;\n    this.objectiveSystem = null;\n    this.hubChamberFoundationSystem = null;\n    this.hubInvestigationGameplaySystem = null;"
+    },
+    {
+      "line": 120,
+      "context": "    this.modeController = null;\n    this.objectiveSystem = null;\n    this.hubChamberFoundationSystem = null;\n    this.hubInvestigationGameplaySystem = null;\n    this.firstSliceCohesionSystem = null;"
+    }
+  ],
+  "boundary": [
+    {
+      "line": 10,
+      "context": "    this.stateById = new Map(recipes.map((recipe) => [recipe.id, {\n      active: false,\n      completed: false,\n      progress: 0,\n      startFrame: -1,"
+    },
+    {
+      "line": 13,
+      "context": "      progress: 0,\n      startFrame: -1,\n      readyAge: 0,\n      returnTriggerArmed: false\n    }]));"
+    },
+    {
+      "line": 14,
+      "context": "      startFrame: -1,\n      readyAge: 0,\n      returnTriggerArmed: false\n    }]));\n    this.activeRecipeId = null;"
+    },
+    {
+      "line": 18,
+      "context": "    this.activeRecipeId = null;\n    this.lastPulseEventId = -1;\n    this.lastInteractEventId = -1;\n  }\n"
+    },
+    {
+      "line": 41,
+      "context": "      this.publishAggregate(frameState);\n      this.publishCompatibilityReadModel(frameState);\n      return;\n    }\n"
+    },
+    {
+      "line": 46,
+      "context": "    // Only evaluate recipes whose source cell is currently active.\n    for (const recipe of this.recipes) {\n      if (recipe.sourceCellId !== frameState.activeCellId) continue;\n      const state = this.stateById.get(recipe.id);\n      if (state.completed) continue;"
+    },
+    {
+      "line": 48,
+      "context": "      if (recipe.sourceCellId !== frameState.activeCellId) continue;\n      const state = this.stateById.get(recipe.id);\n      if (state.completed) continue;\n\n      const readiness = this.evaluateReadiness(recipe, frameState);"
+    },
+    {
+      "line": 51,
+      "context": "\n      const readiness = this.evaluateReadiness(recipe, frameState);\n      const guardedReturn = recipe.direction === \"return\" && recipe.trigger === \"interact\";\n\n      if (readiness.ready) {"
+    },
+    {
+      "line": 53,
+      "context": "      const guardedReturn = recipe.direction === \"return\" && recipe.trigger === \"interact\";\n\n      if (readiness.ready) {\n        state.readyAge = (state.readyAge ?? 0) + dt;\n        if (!guardedReturn) {"
+    },
+    {
+      "line": 54,
+      "context": "\n      if (readiness.ready) {\n        state.readyAge = (state.readyAge ?? 0) + dt;\n        if (!guardedReturn) {\n          state.returnTriggerArmed = true;"
+    },
+    {
+      "line": 55,
+      "context": "      if (readiness.ready) {\n        state.readyAge = (state.readyAge ?? 0) + dt;\n        if (!guardedReturn) {\n          state.returnTriggerArmed = true;\n        } else if ("
+    },
+    {
+      "line": 56,
+      "context": "        state.readyAge = (state.readyAge ?? 0) + dt;\n        if (!guardedReturn) {\n          state.returnTriggerArmed = true;\n        } else if (\n          state.readyAge >= 0.38"
+    },
+    {
+      "line": 58,
+      "context": "          state.returnTriggerArmed = true;\n        } else if (\n          state.readyAge >= 0.38\n          && !Boolean(frameState.input?.interactPressed)\n        ) {"
+    },
+    {
+      "line": 59,
+      "context": "        } else if (\n          state.readyAge >= 0.38\n          && !Boolean(frameState.input?.interactPressed)\n        ) {\n          // HC018E HOTFIX1: a return fold must first become visibly ready,"
+    },
+    {
+      "line": 61,
+      "context": "          && !Boolean(frameState.input?.interactPressed)\n        ) {\n          // HC018E HOTFIX1: a return fold must first become visibly ready,\n          // then see an interact-release frame before a new A/E press can leave\n          // the route. This prevents an interaction press at the route endpoint"
+    },
+    {
+      "line": 62,
+      "context": "        ) {\n          // HC018E HOTFIX1: a return fold must first become visibly ready,\n          // then see an interact-release frame before a new A/E press can leave\n          // the route. This prevents an interaction press at the route endpoint\n          // from also becoming an accidental hub return."
+    },
+    {
+      "line": 63,
+      "context": "          // HC018E HOTFIX1: a return fold must first become visibly ready,\n          // then see an interact-release frame before a new A/E press can leave\n          // the route. This prevents an interaction press at the route endpoint\n          // from also becoming an accidental hub return.\n          state.returnTriggerArmed = true;"
+    },
+    {
+      "line": 64,
+      "context": "          // then see an interact-release frame before a new A/E press can leave\n          // the route. This prevents an interaction press at the route endpoint\n          // from also becoming an accidental hub return.\n          state.returnTriggerArmed = true;\n        }"
+    },
+    {
+      "line": 65,
+      "context": "          // the route. This prevents an interaction press at the route endpoint\n          // from also becoming an accidental hub return.\n          state.returnTriggerArmed = true;\n        }\n      } else {"
+    },
+    {
+      "line": 68,
+      "context": "        }\n      } else {\n        state.readyAge = 0;\n        state.returnTriggerArmed = false;\n      }"
+    }
+  ],
+  "grave": [
+    {
+      "line": 3,
+      "context": "import * as THREE from \"three\";\n\nconst ROUTE_CELL_ID = \"CELL_GRAVE_MEMORY_RESIDUE_BED_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst PREVIEW_RECIPE_ID = \"GRAVE_MEMORY_ROUTE_PREVIEW_HC010A\";"
+    },
+    {
+      "line": 4,
+      "context": "\nconst ROUTE_CELL_ID = \"CELL_GRAVE_MEMORY_RESIDUE_BED_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst PREVIEW_RECIPE_ID = \"GRAVE_MEMORY_ROUTE_PREVIEW_HC010A\";\nconst CIRCUIT_RECIPE_ID = \"GRAVE_MEMORY_SAFE_TRANSFER_CIRCUIT_HC010B\";"
+    },
+    {
+      "line": 5,
+      "context": "const ROUTE_CELL_ID = \"CELL_GRAVE_MEMORY_RESIDUE_BED_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst PREVIEW_RECIPE_ID = \"GRAVE_MEMORY_ROUTE_PREVIEW_HC010A\";\nconst CIRCUIT_RECIPE_ID = \"GRAVE_MEMORY_SAFE_TRANSFER_CIRCUIT_HC010B\";\nconst PROTECTED_IDS = new Set(["
+    },
+    {
+      "line": 14,
+      "context": "\n/**\n * HC-010B keeps the HC-010A first-route ownership boundary while turning its\n * four reads into one recoverable Substance -> State -> Verb -> Reaction ->\n * Risk -> Recovery -> Meaning circuit."
+    },
+    {
+      "line": 20,
+      "context": " * Historical Grave systems remain archived. This system reuses their authored\n * chemistry objects but owns one compact read-before-absorb preview, one\n * physical return fold, and all route presentation inside the new region mount.\n * ObjectiveSystem and LocalCellBoundaryMorphSystem remain the only objective/crossing owners.\n */"
+    },
+    {
+      "line": 21,
+      "context": " * chemistry objects but owns one compact read-before-absorb preview, one\n * physical return fold, and all route presentation inside the new region mount.\n * ObjectiveSystem and LocalCellBoundaryMorphSystem remain the only objective/crossing owners.\n */\nexport class GraveMemoryRouteSystem {"
+    },
+    {
+      "line": 23,
+      "context": " * ObjectiveSystem and LocalCellBoundaryMorphSystem remain the only objective/crossing owners.\n */\nexport class GraveMemoryRouteSystem {\n  constructor({\n    recipeDataSystem,"
+    },
+    {
+      "line": 31,
+      "context": "    frameState\n  }) {\n    if (!recipeDataSystem) throw new Error(\"[GraveMemoryRouteSystem] recipeDataSystem is required.\");\n    if (!chemObjectSystem) throw new Error(\"[GraveMemoryRouteSystem] chemObjectSystem is required.\");\n    if (!scene) throw new Error(\"[GraveMemoryRouteSystem] scene is required.\");"
+    },
+    {
+      "line": 32,
+      "context": "  }) {\n    if (!recipeDataSystem) throw new Error(\"[GraveMemoryRouteSystem] recipeDataSystem is required.\");\n    if (!chemObjectSystem) throw new Error(\"[GraveMemoryRouteSystem] chemObjectSystem is required.\");\n    if (!scene) throw new Error(\"[GraveMemoryRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[GraveMemoryRouteSystem] playerRoot is required.\");"
+    },
+    {
+      "line": 33,
+      "context": "    if (!recipeDataSystem) throw new Error(\"[GraveMemoryRouteSystem] recipeDataSystem is required.\");\n    if (!chemObjectSystem) throw new Error(\"[GraveMemoryRouteSystem] chemObjectSystem is required.\");\n    if (!scene) throw new Error(\"[GraveMemoryRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[GraveMemoryRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[GraveMemoryRouteSystem] frameState is required.\");"
+    },
+    {
+      "line": 34,
+      "context": "    if (!chemObjectSystem) throw new Error(\"[GraveMemoryRouteSystem] chemObjectSystem is required.\");\n    if (!scene) throw new Error(\"[GraveMemoryRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[GraveMemoryRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[GraveMemoryRouteSystem] frameState is required.\");\n"
+    },
+    {
+      "line": 35,
+      "context": "    if (!scene) throw new Error(\"[GraveMemoryRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[GraveMemoryRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[GraveMemoryRouteSystem] frameState is required.\");\n\n    this.recipeDataSystem = recipeDataSystem;"
+    },
+    {
+      "line": 46,
+      "context": "    this.cellRecipe = null;\n    this.root = null;\n    this.returnFold = null;\n    this.routeMotes = null;\n    this.memoryThreadRoot = null;"
+    },
+    {
+      "line": 47,
+      "context": "    this.root = null;\n    this.returnFold = null;\n    this.routeMotes = null;\n    this.memoryThreadRoot = null;\n    this.memoryThreadMotes = [];"
+    },
+    {
+      "line": 63,
+      "context": "    this.materials = [];\n    this.entryAnchor = new THREE.Vector3();\n    this.returnPosition = new THREE.Vector3();\n    this.tempVector = new THREE.Vector3();\n    this.threadStart = new THREE.Vector3();"
+    },
+    {
+      "line": 86,
+      "context": "    this.safeMemoryTransferComplete = false;\n    this.graveMemoryImprintCommitted = false;\n    this.returnFoldReady = false;\n    this.prematureAbsorbCount = 0;\n    this.protectedAbsorbAttemptCount = 0;"
+    },
+    {
+      "line": 93,
+      "context": "    this.residueRecoilRecovered = false;\n    this.lastRiskSource = \"none\";\n    this.completed = false;\n    this.memoryThreadRetained = false;\n    this.absorbResistedCount = 0;"
+    },
+    {
+      "line": 97,
+      "context": "    this.absorbResistedCount = 0;\n    this.lastPulseEventId = 0;\n    this.lastInteractEventId = 0;\n    this.absorbWasHeld = false;\n    this.lastInteraction = \"none\";"
+    },
+    {
+      "line": 99,
+      "context": "    this.lastInteractEventId = 0;\n    this.absorbWasHeld = false;\n    this.lastInteraction = \"none\";\n    this.warning = \"none\";\n    this.stage = \"route_inactive\";"
+    },
+    {
+      "line": 101,
+      "context": "    this.lastInteraction = \"none\";\n    this.warning = \"none\";\n    this.stage = \"route_inactive\";\n    this.consequencePhase = \"quiet_read\";\n    this.recoilVisualStrength = 0;"
+    }
+  ],
+  "vascular": [
+    {
+      "line": 3,
+      "context": "import * as THREE from \"three\";\n\nconst ROUTE_CELL_ID = \"CELL_VASCULAR_RHYTHM_ROUTE_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst RECIPE_ID = \"VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1\";"
+    },
+    {
+      "line": 4,
+      "context": "\nconst ROUTE_CELL_ID = \"CELL_VASCULAR_RHYTHM_ROUTE_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst RECIPE_ID = \"VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1\";\n"
+    },
+    {
+      "line": 11,
+      "context": " * recovery contract. Locked cadence reads cannot be erased, extra Pulse input\n * after 3/3 is harmless, and one bounded Stabilize hold can always settle the\n * route. The system still never moves the player, changes activeCellId,\n * completes an objective, or crosses a gate directly.\n */"
+    },
+    {
+      "line": 12,
+      "context": " * after 3/3 is harmless, and one bounded Stabilize hold can always settle the\n * route. The system still never moves the player, changes activeCellId,\n * completes an objective, or crosses a gate directly.\n */\nexport class VascularRhythmRouteSystem {"
+    },
+    {
+      "line": 14,
+      "context": " * completes an objective, or crosses a gate directly.\n */\nexport class VascularRhythmRouteSystem {\n  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {\n    if (!recipeDataSystem) throw new Error(\"[VascularRhythmRouteSystem] recipeDataSystem is required.\");"
+    },
+    {
+      "line": 16,
+      "context": "export class VascularRhythmRouteSystem {\n  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {\n    if (!recipeDataSystem) throw new Error(\"[VascularRhythmRouteSystem] recipeDataSystem is required.\");\n    if (!scene) throw new Error(\"[VascularRhythmRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[VascularRhythmRouteSystem] playerRoot is required.\");"
+    },
+    {
+      "line": 17,
+      "context": "  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {\n    if (!recipeDataSystem) throw new Error(\"[VascularRhythmRouteSystem] recipeDataSystem is required.\");\n    if (!scene) throw new Error(\"[VascularRhythmRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[VascularRhythmRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[VascularRhythmRouteSystem] frameState is required.\");"
+    },
+    {
+      "line": 18,
+      "context": "    if (!recipeDataSystem) throw new Error(\"[VascularRhythmRouteSystem] recipeDataSystem is required.\");\n    if (!scene) throw new Error(\"[VascularRhythmRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[VascularRhythmRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[VascularRhythmRouteSystem] frameState is required.\");\n"
+    },
+    {
+      "line": 19,
+      "context": "    if (!scene) throw new Error(\"[VascularRhythmRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[VascularRhythmRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[VascularRhythmRouteSystem] frameState is required.\");\n\n    this.recipeDataSystem = recipeDataSystem;"
+    },
+    {
+      "line": 42,
+      "context": "    this.chargeLight = null;\n    this.chargeTrail = [];\n    this.returnFold = null;\n    this.returnFoldLobes = [];\n    this.materials = [];"
+    },
+    {
+      "line": 43,
+      "context": "    this.chargeTrail = [];\n    this.returnFold = null;\n    this.returnFoldLobes = [];\n    this.materials = [];\n"
+    },
+    {
+      "line": 47,
+      "context": "\n    this.entryAnchor = new THREE.Vector3();\n    this.returnPosition = new THREE.Vector3();\n    this.localPlayer = new THREE.Vector3();\n    this.previousPlayerPosition = new THREE.Vector3();"
+    },
+    {
+      "line": 65,
+      "context": "    this.elapsed = 0;\n    this.beatElapsed = 0;\n    this.returnElapsed = 0;\n    this.cadencePhase = 0;\n    this.chargeProgress = 0.04;"
+    },
+    {
+      "line": 89,
+      "context": "    this.stabilizationRange = 0;\n    this.postReadPulseIgnoredCount = 0;\n    this.completed = false;\n    this.returnFoldReady = false;\n    this.lastPulseEventId = 0;"
+    },
+    {
+      "line": 90,
+      "context": "    this.postReadPulseIgnoredCount = 0;\n    this.completed = false;\n    this.returnFoldReady = false;\n    this.lastPulseEventId = 0;\n    this.lastInteraction = \"none\";"
+    },
+    {
+      "line": 92,
+      "context": "    this.returnFoldReady = false;\n    this.lastPulseEventId = 0;\n    this.lastInteraction = \"none\";\n    this.warning = \"none\";\n    this.pulseFlashAge = 99;"
+    },
+    {
+      "line": 97,
+      "context": "\n    // HC018C: traversal-material response. These values never own cadence,\n    // completion, targeting, chemistry or route crossing truth.\n    this.traversalPulseWake = 0;\n    this.traversalAbsorbShear = 0;"
+    },
+    {
+      "line": 108,
+      "context": "\n  init() {\n    this.recipe = this.recipeDataSystem.data.vascularRhythmRouteCircuit;\n    if (this.recipe?.id !== RECIPE_ID) {\n      throw new Error(`[VascularRhythmRouteSystem] Missing ${RECIPE_ID}.`);"
+    },
+    {
+      "line": 110,
+      "context": "    this.recipe = this.recipeDataSystem.data.vascularRhythmRouteCircuit;\n    if (this.recipe?.id !== RECIPE_ID) {\n      throw new Error(`[VascularRhythmRouteSystem] Missing ${RECIPE_ID}.`);\n    }\n    this.pathPoints = (this.recipe.anatomy?.pathPoints ?? [])"
+    },
+    {
+      "line": 115,
+      "context": "      .map((point) => new THREE.Vector3().fromArray(point));\n    if (this.pathPoints.length < 5) {\n      throw new Error(\"[VascularRhythmRouteSystem] Vascular path requires at least five authored points.\");\n    }\n    this.buildPathMetrics();"
+    }
+  ],
+  "silt": [
+    {
+      "line": 3,
+      "context": "import * as THREE from \"three\";\n\nconst ROUTE_CELL_ID = \"CELL_SILT_PRESSURE_ROUTE_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst RECIPE_ID = \"SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A\";"
+    },
+    {
+      "line": 4,
+      "context": "\nconst ROUTE_CELL_ID = \"CELL_SILT_PRESSURE_ROUTE_001\";\nconst HUB_CELL_ID = \"CELL_SIGNAL_CHORUS_NERVE_001\";\nconst RECIPE_ID = \"SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A\";\n"
+    },
+    {
+      "line": 8,
+      "context": "\n/**\n * HC-012A owns Silt Pressure gameplay and presentation while the route is\n * mounted. The route asks the existing verbs to do distinct work: Pulse reads\n * density, Stabilize braces/reopens compressed anatomy, and Absorb must select"
+    },
+    {
+      "line": 9,
+      "context": "/**\n * HC-012A owns Silt Pressure gameplay and presentation while the route is\n * mounted. The route asks the existing verbs to do distinct work: Pulse reads\n * density, Stabilize braces/reopens compressed anatomy, and Absorb must select\n * porous nourishment rather than packed residue. It never translates the"
+    },
+    {
+      "line": 12,
+      "context": " * density, Stabilize braces/reopens compressed anatomy, and Absorb must select\n * porous nourishment rather than packed residue. It never translates the\n * player or mutates objective, gate, active-cell, or route-history truth.\n */\nexport class SiltPressureRouteSystem {"
+    },
+    {
+      "line": 14,
+      "context": " * player or mutates objective, gate, active-cell, or route-history truth.\n */\nexport class SiltPressureRouteSystem {\n  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {\n    if (!recipeDataSystem) throw new Error(\"[SiltPressureRouteSystem] recipeDataSystem is required.\");"
+    },
+    {
+      "line": 16,
+      "context": "export class SiltPressureRouteSystem {\n  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {\n    if (!recipeDataSystem) throw new Error(\"[SiltPressureRouteSystem] recipeDataSystem is required.\");\n    if (!scene) throw new Error(\"[SiltPressureRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[SiltPressureRouteSystem] playerRoot is required.\");"
+    },
+    {
+      "line": 17,
+      "context": "  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {\n    if (!recipeDataSystem) throw new Error(\"[SiltPressureRouteSystem] recipeDataSystem is required.\");\n    if (!scene) throw new Error(\"[SiltPressureRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[SiltPressureRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[SiltPressureRouteSystem] frameState is required.\");"
+    },
+    {
+      "line": 18,
+      "context": "    if (!recipeDataSystem) throw new Error(\"[SiltPressureRouteSystem] recipeDataSystem is required.\");\n    if (!scene) throw new Error(\"[SiltPressureRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[SiltPressureRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[SiltPressureRouteSystem] frameState is required.\");\n"
+    },
+    {
+      "line": 19,
+      "context": "    if (!scene) throw new Error(\"[SiltPressureRouteSystem] scene is required.\");\n    if (!playerRoot) throw new Error(\"[SiltPressureRouteSystem] playerRoot is required.\");\n    if (!frameState) throw new Error(\"[SiltPressureRouteSystem] frameState is required.\");\n\n    this.recipeDataSystem = recipeDataSystem;"
+    },
+    {
+      "line": 43,
+      "context": "    this.densePackets = [];\n    this.deepOrgan = null;\n    this.returnFold = null;\n    this.returnFoldLobes = [];\n    this.materials = [];"
+    },
+    {
+      "line": 44,
+      "context": "    this.deepOrgan = null;\n    this.returnFold = null;\n    this.returnFoldLobes = [];\n    this.materials = [];\n"
+    },
+    {
+      "line": 48,
+      "context": "\n    this.entryAnchor = new THREE.Vector3();\n    this.returnPosition = new THREE.Vector3();\n    this.localPlayer = new THREE.Vector3();\n    this.closestPoint = new THREE.Vector3();"
+    },
+    {
+      "line": 84,
+      "context": "    this.safePacketDistance = Number.POSITIVE_INFINITY;\n    this.nearestDenseDistance = Number.POSITIVE_INFINITY;\n    this.completed = false;\n    this.returnFoldReady = false;\n    this.lastPulseEventId = -1;"
+    },
+    {
+      "line": 85,
+      "context": "    this.nearestDenseDistance = Number.POSITIVE_INFINITY;\n    this.completed = false;\n    this.returnFoldReady = false;\n    this.lastPulseEventId = -1;\n    this.lastInteraction = \"none\";"
+    },
+    {
+      "line": 87,
+      "context": "    this.returnFoldReady = false;\n    this.lastPulseEventId = -1;\n    this.lastInteraction = \"none\";\n    this.warning = \"none\";\n    this.pulseFlashAge = 99;"
+    },
+    {
+      "line": 97,
+      "context": "\n  init() {\n    this.recipe = this.recipeDataSystem.data.siltPressureRouteCircuit;\n    if (this.recipe?.id !== RECIPE_ID) {\n      throw new Error(`[SiltPressureRouteSystem] Missing ${RECIPE_ID}.`);"
+    },
+    {
+      "line": 99,
+      "context": "    this.recipe = this.recipeDataSystem.data.siltPressureRouteCircuit;\n    if (this.recipe?.id !== RECIPE_ID) {\n      throw new Error(`[SiltPressureRouteSystem] Missing ${RECIPE_ID}.`);\n    }\n    this.pathPoints = (this.recipe.anatomy?.pathPoints ?? [])"
+    },
+    {
+      "line": 104,
+      "context": "      .map((point) => new THREE.Vector3().fromArray(point));\n    if (this.pathPoints.length < 5) {\n      throw new Error(\"[SiltPressureRouteSystem] Silt path requires at least five authored points.\");\n    }\n    this.buildPathMetrics();"
+    },
+    {
+      "line": 117,
+      "context": "    this.setVisible(false);\n    this.publish(frameState, false);\n    return {\n      status: \"silt_pressure_route_prepared_hidden\",\n      rootCount: 1,"
+    }
+  ]
+}

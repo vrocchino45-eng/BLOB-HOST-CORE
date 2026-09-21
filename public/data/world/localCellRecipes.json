@@ -1,0 +1,1005 @@
+[
+  {
+    "id": "CELL_MEMBRANE_NURSERY_001",
+    "displayName": "Membrane Nursery Pocket",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "membrane_layer",
+      "lifecycleFunction": "seed_protection",
+      "localContamination": [
+        "early_scar_intrusion"
+      ],
+      "perceptionBand": "micro_awake"
+    },
+    "chemistryField": {
+      "form": 0.72,
+      "flux": 0.41,
+      "scar": 0.22,
+      "residue": 0.08,
+      "bloom": 0.04,
+      "signal": 0.18,
+      "seed": 0.64,
+      "inorganic": 0.0,
+      "confluence": 0.0
+    },
+    "physicalFeel": {
+      "viscosity": 0.68,
+      "pressure": 0.24,
+      "flowVector": [
+        0.12,
+        0.02,
+        -0.18
+      ],
+      "gravityMode": "soft_local_anchor",
+      "boundaryBehavior": "elastic_membrane_recoil"
+    },
+    "contents": {
+      "chemObjects": [
+        "dormant_seed_nutrient_001",
+        "scar_contamination_plate_001",
+        "flux_current_ribbon_001",
+        "signal_vapor_thread_001",
+        "surface_wake_membrane_mote_001",
+        "surface_wake_membrane_mote_002",
+        "surface_wake_membrane_mote_003"
+      ],
+      "entities": [
+        "nursery_membrane_tender_001",
+        "membrane_watcher_001"
+      ],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "membrane_pocket_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "nursery_soft_pressure_fog_v01"
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "fragile",
+        "protected",
+        "slightly_unsafe",
+        "alive",
+        "microscopic_inside_something_vast"
+      ],
+      "teaches": [
+        "movement_in_viscosity",
+        "safe_absorb",
+        "pulse_response",
+        "scar_resistance",
+        "host_reactivity"
+      ],
+      "shouldNotFeelLike": [
+        "empty_test_room",
+        "generic_tutorial",
+        "flat_arena",
+        "spinning_shape_demo"
+      ]
+    }
+  },
+  {
+    "id": "CELL_SCAR_FLOW_FOLD_001",
+    "displayName": "Scar Flow Fold",
+    "status": "runtime_active_prototype",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "wounded_membrane_crossing_vascular_fold",
+      "sourceCell": "CELL_MEMBRANE_NURSERY_001",
+      "lifecycleFunction": "old_wound_becoming_pressure_route",
+      "localContamination": [
+        "scar_memory",
+        "residue_pressure",
+        "vascular_leak"
+      ],
+      "perceptionBand": "micro_awake_pressure_reading"
+    },
+    "chemistryField": {
+      "form": 0.54,
+      "flux": 0.58,
+      "scar": 0.48,
+      "residue": 0.24,
+      "bloom": 0.06,
+      "signal": 0.26,
+      "seed": 0.42,
+      "inorganic": 0.02,
+      "confluence": 0.0
+    },
+    "physicalFeel": {
+      "viscosity": 0.52,
+      "pressure": 0.58,
+      "flowVector": [
+        0.34,
+        0.04,
+        -0.42
+      ],
+      "gravityMode": "pressure_fold_anchor",
+      "boundaryBehavior": "scar_membrane_recoil_with_current_pull",
+      "cameraBias": "follow_pressure_crease_not_door"
+    },
+    "contents": {
+      "chemObjects": [
+        "scar_memory_fleck_001",
+        "scar_flow_clot_001",
+        "resonant_path_thread_001",
+        "pressure_fold_current_001",
+        "guide_threshold_flux_mote_001",
+        "guide_threshold_memory_mote_001"
+      ],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "scar_flow_fold_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "scar_pressure_haze_v01"
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "more_directional",
+        "more_pressured",
+        "less_safe",
+        "old_wound_becoming_route",
+        "still_living"
+      ],
+      "teaches": [
+        "scar_can_redirect_flow",
+        "pulse_reveals_pressure_direction",
+        "signal_thread_can_read_path",
+        "current_can_carry_without_gate"
+      ],
+      "shouldNotFeelLike": [
+        "separate_room",
+        "door_transition",
+        "combat_arena",
+        "generic_corridor"
+      ]
+    },
+    "lockCriteria": [
+      "destination_cell_is_recipe_derived",
+      "no_gate_prompt_exists",
+      "chemistry_blend_targets_are_defined",
+      "scar_flow_objects_have_visual_recipes",
+      "player_read_is_pressure_route_not_exit"
+    ]
+  },
+  {
+    "id": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "displayName": "Signal Chorus Nerve",
+    "status": "runtime_active_prototype",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "signal_choir_tissue",
+      "sourceCell": "CELL_SCAR_FLOW_FOLD_001",
+      "lifecycleFunction": "buried_signal_becoming_readable_after_scar_pressure_relief",
+      "localContamination": [
+        "residue_echo",
+        "soft_scar_memory",
+        "unstable_listening_pressure"
+      ],
+      "perceptionBand": "micro_awake_resonance_reading"
+    },
+    "chemistryField": {
+      "form": 0.47,
+      "flux": 0.38,
+      "scar": 0.18,
+      "residue": 0.28,
+      "bloom": 0.05,
+      "signal": 0.74,
+      "seed": 0.34,
+      "inorganic": 0.0,
+      "confluence": 0.06
+    },
+    "physicalFeel": {
+      "viscosity": 0.48,
+      "pressure": 0.18,
+      "flowVector": [
+        0.04,
+        0.08,
+        -0.12
+      ],
+      "gravityMode": "rhythmic_signal_anchor",
+      "boundaryBehavior": "soft_wave_recoil"
+    },
+    "contents": {
+      "chemObjects": [
+        "choir_resonance_node_001",
+        "listening_pore_membrane_001",
+        "harmonic_wave_thread_001",
+        "seed_signal_bridge_001"
+      ],
+      "entities": [
+        "membrane_watcher_001"
+      ],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "signal_chorus_nerve_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "signal_chorus_soft_haze_v01"
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "lighter_than_scar_flow",
+        "listening",
+        "rhythmic",
+        "answering",
+        "inside_a_living_nerve_thread"
+      ],
+      "teaches": [
+        "pulse_timing",
+        "signal_synchrony",
+        "listening_before_absorbing",
+        "guide_response",
+        "entity_orbiter_resonance"
+      ],
+      "shouldNotFeelLike": [
+        "new_room_gate",
+        "teleport_reward",
+        "flat_arena",
+        "combat_wave"
+      ]
+    }
+  },
+  {
+    "id": "CELL_BLOOM_RESIDUE_FORK_001",
+    "displayName": "Bloom Residue Fork",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "bloom_organs + residue_beds + signal_choir_tissue",
+      "lifecycleFunction": "choice_pressure_after_listening",
+      "localContamination": [
+        "old_core_residue",
+        "overgrowth_pressure"
+      ],
+      "perceptionBand": "choice_fork_awake"
+    },
+    "chemistryField": {
+      "form": 0.34,
+      "flux": 0.36,
+      "scar": 0.3,
+      "residue": 0.58,
+      "bloom": 0.62,
+      "signal": 0.44,
+      "seed": 0.52,
+      "inorganic": 0.0,
+      "confluence": 0.05
+    },
+    "physicalFeel": {
+      "viscosity": 0.52,
+      "pressure": 0.46,
+      "flowVector": [
+        0.08,
+        -0.04,
+        -0.12
+      ],
+      "gravityMode": "forked_soft_pull",
+      "boundaryBehavior": "living_choice_membrane"
+    },
+    "contents": {
+      "chemObjects": [
+        "bloom_spore_lantern_001",
+        "residue_memory_silt_001",
+        "seed_choice_braid_001",
+        "overgrowth_warning_tendril_001"
+      ],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "bloom_residue_fork_surface_v01",
+      "atmosphereRecipe": "bloom_residue_choice_haze_v01"
+    },
+    "gameplayLoop": {
+      "status": "runtime_active_prototype",
+      "purpose": "first no-menu fork where growth and memory become two readable paths",
+      "verbs": [
+        "pulse",
+        "proximity",
+        "absorb_later"
+      ],
+      "forbidden": [
+        "binary_menu_choice",
+        "door_prompt",
+        "teleport_exit"
+      ]
+    }
+  },
+  {
+    "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "displayName": "Grave Memory Residue Bed",
+    "status": "runtime_grave_exit_readiness_prototype_active_exit_deferred",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "residue_beds + scar_fields + marrow_interior + signal_choir_tissue",
+      "sourceRoute": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+      "sourcePlan": "HC004A_GRAVE_ROUTE_RUNTIME_PLANNING",
+      "lifecycleFunction": "old_becoming_memory_metabolized_without_looting",
+      "localContamination": [
+        "old_core_residue",
+        "protective_scar_lock",
+        "memory_silt",
+        "unready_seed_remnant"
+      ],
+      "perceptionBand": "micro_awake_memory_residue_reading"
+    },
+    "chemistryField": {
+      "form": 0.38,
+      "flux": 0.22,
+      "scar": 0.72,
+      "residue": 0.82,
+      "bloom": 0.12,
+      "signal": 0.36,
+      "seed": 0.44,
+      "inorganic": 0.08,
+      "confluence": 0.03
+    },
+    "physicalFeel": {
+      "viscosity": 0.64,
+      "pressure": 0.5,
+      "flowVector": [
+        0.02,
+        -0.06,
+        -0.1
+      ],
+      "gravityMode": "settling_memory_bed_anchor",
+      "boundaryBehavior": "scar_plate_recoil_without_gate_prompt",
+      "cameraBias": "low_reverent_memory_bed_read_not_exit"
+    },
+    "contents": {
+      "chemObjects": [
+        "old_core_husk_memory_001",
+        "residue_silt_cloud_001",
+        "scar_lock_plate_001",
+        "inheritance_seed_remnant_001"
+      ],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ],
+      "entityPlacements": [
+        {
+          "instanceId": "grave_memory_watcher_001",
+          "recipeId": "membrane_watcher_001",
+          "position": [
+            0.92,
+            0.44,
+            -3.1
+          ],
+          "scale": 0.74,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "residue_witness"
+        }
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "grave_memory_residue_bed_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "grave_memory_silt_haze_v01"
+    },
+    "gameplayLoop": {
+      "status": "runtime_active_minimal_read_before_absorb_loop_exit_readiness_prototype",
+      "purpose": "minimal read-before-absorb route pocket where stable Grave reading can make the scar lock exit-readable without opening a route yet",
+      "verbs": [
+        "pulse_read",
+        "proximity_read",
+        "hold_absorb_after_reading",
+        "safe_silt_trace_transfer",
+        "exit_readiness_planning_only",
+        "exit_readiness_readout_only",
+        "receive_seam_micro_exit_return",
+        "post_seam_readout_no_branch",
+        "post_seam_response",
+        "pulse_husk_after_return",
+        "reseal_scar_lock",
+        "warm_seed_remnant_without_opening"
+      ],
+      "forbidden": [
+        "binary_menu_choice",
+        "combat_arena",
+        "consuming_old_core_husk",
+        "dialogue_tree",
+        "door_prompt",
+        "loot_pile",
+        "new_morph_activation",
+        "new_route_branch",
+        "opening_inheritance_seed_remnant",
+        "quest_log",
+        "runtime_route_activation",
+        "teleport_exit",
+        "runtime_exit_activation",
+        "gate_prompt",
+        "branch_select_menu",
+        "stage_node_loader",
+        "moving_player_to_new_cell",
+        "player_relocation",
+        "exit_transition",
+        "opening_closed_inheritance_suture",
+        "seam_object_absorption",
+        "post_seam_branch_activation"
+      ]
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "quiet",
+        "reverent",
+        "unsafe_if_rushed",
+        "memory_rich",
+        "settling_rather_than_expanding"
+      ],
+      "teaches": [
+        "remains_are_not_generic_resources",
+        "pulse_can_read_before_absorb",
+        "scar_can_protect_memory_as_much_as_block_flow",
+        "residue_can_nourish_but_can_also_contaminate",
+        "the_wounded_nursery_host_contains_prior_becoming_attempts"
+      ],
+      "shouldNotFeelLike": [
+        "combat_room",
+        "loot_chest",
+        "generic_dark_zone",
+        "dialogue_tree",
+        "old_gate_room"
+      ]
+    },
+    "runtimeLock": {
+      "status": "not_runtime_active",
+      "mustNotBeReferencedBy": [
+        "morphPlans",
+        "secondMorphPlans",
+        "thirdMorphPlans",
+        "targetFocusRules",
+        "interactionLoops"
+      ],
+      "activationDeferredTo": "HC-004D_or_later_after_visual_support"
+    },
+    "lockCriteria": [
+      "recipe_is_authored",
+      "objects_have_visual_contracts",
+      "no_morph_points_here_yet",
+      "no_gate_prompt_exists",
+      "read_before_absorb_meaning_is_preserved",
+      "only_silt_trace_can_transfer_after_reading",
+      "exit_readiness_visible_without_route_activation"
+    ],
+    "runtimeActivation": {
+      "pass": "HC-004D",
+      "activationMode": "no_gate_morph_destination_only",
+      "sourceCell": "CELL_BLOOM_RESIDUE_FORK_001",
+      "morphPlan": "MORPH_BLOOM_RESIDUE_TO_GRAVE_MEMORY_001",
+      "interactionLoopStatus": "minimal_read_before_absorb_loop_stability_active_exit_readiness_prototype_HC004H",
+      "forbiddenRuntimeArchitecture": [
+        "no old gates",
+        "no doors",
+        "no teleports",
+        "no stage-node loaders",
+        "no branch select menu",
+        "no old chamber runtime"
+      ],
+      "exitReadinessStatus": "prototype_active_no_exit_activation_HC004H",
+      "nextPrototypeDeferredTo": "HC004Q_or_later_after_post_seam_playtest",
+      "seamMicroExitReturnStatus": "can_receive_HC004O_return_after_seam_first_read",
+      "postSeamResponseStatus": "active_after_HC004O_micro_exit_HC004P_no_branch",
+      "postSeamResponseSystem": "GraveBedPostSeamResponseSystem",
+      "postSeamResponseRecipe": "GRAVE_BED_POST_SEAM_RESPONSE_HC004P"
+    }
+  },
+  {
+    "id": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+    "displayName": "Grave Scar-Memory Seam",
+    "status": "runtime_arrival_and_first_read_loop_active",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "scar_fields + residue_beds + marrow_interior + signal_choir_tissue",
+      "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "sourceContinuityPlan": "GRAVE_ROUTE_CONTINUITY_PLANNING_HC004I",
+      "sourceRecipePack": "HC004J_GRAVE_SCAR_MEMORY_SEAM_RECIPE_PACK",
+      "lifecycleFunction": "stitch_old_memory_into_readable_seam_without_opening_it",
+      "localContamination": [
+        "protective_scar_suture",
+        "old_core_echo",
+        "settled_residue",
+        "closed_inheritance_pressure"
+      ],
+      "perceptionBand": "micro_awake_scar_memory_seam_reading"
+    },
+    "chemistryField": {
+      "form": 0.44,
+      "flux": 0.18,
+      "scar": 0.8,
+      "residue": 0.76,
+      "bloom": 0.06,
+      "signal": 0.42,
+      "seed": 0.34,
+      "inorganic": 0.1,
+      "confluence": 0.04
+    },
+    "physicalFeel": {
+      "viscosity": 0.68,
+      "pressure": 0.62,
+      "flowVector": [
+        0.01,
+        -0.03,
+        -0.08
+      ],
+      "gravityMode": "scar_suture_anchor",
+      "boundaryBehavior": "closed_memory_seam_recoil_without_exit_prompt",
+      "cameraBias": "close_low_seam_read_not_corridor"
+    },
+    "contents": {
+      "chemObjects": [
+        "scar_memory_seam_thread_001",
+        "residue_stitch_lattice_001",
+        "echo_husk_imprint_001",
+        "closed_inheritance_suture_001"
+      ],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "grave_scar_memory_seam_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "grave_scar_memory_seam_haze_v01"
+    },
+    "gameplayLoop": {
+      "status": "runtime_arrival_and_first_read_loop_active",
+      "purpose": "runtime arrival plus first playable seam read loop: target, pulse, and read the closed seam without consuming objects or opening an exit",
+      "verbs": [
+        "pulse",
+        "listen",
+        "trace",
+        "read",
+        "respect_closed_suture",
+        "absorb_recoil_blocked",
+        "no_exit",
+        "post_read_micro_exit",
+        "pulse_closed_suture_fold_back",
+        "return_to_grave_bed_no_branch"
+      ],
+      "forbidden": [
+        "runtime_exit_activation",
+        "player_relocation_beyond_arrival",
+        "new_route_branch",
+        "new_morph_activation",
+        "gate_prompt",
+        "door_prompt",
+        "teleport",
+        "branch_select_menu",
+        "combat",
+        "dialogue_tree",
+        "quest_log",
+        "teleport_marker",
+        "old_chamber_runtime",
+        "opening_inheritance_seed",
+        "opening_closed_inheritance_suture",
+        "consuming_old_core_husk",
+        "seam_object_absorption"
+      ]
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "deeper",
+        "stitched",
+        "reverent",
+        "closed_but_meaningful",
+        "not_a_door"
+      ],
+      "teaches": [
+        "memory_can_be_stitched_without_being_consumed",
+        "scar_can_preserve_continuity",
+        "inheritance_remains_closed_until_ready"
+      ],
+      "shouldNotFeelLike": [
+        "new_level_transition",
+        "loot_room",
+        "boss_room",
+        "teleport_corridor",
+        "menu_branch"
+      ]
+    },
+    "runtimeActivation": {
+      "status": "runtime_arrival_and_first_read_loop_active_HC004N",
+      "arrivalStatus": "active_no_gate_continuity_pull_HC004M",
+      "transitionStatus": "arrival_prototype_active_without_legacy_exit_architecture",
+      "playerRelocation": "smooth_runtime_arrival_pull_only",
+      "targetFocusStatus": "active_seam_read_targets_only_HC004N",
+      "interactionLoopStatus": "active_first_read_loop_HC004N",
+      "sourceRuntimePlan": "GRAVE_SCAR_MEMORY_SEAM_FIRST_READ_LOOP_HC004N",
+      "forbidden": [
+        "gate",
+        "door",
+        "teleport",
+        "branch_menu",
+        "old_chamber_runtime",
+        "stage_node_loader",
+        "combat",
+        "dialogue_tree",
+        "quest_log",
+        "runtime_exit_activation",
+        "new_morph_plan",
+        "seam_object_absorption",
+        "opening_closed_inheritance_suture"
+      ],
+      "microExitStatus": "active_no_gate_fold_back_to_grave_bed_HC004O",
+      "postSeamResponseDestination": "CELL_GRAVE_MEMORY_RESIDUE_BED_001 receives HC004P post-seam response after HC004O fold-back"
+    },
+    "lockCriteria": [
+      "seam_arrival_from_HC004M_still_works_without_gate",
+      "seam_first_read_loop_targets_all_four_seam_objects",
+      "pulse_and_proximity_advance_reading_without_absorb_consumption",
+      "closed_inheritance_suture_remains_closed",
+      "no_exit_route_or_new_morph_is_activated",
+      "HC004O_micro_exit_returns_to_grave_bed_without_opening_suture_or_branch"
+    ]
+  },
+  {
+    "id": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "displayName": "Vascular Rhythm Route",
+    "status": "runtime_playable_HC011A",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "vascular_fold + signal_choir_tissue",
+      "sourceCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "lifecycleFunction": "circulation rhythm interpreted through existing Core verbs",
+      "localContamination": [
+        "scar_memory",
+        "uneven_charge_cadence"
+      ],
+      "perceptionBand": "micro_awake_systemic_rhythm"
+    },
+    "chemistryField": {
+      "form": 0.42,
+      "flux": 0.7,
+      "scar": 0.24,
+      "residue": 0.14,
+      "bloom": 0.08,
+      "signal": 0.62,
+      "seed": 0.28,
+      "inorganic": 0.02,
+      "confluence": 0.06
+    },
+    "physicalFeel": {
+      "viscosity": 0.38,
+      "pressure": 0.68,
+      "flowVector": [
+        0.42,
+        0.08,
+        -0.3
+      ],
+      "gravityMode": "vascular_current_anchor",
+      "boundaryBehavior": "vascular_contract_current_recoil"
+    },
+    "contents": {
+      "chemObjects": [],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ],
+      "entityPlacements": [
+        {
+          "instanceId": "vascular_relay_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            0.08,
+            0.16,
+            -2.72
+          ],
+          "scale": 0.78,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "upstream_handoff"
+        },
+        {
+          "instanceId": "vascular_relay_mid_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            1.18,
+            -0.06,
+            -5.18
+          ],
+          "scale": 0.7,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "midstream_handoff"
+        },
+        {
+          "instanceId": "vascular_relay_downstream_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            -1.06,
+            0.31,
+            -7.34
+          ],
+          "scale": 0.73,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "downstream_handoff"
+        }
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "scar_flow_fold_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "signal_chorus_soft_haze_v01"
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "circulating",
+        "timed",
+        "alive",
+        "systemic"
+      ],
+      "teaches": [
+        "movement_with_current_builds_coherence",
+        "pulse_reads_visible_living_cadence",
+        "stabilize_holds_and_recovers_contraction_pressure",
+        "desynchronization_is_recoverable"
+      ],
+      "shouldNotFeelLike": [
+        "empty playable crossing",
+        "teleport room",
+        "combat arena",
+        "ring timing minigame",
+        "trigger marker corridor"
+      ]
+    },
+    "runtimeContract": {
+      "pass": "HC-011A",
+      "foundationPass": "HC-010G",
+      "destinationMounted": true,
+      "gameplayReady": true,
+      "playerCrossable": true,
+      "returnFoldAuthored": true,
+      "returnRequiresObjective": "vascular_route_playable_circuit",
+      "gameplaySystem": "VascularRhythmRouteSystem"
+    }
+  },
+  {
+    "id": "CELL_SILT_PRESSURE_ROUTE_001",
+    "displayName": "Silt Pressure Living Route",
+    "status": "runtime_playable_silt_pressure_HC012A",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "compressed residue bed + structural scar ribs",
+      "sourceCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "lifecycleFunction": "pressure and appetite interpreted through existing Core verbs",
+      "localContamination": [
+        "dense_silt",
+        "protective_scar_pressure"
+      ],
+      "perceptionBand": "micro_awake_compression_reading"
+    },
+    "chemistryField": {
+      "form": 0.66,
+      "flux": 0.24,
+      "scar": 0.58,
+      "residue": 0.72,
+      "bloom": 0.1,
+      "signal": 0.26,
+      "seed": 0.34,
+      "inorganic": 0.08,
+      "confluence": 0.02
+    },
+    "physicalFeel": {
+      "viscosity": 0.78,
+      "pressure": 0.76,
+      "flowVector": [
+        0.08,
+        -0.12,
+        -0.16
+      ],
+      "gravityMode": "compressed_silt_anchor",
+      "boundaryBehavior": "silt_contract_compression_recoil"
+    },
+    "contents": {
+      "chemObjects": [],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ],
+      "entityPlacements": [
+        {
+          "instanceId": "silt_pressure_relay_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            -0.78,
+            -0.2,
+            -3.56
+          ],
+          "scale": 0.67,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "pressure_stranded_handoff"
+        }
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "grave_memory_residue_bed_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "grave_memory_silt_haze_v01"
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "compressed",
+        "heavy",
+        "shifting",
+        "recoverable"
+      ],
+      "teaches": [
+        "read pressure",
+        "brace compression",
+        "select appetite",
+        "recover from greed"
+      ],
+      "shouldNotFeelLike": [
+        "empty playable crossing",
+        "teleport room",
+        "combat arena",
+        "checklist corridor"
+      ]
+    },
+    "runtimeContract": {
+      "pass": "HC-012A",
+      "destinationMounted": true,
+      "gameplayReady": true,
+      "playerCrossable": true,
+      "returnFoldAuthored": true,
+      "returnRequiresObjective": "silt_route_playable_circuit",
+      "gameplaySystem": "SiltPressureRouteSystem"
+    }
+  },
+  {
+    "id": "CELL_COMB_THRESHOLD_FILTER_001",
+    "displayName": "Comb Threshold Living Filter",
+    "status": "runtime_foundation_active_HC013A",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "comb filter organ + signal choir tissue + retained route consequences",
+      "sourceCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "lifecycleFunction": "filter the combined Grave, Vascular, and Silt reading toward the first open field without collapsing their differences",
+      "localContamination": [
+        "grave_memory_trace",
+        "vascular_return_cadence",
+        "silt_pressure_adaptation"
+      ],
+      "perceptionBand": "micro_awake_ceremonial_filter_threshold"
+    },
+    "chemistryField": {
+      "form": 0.62,
+      "flux": 0.46,
+      "scar": 0.52,
+      "residue": 0.4,
+      "bloom": 0.14,
+      "signal": 0.66,
+      "seed": 0.28,
+      "inorganic": 0.05,
+      "confluence": 0.18
+    },
+    "physicalFeel": {
+      "viscosity": 0.48,
+      "pressure": 0.64,
+      "flowVector": [
+        0,
+        0,
+        -0.1
+      ],
+      "gravityMode": "comb_filter_entry_anchor",
+      "boundaryBehavior": "comb_filter_soft_recoil"
+    },
+    "contents": {
+      "chemObjects": [],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ],
+      "entityPlacements": [
+        {
+          "instanceId": "comb_filter_watcher_001",
+          "recipeId": "membrane_watcher_001",
+          "position": [
+            -1.26,
+            0.48,
+            -2.78
+          ],
+          "scale": 0.68,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "filter_witness"
+        },
+        {
+          "instanceId": "comb_filter_relay_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            1.34,
+            -0.14,
+            -3.72
+          ],
+          "scale": 0.66,
+          "coordinateSpace": "cell_entry_relative",
+          "distributionRole": "filter_handoff"
+        }
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "scar_flow_fold_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "signal_chorus_soft_haze_v01"
+    },
+    "runtime": {
+      "modeId": "comb_threshold_mode",
+      "systemIds": [
+        "combThresholdFoundationSystem"
+      ],
+      "entryGateId": "hub_to_comb_threshold",
+      "returnGateId": "comb_threshold_to_hub_chamber",
+      "apertureGateId": "comb_threshold_to_aperture_fields",
+      "apertureDestinationMounted": false,
+      "apertureCrossable": false
+    }
+  },
+  {
+    "id": "CELL_APERTURE_FIELDS_ARRIVAL_001",
+    "displayName": "Aperture Fields Arrival Shelf",
+    "status": "arrival_boundary_foundation_HC014A",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "aperture membrane shelf + distant ecology silhouettes",
+      "sourceCell": "CELL_COMB_THRESHOLD_FILTER_001",
+      "lifecycleFunction": "decompress the player from chamber-scale filtering into readable field-scale orientation before ecology systems mount",
+      "localContamination": [
+        "comb_memory_trace",
+        "vascular_cadence_trace",
+        "silt_pressure_trace"
+      ],
+      "perceptionBand": "micro_to_field_scale_opening"
+    },
+    "chemistryField": {
+      "form": 0.48,
+      "flux": 0.58,
+      "scar": 0.24,
+      "residue": 0.24,
+      "bloom": 0.22,
+      "signal": 0.62,
+      "seed": 0.34,
+      "inorganic": 0.05,
+      "confluence": 0.2
+    },
+    "physicalFeel": {
+      "viscosity": 0.3,
+      "pressure": 0.22,
+      "flowVector": [
+        0,
+        0,
+        -0.04
+      ],
+      "gravityMode": "field_arrival_free_3d",
+      "boundaryBehavior": "wide_soft_field_recoil"
+    },
+    "contents": {
+      "chemObjects": [],
+      "entities": [],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "scar_flow_fold_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "signal_chorus_soft_haze_v01"
+    },
+    "runtime": {
+      "modeId": "aperture_fields_arrival_mode",
+      "systemIds": [
+        "apertureFieldsArrivalSystem"
+      ],
+      "entryGateId": "comb_threshold_to_aperture_fields",
+      "returnGateId": "aperture_fields_to_comb_threshold",
+      "fullEcologyMounted": false,
+      "ecologyGameplayReady": false
+    }
+  }
+]

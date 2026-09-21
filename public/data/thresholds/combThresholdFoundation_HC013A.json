@@ -1,0 +1,151 @@
+{
+  "id": "COMB_THRESHOLD_FOUNDATION_HC013A",
+  "pass": "HC-013A",
+  "version": "1.0.0",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "regionId": "comb_threshold",
+  "runtimeCellId": "CELL_COMB_THRESHOLD_FILTER_001",
+  "purpose": "Author the living Comb threshold anatomy, bounded physical feel, reversible Hub entry, and a sealed unmounted Aperture-facing destination contract without introducing new verbs or opening Aperture Fields.",
+  "owners": {
+    "mode": "CombThresholdMode",
+    "presentation": "CombThresholdFoundationSystem",
+    "movement": "PlayerMovementController",
+    "crossing": "GateSystem",
+    "objective": "ObjectiveSystem",
+    "camera": "GameRuntimeCameraRig[camera_comb_threshold_filter]"
+  },
+  "activation": {
+    "revealSeconds": 1.45
+  },
+  "anatomy": {
+    "pathPoints": [
+      [
+        0,
+        0,
+        0.4
+      ],
+      [
+        0.35,
+        0.18,
+        -3.2
+      ],
+      [
+        -0.28,
+        -0.14,
+        -6.6
+      ],
+      [
+        0,
+        0.12,
+        -10.8
+      ]
+    ],
+    "envelopeRadius": 2.05,
+    "toothStationCount": 12,
+    "firstStationZ": -1.2,
+    "stationSpacing": 0.72,
+    "filterLobeCount": 6,
+    "retainedRouteImprintFamilies": [
+      "grave_memory",
+      "vascular_rhythm",
+      "silt_pressure"
+    ],
+    "finalFilterCenterZ": -8.25,
+    "finalFilterStationZ": [
+      -7.72,
+      -8.28
+    ]
+  },
+  "movementBounds": {
+    "centerOffset": [
+      0,
+      0,
+      -4.8
+    ],
+    "radii": [
+      3.9,
+      3.1,
+      6.9
+    ],
+    "owner": "PlayerMovementController",
+    "terminalApproachAfterReads": 6,
+    "terminalApproachCenterOffset": [
+      0,
+      0,
+      -5.8
+    ],
+    "terminalApproachRadii": [
+      4.4,
+      3.6,
+      7.8
+    ],
+    "terminalApproachPurpose": "after_6_of_6_expand_and_recenter_comb_envelope_so_visible_aperture_membrane_is_physically_inhabitable_without_trigger_inflation"
+  },
+  "physicalFeel": {
+    "viscosity": 0.48,
+    "pressure": 0.64,
+    "flowVector": [
+      0,
+      0,
+      -0.1
+    ],
+    "boundaryBehavior": "comb_filter_soft_recoil"
+  },
+  "returnFold": {
+    "gateId": "comb_threshold_to_hub_chamber",
+    "position": [
+      0,
+      0,
+      0.75
+    ],
+    "interactionRange": 1.45,
+    "destinationRegionId": "hub_chamber",
+    "destinationCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "crossingOwner": "GateSystem",
+    "gameplayReady": true
+  },
+  "apertureDestinationContract": {
+    "gateId": "comb_threshold_to_aperture_fields",
+    "destinationRegionId": "aperture_fields",
+    "destinationCellId": "CELL_APERTURE_FIELDS_ARRIVAL_001",
+    "sealPosition": [
+      0,
+      0,
+      -10.8
+    ],
+    "sealPetalCount": 8,
+    "sealReadRange": 2.15,
+    "destinationMounted": false,
+    "gameplayReady": false,
+    "crossable": false,
+    "sealIntact": true,
+    "implementationStatus": "authored_destination_contract_only_HC013A",
+    "membraneAwakensAfterFilterReads": 6
+  },
+  "visual": {
+    "envelopeColor": 3102033,
+    "envelopeEmissive": 1519663,
+    "toothWarmColor": 14729083,
+    "toothCoolColor": 7972768,
+    "channelColor": 10081221,
+    "channelEmissive": 5213056,
+    "graveColor": 12165293,
+    "vascularColor": 7922687,
+    "siltColor": 13213013,
+    "apertureSealColor": 13234393,
+    "aperturePreviewColor": 10485719
+  },
+  "constraints": {
+    "newAbilityUnlocks": 0,
+    "newEntities": 0,
+    "newCombatRules": 0,
+    "newBaseVerbs": 0,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "directActiveCellMutation": false,
+    "forcedPlayerRelocation": false,
+    "apertureFieldsImplemented": false,
+    "genericRingMarkers": 0,
+    "triggerMarkers": 0
+  }
+}

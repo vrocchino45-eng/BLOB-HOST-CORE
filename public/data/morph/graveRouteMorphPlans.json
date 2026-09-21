@@ -1,0 +1,76 @@
+[
+  {
+    "id": "MORPH_BLOOM_RESIDUE_TO_GRAVE_MEMORY_001",
+    "status": "runtime_grave_morph_active_prototype",
+    "build": "HC-004D",
+    "sourceCell": "CELL_BLOOM_RESIDUE_FORK_001",
+    "destinationCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "route": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+    "morphType": "no_gate_residue_memory_to_grave_bed_fold",
+    "designRule": "The player does not choose a branch menu or enter a door. When the Bloom Residue fork is stable, pulse turns inherited residue into a quiet Grave Memory pocket inside the same host tissue.",
+    "readiness": {
+      "requiresBloomResidueLoopPrepared": true,
+      "minimumBloomResidueProgress": 0.82,
+      "minimumResidueMemory": 0.54,
+      "minimumForkStability": 0.64,
+      "maximumOvergrowthRisk": 0.42,
+      "requiredFocusObjects": [
+        "residue_memory_silt_001",
+        "seed_choice_braid_001"
+      ],
+      "requiredPlayerComposition": {
+        "residue": 0.24,
+        "seed": 0.34,
+        "scarMax": 0.42
+      }
+    },
+    "triggerPrototype": {
+      "afterReady": "Pulse residue memory silt or the warmed seed-choice braid while the Bloom Residue fork is stable.",
+      "controller": "X",
+      "keyboard": "Space",
+      "notAllowed": [
+        "door_prompt",
+        "teleport_marker",
+        "press_E_gate",
+        "hard_threshold",
+        "map_menu_jump",
+        "branch_select_menu"
+      ]
+    },
+    "worldFacingRead": {
+      "beforeReady": "The fork remembers, but the remains are not safe to read yet.",
+      "nearlyReady": "The residue is settling into a lower route. The Guide grows quieter.",
+      "ready": "The old remains are answering. Pulse the residue, not the doorway.",
+      "trigger": "Pulse the stable residue and let the grave bed form without forcing it open.",
+      "arrival": "This is not a loot pile. Read before you consume. Leave what is not ready."
+    },
+    "plannedDestinationFeel": {
+      "dominantDomains": [
+        "residue",
+        "scar",
+        "seed",
+        "signal"
+      ],
+      "visualLanguage": [
+        "low settling silt basin",
+        "half-buried core husks",
+        "protective scar locks",
+        "ash haze with signal flickers",
+        "inheritance seed glow held inside residue"
+      ],
+      "movementFeel": "slower, quieter, lower pull; the space feels reverent rather than reward-heavy",
+      "playFunction": "first runtime step into the Grave route while deferring the actual read-before-absorb loop"
+    },
+    "forbiddenRuntimeArchitecture": [
+      "no old gates",
+      "no doors",
+      "no teleports",
+      "no old chamber exits",
+      "no stage-node loaders",
+      "no branch select menu",
+      "no dialogue tree",
+      "no combat arena",
+      "no Grave interaction loop yet"
+    ]
+  }
+]

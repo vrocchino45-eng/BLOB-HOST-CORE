@@ -1,0 +1,52 @@
+{
+  "id": "hc027e_consequence_rhythm_system_turntaking",
+  "owner": "InteractionCompositionSystem",
+  "parent": "HC-027D1",
+  "purpose": "Turn the existing playtest material into a clearer observe/move/manipulate/consequence/quiet/discover rhythm without adding gameplay content or travel padding.",
+  "playtestFinding": {
+    "denseCoreMoments": "too many layers remained visually important at once",
+    "quietTraversal": "readable space often lacked enough world feedback",
+    "audioReference": "HC027D1 level confirmed good and remains locked"
+  },
+  "consequenceResolution": {
+    "pulseReturnHoldSeconds": 1.08,
+    "absorbCaptureHoldSeconds": 1.24,
+    "stabilizeLockHoldSeconds": 1.34,
+    "coreWorkCommitHoldSeconds": 0.74,
+    "routeStateHoldSeconds": 0.92,
+    "rule": "consequence begins on existing process resolution rather than only on button edge"
+  },
+  "coreWorkHierarchy": {
+    "selectedAmbientSuppression": 0.76,
+    "heldAmbientSuppression": 0.84,
+    "companionYield": 0.86,
+    "effectSuppressionHeld": 0.38,
+    "ambientLateOverwriteFixed": true
+  },
+  "quietTraversal": {
+    "worldNoticeLiftMax": 0.24,
+    "startsAfterSecondsApprox": 1.35,
+    "usesExistingAmbientMaterial": true,
+    "createsTarget": false,
+    "createsObjective": false,
+    "addsTravelPadding": false
+  },
+  "worldAfterAnswers": [
+    "sonar_answer_afterglow",
+    "metabolic_afterflow",
+    "coherence_lock_afterglow",
+    "core_work_yield"
+  ],
+  "locked": {
+    "audioMixChanged": false,
+    "pulseGameplayRangeChanged": false,
+    "pulseReturnTimingChanged": false,
+    "radialPhysiologyChanged": false,
+    "movementAuthorityChanged": false,
+    "chemistryAuthorityChanged": false,
+    "progressionAuthorityChanged": false,
+    "routeTopologyChanged": false,
+    "engineGrammarChanged": false,
+    "newGameplaySystems": false
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "id": "FIRST_SLICE_RUNTIME_PROFILE_HC009D",
+  "pass": "HC-009D",
+  "version": "1.2.0",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "scope": "surface_wake_to_guide_threshold_to_hub_chamber",
+  "bootPolicy": "first_slice_only",
+  "firstSlicePath": [
+    "surface_wake",
+    "guide_threshold",
+    "hub_chamber"
+  ],
+  "runtimeCellPath": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "globalSystemIds": [
+    "input",
+    "controllerComfortSystem",
+    "modeController",
+    "statusPageSystem",
+    "debugDisplaySystem",
+    "objectiveSystem",
+    "gateSystem",
+    "guidePromptSystem",
+    "playerMovement",
+    "coreGrowthSystem",
+    "visualComposer",
+    "motionSignatureSystem",
+    "playtestHudSystem",
+    "recipeDebugOverlay",
+    "chemistryDebugPanel"
+  ],
+  "sharedSystemIds": [
+    "chemObjectSystem",
+    "targetFocusRegistry",
+    "targetingSystem",
+    "orbiterSystem",
+    "inspectionCameraSystem",
+    "firstSliceCohesionSystem"
+  ],
+  "regions": {
+    "surface_wake": {
+      "modeId": "landing_mode",
+      "modeOwner": "LandingMode",
+      "gameplayOwner": "LandingMode",
+      "presentationOwner": "SurfaceWakeEcologicalCausalitySystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_surface_wake_landing]",
+      "systemIds": [
+        "surfaceWakeGameplaySystem",
+        "openingPacingSystem",
+        "surfaceWakeLayeredInteractionSystem",
+        "surfaceWakeEcologicalCausalitySystem",
+        "cinematicAwakeningSystem",
+        "localCellMorphSystem",
+        "entitySystem",
+        "bondSystem",
+        "morphReadabilitySystem"
+      ],
+      "activeUpdateBudget": 15,
+      "transitionOwner": "LocalCellMorphSystem",
+      "destinationRegionId": "guide_threshold"
+    },
+    "guide_threshold": {
+      "modeId": "threshold_mode",
+      "modeOwner": "ThresholdMode",
+      "gameplayOwner": "ThresholdMode",
+      "presentationOwner": "GuideThresholdLayeredInteractionSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_guide_threshold_directional]",
+      "systemIds": [
+        "morphCompletionSystem",
+        "scarFlowArrivalSystem",
+        "guideThresholdGameplaySystem",
+        "guideThresholdLayeredInteractionSystem",
+        "scarFlowInteractionSystem",
+        "secondLocalCellMorphSystem",
+        "morphReadabilitySystem"
+      ],
+      "activeUpdateBudget": 13,
+      "transitionOwner": "SecondLocalCellMorphSystem",
+      "destinationRegionId": "hub_chamber"
+    },
+    "hub_chamber": {
+      "modeId": "hub_mode",
+      "modeOwner": "HubMode",
+      "gameplayOwner": "HubMode",
+      "presentationOwner": "HubChamberFoundationSystem",
+      "cameraOwner": "GameRuntimeCameraRig[camera_hub_chamber_interpretive]",
+      "systemIds": [
+        "hubChamberFoundationSystem",
+        "hubInvestigationGameplaySystem"
+      ],
+      "activeUpdateBudget": 8,
+      "transitionOwner": "GateSystem",
+      "destinationRegionId": "first_slice_boundary"
+    }
+  },
+  "dormantCompatibilitySystemIds": [
+    "signalChorusArrivalSystem",
+    "signalChorusInteractionSystem",
+    "thirdLocalCellMorphSystem",
+    "bloomResidueArrivalSystem",
+    "bloomResidueInteractionSystem",
+    "graveRouteMorphSystem",
+    "graveArrivalReadabilitySystem",
+    "graveReadBeforeAbsorbSystem",
+    "graveLoopStabilitySystem",
+    "graveExitReadinessSystem",
+    "graveScarMemorySeamArrivalSystem",
+    "graveScarMemorySeamFirstReadSystem",
+    "graveSeamContinuityMicroExitSystem",
+    "graveBedPostSeamResponseSystem",
+    "graveRouteLockSystem",
+    "graveReturnContinuitySystem",
+    "signalChorusReturnStateSystem",
+    "signalChorusNextRoutePressureSystem",
+    "signalChorusVisualIdentitySystem",
+    "signalChorusLayeredInteractionSystem"
+  ],
+  "archivePolicy": {
+    "sourceAndAuthoredDataRetained": true,
+    "registeredDuringFirstSliceBoot": false,
+    "initializedDuringFirstSliceBoot": false,
+    "updatedDuringFirstSliceBoot": false,
+    "referenceBuild": "HC-008G",
+    "reactivationRule": "Only a later milestone may explicitly promote an archived system into an authored region mount."
+  },
+  "ownershipRule": "The active mode mounts region systems. PlayerMovementController owns translation. CoreGrowthSystem owns growth truth and updates CoreEmbodimentSystem as its body-language collaborator through one global registry slot. UI remains read-only.",
+  "forbiddenRuntimeFallbacks": [
+    "global_update_of_inactive_region_systems",
+    "parallel_core_growth_and_embodiment_registry_updaters",
+    "signal_chorus_as_parallel_hub_presentation",
+    "bloom_or_grave_runtime_boot",
+    "historical_pass_validation_as_game_boot_logic",
+    "renderer_owned_progression"
+  ]
+}

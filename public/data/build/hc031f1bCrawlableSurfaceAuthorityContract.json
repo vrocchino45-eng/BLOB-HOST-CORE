@@ -1,0 +1,42 @@
+{
+  "pass": "HC-031F1B",
+  "title": "Crawlable Surface Authority + Host Contact Shelf",
+  "parent": "HC-031F1A",
+  "purpose": "Replace generic visible-mesh contact with explicit ecological surface authority and introduce the first authored surface-ecology continuation in Surface Wake.",
+  "lockedTruth": {
+    "movementAuthority": "PlayerMovementController",
+    "surfaceTruthAuthority": "CoreSurfaceTruthSystem",
+    "surfaceAuthoringAuthority": "CrawlableSurfaceRegistry",
+    "tendrilCount": 3,
+    "directInputAccelerationScaleWhileTendrilDriven": 0.04,
+    "visibleSurfaceStandOffDistance": 0.38,
+    "genericVisibleMeshesEligible": false,
+    "addsCollider": false,
+    "changesControls": false,
+    "progressionAuthority": false,
+    "verbStrengthAuthority": false
+  },
+  "hostContactShelf": {
+    "cellId": "CELL_MEMBRANE_NURSERY_001",
+    "newRegion": false,
+    "continuationArea": true,
+    "surfaceProfiles": [
+      "membrane_stable",
+      "scar_brace",
+      "soft_tissue",
+      "residue_weak"
+    ],
+    "surfaceCount": 4,
+    "noHardGate": true
+  },
+  "surfaceEcology": {
+    "membrane_stable": { "adhesion": 0.84, "loadTolerance": 0.74, "pulseTransmission": 0.64 },
+    "scar_brace": { "adhesion": 0.96, "loadTolerance": 0.96, "pulseTransmission": 0.94 },
+    "soft_tissue": { "adhesion": 0.78, "loadTolerance": 0.56, "pulseTransmission": 0.54 },
+    "residue_weak": { "adhesion": 0.46, "loadTolerance": 0.32, "pulseTransmission": 0.30 }
+  },
+  "futureProof": {
+    "next": "anchored_pulse_v1",
+    "rule": "anchor geometry and authored surface load/transmission may modify the same Pulse verb; this pass only publishes the ecological data and does not alter Pulse output"
+  }
+}

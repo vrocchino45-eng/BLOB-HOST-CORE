@@ -1,0 +1,146 @@
+{
+  "id": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC012A",
+  "pass": "HC-012A",
+  "foundationReference": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC010G",
+  "previousPlayableContract": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC011A",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "owner": "Act1RouteContractSystem",
+  "crossingOwner": "GateSystem",
+  "objectiveOwner": "ObjectiveSystem",
+  "persistenceOwner": "GateSystem",
+  "wakeCondition": "graveReturned",
+  "routes": [
+    {
+      "id": "vascular_route",
+      "displayName": "Vascular Rhythm",
+      "runtimeCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "entryGateId": "hub_to_vascular_route",
+      "returnGateId": "vascular_route_to_hub_chamber",
+      "objectiveId": "vascular_route_playable_circuit",
+      "cameraProfileId": "camera_vascular_rhythm_contract",
+      "visualLanguageId": "vascular_rhythm_contract",
+      "gameplayReady": true,
+      "playablePass": "HC-011A",
+      "gameplaySystemId": "vascularRhythmRouteSystem",
+      "gameplayOwner": "VascularRhythmRouteSystem",
+      "presentationOwner": "VascularRhythmRouteSystem",
+      "playableCircuitRecipeId": "VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1",
+      "physicalFeel": {
+        "viscosity": 0.38,
+        "pressure": 0.68,
+        "flowVector": [
+          0.42,
+          0.08,
+          -0.3
+        ],
+        "boundaryBehavior": "vascular_contract_current_recoil"
+      },
+      "movementBounds": {
+        "mode": "entry_anchored_ellipsoid",
+        "centerSource": "preserved_gate_entry_position",
+        "radii": [
+          4.5,
+          3.2,
+          22.5
+        ],
+        "collisionOwner": "PlayerMovementController",
+        "tuningOwner": "Act1RouteContractSystem",
+        "purpose": "HC016W: active Act1RouteContractSystem envelope synchronized to the expanded Vascular route."
+      },
+      "returnFold": {
+        "position": [
+          0.0,
+          0.05,
+          0.62
+        ],
+        "interactionRange": 1.35,
+        "input": "interact",
+        "readySource": "VascularRhythmRouteSystem.returnFoldReady"
+      },
+      "spatialConvergencePass": "HC-016W"
+    },
+    {
+      "id": "silt_burrow_route",
+      "displayName": "Silt Pressure",
+      "runtimeCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+      "entryGateId": "hub_to_silt_burrow_route",
+      "returnGateId": "silt_burrow_route_to_hub_chamber",
+      "objectiveId": "silt_route_playable_circuit",
+      "cameraProfileId": "camera_silt_pressure_contract",
+      "visualLanguageId": "silt_pressure_contract",
+      "gameplayReady": true,
+      "playablePass": "HC-012A",
+      "gameplaySystemId": "siltPressureRouteSystem",
+      "gameplayOwner": "SiltPressureRouteSystem",
+      "presentationOwner": "SiltPressureRouteSystem",
+      "playableCircuitRecipeId": "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A",
+      "physicalFeel": {
+        "viscosity": 0.78,
+        "pressure": 0.76,
+        "flowVector": [
+          0.08,
+          -0.12,
+          -0.16
+        ],
+        "boundaryBehavior": "silt_contract_compression_recoil"
+      },
+      "movementBounds": {
+        "mode": "entry_anchored_ellipsoid",
+        "centerSource": "preserved_gate_entry_position",
+        "radii": [
+          6.8,
+          4.25,
+          21.2
+        ],
+        "collisionOwner": "PlayerMovementController",
+        "tuningOwner": "Act1RouteContractSystem",
+        "purpose": "HC016V expanded Silt traversal: enough lateral room for the porous-choice pocket and enough longitudinal depth for pressure, brace, choice, consequence, and return to occupy distinct physical beats."
+      },
+      "returnFold": {
+        "position": [
+          0.0,
+          -0.04,
+          0.58
+        ],
+        "interactionRange": 1.35,
+        "input": "interact",
+        "readySource": "SiltPressureRouteSystem.returnFoldReady"
+      },
+      "spatialExpansionPass": "HC-016V",
+      "spatialConvergencePass": "HC-016W"
+    }
+  ],
+  "historySchema": {
+    "version": 1,
+    "routeIds": [
+      "grave_memory_route",
+      "vascular_route",
+      "silt_burrow_route"
+    ],
+    "perRouteFields": [
+      "entered",
+      "returned",
+      "entryCount",
+      "returnCount",
+      "completed"
+    ],
+    "serializable": true,
+    "restorable": true
+  },
+  "constraints": {
+    "emptyPlayerFacingCrossings": false,
+    "destinationMountRequiredBeforeWake": true,
+    "gameplayReadyRequiredBeforeCrossing": true,
+    "onlyActiveRegionUpdates": true,
+    "playerRelocation": false,
+    "playableRouteIds": [
+      "vascular_route",
+      "silt_burrow_route"
+    ],
+    "gameplayPendingRouteIds": [],
+    "newAbilities": 0,
+    "archivedCompatibilitySystemsActivated": 0
+  },
+  "convergencePass": "HC-016W",
+  "convergenceRule": "Do not let the active route contract restore pre-expansion movement envelopes."
+}

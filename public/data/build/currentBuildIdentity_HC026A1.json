@@ -1,0 +1,29 @@
+{
+  "id": "HC-026A1",
+  "version": "0.26.1",
+  "label": "Hub Macro Spatial Exaggeration",
+  "mode": "macro-readability refinement of the existing Hub/Core spatial mirror while stable routes remain fixed",
+  "parent": "HC-026A",
+  "buildRule": "Core chemistry remains the source of truth. Deep / Inner / Membrane now map to strongly separated Hub-scale radial bands, exact XYZ telemetry is reduced to a secondary directional bend, and retained echo silhouettes scale by zone. Route gates, corridors, progression, and authored family territories remain fixed.",
+  "sourceJsCount": 88,
+  "hubCoreSpatialMirrorEnabled": true,
+  "macroReadabilityRefined": true,
+  "usesSpatialCoreChemistry": true,
+  "mirrorsRetainedEchoAnatomy": true,
+  "routeGatesMoved": false,
+  "routeCorridorsMoved": false,
+  "exactTelemetryInfluence": 0.22,
+  "zoneRadii": {
+    "deep": 1.55,
+    "inner": 3.75,
+    "membrane": 6.25
+  },
+  "zoneVisualScale": {
+    "deep": 0.78,
+    "inner": 1.08,
+    "membrane": 1.38
+  },
+  "topologyStateCount": 10,
+  "newRegions": 0,
+  "newSourceModules": 0
+}

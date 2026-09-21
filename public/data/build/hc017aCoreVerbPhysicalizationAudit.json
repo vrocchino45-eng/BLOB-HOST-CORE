@@ -1,0 +1,43 @@
+{
+  "build": "HC-017A",
+  "mode": "core_verb_physicalization_baseline",
+  "sourceBuild": "HC-016Z",
+  "gameplayRulesChanged": false,
+  "newVerbAdded": false,
+  "chemistryRulesChanged": false,
+  "verbs": {
+    "pulse": "outward volumetric propagation front + material contact flashes; existing pulse truth untouched",
+    "absorb": "existing bond becomes visible material stream; target yields toward Core; fragments visibly integrate before existing completion",
+    "stabilize": "sustained regulation field/connection with build and release; existing stabilizeHeld/resonanceHeld truth untouched"
+  },
+  "ownership": {
+    "gameplay": [
+      "ChemObjectSystem",
+      "BondSystem",
+      "authored route/layered interaction systems"
+    ],
+    "presentation": "CoreVerbPhysicalizationSystem",
+    "rule": "presentation observes frameState and must not award progress, mutate chemistry, or complete objectives"
+  },
+  "performance": {
+    "particleCap": 28,
+    "pulseFrontLifetime": 0.68,
+    "noAmbientMicroMaterialYet": true
+  },
+  "locked": [
+    "HC016Z anatomy",
+    "Core scale 0.52",
+    "HC016X movement",
+    "HC016Y route feel",
+    "interaction ranges",
+    "route dimensions",
+    "chemistry",
+    "progression"
+  ],
+  "deferred": [
+    "ambient micro-material populations",
+    "material chemistry coupling",
+    "new verbs"
+  ],
+  "nextPass": "HC-017B representative material response grammar after playtest"
+}

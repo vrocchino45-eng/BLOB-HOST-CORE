@@ -1,0 +1,72 @@
+{
+  "id": "HC003N_OPENING_SLICE_GOLD_CANDIDATE",
+  "build": "HC-003N",
+  "label": "Opening Slice Gold Candidate",
+  "status": "opening_slice_gold_candidate_pending_user_playtest",
+  "sourceBlueprint": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "requiredOpeningChain": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "beyondMinuteOptionalFork": "CELL_BLOOM_RESIDUE_FORK_001",
+  "goldPurpose": "Confirm the first playable minute is understandable, stable, controller-playable, and readable with debug hidden before widening into the Grave memory route.",
+  "goldCandidateSystems": [
+    "Host Core boot and local-cell loading",
+    "debug-hidden playtest HUD",
+    "Guide prompt world-facing instruction layer",
+    "opening pacing layer",
+    "cinematic awakening cues without control lockout",
+    "controller comfort tuning",
+    "camera orbit/recenter/readability",
+    "P0 visual-lock replacements",
+    "first-minute visual readability polish",
+    "target lock and absorb assist",
+    "first no-gate morph",
+    "Scar-Flow arrival and interaction loop",
+    "second no-gate morph",
+    "Signal Chorus arrival and interaction loop",
+    "optional Bloom Residue beyond-minute fork"
+  ],
+  "mustPass": [
+    "Boot starts cleanly with no startup validation error.",
+    "Debug starts hidden by default and F1/F2/F3 can still reveal it.",
+    "Player can understand the first action without debug panels.",
+    "Safe seed can be targeted and absorbed.",
+    "Scar contamination reads as unsafe and resists forced absorb.",
+    "First tissue fold happens as a no-gate morph.",
+    "Scar-Flow loop can stabilize.",
+    "Second tissue fold reaches Signal Chorus as a no-gate morph.",
+    "Signal Chorus loop can complete the required first playable minute.",
+    "Controller can complete the required opening chain.",
+    "Right-stick/IJKL camera control keeps the core visible.",
+    "No console crash occurs through the required opening chain."
+  ],
+  "mustNotRegress": [
+    "No gates, doors, teleports, hard exits, stage-node transitions, or old chamber runtime return.",
+    "Debug panels remain build tools rather than final HUD.",
+    "Visuals remain recipe-driven and placeholder contracts remain enforceable.",
+    "Bloom Residue Fork remains optional for the first playable minute.",
+    "Cinematic cues never steal control.",
+    "Route planning remains data-only until HC-004."
+  ],
+  "uiReadoutPolicy": {
+    "guidePrompt": "primary_world_facing_instruction",
+    "playtestHud": "debug_hidden_status_and_controls",
+    "morphPanel": "tiny_secondary_no_gate_status_strip",
+    "firstMinuteLock": "gold_candidate_status_separate_from_optional_bloom_fork",
+    "bloomFork": "beyond_minute_optional_extension"
+  },
+  "validationCommands": [
+    "npm run validate:recipe-data",
+    "npm run validate:prompt-lock",
+    "npm run validate:playtest-hud",
+    "npm run validate:first-minute-visual-polish",
+    "npm run validate:gold-candidate",
+    "npm run audit:undefined-methods",
+    "npm run build"
+  ],
+  "lockDecision": "pending_user_playtest",
+  "nextIfPasses": "HC-004A Grave Route Runtime Planning",
+  "nextIfFails": "HC-003NA Opening Gold Candidate Fix Pass"
+}

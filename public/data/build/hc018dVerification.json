@@ -1,0 +1,17 @@
+{
+  "build": "HC018D",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "focusedValidator": "[HC018D] Silt retained local consequence PASS\n[HC018D] Vascular retained local consequence PASS\n[HC018D] Grave existing memory authority preserved PASS\n[HC018D] progression/chemistry/movement/camera locks PASS",
+  "runtimeSyntax": "PASS: 101 JS modules",
+  "lockedSystems": {
+    "src/core/GameRuntime.js": true,
+    "src/chemistry/BondSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/CoreVerbPhysicalizationSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/routes/GraveMemoryRouteSystem.js": true,
+    "src/camera/InspectionCameraSystem.js": true,
+    "src/presentation/InteractionCompositionSystem.js": true
+  },
+  "bundler": "NOT_RUN: packaged source omits node_modules; npm install then npm run dev/build locally"
+}

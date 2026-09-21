@@ -1,0 +1,48 @@
+{
+  "build": "HC-016Q",
+  "identifiedObject": {
+    "id": "nursery_membrane_tender_001",
+    "name": "Nursery Membrane Tender",
+    "visualMatch": [
+      "mint-green guarding canopies",
+      "cupped fronds",
+      "three orange tiny seed sacs"
+    ]
+  },
+  "purpose": {
+    "role": "care_repair_companion_if_bonded",
+    "guideAuthority": false,
+    "bondTrustThreshold": 0.56,
+    "bondIntegrityThreshold": 0.62,
+    "passiveScarRecoveryPerSecond": 0.0012,
+    "pulseBoostScarRecoveryPerSecond": 0.0042,
+    "pulseBoostSeconds": 4.0
+  },
+  "checks": [
+    {
+      "name": "syntax:EntitySystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GameRuntime.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:PlaytestHudSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:RecipeDebugOverlay.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016QTenderCompanion.mjs",
+      "status": "PASS",
+      "detail": "[HC016Q] Nursery Membrane Tender identified + care companion role PASS\n[HC016Q] Guide navigation authority remains separate PASS\n"
+    }
+  ]
+}

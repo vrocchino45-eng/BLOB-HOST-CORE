@@ -1,0 +1,58 @@
+{
+  "id": "HC-024D1",
+  "name": "Three-Zone Body Topology Chemistry",
+  "purpose": "Make retained Grave Memory, Vascular Rhythm, and Silt Pressure visibly change the Core according to whether each is placed in Deep Core, Inner Body, or Membrane, while deriving one of ten whole-Core topology states from the three-piece distribution.",
+  "inputOwnership": {
+    "coreInspection": "Y",
+    "coreWorkEntry": "D-Pad Down",
+    "selectRetainedAnatomy": "D-Pad Left/Right",
+    "grabPlace": "A",
+    "moveAcrossBody": "Left Stick",
+    "moveOutward": "RT",
+    "moveInward": "LT",
+    "orbitCamera": "Right Stick",
+    "back": "B"
+  },
+  "bodyZones": [
+    { "id": "deep_core", "label": "Deep Core", "normalizedDepthMaxExclusive": 0.28, "visualPrinciple": "compact, concentrated, nucleus-dominant" },
+    { "id": "inner_body", "label": "Inner Body", "normalizedDepthMinInclusive": 0.28, "normalizedDepthMaxExclusive": 0.58, "visualPrinciple": "circulating, metabolically active, mantle-dominant" },
+    { "id": "membrane", "label": "Membrane", "normalizedDepthMinInclusive": 0.58, "visualPrinciple": "expanded, externally expressive, boundary-dominant" }
+  ],
+  "fundamentalInteractions": [
+    { "piece": "Grave Memory", "zone": "deep_core", "id": "grave_memory_knot", "label": "Memory Knot" },
+    { "piece": "Grave Memory", "zone": "inner_body", "id": "grave_memory_echo", "label": "Memory Echo" },
+    { "piece": "Grave Memory", "zone": "membrane", "id": "grave_residue_sense", "label": "Residue Sense" },
+    { "piece": "Vascular Rhythm", "zone": "deep_core", "id": "vascular_cadence_anchor", "label": "Cadence Anchor" },
+    { "piece": "Vascular Rhythm", "zone": "inner_body", "id": "vascular_circulation_drive", "label": "Circulation Drive" },
+    { "piece": "Vascular Rhythm", "zone": "membrane", "id": "vascular_signal_skin", "label": "Signal Skin" },
+    { "piece": "Silt Pressure", "zone": "deep_core", "id": "silt_ballast", "label": "Ballast" },
+    { "piece": "Silt Pressure", "zone": "inner_body", "id": "silt_body_brace", "label": "Body Brace" },
+    { "piece": "Silt Pressure", "zone": "membrane", "id": "silt_adhesion_skin", "label": "Adhesion Skin" }
+  ],
+  "wholeCoreTopologies": [
+    { "distribution": "3:0:0", "id": "deep_concentration", "label": "Deep Concentration" },
+    { "distribution": "0:3:0", "id": "inner_saturation", "label": "Inner Saturation" },
+    { "distribution": "0:0:3", "id": "membrane_saturation", "label": "Membrane Saturation" },
+    { "distribution": "2:1:0", "id": "deep_dominant_inner", "label": "Deep-Dominant / Inner" },
+    { "distribution": "2:0:1", "id": "deep_dominant_membrane", "label": "Deep-Dominant / Membrane" },
+    { "distribution": "1:2:0", "id": "inner_dominant_deep", "label": "Inner-Dominant / Deep" },
+    { "distribution": "0:2:1", "id": "inner_dominant_membrane", "label": "Inner-Dominant / Membrane" },
+    { "distribution": "1:0:2", "id": "membrane_dominant_deep", "label": "Membrane-Dominant / Deep" },
+    { "distribution": "0:1:2", "id": "membrane_dominant_inner", "label": "Membrane-Dominant / Inner" },
+    { "distribution": "1:1:1", "id": "three_way_balance", "label": "Three-Way Balance" }
+  ],
+  "visualAcceptance": [
+    "Deep-heavy arrangements visibly concentrate the Core toward the nucleus.",
+    "Inner-heavy arrangements visibly activate/circulate the middle body layer.",
+    "Membrane-heavy arrangements visibly expand and energize the exterior silhouette.",
+    "Each retained anatomy keeps its own identity while visibly changing behavior across the three zones.",
+    "The player can read the intended state from the Core itself; HUD text is secondary confirmation only."
+  ],
+  "gameplayConsequencesEnabled": false,
+  "recipeMenuUsed": false,
+  "inventorySlotsUsed": false,
+  "progressionChanged": false,
+  "geographyChanged": false,
+  "debugQuickTestbedPreserved": true,
+  "activeSourceModuleCount": 88
+}

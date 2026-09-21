@@ -1,0 +1,77 @@
+[
+  {
+    "id": "CELL_SCAR_FLOW_FOLD_001",
+    "displayName": "Scar Flow Fold",
+    "status": "authored_in_localCellRecipes_HC002B",
+    "derivation": {
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomySource": "wounded_membrane_to_vascular_fold",
+      "lifecycleFunction": "scarred_flow_redirection",
+      "localContamination": [
+        "scar_memory_intrusion",
+        "pressure_flow_leak"
+      ],
+      "perceptionBand": "micro_awake_plus_first_memory_pressure"
+    },
+    "chemistryField": {
+      "form": 0.54,
+      "flux": 0.58,
+      "scar": 0.48,
+      "residue": 0.24,
+      "bloom": 0.06,
+      "signal": 0.26,
+      "seed": 0.42,
+      "inorganic": 0.02,
+      "confluence": 0.0
+    },
+    "physicalFeel": {
+      "viscosity": 0.57,
+      "pressure": 0.42,
+      "flowVector": [
+        0.22,
+        0.04,
+        -0.32
+      ],
+      "gravityMode": "folded_membrane_current",
+      "boundaryBehavior": "scarred_elastic_recoil_with_flow_pull"
+    },
+    "contents": {
+      "chemObjects": [
+        "scar_memory_fleck_001",
+        "scar_flow_clot_001",
+        "resonant_path_thread_001"
+      ],
+      "entities": [
+        "membrane_watcher_001"
+      ],
+      "orbiters": [
+        "guide_orbiter_folded_lantern_001"
+      ]
+    },
+    "visuals": {
+      "environmentRecipe": "scar_flow_fold_surface_v01",
+      "distantHostRecipe": "host_alpha_distant_silhouette_v01",
+      "atmosphereRecipe": "scar_pressure_haze_v01"
+    },
+    "playerExperience": {
+      "intendedFeel": [
+        "same_body_newly_revealed",
+        "more_pressure",
+        "old_wound_becoming_route",
+        "still_not_a_gate"
+      ],
+      "teaches": [
+        "continuous_morph_readability",
+        "scar_and_flow_relation",
+        "pressure_current_navigation"
+      ],
+      "shouldNotFeelLike": [
+        "new_room_load",
+        "threshold_gate",
+        "teleport",
+        "flat_corridor"
+      ]
+    },
+    "authoredRecipeFile": "public/data/world/localCellRecipes.json"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "build": "HC019C",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "focusedValidator": "[HC019C] material visual state language PASS\n[HC019C] reduced instruction dependence PASS\n[HC019C] gameplay/crossing/completion locks PASS",
+  "runtimeSyntax": "PASS: 101 JS modules",
+  "lockedSystems": {
+    "src/morph/LocalCellBoundaryMorphSystem.js": true,
+    "src/opening/SurfaceWakeLayeredInteractionSystem.js": true,
+    "src/morph/GuideThresholdLayeredInteractionSystem.js": true,
+    "src/chemistry/BondSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/camera/InspectionCameraSystem.js": true
+  },
+  "bundler": "NOT_RUN: packaged source omits node_modules; npm install then npm run dev/build locally"
+}

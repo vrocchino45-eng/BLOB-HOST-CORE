@@ -1,0 +1,99 @@
+[
+  {
+    "id": "GRAVE_RETURN_CONTINUITY_HC005A",
+    "build": "HC-005A",
+    "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "buildStrategyReference": "BUILD_STRATEGY_REFERENCE.md",
+    "status": "runtime_active_continuous_return_prototype",
+    "purpose": "Carry the player from the locked Grave memory bed back into the Signal Chorus route-awareness tissue through one visible, movement-driven host-tissue fold without a gate, door, teleport, branch menu, or reopened Grave interaction.",
+    "sourceLock": "GRAVE_ROUTE_LOCK_HC004R",
+    "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "destinationCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "activationRules": {
+      "requiresGraveRouteLocked": true,
+      "requiresActiveSourceCell": true,
+      "requiresPostSeamCompletion": true,
+      "movementStartsReturn": true,
+      "pulseStartsReturn": false,
+      "absorbStartsReturn": false,
+      "targetRequired": false
+    },
+    "path": {
+      "mouth": [2.55, -0.22, -1.12],
+      "controlA": [3.25, 0.04, -0.22],
+      "controlB": [2.18, 0.30, 0.62],
+      "destination": [0.34, 0.12, -0.88],
+      "mouthRadius": 1.12,
+      "followRadius": 1.48,
+      "completionRadius": 1.10,
+      "completionProgress": 0.91,
+      "sampleCount": 56
+    },
+    "movement": {
+      "viscosityStart": 0.62,
+      "viscosityEnd": 0.48,
+      "pressureStart": 0.46,
+      "pressureEnd": 0.20,
+      "flowStrength": 0.18,
+      "movementFeel": "player_driven_return_current_with_soft_tissue_assist"
+    },
+    "visual": {
+      "currentColor": "#bdefff",
+      "memoryEdgeColor": "#ffd2ad",
+      "routeAwarenessColor": "#fff0b8",
+      "tubeRadius": 0.075,
+      "mouthRingRadius": 0.82,
+      "maxOpacity": 0.46,
+      "graveEnvironmentIds": [
+        "grave_memory_residue_bed_surface_001",
+        "grave_memory_silt_haze_001"
+      ],
+      "signalEnvironmentIds": [
+        "signal_chorus_nerve_surface_001",
+        "signal_chorus_soft_haze_001"
+      ]
+    },
+    "playerFacingLanguage": {
+      "hudReady": "Grave Return: scar-current readable",
+      "hudMoving": "Grave Return: following tissue fold",
+      "hudComplete": "Signal Chorus: Grave reading returned",
+      "guideReady": "A pale scar-current has remembered the way back. Move into it; do not pulse the remains again.",
+      "guideMoving": "Stay inside the current and steer through the fold. The Grave stays behind intact.",
+      "guideComplete": "The Signal Chorus now carries the Grave reading. Nothing was taken, and nothing was reopened.",
+      "objectiveReady": "Move into the pale current at the far edge of the Grave bed.",
+      "objectiveMoving": "Follow the current with normal movement until the Chorus reforms.",
+      "objectiveComplete": "Route awareness restored at Signal Chorus. Hold this reading for the next route pass."
+    },
+    "completion": {
+      "setsActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "graveRouteRemainsLocked": true,
+      "protectedRemainsConsumed": false,
+      "inheritanceSeedRemnantOpened": false,
+      "playerRelocation": false,
+      "runtimeExitActivation": false,
+      "newBranchSelection": false,
+      "routeAwarenessRestored": true,
+      "nextRecommendedPass": "HC-005B"
+    },
+    "forbidden": [
+      "old gates",
+      "doors",
+      "teleports",
+      "branch select menu",
+      "old chamber runtime",
+      "old exit registries",
+      "stage-node loaders",
+      "player relocation",
+      "pulse-triggered return",
+      "absorb-triggered return",
+      "reopening Grave interaction",
+      "consuming old core husk",
+      "opening inheritance seed remnant",
+      "new combat",
+      "new ecology",
+      "Comb Threshold runtime",
+      "Aperture Fields runtime",
+      "Act expansion"
+    ]
+  }
+]

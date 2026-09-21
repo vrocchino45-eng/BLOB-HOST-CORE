@@ -1,0 +1,225 @@
+[
+  {
+    "id": "HUB_CHAMBER_PRESENTATION_LOCK_HC006JA",
+    "build": "HC-006JA",
+    "status": "runtime_active_presentation_lock",
+    "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "regionId": "hub_chamber",
+    "purpose": "Lock Hub presentation ownership after the foundation is readable: Hub-only prompts, quiet retained Signal Chorus layers, wider route separation, distinct active/dormant rhythms, and a junction-wide camera frame without changing route availability.",
+    "activation": {
+      "requiresActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "revealSeconds": 1.45,
+      "routeIdentityRequiresLayeredInteractionComplete": true
+    },
+    "junction": {
+      "position": [
+        0.1,
+        -0.15,
+        -1.8
+      ],
+      "radius": 1.05,
+      "ringCount": 4,
+      "petalCount": 4,
+      "memoryFragmentPosition": [
+        0.1,
+        1.85,
+        -2.05
+      ]
+    },
+    "routes": [
+      {
+        "id": "grave_memory_route",
+        "displayName": "Grave Memory",
+        "gateId": "hub_to_grave_memory_route",
+        "runtimeCompatibilityDestination": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+        "status": "active_route",
+        "position": [
+          0.12,
+          0.2,
+          -4.4
+        ],
+        "controlA": [
+          0.08,
+          -0.08,
+          -2.55
+        ],
+        "controlB": [
+          0.1,
+          0.16,
+          -3.55
+        ],
+        "shape": "memory_lattice",
+        "chemistry": [
+          "scar",
+          "residue",
+          "signal"
+        ],
+        "color": 16758640,
+        "secondaryColor": 12108711,
+        "worldMeaning": "Memory and unfinished becoming remain readable without being consumed."
+      },
+      {
+        "id": "vascular_route",
+        "displayName": "Vascular Rhythm",
+        "gateId": "hub_to_vascular_route",
+        "status": "dormant_route",
+        "position": [
+          -4.6,
+          2.45,
+          -2.7
+        ],
+        "controlA": [
+          -1.3,
+          0.8,
+          -2.0
+        ],
+        "controlB": [
+          -3.0,
+          1.8,
+          -2.4
+        ],
+        "shape": "vascular_arc",
+        "chemistry": [
+          "signal",
+          "flux",
+          "form"
+        ],
+        "color": 7398143,
+        "secondaryColor": 16755588,
+        "worldMeaning": "Circulation, rhythm, charge, and flow wait beyond a sleeping current."
+      },
+      {
+        "id": "silt_burrow_route",
+        "displayName": "Silt Pressure",
+        "gateId": "hub_to_silt_burrow_route",
+        "status": "dormant_route",
+        "position": [
+          4.6,
+          -2.35,
+          -2.7
+        ],
+        "controlA": [
+          1.3,
+          -0.82,
+          -2.0
+        ],
+        "controlB": [
+          3.0,
+          -1.75,
+          -2.4
+        ],
+        "shape": "compressed_ribs",
+        "chemistry": [
+          "form",
+          "residue",
+          "seed"
+        ],
+        "color": 16763742,
+        "secondaryColor": 10185055,
+        "worldMeaning": "Appetite, pressure, and compression remain dormant until the Host accepts another reading."
+      }
+    ],
+    "visual": {
+      "junctionColor": 11393254,
+      "junctionMemoryColor": 16769184,
+      "junctionOpacity": 0.22,
+      "routeLineOpacity": 0.0,
+      "activeGateOpacity": 0.82,
+      "dormantGateOpacity": 0.13,
+      "memoryFragmentOpacity": 0.8,
+      "renderOrder": 5,
+      "hubClutterOpacityScale": 0.0,
+      "hubMoteVisibilityScale": 0.0,
+      "legacyChorusOpacityScale": 0.08,
+      "signalSurfaceOpacityScale": 0.22,
+      "signalHazeOpacityScale": 0.04,
+      "activeRouteBeadCount": 4,
+      "activeRouteBeadOpacity": 0.82,
+      "backgroundTissueColor": 1585474,
+      "foregroundTissueColor": 3233640,
+      "backgroundTissueOpacity": 0.12,
+      "foregroundTissueOpacity": 0.22
+    },
+    "camera": {
+      "focusId": "hub_junction_anchor_001",
+      "assistRange": 10.5,
+      "distance": 8.8,
+      "fieldOfView": 60,
+      "explorationDistance": 5.5,
+      "explorationFieldOfView": 52,
+      "targetBlendTowardFocus": 0.4,
+      "targetLift": 0.28,
+      "baseHeight": 1.55,
+      "pitch": 0.29,
+      "shoulderOffset": 0.24,
+      "forwardOffset": 0.0,
+      "maxYawOffset": 1.3,
+      "pitchMin": -0.02,
+      "pitchMax": 0.58,
+      "blockerOpacity": 0.045,
+      "ambientDensityScale": 0.18
+    },
+    "spatialAuthority": {
+      "pass": "HC-008G",
+      "visualOwner": "HubChamberFoundationSystem",
+      "investigationOwner": "HubInvestigationGameplaySystem",
+      "presentationPolicy": "one_authoritative_body_led_hub_composition",
+      "cameraPolicy": "wide_establishing_then_player_tethered_territory_exploration",
+      "depthLayers": [
+        "foreground",
+        "middle",
+        "background"
+      ],
+      "routeTerritories": {
+        "vascular_route": "upper_vascular_corridor",
+        "grave_memory_route": "middle_memory_shard_corridor",
+        "silt_burrow_route": "lower_compressed_plate_corridor"
+      },
+      "renderTruthPass": "HC-009G",
+      "readabilityProof": "physical route separation, unique silhouettes, center clearance, environment ownership, and target lifecycle; reveal time alone cannot satisfy readability",
+      "disabledVisuals": [
+        "nursery membrane pocket and fog inside Hub",
+        "Guide Threshold surface and transition artifacts inside Hub",
+        "global route spokes",
+        "central orbit shell",
+        "memory orbit shell",
+        "duplicate investigation markers",
+        "completed Signal Chorus chemistry bodies",
+        "stale Watcher",
+        "Guide shimmer line"
+      ]
+    },
+    "playerFacingLanguage": {
+      "revealingGuide": "The remembered Chorus is settling into a junction. Three routes are separating around one center.",
+      "revealingObjective": "Hold the center in view while the three route identities separate.",
+      "completeGuide": "This is the Hub. Grave Memory answers ahead; Vascular Rhythm sleeps to the left; Silt Pressure sleeps to the right.",
+      "completeObjective": "Read the active Grave-memory route and remember the two dormant routes.",
+      "nextAction": "The junction is readable. Grave Memory accepts one bounded preview; the two other routes remain dormant."
+    },
+    "completion": {
+      "centralAnchorReadable": true,
+      "threeRouteLayoutReadable": true,
+      "oneActiveRouteReadable": true,
+      "twoDormantRoutesReadable": true,
+      "firstMemoryFragmentReadable": true,
+      "fullHubChamberFoundationComplete": true,
+      "statusPageIntroduced": false,
+      "nextRecommendedPass": "HC-006K \u2014 Hub Status and Route Readout Lock",
+      "presentationOwnershipLocked": true
+    },
+    "forbidden": [
+      "Vascular Route activation",
+      "Silt Burrow activation",
+      "Comb Threshold crossing",
+      "Aperture Fields",
+      "teleport",
+      "branch menu",
+      "forced player relocation",
+      "combat",
+      "full status page implementation",
+      "legacy Signal Chorus prompts while Hub owns scene",
+      "completed Chorus geometry dominating Hub frame"
+    ]
+  }
+]

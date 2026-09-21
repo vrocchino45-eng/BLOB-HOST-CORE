@@ -1,0 +1,46 @@
+{
+  "build": "HC-023C",
+  "milestone": "Guide Living-State Continuity",
+  "strategy": "carry situations across spaces; do not duplicate systems",
+  "sourceStateOwner": "SurfaceWakeGameplaySystem",
+  "guidePolicy": {
+    "derivesNewStates": false,
+    "presentationOnly": true,
+    "changesReadiness": false,
+    "changesTraversalTiming": false,
+    "changesTriggerPolicy": false,
+    "changesMovementEnvelope": false
+  },
+  "presentationOwners": [
+    "GuideThresholdGameplaySystem",
+    "GuideThresholdLayeredInteractionSystem"
+  ],
+  "existingAnatomyReused": {
+    "gameplayStrands": 4,
+    "gameplayMotes": 20,
+    "gameplayPressureBodies": 5,
+    "layeredStrands": 5,
+    "layeredRibs": 6,
+    "layeredMotes": 16,
+    "layeredResponseRings": 3
+  },
+  "stateReads": {
+    "cautious": "baseline current remains legible",
+    "blooming": "brighter faster coherent lift",
+    "withered": "contracted sparse slow current",
+    "panic": "acute jitter and compressed pressure response that settles under coherence",
+    "embrace": "broad calm current and sheltering ribs",
+    "growth": "persistent fuller current and larger existing pressure anatomy"
+  },
+  "performance": {
+    "newSystems": 0,
+    "newSourceModules": 0,
+    "newParticles": 0,
+    "newGeometry": false,
+    "newRaycasts": 0
+  },
+  "bodyLock": {
+    "coreRemainsLimbless": true,
+    "matureTendrilsRemainDeferred": true
+  }
+}

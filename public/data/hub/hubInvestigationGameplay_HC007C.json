@@ -1,0 +1,126 @@
+[
+  {
+    "id": "HUB_INVESTIGATION_GAMEPLAY_HC007C",
+    "build": "HC-012C",
+    "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "purpose": "Preserve the original Hub investigation and, after Grave Memory, Vascular Rhythm, and Silt Pressure have all returned, combine them through one movement-led spiral weave without opening Comb Threshold.",
+    "center": {
+      "position": [
+        0.1,
+        -0.15,
+        -1.8
+      ],
+      "returnRange": 0.9
+    },
+    "memoryFragment": {
+      "position": [
+        0.1,
+        1.85,
+        -2.05
+      ],
+      "readRange": 1.65,
+      "requiresPulse": true
+    },
+    "routes": [
+      {
+        "id": "grave_memory_route",
+        "displayName": "Grave Memory",
+        "position": [
+          0.12,
+          0.2,
+          -4.4
+        ],
+        "readRange": 1.9,
+        "chemistry": [
+          "scar",
+          "residue",
+          "signal"
+        ],
+        "response": "memory_echo_draws_inward",
+        "color": 16758640
+      },
+      {
+        "id": "vascular_route",
+        "displayName": "Vascular Rhythm",
+        "position": [
+          -4.6,
+          2.45,
+          -2.7
+        ],
+        "readRange": 1.95,
+        "chemistry": [
+          "signal",
+          "flux",
+          "form"
+        ],
+        "response": "sleeping_rhythm_answers_without_opening",
+        "color": 7398143
+      },
+      {
+        "id": "silt_burrow_route",
+        "displayName": "Silt Pressure",
+        "position": [
+          4.6,
+          -2.35,
+          -2.7
+        ],
+        "readRange": 1.95,
+        "chemistry": [
+          "form",
+          "residue",
+          "seed"
+        ],
+        "response": "dense_pressure_recoils_without_opening",
+        "color": 16763742
+      }
+    ],
+    "requirements": {
+      "routePulseReads": 3,
+      "memoryPulseRead": true,
+      "returnToCenter": true
+    },
+    "triggerPolicy": {
+      "preserveStatusPageTrigger": true,
+      "preserveGraveGateTrigger": true,
+      "neverCompletesHubObjectiveDirectly": true,
+      "neverOpensDormantRoutes": true
+    },
+    "visual": {
+      "markerRadius": 0.34,
+      "baseOpacity": 0.0,
+      "nearOpacity": 0.18,
+      "readOpacity": 0.12,
+      "authority": "logic_only_visuals_delegated_to_HubChamberFoundationSystem",
+      "duplicateMarkersDisabledBy": "HC-008G"
+    },
+    "threeRouteConvergence": {
+      "pass": "HC-012C",
+      "mode": "continuous_spiral_weave",
+      "centerPosition": [
+        0.1,
+        -0.15,
+        -1.8
+      ],
+      "entryRadius": 3.25,
+      "outerRadius": 3.0,
+      "innerRadius": 0.82,
+      "requiredOrbitRadians": 5.78,
+      "requiredCompression": 0.82,
+      "requiredContinuity": 0.38,
+      "minimumMovementSpeed": 0.12,
+      "finalPulseRadius": 1.05,
+      "routeOrderIndependent": true,
+      "routeTriggerChecklist": false,
+      "oneFinalPulse": true,
+      "failurePolicy": "soft_coherence_decay_without_reset_or_restart",
+      "availableGuideLine": "The three returned readings lean toward the same center. Carry them together through movement rather than triggering them separately.",
+      "availableObjectiveLine": "Enter the central weave and begin circling the cradle.",
+      "completedGuideLine": "Memory, rhythm, and pressure now move as one reading without losing their differences.",
+      "completedObjectiveLine": "The Combward body is visible but remains sealed for the next pass.",
+      "combThresholdCrossable": false,
+      "newAbilityUnlocks": 0,
+      "combat": false
+    }
+  }
+]

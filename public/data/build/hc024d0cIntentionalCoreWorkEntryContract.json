@@ -1,0 +1,35 @@
+{
+  "id": "HC-024D0C",
+  "name": "Intentional Core Work Entry",
+  "purpose": "Keep A/E as interaction in external Core Inspection and open Guide-assisted Core Work with an intentional D-Pad Down command.",
+  "primaryActionRule": "A/E always interacts outside Core Work; inside Core Work A/E grabs or places retained anatomy.",
+  "coreWorkEntry": {
+    "controller": "D-Pad Down",
+    "controllerButtonIndex": 13,
+    "keyboard": "G",
+    "requiresExternalCoreInspection": true,
+    "requiresGuideAvailable": true,
+    "requiresGuideHoned": false,
+    "suppressesEntryFrameVerticalDpadMotion": true
+  },
+  "guideHone": {
+    "role": "focus/readability language, not Core Work gate",
+    "visualCue": "subtle additive Guide glow",
+    "beginGlowDot": 0.955,
+    "honeDot": 0.988,
+    "maxBehindCoreDepth": 0.12,
+    "futureTranslation": "same hone language may identify other Core/world targets"
+  },
+  "ownership": {
+    "worldA": "world_interact",
+    "coreInspectionA": "world_interact",
+    "coreInspectionDpadDown": "enter_core_work_intentionally",
+    "coreWorkA": "core_work_grab_place",
+    "coreWorkDpadLeftRight": "select_retained_anatomy",
+    "statusUi": "reserved_no_gameplay_action"
+  },
+  "chemistryAdded": false,
+  "progressionChanged": false,
+  "debugQuickTestbedPreserved": true,
+  "activeSourceModuleCount": 88
+}

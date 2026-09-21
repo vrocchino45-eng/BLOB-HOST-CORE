@@ -1,0 +1,43 @@
+{
+  "build": "HC-016P",
+  "checks": [
+    {
+      "name": "syntax:InspectionOcclusionSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:MembraneRidgeGameplaySystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:PlaytestHudSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GuidePromptSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016PTightCameraCostFix.mjs",
+      "status": "PASS",
+      "detail": "[HC016P] cached/sampled Tight Camera occlusion PASS\n[HC016P] Membrane Ridge current endpoint made explicit PASS\n"
+    }
+  ],
+  "tightCamera": {
+    "previousCorridorRaycastsPerFrame": 18,
+    "currentCorridorRaycastsPerOcclusionSample": 10,
+    "occlusionSampleIntervalSeconds": 0.075,
+    "candidateRefreshIntervalSeconds": 0.65,
+    "recursiveWholeSceneRaycastRemoved": true,
+    "perFrameWholeSceneTraverseRemoved": true
+  },
+  "membraneRidge": {
+    "progressionBugFound": false,
+    "completedStateIsCurrentPlayableEndpoint": true,
+    "gatheringGroundGameplayImplemented": false
+  }
+}

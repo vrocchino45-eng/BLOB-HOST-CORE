@@ -1,0 +1,41 @@
+{
+  "build": "HC-016X",
+  "mode": "core_scale_normalization_and_locomotion_baseline",
+  "sourceBuild": "HC-016W",
+  "core": {
+    "visualScale": 0.52,
+    "approxReductionPercent": 48,
+    "worldSpaceInteractionRangesChanged": false,
+    "routeDimensionsChanged": false,
+    "growthHeadroomCreated": true
+  },
+  "movement": {
+    "normalSpeedLimitBefore": 3.75,
+    "normalSpeedLimitAfter": 4.65,
+    "normalIncreasePercent": 24.0,
+    "baseAccelerationBefore": 11.15,
+    "baseAccelerationAfter": 13.1,
+    "existingBoostControl": "L3 / Shift",
+    "boostAccelerationMultiplier": 1.8,
+    "boostSpeedMultiplier": 1.85,
+    "newMovementButtonAdded": false
+  },
+  "attachedPresentation": {
+    "guideOffsetsNormalized": true,
+    "tenderOffsetsNormalized": true,
+    "wakeNormalized": true,
+    "interactionEffectsRemainMechanicallyWorldSpace": true
+  },
+  "locked": [
+    "Grave HC016T dimensions",
+    "Vascular HC016U dimensions",
+    "Silt HC016V dimensions",
+    "route mechanics",
+    "chemistry",
+    "progression",
+    "camera architecture",
+    "interaction reach",
+    "Surface \u2192 Guide \u2192 Hub progression"
+  ],
+  "nextPass": "HC-016Y Route Physical Feel"
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "BLOOM_RESIDUE_LOOP_001",
+    "cellId": "CELL_BLOOM_RESIDUE_FORK_001",
+    "purpose": "Stabilize the fork by reading inherited residue, opening bloom carefully, warming the seed-choice braid, and respecting overgrowth warning without turning it into a pickup.",
+    "sequence": [
+      {
+        "stage": "memory_read",
+        "focusObject": "residue_memory_silt_001",
+        "verb": "pulse",
+        "meaning": "read what the fork inherited before nourishing growth"
+      },
+      {
+        "stage": "bloom_opened",
+        "focusObject": "bloom_spore_lantern_001",
+        "verb": "pulse",
+        "meaning": "approach growth carefully; bloom is possibility and risk"
+      },
+      {
+        "stage": "braid_warmed",
+        "focusObject": "seed_choice_braid_001",
+        "verb": "pulse",
+        "meaning": "warm relation instead of selecting a menu branch"
+      },
+      {
+        "stage": "warning_respected",
+        "focusObject": "overgrowth_warning_tendril_001",
+        "verb": "pulse_respect",
+        "meaning": "recognize overgrowth without absorbing it as reward"
+      },
+      {
+        "stage": "fork_stable",
+        "focusObject": "seed_choice_braid_001",
+        "verb": "remain",
+        "meaning": "hold memory and growth together without forcing a final choice"
+      }
+    ],
+    "metrics": {
+      "minimumResidueMemory": 0.58,
+      "minimumBloomCare": 0.56,
+      "minimumBraidWarmth": 0.58,
+      "minimumWarningRespect": 0.48,
+      "maximumOvergrowthRisk": 0.38,
+      "minimumForkStability": 0.72
+    },
+    "rewards": {
+      "seed": 0.00045,
+      "bloom": 0.00055,
+      "residue": 0.00035,
+      "signal": 0.0002
+    },
+    "forbidden": [
+      "do_not_absorb_overgrowth_warning_tendril",
+      "do_not_force_binary_choice",
+      "do_not_spawn_fourth_cell"
+    ],
+    "handoffCompositionFloors": {
+      "residue": 0.24,
+      "seed": 0.34
+    },
+    "handoffCompositionRule": "Completing the four authored Bloom reads commits the residue/seed evidence required by the immediate Grave handoff. This is a deterministic floor, not a repeatable farming reward."
+  }
+]

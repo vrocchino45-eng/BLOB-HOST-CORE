@@ -1,0 +1,34 @@
+{
+  "id": "HC025B_CHEMISTRY_DRIVEN_ATTACHMENT",
+  "parent": "HC-025A",
+  "movementOwner": "PlayerMovementController",
+  "chemistryOwner": "CoreEmbodimentSystem",
+  "surfaceAuthority": "PlayerMovementController existing authored ellipsoid boundary",
+  "states": [
+    "suspended",
+    "brushing",
+    "attached",
+    "releasing"
+  ],
+  "requires": {
+    "retainedAnatomy": "Silt Pressure",
+    "bodyZone": "membrane",
+    "interaction": "silt_adhesion_skin",
+    "surfaceAlignment": "Silt-bearing world direction compared with trusted boundary surface normal"
+  },
+  "attachment": {
+    "automatic": true,
+    "newButton": false,
+    "acquire": "near trusted boundary + Silt membrane + sufficient directional alignment",
+    "motion": "velocity projected tangent to trusted membrane; position settles on inner shell",
+    "release": "deliberate input away from surface or chemistry/surface loss",
+    "reacquireCooldownSeconds": 0.3
+  },
+  "usesExistingMovementBoundary": true,
+  "addsCollider": false,
+  "addsRaycastSystem": false,
+  "decorativeGeometryCollisionAuthority": false,
+  "collisionConsequencesEnabled": false,
+  "progressionAuthority": false,
+  "acceptance": "Silt on the aligned membrane side produces free -> brush -> attach -> tangent traverse -> pull-away release -> free on the existing authored boundary; moving Silt away from membrane or to a poorly aligned side weakens/removes attachment."
+}

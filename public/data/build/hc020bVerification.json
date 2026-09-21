@@ -1,0 +1,26 @@
+{
+  "build": "HC020B",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "validator": "[HC020B] Guide readable verb grammar PASS\n[HC020B] wrong-verb visible response / anti-mash contract PASS\n[HC020B] Status/Info UI removed from progression PASS\n[HC020B] documentation history archived PASS\n[HC020B] expansion/movement/camera/chemistry/crossing locks PASS",
+  "runtimeSyntax": "PASS: 101 JS modules",
+  "lockedSystems": {
+    "src/morph/LocalCellBoundaryMorphSystem.js": true,
+    "src/opening/SurfaceWakeGameplaySystem.js": true,
+    "src/opening/SurfaceWakeLayeredInteractionSystem.js": true,
+    "src/chemistry/BondSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/camera/InspectionCameraSystem.js": true,
+    "src/world/AmbientMaterialInteractionSystem.js": true
+  },
+  "rootMarkdownFiles": [
+    "CHANGELOG.md",
+    "HC020B_BUILD_REPORT.md",
+    "KNOWN_ISSUES.md",
+    "LOCK_STATUS.md",
+    "README.md"
+  ],
+  "historicalReportsArchived": 74,
+  "bundler": "NOT_RUN: packaged source omits node_modules; npm install then npm run dev/build locally",
+  "guideStabilizeVfxSuppressionConsumed": true
+}

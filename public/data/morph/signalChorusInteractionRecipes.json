@@ -1,0 +1,55 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_LOOP_001",
+    "cellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "purpose": "Teach listening before force by making the player call and answer with signal objects.",
+    "noGate": true,
+    "sequence": [
+      {
+        "stage": "choir_heard",
+        "focusObject": "choir_resonance_node_001",
+        "verb": "pulse",
+        "meaning": "the chorus answers only when called, not consumed",
+        "progressGain": 0.24
+      },
+      {
+        "stage": "pore_opened",
+        "focusObject": "listening_pore_membrane_001",
+        "verb": "pulse",
+        "meaning": "the host opens listening tissue when pressure is gentle",
+        "progressGain": 0.23
+      },
+      {
+        "stage": "wave_followed",
+        "focusObject": "harmonic_wave_thread_001",
+        "verb": "pulse_or_proximity",
+        "meaning": "follow the returning wave until the nerve becomes readable",
+        "progressGain": 0.24
+      },
+      {
+        "stage": "bridge_warmed",
+        "focusObject": "seed_signal_bridge_001",
+        "verb": "pulse_before_absorb",
+        "meaning": "seed and signal can bridge after listening is established",
+        "progressGain": 0.21
+      },
+      {
+        "stage": "signal_chorus_tuned",
+        "focusObject": "seed_signal_bridge_001",
+        "verb": "hold_presence",
+        "meaning": "the chorus is stable enough to plan the next branch",
+        "progressGain": 0.08
+      }
+    ],
+    "metrics": {
+      "minimumListen": 0.64,
+      "minimumAnswer": 0.58,
+      "minimumHarmony": 0.62,
+      "maximumForcedAbsorbRisk": 0.34
+    },
+    "completion": {
+      "setsPreparedForNextBranch": true,
+      "nextPlanningPass": "HC-002O Third Local Cell Planning / Bloom-Residue Choice Fork"
+    }
+  }
+]

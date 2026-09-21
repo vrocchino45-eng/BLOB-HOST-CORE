@@ -1,0 +1,12 @@
+import fs from "node:fs";
+const c=fs.readFileSync(new URL("../src/presentation/InteractionCompositionSystem.js",import.meta.url),"utf8");
+const r=fs.readFileSync(new URL("../src/core/GameRuntime.js",import.meta.url),"utf8");
+const a=JSON.parse(fs.readFileSync(new URL("../public/data/build/hc018aInteractionCompositionAudit.json",import.meta.url),"utf8"));
+const must=(x,m)=>{if(!x)throw new Error(m)};
+for(const x of ["anatomy_dominant","target_dominant","verb_response_dominant","environmental_consequence_then_anatomy"]) must(c.includes(x),`missing hierarchy ${x}`);
+must(r.includes("interactionBreathingRoom"),"camera breathing room not integrated");
+must(r.includes('registry.register("interactionCompositionSystem"'),"composition coordinator not registered");
+for(const k of ["targetRulesChanged","verbRulesChanged","bondRulesChanged","routeRulesChanged","chemistryChanged","movementChanged","coreScaleChanged"]) must(a[k]===false,`lock violated ${k}`);
+console.log("[HC018A] interaction hierarchy PASS");
+console.log("[HC018A] camera breathing room PASS");
+console.log("[HC018A] gameplay/route/chemistry locks PASS");

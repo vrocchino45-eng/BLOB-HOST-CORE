@@ -1,0 +1,94 @@
+{
+  "id": "HC024B_GUIDE_CORE_WORK_VIEW_CONTRACT",
+  "build": "HC-024B",
+  "mode": "camera / Guide embodiment / interaction foundation",
+  "purpose": "Prove a third, Guide-assisted Core Work view inside the live Host scene without enabling chemistry or piece manipulation yet.",
+  "playerEvidence": [
+    "HC024A external Core inspection is working and useful as a close view",
+    "player wants an internal look and eventual manipulation of accumulated Core pieces",
+    "Guide is preferred as the embodied manipulation agent rather than a detached crafting cursor"
+  ],
+  "entryFlow": {
+    "worldToCoreInspection": "Y controller / F keyboard / V alias",
+    "coreInspectionToCoreWork": "A controller / E keyboard while self-inspection is active",
+    "coreWorkToCoreInspection": "B controller / Escape keyboard",
+    "coreWorkToWorld": "Y controller / F keyboard / V alias"
+  },
+  "allowedScope": [
+    "reuse InspectionCameraSystem as Core Work state owner",
+    "reuse GameRuntime as sole camera transform owner",
+    "contextually capture A/E while Core self-inspection is active",
+    "move existing Guide orbiter into a readable Core-attending pose",
+    "soften existing Core membrane opacity and brighten existing internal anatomy",
+    "retain right-stick orbit and R3 recenter",
+    "keep the Host scene live behind the Core",
+    "update compact playtest hints and diagnostics"
+  ],
+  "forbiddenScope": [
+    "new region or geography",
+    "new world geometry",
+    "new Guide geometry",
+    "new chemistry recipe",
+    "chemistry reaction",
+    "piece dragging or rearrangement",
+    "inventory or crafting screen",
+    "detached editor scene",
+    "player teleport or relocation",
+    "progression requirement",
+    "contact or attachment physics",
+    "return-traversal topology change",
+    "new physical controller mapping"
+  ],
+  "camera": {
+    "mode": "guide_assisted_core_work",
+    "distance": 1.95,
+    "fieldOfView": 43,
+    "pitchMin": -0.72,
+    "pitchMax": 0.92,
+    "rightStickOrbit": true,
+    "firstPerson": false,
+    "worldScenePreserved": true
+  },
+  "guide": {
+    "state": "guide_attending_core_work",
+    "target": "player_core_work_surface",
+    "usesExistingOrbiterBody": true,
+    "newGeometry": false,
+    "shimmerLineReused": true
+  },
+  "core": {
+    "cutawayPolicy": "soften existing outer membrane while brightening existing inner mantle and nucleus",
+    "newGeometry": false,
+    "chemistryMutation": false,
+    "pieceManipulation": false
+  },
+  "input": {
+    "physicalMapChanged": false,
+    "contextualInteractCapture": true,
+    "worldInteractSuppressedDuringSelfInspection": true,
+    "futureManipulationReservation": "A/E remains reserved inside Core Work for HC024C"
+  },
+  "locks": {
+    "cameraTransformOwner": "GameRuntime",
+    "inspectionAndWorkStateOwner": "InspectionCameraSystem",
+    "guidePoseOwner": "OrbiterSystem",
+    "coreCutawayOwner": "CoreEmbodimentSystem",
+    "movementOwner": "PlayerMovementController",
+    "controlMapRemapped": false,
+    "newSourceModules": 0,
+    "sourceJsCount": 88
+  },
+  "acceptanceTests": [
+    "Y enters external Core Inspection exactly as HC024A",
+    "A from self-inspection calls Guide into a closer Core Work composition",
+    "A used for Core Work does not also trigger world interact",
+    "Guide visibly approaches and attends the Core using its existing body",
+    "outer membrane becomes more readable-through without disappearing",
+    "existing internal anatomy becomes easier to read",
+    "Right Stick still orbits during Core Work",
+    "B returns to external inspection",
+    "Y from Core Work returns to world exploration",
+    "chemistry and piece manipulation remain disabled"
+  ],
+  "nextIfPasses": "HC024C may prototype physical selection and repositioning of a very small set of existing accumulated Core pieces, still using Guide as the manipulation agent."
+}

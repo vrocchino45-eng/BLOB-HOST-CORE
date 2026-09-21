@@ -1,0 +1,14 @@
+import fs from "node:fs";
+const read=(p)=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), ambient=read("../src/world/AmbientMaterialInteractionSystem.js");
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-021B"'),"identity");
+for(const x of ["nursery_suspension","grave_settling_residue","vascular_current_riders","silt_particulate_beds"]) must(ambient.includes(x),`profile ${x}`);
+for(const x of ["suspension","currentRiders","settlingResidue","reactiveSpores"]) must(ambient.includes(x),`ecology telemetry ${x}`);
+must(ambient.includes("inventoryAuthority: false"),"inventory authority");
+must(ambient.includes("chemistryAuthority: false"),"chemistry authority");
+must(ambient.includes("objectiveAuthority: false"),"objective authority");
+must(ambient.includes("progressionAuthority: false"),"progression authority");
+console.log("[HC021B] ambient matter ecology PASS");
+console.log("[HC021B] regional micro-ecology profiles PASS");
+console.log("[HC021B] zero inventory/objective/progression authority PASS");

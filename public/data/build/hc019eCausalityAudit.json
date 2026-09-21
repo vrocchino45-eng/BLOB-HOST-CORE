@@ -1,0 +1,28 @@
+{
+  "build": "HC019E",
+  "mode": "causality_convergence",
+  "worldStateOwner": "SurfaceWakeGameplaySystem.materialPassageOpen",
+  "foldObserver": "SurfaceWakeLayeredInteractionSystem",
+  "objectiveObserver": "ObjectiveSystem.surfaceWakeState",
+  "pacingObserver": "OpeningPacingSystem",
+  "crossingOwner": "existing LocalCellBoundaryMorphSystem / local morph systems",
+  "causalOrder": [
+    "player verb",
+    "material result",
+    "materialPassageOpen",
+    "fold availability",
+    "fold completion",
+    "objective observation",
+    "existing morph/crossing"
+  ],
+  "objectiveCreatesWorldState": false,
+  "objectiveCreatesCrossing": false,
+  "foldCreatesWorldState": false,
+  "crossingChanged": false,
+  "surfaceGameplayChanged": false,
+  "ambientFieldChanged": false,
+  "movementChanged": false,
+  "cameraChanged": false,
+  "chemistryChanged": false,
+  "verbRulesChanged": false
+}

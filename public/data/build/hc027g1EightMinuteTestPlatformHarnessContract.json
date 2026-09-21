@@ -1,0 +1,44 @@
+{
+  "id": "hc027g1_eight_minute_test_platform_harness",
+  "owner": "DebugAreaJumpSystem",
+  "parent": "HC-027G",
+  "purpose": "Use eight deterministic debug-only shortcuts to spend a focused eight-minute playtest on distinct existing gameplay contexts instead of travel/setup repetition.",
+  "shortcutFamily": "Shift+1..8",
+  "suggestedSecondsPerPlatform": 60,
+  "suggestedTotalSeconds": 480,
+  "automaticAdvance": false,
+  "platforms": [
+    { "slot": 1, "label": "Orientation / Surface Wake", "cellId": "CELL_MEMBRANE_NURSERY_001", "purpose": "movement + approved audio baseline + first Pulse readability" },
+    { "slot": 2, "label": "Pressure / Guide Threshold", "cellId": "CELL_SCAR_FLOW_FOLD_001", "purpose": "camera-relative movement + pressure current + Stabilize/Pulse language" },
+    { "slot": 3, "label": "Inquiry / Hub Core Work", "cellId": "CELL_SIGNAL_CHORUS_NERVE_001", "purpose": "route comparison + Core inspection + close-view hierarchy" },
+    { "slot": 4, "label": "Memory / Grave Reply", "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001", "purpose": "scar-memory Pulse answer + material reply + local consequence" },
+    { "slot": 5, "label": "Flow / Vascular Physiology", "cellId": "CELL_VASCULAR_RHYTHM_ROUTE_001", "purpose": "current traversal + boost/endurance physiology + cadence readability" },
+    { "slot": 6, "label": "Pressure / Silt Intake", "cellId": "CELL_SILT_PRESSURE_ROUTE_001", "purpose": "resistance + selective Absorb + pressure recovery" },
+    { "slot": 7, "label": "Coherence / Comb Threshold", "cellId": "CELL_COMB_THRESHOLD_FILTER_001", "purpose": "mixed-read sequencing + Stabilize coherence + threshold readability" },
+    { "slot": 8, "label": "Open Inquiry / Signal Plain", "cellId": "CELL_APERTURE_FIELDS_ARRIVAL_001", "purpose": "open-field orientation + Pulse inquiry + ecology/material response" }
+  ],
+  "testSetup": {
+    "canonicalEntryPosition": [0, 0, 0],
+    "zeroMomentum": true,
+    "releaseInspectionCamera": true,
+    "clearTransientSonarAnswers": true,
+    "seedCoreWorkAtSlots": [3, 5],
+    "resetSignalPlainAtSlot8": true,
+    "showFiveSecondHudToast": true
+  },
+  "locked": {
+    "legacyCtrlAreaJumpsPreserved": true,
+    "audioMixChanged": false,
+    "materialReplyGrammarChanged": false,
+    "pulseGameplayRangeChanged": false,
+    "pulseReturnTimingChanged": false,
+    "answerMemoryLawChanged": false,
+    "radialPhysiologyChanged": false,
+    "movementAuthorityChanged": false,
+    "chemistryAuthorityChanged": false,
+    "progressionAuthorityChanged": false,
+    "routeTopologyChanged": false,
+    "engineGrammarChanged": false,
+    "newGameplaySystems": false
+  }
+}

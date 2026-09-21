@@ -1,0 +1,33 @@
+{
+  "build": "HC-028H1",
+  "rule": "topology_changes_how_existing_environmental_force_is_received_without_changing_player_input_or_world_force_generation",
+  "sourceAuthority": "CoreTopologyResonanceSystem + CoreRadialPerformanceSystem",
+  "movementConsumer": "PlayerMovementController",
+  "modifiers": {
+    "environmentalCouplingMultiplier": {
+      "min": 0.92,
+      "max": 1.09,
+      "meaning": "bounded_scale_on_existing_environment_flow_acceleration_only"
+    },
+    "fluidSlipDampingMultiplier": {
+      "min": 0.94,
+      "max": 1.07,
+      "meaning": "bounded_scale_on_existing_fluid_slip_damping_only"
+    }
+  },
+  "neutralizedDuring": [
+    "hub_guided_commit",
+    "convergence_reachability"
+  ],
+  "normalInputAccelerationMultiplier": 1,
+  "speedLimitMultiplier": 1,
+  "boostMultiplier": 1,
+  "verbMultiplier": 1,
+  "perRegionTable": false,
+  "topologyBuffTable": false,
+  "worldForceGenerationChanged": false,
+  "newThermalPhysics": false,
+  "routeAuthority": false,
+  "inputAuthority": false,
+  "telemetrySchema": "blob.session.telemetry.v1.7"
+}

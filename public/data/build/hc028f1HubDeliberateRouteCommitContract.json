@@ -1,0 +1,37 @@
+{
+  "id": "HC028F1_HUB_DELIBERATE_ROUTE_COMMIT",
+  "rule": "hub_is_orientation_and_deliberate_destination_choice_not_a_hidden_activation_puzzle",
+  "controlGrammar": {
+    "movement": "approach destination body",
+    "pulseAbsorbStabilize": "optional reading and regional gameplay",
+    "A": "commit to awake Hub destination"
+  },
+  "hubEntryRecipeIds": [
+    "hub_to_grave",
+    "hub_to_vascular",
+    "hub_to_silt",
+    "hub_to_comb"
+  ],
+  "hubEntryTrigger": "commit",
+  "guidedApproach": true,
+  "oldMandatoryHubInvestigationForGraveEntry": false,
+  "oldMandatoryThreeRouteSpiralForComb": false,
+  "returnRoutesRemainProximityResolved": true,
+  "noBranchMenu": true,
+  "noTeleport": true,
+  "authority": {
+    "commitmentIntent": "DeliberateCommitmentSystem",
+    "hubSelection": "HubInvestigationGameplaySystem",
+    "transitionAndGuidedApproach": "LocalCellBoundaryMorphSystem",
+    "movementSuppressionDuringGuidedApproach": "PlayerMovementController",
+    "regionGameplay": "unchanged existing region owners"
+  },
+  "forbidden": [
+    "Pulse required merely to enter an awake Hub route",
+    "hidden center convergence required to choose a route",
+    "route gameplay changes",
+    "new controller mapping",
+    "generic A scan/interact restoration"
+  ],
+  "hubEntriesRepeatableAfterReturn": true
+}

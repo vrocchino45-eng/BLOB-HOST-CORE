@@ -1,0 +1,80 @@
+{
+  "id": "GRAVE_ROUTE_LOCK_HC004R",
+  "build": "HC-004R",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "buildStrategyReference": "BUILD_STRATEGY_REFERENCE.md",
+  "status": "runtime_active_locked_after_verified_post_seam_completion",
+  "purpose": "Lock the completed Grave route as a self-contained memory loop after the verified read-before-absorb, safe transfer, scar-memory seam, fold-back, and post-seam response sequence.",
+  "lockDecision": "self_contained_memory_loop_locked",
+  "sourceCompletion": {
+    "system": "GraveBedPostSeamResponseSystem",
+    "recipeId": "GRAVE_BED_POST_SEAM_RESPONSE_HC004P",
+    "requiredCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "requiredStage": "grave_bed_post_seam_response_complete",
+    "requiresCompleted": true,
+    "requiresResponseComplete": true
+  },
+  "verifiedChain": [
+    "grave_read_before_absorb",
+    "safe_silt_transfer",
+    "grave_loop_stability",
+    "grave_exit_readiness",
+    "scar_memory_seam_arrival",
+    "scar_memory_seam_first_read",
+    "verified_fold_back",
+    "grave_bed_post_seam_response"
+  ],
+  "lockedSystems": [
+    "GraveReadBeforeAbsorbSystem",
+    "GraveLoopStabilitySystem",
+    "GraveExitReadinessSystem",
+    "GraveScarMemorySeamArrivalSystem",
+    "GraveScarMemorySeamFirstReadSystem",
+    "GraveSeamContinuityMicroExitSystem",
+    "GraveBedPostSeamResponseSystem",
+    "InputSystem Grave contextual A-button handoff"
+  ],
+  "runtimeBehavior": {
+    "readOnlyCompletionOwner": true,
+    "playerRelocation": false,
+    "runtimeExitActivation": false,
+    "newMorphActivation": false,
+    "newRouteBranch": false,
+    "targetRequired": false,
+    "inputRequired": false,
+    "protectedRemainsStayVisible": true,
+    "inheritanceSeedRemainsClosed": true
+  },
+  "playerFacingLanguage": {
+    "hudStatus": "Grave Memory Route: complete",
+    "guideLine": "The Grave has answered. Nothing here asks to be opened.",
+    "objectiveLine": "Hold the reading. The husk, scar, and inheritance seed remain intact.",
+    "nextAction": "The memory loop is complete. Further continuation must begin as a new tissue path, not an exit from this bed."
+  },
+  "nextRecommendedPass": {
+    "id": "HC-005A",
+    "label": "First Route Return Continuity Planning",
+    "purpose": "Plan a continuous no-gate tissue return toward the Signal Chorus route-awareness function before any Comb Threshold or wider Act 1 expansion."
+  },
+  "forbidden": [
+    "old gates",
+    "doors",
+    "teleports",
+    "branch select menu",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "runtime exit activation",
+    "new morph activation",
+    "new route branch",
+    "player relocation",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "new entity spawns",
+    "consuming old core husk",
+    "opening inheritance seed remnant",
+    "opening closed inheritance suture",
+    "Act expansion"
+  ]
+}

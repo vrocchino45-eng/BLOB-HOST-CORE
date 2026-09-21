@@ -1,0 +1,69 @@
+{
+  "build": "HC-030A",
+  "parent": "HC-029C",
+  "label": "Reactive State Grammar",
+  "lockedFoundation": {
+    "targeting": "HC029A relationship acquisition, retention and handoff thresholds unchanged",
+    "effectOwnership": "HC029B relationship effect ownership unchanged",
+    "composition": "HC029C chord meanings and modifiers unchanged",
+    "newBaseVerbs": 0,
+    "newButtons": 0
+  },
+  "stateOwner": "ReactiveStateGrammarSystem",
+  "authoredDispositionSource": "chemObjectRecipes[*].chemistry.instabilityRisk",
+  "stateGrammar": {
+    "coherent": {
+      "maxCondition01": 0.3,
+      "cue": "closed_coherent_form"
+    },
+    "strained": {
+      "minCondition01": 0.3,
+      "maxCondition01": 0.52,
+      "cue": "vibrating_closed_form"
+    },
+    "unstable": {
+      "minCondition01": 0.52,
+      "maxCondition01": 0.72,
+      "cue": "uneven_phase_form"
+    },
+    "failing": {
+      "minCondition01": 0.72,
+      "cue": "open_broken_form"
+    }
+  },
+  "verbAnswers": {
+    "pulse": "raises live condition on retained target; coherent displacement stays clean while unstable/failing response becomes increasingly irregular",
+    "absorb": "adds strain while held; higher condition slows incorporation and increases rotational agitation",
+    "stabilize": "reduces live condition toward coherence without changing authored baseline disposition",
+    "cohere_project": "stabilize suppresses Pulse-added strain while preserving controlled push",
+    "cohere_draw": "stabilize suppresses Absorb-added strain while preserving draw",
+    "exchange": "opposed force remains tense and comparatively destabilizing",
+    "full_system": "strong containment suppresses visible deformation more than it repairs underlying condition"
+  },
+  "runtimeOrder": {
+    "chemObjectBeforeTargeting": true,
+    "targetingBeforeComposition": true,
+    "compositionBeforeReactiveState": true,
+    "reactiveStateBeforeBond": true,
+    "chemObjectVisualConsumesPriorFrameReactiveState": true,
+    "reorderedLockedOwners": false
+  },
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.19",
+    "eventCapacity": 16000,
+    "recordsReactiveStageChanges": true
+  },
+  "forbidden": {
+    "targetingThresholdRetune": false,
+    "manualTargetCycle": false,
+    "cameraSnap": false,
+    "newReticle": false,
+    "newAbility": false,
+    "newButton": false,
+    "routeChange": false,
+    "progressionChange": false,
+    "ecologyChange": false,
+    "newRegionContent": false,
+    "materialPersonalitySpecialCases": false
+  }
+}

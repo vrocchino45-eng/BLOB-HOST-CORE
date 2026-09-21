@@ -1,0 +1,14 @@
+import fs from "node:fs";
+const read=(p)=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), surface=read("../src/opening/SurfaceWakeGameplaySystem.js"), guide=read("../src/morph/GuideThresholdGameplaySystem.js");
+const sr=JSON.parse(read("../public/data/opening/surfaceWakeGameplayRecipes.json"))[0], gr=JSON.parse(read("../public/data/morph/guideThresholdGameplayRecipes.json"))[0];
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-021A"'),"identity");
+for(const x of ["teach","repeat","recognize","vary"]) must(surface.includes(`"${x}"`),`surface ${x}`);
+must(surface.includes("familySeenTypes")&&surface.includes("familyResolvedTypes"),"family memory");
+must(guide.includes('familyId: "guide_living_current_family"'),"guide family");
+must(!sr.interactionFamily.newPrimaryMechanic&&!gr.interactionFamily.newPrimaryMechanic,"mechanic scope");
+must(!sr.interactionFamily.newRegion&&!gr.interactionFamily.newRegion,"region scope");
+console.log("[HC021A] interaction families PASS");
+console.log("[HC021A] teach/repeat/recognize/vary PASS");
+console.log("[HC021A] no new primary mechanic / no new region PASS");

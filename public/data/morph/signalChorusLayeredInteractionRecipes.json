@@ -1,0 +1,123 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_LAYERED_INTERACTION_HC006B",
+    "build": "HC-006B",
+    "status": "runtime_active_layered_trigger_prototype",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "focusObjectId": "chorus_cadence_knot_001",
+    "purpose": "Replace one-step pulse registration with a readable approach, observation, cadence alignment, sustained resonance, visible tissue response, release, and settle loop while keeping the next route closed.",
+    "activation": {
+      "requiresReturnState": "signal_chorus_return_state_held",
+      "requiresPressureStage": "combward_pressure_readable",
+      "requiresVisualIdentityStage": "signal_chorus_living_tissue_identity_readable",
+      "requiresActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001"
+    },
+    "geometry": {
+      "anchor": [
+        1.05,
+        0.26,
+        -1.92
+      ],
+      "chorusCenter": [
+        0.28,
+        0.18,
+        -1.75
+      ],
+      "combwardAim": [
+        3.72,
+        0.52,
+        -2.58
+      ],
+      "approachRange": 3.1,
+      "interactionRange": 2.75,
+      "sustainRange": 2.9,
+      "knotRadius": 0.18,
+      "ringRadius": 0.48,
+      "responseRingCount": 3,
+      "tendrilCount": 6
+    },
+    "timing": {
+      "approachHoldSeconds": 0.55,
+      "cadencePeriodSeconds": 1.35,
+      "cadenceWindowFraction": 0.18,
+      "requiredCadenceMatches": 2,
+      "sustainSeconds": 1.8,
+      "releaseSettleSeconds": 1.2,
+      "outOfRangeDecayPerSecond": 0.18
+    },
+    "visual": {
+      "signalColor": 11460863,
+      "memoryColor": 16765104,
+      "cadenceColor": 16774192,
+      "missColor": 16738488,
+      "settledColor": 13500382,
+      "baseOpacity": 0.22,
+      "activeOpacity": 0.72,
+      "responseOpacity": 0.5,
+      "renderOrder": 9
+    },
+    "stages": [
+      {
+        "id": "approach_cadence_knot",
+        "guideLine": "A cadence knot has formed where the returned memory meets the combward tissue.",
+        "objectiveLine": "Move close enough to let the knot read your presence.",
+        "nextAction": "Approach the bright knot at the base of the combward strands."
+      },
+      {
+        "id": "observe_read",
+        "guideLine": "The knot is listening. Answer once so its rhythm becomes visible.",
+        "objectiveLine": "Pulse once to reveal the cadence.",
+        "nextAction": "Press X once while near the cadence knot."
+      },
+      {
+        "id": "align_with_cadence",
+        "guideLine": "Do not strike at random. Answer when the ring flashes gold.",
+        "objectiveLine": "Match two visible cadence beats.",
+        "nextAction": "Pulse when the cadence ring reaches its bright gold beat."
+      },
+      {
+        "id": "sustain_resonance",
+        "guideLine": "The knot has accepted your timing. Keep the resonance alive without forcing it.",
+        "objectiveLine": "Hold resonance until the tissue fully answers.",
+        "nextAction": "Hold LT near the knot. X remains pulse."
+      },
+      {
+        "id": "release_and_settle",
+        "guideLine": "The response is full. Release it and let the tissue settle into memory.",
+        "objectiveLine": "Release LT and remain nearby while the response settles.",
+        "nextAction": "Release LT. Do not pulse or move away until the rings settle."
+      },
+      {
+        "id": "layered_interaction_complete",
+        "guideLine": "The Chorus remembers how you approached, answered, aligned, sustained, and released.",
+        "objectiveLine": "Layered resonance complete. The next route remains closed in this pass.",
+        "nextAction": "Hold the completed reading. Inspection camera work comes next."
+      }
+    ],
+    "completion": {
+      "registersLayeredInteraction": true,
+      "routeActivated": false,
+      "thresholdOpened": false,
+      "activeCellChanges": false,
+      "nextRecommendedPass": "HC-006E \u2014 Surface Wake Interaction and Inspection Retrofit"
+    },
+    "forbidden": [
+      "Comb Threshold runtime",
+      "Aperture Fields runtime",
+      "new local cell",
+      "new morph destination",
+      "route activation",
+      "gate",
+      "door",
+      "teleport",
+      "branch menu",
+      "player relocation",
+      "reopening Grave",
+      "replaying original Signal Chorus loop",
+      "combat",
+      "forced first-person camera",
+      "inspection camera activation"
+    ],
+    "controlMap": "HOST_CORE_CANONICAL_CONTROLS_V1"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "pass": "HC-028C1",
+  "law": "3 -> 6 -> 12 must be readable as changing Core architecture, not merely changing telemetry",
+  "visualOwner": "CoreEmbodimentSystem",
+  "sequenceOwner": "CoreEngineSystem",
+  "architectures": [
+    { "phaseCount": 3, "silhouette": "triangle", "meaning": "one_phase_per_function" },
+    { "phaseCount": 6, "silhouette": "hexagon", "meaning": "paired_counterpart_phases_per_function" },
+    { "phaseCount": 12, "silhouette": "dodecagon", "meaning": "four_phase_resolution_per_function" }
+  ],
+  "readability": {
+    "worldScaleReadable": true,
+    "architectureChangeBloomSeconds": 0.72,
+    "polygonOutlineEnabled": true,
+    "nodeRadius": 0.058,
+    "ordinaryPlayInactiveOpacity": 0.18,
+    "inspectionInactiveOpacity": 0.38,
+    "coreWorkInactiveOpacity": 0.52
+  },
+  "locked": {
+    "engineSequencingChanged": false,
+    "rpmLawChanged": false,
+    "debugCycleKey": "O",
+    "debugOnly": true,
+    "gameplayAuthority": false,
+    "progressionAuthority": false,
+    "worldRhythmGrammarChanged": false
+  }
+}

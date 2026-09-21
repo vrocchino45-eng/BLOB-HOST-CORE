@@ -1,0 +1,115 @@
+[
+  {
+    "id": "surface_absorb_first_nutrient",
+    "regionId": "surface_wake",
+    "displayText": "Read the nursery fold, absorb the safe seed, and reach the living seam.",
+    "steps": [
+      "surface_wake_lesson_complete",
+      "safe_seed_absorb_unlocked",
+      "surface_to_guide_handoff_complete"
+    ],
+    "onComplete": "prime_surface_to_guide_threshold"
+  },
+  {
+    "id": "guide_stabilize_and_cross",
+    "regionId": "guide_threshold",
+    "displayText": "Read the current, stabilize while traversing, then release at the settling ribs.",
+    "steps": [
+      "current_direction_observed",
+      "movement_aligned",
+      "resonance_sustained",
+      "settle_release_accepted",
+      "guide_to_hub_handoff_complete"
+    ],
+    "onComplete": "prime_guide_to_hub_chamber"
+  },
+  {
+    "id": "hub_read_route_gates",
+    "regionId": "hub_chamber",
+    "displayText": "Read the central junction, distinguish the three route states, register the first memory fragment, then open the Status Page for the core self-reading.",
+    "steps": [
+      "hub_junction_anchor_readable",
+      "three_route_gate_layout_readable",
+      "active_route_identity_distinguished",
+      "first_memory_fragment_readable",
+      "first_status_page_use"
+    ],
+    "onComplete": "lock_first_slice_hub_foundation",
+    "implementationStatus": "hub_foundation_and_status_runtime_bound"
+  },
+  {
+    "id": "grave_memory_read_and_stabilize",
+    "regionId": "grave_memory_route",
+    "displayText": "Read the old Core, recover any residue recoil, then accept only the settled memory trace without consuming the remains.",
+    "steps": [
+      "old_core_husk_pulse_read",
+      "memory_silt_pulse_read",
+      "memory_silt_stabilized",
+      "protective_scar_pulse_read",
+      "inheritance_seed_pulse_read",
+      "protected_remains_left_intact",
+      "residue_recoil_within_safe_bounds",
+      "settled_memory_trace_safely_transferred",
+      "grave_memory_imprint_committed"
+    ],
+    "onComplete": "prime_grave_memory_to_hub_fold",
+    "implementationStatus": "runtime_bound_first_route_consequence_HC010B"
+  },
+  {
+    "id": "vascular_route_playable_circuit",
+    "regionId": "vascular_route",
+    "displayText": "Move with the circulation charge, Pulse three living cadences, Stabilize contraction pressure, and follow the reversed current back.",
+    "steps": [
+      "living_current_entered",
+      "three_cadence_windows_pulse_read",
+      "deep_valve_reached",
+      "contraction_pressure_stabilized",
+      "circulation_synchronized",
+      "return_current_formed"
+    ],
+    "onComplete": "prime_vascular_route_return_consequence",
+    "implementationStatus": "runtime_playable_circuit_HC011A"
+  },
+  {
+    "id": "silt_route_playable_circuit",
+    "regionId": "silt_burrow_route",
+    "displayText": "Read the compression, brace the living ribs, selectively Absorb porous nourishment, recover from packed-residue collapse, and reach the deep release.",
+    "steps": [
+      "pressure_direction_pulse_read",
+      "living_ribs_stabilized_open",
+      "porous_nutrient_selectively_absorbed",
+      "packed_residue_left_intact",
+      "deep_pressure_organ_reached",
+      "return_breath_formed"
+    ],
+    "onComplete": "prime_silt_route_return_consequence",
+    "implementationStatus": "runtime_playable_circuit_HC012A"
+  },
+  {
+    "id": "comb_threshold_playable_synthesis",
+    "regionId": "comb_threshold",
+    "displayText": "Carry Grave memory, Vascular cadence, and Silt pressure through six mixed filter readings, then hold one final centered Stabilize + Pulse to reveal the first field without crossing into it.",
+    "steps": [
+      "six_mixed_filter_reads_held",
+      "combined_coherence_above_final_threshold",
+      "final_pulse_stabilize_read_held",
+      "first_field_reveal_witnessed",
+      "aperture_destination_remains_unmounted"
+    ],
+    "onComplete": "retain_comb_synthesis_in_gate_history_and_keep_aperture_unmounted",
+    "implementationStatus": "playable_synthesis_complete_first_field_reveal_only_HC013B"
+  },
+  {
+    "id": "aperture_fields_arrival_read",
+    "regionId": "aperture_fields",
+    "displayText": "Cross into the first open field, move off the Comb membrane, and read the three distant ecology landmarks before choosing whether to return.",
+    "steps": [
+      "arrival_boundary_crossed",
+      "decompression_shelf_entered",
+      "three_distant_landmarks_readable",
+      "comb_return_fold_retained"
+    ],
+    "onComplete": "hold_at_arrival_boundary_full_ecology_pending",
+    "implementationStatus": "arrival_foundation_read_HC014A"
+  }
+]

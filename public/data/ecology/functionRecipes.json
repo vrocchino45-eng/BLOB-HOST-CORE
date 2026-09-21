@@ -1,0 +1,112 @@
+[
+  {
+    "id": "repair_filter_protect",
+    "category": "host_function",
+    "hostPurpose": {
+      "biological": [
+        "repair_small_membrane_damage",
+        "filter_seed_nutrients",
+        "protect_new_cores"
+      ],
+      "ecological": [
+        "reduce_contamination",
+        "maintain_nursery_boundary"
+      ],
+      "narrative": [
+        "show_that_the_host_is_trying_to_care"
+      ]
+    },
+    "behaviorBias": {
+      "aggression": 0.05,
+      "curiosity": 0.42,
+      "protectiveness": 0.81,
+      "avoidance": 0.35,
+      "repairPriority": 0.77
+    },
+    "compatibleChemistry": [
+      "form",
+      "seed",
+      "signal"
+    ],
+    "incompatibleChemistry": [
+      "parasitic_residue",
+      "overactive_bloom"
+    ],
+    "allegory": {
+      "humanReading": "care, caution, protection, boundary maintenance"
+    }
+  },
+  {
+    "id": "sense_warn_record",
+    "category": "host_function",
+    "hostPurpose": {
+      "biological": [
+        "sense_player_core",
+        "record_membrane_disturbance",
+        "warn_host_of_agitation"
+      ],
+      "ecological": [
+        "monitor_new_seed_behavior",
+        "alert_tenders_to_contamination"
+      ],
+      "narrative": [
+        "show_that_the_host_notices_before_it_judges"
+      ]
+    },
+    "behaviorBias": {
+      "aggression": 0.02,
+      "curiosity": 0.68,
+      "protectiveness": 0.44,
+      "avoidance": 0.18,
+      "warningPriority": 0.86
+    },
+    "compatibleChemistry": [
+      "form",
+      "signal"
+    ],
+    "incompatibleChemistry": [
+      "scar_agitation",
+      "parasitic_bond"
+    ],
+    "allegory": {
+      "humanReading": "attention, witness, early judgment, being noticed"
+    }
+  },
+  {
+    "id": "carry_align_release",
+    "category": "host_function",
+    "hostPurpose": {
+      "biological": [
+        "catch_moving_signal_and_nutrient_flow",
+        "align_transfer_with_vascular_current",
+        "release_carried_material_downstream"
+      ],
+      "ecological": [
+        "keep_local_circulation_from_stalling",
+        "bridge_short_gaps_between_contraction_pulses"
+      ],
+      "narrative": [
+        "show_that_host_ecology_can_transport_and_transform_without_waiting_for_the_player"
+      ]
+    },
+    "behaviorBias": {
+      "aggression": 0.01,
+      "curiosity": 0.36,
+      "protectiveness": 0.16,
+      "avoidance": 0.12,
+      "transferPriority": 0.88
+    },
+    "compatibleChemistry": [
+      "form",
+      "flux",
+      "signal"
+    ],
+    "incompatibleChemistry": [
+      "dense_scar_lock",
+      "stagnant_residue"
+    ],
+    "allegory": {
+      "humanReading": "carrying, timing, handoff, keeping circulation moving"
+    }
+  }
+]

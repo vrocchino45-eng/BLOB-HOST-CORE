@@ -1,0 +1,131 @@
+{
+  "id": "HC003G_FIRST_ROUTE_CHOICE_PLANNING",
+  "build": "HC-003G",
+  "status": "planning_only_not_runtime_active",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "planningRule": "Plan the route pressure before runtime. This route is not runtime active. Do not add gates, branch menus, old chamber exits, or a fifth local cell in this pass.",
+  "currentLockedFoundation": {
+    "requiredFirstPlayableMinute": [
+      "CELL_MEMBRANE_NURSERY_001",
+      "CELL_SCAR_FLOW_FOLD_001",
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "optionalBeyondMinuteFork": "CELL_BLOOM_RESIDUE_FORK_001",
+    "meaning": "The player has awakened, learned safe absorption, learned that scar matter remembers pressure, listened through Signal Chorus, and previewed a bloom/residue fork."
+  },
+  "recommendedFirstRoute": {
+    "id": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+    "label": "Grave Memory / Residue-Scar Route",
+    "status": "selected_for_next_design_branch_not_runtime_active",
+    "blueprintEchoes": [
+      "Graveyard Chamber",
+      "Grave Expanse",
+      "Witness / Grave Listener",
+      "Residue Shards",
+      "old core remains"
+    ],
+    "hostAnatomySources": [
+      "residue_beds",
+      "scar_fields",
+      "marrow_interior"
+    ],
+    "dominantDomains": [
+      "residue",
+      "scar",
+      "seed",
+      "signal"
+    ],
+    "secondaryDomains": [
+      "form",
+      "flux"
+    ],
+    "humanPressure": "mourning, inheritance, unfinished becoming, and learning what old wounds become when they are metabolized instead of eaten.",
+    "whyThisRouteFirst": [
+      "Scar-Flow already teaches that wounds are readable but not always absorbable.",
+      "Bloom Residue already introduces memory, bloom, braid, and warning as a first fork pressure.",
+      "The Wounded Nursery Host needs old scars metabolized before broad Act 1 expansion.",
+      "A memory route deepens the current opening instead of introducing unrelated systems.",
+      "It gives the Guide/Witness line a natural next role without adding a full dialogue tree."
+    ],
+    "firstRouteQuestion": "Can the player learn from remains without becoming trapped inside them?",
+    "playerLearningGoals": [
+      "old cores are not loot; they are unfinished becoming",
+      "residue can nourish but also contaminate",
+      "scar matter protects and imprisons",
+      "pulse can reveal memory without consuming it",
+      "route choice should feel like a tissue pressure, not a menu selection"
+    ],
+    "mustNotBuildYet": [
+      "runtime grave route",
+      "new local cells",
+      "new morph plan",
+      "graveyard chamber loader",
+      "teleport route gate",
+      "branch select menu",
+      "boss encounter",
+      "full relic/crafting system"
+    ],
+    "plannedFutureLocalCellRoles": [
+      {
+        "roleId": "grave_listener_residue_bed_role",
+        "notRuntimeCellId": "CELL_GRAVE_LISTENER_RESIDUE_BED_001",
+        "status": "name_reserved_only",
+        "function": "first playable residue/grave listening pocket; not authored as runtime cell in HC-003G"
+      },
+      {
+        "roleId": "old_core_husk_memory_role",
+        "notRuntimeCellId": "CELL_OLD_CORE_HUSK_MEMORY_001",
+        "status": "name_reserved_only",
+        "function": "old becoming remains; pulse-to-read, not consume-first; not authored as runtime cell in HC-003G"
+      },
+      {
+        "roleId": "scar_residue_choice_fold_role",
+        "notRuntimeCellId": "CELL_SCAR_RESIDUE_CHOICE_FOLD_001",
+        "status": "name_reserved_only",
+        "function": "future no-gate tissue pressure where the route asks repair/condense/leech questions"
+      }
+    ]
+  },
+  "alternativeRoutePressures": [
+    {
+      "id": "ROUTE_SILT_APPETITE_PRESSURE_001",
+      "label": "Silt / Appetite / Pressure Route",
+      "status": "defer",
+      "reasonToDefer": "Useful for appetite and compression, but it risks adding new movement/pressure systems before the memory foundation is clear."
+    },
+    {
+      "id": "ROUTE_VASCULAR_RHYTHM_CHARGE_001",
+      "label": "Vascular / Rhythm / Charge Route",
+      "status": "defer",
+      "reasonToDefer": "Strong future route, but it would pull toward timing/flow mechanics before the first meaning route is grounded."
+    },
+    {
+      "id": "ROUTE_BLOOM_OVERGROWTH_001",
+      "label": "Bloom / Overgrowth Route",
+      "status": "defer_after_grave_memory",
+      "reasonToDefer": "Bloom is already previewed through the optional fork; it should become more dangerous after the player understands residue/memory cost."
+    }
+  ],
+  "routeChoicePrinciples": [
+    "Route choice is expressed through host tissue pressure and Guide/Witness interpretation, not a menu.",
+    "The route must derive from Wounded Nursery Host anatomy and chemistry.",
+    "A route begins as pressure, then local cell planning, then recipe pack, then runtime morph prototype.",
+    "No old gates, doors, chamber exits, or stage node loaders may be revived.",
+    "The first route must deepen the current first playable minute rather than widen away from it."
+  ],
+  "nextPassRecommendation": {
+    "id": "HC-003H",
+    "label": "Placeholder Visual Triage Pass",
+    "reason": "Before authoring a new route, classify which visible placeholders must be replaced or accepted so the first route does not multiply visual debt."
+  },
+  "futureBranchAfterTriage": {
+    "id": "HC-004A",
+    "label": "Grave Memory Route Design Lock",
+    "mode": "planning_before_runtime",
+    "notBefore": [
+      "HC-003H Placeholder Visual Triage Pass",
+      "HC-003I Controller Onboarding / Comfort Pass",
+      "HC-003K Opening Slice Gold Candidate"
+    ]
+  }
+}

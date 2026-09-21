@@ -1,0 +1,20 @@
+import fs from "node:fs";
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), ambient=read("../src/world/AmbientMaterialInteractionSystem.js"),
+inspect=read("../src/camera/InspectionCameraSystem.js"), emb=read("../src/player/CoreEmbodimentSystem.js");
+const data=JSON.parse(read("../public/data/player/microVerbReadability_HC022B.json"));
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-022B"'),"identity");
+for(const x of ["scanInteract","understand_without_mutating","disturb_reveal_communicate","organize_synchronize","incorporate_remove_commit"]) must(ambient.includes(x),x);
+must(ambient.includes("scanUsesExistingMoteLoop: true"),"scan perf");
+must(ambient.includes("scanAddsSecondMotePass: false"),"second scan");
+must(ambient.includes("this.count = 66"),"mote count");
+must(!ambient.includes("Array.from(this.ecologyKind).filter"),"allocation regression");
+must(!data.scanAdvancesObjective&&!data.scanMutatesWorld,"scan authority");
+must(inspect.includes("computeFocusIntentAlignment")&&inspect.includes("manualFocusOverrideSeconds"),"inspection regression");
+must(emb.includes('const surfaceTrace = growth.surfaceMemoryMode ?? "unwritten";'),"runtime regression");
+console.log("[HC022B] Interact/Scan first-class verb PASS");
+console.log("[HC022B] four-verb micro grammar PASS");
+console.log("[HC022B] optional/no-objective Scan PASS");
+console.log("[HC022B] 66-mote performance budget PASS");
+console.log("[HC022B] HC022A1 runtime + inspection retained PASS");

@@ -1,0 +1,50 @@
+{
+  "id": "SURFACE_WAKE_ECOLOGICAL_CAUSALITY_HC008B",
+  "build": "HC-008B",
+  "status": "runtime_active_non_authoritative_experience_layer",
+  "sourceCellId": "CELL_MEMBRANE_NURSERY_001",
+  "blueprintRole": "Surface Wake as a wounded protective nursery",
+  "purpose": "Give the existing Surface Wake cast purpose and identity by making care, circulation, wound, sensory, communication, nourishment, growth, and departure visibly cause one another.",
+  "playerQuestion": "Can I learn how this living pocket protects, feeds, and warns before I ask it to open?",
+  "awakening": {
+    "noticeMoveDistance": 0.18,
+    "noticeAfterSeconds": 1.25
+  },
+  "circulation": {
+    "cycleSeconds": 6.2,
+    "phases": ["membrane_inhale", "pressure_build", "matter_carry", "calm_window"]
+  },
+  "systems": {
+    "care": ["nursery_membrane_tender_001", "surface_wake_membrane_mote_001", "dormant_seed_nutrient_001"],
+    "circulation": ["flux_current_ribbon_001", "surface_wake_membrane_mote_002"],
+    "woundSensory": ["scar_contamination_plate_001", "surface_wake_membrane_mote_003", "membrane_watcher_001", "signal_vapor_thread_001"],
+    "convergence": ["surface_wake_listening_fold_001"]
+  },
+  "phaseMeaning": {
+    "awaken": "The nursery is quiet but already breathing around an unfamiliar core.",
+    "observe": "The Watcher attends, the Tender guards, and the current demonstrates the nursery's rhythm.",
+    "communicate": "The fold carries a held answer through signal, circulation, care, and memory.",
+    "receive": "The nursery presents protected nourishment after retaining the core's answer.",
+    "outgrow": "The nourished core distorts the old circuit and makes the scar-signal seam readable.",
+    "depart": "The same established morph opens while the nursery repairs and remembers how the core left."
+  },
+  "triggerPolicy": {
+    "listeningFoldOwner": "SurfaceWakeLayeredInteractionSystem",
+    "seedAbsorptionOwner": "BondSystem",
+    "firstMorphOwner": "LocalCellMorphSystem",
+    "changesTriggerThresholds": false,
+    "addsPrerequisite": false,
+    "addsGate": false,
+    "addsRoute": false,
+    "addsRegion": false,
+    "addsEntity": false,
+    "addsAbility": false
+  },
+  "acceptance": {
+    "existingCastHasReadablePurpose": true,
+    "foldAnswerTravelsAcrossNursery": true,
+    "seedIsOfferedOnlyAfterFold": true,
+    "departureExpressionIsNonBranching": true,
+    "mistakesRemainRecoverable": true
+  }
+}

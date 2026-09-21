@@ -1,0 +1,62 @@
+{
+  "id": "HC-028M",
+  "parent": "HC-028L1",
+  "rule": "remembered_organism_relationship_may_shape_nearby_existing_host_matter_without_new_particles_affinity_gameplay_force_or_progression_authority",
+  "scope": {
+    "entityTypesAdded": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newTargeting": false,
+    "newBondRules": false,
+    "newRepairRules": false,
+    "newProgression": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": false,
+    "verbPowerChanged": false,
+    "routeLogicChanged": false,
+    "combReentryHotfixPreserved": true,
+    "startupScopeHotfixPreserved": true,
+    "existingHostMoteOwnerRemainsAmbientMaterialInteractionSystem": true,
+    "newParticleFieldAdded": false,
+    "newGeometryAdded": false,
+    "newDrawCallsAdded": false
+  },
+  "coupling": {
+    "directiveOwner": "EntityLocalMatterCouplingSystem",
+    "matterMotionOwner": "AmbientMaterialInteractionSystem",
+    "sources": [
+      "EntityReciprocalMemorySystem",
+      "EntityReciprocalBehaviorSystem",
+      "EntitySystem"
+    ],
+    "usesExistingHostMotes": true,
+    "maxAuthoredFields": 2,
+    "oneFrameReadThroughAllowed": true,
+    "hiddenAffinityScore": false,
+    "preciseBeatTimingRequired": false,
+    "regionalCompositionRemainsAuthoritative": true,
+    "playerMovementAuthority": false,
+    "entityMovementAuthority": false,
+    "collisionAuthority": false,
+    "chemistryAuthority": false,
+    "bondAuthority": false,
+    "repairAuthority": false,
+    "combatAuthority": false,
+    "targetingAuthority": false,
+    "progressionAuthority": false,
+    "routeAuthority": false,
+    "tenderModes": [
+      "care_breath",
+      "protective_retraction",
+      "coherent_settle",
+      "signal_follow"
+    ],
+    "watcherModes": [
+      "sample_hold",
+      "counter_sense_ripple",
+      "anchored_quiet",
+      "quiet_observation"
+    ]
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.13"
+}

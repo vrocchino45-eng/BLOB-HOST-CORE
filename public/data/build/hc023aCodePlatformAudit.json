@@ -1,0 +1,233 @@
+{
+  "build": "HC-023A",
+  "activeSourceBefore": {
+    "jsFiles": 102,
+    "approxLines": 47223
+  },
+  "unreachableSourceArchived": {
+    "files": 17,
+    "lines": 6231,
+    "archive": "docs/source_archive/HC023A_UNREACHABLE_SOURCE_ARCHIVE.zip",
+    "runtimePerformanceGainExpected": "none_direct; these modules were not imported/executed",
+    "maintenanceBenefit": "active src now contains only modules reachable from main.js"
+  },
+  "activeSourceAfter": {
+    "jsFiles": 85,
+    "approxLines": 40992
+  },
+  "rootBuildReportsArchived": 15,
+  "recipeData": {
+    "staticJsonLoadsAtStartup": 85,
+    "datasetsWithNoExternalRuntimeReference": 35,
+    "action": "do_not_remove_yet; many are consumed by RecipeDataSystem validation/compatibility logic. Split active-runtime data from validation/archive before retiring."
+  },
+  "zeroExternalDatasetCandidates": [
+    {
+      "key": "anatomyRecipes",
+      "path": "/data/world/anatomyRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "act1RouteContracts",
+      "path": "/data/routes/act1RouteContracts_HC012A.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "chemicalDomains",
+      "path": "/data/chemistry/chemicalDomains.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "matterStates",
+      "path": "/data/chemistry/matterStates.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "functionRecipes",
+      "path": "/data/ecology/functionRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "guideThresholdLayeredInteraction",
+      "path": "/data/morph/guideThresholdLayeredInteractionRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusInteractionRecipes",
+      "path": "/data/morph/signalChorusInteractionRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "bloomResidueInteractionRecipes",
+      "path": "/data/morph/bloomResidueInteractionRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveReadBeforeAbsorbRecipes",
+      "path": "/data/morph/graveReadBeforeAbsorbRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveScarMemorySeamFirstReadLoop",
+      "path": "/data/morph/graveScarMemorySeamFirstReadRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveSeamContinuityMicroExit",
+      "path": "/data/morph/graveSeamContinuityMicroExitRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveBedPostSeamResponse",
+      "path": "/data/morph/graveBedPostSeamResponseRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveRouteLockState",
+      "path": "/data/lock/graveRouteLockState_HC004R.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveReturnContinuity",
+      "path": "/data/morph/graveReturnContinuityRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusReturnState",
+      "path": "/data/morph/signalChorusReturnStateRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusNextRoutePressure",
+      "path": "/data/morph/signalChorusNextRoutePressureRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusVisualIdentity",
+      "path": "/data/visual/signalChorusVisualIdentity_HC006A.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusLayeredInteraction",
+      "path": "/data/morph/signalChorusLayeredInteractionRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "surfaceWakeLayeredInteraction",
+      "path": "/data/opening/surfaceWakeLayeredInteractionRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusInspectionCamera",
+      "path": "/data/camera/signalChorusInspectionCameraRecipes.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "inspectionCameraProfile",
+      "path": "/data/camera/inspectionCameraProfiles.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "thirdMorphPlans",
+      "path": "/data/morph/thirdLocalCellMorphPlans.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveRouteMorphPlans",
+      "path": "/data/morph/graveRouteMorphPlans.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "signalChorusExitReadinessRules",
+      "path": "/data/morph/signalChorusExitReadinessRules.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveRouteRuntimePlanning",
+      "path": "/data/planning/graveRouteRuntimePlanning_HC004A.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveRouteRecipePack",
+      "path": "/data/planning/graveRouteRecipePack_HC004B.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveRouteMorphPrototype",
+      "path": "/data/planning/graveRouteMorphPrototype_HC004D.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveArrivalReadability",
+      "path": "/data/planning/graveArrivalReadability_HC004E.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveLoopStabilityExitReadiness",
+      "path": "/data/planning/graveLoopStabilityAndExitReadiness_HC004G.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveExitReadinessPrototype",
+      "path": "/data/planning/graveExitReadinessPrototype_HC004H.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveRouteContinuityPlanning",
+      "path": "/data/planning/graveRouteContinuityPlanning_HC004I.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveScarMemorySeamRecipePack",
+      "path": "/data/planning/graveScarMemorySeamRecipePack_HC004J.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveScarMemorySeamVisualComposerSupport",
+      "path": "/data/planning/graveScarMemorySeamVisualComposerSupport_HC004K.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveScarMemorySeamArrivalPlanning",
+      "path": "/data/planning/graveScarMemorySeamArrivalPlanning_HC004L.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    },
+    {
+      "key": "graveScarMemorySeamRuntimeArrival",
+      "path": "/data/planning/graveScarMemorySeamRuntimeArrival_HC004M.json",
+      "classification": "MIGRATE_OR_RETIRE_AFTER_VALIDATION_SPLIT"
+    }
+  ],
+  "highComplexityFiles": [
+    {
+      "file": "src/data/RecipeDataSystem.js",
+      "finding": "largest active source; combines runtime loading, compatibility data and validation",
+      "action": "MIGRATE: split runtime recipe pack from validation/archive before gameplay-density expansion grows data"
+    },
+    {
+      "file": "src/core/GameRuntime.js",
+      "finding": "large composition root with 50 registered systems",
+      "action": "KEEP ownership; avoid adding HC023 encounter systems directly here when existing regional owners can compose them"
+    },
+    {
+      "file": "src/hub/HubChamberFoundationSystem.js",
+      "finding": "large Hub owner",
+      "action": "KEEP but extend through existing Hub investigation/return-state hooks rather than another Hub authority"
+    },
+    {
+      "file": "src/routes/GraveMemoryRouteSystem.js",
+      "finding": "large route owner",
+      "action": "KEEP; add density inside this owner, not parallel Grave systems"
+    },
+    {
+      "file": "src/routes/VascularRhythmRouteSystem.js",
+      "finding": "large route owner",
+      "action": "KEEP; add between-beat situations without increasing requiredReads"
+    },
+    {
+      "file": "src/routes/SiltPressureRouteSystem.js",
+      "finding": "large route owner",
+      "action": "KEEP; reuse existing density/pressure structures rather than new route system"
+    }
+  ]
+}

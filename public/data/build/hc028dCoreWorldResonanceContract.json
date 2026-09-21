@@ -1,0 +1,57 @@
+{
+  "id": "HC028D_CORE_WORLD_RESONANCE_FOUNDATION",
+  "bridge": {
+    "owner": "CoreWorldResonanceSystem",
+    "inputs": [
+      "HostRhythmSystem.composition",
+      "CoreEngineSystem"
+    ],
+    "output": "frameState.coreWorldResonance",
+    "activePrototypeCell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "relationshipStates": [
+      "aligned",
+      "resolving",
+      "oscillating",
+      "strained",
+      "opposed"
+    ],
+    "readOnly": true
+  },
+  "presentation": {
+    "core": [
+      "precession_scale",
+      "world_function_plane_emphasis",
+      "small_resonance_pulse"
+    ],
+    "world": [
+      "vascular_tissue_reply"
+    ],
+    "maximumWorldReplyStrength": 0.26
+  },
+  "authority": {
+    "engineRetiming": false,
+    "movement": false,
+    "verbs": false,
+    "progression": false,
+    "routeCompletion": false,
+    "inputTimingGate": false,
+    "gameplayAdvantage": false
+  },
+  "locks": {
+    "coreEngineSequence": [
+      "pulse",
+      "absorb",
+      "stabilize"
+    ],
+    "phaseCounts": [
+      3,
+      6,
+      12
+    ],
+    "vascularMovementFlowScale": [
+      0.96,
+      1.06
+    ],
+    "sharedHostClock": true
+  }
+}

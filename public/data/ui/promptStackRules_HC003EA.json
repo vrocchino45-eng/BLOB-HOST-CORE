@@ -1,0 +1,30 @@
+{
+  "id": "PROMPT_STACK_RULES_HC003EA",
+  "pass": "HC-003EA",
+  "purpose": "Guide prompt is the primary world-facing instruction layer; Host Tissue Shift panel becomes secondary status while Guide is active.",
+  "rules": [
+    {
+      "id": "guide_primary",
+      "description": "Guide prompt owns player-facing objective text."
+    },
+    {
+      "id": "morph_secondary",
+      "description": "Morph panel keeps tissue status/progress but suppresses duplicate objective line while Guide is active."
+    },
+    {
+      "id": "separate_lock_status",
+      "description": "First playable minute lock is reported separately from optional Bloom Residue fork status."
+    },
+    {
+      "id": "bloom_display_clamp",
+      "description": "Bloom fork_stable at or above 95% reads as stable / complete in debug/readability panels."
+    }
+  ],
+  "forbidden": [
+    "dialogue tree",
+    "quest log",
+    "new cell",
+    "new morph",
+    "gameplay expansion"
+  ]
+}

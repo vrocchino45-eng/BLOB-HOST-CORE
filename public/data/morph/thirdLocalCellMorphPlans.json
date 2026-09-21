@@ -1,0 +1,70 @@
+[
+  {
+    "id": "MORPH_SIGNAL_CHORUS_TO_BLOOM_RESIDUE_FORK_001",
+    "status": "runtime_third_morph_active_prototype",
+    "sourceCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "plannedDestinationCell": "CELL_BLOOM_RESIDUE_FORK_001",
+    "branch": "HC-002",
+    "morphType": "no_gate_signal_harmony_to_choice_fold",
+    "designRule": "The player does not enter a door. When the chorus is tuned, the host tissue presents a living fork where growth pressure and memory residue become readable as two compatible but tense paths.",
+    "readiness": {
+      "requiresSignalChorusLoopStage": "signal_chorus_tuned",
+      "minimumListen": 0.74,
+      "minimumAnswer": 0.68,
+      "minimumHarmony": 0.72,
+      "maximumForcedAbsorbRisk": 0.32,
+      "requiredPlayerComposition": {
+        "signal": 0.12,
+        "seed": 0.3,
+        "scarMax": 0.24
+      }
+    },
+    "triggerPrototype": {
+      "futureRuntimePass": "HC-002Q",
+      "afterReady": "Pulse the seed-signal bridge while the chorus is tuned and the Guide is in listening mode.",
+      "controller": "X",
+      "keyboard": "Space",
+      "notAllowed": [
+        "door_prompt",
+        "teleport_marker",
+        "press_E_gate",
+        "hard_threshold",
+        "map_menu_jump"
+      ]
+    },
+    "worldFacingRead": {
+      "beforeReady": "The chorus hears you, but the bridge is still learning your rhythm.",
+      "nearlyReady": "The seed-signal bridge is warming. Growth and memory are beginning to separate into paths.",
+      "ready": "The chorus has tuned. A fork of bloom and residue is forming inside the host tissue.",
+      "trigger": "Pulse the warmed bridge and let the next choice become matter."
+    },
+    "plannedDestinationFeel": {
+      "dominantDomains": [
+        "bloom",
+        "residue",
+        "seed"
+      ],
+      "secondaryDomains": [
+        "signal",
+        "flux",
+        "scar"
+      ],
+      "visualLanguage": [
+        "split living path",
+        "spore sacs",
+        "memory silt",
+        "seed bridge",
+        "two-pressure braid",
+        "choice organ"
+      ],
+      "movementFeel": "a wider pocket with two soft pulls: bloom pulls outward into risk/growth; residue pulls downward into memory/recycling",
+      "playFunction": "introduce the first authored choice fork without a menu: nourish future growth or metabolize old remains first"
+    },
+    "notes": {
+      "HC-002O": "Planning/data only. Destination cell is not authored in localCellRecipes yet and runtime third morph is inactive.",
+      "HC-002P": "CELL_BLOOM_RESIDUE_FORK_001 authored with chem object and visual recipe pack. Runtime third morph remains inactive.",
+      "HC-002Q": "Runtime third morph active: Signal Chorus can fold into Bloom Residue Fork after loop readiness and pulse."
+    },
+    "destinationCell": "CELL_BLOOM_RESIDUE_FORK_001"
+  }
+]

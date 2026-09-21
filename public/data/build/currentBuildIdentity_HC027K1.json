@@ -1,0 +1,36 @@
+{
+  "id": "HC-027K1",
+  "label": "Playtest Input Instrumentation + Hot Button Reference",
+  "parent": "HC-027K",
+  "status": "debug_instrumentation_checkpoint",
+  "sourceJsCount": 92,
+  "newSourceModules": 0,
+  "purpose": "Make accumulated debug hot buttons discoverable in Status > Controls and make physical button/keystroke use plus interpreted actions visible in F1 Full recordings without changing gameplay mappings or authority.",
+  "locked": [
+    "HC027K consequence-to-next-question relationships",
+    "HC027J2 verb power/cost physiology",
+    "HC027J1 quick-vs-charged Pulse language",
+    "4.25 quick/local actionable Pulse radius",
+    "HC027D1 approved audio reference gains",
+    "3\u21926\u219212 engine grammar",
+    "movement/chemistry/progression/route authority"
+  ],
+  "scope": [
+    "InputSystem read-only physical/action telemetry",
+    "RecipeDebugOverlay F1 live input panel",
+    "StatusPageSystem Controls hot-button reference",
+    "DebugAreaJumpSystem hot-button catalog metadata",
+    "profile/validator/governance"
+  ],
+  "forbidden": [
+    "gameplay control remap",
+    "dead-zone/response-curve changes",
+    "verb balance changes",
+    "Pulse range changes",
+    "movement changes",
+    "new progression/objective/gate authority",
+    "new region/content",
+    "global audio retune",
+    "new source modules"
+  ]
+}

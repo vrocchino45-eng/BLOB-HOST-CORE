@@ -1,0 +1,32 @@
+{
+  "build": "HC017C",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "checks": [
+    {
+      "name": "focused validator",
+      "status": "PASS",
+      "detail": "[HC017C] bounded ambient field PASS\n[HC017C] Pulse scatter / Absorb draw / Stabilize order PASS\n[HC017C] no progression, inventory, route or gate authority PASS"
+    },
+    {
+      "name": "runtime syntax",
+      "status": "PASS",
+      "detail": "100 modules checked; 0 failures"
+    },
+    {
+      "name": "locked byte identity",
+      "status": "PASS",
+      "detail": "{\"src/chemistry/BondSystem.js\": true, \"src/player/PlayerMovementController.js\": true, \"src/routes/GraveMemoryRouteSystem.js\": true, \"src/routes/VascularRhythmRouteSystem.js\": true, \"src/routes/SiltPressureRouteSystem.js\": true, \"src/camera/InspectionCameraSystem.js\": true, \"src/chemistry/ChemObjectSystem.js\": true, \"src/player/CoreVerbPhysicalizationSystem.js\": true}"
+    }
+  ],
+  "bundler": "NOT_RUN: packaged source omits node_modules; use npm install then npm run dev/build locally",
+  "lockedSystems": {
+    "src/chemistry/BondSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/routes/GraveMemoryRouteSystem.js": true,
+    "src/routes/VascularRhythmRouteSystem.js": true,
+    "src/routes/SiltPressureRouteSystem.js": true,
+    "src/camera/InspectionCameraSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/CoreVerbPhysicalizationSystem.js": true
+  }
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_VISUAL_IDENTITY_HC006A",
+    "build": "HC-006A",
+    "status": "runtime_active_visual_identity_only",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "purpose": "Thicken the held Signal Chorus into a living neural-tissue place whose motion and branching make the combward pressure legible without opening the route or changing interaction ownership.",
+    "activation": {
+      "requiresReturnState": "signal_chorus_return_state_held",
+      "requiresActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "minimumHeldSeconds": 0.2,
+      "revealSeconds": 1.6
+    },
+    "geometry": {
+      "anchor": [0.28, 0.18, -1.75],
+      "combwardStart": [1.05, 0.26, -1.92],
+      "combwardAim": [3.72, 0.52, -2.58],
+      "lobeCount": 9,
+      "filamentCount": 15,
+      "combwardTrunkCount": 4,
+      "moteCount": 24,
+      "radialRadius": 1.38,
+      "verticalSpread": 0.58,
+      "tubeRadius": 0.016,
+      "trunkRadius": 0.028
+    },
+    "visual": {
+      "signalColor": 10939391,
+      "memoryColor": 16763568,
+      "tissueColor": 8323295,
+      "combwardColor": 16774192,
+      "lobeOpacity": 0.19,
+      "filamentOpacity": 0.27,
+      "trunkOpacity": 0.36,
+      "moteOpacity": 0.68,
+      "lightIntensity": 0.72,
+      "renderOrder": 6
+    },
+    "motion": {
+      "breathSpeed": 1.55,
+      "conductionSpeed": 0.12,
+      "waveSpeed": 2.35,
+      "combwardBiasWhenPressureReadable": 1.34
+    },
+    "completion": {
+      "visualIdentityReadable": true,
+      "livingMotionReadable": true,
+      "combwardDirectionReinforced": true,
+      "routeActivated": false,
+      "targetActivated": false,
+      "inputRequired": false,
+      "activeCellChanges": false,
+      "nextRecommendedPass": "HC-006B — Layered Interaction Trigger Prototype"
+    },
+    "futureDepthPlan": {
+      "interaction": "Replace one-step pulse registration with approach, observation, alignment, sustained resonance, world response, and release stages.",
+      "camera": "Add a controller-toggle tight inspection camera after the layered trigger prototype proves what must be framed.",
+      "prototypeTarget": "choir_resonance_node_001"
+    },
+    "forbidden": [
+      "Comb Threshold runtime",
+      "Aperture Fields runtime",
+      "new local cell",
+      "new morph destination",
+      "target lock",
+      "pulse activation",
+      "absorb activation",
+      "route activation",
+      "gate",
+      "door",
+      "teleport",
+      "branch menu",
+      "player relocation",
+      "reopening Grave",
+      "replaying original Signal Chorus loop",
+      "combat",
+      "objective completion",
+      "first person camera activation",
+      "inspection camera activation"
+    ]
+  }
+]

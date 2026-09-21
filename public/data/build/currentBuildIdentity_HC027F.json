@@ -1,0 +1,32 @@
+{
+  "id": "HC-027F",
+  "version": "0.27.7",
+  "label": "Host Answer Memory / Traversal Inquiry",
+  "mode": "world-response convergence / optional traversal inquiry",
+  "parent": "HC-027E",
+  "buildRule": "A Pulse answer may remain briefly where the world answered so the player can approach and read it. The memory is sensory-only: no waypoint, target, objective, reward, gate, route authority or hidden-state reveal.",
+  "sourceJsCount": 92,
+  "newSourceModules": 0,
+  "newRegions": 0,
+  "modifiedOwners": [
+    "CoreSensoryResponseSystem",
+    "AmbientMaterialInteractionSystem",
+    "InteractionCompositionSystem",
+    "PlaytestHudSystem"
+  ],
+  "answerMemory": {
+    "max": 4,
+    "ttlSeconds": 7.2,
+    "approachRange": 3.6,
+    "readRange": 1.65
+  },
+  "audioMixChanged": false,
+  "audioReferenceBuild": "HC-027D1",
+  "gameplayAuthorityChanged": false,
+  "progressionChanged": false,
+  "movementOwnershipChanged": false,
+  "chemistryAuthorityChanged": false,
+  "routeTopologyChanged": false,
+  "engineGrammarChanged": false,
+  "sonarRangeOrReturnTimingChanged": false
+}

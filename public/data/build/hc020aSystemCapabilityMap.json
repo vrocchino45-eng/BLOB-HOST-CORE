@@ -1,0 +1,952 @@
+{
+  "build": "HC020A",
+  "generatedFrom": "active runtime source",
+  "systems": [
+    {
+      "file": "src/camera/CameraReadabilitySystem.js",
+      "tags": [
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/camera/InspectionCameraSystem.js",
+      "tags": [
+        "memory",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/camera/InspectionOcclusionSystem.js",
+      "tags": [
+        "pulse",
+        "ambient"
+      ]
+    },
+    {
+      "file": "src/camera/TightInspectionCameraSystem.js",
+      "tags": [
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/chemistry/BondSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "surface",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/chemistry/ChemObjectSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory"
+      ]
+    },
+    {
+      "file": "src/cinematic/CinematicAwakeningSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "orbiter",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/core/FirstSliceCohesionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/core/FirstSliceTransitionCoordinator.js",
+      "tags": [
+        "surface",
+        "guide",
+        "hub",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/core/GameRuntime.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "orbiter",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/core/HostCoreSourceAuthority.js",
+      "tags": [
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/core/RuntimeStateLedgerSystem.js",
+      "tags": [
+        "pulse",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/core/SystemRegistry.js",
+      "tags": [
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/data/RecipeDataSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "orbiter",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/debug/ChemistryDebugPanel.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "orbiter",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/debug/DebugAreaJumpSystem.js",
+      "tags": [
+        "surface",
+        "guide",
+        "hub",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/debug/RecipeDebugOverlay.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/debug/RuntimeDiagnosticSummary.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/ecology/EntitySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "surface",
+        "orbiter",
+        "entity",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/ecology/OrbiterSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "hub",
+        "orbiter",
+        "entity",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/fields/ApertureFieldsArrivalSystem.js",
+      "tags": [
+        "pulse",
+        "entity",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/fields/MembraneRidgeGameplaySystem.js",
+      "tags": [
+        "pulse",
+        "entity",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/fields/SignalPlainEcologySystem.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "entity",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/guide/GuidePromptSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "entity",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/hub/HubChamberFoundationSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "hub",
+        "orbiter",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/hub/HubInvestigationGameplaySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "hub",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/input/ControlMap.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ]
+    },
+    {
+      "file": "src/input/ControllerComfortSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/input/InputSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/interaction/LayeredInteractionGrammar.js",
+      "tags": [
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/modes/ApertureFieldsArrivalMode.js",
+      "tags": [
+        "pulse",
+        "stabilize"
+      ]
+    },
+    {
+      "file": "src/modes/BaseMode.js",
+      "tags": [
+        "objective"
+      ]
+    },
+    {
+      "file": "src/modes/CombThresholdMode.js",
+      "tags": [
+        "pulse",
+        "stabilize"
+      ]
+    },
+    {
+      "file": "src/modes/HubMode.js",
+      "tags": [
+        "pulse"
+      ]
+    },
+    {
+      "file": "src/modes/LandingMode.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ]
+    },
+    {
+      "file": "src/modes/MemoryRouteMode.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "memory"
+      ]
+    },
+    {
+      "file": "src/modes/ModeController.js",
+      "tags": [
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/modes/RouteContractMode.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/modes/ThresholdMode.js",
+      "tags": [
+        "pulse",
+        "stabilize"
+      ]
+    },
+    {
+      "file": "src/modes/VascularRhythmMode.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "objective"
+      ]
+    },
+    {
+      "file": "src/morph/BloomResidueInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveArrivalReadabilitySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "orbiter",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveBedPostSeamResponseSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveExitReadinessSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveLoopStabilitySystem.js",
+      "tags": [
+        "absorb",
+        "stabilize",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveReadBeforeAbsorbSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveRouteLockSystem.js",
+      "tags": [
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GraveScarMemorySeamFirstReadSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GuideThresholdGameplaySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "guide",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/GuideThresholdLayeredInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "guide",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "hub",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/LocalCellBoundaryRecipeRegistry.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "memory"
+      ]
+    },
+    {
+      "file": "src/morph/LocalCellMorphSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/MorphCompletionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/MorphReadabilitySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "hub",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/MorphStateSelector.js",
+      "tags": [
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/ScarFlowArrivalSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "orbiter",
+        "entity",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/ScarFlowInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "guide",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/SecondLocalCellMorphSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "guide",
+        "hub",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/SignalChorusInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/SignalChorusLayeredInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "surface",
+        "entity",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/morph/SignalChorusNextRoutePressureSystem.js",
+      "tags": [
+        "pulse",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/opening/OpeningPacingSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/opening/SurfaceWakeEcologicalCausalitySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "orbiter",
+        "entity",
+        "memory",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/opening/SurfaceWakeGameplaySystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/opening/SurfaceWakeLayeredInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/player/CoreEmbodimentSystem.js",
+      "tags": [
+        "pulse",
+        "entity",
+        "memory",
+        "ambient"
+      ]
+    },
+    {
+      "file": "src/player/CoreGrowthSystem.js",
+      "tags": [
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "memory",
+        "objective"
+      ]
+    },
+    {
+      "file": "src/player/CoreVerbPhysicalizationSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/player/PlayerMovementController.js",
+      "tags": [
+        "absorb",
+        "stabilize"
+      ]
+    },
+    {
+      "file": "src/presentation/InteractionCompositionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/routes/Act1RouteContractSystem.js",
+      "tags": [
+        "pulse",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/routes/GraveMemoryRouteSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/routes/SiltPressureRouteSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/routes/VascularRhythmRouteSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/systems/ObjectiveSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "entity",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/targeting/TargetFocusRegistry.js",
+      "tags": [
+        "absorb",
+        "surface",
+        "guide",
+        "hub",
+        "memory",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/targeting/TargetingSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "memory",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/thresholds/CombThresholdFoundationSystem.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/thresholds/CombThresholdPlayableSystem.js",
+      "tags": [
+        "pulse",
+        "stabilize",
+        "entity",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/ui/PlaytestHudSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "guide",
+        "hub",
+        "entity",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/ui/StatusPageSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "hub",
+        "entity",
+        "memory",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/visual/MotionSignatureSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "surface",
+        "orbiter",
+        "entity",
+        "memory",
+        "ambient"
+      ]
+    },
+    {
+      "file": "src/visual/PlaceholderValidator.js",
+      "tags": [
+        "orbiter",
+        "entity"
+      ]
+    },
+    {
+      "file": "src/visual/SignalChorusVisualIdentitySystem.js",
+      "tags": [
+        "entity",
+        "memory",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/visual/VisualComposer.js",
+      "tags": [
+        "pulse",
+        "hub",
+        "orbiter",
+        "entity",
+        "ambient",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/visual/composers/ChemObjectVisualComposer.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "entity",
+        "memory",
+        "ambient"
+      ]
+    },
+    {
+      "file": "src/visual/composers/EntityVisualComposer.js",
+      "tags": [
+        "pulse",
+        "entity"
+      ]
+    },
+    {
+      "file": "src/visual/composers/EnvironmentVisualComposer.js",
+      "tags": [
+        "memory",
+        "ambient"
+      ]
+    },
+    {
+      "file": "src/visual/composers/OrbiterVisualComposer.js",
+      "tags": [
+        "orbiter",
+        "ambient"
+      ]
+    },
+    {
+      "file": "src/world/AmbientMaterialInteractionSystem.js",
+      "tags": [
+        "pulse",
+        "absorb",
+        "stabilize",
+        "surface",
+        "memory",
+        "ambient",
+        "objective",
+        "crossing"
+      ]
+    },
+    {
+      "file": "src/world/ObjectiveRegistry.js",
+      "tags": [
+        "objective"
+      ]
+    }
+  ]
+}

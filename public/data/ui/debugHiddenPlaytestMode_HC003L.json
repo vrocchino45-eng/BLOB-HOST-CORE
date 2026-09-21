@@ -1,0 +1,72 @@
+{
+  "id": "HC003L_DEBUG_HIDDEN_PLAYTEST_MODE",
+  "pass": "HC-003L",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Prove the first playable minute can be understood without dev panels by using only the Guide prompt, minimal playtest HUD, target/readability cues, camera, and tissue-shift status strip.",
+  "defaultDebugMode": "hidden",
+  "preservedDebugControls": [
+    "F1 full",
+    "F2 compact",
+    "F3 hide",
+    "controller Back/Select cycles debug"
+  ],
+  "visibleWhenDebugHidden": {
+    "primary": "GuidePromptSystem",
+    "secondary": "PlaytestHudSystem",
+    "tertiary": "MorphReadabilitySystem as tiny no-gate status strip",
+    "targeting": "reticle, target line, and player-core halo/glint"
+  },
+  "hudRules": [
+    {
+      "id": "no_debug_dependency",
+      "rule": "No critical first-minute instruction may only appear in debug overlay text."
+    },
+    {
+      "id": "guide_primary",
+      "rule": "Guide prompt remains the main world-facing instruction."
+    },
+    {
+      "id": "hud_short_state",
+      "rule": "Playtest HUD shows only objective, action hint, target, controls, and slice state."
+    },
+    {
+      "id": "dev_tools_preserved",
+      "rule": "Full and compact debug remain available through F1/F2 or Back cycle."
+    },
+    {
+      "id": "no_expansion",
+      "rule": "This pass cannot add cells, morphs, gates, route runtime, dialogue trees, quest logs, combat, doors, teleports, or old chamber runtime."
+    }
+  ],
+  "firstPlayableMinuteRequiredChain": [
+    "CELL_MEMBRANE_NURSERY_001",
+    "CELL_SCAR_FLOW_FOLD_001",
+    "CELL_SIGNAL_CHORUS_NERVE_001"
+  ],
+  "beyondMinuteOptionalFork": "CELL_BLOOM_RESIDUE_FORK_001",
+  "statusReadouts": {
+    "opening": "First Minute: learn seed, scar, pulse, and chorus.",
+    "inProgress": "First Minute: in progress",
+    "complete": "First Minute: complete / lock candidate",
+    "optionalFork": "Bloom Fork: optional beyond-minute extension"
+  },
+  "minimalControls": [
+    {
+      "device": "controller",
+      "line": "Left Stick move \u00b7 Right Stick camera \u00b7 RT absorb \u00b7 X pulse \u00b7 R3 recenter \u00b7 Back debug"
+    },
+    {
+      "device": "keyboard",
+      "line": "WASD move \u00b7 IJKL camera \u00b7 F absorb \u00b7 Space/X pulse \u00b7 C recenter \u00b7 F1/F2/F3 debug"
+    }
+  ],
+  "acceptanceTests": [
+    "Boot starts with debugDisplay.mode = hidden.",
+    "Playtest HUD is visible when debug is hidden.",
+    "Guide prompt is visible and primary.",
+    "Tissue Shift is small secondary progress/status only.",
+    "F1/F2/F3 still reveal and hide debug panels.",
+    "Required first-minute chain can be completed without reading debug overlays.",
+    "No new cells, no new morphs, no gates, no old chamber runtime."
+  ]
+}

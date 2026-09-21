@@ -1,0 +1,40 @@
+{
+  "pass": "HC-027B",
+  "owner": "CoreEngineSystem",
+  "purpose": "Establish one continuous Core physiology substrate before power/endurance tuning, functional rooting, or adaptation.",
+  "canonicalFunctions": [
+    { "id": "pulse", "role": "outward energy expression" },
+    { "id": "absorb", "role": "intake and incorporation" },
+    { "id": "stabilize", "role": "coherence and timing" }
+  ],
+  "architectures": [
+    { "phaseCount": 3, "phasesPerFunction": 1, "meaning": "one phase per fundamental function" },
+    { "phaseCount": 6, "phasesPerFunction": 2, "meaning": "paired counterpart phases per fundamental function" },
+    { "phaseCount": 12, "phasesPerFunction": 4, "meaning": "four-phase resolution per fundamental function" }
+  ],
+  "firingOrderRule": "repeat Pulse -> Absorb -> Stabilize for each resolution layer",
+  "rpm": {
+    "min": 3000,
+    "max": 10000,
+    "meaning": "marker for current Core energy cycling/expenditure",
+    "literalMechanicalRpm": false
+  },
+  "debug": {
+    "cycleArchitectureCommand": "O",
+    "playerFacingArchitectureSelection": false
+  },
+  "locked": {
+    "defaultArchitecture": 3,
+    "powerEnduranceGameplayConsequences": false,
+    "radialTopologyPerformanceConsequences": false,
+    "functionalRooting": false,
+    "plasticity": false,
+    "nonTriadicGeometry": false,
+    "primeNumberGeometry": false,
+    "geometryViolation": false,
+    "progressionMutation": false,
+    "chemistryMutation": false,
+    "movementMutation": false,
+    "verbMutation": false
+  }
+}

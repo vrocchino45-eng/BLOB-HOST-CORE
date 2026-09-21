@@ -1,0 +1,64 @@
+{
+  "build": "HC020A",
+  "route": [
+    "Surface Wake",
+    "Guide Threshold",
+    "Hub Chamber"
+  ],
+  "scoring": {
+    "0": "absent/broken",
+    "1": "present but weak",
+    "2": "readable",
+    "3": "strong/repeatable"
+  },
+  "checkpoints": [
+    {
+      "segment": "Surface Wake",
+      "tests": [
+        "toy_without_objective",
+        "mystery_visible_before_explanation",
+        "verb_rule_repeats",
+        "material_consequence_precedes_progress",
+        "memory_persists",
+        "core_or_orbiter_shows_becoming",
+        "quiet_or_contrast_exists"
+      ]
+    },
+    {
+      "segment": "Guide Threshold",
+      "tests": [
+        "existing_rule_recognizable",
+        "new_variation_not_one_off",
+        "world_acts_first",
+        "movement_and_interaction_connect",
+        "failure_creates_recoverable_state",
+        "guide_or_orbiter_has_readable_role"
+      ]
+    },
+    {
+      "segment": "Hub Chamber",
+      "tests": [
+        "arrival_payoff",
+        "core_readable_as_yours",
+        "three_route_conditions_physically_distinct",
+        "route_interest_without_marker",
+        "mystery_points_forward",
+        "rest_wonder_before_choice"
+      ]
+    },
+    {
+      "segment": "Regression",
+      "tests": [
+        "no_automatic_hub_return",
+        "fresh_interact_required_for_return",
+        "camera_modes_smooth",
+        "zoom_movement_smooth",
+        "core_scale_consistent",
+        "debug_build_identity_correct"
+      ]
+    }
+  ],
+  "flatSpotQuestion": "Where does curiosity/pleasure/consequence/attachment fall away even though the runtime is functioning?",
+  "repetitionQuestion": "Which rules recur enough to become fluent, and which remain bespoke one-offs?",
+  "gotchaQuestion": "At what moment does the player first want to see what the Core becomes next?"
+}

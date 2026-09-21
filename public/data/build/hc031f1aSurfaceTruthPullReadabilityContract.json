@@ -1,0 +1,45 @@
+{
+  "pass": "HC-031F1A",
+  "title": "Surface Truth + Pull Readability",
+  "mode": "movement convergence / visible-surface truth correction",
+  "purpose": "Make suction locomotion agree with visible crawlable geometry and make each plant-load-pull-handoff step perceptually causal without expanding controls or traversal scope.",
+  "allowedScope": [
+    "bounded local visible-mesh surface sampling",
+    "shared local contact point/normal for stand-off, tangent motion, and tendril anchors",
+    "attached pull cadence and handoff hesitation",
+    "load-bearing tendril readability",
+    "Core contact deformation aligned to visible surface and loaded anchor",
+    "fallback to authored movement envelope when no visible surface truth is available"
+  ],
+  "forbiddenScope": [
+    "new player buttons or manual tendril selection",
+    "new colliders or navmesh",
+    "general wall/ceiling traversal guarantees or edge wrapping",
+    "chemistry adhesion redesign",
+    "targeting/Bond/verb changes",
+    "Grave octave/resonance/rupture/consequence/progression changes",
+    "regional-history synthesis"
+  ],
+  "lockedTruth": {
+    "tendrilCount": 3,
+    "movementAuthority": "PlayerMovementController",
+    "surfaceTruthAuthority": "CoreSurfaceTruthSystem",
+    "anchorAuthority": "CoreTendrilSurfaceContactSystem",
+    "visibleSurfaceSource": "bounded_visible_mesh_raycast",
+    "authoredBoundaryFallback": true,
+    "addsCollider": false,
+    "changesControls": false,
+    "directInputAccelerationScaleWhileTendrilDriven": 0.04,
+    "visibleSurfaceStandOffDistance": 0.38,
+    "maxVisibleSurfaceProbeDistance": 1.18,
+    "visualFamily": "core_suction_tendril_v1"
+  },
+  "acceptanceTests": [
+    "on a broad visible surface, the Core remains beside that mesh rather than sinking toward a mismatched ellipsoid shell",
+    "suction pads, stand-off correction, and attached tangent movement use the same visible surface point/normal",
+    "a newly sealed forward anchor produces a visible stronger pull window",
+    "when no forward anchor exists, the Core hesitates while the next tendril plants instead of skating continuously",
+    "the load-bearing tendril and Core silhouette visibly agree about pull direction",
+    "free-space movement and all locked gameplay systems remain unchanged"
+  ]
+}

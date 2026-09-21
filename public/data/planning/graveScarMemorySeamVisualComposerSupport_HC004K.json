@@ -1,0 +1,109 @@
+{
+  "id": "HC004K_GRAVE_SCAR_MEMORY_SEAM_VISUAL_COMPOSER_SUPPORT",
+  "build": "HC-004K",
+  "status": "visual_support_only_not_runtime_active",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceRecipePack": "HC004J_GRAVE_SCAR_MEMORY_SEAM_RECIPE_PACK",
+  "purpose": "Teach the generic visual composer how to interpret the authored Grave Scar-Memory Seam recipe silhouettes before any seam traversal, target focus, or interaction loop is allowed.",
+  "allowedScope": [
+    "visual composer silhouette routing",
+    "environment visual composer methods for seam surface and haze recipes",
+    "chem-object visual composer methods for seam recipe objects",
+    "visual composer validation",
+    "documentation",
+    "build identity update"
+  ],
+  "forbiddenScope": [
+    "runtime route activation",
+    "new morph activation",
+    "runtime exit activation",
+    "player relocation",
+    "new route branch",
+    "target focus activation",
+    "seam interaction loop",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "branch select menu",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "new entity spawns",
+    "Act expansion",
+    "consuming the old core husk",
+    "opening the inheritance seed remnant",
+    "moving the player to the scar-memory seam"
+  ],
+  "composerSupport": [
+    {
+      "visualRecipe": "grave_scar_memory_seam_surface_v01",
+      "silhouette": "closed_scar_memory_seam_basin",
+      "composer": "EnvironmentVisualComposer",
+      "method": "composeGraveScarMemorySeamSurface",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "grave_scar_memory_seam_haze_v01",
+      "silhouette": "thin_haze_caught_between_suture_threads",
+      "composer": "EnvironmentVisualComposer",
+      "method": "composeGraveScarMemorySeamHaze",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "scar_memory_seam_thread_v01",
+      "silhouette": "thin_suture_thread_with_memory_knots",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeScarMemorySeamThread",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "residue_stitch_lattice_v01",
+      "silhouette": "settled_lattice_of_silt_and_scar_stitches",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeResidueStitchLattice",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "echo_husk_imprint_v01",
+      "silhouette": "transparent_collapsed_core_imprint",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeEchoHuskImprint",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "closed_inheritance_suture_v01",
+      "silhouette": "small_dim_seed_inside_closed_scar_ring",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeClosedInheritanceSuture",
+      "mustNotFallback": true
+    }
+  ],
+  "noRuntimeActivation": {
+    "strictMarker": "HC-004K adds visual composer support only; the scar-memory seam remains not reachable, not targeted, not interacted with, and not runtime active.",
+    "forbiddenRuntimeArchitecture": [
+      "no old gates",
+      "no doors",
+      "no teleports",
+      "no old chamber exits",
+      "no stage-node loaders",
+      "no branch select menu",
+      "not runtime active",
+      "no player relocation"
+    ]
+  },
+  "acceptanceTests": [
+    "All six HC-004J seam visual recipes are routed to concrete composer methods.",
+    "No seam visual recipe falls through to VisualComposer fallback geometry.",
+    "Composer methods can instantiate Three.js groups without throwing.",
+    "The seam local cell and seam chem objects remain authored but not runtime active/spawned.",
+    "No morph plan, target focus rule, interaction loop, gate, door, teleport, or branch menu makes the seam playable."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004L",
+    "label": "Grave Scar-Memory Seam Arrival Planning",
+    "mode": "planning_before_runtime_transition_activation"
+  }
+}

@@ -1,0 +1,184 @@
+[
+  {
+    "id": "soft_bond",
+    "chemistry": {
+      "producedBy": [
+        "form",
+        "seed",
+        "gel"
+      ],
+      "compatibleStates": [
+        "gel",
+        "membrane",
+        "dormant_seed"
+      ],
+      "incompatibleStates": [
+        "scarred",
+        "crystalline"
+      ]
+    },
+    "behavior": {
+      "formationDifficulty": 0.15,
+      "stability": 0.58,
+      "elasticity": 0.82,
+      "breakRiskUnderPressure": 0.45,
+      "formationRange": 4.35,
+      "absorbRange": 2.85,
+      "absorbThreshold": 0.18,
+      "assistRange": 5.35,
+      "confirmationRateMultiplier": 1.55
+    },
+    "gameplay": {
+      "enables": [
+        "absorb",
+        "gentle_pull",
+        "basic_trust"
+      ],
+      "risks": [
+        "dependency",
+        "easy_break_under_stress"
+      ]
+    },
+    "visual": {
+      "vfxRecipe": "soft_thread_v01",
+      "motion": "elastic_bead_flow"
+    },
+    "meaning": "Early trust, fragile attachment, dependence.",
+    "notes": {
+      "HC-003C": "Slightly smoother first seed absorb timing for the first playable minute."
+    }
+  },
+  {
+    "id": "flow_bond",
+    "chemistry": {
+      "producedBy": [
+        "flux",
+        "signal"
+      ],
+      "compatibleStates": [
+        "fluid",
+        "signal_vapor",
+        "membrane"
+      ],
+      "incompatibleStates": [
+        "scarred",
+        "clot",
+        "crystalline"
+      ]
+    },
+    "behavior": {
+      "formationDifficulty": 0.34,
+      "stability": 0.46,
+      "elasticity": 0.76,
+      "breakRiskUnderPressure": 0.52,
+      "formationRange": 3.35,
+      "absorbRange": 1.75,
+      "absorbThreshold": 0.55,
+      "assistRange": 4.15,
+      "movementAssist": 0.28
+    },
+    "gameplay": {
+      "enables": [
+        "flow_follow",
+        "current_reading",
+        "pressure_release",
+        "movement_tether"
+      ],
+      "risks": [
+        "overcarry",
+        "loss_of_control",
+        "pressure_slip"
+      ]
+    },
+    "visual": {
+      "vfxRecipe": "flow_ribbon_thread_v01",
+      "motion": "streaming_bead_flow"
+    },
+    "meaning": "A temporary moving relationship formed by pressure, current, and trust in flow."
+  },
+  {
+    "id": "scar_bond",
+    "chemistry": {
+      "producedBy": [
+        "scar",
+        "residue"
+      ],
+      "compatibleStates": [
+        "scarred"
+      ],
+      "incompatibleStates": [
+        "gel",
+        "signal_vapor"
+      ]
+    },
+    "behavior": {
+      "formationDifficulty": 0.72,
+      "stability": 0.86,
+      "elasticity": 0.11,
+      "breakRiskUnderPressure": 0.22,
+      "formationRange": 2.05,
+      "absorbRange": 1.25,
+      "absorbThreshold": 0.88,
+      "assistRange": 2.7
+    },
+    "gameplay": {
+      "enables": [
+        "resistance",
+        "memory_echo",
+        "hardening"
+      ],
+      "risks": [
+        "isolation",
+        "reduced_signal_softness"
+      ]
+    },
+    "visual": {
+      "vfxRecipe": "scar_crack_thread_v01",
+      "motion": "delayed_pulse_echo"
+    },
+    "meaning": "Strong but rigid protection formed from old pain."
+  },
+  {
+    "id": "resonant_bond",
+    "chemistry": {
+      "producedBy": [
+        "signal"
+      ],
+      "compatibleStates": [
+        "signal_vapor",
+        "membrane",
+        "fluid"
+      ],
+      "incompatibleStates": [
+        "over_agitated_scar"
+      ]
+    },
+    "behavior": {
+      "formationDifficulty": 0.38,
+      "stability": 0.52,
+      "elasticity": 0.64,
+      "breakRiskUnderDissonance": 0.66,
+      "formationRange": 3.0,
+      "absorbRange": 1.8,
+      "absorbThreshold": 0.62,
+      "assistRange": 3.8
+    },
+    "gameplay": {
+      "enables": [
+        "tune",
+        "reveal",
+        "synchronize",
+        "calm"
+      ],
+      "risks": [
+        "dissonance",
+        "miscommunication"
+      ]
+    },
+    "visual": {
+      "vfxRecipe": "wave_ring_thread_v01",
+      "motion": "synchronized_pulse"
+    },
+    "meaning": "Communication, empathy, shared rhythm."
+  }
+]

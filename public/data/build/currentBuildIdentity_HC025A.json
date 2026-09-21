@@ -1,0 +1,23 @@
+{
+  "id": "HC-025A",
+  "version": "0.25.0",
+  "label": "Contact Language",
+  "mode": "visual-only Core-to-Host contact state readability",
+  "parent": "HC-024E",
+  "buildRule": "Existing movement-boundary telemetry may drive suspended/brushing/attached/releasing Core body language; movement, collision, adhesion physics, progression and geography remain locked",
+  "sourceJsCount": 88,
+  "contactLanguageEnabled": true,
+  "contactStates": [
+    "suspended",
+    "brushing",
+    "attached",
+    "releasing"
+  ],
+  "usesExistingMovementBoundaryTelemetry": true,
+  "chemistryCanAmplifyVisualAttachment": true,
+  "movementConsequencesEnabled": false,
+  "collisionConsequencesEnabled": false,
+  "adhesionPhysicsEnabled": false,
+  "newRegions": 0,
+  "newSourceModules": 0
+}

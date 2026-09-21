@@ -1,0 +1,100 @@
+{
+  "id": "HC004C_GRAVE_ROUTE_VISUAL_COMPOSER_SUPPORT",
+  "build": "HC-004C",
+  "status": "visual_support_only_not_runtime_active",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceRecipePack": "HC004B_GRAVE_ROUTE_RECIPE_PACK",
+  "purpose": "Teach the generic visual composer how to interpret the authored Grave Memory / Residue-Scar recipe silhouettes before any runtime traversal or morph activation is allowed.",
+  "allowedScope": [
+    "visual composer silhouette routing",
+    "environment visual composer methods for Grave surface and haze recipes",
+    "chem-object visual composer methods for Grave recipe objects",
+    "visual composer validation",
+    "documentation",
+    "build identity update"
+  ],
+  "forbiddenScope": [
+    "runtime route activation",
+    "new morph activation",
+    "new target focus activation",
+    "new interaction loop activation",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "branch select menu",
+    "combat",
+    "dialogue tree",
+    "quest log"
+  ],
+  "composerSupport": [
+    {
+      "visualRecipe": "grave_memory_residue_bed_surface_v01",
+      "silhouette": "low_settling_residue_basin_with_half_buried_core_shells",
+      "composer": "EnvironmentVisualComposer",
+      "method": "composeGraveMemoryResidueBedSurface",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "grave_memory_silt_haze_v01",
+      "silhouette": "wide_soft_ash_haze_with_threadlike_signal_flickers",
+      "composer": "EnvironmentVisualComposer",
+      "method": "composeGraveMemorySiltHaze",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "old_core_husk_memory_v01",
+      "silhouette": "collapsed_seed_core_shell_with_missing_inner_ring",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeOldCoreHuskMemory",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "residue_silt_cloud_v01",
+      "silhouette": "soft_irregular_silt_cloud_with_threaded_voids",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeResidueSiltCloud",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "scar_lock_plate_v01",
+      "silhouette": "interlocking_dark_plate_with_rounded_guard_edges",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeScarLockPlate",
+      "mustNotFallback": true
+    },
+    {
+      "visualRecipe": "inheritance_seed_remnant_v01",
+      "silhouette": "small_seed_pod_nested_inside_residue_ring",
+      "composer": "ChemObjectVisualComposer",
+      "method": "composeInheritanceSeedRemnant",
+      "mustNotFallback": true
+    }
+  ],
+  "noRuntimeActivation": {
+    "strictMarker": "HC-004C adds visual composer support only; the Grave route remains not reachable, not morphed, and not runtime active.",
+    "forbiddenRuntimeArchitecture": [
+      "no old gates",
+      "no doors",
+      "no teleports",
+      "no old chamber exits",
+      "no stage-node loaders",
+      "no branch select menu",
+      "not runtime active"
+    ]
+  },
+  "acceptanceTests": [
+    "All six HC-004B Grave visual recipes are routed to concrete composer methods.",
+    "No Grave visual recipe falls through to VisualComposer fallback geometry.",
+    "Composer methods can instantiate Three.js groups without throwing.",
+    "The Grave local cell and Grave chem objects remain authored but not runtime active/spawned.",
+    "No morph plan, target focus rule, interaction loop, gate, door, teleport, or branch menu makes the Grave route playable."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004D",
+    "label": "Runtime Grave Morph Prototype",
+    "mode": "runtime_activation_prototype_after_visual_support"
+  }
+}

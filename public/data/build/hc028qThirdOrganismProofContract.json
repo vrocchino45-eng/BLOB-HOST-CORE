@@ -1,0 +1,66 @@
+{
+  "id": "HC-028Q",
+  "parent": "HC-028P",
+  "mode": "expansion_proof",
+  "organism": {
+    "id": "vascular_relay_001",
+    "role": "flow_relay",
+    "homeCell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "homeRegion": "Vascular",
+    "hostFunction": "carry_align_release",
+    "coordinateSpace": "cell_entry_relative",
+    "visualRecipe": "vascular_relay_v01",
+    "pairedVaneStations": 3,
+    "totalVanes": 6,
+    "careRole": false,
+    "sensorRole": false,
+    "enemyRole": false,
+    "bondable": false,
+    "guideAuthority": false,
+    "repairAuthority": false
+  },
+  "grammarProof": {
+    "profileOwner": "entityRecipes.vascular_relay_001.ecologyGrammar",
+    "relationshipProfileDriven": true,
+    "memoryProfileDriven": true,
+    "behaviorProfileDriven": true,
+    "localMatterProfileDriven": true,
+    "residueProfileDriven": true,
+    "recognitionProfileDriven": true,
+    "crossInfluenceGenericFallbackPreserved": true,
+    "resonanceGenericFallbackPreserved": true,
+    "existingHostMotesOnly": true,
+    "newParticleField": false
+  },
+  "movement": {
+    "owner": "EntitySystem",
+    "ridesRegionalCurrent": true,
+    "facesCurrentNotPlayer": true,
+    "boundedLocalDrift": true,
+    "playerMovementAuthority": false,
+    "routeAuthority": false
+  },
+  "scope": {
+    "oneNewOrganism": true,
+    "oneHomeRegion": true,
+    "tenderPreserved": true,
+    "watcherPreserved": true,
+    "hc028pCrossInfluencePreserved": true,
+    "hc028nResiduePreserved": true,
+    "hubRoutesPreserved": true,
+    "combReentryPreserved": true,
+    "startupScopeFixPreserved": true
+  },
+  "forbidden": {
+    "newButton": false,
+    "healthBar": false,
+    "combatLoop": false,
+    "loot": false,
+    "resourceFarming": false,
+    "affinityMeter": false,
+    "routeGate": false,
+    "objectiveRequirement": false,
+    "persistentSaveEcology": false,
+    "newProgressionSystem": false
+  }
+}

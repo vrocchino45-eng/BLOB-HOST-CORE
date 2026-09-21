@@ -1,0 +1,52 @@
+{
+  "pass": "HC-027L",
+  "law": "existing_systems_take_turns_and_quiet_travel_surfaces_spatial_information_without_creating_objectives_or_content",
+  "targetSessionSeconds": 480,
+  "rhythm": {
+    "sequence": [
+      "observe",
+      "move",
+      "manipulate",
+      "consequence",
+      "reorient",
+      "follow_answer",
+      "discover",
+      "transition"
+    ],
+    "reorientationSeconds": 2.8,
+    "quietNoticeBeginsSeconds": 0.9,
+    "quietNoticeLiftMax": 0.24,
+    "softSpatialSupportBeginsSeconds": 7.5,
+    "deadTimeReviewBeginsSeconds": 18,
+    "desiredMaximumUnchangedWindowSeconds": 60,
+    "hardReviewWindowSeconds": 90
+  },
+  "visualHierarchy": {
+    "committedPulseCameraBreathingRoomMax": 0.78,
+    "runtimeBreathingRoomCeiling": 0.8,
+    "coreWorkBreathingRoom": 0.62,
+    "nextQuestionBreathingRoom": 0.56,
+    "worldLedHudInstructionOpacity": 0.5,
+    "worldLedHudControlsOpacity": 0.42
+  },
+  "locks": {
+    "sourceJsCount": 92,
+    "newSourceModules": 0,
+    "quickPulseLocalActionableRange": 4.25,
+    "audioReference": "HC027D1",
+    "verbPhysiology": "HC027J2",
+    "consequenceNextQuestion": "HC027K",
+    "inputInstrumentation": "HC027K1 HOTFIX2",
+    "newMechanics": false,
+    "newContent": false
+  },
+  "authority": {
+    "createsObjective": false,
+    "createsWaypoint": false,
+    "changesProgression": false,
+    "changesRoute": false,
+    "changesMovement": false,
+    "changesChemistry": false,
+    "changesInput": false
+  }
+}

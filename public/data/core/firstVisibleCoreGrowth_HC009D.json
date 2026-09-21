@@ -1,0 +1,91 @@
+{
+  "id": "FIRST_VISIBLE_CORE_GROWTH_HC009D",
+  "build": "HC-009D",
+  "status": "runtime_active_first_growth",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Turn retained nursery nourishment, intervention history, and the protected seed's Form/Seed mass into the first unmistakable bodily adaptation, then carry that form through Guide Threshold and Hub Chamber.",
+  "authority": {
+    "growthOwner": "CoreGrowthSystem",
+    "bodyLanguageCollaborator": "CoreEmbodimentSystem",
+    "movementConsumer": "PlayerMovementController",
+    "guideRecognitionOwner": "GuideThresholdGameplaySystem",
+    "hubReflectionOwner": "HubChamberFoundationSystem"
+  },
+  "stages": {
+    "seed": {
+      "id": "seed_core",
+      "displayName": "Seed Core",
+      "maximumProgress": 0.17
+    },
+    "emerging": {
+      "id": "binding_core_emerging",
+      "displayName": "Binding Core — emerging",
+      "minimumProgress": 0.18,
+      "maximumProgress": 0.84
+    },
+    "bound": {
+      "id": "binding_core",
+      "displayName": "Binding Core",
+      "minimumProgress": 0.85
+    }
+  },
+  "growth": {
+    "consequenceBudTarget": 0.28,
+    "successfulCircuitTarget": 0.64,
+    "protectedSeedWithoutSuccessfulCircuitTarget": 0.44,
+    "protectedSeedAndSuccessfulCircuitTarget": 1.0,
+    "growthRatePerSecond": 0.46,
+    "commitProgress": 0.85
+  },
+  "bias": {
+    "reversible": true,
+    "classLock": false,
+    "blendRatePerSecond": 2.4,
+    "careThreshold": 0.2,
+    "scarThreshold": -0.2,
+    "careLabel": "tender_attuned_binding",
+    "balancedLabel": "balanced_first_binding",
+    "scarLabel": "scar_tempered_binding"
+  },
+  "visual": {
+    "careColor": "#8ff0c5",
+    "careEmissive": "#3e9d78",
+    "balancedColor": "#b8e9e2",
+    "balancedEmissive": "#4f8f91",
+    "scarColor": "#e89268",
+    "scarEmissive": "#9d3e39",
+    "nucleusColor": "#ffe2a4",
+    "petalCount": 6,
+    "scarPlateCount": 5,
+    "connectionNodeCount": 4,
+    "objectDefiningRings": false
+  },
+  "movement": {
+    "maximumPressureResistance": 0.18,
+    "maximumFlowResistance": 0.13,
+    "maximumCareAccelerationGain": 0.03,
+    "maximumScarAccelerationLoss": 0.04,
+    "maximumScarDragGain": 0.08,
+    "maximumCareDragReduction": 0.03,
+    "baseStabilizeEfficiencyGain": 0.12,
+    "careStabilizeEfficiencyGain": 0.12
+  },
+  "crossRoom": {
+    "surfaceWake": "The nursery's retained consequence buds visibly through the Core's shell.",
+    "guideThreshold": "Guide Threshold presses against the new shell and exposes its altered current response.",
+    "hubChamber": "The Hub comparison cradle echoes the Core's retained form and soft chemistry bias."
+  },
+  "constraints": {
+    "addsAbility": false,
+    "addsRoute": false,
+    "addsRegion": false,
+    "addsEntity": false,
+    "addsGate": false,
+    "permanentClass": false,
+    "directTriggerCompletion": false,
+    "directObjectiveCompletion": false,
+    "directGateMutation": false,
+    "changesDestination": false,
+    "everyViableBiasReachesSameDestination": true
+  }
+}

@@ -1,0 +1,165 @@
+[
+  {
+    "id": "GUIDE_THRESHOLD_LAYERED_INTERACTION_HC006F",
+    "sourceCellId": "CELL_SCAR_FLOW_FOLD_001",
+    "title": "Read the Current, Move With It",
+    "purpose": "Lock the movement-led Guide Threshold traversal and preserve valid release eligibility across the response-to-settle handoff so ambient Scar-Flow drift cannot strand completion.",
+    "focusObjectId": "guide_threshold_current_001",
+    "activation": {
+      "requiresFirstMorphComplete": true,
+      "requiresActiveCell": "CELL_SCAR_FLOW_FOLD_001",
+      "targetRequired": false,
+      "suppressesGenericTargeting": true
+    },
+    "geometry": {
+      "pathPoints": [
+        [
+          -0.82,
+          0.18,
+          -1.08
+        ],
+        [
+          -1.02,
+          0.98,
+          -1.58
+        ],
+        [
+          -0.35,
+          1.2,
+          -1.98
+        ],
+        [
+          0.72,
+          -0.38,
+          -2.42
+        ]
+      ],
+      "volumetricPath": true,
+      "verticalExcursion": 1.58,
+      "approachRange": 3.0,
+      "observeRange": 2.8,
+      "alignTravelDistance": 0.72,
+      "sustainTravelDistance": 1.05,
+      "settleRange": 1.35,
+      "strandCount": 5,
+      "ribCount": 6,
+      "corridorRange": 1.15,
+      "assistedCorridorRange": 1.48,
+      "focusLookAhead": 0.18,
+      "alignmentDot": 0.2,
+      "assistedAlignmentDot": 0.08,
+      "sustainAlignmentDot": 0.08,
+      "assistedSustainDot": -0.02,
+      "minimumMovement": 0.12,
+      "minimumSustainMovement": 0.1,
+      "sustainTargetPathProgress": 0.84,
+      "requiredResonanceHold": 0.92,
+      "requiredTraversalProgress": 0.78,
+      "settlePathProgressMin": 0.82,
+      "settleCorridorRange": 1.68
+    },
+    "timing": {
+      "approachHoldSeconds": 0.38,
+      "alignmentSeconds": 0.9,
+      "sustainSeconds": 1.45,
+      "responseSeconds": 0.7,
+      "releaseSettleSeconds": 0.9,
+      "outOfAlignmentDecayPerSecond": 0.16,
+      "guidanceAssistAfterSeconds": 2.8,
+      "invalidSustainDecayPerSecond": 0.06
+    },
+    "stages": [
+      {
+        "id": "approach_guiding_current",
+        "guideLine": "The scar does not block the way; it bends the current.",
+        "objectiveLine": "Approach the pale current where memory and pressure meet.",
+        "nextAction": "Move close enough for the current to read your presence."
+      },
+      {
+        "id": "observe_current_direction",
+        "guideLine": "Ask once. Watch which way the answer travels.",
+        "objectiveLine": "Pulse once to reveal the current's direction.",
+        "nextAction": "Press X once; do not absorb the scar."
+      },
+      {
+        "id": "align_movement_with_fold",
+        "guideLine": "Do not point at the route. Move until your motion agrees with it.",
+        "objectiveLine": "Move along the lit current until the fold accepts your direction.",
+        "nextAction": "Use left-stick up and steer with the camera; keep moving along the current."
+      },
+      {
+        "id": "sustain_resonance_while_traversing",
+        "guideLine": "Carry the resonance through motion. Stillness cannot open this reading.",
+        "objectiveLine": "Hold LT while continuing through the current.",
+        "nextAction": "Keep moving with the current while stabilizing with LT. X remains pulse."
+      },
+      {
+        "id": "watch_threshold_tissue_answer",
+        "guideLine": "The threshold is tissue changing state, not a door.",
+        "objectiveLine": "Watch the fold answer around your movement.",
+        "nextAction": "Stay with the response; no extra input is needed."
+      },
+      {
+        "id": "release_at_settling_point",
+        "guideLine": "Let go where the current becomes quiet.",
+        "objectiveLine": "Release LT near the settling ribs and remain with the tissue.",
+        "nextAction": "Release resonance and hold position until the fold settles."
+      },
+      {
+        "id": "guide_threshold_complete",
+        "guideLine": "You crossed by agreeing with the living route.",
+        "objectiveLine": "The Guide Threshold reading is complete.",
+        "nextAction": "Let the settled fold become Signal Chorus tissue."
+      }
+    ],
+    "inspection": {
+      "toggleRange": 4.8,
+      "autoExitRange": 6.6,
+      "distance": 4.5,
+      "fieldOfView": 52,
+      "targetBlendTowardFocus": 0.64,
+      "targetLift": 0.12,
+      "baseHeight": 0.86,
+      "pitch": 0.2,
+      "shoulderOffset": 0.56,
+      "forwardOffset": 0.1
+    },
+    "visual": {
+      "memoryColor": 16766634,
+      "signalColor": 11137023,
+      "pressureColor": 10354687,
+      "settledColor": 13565918,
+      "baseOpacity": 0.16,
+      "activeOpacity": 0.56
+    },
+    "completion": {
+      "preparedForSecondMorph": true,
+      "routeActivated": false,
+      "thresholdOpened": false,
+      "activeCellChanges": false,
+      "noGate": true,
+      "nextRecommendedPass": "HC-006J \u2014 Hub Chamber Route Readability Build Plan",
+      "lockDecision": "guide_threshold_response_to_settle_handoff_repaired_pending_live_verification",
+      "repairPass": "HC-006IA"
+    },
+    "forbiddenScope": [
+      "hard gate",
+      "door prompt",
+      "teleport",
+      "branch menu",
+      "single pulse completion",
+      "forced camera",
+      "new combat",
+      "Comb Threshold runtime",
+      "Aperture Fields runtime",
+      "time-only traversal completion",
+      "off-corridor resonance completion",
+      "global straight-line direction checks",
+      "time-only settle before valid release zone",
+      "raw endpoint-only settle ownership",
+      "discarding valid settle eligibility during the response-to-release handoff"
+    ],
+    "lockPass": "HC-006G",
+    "controlMap": "HOST_CORE_CANONICAL_CONTROLS_V1"
+  }
+]

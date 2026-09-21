@@ -1,0 +1,31 @@
+{
+  "build": "HC-016V",
+  "status": "PASS",
+  "pathLengthBefore": 7.453299417397773,
+  "pathLengthAfter": 24.203619673027173,
+  "movementBoundsBefore": [
+    4.45,
+    3.05,
+    6.6
+  ],
+  "movementBoundsAfter": [
+    6.8,
+    4.25,
+    21.2
+  ],
+  "coreScaleChanged": false,
+  "gameplayContractChanged": false,
+  "checks": [
+    {
+      "name": "syntax:SiltPressureRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016VSiltSpatialExpansion.mjs",
+      "status": "PASS",
+      "detail": "[HC016V] expanded Silt path 24.20 units PASS\n[HC016V] wider appetite decision pocket PASS\n[HC016V] movement envelope + gameplay-rule locks PASS\n"
+    }
+  ],
+  "nextPass": "HC-016W Three-Route Gameplay Convergence"
+}

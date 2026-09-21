@@ -1,0 +1,32 @@
+{
+  "id": "HC-002R_SCHEMA_CLEANUP_STATE",
+  "build": "HC-002R",
+  "status": "schema_cleanup_ready_for_playtest",
+  "lockedSystems": [
+    "HostCore recipe loading",
+    "LocalCell recipe loading",
+    "Schema reference validation",
+    "Placeholder validation and expiration status",
+    "Visual recipe composition",
+    "Movement viscosity",
+    "Controller input",
+    "Targeting",
+    "Bond-driven seed absorb",
+    "Entity spawning",
+    "Guide orbiter spawning",
+    "Three-cell no-gate morph chain through Bloom Residue Fork"
+  ],
+  "mustNotRegress": [
+    "seed can be absorbed",
+    "scar resists absorption",
+    "controller detected",
+    "Tender and Watcher spawn",
+    "Guide spawns",
+    "morphs remain no-gate/no-teleport",
+    "flow_bond exists",
+    "inorganic and confluence domains exist",
+    "schema validation has zero missing references"
+  ],
+  "nextIfPasses": "HC-002S Bloom Residue Arrival Stabilization",
+  "nextIfFails": "HC-002R_FIX Schema Cleanup Regression Fix"
+}

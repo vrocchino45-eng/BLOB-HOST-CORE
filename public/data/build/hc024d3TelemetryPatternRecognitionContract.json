@@ -1,0 +1,77 @@
+{
+  "id": "HC-024D3",
+  "name": "Telemetry Pattern Recognition Pop",
+  "purpose": "Treat Grave Memory, Vascular Rhythm, and Silt Pressure as a true 3D chemistry cloud: publish exact relative telemetry, recognize a small set of meaningful stable geometric patterns, and confirm each newly entered pattern with a short one-shot Core animation pop.",
+  "inherits": [
+    "HC-024D1 nine component-zone interactions",
+    "HC-024D2 ten whole-Core topology visual states"
+  ],
+  "telemetry": {
+    "pieceLocalXYZ": true,
+    "pairDistances": 3,
+    "triangleArea": true,
+    "normalizedTriangleArea": true,
+    "pairUniformity": true,
+    "radialSpan": true,
+    "centroidXYZ": true,
+    "centroidRadius": true,
+    "polarization": true,
+    "nearestPair": true,
+    "radialOrder": true
+  },
+  "recognizedPatterns": [
+    {
+      "id": "tight_convergence",
+      "label": "Tight Convergence",
+      "signal": "all three pair distances compact",
+      "pop": "compression + nucleus rebound"
+    },
+    {
+      "id": "paired_counterpoint",
+      "label": "Pair + Counterpoint",
+      "signal": "one tight pair with a clearly isolated third",
+      "pop": "paired pulse then counter-pulse"
+    },
+    {
+      "id": "radial_ladder",
+      "label": "Radial Ladder",
+      "signal": "large radial span with near-linear depth alignment",
+      "pop": "deep-to-surface sequential wave"
+    },
+    {
+      "id": "linear_channel",
+      "label": "Linear Channel",
+      "signal": "low triangle area across a long three-point line",
+      "pop": "sequential channel wave"
+    },
+    {
+      "id": "balanced_triad",
+      "label": "Balanced Triad",
+      "signal": "broad, near-even triangle with low centroid polarization",
+      "pop": "synchronized three-point / nucleus / mantle / membrane pulse"
+    }
+  ],
+  "recognitionRules": {
+    "activationDwellSeconds": 0.18,
+    "releaseDwellSeconds": 0.34,
+    "commitWhilePieceHeld": false,
+    "oneShotOnRecognizedStateEntry": true,
+    "repeatWhileStable": false,
+    "fixedSocketsUsed": false
+  },
+  "acceptance": [
+    "P quick-test default arrangement can resolve a recognized pattern without changing progression.",
+    "Dragging through a pattern does not commit/pop until the Guide places the piece and the telemetry is stable.",
+    "Entering a new recognized pattern produces a brief visibly distinct body animation pop.",
+    "Remaining in the same pattern does not repeatedly pop.",
+    "Leaving and later re-entering that pattern may pop again.",
+    "World movement, contact, collision, progression, geography, and route logic are unchanged."
+  ],
+  "gameplayConsequencesEnabled": false,
+  "recipeMenuUsed": false,
+  "inventorySlotsUsed": false,
+  "progressionChanged": false,
+  "geographyChanged": false,
+  "debugQuickTestbedPreserved": true,
+  "activeSourceModuleCount": 88
+}

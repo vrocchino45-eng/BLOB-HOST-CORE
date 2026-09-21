@@ -1,0 +1,48 @@
+{
+  "build": "HC-016H",
+  "checks": [
+    {
+      "name": "LocalCellBoundaryRecipeRegistry.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "LocalCellBoundaryMorphSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "GateSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016HHubCombGenericMorph.mjs",
+      "status": "PASS",
+      "detail": "[HC016H] Hub <-> Comb generic boundary migration PASS\n"
+    },
+    {
+      "name": "runtime-registration-count-stable",
+      "status": "PASS",
+      "detail": "48->48"
+    },
+    {
+      "name": "activeCell-writer-count-stable",
+      "status": "PASS",
+      "detail": "19->19"
+    }
+  ],
+  "runtimeRegistrations": {
+    "before": 48,
+    "after": 48
+  },
+  "activeCellMutationSites": {
+    "before": 19,
+    "after": 19
+  },
+  "migratedBoundaryCount": 8,
+  "remainingGateOwnedMacroBoundaries": [
+    "comb_to_aperture",
+    "aperture_to_comb"
+  ]
+}

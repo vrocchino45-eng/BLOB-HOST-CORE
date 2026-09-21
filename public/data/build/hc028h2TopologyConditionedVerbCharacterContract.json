@@ -1,0 +1,38 @@
+{
+  "id": "HC-028H2",
+  "parent": "HC-028H1",
+  "title": "Topology-Conditioned Verb Character",
+  "purpose": "Make existing topology physiology readable in Pulse/Absorb/Stabilize presentation and audio without adding verb power, range, progress, cost, targeting, input, movement, route, or engine authority.",
+  "newSystem": "CoreTopologyVerbCharacterSystem",
+  "duplicateVerbPhysiology": false,
+  "topologyBuffTable": false,
+  "verbPowerChanged": false,
+  "verbRangeChanged": false,
+  "verbProgressChanged": false,
+  "verbCostChanged": false,
+  "targetingChanged": false,
+  "movementChanged": false,
+  "environmentalHandlingChanged": false,
+  "routeChanged": false,
+  "inputChanged": false,
+  "engineRetimed": false,
+  "audioReferenceMixChanged": false,
+  "telemetrySchema": "blob.session.telemetry.v1.8",
+  "characterModes": [
+    "buffered_long_memory",
+    "controlled_transmission",
+    "exposed_quick_response",
+    "triadic_adaptive",
+    "buffered_mixed",
+    "expressive_mixed",
+    "controlled_mixed"
+  ],
+  "readabilityAxes": [
+    "pulse_contour_persistence",
+    "pulse_return_tail",
+    "absorb_helix_rate_radius",
+    "absorb_fragment_persistence",
+    "stabilize_wobble_precession",
+    "audio_transient_tail_texture_focus"
+  ]
+}

@@ -1,0 +1,14 @@
+import fs from "node:fs";
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), surf=read("../src/opening/SurfaceWakeGameplaySystem.js"), eco=read("../src/opening/SurfaceWakeEcologicalCausalitySystem.js"), core=read("../src/player/CoreEmbodimentSystem.js");
+const recipe=JSON.parse(read("../public/data/opening/surfaceWakeGameplayRecipes.json"))[0], must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-021D"'),"identity");
+for(const x of ["read_contamination_in_flow","changing_matter_while_carried","flow_and_matter_brought_into_safe_relationship","commit_unresolved_contamination"]) must(surf.includes(x),x);
+for(const x of ["Pulse:read_matter_in_current","Stabilize:change_carried_matter_state","Absorb:commit_current_matter_state"]) must(surf.includes(x),x);
+must(surf.includes("requiredNewVerb: false")&&surf.includes("gateAuthority: false"),"scope");
+must(eco.includes("tender_softens_as_carried_matter_becomes_compatible"),"ecology");
+must(core.includes("primitive_membrane_and_nucleus")&&core.includes("gameplayBodyUnchanged: true"),"core");
+must(!recipe.mechanicalCombination.newPrimaryMechanic&&!recipe.mechanicalCombination.newRegion,"recipe scope");
+console.log("[HC021D] mechanical combination PASS");
+console.log("[HC021D] read -> transform -> commit causal chain PASS");
+console.log("[HC021D] HC021C anatomical foundation retained PASS");

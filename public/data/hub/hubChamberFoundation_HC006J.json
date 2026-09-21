@@ -1,0 +1,124 @@
+[
+  {
+    "id": "HUB_CHAMBER_FOUNDATION_HC006J",
+    "build": "HC-006J",
+    "status": "runtime_active_foundation",
+    "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "sourceCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "regionId": "hub_chamber",
+    "purpose": "Convert the proven Signal Chorus route-awareness proxy into a readable Hub junction with one central anchor, three physically separated route identities, one active route, two dormant routes, and one first-memory fragment without opening new route content.",
+    "activation": {
+      "requiresActiveCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "revealSeconds": 1.8,
+      "routeIdentityRequiresLayeredInteractionComplete": true
+    },
+    "junction": {
+      "position": [0.1, -0.36, -2.65],
+      "radius": 1.16,
+      "ringCount": 3,
+      "memoryFragmentPosition": [0.08, 0.52, -3.0]
+    },
+    "routes": [
+      {
+        "id": "grave_memory_route",
+        "displayName": "Grave Memory",
+        "gateId": "hub_to_grave_memory_route",
+        "runtimeCompatibilityDestination": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+        "status": "active_route",
+        "position": [0.15, -0.2, -5.35],
+        "controlA": [0.08, -0.12, -3.5],
+        "controlB": [0.12, -0.18, -4.42],
+        "shape": "memory_lattice",
+        "chemistry": ["scar", "residue", "signal"],
+        "color": 16758640,
+        "secondaryColor": 12108711,
+        "worldMeaning": "Memory and unfinished becoming remain readable without being consumed."
+      },
+      {
+        "id": "vascular_route",
+        "displayName": "Vascular Rhythm",
+        "gateId": "hub_to_vascular_route",
+        "status": "dormant_route",
+        "position": [-3.05, 0.12, -4.3],
+        "controlA": [-0.9, -0.02, -3.18],
+        "controlB": [-2.0, 0.08, -3.75],
+        "shape": "vascular_arc",
+        "chemistry": ["signal", "flux", "form"],
+        "color": 7398143,
+        "secondaryColor": 16755588,
+        "worldMeaning": "Circulation, rhythm, charge, and flow wait beyond a sleeping current."
+      },
+      {
+        "id": "silt_burrow_route",
+        "displayName": "Silt Pressure",
+        "gateId": "hub_to_silt_burrow_route",
+        "status": "dormant_route",
+        "position": [3.12, -0.34, -4.28],
+        "controlA": [0.95, -0.12, -3.15],
+        "controlB": [2.08, -0.24, -3.72],
+        "shape": "compressed_ribs",
+        "chemistry": ["form", "residue", "seed"],
+        "color": 16763742,
+        "secondaryColor": 10185055,
+        "worldMeaning": "Appetite, pressure, and compression remain dormant until the Host accepts another reading."
+      }
+    ],
+    "visual": {
+      "junctionColor": 11393254,
+      "junctionMemoryColor": 16769184,
+      "junctionOpacity": 0.34,
+      "routeLineOpacity": 0.34,
+      "activeGateOpacity": 0.64,
+      "dormantGateOpacity": 0.2,
+      "memoryFragmentOpacity": 0.72,
+      "renderOrder": 5,
+      "hubClutterOpacityScale": 0.52,
+      "hubMoteVisibilityScale": 0.38
+    },
+    "camera": {
+      "focusId": "hub_junction_anchor_001",
+      "assistRange": 8.4,
+      "distance": 6.15,
+      "fieldOfView": 56,
+      "targetBlendTowardFocus": 0.58,
+      "targetLift": 0.18,
+      "baseHeight": 1.12,
+      "pitch": 0.24,
+      "shoulderOffset": 0.46,
+      "forwardOffset": 0.05,
+      "maxYawOffset": 1.18,
+      "pitchMin": -0.04,
+      "pitchMax": 0.52,
+      "blockerOpacity": 0.08,
+      "ambientDensityScale": 0.44
+    },
+    "playerFacingLanguage": {
+      "revealingGuide": "The Chorus is becoming a junction. Three route pressures are separating around one remembered center.",
+      "revealingObjective": "Hold position and read the three route identities as they take shape.",
+      "completeGuide": "Three readings now stand apart. The Grave memory route is answering; the vascular and silt routes remain dormant.",
+      "completeObjective": "Read the active Grave-memory gate and remember the two sleeping routes.",
+      "nextAction": "The junction is readable. Pulse the active Grave Memory body after the Status self-reading; the other routes remain dormant."
+    },
+    "completion": {
+      "centralAnchorReadable": true,
+      "threeRouteLayoutReadable": true,
+      "oneActiveRouteReadable": true,
+      "twoDormantRoutesReadable": true,
+      "firstMemoryFragmentReadable": true,
+      "fullHubChamberFoundationComplete": true,
+      "statusPageIntroduced": false,
+      "nextRecommendedPass": "HC-006K — Hub Status and Route Readout Lock"
+    },
+    "forbidden": [
+      "Vascular Route activation",
+      "Silt Burrow activation",
+      "Comb Threshold crossing",
+      "Aperture Fields",
+      "teleport",
+      "branch menu",
+      "forced player relocation",
+      "combat",
+      "full status page implementation"
+    ]
+  }
+]

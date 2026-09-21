@@ -1,0 +1,60 @@
+{
+  "id": "HC027I_EMBODIED_VERB_AFFORDANCE",
+  "pilot": "Signal Plain / Shift+8",
+  "targetSeconds": "60-90",
+  "law": "condition_suggests_experiment_without_button_prompt_or_lock",
+  "conditions": [
+    {
+      "node": 1,
+      "signature": "slow_breath",
+      "condition": "draw_release",
+      "impliedVerbDebugOnly": "absorb",
+      "physicalCue": "filaments draw inward then release",
+      "matchingResponse": "draw deepens while held"
+    },
+    {
+      "node": 2,
+      "signature": "paired_chirp",
+      "condition": "call_wait",
+      "impliedVerbDebugOnly": "pulse",
+      "physicalCue": "paired call followed by quiet gap",
+      "matchingResponse": "short answer flare"
+    },
+    {
+      "node": 3,
+      "signature": "shear_drift",
+      "condition": "phase_slip",
+      "impliedVerbDebugOnly": "stabilize",
+      "physicalCue": "layers slip out of phase",
+      "matchingResponse": "shear visibly settles while held"
+    }
+  ],
+  "presentation": {
+    "guideMayDescribeCondition": true,
+    "guideNamesVerb": false,
+    "hudNamesRequiredVerb": false,
+    "matchingResponseTransient": true,
+    "matchingResponsePersists": false
+  },
+  "authority": {
+    "matchingVerbMarksObserved": false,
+    "matchingVerbCompletesEncounter": false,
+    "wrongVerbPenalty": false,
+    "createsTargets": false,
+    "createsObjectives": false,
+    "createsRewards": false,
+    "changesProgression": false,
+    "changesRoutes": false,
+    "changesVerbRanges": false,
+    "persistentWorldChange": false
+  },
+  "locked": {
+    "sourceJsCount": 92,
+    "audioReference": "HC027D1",
+    "pulseRange": 4.25,
+    "answerMemoryMax": 4,
+    "materialReplyClassCount": 7,
+    "testPlatformHarness": "HC027G1",
+    "traversalIntentionPass": "HC027H"
+  }
+}

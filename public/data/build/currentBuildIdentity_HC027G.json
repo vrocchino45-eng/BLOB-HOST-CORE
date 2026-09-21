@@ -1,0 +1,32 @@
+{
+  "id": "HC-027G",
+  "version": "0.27.8",
+  "label": "Host Material Reply Grammar",
+  "mode": "world-response convergence / material differentiation",
+  "parent": "HC-027F",
+  "buildRule": "Already-returned Pulse answers may shape the existing local Host field according to material class so the player can infer what answered before optional Scan confirmation. No waypoint, target, objective, reward, gate, route authority or progression change is created.",
+  "sourceJsCount": 92,
+  "newSourceModules": 0,
+  "newRegions": 0,
+  "modifiedOwners": [
+    "AmbientMaterialInteractionSystem",
+    "PlaytestHudSystem"
+  ],
+  "materialReply": {
+    "classCount": 7,
+    "localRadius": 2.35,
+    "usesExistingMotes": true,
+    "addsGeometry": false,
+    "addsDrawCalls": false
+  },
+  "audioMixChanged": false,
+  "audioReferenceBuild": "HC-027D1",
+  "answerMemoryLawChanged": false,
+  "sonarRangeOrReturnTimingChanged": false,
+  "gameplayAuthorityChanged": false,
+  "progressionChanged": false,
+  "movementOwnershipChanged": false,
+  "chemistryAuthorityChanged": false,
+  "routeTopologyChanged": false,
+  "engineGrammarChanged": false
+}

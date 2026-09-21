@@ -1,0 +1,50 @@
+{
+  "id": "HC003J_P0_VISUAL_LOCK_REPLACEMENTS",
+  "pass": "HC-003J",
+  "label": "P0 Visual Lock Replacement Pass",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Replace the three highest-priority opening placeholders with stronger recipe-composed visual identities before the opening objective/prompt lock.",
+  "lockedReplacements": [
+    {
+      "placeholderId": "debug_player_core_001",
+      "recipeId": "player_seed_core_stage_01",
+      "status": "p0_locked",
+      "reason": "The player core is the user anchor and must stay readable through motion, fog, and camera occlusion."
+    },
+    {
+      "placeholderId": "debug_guide_orbiter_001",
+      "recipeId": "guide_orbiter_folded_lantern_v01",
+      "status": "p0_locked",
+      "reason": "The Guide is now the primary world-facing instruction source and must read as interpreter/protector."
+    },
+    {
+      "placeholderId": "debug_nutrient_seed_001",
+      "recipeId": "dormant_seed_nutrient_v01",
+      "status": "p0_locked",
+      "reason": "The safe seed teaches trust, absorb, and future potential; it must not read as hazard or generic pickup."
+    }
+  ],
+  "stillDeferred": [
+    {
+      "placeholderId": "debug_scar_plate_001",
+      "recipeId": "scar_contamination_plate_v01",
+      "priority": "P1",
+      "reason": "Needed before first Grave route runtime."
+    },
+    {
+      "placeholderId": "debug_signal_thread_001",
+      "recipeId": "signal_vapor_thread_v01",
+      "priority": "P1",
+      "reason": "Needed before deeper signal/route expansion."
+    }
+  ],
+  "forbiddenScope": [
+    "replace all visuals",
+    "new cells",
+    "new morphs",
+    "new gameplay systems",
+    "old gates",
+    "old chamber loading"
+  ],
+  "nextRecommendedPass": "HC-003K Opening Objective + Prompt Lock"
+}

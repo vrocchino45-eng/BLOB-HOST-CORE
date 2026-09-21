@@ -1,0 +1,107 @@
+{
+  "id": "GRAVE_MEMORY_ROUTE_PREVIEW_HC010A",
+  "pass": "HC-010A",
+  "status": "runtime_active_first_route_preview",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceRegionId": "hub_chamber",
+  "sourceRuntimeCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+  "regionId": "grave_memory_route",
+  "runtimeCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "purpose": "Open one bounded Grave Memory route from the golden first slice, let the player read remains without consuming them, and return through the same living fold without reviving the archived multi-system route chain.",
+  "routeQuestion": "Can the player learn from remains without becoming trapped inside them?",
+  "anatomy": {
+    "sources": [
+      "residue_beds",
+      "scar_fields",
+      "marrow_interior",
+      "signal_choir_tissue"
+    ],
+    "ribPositions": [
+      [-2.15, 0.15, -2.15],
+      [-1.15, 0.62, -3.55],
+      [1.25, 0.48, -4.4],
+      [2.15, -0.05, -2.75]
+    ],
+    "depthLayers": [
+      "foreground scar ribs",
+      "playable residue bed",
+      "distant marrow wall"
+    ]
+  },
+  "objects": [
+    {
+      "id": "old_core_husk_memory_001",
+      "role": "first protected memory read",
+      "position": [-1.35, -0.15, -2.15],
+      "protected": true
+    },
+    {
+      "id": "residue_silt_cloud_001",
+      "role": "pulse then stabilize trace",
+      "position": [1.2, 0.35, -3.25],
+      "protected": false
+    },
+    {
+      "id": "scar_lock_plate_001",
+      "role": "protective scar meaning read",
+      "position": [1.0, -0.22, -4.85],
+      "protected": true
+    },
+    {
+      "id": "inheritance_seed_remnant_001",
+      "role": "unconsumed inherited potential read",
+      "position": [-1.05, 0.48, -5.65],
+      "protected": true
+    }
+  ],
+  "interaction": {
+    "pulseRange": 2.2,
+    "stabilizeRange": 1.8,
+    "stabilizeSeconds": 1.15,
+    "requiredReadObjects": [
+      "old_core_husk_memory_001",
+      "residue_silt_cloud_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "protectedObjects": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "safeTransferRule": "retain a readable memory thread; consume no protected remains"
+  },
+  "returnFold": {
+    "position": [0, 0.05, 0.72],
+    "interactionRange": 1.25,
+    "interaction": "A / E after the route reading is complete",
+    "destinationRegionId": "hub_chamber",
+    "destinationRuntimeCellId": "CELL_SIGNAL_CHORUS_NERVE_001"
+  },
+  "camera": {
+    "distance": 6.35,
+    "fieldOfView": 57,
+    "feeling": "low reverent spatial memory reading"
+  },
+  "playerFacingLanguage": {
+    "read_old_core_husk": "Approach the old Core husk and Pulse to read it.",
+    "pulse_memory_silt": "Pulse the drifting memory silt before trying to hold it.",
+    "stabilize_memory_silt": "Hold Stabilize near the read silt until its trace settles.",
+    "read_protective_scar": "Pulse the scar plate. It protects the remains; it is not a door.",
+    "read_inheritance_seed": "Pulse the inheritance seed without taking it.",
+    "memory_reading_settling": "Let the four readings settle together.",
+    "return_fold_ready": "The memory is retained. Return to the entry fold and press A."
+  },
+  "constraints": {
+    "newRegisteredRouteUpdaters": 1,
+    "archivedCompatibilitySystemsActivated": 0,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "forcedPlayerRelocation": false,
+    "protectedRemainsConsumable": false,
+    "newAbilityUnlocks": 0,
+    "combat": false,
+    "branchMenu": false,
+    "teleport": false
+  }
+}

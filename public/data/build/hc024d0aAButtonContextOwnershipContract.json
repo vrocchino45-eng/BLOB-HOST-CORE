@@ -1,0 +1,17 @@
+{
+  "id": "HC-024D0A",
+  "name": "A Button Context Ownership",
+  "purpose": "Give A/E exactly one owner per top-level interaction context so close inspection cannot leak into world interaction.",
+  "ownership": {
+    "world": "world_interact",
+    "coreInspection": "enter_core_work",
+    "coreWork": "core_work_grab_place",
+    "statusUi": "reserved_no_world_or_core_action"
+  },
+  "authoredFocusMayRemapAInInspection": false,
+  "controllerRemap": false,
+  "chemistryAdded": false,
+  "progressionChanged": false,
+  "debugQuickTestbedPreserved": true,
+  "activeSourceModuleCount": 88
+}

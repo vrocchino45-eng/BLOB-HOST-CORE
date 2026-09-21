@@ -1,0 +1,1030 @@
+[
+  {
+    "id": "GUIDE_PROMPT_AWAKENING_001",
+    "build": "HC-003K",
+    "beat": "awakening",
+    "priority": 20,
+    "cellIds": [
+      "CELL_MEMBRANE_NURSERY_001"
+    ],
+    "conditions": {
+      "morphPhases": [
+        "waiting_for_seed_absorb",
+        "waiting_for_composition_growth",
+        "waiting_for_pulse"
+      ],
+      "targetIds": [
+        "none",
+        "dormant_seed_nutrient_001"
+      ]
+    },
+    "guideLine": "The lantern is here. The warm seed is safe.",
+    "objectiveLine": "Drift toward the seed and hold close.",
+    "debugFallback": "target dormant_seed_nutrient_001 and hold absorb",
+    "tone": "protective",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_OPENING_FLOW_001",
+    "build": "HC-003K",
+    "beat": "opening_flow_trim",
+    "priority": 74,
+    "cellIds": [
+      "CELL_MEMBRANE_NURSERY_001"
+    ],
+    "conditions": {
+      "openingStages": [
+        "find_safe_seed"
+      ],
+      "targetIds": [
+        "none",
+        "dormant_seed_nutrient_001"
+      ],
+      "requiresNotAbsorbed": [
+        "dormant_seed_nutrient_001"
+      ]
+    },
+    "guideLine": "Begin with what is warm enough to trust.",
+    "objectiveLine": "Move to the safe seed. Hold absorb; do not tap.",
+    "debugFallback": "HC-003C opening flow: target dormant_seed_nutrient_001 and hold RT",
+    "tone": "protective",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SAFE_SEED_001",
+    "build": "HC-003K",
+    "beat": "first_seed_absorb",
+    "priority": 80,
+    "cellIds": [
+      "CELL_MEMBRANE_NURSERY_001"
+    ],
+    "conditions": {
+      "targetIds": [
+        "dormant_seed_nutrient_001"
+      ],
+      "requiresNotAbsorbed": [
+        "dormant_seed_nutrient_001"
+      ]
+    },
+    "guideLine": "Hold the bond. Let the seed enter slowly.",
+    "objectiveLine": "Hold RT. Do not tap; let the seed enter slowly.",
+    "debugFallback": "hold RT on dormant_seed_nutrient_001",
+    "tone": "protective",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SCAR_WARNING_001",
+    "build": "HC-003K",
+    "beat": "scar_warning",
+    "priority": 85,
+    "cellIds": [
+      "CELL_MEMBRANE_NURSERY_001"
+    ],
+    "conditions": {
+      "targetIds": [
+        "scar_contamination_plate_001"
+      ]
+    },
+    "guideLine": "That is scar. It remembers pressure.",
+    "objectiveLine": "Listen with pulse. Do not eat it yet.",
+    "debugFallback": "pulse scar_contamination_plate_001; unsafe absorb should be resisted",
+    "tone": "cautious",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_FIRST_FOLD_READY_001",
+    "build": "HC-003K",
+    "beat": "first_fold_ready",
+    "priority": 90,
+    "cellIds": [
+      "CELL_MEMBRANE_NURSERY_001"
+    ],
+    "conditions": {
+      "morphReady": true,
+      "morphPhases": [
+        "ready_for_pulse",
+        "waiting_for_pulse"
+      ]
+    },
+    "guideLine": "The wound is answering. The tissue can fold without a gate.",
+    "objectiveLine": "Pulse once when the scar or signal brightens.",
+    "debugFallback": "press X / Space when morph readiness is high",
+    "tone": "threshold",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SCAR_FLOW_ARRIVAL_001",
+    "build": "HC-003K",
+    "beat": "scar_flow_arrival",
+    "priority": 60,
+    "cellIds": [
+      "CELL_SCAR_FLOW_FOLD_001"
+    ],
+    "conditions": {
+      "arrivalSystem": "scarFlowArrival"
+    },
+    "guideLine": "This place is flow caught in scar.",
+    "objectiveLine": "Follow the pressure. Respect the clot.",
+    "debugFallback": "complete Scar-Flow focus objects in order",
+    "tone": "interpretive",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SCAR_MEMORY_001",
+    "build": "HC-003K",
+    "beat": "scar_memory",
+    "priority": 82,
+    "cellIds": [
+      "CELL_SCAR_FLOW_FOLD_001"
+    ],
+    "conditions": {
+      "loopSystem": "scarFlowInteraction",
+      "loopStages": [
+        "memory_read",
+        "read_memory",
+        "memory"
+      ],
+      "currentFocusIds": [
+        "scar_memory_fleck_001"
+      ]
+    },
+    "guideLine": "A scar can be read before it is changed.",
+    "objectiveLine": "Pulse the memory fleck.",
+    "debugFallback": "pulse scar_memory_fleck_001",
+    "tone": "observant",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SCAR_CLOT_001",
+    "build": "HC-003K",
+    "beat": "scar_clot_warning",
+    "priority": 82,
+    "cellIds": [
+      "CELL_SCAR_FLOW_FOLD_001"
+    ],
+    "conditions": {
+      "loopSystem": "scarFlowInteraction",
+      "currentFocusIds": [
+        "scar_flow_clot_001"
+      ]
+    },
+    "guideLine": "The clot is warning, not food.",
+    "objectiveLine": "Respect it and let the fold settle.",
+    "debugFallback": "pulse/observe scar_flow_clot_001 without trying to absorb it",
+    "tone": "cautious",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SIGNAL_REVEAL_001",
+    "build": "HC-003K",
+    "beat": "signal_chorus_reveal",
+    "priority": 76,
+    "cellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "conditions": {
+      "arrivalSystem": "signalChorusArrival"
+    },
+    "guideLine": "The host is not silent. The chorus is answering.",
+    "objectiveLine": "Pulse the bright choir node, then wait for the next answer.",
+    "debugFallback": "debug: Signal Chorus arrival active; target the current chorus focus object",
+    "tone": "wonder",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_CHOIR_NODE_001",
+    "build": "HC-003K",
+    "beat": "choir_node",
+    "priority": 90,
+    "cellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "conditions": {
+      "loopSystem": "signalChorusInteraction",
+      "currentFocusIds": [
+        "choir_resonance_node_001"
+      ]
+    },
+    "guideLine": "The chorus answers in rings, not commands.",
+    "objectiveLine": "Pulse the choir node once. Let the next focus appear.",
+    "debugFallback": "pulse choir_resonance_node_001 once; wait for Signal Chorus focus handoff",
+    "tone": "wonder",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_LISTENING_PORE_HC004Q",
+    "build": "HC-004QA",
+    "beat": "listening_pore_handoff",
+    "priority": 91,
+    "cellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "conditions": {
+      "loopSystem": "signalChorusInteraction",
+      "currentFocusIds": [
+        "listening_pore_membrane_001"
+      ]
+    },
+    "guideLine": "Good. The answer moved. Now listen where the membrane opens.",
+    "objectiveLine": "Pulse the listening pore once. Let the wave thread take focus.",
+    "debugFallback": "pulse listening_pore_membrane_001 once; HC004Q should hand off to harmonic_wave_thread_001",
+    "tone": "attentive",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "teleport",
+      "branch_select_menu"
+    ],
+    "runtimeOwnership": "signalChorusInteraction"
+  },
+  {
+    "id": "GUIDE_PROMPT_HARMONIC_WAVE_HC004Q",
+    "build": "HC-004QA",
+    "beat": "harmonic_wave_handoff",
+    "priority": 92,
+    "cellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "conditions": {
+      "loopSystem": "signalChorusInteraction",
+      "currentFocusIds": [
+        "harmonic_wave_thread_001"
+      ]
+    },
+    "guideLine": "The chorus is now a path. Follow the returning wave.",
+    "objectiveLine": "Pulse the harmonic wave once. The seed-signal bridge should warm next.",
+    "debugFallback": "pulse harmonic_wave_thread_001 once; HC004Q should hand off to seed_signal_bridge_001",
+    "tone": "wonder",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "teleport",
+      "branch_select_menu"
+    ],
+    "runtimeOwnership": "signalChorusInteraction"
+  },
+  {
+    "id": "GUIDE_PROMPT_SIGNAL_BRIDGE_001",
+    "build": "HC-003K",
+    "beat": "bridge_warmth",
+    "priority": 94,
+    "cellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "conditions": {
+      "loopSystem": "signalChorusInteraction",
+      "currentFocusIds": [
+        "seed_signal_bridge_001"
+      ]
+    },
+    "guideLine": "The bridge is warm enough to hear you.",
+    "objectiveLine": "Pulse the seed-signal bridge gently. Do not force absorb.",
+    "debugFallback": "pulse seed_signal_bridge_001; avoid absorb until bridge warmth is complete",
+    "tone": "restraint",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_FIRST_MINUTE_COMPLETE_001",
+    "build": "HC-003K",
+    "beat": "first_minute_complete",
+    "priority": 96,
+    "cellIds": [
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "conditions": {
+      "loopSystem": "signalChorusInteraction",
+      "loopStages": [
+        "signal_chorus_tuned"
+      ],
+      "currentFocusIds": [
+        "seed_signal_bridge_001"
+      ]
+    },
+    "guideLine": "The first lesson has held. You are still inside the host.",
+    "objectiveLine": "First minute complete. Stay with the signal, or continue toward the optional fork.",
+    "debugFallback": "first playable minute lock candidate complete; Bloom fork remains optional",
+    "tone": "lock",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_BLOOM_AFTERFORK_001",
+    "build": "HC-003K",
+    "beat": "beyond_minute_fork",
+    "priority": 64,
+    "cellIds": [
+      "CELL_BLOOM_RESIDUE_FORK_001"
+    ],
+    "conditions": {
+      "loopSystem": "bloomResidueInteraction"
+    },
+    "guideLine": "This is past the first lesson. The tissue can fork.",
+    "objectiveLine": "Optional: stay only if you want memory, bloom, braid, and warning to settle.",
+    "debugFallback": "optional beyond-minute fork; Bloom Residue is not required for first-minute lock",
+    "tone": "afterfork",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_ARRIVAL_001",
+    "build": "HC-004E",
+    "beat": "grave_arrival_readability",
+    "priority": 95,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "arrivalSystem": "graveArrivalReadability"
+    },
+    "guideLine": "This is not a reward room. The remains need to be read first.",
+    "objectiveLine": "Pulse gently. Leave what is not ready to enter you.",
+    "debugFallback": "HC-004E Grave arrival readability active; HC-004F read loop may take over after confidence rises",
+    "tone": "grave",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_HUSK_READ_001",
+    "build": "HC-004F",
+    "beat": "grave_husk_memory_read",
+    "priority": 101,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "loopSystem": "graveReadBeforeAbsorb",
+      "currentFocusIds": [
+        "old_core_husk_memory_001"
+      ]
+    },
+    "guideLine": "Read the husk. It is a prior becoming, not food.",
+    "objectiveLine": "Pulse once, then wait for the silt to answer.",
+    "debugFallback": "HC-004F: pulse old_core_husk_memory_001; do not hold absorb here",
+    "tone": "grave_memory",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_SILT_SETTLE_001",
+    "build": "HC-004F",
+    "beat": "grave_silt_memory_settled",
+    "priority": 102,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "loopSystem": "graveReadBeforeAbsorb",
+      "currentFocusIds": [
+        "residue_silt_cloud_001"
+      ],
+      "loopStages": [
+        "silt_memory_settled"
+      ]
+    },
+    "guideLine": "The silt carries trace memory, not treasure.",
+    "objectiveLine": "Pulse it until it settles. Absorb comes only after the scar and seed are understood.",
+    "debugFallback": "HC-004F: pulse residue_silt_cloud_001 during silt settle stage",
+    "tone": "grave_silt",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_SCAR_LOCK_001",
+    "build": "HC-004F",
+    "beat": "grave_scar_lock_understood",
+    "priority": 103,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "loopSystem": "graveReadBeforeAbsorb",
+      "currentFocusIds": [
+        "scar_lock_plate_001"
+      ]
+    },
+    "guideLine": "The scar is protecting memory, not hiding a door.",
+    "objectiveLine": "Pulse it gently. Do not try to open it.",
+    "debugFallback": "HC-004F: scar_lock_plate_001 is protection; no gate/door prompt exists",
+    "tone": "grave_scar",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_SEED_WARM_001",
+    "build": "HC-004F",
+    "beat": "grave_inheritance_seed_warmed",
+    "priority": 104,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "loopSystem": "graveReadBeforeAbsorb",
+      "currentFocusIds": [
+        "inheritance_seed_remnant_001"
+      ]
+    },
+    "guideLine": "Warm the inheritance seed. Do not open it yet.",
+    "objectiveLine": "Pulse softly and leave the remnant intact.",
+    "debugFallback": "HC-004F: warm inheritance_seed_remnant_001 without consuming it",
+    "tone": "grave_seed",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_SAFE_SILT_TRANSFER_001",
+    "build": "HC-004F",
+    "beat": "grave_safe_silt_transfer",
+    "priority": 106,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "loopSystem": "graveReadBeforeAbsorb",
+      "loopStages": [
+        "safe_silt_transfer",
+        "memory_trace_received"
+      ],
+      "currentFocusIds": [
+        "residue_silt_cloud_001"
+      ]
+    },
+    "guideLine": "Only the settled silt trace is safe to receive.",
+    "objectiveLine": "Hold RT near the silt. Leave the husk, scar, and seed intact.",
+    "debugFallback": "HC-004F: hold absorb near residue_silt_cloud_001 only after read thresholds",
+    "tone": "grave_transfer",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_LOOP_STABILITY_001",
+    "build": "HC-004G",
+    "beat": "grave_loop_stability_after_transfer",
+    "priority": 108,
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "conditions": {
+      "loopSystem": "graveLoopStability"
+    },
+    "guideLine": "The trace entered. Now let the Grave settle; do not force the remains.",
+    "objectiveLine": "Hold position, release absorb, and keep the husk, scar, and seed intact. No exit opens in this pass.",
+    "debugFallback": "HC-004G: graveLoopStability active; exit readiness is planning-only",
+    "tone": "grave_stability",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "runtime_exit_activation",
+      "new_morph_activation"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_FALLBACK_001",
+    "build": "HC-003K",
+    "beat": "fallback",
+    "priority": 1,
+    "cellIds": [
+      "*"
+    ],
+    "conditions": {},
+    "guideLine": "Stay close to what answers.",
+    "objectiveLine": "Move, pulse, and absorb only when the bond feels safe.",
+    "debugFallback": "use active target / morph nextAction fallback",
+    "tone": "fallback",
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_EXIT_READINESS_HC004H",
+    "build": "HC-004H",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "grave_exit_readiness_visible",
+    "tone": "grave_exit_readiness",
+    "priority": 97,
+    "guideLine": "The scar lock can be read as a way forward now. It is not open yet.",
+    "objectiveLine": "Stay with the readable scar lock. Do not force the husk or inheritance seed.",
+    "debugFallback": "Grave exit-readiness prototype active: visible marker only, no exit activation.",
+    "conditions": {
+      "loopSystem": "graveExitReadiness"
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "runtime_exit_activation",
+      "new_morph_activation",
+      "branch_select_menu",
+      "teleport"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_ROUTE_CONTINUITY_HC004I",
+    "build": "HC-004I",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "grave_route_continuity_planned",
+    "tone": "grave_continuity",
+    "priority": 109,
+    "guideLine": "The scar lock points toward a deeper Grave seam, not an open door.",
+    "objectiveLine": "Hold the meaning. The next continuity is planned, but no transition activates in this pass.",
+    "debugFallback": "HC-004I: Grave route continuity planned as deeper Grave / scar-memory seam; no exit, no morph, no relocation.",
+    "conditions": {
+      "loopSystem": "graveExitReadiness"
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "runtime_exit_activation",
+      "new_morph_activation",
+      "branch_select_menu",
+      "teleport",
+      "player_relocation",
+      "exit_transition"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_SEAM_ARRIVAL_PLANNING_HC004L",
+    "build": "HC-004L",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "grave_scar_memory_seam_arrival_planned",
+    "tone": "grave_seam_arrival",
+    "priority": 110,
+    "guideLine": "The seam can be imagined now, but not entered. The scar is teaching direction before passage.",
+    "objectiveLine": "Hold the Grave readiness. Arrival into the seam is planned, not active.",
+    "debugFallback": "HC-004L: seam arrival planning loaded; no transition, no player relocation, no target focus, no interaction loop.",
+    "conditions": {
+      "loopSystem": "graveExitReadiness"
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "runtime_exit_activation",
+      "new_morph_activation",
+      "branch_select_menu",
+      "teleport",
+      "player_relocation",
+      "exit_transition",
+      "target_focus_activation",
+      "seam_interaction_loop"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_SEAM_RUNTIME_ARRIVAL_HC004M",
+    "build": "HC-004M",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "grave_scar_memory_seam_runtime_arrival",
+    "tone": "grave_seam_arrival_runtime",
+    "priority": 112,
+    "guideLine": "Now the scar can carry you, slowly. Pulse it; do not open it like a door.",
+    "objectiveLine": "Let the seam pull the core forward. Keep the husk, scar, and seed intact.",
+    "debugFallback": "HC-004M: no-gate seam arrival active or ready; no target-focus rule, no seam loop, no old exit.",
+    "conditions": {
+      "loopSystem": "graveScarMemorySeamRuntimeArrival"
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_chamber_runtime",
+      "target_focus_activation",
+      "seam_interaction_loop"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_THREAD_READ_HC004N",
+    "build": "HC-004N",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_thread_first_read",
+    "tone": "grave_seam_first_read",
+    "priority": 116,
+    "guideLine": "This thread is direction, not an exit. Pulse it and read the stitch.",
+    "objectiveLine": "Pulse the scar-memory seam thread. Do not hold absorb.",
+    "debugFallback": "HC-004N: seam thread read focus active; no exit activation.",
+    "conditions": {
+      "loopSystem": "graveScarMemorySeamFirstRead",
+      "currentFocusIds": [
+        "scar_memory_seam_thread_001"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "runtime_exit_activation",
+      "new_morph_activation"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_LATTICE_READ_HC004N",
+    "build": "HC-004N",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_lattice_first_read",
+    "tone": "grave_seam_first_read",
+    "priority": 116,
+    "guideLine": "The lattice shows repair. Stay close enough for it to settle.",
+    "objectiveLine": "Pulse/read the residue stitch lattice. Let it hold shape.",
+    "debugFallback": "HC-004N: residue stitch lattice read focus active.",
+    "conditions": {
+      "loopSystem": "graveScarMemorySeamFirstRead",
+      "currentFocusIds": [
+        "residue_stitch_lattice_001"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "runtime_exit_activation",
+      "new_morph_activation"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_ECHO_READ_HC004N",
+    "build": "HC-004N",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_echo_first_read",
+    "tone": "grave_seam_first_read",
+    "priority": 116,
+    "guideLine": "The husk is an imprint now. Read what is missing; do not take it.",
+    "objectiveLine": "Pulse the echo husk imprint and leave it intact.",
+    "debugFallback": "HC-004N: echo husk imprint read focus active.",
+    "conditions": {
+      "loopSystem": "graveScarMemorySeamFirstRead",
+      "currentFocusIds": [
+        "echo_husk_imprint_001"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "runtime_exit_activation",
+      "new_morph_activation",
+      "seam_object_absorption"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_CLOSED_SUTURE_HC004N",
+    "build": "HC-004N",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_closed_suture_first_read",
+    "tone": "grave_seam_first_read",
+    "priority": 117,
+    "guideLine": "The inheritance is present, but closed. Warm it once and let the suture hold.",
+    "objectiveLine": "Pulse the closed inheritance suture. Do not open or absorb it.",
+    "debugFallback": "HC-004N: closed inheritance suture read focus active.",
+    "conditions": {
+      "loopSystem": "graveScarMemorySeamFirstRead",
+      "currentFocusIds": [
+        "closed_inheritance_suture_001"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "runtime_exit_activation",
+      "new_morph_activation",
+      "opening_closed_inheritance_suture",
+      "seam_object_absorption"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_FIRST_READ_COMPLETE_HC004N",
+    "build": "HC-004N",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_first_read_complete",
+    "tone": "grave_seam_complete",
+    "priority": 118,
+    "guideLine": "The seam has been read. It stays closed for now.",
+    "objectiveLine": "Hold the seam. No exit, combat, or new route activates yet.",
+    "debugFallback": "HC-004N: seam first-read complete; later continuity not activated.",
+    "conditions": {
+      "loopSystem": "graveScarMemorySeamFirstRead",
+      "loopStages": [
+        "seam_first_read_complete"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "runtime_exit_activation",
+      "new_morph_activation",
+      "route_branch_activation"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_MICRO_EXIT_READY_HC004O",
+    "build": "HC-004O",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_micro_exit_ready",
+    "tone": "grave_seam_micro_exit",
+    "priority": 121,
+    "guideLine": "The seam has answered. The closed suture can fold you back without opening.",
+    "objectiveLine": "Pulse the closed suture to return to the Grave bed. Do not hold absorb.",
+    "debugFallback": "HC-004O: seam micro-exit ready; pulse closed_inheritance_suture_001, no gate/door/teleport.",
+    "conditions": {
+      "loopSystem": "graveSeamContinuityMicroExit",
+      "loopStages": [
+        "ready_pulse_closed_suture_fold_back"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_exit_registry",
+      "stage_node_loader",
+      "new_morph_activation",
+      "new_route_branch",
+      "opening_closed_inheritance_suture",
+      "seam_object_absorption"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_MICRO_EXIT_MOVING_HC004O",
+    "build": "HC-004O",
+    "cellIds": [
+      "CELL_GRAVE_SCAR_MEMORY_SEAM_001"
+    ],
+    "beat": "seam_micro_exit_folding_back",
+    "tone": "grave_seam_micro_exit",
+    "priority": 122,
+    "guideLine": "Stay with the fold. It is continuity, not a door.",
+    "objectiveLine": "Let the short pull return you to the Grave bed. Keep absorb released.",
+    "debugFallback": "HC-004O: micro-exit started; smooth fold-back only.",
+    "conditions": {
+      "loopSystem": "graveSeamContinuityMicroExit",
+      "loopStages": [
+        "micro_exit_folding_back_to_grave_bed"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_exit_registry",
+      "stage_node_loader",
+      "new_morph_activation",
+      "new_route_branch",
+      "opening_closed_inheritance_suture",
+      "seam_object_absorption"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_SEAM_MICRO_EXIT_COMPLETE_HC004O",
+    "build": "HC-004O",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "seam_micro_exit_complete",
+    "tone": "grave_seam_micro_exit",
+    "priority": 120,
+    "guideLine": "You came back with the seam understood. Nothing has been opened by force.",
+    "objectiveLine": "Read the Grave bed again. The branch is still closed for now.",
+    "debugFallback": "HC-004O: returned to Grave bed after micro-exit; no new route branch active.",
+    "conditions": {
+      "loopSystem": "graveSeamContinuityMicroExit",
+      "loopStages": [
+        "returned_to_grave_bed_seam_understood_no_branch"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_exit_registry",
+      "stage_node_loader",
+      "new_morph_activation",
+      "new_route_branch",
+      "opening_inheritance_seed_remnant"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_BED_POST_SEAM_ACTIVE_HC004P",
+    "build": "HC-004P",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "grave_bed_post_seam_response_active",
+    "tone": "grave_post_seam",
+    "priority": 124,
+    "guideLine": "You brought the seam back with you. Let the old bed answer before you look for another way forward.",
+    "objectiveLine": "Pulse-read the husk, scar lock, and inheritance seed remnant. Do not absorb.",
+    "debugFallback": "HC-004P: Grave bed post-seam response active; no branch, no exit, no combat.",
+    "conditions": {
+      "loopSystem": "graveBedPostSeamResponse"
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_exit_registry",
+      "stage_node_loader",
+      "new_morph_activation",
+      "new_route_branch",
+      "runtime_exit_activation",
+      "consuming_old_core_husk",
+      "opening_inheritance_seed_remnant"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_BED_POST_SEAM_COMPLETE_HC004P",
+    "build": "HC-004P",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "grave_bed_post_seam_response_complete",
+    "tone": "grave_post_seam_complete",
+    "priority": 125,
+    "guideLine": "The bed is calmer now. The inheritance stayed closed, and that matters.",
+    "objectiveLine": "Hold this reading. No new route opens yet; the Grave bed is settled for this slice.",
+    "debugFallback": "HC-004P: post-seam response complete; no new route branch active.",
+    "conditions": {
+      "loopSystem": "graveBedPostSeamResponse",
+      "loopStages": [
+        "grave_bed_post_seam_response_complete"
+      ]
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_exit_registry",
+      "stage_node_loader",
+      "new_morph_activation",
+      "new_route_branch",
+      "runtime_exit_activation",
+      "opening_closed_inheritance_suture",
+      "opening_inheritance_seed_remnant"
+    ]
+  },
+  {
+    "id": "GUIDE_PROMPT_GRAVE_ROUTE_LOCKED_HC004R",
+    "build": "HC-004R",
+    "cellIds": [
+      "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+    ],
+    "beat": "grave_route_locked_complete",
+    "tone": "grave_route_locked",
+    "priority": 130,
+    "guideLine": "The Grave has answered. Nothing here asks to be opened.",
+    "objectiveLine": "Hold the reading. The husk, scar, and inheritance seed remain intact.",
+    "debugFallback": "HC-004R: Grave route locked as a self-contained memory loop; no input, target, exit, relocation, or new branch.",
+    "conditions": {
+      "loopSystem": "graveRouteLock"
+    },
+    "forbidden": [
+      "dialogue_tree",
+      "quest_log",
+      "combat",
+      "gate_prompt",
+      "door_prompt",
+      "teleport",
+      "branch_select_menu",
+      "old_exit_registry",
+      "stage_node_loader",
+      "new_morph_activation",
+      "new_route_branch",
+      "runtime_exit_activation",
+      "player_relocation",
+      "opening_inheritance_seed_remnant"
+    ]
+  }
+]

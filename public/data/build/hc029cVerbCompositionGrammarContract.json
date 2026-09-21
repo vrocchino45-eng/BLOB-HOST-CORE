@@ -1,0 +1,75 @@
+{
+  "build": "HC-029C",
+  "parent": "HC-029B",
+  "label": "Verb Composition Grammar",
+  "lockedFoundation": {
+    "targeting": "HC029A targeting thresholds and relationship handoff remain unchanged",
+    "effectOwnership": "HC029B relationship ownership remains unchanged",
+    "newBaseVerbs": 0,
+    "newButtons": 0
+  },
+  "compositionOwner": "VerbCompositionSystem",
+  "relationshipRule": "simultaneous verbs compose only on the retained relationship and never independently retarget",
+  "chords": {
+    "cohere_project": {
+      "meaning": "controlled_directional_push",
+      "pulseFocusedMultiplier": 0.82,
+      "pulseAmbientMultiplier": 0.55,
+      "stabilizeRateMultiplier": 1.12,
+      "stabilizeWobbleMultiplier": 0.56,
+      "enduranceDemandMultiplier": 1.08
+    },
+    "cohere_draw": {
+      "meaning": "coherent_controlled_draw",
+      "absorbProgressMultiplier": 0.92,
+      "absorbPullMultiplier": 0.84,
+      "absorbSpinMultiplier": 0.34,
+      "stabilizeRateMultiplier": 1.14,
+      "stabilizeWobbleMultiplier": 0.48,
+      "enduranceDemandMultiplier": 1.08
+    },
+    "exchange": {
+      "meaning": "opposed_push_pull_tension",
+      "pulseFocusedMultiplier": 0.58,
+      "pulseAmbientMultiplier": 0.36,
+      "absorbProgressMultiplier": 0.52,
+      "absorbPullMultiplier": 0.34,
+      "tension01": 0.92,
+      "equilibrium01": 0.38,
+      "enduranceDemandMultiplier": 1.18
+    },
+    "full_system": {
+      "meaning": "high_strain_equilibrium",
+      "pulseFocusedMultiplier": 0.42,
+      "pulseAmbientMultiplier": 0.25,
+      "absorbProgressMultiplier": 0.3,
+      "absorbPullMultiplier": 0.16,
+      "stabilizeRateMultiplier": 0.86,
+      "stabilizeWobbleMultiplier": 0.18,
+      "tension01": 1,
+      "equilibrium01": 1,
+      "enduranceDemandMultiplier": 1.32,
+      "superMove": false
+    }
+  },
+  "runtimeOrder": {
+    "chemObjectBeforeTargeting": true,
+    "pulseUsesPriorResolvedComposition": true,
+    "targetingBeforeComposition": true,
+    "compositionBeforeBond": true,
+    "physicalizationAfterRegistry": true,
+    "reorderedLegacyOwners": false
+  },
+  "forbidden": {
+    "targetingThresholdRetune": false,
+    "manualTargetCycle": false,
+    "cameraSnap": false,
+    "newReticle": false,
+    "newAbility": false,
+    "newButton": false,
+    "routeChange": false,
+    "progressionChange": false,
+    "ecologyChange": false,
+    "newRegionContent": false
+  }
+}

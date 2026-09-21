@@ -1,0 +1,49 @@
+{
+  "build": "HC-031C",
+  "parent": "HC-031B",
+  "label": "Rupture Harvest V1",
+  "purpose": "prove BLOB combat as material rupture, partial fragment harvest, and persistent residue rather than hack-and-slash damage",
+  "locks": [
+    "HC029A relationship targeting",
+    "HC029B relationship effect ownership",
+    "HC029C verb composition",
+    "HC030A reactive state grammar",
+    "HC030B response personality",
+    "HC030B1 visual hierarchy compression",
+    "HC031A1 Grave II octave geometry",
+    "HC031B Grave II coupled regional resonance",
+    "Grave exit safety and route progression ownership"
+  ],
+  "combatLaw": {
+    "statement": "pressure matter until coherence ruptures, harvest what releases, and let missed material remain as aftermath",
+    "healthBars": false,
+    "hackAndSlashAttack": false,
+    "newAbilityButtons": 0,
+    "breakableArchetypes": [
+      "brittle_memory_node",
+      "residue_pressure_sac",
+      "drifting_echo_carrier"
+    ],
+    "pulseBuildsRupturePressure": true,
+    "stabilizeCanSettleRupturePressure": true,
+    "absorbHarvestsFragments": true,
+    "wholeObjectAbsorbBeforeRupture": false,
+    "fragmentHarvestIsPartial": true,
+    "missedFragmentsPersistAsResidue": true,
+    "exitBlockedByCombat": false,
+    "routeProgressionOwnedByCombat": false,
+    "newTargetingMode": false,
+    "addsLargeRingsOrCages": false
+  },
+  "acceptanceTests": [
+    "at least three materially distinct Grave II objects can rupture under existing Pulse pressure",
+    "Stabilize can visibly and mechanically settle rupture pressure before failure",
+    "rupture releases multiple individually absorbable fragments",
+    "ordinary Absorb harvests fragments through the existing BondSystem rather than a combat-only pickup button",
+    "the player cannot reliably collect every released fragment before all capture windows close",
+    "missed fragments cool into persistent non-targetable residue instead of disappearing",
+    "different rupture archetypes scatter with different motion signatures",
+    "combat never blocks Grave II exit or owns route progression",
+    "no health bars, melee attacks, weapon buttons, or targeting rewrite"
+  ]
+}

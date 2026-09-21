@@ -1,0 +1,132 @@
+{
+  "build": "HC-016J",
+  "checks": [
+    {
+      "name": "GateSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "RuntimeStateLedgerSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016JGateCleanup.mjs",
+      "status": "PASS",
+      "detail": "[HC016J] GateSystem crossing/input/activeCell authority removed PASS\n"
+    },
+    {
+      "name": "GateSystem-activeCell-writers-zero",
+      "status": "PASS",
+      "detail": "[]"
+    },
+    {
+      "name": "GateSystem-source-reduced",
+      "status": "PASS",
+      "detail": "44262->30127 bytes"
+    }
+  ],
+  "gateSystem": {
+    "linesBefore": 969,
+    "linesAfter": 632,
+    "linesReduced": 337,
+    "bytesBefore": 44262,
+    "bytesAfter": 30127,
+    "bytesReduced": 14135,
+    "activeCellMutationSites": 0,
+    "role": "read_only_compatibility_observer"
+  },
+  "allActiveCellMutationSites": [
+    {
+      "file": "src/debug/DebugAreaJumpSystem.js",
+      "line": 30,
+      "code": "frameState.activeCellId = target.cellId;"
+    },
+    {
+      "file": "src/morph/ThirdLocalCellMorphSystem.js",
+      "line": 354,
+      "code": "frameState.activeCellId = this.destinationCell.id;"
+    },
+    {
+      "file": "src/morph/GraveRouteMorphSystem.js",
+      "line": 340,
+      "code": "frameState.activeCellId = this.destinationCell.id;"
+    },
+    {
+      "file": "src/morph/SignalChorusReturnStateSystem.js",
+      "line": 86,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;"
+    },
+    {
+      "file": "src/morph/GraveSeamContinuityMicroExitSystem.js",
+      "line": 192,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;"
+    },
+    {
+      "file": "src/morph/GraveSeamContinuityMicroExitSystem.js",
+      "line": 204,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;"
+    },
+    {
+      "file": "src/morph/BloomResidueArrivalSystem.js",
+      "line": 62,
+      "code": "if (active) frameState.activeCellId = this.cellId;"
+    },
+    {
+      "file": "src/morph/BloomResidueArrivalSystem.js",
+      "line": 198,
+      "code": "frameState.activeCellId = this.cellId;"
+    },
+    {
+      "file": "src/morph/LocalCellMorphSystem.js",
+      "line": 397,
+      "code": "frameState.activeCellId = this.destinationCell.id;"
+    },
+    {
+      "file": "src/morph/SecondLocalCellMorphSystem.js",
+      "line": 384,
+      "code": "frameState.activeCellId = this.destinationCell.id;"
+    },
+    {
+      "file": "src/morph/ScarFlowArrivalSystem.js",
+      "line": 119,
+      "code": "frameState.activeCellId = this.cellId;"
+    },
+    {
+      "file": "src/morph/SignalChorusArrivalSystem.js",
+      "line": 177,
+      "code": "frameState.activeCellId = this.cellId;"
+    },
+    {
+      "file": "src/morph/GraveScarMemorySeamArrivalSystem.js",
+      "line": 254,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;"
+    },
+    {
+      "file": "src/morph/GraveScarMemorySeamArrivalSystem.js",
+      "line": 266,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;"
+    },
+    {
+      "file": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "line": 311,
+      "code": "frameState.activeCellId = recipe.destinationCellId;"
+    },
+    {
+      "file": "src/morph/GraveReturnContinuitySystem.js",
+      "line": 282,
+      "code": "frameState.activeCellId = DESTINATION_CELL_ID;"
+    },
+    {
+      "file": "src/core/GameRuntime.js",
+      "line": 1503,
+      "code": "this.frameState.activeCellId = cell.id;"
+    },
+    {
+      "file": "src/core/FirstSliceTransitionCoordinator.js",
+      "line": 239,
+      "code": "this.frameState.activeCellId = activeCellBefore;"
+    }
+  ]
+}

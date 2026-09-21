@@ -1,0 +1,64 @@
+{
+  "id": "VASCULAR_RHYTHM_RETURN_CONSEQUENCE_HC011B",
+  "pass": "HC-011B",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "routeId": "vascular_route",
+  "runtimeCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+  "returnRegionId": "hub_chamber",
+  "returnCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+  "historyOwner": "GateSystem",
+  "coreStateOwner": "CoreGrowthSystem",
+  "corePresentationOwner": "CoreEmbodimentSystem",
+  "hubPresentationOwner": "HubChamberFoundationSystem",
+  "promptSelectionOwner": "GuidePromptSystem",
+  "retentionCondition": {
+    "routeEntered": true,
+    "routeCompleted": true,
+    "routeReturned": true,
+    "requiredCadenceReads": 3,
+    "currentReversedTowardHub": true
+  },
+  "coreFilament": {
+    "rootName": "player_vascular_return_filament_root_HC011B",
+    "filamentCount": 3,
+    "cadenceNodeCount": 3,
+    "chargeCount": 1,
+    "signalColor": 7922687,
+    "returnColor": 16762477,
+    "deepColor": 4616214,
+    "revealSeconds": 1.4,
+    "beatSeconds": 2.35,
+    "motionLanguage": "three open right-flank tendons carry one sequential return charge",
+    "objectDefiningRings": 0,
+    "permanentHalos": 0
+  },
+  "hubEcho": {
+    "rootName": "hub_vascular_return_echo_HC011B",
+    "position": [-3.68, 2.02, -2.02],
+    "filamentCount": 3,
+    "valveCount": 3,
+    "chargeCount": 1,
+    "beatSeconds": 2.35,
+    "motionLanguage": "upper Hub tissue repeats the Core's retained three-beat cadence",
+    "objectDefiningRings": 0,
+    "triggerMarkers": 0
+  },
+  "playerFacingLanguage": {
+    "guideLine": "The current returned as rhythm, not reward. Your Core and the upper Hub tissue now keep the same three-beat memory.",
+    "objectiveLine": "Vascular Rhythm is retained. Silt Pressure is awake, but remains closed until its living route is authored.",
+    "nextAction": "Observe the shared cadence on the Core and upper Hub tissue; no additional Vascular trigger is required."
+  },
+  "constraints": {
+    "newAbilities": 0,
+    "newEntities": 0,
+    "combat": false,
+    "permanentClass": false,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "directActiveCellMutation": false,
+    "routeMechanicMutation": false,
+    "siltGameplayActivated": false,
+    "newRegisteredSystems": 0,
+    "archivedCompatibilitySystemsActivated": 0
+  }
+}

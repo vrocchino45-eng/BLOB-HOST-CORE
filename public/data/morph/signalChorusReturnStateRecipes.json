@@ -1,0 +1,86 @@
+[
+  {
+    "id": "SIGNAL_CHORUS_RETURN_STATE_HC005B",
+    "build": "HC-005B",
+    "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "buildStrategyReference": "BUILD_STRATEGY_REFERENCE.md",
+    "status": "runtime_active_return_state_convergence",
+    "purpose": "Hold the completed Grave reading at Signal Chorus as a stable route-awareness state after the movement-driven return, while preventing older Grave and Signal loops from reclaiming runtime ownership.",
+    "sourceHandoff": "GRAVE_RETURN_CONTINUITY_HC005A",
+    "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "destinationCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "ownershipRules": {
+      "requiresVerifiedReturnCompletion": true,
+      "reassertsDestinationCell": true,
+      "suppressesOldSignalLoopReplay": true,
+      "suppressesStaleGraveTargets": true,
+      "preservesGraveRouteLock": true,
+      "opensNewRoute": false,
+      "activatesNewMorph": false,
+      "requiresInput": false,
+      "requiresTarget": false
+    },
+    "playerFacingLanguage": {
+      "hudStatus": "Signal Chorus: Grave reading held",
+      "guideLine": "The Chorus holds the Grave reading without reopening the old route.",
+      "objectiveLine": "Stay with the returned reading. No new route is active in this pass.",
+      "nextAction": "The returned reading is stable and readable. The next route pressure remains separate."
+    },
+    "completion": {
+      "activeCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "routeAwarenessRestored": true,
+      "graveRouteRemainsLocked": true,
+      "oldGraveOwnersRelinquished": true,
+      "oldSignalLoopSuppressed": true,
+      "protectedRemainsConsumed": false,
+      "inheritanceSeedRemnantOpened": false,
+      "runtimeExitActivation": false,
+      "newRouteBranch": false,
+      "playerRelocation": false,
+      "nextRecommendedPass": "HC-005D"
+    },
+    "forbidden": [
+      "old gates",
+      "doors",
+      "teleports",
+      "branch select menu",
+      "old chamber runtime",
+      "old exit registries",
+      "stage-node loaders",
+      "replaying the old Signal Chorus tuning loop",
+      "reopening Grave interaction",
+      "consuming old core husk",
+      "opening inheritance seed remnant",
+      "runtime exit activation",
+      "new route branch",
+      "new morph activation",
+      "Comb Threshold runtime",
+      "Aperture Fields runtime",
+      "new combat",
+      "new ecology"
+    ],
+    "readabilityPass": "HC-005C",
+    "readability": {
+      "preserveAuthoredOpacity": true,
+      "surfaceObjectId": "signal_chorus_nerve_surface_001",
+      "surfaceOpacityFactor": 0.82,
+      "hazeObjectId": "signal_chorus_soft_haze_001",
+      "hazeOpacityFactor": 0.42,
+      "hazeOpacityCap": 0.022,
+      "hazeScale": [
+        0.94,
+        0.46,
+        0.72
+      ],
+      "hazeOffset": [
+        0.0,
+        0.34,
+        -1.15
+      ],
+      "destinationObjectOpacityFactor": 0.9,
+      "anchorObjectId": "choir_resonance_node_001",
+      "anchorRole": "visual_anchor_only_no_target",
+      "foregroundMidgroundBackgroundRequired": true
+    }
+  }
+]

@@ -1,0 +1,260 @@
+{
+  "id": "GRAVE_MEMORY_SAFE_TRANSFER_CIRCUIT_HC010B",
+  "pass": "HC-010B",
+  "status": "runtime_active_first_route_consequence_circuit",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceRegionId": "hub_chamber",
+  "sourceRuntimeCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+  "regionId": "grave_memory_route",
+  "runtimeCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "purpose": "Deepen the bounded Grave Memory route into one readable risk-and-recovery circuit: understand the remains, recover from premature taking, accept only the settled memory trace, and carry its visible imprint back to the Core and Hub without reviving the archived multi-system route chain.",
+  "routeQuestion": "Can the player learn from remains without becoming trapped inside them?",
+  "anatomy": {
+    "sources": [
+      "residue_beds",
+      "scar_fields",
+      "marrow_interior",
+      "signal_choir_tissue"
+    ],
+    "ribPositions": [
+      [
+        -4.5,
+        0.15,
+        -4.0
+      ],
+      [
+        -3.5,
+        0.62,
+        -7.2
+      ],
+      [
+        3.8,
+        0.48,
+        -11.2
+      ],
+      [
+        4.6,
+        -0.05,
+        -15.1
+      ],
+      [
+        -2.8,
+        0.32,
+        -17.6
+      ]
+    ],
+    "depthLayers": [
+      "foreground scar ribs",
+      "playable residue bed",
+      "distant marrow wall"
+    ]
+  },
+  "objects": [
+    {
+      "id": "old_core_husk_memory_001",
+      "role": "first protected memory read",
+      "position": [
+        -3.4,
+        -0.15,
+        -5.0
+      ],
+      "protected": true
+    },
+    {
+      "id": "residue_silt_cloud_001",
+      "role": "pulse then stabilize trace",
+      "position": [
+        2.9,
+        0.35,
+        -9.0
+      ],
+      "protected": false
+    },
+    {
+      "id": "scar_lock_plate_001",
+      "role": "protective scar meaning read",
+      "position": [
+        3.1,
+        -0.22,
+        -13.2
+      ],
+      "protected": true
+    },
+    {
+      "id": "inheritance_seed_remnant_001",
+      "role": "unconsumed inherited potential read",
+      "position": [
+        -2.7,
+        0.48,
+        -17.0
+      ],
+      "protected": true
+    }
+  ],
+  "movementBounds": {
+    "mode": "entry_anchored_ellipsoid",
+    "centerSource": "preserved_gate_entry_position",
+    "radii": [
+      5.4,
+      3.5,
+      19.2
+    ],
+    "minimumInteractionClearance": 0.8,
+    "collisionOwner": "PlayerMovementController",
+    "tuningOwner": "GraveMemoryRouteSystem",
+    "restoresPriorBoundaryOnExit": true,
+    "purpose": "Keep the Core at its locked scale while giving the Grave route a real approach, sparse memory field, protected-remains journey, deeper consequence pocket, and return distance."
+  },
+  "interaction": {
+    "pulseRange": 2.2,
+    "stabilizeRange": 1.8,
+    "stabilizeSeconds": 1.15,
+    "safeTransferRange": 1.8,
+    "safeTransferSeconds": 1.25,
+    "transferDecayPerSecond": 0.18,
+    "postTransferSettleSeconds": 0.72,
+    "initialTraceIntegrity": 1,
+    "minimumSafeTraceIntegrity": 0.72,
+    "maximumSafeRecoilRisk": 0.18,
+    "prematureAbsorbRisk": 0.28,
+    "protectedAbsorbRisk": 0.36,
+    "traceDamagePerPrematureAbsorb": 0.24,
+    "recoveryPerSecond": 0.42,
+    "traceRecoveryPerSecond": 0.3,
+    "requiredReadObjects": [
+      "old_core_husk_memory_001",
+      "residue_silt_cloud_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "protectedObjects": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "safeTransferRule": "Pulse-read all four meanings, recover trace integrity and recoil with Stabilize, then hold Absorb only on the settled silt trace; consume no protected remains"
+  },
+  "consequence": {
+    "substance": "settled memory silt trace",
+    "state": "read, stabilized, and below the authored recoil threshold",
+    "verb": "hold Absorb gently near the silt after every protected meaning is understood",
+    "reaction": "one memory thread enters the Core while the husk, scar, and inheritance seed remain embodied in the world",
+    "risk": "premature or protected-remains Absorb disperses trace integrity and raises residue recoil",
+    "recovery": "hold Stabilize near the read silt until integrity returns and recoil settles",
+    "meaning": "the player carries an interpretation of the remains rather than carrying the remains themselves",
+    "coreImprint": "asymmetric grave-memory pearl attached to the existing Binding Core body",
+    "hubImprint": "the existing Grave comparison leaf retains the same pearl-dark memory response",
+    "newAbilityUnlocks": 0,
+    "permanentClass": false,
+    "routeBranch": false
+  },
+  "visualConsequence": {
+    "pass": "HC-010E",
+    "owner": "GraveMemoryRouteSystem",
+    "phaseOrder": [
+      "recoil_scatter",
+      "stabilization_reweave",
+      "safe_trace_transfer",
+      "retained_memory_imprint"
+    ],
+    "recoilColor": 15759463,
+    "recoveryColor": 10478033,
+    "transferColor": 14205656,
+    "recoilShardCount": 9,
+    "recoveryStrandCount": 6,
+    "transferThreadMoteCount": 13,
+    "objectDefiningRings": false,
+    "meaning": "Failure scatters outward, recovery visibly reweaves the silt, safe transfer travels as one coherent thread, and retention becomes attached asymmetry on the Core rather than another orbit diagram."
+  },
+  "hubReturnPresentation": {
+    "pass": "HC-010E",
+    "owner": "HubChamberFoundationSystem",
+    "echoPosition": [
+      -1.55,
+      0.75,
+      -4.22
+    ],
+    "tissueColor": 7164521,
+    "pearlColor": 12165293,
+    "cameraDistance": 6.35,
+    "fieldOfView": 56,
+    "guidePerchOwner": "OrbiterSystem",
+    "centralCradleQuieted": true,
+    "layerHierarchy": [
+      "immediate_core_and_guide",
+      "objective_grave_echo",
+      "background_host_anatomy"
+    ],
+    "minimumPlayerEchoWorldSeparation": 1.35,
+    "minimumGuideEchoWorldSeparation": 2.1,
+    "minimumGuidePlayerWorldSeparation": 1.85,
+    "minimumPlayerEchoScreenSeparation": 0.14,
+    "minimumGuideEchoScreenSeparation": 0.28,
+    "minimumGuidePlayerScreenSeparation": 0.24,
+    "newRouteContent": false
+  },
+  "returnFold": {
+    "position": [
+      0,
+      0.05,
+      0.72
+    ],
+    "interactionRange": 1.25,
+    "interaction": "A / E after the route reading is complete",
+    "destinationRegionId": "hub_chamber",
+    "destinationRuntimeCellId": "CELL_SIGNAL_CHORUS_NERVE_001"
+  },
+  "camera": {
+    "distance": 7.15,
+    "fieldOfView": 58,
+    "feeling": "broad sparse reverent spatial memory journey"
+  },
+  "playerFacingLanguage": {
+    "read_old_core_husk": "Approach the old Core husk and Pulse to read it.",
+    "pulse_memory_silt": "Pulse the drifting memory silt before trying to hold it.",
+    "stabilize_memory_silt": "Hold Stabilize near the read silt until its trace settles.",
+    "read_protective_scar": "Pulse the scar plate. It protects the remains; it is not a door.",
+    "read_inheritance_seed": "Pulse the inheritance seed without taking it.",
+    "recover_memory_trace": "The trace scattered. Hold Stabilize near the silt until the recoil settles.",
+    "accept_memory_trace": "Only the settled trace may enter. Hold Absorb gently near the memory silt.",
+    "memory_trace_entering": "Keep the gentle draw steady. Carry the reading, not the remains.",
+    "memory_reading_settling": "The trace is becoming part of the Core. Let it settle.",
+    "return_fold_ready": "The memory pearl is retained. Return to the entry fold and press A."
+  },
+  "constraints": {
+    "newRegisteredRouteUpdaters": 1,
+    "archivedCompatibilitySystemsActivated": 0,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "forcedPlayerRelocation": false,
+    "protectedRemainsConsumable": false,
+    "newAbilityUnlocks": 0,
+    "safeTransferRequired": true,
+    "prematureAbsorbHasConsequence": true,
+    "failureRecoverable": true,
+    "coreImprintPersistent": true,
+    "hubImprintPersistent": true,
+    "visualConsequenceReadabilityOnly": true,
+    "newRegisteredPresentationSystem": false,
+    "combat": false,
+    "branchMenu": false,
+    "teleport": false
+  },
+  "spatialExpansion": {
+    "pass": "HC-016T",
+    "sourceAudit": "HC-016S",
+    "coreScaleChanged": false,
+    "gameplayRulesChanged": false,
+    "primaryDepthTarget": 18.0,
+    "lateralBreadthTarget": 10.0,
+    "grammar": [
+      "quiet approach",
+      "old husk memory field",
+      "settled silt reading field",
+      "scar protection field",
+      "deep inheritance consequence pocket",
+      "return fold"
+    ],
+    "rule": "distance is added between existing meanings; no new verb, trigger class, objective owner, crossing owner, chemistry rule, or route branch"
+  }
+}

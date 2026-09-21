@@ -1,0 +1,118 @@
+{
+  "id": "HC003J_PLACEHOLDER_VISUAL_TRIAGE",
+  "pass": "HC-003J",
+  "label": "Placeholder Visual Triage After P0 Visual Lock",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "purpose": "Track placeholder pressure after the three P0 opening visual replacements are applied.",
+  "governanceRule": "A placeholder may remain only when it has a replacement recipe, meaning declaration, expiration pressure, and a triage status. Triage is not replacement; it is visual governance.",
+  "currentVisualStatus": {
+    "totalPlaceholders": 26,
+    "expiredPlaceholders": 23,
+    "triageDecision": "P0 opening visuals replaced/locked; remaining pressure is P1 and prototype-accepted support visuals.",
+    "notABlockerForHC003OpeningLock": true,
+    "blockerForFutureVisualLock": true
+  },
+  "visualLockRequiredFirst": [
+    {
+      "placeholderId": "debug_scar_plate_001",
+      "replacementRecipe": "scar_contamination_plate_v01",
+      "priority": "P1",
+      "reason": "The first unsafe scar teaches that old wound matter should be listened to or pulsed, not simply eaten.",
+      "requiredBefore": "first route runtime work"
+    },
+    {
+      "placeholderId": "debug_signal_thread_001",
+      "replacementRecipe": "signal_vapor_thread_v01",
+      "priority": "P1",
+      "reason": "Signal is the bridge to Guide / Chorus readability. It needs a cleaner thread/wave language before route expansion.",
+      "requiredBefore": "first route runtime work"
+    }
+  ],
+  "prototypeAcceptedForNow": [
+    {
+      "group": "Scar-Flow support visuals",
+      "placeholderIds": [
+        "debug_scar_memory_fleck_001",
+        "debug_scar_flow_clot_001",
+        "debug_resonant_path_thread_001",
+        "debug_pressure_fold_current_001",
+        "debug_scar_flow_fold_surface_001",
+        "debug_scar_pressure_haze_001"
+      ],
+      "reason": "Readable enough for current chain testing; replace when Scar/Grave route becomes runtime-active."
+    },
+    {
+      "group": "Signal Chorus support visuals",
+      "placeholderIds": [
+        "debug_signal_chorus_surface_001",
+        "debug_signal_chorus_haze_001",
+        "debug_choir_resonance_node_001",
+        "debug_listening_pore_membrane_001",
+        "debug_harmonic_wave_thread_001",
+        "debug_seed_signal_bridge_001"
+      ],
+      "reason": "Readable enough for opening lock; replace with stronger tone/choir language during Signal visual pass."
+    },
+    {
+      "group": "Bloom Residue beyond-minute visuals",
+      "placeholderIds": [
+        "debug_bloom_residue_fork_surface_001",
+        "debug_bloom_residue_choice_haze_001",
+        "debug_bloom_spore_lantern_001",
+        "debug_residue_memory_silt_001",
+        "debug_seed_choice_braid_001",
+        "debug_overgrowth_warning_tendril_001"
+      ],
+      "reason": "Bloom is optional beyond-minute content in HC-003. Keep prototype-accepted until the beyond-minute branch becomes primary."
+    },
+    {
+      "group": "Secondary environment/entity support",
+      "placeholderIds": [
+        "debug_flux_ribbon_001",
+        "debug_tender_001",
+        "debug_watcher_001"
+      ],
+      "reason": "Important, but less urgent than player/guide/seed/scar/signal for first-minute readability."
+    }
+  ],
+  "removeOrMergeCandidates": [],
+  "futureReplacementOrder": [
+    "player_seed_core_stage_01",
+    "guide_orbiter_folded_lantern_v01",
+    "dormant_seed_nutrient_v01",
+    "scar_contamination_plate_v01",
+    "signal_vapor_thread_v01",
+    "nursery_membrane_tender_v01",
+    "membrane_watcher_v01"
+  ],
+  "forbiddenScope": [
+    "replace all 26 visuals in one pass",
+    "new cells",
+    "new morphs",
+    "new gameplay systems",
+    "gates",
+    "old chamber runtime",
+    "asset-heavy visual campaign before opening flow is stable"
+  ],
+  "nextRecommendedPass": "HC-003K Opening Objective + Prompt Lock",
+  "p0VisualLockCompleted": [
+    {
+      "placeholderId": "debug_player_core_001",
+      "recipeId": "player_seed_core_stage_01",
+      "status": "p0_locked",
+      "reason": "The player core is the user anchor and must stay readable through motion, fog, and camera occlusion."
+    },
+    {
+      "placeholderId": "debug_guide_orbiter_001",
+      "recipeId": "guide_orbiter_folded_lantern_v01",
+      "status": "p0_locked",
+      "reason": "The Guide is now the primary world-facing instruction source and must read as interpreter/protector."
+    },
+    {
+      "placeholderId": "debug_nutrient_seed_001",
+      "recipeId": "dormant_seed_nutrient_v01",
+      "status": "p0_locked",
+      "reason": "The safe seed teaches trust, absorb, and future potential; it must not read as hazard or generic pickup."
+    }
+  ]
+}

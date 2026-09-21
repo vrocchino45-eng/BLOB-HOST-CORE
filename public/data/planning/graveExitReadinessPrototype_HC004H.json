@@ -1,0 +1,91 @@
+{
+  "id": "GRAVE_EXIT_READINESS_PROTOTYPE_HC004H",
+  "build": "HC-004H",
+  "status": "runtime_exit_readiness_prototype_active_exit_deferred",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceStabilityPlan": "GRAVE_LOOP_STABILITY_EXIT_READINESS_HC004G",
+  "sourceLoop": "GRAVE_READ_BEFORE_ABSORB_LOOP_001",
+  "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "sourceRoute": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+  "mode": "prototype_exit_readiness_after_grave_stability_without_exit_activation",
+  "readinessRules": {
+    "requiresStabilityPlanningReady": true,
+    "requiresSafeMemoryTransferComplete": true,
+    "requiresProtectedRemainsVisible": true,
+    "requiresRecoilSettled": true,
+    "requiresNoForcedAbsorb": true,
+    "minimumVisibleSeconds": 1.8,
+    "maximumAllowedRecoilRisk": 0.28,
+    "focusObject": "scar_lock_plate_001",
+    "protectedRemains": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "safeTransferObject": "residue_silt_cloud_001",
+    "output": "exit_readiness_visible_no_exit_activation",
+    "readinessDoesNotActivate": [
+      "new_morph_activation",
+      "runtime_exit_activation",
+      "gate",
+      "door",
+      "teleport",
+      "branch_select_menu",
+      "old_chamber_runtime",
+      "player_relocation"
+    ]
+  },
+  "prototypeBehavior": {
+    "marker": "scar_lock_readiness_echo",
+    "markerMeaning": "the Grave has been read enough to make a later exit legible, but no route opens in this pass",
+    "runtimeActivationThisPass": "readiness_readout_only",
+    "newRouteBranchThisPass": false,
+    "morphActivationThisPass": false,
+    "exitActivationThisPass": false,
+    "playerRelocationThisPass": false,
+    "worldFacingMeaning": "The scar lock is no longer only a warning. It is now a readable boundary for a later route-continuity pass."
+  },
+  "hudLanguage": {
+    "waiting": "Let the Grave finish settling before you read the scar lock as a way forward.",
+    "visible": "The scar lock is readable now, but it is not open. No exit activates yet.",
+    "forcedAbsorbWarning": "Do not force the remains. Exit readiness disappears while absorb is forced.",
+    "protectedRemains": "The husk and inheritance seed must remain visible for any later route."
+  },
+  "allowedScope": [
+    "exit-readiness readout after HC-004G stability",
+    "scar-lock marker VFX with no transition",
+    "data-driven readiness criteria",
+    "Guide/HUD clarity",
+    "validator proving no old route architecture returned"
+  ],
+  "forbiddenScope": [
+    "full Grave route branch",
+    "new morph activation",
+    "runtime exit activation",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion",
+    "consuming the old core husk",
+    "opening the inheritance seed remnant",
+    "moving the player to a new cell"
+  ],
+  "acceptanceTests": [
+    "The exit-readiness prototype activates only in CELL_GRAVE_MEMORY_RESIDUE_BED_001 after HC-004G planningReady is true.",
+    "A scar-lock readiness marker may become visible, but it must not transition the player or open a route.",
+    "Protected remains must remain visible and unconsumed.",
+    "The pass must not add any new morph activation, route branch, gate, door, teleport, branch menu, old chamber runtime, dialogue tree, quest log, combat, or Act expansion.",
+    "HC-004I may be named only as a later route-continuity planning pass, not as active runtime."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004I",
+    "label": "Grave Route Continuity Planning",
+    "mode": "plan_next_cell_or_return_logic_only_after_exit_readiness_playtest"
+  }
+}

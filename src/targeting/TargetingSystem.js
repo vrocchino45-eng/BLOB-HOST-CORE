@@ -1,0 +1,651 @@
+import * as THREE from "three";
+
+const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
+const COHERENCE_SEGMENTS = 40;
+
+const clamp01 = (value) => Math.max(0, Math.min(1, value));
+
+export class TargetingSystem {
+  constructor({ scene, camera, playerRoot, chemObjectSystem, frameState }) {
+    if (!scene) throw new Error("[TargetingSystem] scene is required.");
+    if (!camera) throw new Error("[TargetingSystem] camera is required.");
+    if (!playerRoot) throw new Error("[TargetingSystem] playerRoot is required.");
+    if (!chemObjectSystem) throw new Error("[TargetingSystem] chemObjectSystem is required.");
+
+    this.scene = scene;
+    this.camera = camera;
+    this.playerRoot = playerRoot;
+    this.chemObjectSystem = chemObjectSystem;
+    this.frameState = frameState;
+
+    // HC029A: candidate selection and committed relationship are separate states.
+    // Candidate may drift softly with gaze/context; the relationship target may not.
+    this.candidate = null;
+    this.target = null;
+    this.relationshipTarget = null;
+    this.relationshipTargetId = "none";
+    this.relationshipSequence = 0;
+    this.relationshipAge = 0;
+    this.relationshipReleaseGraceRemaining = 0;
+    this.relationshipReleaseGraceSeconds = 0.28;
+    this.relationshipHandoffCooldownSeconds = 0.24;
+    this.candidateSwitchMargin = 0.52;
+    this.candidateSnapshotsById = new Map();
+
+    this.reticle = null;
+    this.pointerLine = null;
+    this.selectedHalo = null;
+    this.relationshipGlyphRoot = null;
+    this.pulseTriangle = null;
+    this.absorbTriangle = null;
+    this.coherenceBoundary = null;
+    this.coherencePositions = new Float32Array(COHERENCE_SEGMENTS * 3);
+    this.linePositions = new Float32Array(6);
+
+    this.tmpTargetPosition = new THREE.Vector3();
+    this.tmpPlayerPosition = new THREE.Vector3();
+    this.tmpCameraPosition = new THREE.Vector3();
+    this.tmpCameraDirection = new THREE.Vector3();
+    this.tmpToTarget = new THREE.Vector3();
+    this.tmpRelationshipDirection = new THREE.Vector3();
+    this.tmpRight = new THREE.Vector3();
+    this.tmpNormal = new THREE.Vector3();
+    this.tmpMatrix = new THREE.Matrix4();
+
+    this.lastActiveCellId = "none";
+    this.lastMountSequence = -1;
+    this.regionClearSequence = 0;
+    this.lastRegionClearReason = "not_initialized";
+  }
+
+  init() {
+    this.createReticle();
+    this.createSelectedHalo();
+    this.createPointerLine();
+    this.createRelationshipGlyphs();
+    this.lastActiveCellId = this.frameState?.activeCellId ?? "none";
+    this.lastMountSequence = this.frameState?.firstSliceRuntimeMount?.mountSequence ?? -1;
+  }
+
+  update(dt, frameState) {
+    const ownershipChanged = this.clearForOwnershipChange(frameState);
+    if (ownershipChanged) {
+      this.updateFrameState(frameState, this.resolveRelationshipIntent(frameState.input));
+      return;
+    }
+
+    const intent = this.resolveRelationshipIntent(frameState.input);
+    this.candidate = this.pickTarget(this.candidate);
+    this.updateRelationship(Math.max(0, dt ?? 0), frameState, intent);
+    this.target = this.relationshipTarget ?? this.candidate;
+
+    this.updateFrameState(frameState, intent);
+    this.updateReticle(frameState);
+    this.updatePointerLine(frameState);
+    this.updateRelationshipGlyphs(frameState);
+  }
+
+  onRuntimeUnmount(frameState) {
+    this.clearTargetState(frameState, "targeting_runtime_unmounted");
+  }
+
+  clearForOwnershipChange(frameState) {
+    const activeCellId = frameState.activeCellId ?? "none";
+    const mountSequence = frameState.firstSliceRuntimeMount?.mountSequence ?? -1;
+    const cellChanged = this.lastActiveCellId !== "none" && activeCellId !== this.lastActiveCellId;
+    const mountChanged = this.lastMountSequence >= 0 && mountSequence !== this.lastMountSequence;
+
+    if (cellChanged || mountChanged) {
+      const fromCell = this.lastActiveCellId;
+      const reason = `region_ownership_changed:${fromCell}->${activeCellId}`;
+      this.clearTargetState(frameState, reason);
+    }
+
+    this.lastActiveCellId = activeCellId;
+    this.lastMountSequence = mountSequence;
+    return cellChanged || mountChanged;
+  }
+
+  clearTargetState(frameState, reason = "explicit_target_clear") {
+    this.candidate = null;
+    this.target = null;
+    this.relationshipTarget = null;
+    this.relationshipTargetId = "none";
+    this.relationshipAge = 0;
+    this.relationshipReleaseGraceRemaining = 0;
+    this.candidateSnapshotsById.clear();
+    this.clearVisualArtifacts();
+    this.regionClearSequence += 1;
+    this.lastRegionClearReason = reason;
+
+    if (this.playerRoot?.userData) {
+      frameState.selectedObject = this.playerRoot.userData;
+    }
+
+    frameState.targeting = this.createEmptyTargetingState(frameState, "target_cleared_for_region_ownership");
+  }
+
+  createEmptyTargetingState(frameState, message = "no_target") {
+    return {
+      active: false,
+      targetId: "none",
+      targetKind: "none",
+      targetCellId: "none",
+      distance: 0,
+      lockStrength: 0,
+      reticleState: "idle",
+      message,
+      absorbHint: "no_target",
+      focusProvider: frameState.targetFocus?.provider ?? "none",
+      candidateId: "none",
+      candidateKind: "none",
+      candidateDistance: 0,
+      candidateAimDot: -1,
+      candidateScore: 0,
+      relationshipActive: false,
+      relationshipPhase: "none",
+      relationshipTargetId: "none",
+      relationshipVerb: "none",
+      relationshipVerbs: [],
+      relationshipSequence: this.relationshipSequence,
+      relationshipAge: 0,
+      handoffPolicy: "camera_intent_plus_score_margin",
+      regionClearSequence: this.regionClearSequence,
+      lastRegionClearReason: this.lastRegionClearReason,
+      visualArtifactsCleared: true
+    };
+  }
+
+  clearVisualArtifacts() {
+    if (this.reticle) this.reticle.visible = false;
+    if (this.pointerLine) this.pointerLine.visible = false;
+    if (this.selectedHalo) this.selectedHalo.visible = false;
+    if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
+    if (this.coherenceBoundary) this.coherenceBoundary.visible = false;
+  }
+
+  resolveRelationshipIntent(input = {}) {
+    const verbs = [];
+    if (input.pulseHeld || input.pulsePressed) verbs.push("pulse");
+    if (input.absorbHeld) verbs.push("absorb");
+    if (input.stabilizeHeld || input.resonanceHeld) verbs.push("stabilize");
+    return {
+      active: verbs.length > 0,
+      verbs,
+      primary: verbs[0] ?? "none",
+      chord: verbs.length > 1 ? verbs.join("+") : (verbs[0] ?? "none")
+    };
+  }
+
+  updateRelationship(dt, frameState, intent) {
+    const currentSnapshot = this.relationshipTargetId !== "none"
+      ? this.candidateSnapshotsById.get(this.relationshipTargetId) ?? null
+      : null;
+
+    if (this.relationshipTarget && !currentSnapshot) {
+      this.releaseRelationship("relationship_target_invalid");
+    } else if (currentSnapshot) {
+      this.relationshipTarget = currentSnapshot;
+    }
+
+    if (intent.active) {
+      this.relationshipReleaseGraceRemaining = this.relationshipReleaseGraceSeconds;
+
+      if (!this.relationshipTarget && this.candidate) {
+        this.setRelationshipTarget(this.candidate, "verb_engaged");
+      } else if (
+        this.relationshipTarget
+        && this.candidate
+        && this.candidate.recipe.id !== this.relationshipTarget.recipe.id
+        && this.relationshipAge >= this.relationshipHandoffCooldownSeconds
+        && this.shouldHandoff(this.relationshipTarget, this.candidate)
+      ) {
+        this.setRelationshipTarget(this.candidate, "intentional_camera_handoff");
+      }
+
+      if (this.relationshipTarget) this.relationshipAge += dt;
+    } else if (this.relationshipTarget) {
+      this.relationshipReleaseGraceRemaining = Math.max(0, this.relationshipReleaseGraceRemaining - dt);
+      this.relationshipAge += dt;
+      if (this.relationshipReleaseGraceRemaining <= 0) {
+        this.releaseRelationship("verb_released");
+      }
+    }
+
+    if (this.relationshipTarget?.root?.userData) {
+      frameState.selectedObject = this.relationshipTarget.root.userData;
+    }
+  }
+
+  setRelationshipTarget(target, reason) {
+    if (!target) return;
+    const nextId = target.recipe?.id ?? "none";
+    if (nextId === "none") return;
+    const changed = this.relationshipTargetId !== nextId;
+    this.relationshipTarget = target;
+    this.relationshipTargetId = nextId;
+    this.relationshipAge = 0;
+    if (changed) this.relationshipSequence += 1;
+    this.lastRelationshipReason = reason;
+  }
+
+  releaseRelationship(reason) {
+    this.relationshipTarget = null;
+    this.relationshipTargetId = "none";
+    this.relationshipAge = 0;
+    this.relationshipReleaseGraceRemaining = 0;
+    this.lastRelationshipReason = reason;
+  }
+
+  shouldHandoff(current, candidate) {
+    if (!current || !candidate || current.recipe?.id === candidate.recipe?.id) return false;
+
+    // A nearby object passing through the score field cannot steal an established
+    // relationship. The current target must leave the player's intentional view
+    // while the replacement is clearly in view and meaningfully better scored.
+    const currentAim = Number.isFinite(current.aimDot) ? current.aimDot : -1;
+    const candidateAim = Number.isFinite(candidate.aimDot) ? candidate.aimDot : -1;
+    const scoreLead = (candidate.score ?? 0) - (current.score ?? 0);
+    const deliberateRedirect = currentAim < 0.18 && candidateAim > 0.68 && scoreLead > 0.48;
+    const distanceEscape = current.distance > 7.4
+      && candidate.distance + 0.85 < current.distance
+      && candidateAim > currentAim + 0.36
+      && scoreLead > 0.18;
+
+    return deliberateRedirect || distanceEscape;
+  }
+
+  pickTarget(incumbent = null) {
+    let best = null;
+    let incumbentSnapshot = null;
+    const focus = this.frameState.targetFocus ?? {};
+    this.candidateSnapshotsById.clear();
+    if (this.frameState.activeCellId === HUB_CELL_ID) return null;
+    if (focus.suppressTargeting) return null;
+    const allowedCells = new Set(focus.allowedCells ?? []);
+    const excludedObjectIds = new Set(focus.excludedObjectIds ?? []);
+    const incumbentId = incumbent?.recipe?.id ?? "none";
+
+    this.camera.getWorldPosition(this.tmpCameraPosition);
+    this.camera.getWorldDirection(this.tmpCameraDirection).normalize();
+    this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
+
+    for (const item of this.chemObjectSystem.objects) {
+      if (excludedObjectIds.has(item.recipe.id)) continue;
+      if (item.absorbed || item.root.userData.absorbed || !item.root.visible) continue;
+      if (allowedCells.size > 0 && item.cellId && !allowedCells.has(item.cellId)) continue;
+
+      const snapshot = this.scoreCandidate(item, focus);
+      this.candidateSnapshotsById.set(item.recipe.id, snapshot);
+      if (item.recipe.id === incumbentId) incumbentSnapshot = snapshot;
+      if (!best || snapshot.score > best.score) best = snapshot;
+    }
+
+    if (
+      best
+      && incumbentSnapshot
+      && best.recipe.id !== incumbentSnapshot.recipe.id
+      && best.score < incumbentSnapshot.score + this.candidateSwitchMargin
+    ) {
+      return incumbentSnapshot;
+    }
+
+    return best;
+  }
+
+  scoreCandidate(item, focus) {
+    this.getWorldPosition(item.root, this.tmpTargetPosition);
+    const distance = this.tmpPlayerPosition.distanceTo(this.tmpTargetPosition);
+    const domains = item.recipe.chemistry?.domains ?? [];
+    const bondTypes = item.recipe.chemistry?.bondTypes ?? [];
+    const isAbsorbable = Boolean(item.recipe.behavior?.onAbsorb);
+    const isSignal = domains.includes("signal");
+    const isScar = domains.includes("scar");
+
+    let priority = 0;
+    if (isAbsorbable) priority += 4;
+    const targetingTuning = this.frameState.controllerOnboarding?.tuning?.targeting ?? {};
+    if (bondTypes.includes("soft_bond")) priority += targetingTuning.softBondBoost ?? 2.5;
+    if (isSignal) priority += 1.2;
+    if (isScar) priority -= 0.4;
+    if (item.cellId && focus.cellBoosts?.[item.cellId]) priority += focus.cellBoosts[item.cellId];
+    if (focus.objectBoosts?.[item.recipe.id]) priority += focus.objectBoosts[item.recipe.id];
+    if (focus.preferredTargetId === item.recipe.id) priority += targetingTuning.preferredTargetBoost ?? 3.5;
+    if (this.frameState.input?.absorbHeld && isAbsorbable) priority += targetingTuning.absorbHeldTargetBoost ?? 0;
+
+    const distanceScore = Math.max(0, (targetingTuning.scoreDistanceRange ?? 6.0) - distance);
+    this.tmpToTarget.copy(this.tmpTargetPosition).sub(this.tmpCameraPosition);
+    const aimDistance = this.tmpToTarget.length();
+    const aimDot = aimDistance > 0.0001
+      ? this.tmpToTarget.multiplyScalar(1 / aimDistance).dot(this.tmpCameraDirection)
+      : 1;
+    const aimScore = aimDot >= 0
+      ? aimDot * 4.0
+      : aimDot * 2.6;
+    const score = priority + distanceScore + aimScore;
+
+    return {
+      ...item,
+      distance,
+      score,
+      priority,
+      aimDot,
+      aimScore,
+      isAbsorbable,
+      isSignal,
+      isScar
+    };
+  }
+
+  getWorldPosition(root, target) {
+    if (root?.getWorldPosition) return root.getWorldPosition(target);
+    if (root?.position) return target.copy(root.position);
+    return target.set(0, 0, 0);
+  }
+
+  updateFrameState(frameState, intent = this.resolveRelationshipIntent(frameState.input)) {
+    const candidate = this.candidate;
+    const effective = this.relationshipTarget ?? candidate;
+    if (!effective) {
+      frameState.targeting = this.createEmptyTargetingState(frameState);
+      return;
+    }
+
+    const recipe = effective.recipe;
+    const domains = recipe.chemistry?.domains ?? [];
+    const targetKind = this.getTargetKind(recipe.id, effective, frameState);
+    const targetingTuning = frameState.controllerOnboarding?.tuning?.targeting ?? {};
+    const lockStrength = Math.max(0, Math.min(1, 1 - effective.distance / (targetingTuning.lockDistance ?? 5.0)));
+    const reticleState = effective.distance <= (targetingTuning.absorbStateDistance ?? 2.65)
+      ? "absorb_range"
+      : effective.distance <= (targetingTuning.assistStateDistance ?? 5.2)
+        ? "assist_range"
+        : "far";
+
+    const absorbHint = targetKind === "absorbable"
+      ? reticleState === "absorb_range"
+        ? "hold_absorb_to_receive"
+        : "hold_absorb_to_draw_closer"
+      : targetKind === "scar_resists" || targetKind.includes("warning")
+        ? "unsafe_absorb_resists"
+        : "relationship_available";
+
+    const relationshipActive = Boolean(this.relationshipTarget);
+    const relationshipPhase = relationshipActive
+      ? intent.active ? "engaged" : "releasing"
+      : candidate ? "candidate" : "none";
+    const candidateKind = candidate ? this.getTargetKind(candidate.recipe.id, candidate, frameState) : "none";
+
+    frameState.targeting = {
+      active: true,
+      targetId: recipe.id,
+      targetKind,
+      targetCellId: effective.cellId ?? effective.root?.userData?.cellId ?? "none",
+      domains,
+      distance: effective.distance,
+      lockStrength,
+      reticleState,
+      message: relationshipActive ? `${intent.chord}:relationship` : `${targetKind}:candidate`,
+      absorbHint,
+      focusProvider: frameState.targetFocus?.provider ?? "none",
+      focusRuleId: frameState.targetFocus?.ruleId ?? "none",
+      focusPreferred: frameState.targetFocus?.preferredTargetId ?? "none",
+      focusScore: effective.score ?? 0,
+      candidateId: candidate?.recipe?.id ?? "none",
+      candidateKind,
+      candidateDistance: candidate?.distance ?? 0,
+      candidateAimDot: candidate?.aimDot ?? -1,
+      candidateScore: candidate?.score ?? 0,
+      relationshipActive,
+      relationshipPhase,
+      relationshipTargetId: this.relationshipTargetId,
+      relationshipVerb: intent.chord,
+      relationshipVerbs: [...intent.verbs],
+      relationshipSequence: this.relationshipSequence,
+      relationshipAge: this.relationshipAge,
+      relationshipReason: this.lastRelationshipReason ?? "none",
+      releaseGraceRemaining: this.relationshipReleaseGraceRemaining,
+      handoffPolicy: "camera_intent_plus_score_margin",
+      visualPolicy: relationshipActive ? "diegetic_relationship_glyph" : "candidate_body_only",
+      idlePointerSuppressed: !relationshipActive,
+      regionClearSequence: this.regionClearSequence,
+      lastRegionClearReason: this.lastRegionClearReason,
+      visualArtifactsCleared: !relationshipActive
+    };
+  }
+
+  getTargetKind(id, target, frameState) {
+    const mappedKind = frameState.targetFocus?.targetKinds?.[id];
+    if (mappedKind) return mappedKind;
+
+    if (target.isAbsorbable) return "absorbable";
+    if (target.isScar) return "scar_resists";
+    if (target.isSignal) return "signal_listen";
+    return "chem_object";
+  }
+
+  createReticle() {
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.0,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.018, 8, 64), material);
+    ring.name = "legacy_target_lock_reticle_hc029a_disabled";
+    ring.visible = false;
+    this.scene.add(ring);
+    this.reticle = ring;
+  }
+
+  createSelectedHalo() {
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xfff0a8,
+      transparent: true,
+      opacity: 0.0,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+
+    const halo = new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.01, 8, 64), material);
+    halo.name = "legacy_selected_object_halo_hc029a_disabled";
+    halo.rotation.x = Math.PI / 2;
+    halo.visible = false;
+    this.scene.add(halo);
+    this.selectedHalo = halo;
+  }
+
+  createPointerLine() {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(this.linePositions, 3));
+
+    const material = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.08,
+      depthWrite: false
+    });
+
+    const line = new THREE.Line(geometry, material);
+    line.name = "relationship_axis_line";
+    line.visible = false;
+    this.scene.add(line);
+    this.pointerLine = line;
+  }
+
+  createRelationshipGlyphs() {
+    const triangleGeometry = new THREE.BufferGeometry();
+    triangleGeometry.setAttribute("position", new THREE.Float32BufferAttribute([
+      -0.22, -0.16, 0,
+       0.00,  0.26, 0,
+       0.22, -0.16, 0
+    ], 3));
+
+    const triangleMaterial = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false
+    });
+
+    const root = new THREE.Group();
+    root.name = "relationship_direction_glyph_root";
+    root.visible = false;
+    this.scene.add(root);
+    this.relationshipGlyphRoot = root;
+
+    this.pulseTriangle = new THREE.LineLoop(triangleGeometry.clone(), triangleMaterial.clone());
+    this.pulseTriangle.name = "relationship_glyph_pulse_outward_triangle";
+    root.add(this.pulseTriangle);
+
+    this.absorbTriangle = new THREE.LineLoop(triangleGeometry.clone(), triangleMaterial.clone());
+    this.absorbTriangle.name = "relationship_glyph_absorb_inward_triangle";
+    this.absorbTriangle.rotation.z = Math.PI;
+    root.add(this.absorbTriangle);
+
+    const coherenceGeometry = new THREE.BufferGeometry();
+    coherenceGeometry.setAttribute("position", new THREE.BufferAttribute(this.coherencePositions, 3));
+    const coherenceMaterial = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false
+    });
+    this.coherenceBoundary = new THREE.LineLoop(coherenceGeometry, coherenceMaterial);
+    this.coherenceBoundary.name = "relationship_glyph_stabilize_coherence_boundary";
+    this.coherenceBoundary.visible = false;
+    this.scene.add(this.coherenceBoundary);
+  }
+
+  updateReticle() {
+    // HC029A retires the generic lock ring from normal play. Candidate state is
+    // intentionally almost unmarked; committed P/A/S relationships own the glyphs.
+    if (this.reticle) this.reticle.visible = false;
+    if (this.selectedHalo) this.selectedHalo.visible = false;
+  }
+
+  updatePointerLine(frameState) {
+    if (!this.pointerLine) return;
+    const relationshipActive = Boolean(frameState.targeting?.relationshipActive && this.relationshipTarget);
+    this.pointerLine.visible = relationshipActive;
+    if (!relationshipActive) return;
+
+    this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
+    this.getWorldPosition(this.relationshipTarget.root, this.tmpTargetPosition);
+
+    this.linePositions[0] = this.tmpPlayerPosition.x;
+    this.linePositions[1] = this.tmpPlayerPosition.y;
+    this.linePositions[2] = this.tmpPlayerPosition.z;
+    this.linePositions[3] = this.tmpTargetPosition.x;
+    this.linePositions[4] = this.tmpTargetPosition.y;
+    this.linePositions[5] = this.tmpTargetPosition.z;
+    this.pointerLine.geometry.attributes.position.needsUpdate = true;
+
+    const color = this.getTargetColor(frameState.targeting?.targetKind, frameState.targeting?.reticleState);
+    this.pointerLine.material.color.set(color);
+    this.pointerLine.material.opacity = 0.035 + (frameState.targeting?.lockStrength ?? 0) * 0.085;
+  }
+
+  updateRelationshipGlyphs(frameState) {
+    const relationshipActive = Boolean(frameState.targeting?.relationshipActive && this.relationshipTarget);
+    if (!relationshipActive) {
+      if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
+      if (this.coherenceBoundary) this.coherenceBoundary.visible = false;
+      return;
+    }
+
+    const verbs = new Set(frameState.targeting?.relationshipVerbs ?? []);
+    const pulseActive = verbs.has("pulse");
+    const absorbActive = verbs.has("absorb");
+    const stabilizeActive = verbs.has("stabilize");
+    const t = frameState.runtimeSeconds ?? 0;
+    const color = this.getTargetColor(frameState.targeting?.targetKind, frameState.targeting?.reticleState);
+
+    this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
+    this.getWorldPosition(this.relationshipTarget.root, this.tmpTargetPosition);
+    this.tmpRelationshipDirection.copy(this.tmpTargetPosition).sub(this.tmpPlayerPosition);
+    const distance = Math.max(0.001, this.tmpRelationshipDirection.length());
+    this.tmpRelationshipDirection.multiplyScalar(1 / distance);
+    this.camera.getWorldDirection(this.tmpCameraDirection).normalize();
+
+    this.tmpRight.crossVectors(this.tmpRelationshipDirection, this.tmpCameraDirection);
+    if (this.tmpRight.lengthSq() < 0.0001) {
+      this.tmpRight.crossVectors(this.camera.up, this.tmpRelationshipDirection);
+    }
+    this.tmpRight.normalize();
+    this.tmpNormal.crossVectors(this.tmpRight, this.tmpRelationshipDirection).normalize();
+    this.tmpMatrix.makeBasis(this.tmpRight, this.tmpRelationshipDirection, this.tmpNormal);
+
+    this.relationshipGlyphRoot.visible = pulseActive || absorbActive;
+    if (this.relationshipGlyphRoot.visible) {
+      this.relationshipGlyphRoot.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, 0.58);
+      this.relationshipGlyphRoot.quaternion.setFromRotationMatrix(this.tmpMatrix);
+      const scale = Math.max(0.68, Math.min(1.28, 0.72 + distance * 0.065));
+      this.relationshipGlyphRoot.scale.setScalar(scale);
+      this.pulseTriangle.visible = pulseActive;
+      this.absorbTriangle.visible = absorbActive;
+      const paired = pulseActive && absorbActive;
+      this.pulseTriangle.position.x = paired ? -0.11 : 0;
+      this.absorbTriangle.position.x = paired ? 0.11 : 0;
+      this.pulseTriangle.material.color.set(color);
+      this.absorbTriangle.material.color.set(color);
+      this.pulseTriangle.material.opacity = 0.20 + clamp01(frameState.targeting?.lockStrength ?? 0) * 0.20;
+      this.absorbTriangle.material.opacity = 0.20 + clamp01(frameState.targeting?.lockStrength ?? 0) * 0.20;
+    }
+
+    this.coherenceBoundary.visible = stabilizeActive;
+    if (stabilizeActive) {
+      const instability = clamp01(this.relationshipTarget.recipe?.chemistry?.instabilityRisk ?? 0.18);
+      const radius = Math.max(0.42, Math.min(0.92, 0.48 + (this.relationshipTarget.root?.scale?.x ?? 1) * 0.18));
+      const positions = this.coherenceBoundary.geometry.attributes.position.array;
+      for (let i = 0; i < COHERENCE_SEGMENTS; i += 1) {
+        const angle = (i / COHERENCE_SEGMENTS) * Math.PI * 2;
+        const distortion = instability * (
+          Math.sin(angle * 3 + t * 2.3) * 0.10
+          + Math.sin(angle * 5 - t * 1.7) * 0.045
+        );
+        const r = radius * (1 + distortion);
+        positions[i * 3] = Math.cos(angle) * r;
+        positions[i * 3 + 1] = Math.sin(angle) * r;
+        positions[i * 3 + 2] = 0;
+      }
+      this.coherenceBoundary.geometry.attributes.position.needsUpdate = true;
+      this.coherenceBoundary.position.copy(this.tmpTargetPosition);
+      this.coherenceBoundary.position.x += Math.sin(t * 2.1) * instability * 0.045;
+      this.coherenceBoundary.position.y += Math.cos(t * 1.8) * instability * 0.035;
+      this.coherenceBoundary.quaternion.copy(this.camera.quaternion);
+      this.coherenceBoundary.material.color.set(color);
+      this.coherenceBoundary.material.opacity = 0.12 + (1 - instability * 0.45) * 0.16;
+    }
+  }
+
+  getTargetColor(kind, state) {
+    if (kind === "scar_resists" || kind === "scar_flow_warning") return 0xff728a;
+    if (kind === "pressure_current") return 0x7fe8ff;
+    if (kind === "path_thread") return 0xffd48a;
+    if (kind === "memory_echo") return 0xff9eb0;
+    if (kind === "signal_listen") return 0xa8ecff;
+    if (kind === "choir_resonance") return 0xaeefff;
+    if (kind === "listening_pore") return 0x9dffd9;
+    if (kind === "harmonic_wave") return 0xc9b8ff;
+    if (kind === "seed_signal_bridge") return 0xffe3a3;
+    if (kind === "signal_chorus_hook") return 0xaeefff;
+    if (kind === "bloom_growth_path") return 0xff9bd4;
+    if (kind === "residue_memory_path") return 0xd2b08a;
+    if (kind === "seed_choice_braid") return 0xffe7a8;
+    if (kind === "overgrowth_warning") return 0xff758f;
+    if (kind === "grave_memory_husk") return 0xd8b6aa;
+    if (kind === "grave_silt_trace") return 0xc8b58f;
+    if (kind === "grave_scar_lock") return 0xff7b8e;
+    if (kind === "grave_inheritance_seed") return 0xffd6a1;
+    if (kind === "seam_scar_thread") return 0xffb8a8;
+    if (kind === "seam_residue_lattice") return 0xd6bf91;
+    if (kind === "seam_echo_imprint") return 0xd8c5ff;
+    if (kind === "seam_closed_suture") return 0xffe1ae;
+    if (kind === "absorbable" && state === "absorb_range") return 0xfff0a8;
+    if (kind === "absorbable") return 0xffd494;
+    return 0xffffff;
+  }
+}

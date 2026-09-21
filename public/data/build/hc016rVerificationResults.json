@@ -1,0 +1,29 @@
+{
+  "build": "HC-016R",
+  "checks": [
+    {
+      "name": "syntax:FirstSliceCohesionSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:PlaytestHudSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "syntax:GuidePromptSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "validateHC016RFirstMinuteConvergence.mjs",
+      "status": "PASS",
+      "detail": "[HC016R] R1 closeout architecture proof PASS\n[HC016R] true Surface\u2192Guide\u2192Hub first-minute milestone PASS\n[HC016R] HUD/Guide remain observational PASS\n"
+    }
+  ],
+  "r1Closed": true,
+  "r2Milestone": "first_playable_minute_intentional",
+  "firstMinuteEndsAt": "stable_hub_arrival",
+  "verticalSliceLockStillSeparate": true
+}

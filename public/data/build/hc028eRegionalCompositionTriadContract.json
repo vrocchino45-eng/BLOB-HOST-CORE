@@ -1,0 +1,45 @@
+{
+  "id": "HC028E_REGIONAL_COMPOSITION_TRIAD",
+  "parent": "HC-028D2",
+  "rule": "same_host_clock_different_regional_sentence",
+  "hostCycleSeconds": 5.8,
+  "profiles": {
+    "vascular": {
+      "profileId": "vascular_psa_44_micro",
+      "key": "P-S-A",
+      "meter": "4/4",
+      "barsPerHostCycle": 2,
+      "beatsPerHostCycle": 8,
+      "expectedTempoBpm": 82.75862068965517,
+      "voice": "transmission_pulse"
+    },
+    "silt": {
+      "profileId": "silt_asp_34_micro",
+      "key": "A-S-P",
+      "meter": "3/4",
+      "barsPerHostCycle": 2,
+      "beatsPerHostCycle": 6,
+      "expectedTempoBpm": 62.06896551724138,
+      "voice": "pressure_bass_triplet"
+    },
+    "grave": {
+      "profileId": "grave_sap_128_micro",
+      "key": "S-A-P",
+      "meter": "12/8",
+      "barsPerHostCycle": 1,
+      "beatsPerHostCycle": 12,
+      "expectedTempoBpm": 124.13793103448276,
+      "grouping": "3+3+3+3",
+      "voice": "compound_memory_bass"
+    }
+  },
+  "authority": {
+    "sharedHostClock": true,
+    "inputTimingGate": false,
+    "routeCompletion": false,
+    "progression": false,
+    "objective": false,
+    "siltMovementModulation": false,
+    "graveMovementModulation": false
+  }
+}

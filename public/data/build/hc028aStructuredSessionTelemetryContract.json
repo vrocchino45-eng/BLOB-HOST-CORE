@@ -1,0 +1,32 @@
+{
+  "pass": "HC-028A",
+  "parent": "HC-027L1",
+  "baseline": "HC027L1_GOLDEN_INQUIRY_BASELINE_01",
+  "law": "golden_inquiry_gameplay_is_frozen_while_read_only_session_telemetry_records_percept_action_space_core_and_semantic_rhythm_without_feedback_authority",
+  "schemaVersion": "blob.session.telemetry.v1",
+  "streams": {
+    "events": "meaningful actions and state changes only",
+    "movementSamples": "2Hz path/context/input reconstruction",
+    "coreSnapshots": "10-second plus topology-change phenotype snapshots"
+  },
+  "dataBoundary": {
+    "percept": "future blind-agent-safe anonymous/observable payload",
+    "developer": "authored/internal truth retained for diagnosis but forbidden to blind agent",
+    "developerTruthSeparated": true
+  },
+  "persistence": {
+    "localStorage": "development autosave approximately every 8 seconds plus page-hide save; retain last four sessions",
+    "export": "Shift+T JSON download",
+    "manualMarker": "Shift+M timestamped playtest marker",
+    "serverTransport": "not_added_hc028a"
+  },
+  "authority": {
+    "gameplay": false,
+    "movement": false,
+    "chemistry": false,
+    "progression": false,
+    "targeting": false,
+    "presentation": false,
+    "inputMutation": false
+  }
+}

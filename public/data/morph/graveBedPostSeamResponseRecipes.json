@@ -1,0 +1,104 @@
+[
+  {
+    "id": "GRAVE_BED_POST_SEAM_RESPONSE_HC004P",
+    "build": "HC-004P",
+    "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+    "status": "runtime_active_post_seam_grave_bed_response_no_branch",
+    "sourceMicroExit": "GRAVE_SEAM_CONTINUITY_MICRO_EXIT_HC004O",
+    "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "purpose": "After the player folds back from the scar-memory seam, make the Grave bed react in play: the old husk, scar lock, and inheritance seed remnant answer the returned understanding without opening a branch or consuming protected remains.",
+    "activationRules": {
+      "requiresActiveCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "requiresMicroExitComplete": true,
+      "requiresProtectedRemainsVisible": true,
+      "requiresNoAbsorbHeld": true,
+      "absorbStartsResponse": false,
+      "pulseOrProximityReadsOnly": true
+    },
+    "sequence": [
+      {
+        "stage": "husk_acknowledges_return",
+        "focusObject": "old_core_husk_memory_001",
+        "readKey": "huskAcknowledged",
+        "pulseGain": 0.26,
+        "proximityRate": 0.052,
+        "threshold": 0.62,
+        "nextAction": "Pulse the old husk once more. It should remember the seam, not be consumed."
+      },
+      {
+        "stage": "scar_lock_reseals_meaning",
+        "focusObject": "scar_lock_plate_001",
+        "readKey": "scarResealed",
+        "pulseGain": 0.24,
+        "proximityRate": 0.048,
+        "threshold": 0.58,
+        "nextAction": "Pulse the scar lock. Let it reseal around the meaning you brought back."
+      },
+      {
+        "stage": "inheritance_seed_warms_closed",
+        "focusObject": "inheritance_seed_remnant_001",
+        "readKey": "seedWarmth",
+        "pulseGain": 0.2,
+        "proximityRate": 0.04,
+        "threshold": 0.50,
+        "nextAction": "Warm the inheritance seed remnant. Do not open it yet."
+      }
+    ],
+    "metrics": {
+      "pulseRange": 4.6,
+      "readRange": 3.35,
+      "absorbRecoilRange": 3.0,
+      "completionStableSeconds": 1.25,
+      "maximumRecoilRisk": 0.4
+    },
+    "vfx": {
+      "settleRingColor": "#ffd3aa",
+      "memoryThreadColor": "#ffb894",
+      "seedWarmthColor": "#ffe7b8",
+      "maxRingOpacity": 0.34,
+      "completedRingOpacity": 0.16
+    },
+    "playerFacingLanguage": {
+      "hudStatusActive": "Grave Bed: post-seam response",
+      "hudStatusComplete": "Grave Bed: seam understood / bed settled",
+      "nextActionActive": "Read the Grave bed again: husk, scar lock, then seed remnant. Do not absorb.",
+      "nextActionComplete": "The Grave has answered. Nothing here asks to be opened."
+    },
+    "completion": {
+      "stage": "grave_bed_post_seam_response_complete",
+      "status": "grave_bed_settled_after_seam_return_no_branch_opened",
+      "compositionReward": {
+        "scar": 0.001,
+        "residue": 0.0008,
+        "seed": 0.0007,
+        "signal": 0.0005
+      },
+      "protectedRemainsConsumed": false,
+      "inheritanceSeedRemnantOpened": false,
+      "newRouteBranchActivated": false,
+      "runtimeExitActivation": false,
+      "nextAction": "The memory loop is complete. Leave the husk, scar, and inheritance seed intact."
+    },
+    "forbidden": [
+      "old gates",
+      "doors",
+      "teleports",
+      "branch select menu",
+      "old chamber runtime",
+      "old exit registries",
+      "stage-node loaders",
+      "new morph activation",
+      "new route branch",
+      "runtime exit activation",
+      "combat",
+      "dialogue tree",
+      "quest log",
+      "new entity spawns",
+      "consuming old core husk",
+      "opening inheritance seed remnant",
+      "seam object absorption",
+      "opening closed inheritance suture",
+      "Act expansion"
+    ]
+  }
+]

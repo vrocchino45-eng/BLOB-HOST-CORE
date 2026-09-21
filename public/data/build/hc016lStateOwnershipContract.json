@@ -1,0 +1,151 @@
+{
+  "pass": "HC-016L",
+  "strategy": "R1_ACTIVE_CELL_MUTATION_DEBT_CLEANUP",
+  "domains": {
+    "host": {
+      "owner": "HostState/rebuild blueprint",
+      "authoritative": true
+    },
+    "localCell": {
+      "owner": "activeCellId + morph systems",
+      "authoritative": true
+    },
+    "chemistry": {
+      "owner": "ChemObjectSystem + BondSystem + recipes",
+      "authoritative": true
+    },
+    "playerComposition": {
+      "owner": "CoreEmbodimentSystem + CoreGrowthSystem",
+      "authoritative": false,
+      "targetMilestone": "R4"
+    },
+    "presentation": {
+      "owner": "camera + Guide + HUD",
+      "authoritative": false,
+      "mayMutateGameplayTruth": false
+    },
+    "legacyGate": {
+      "owner": "GateSystem",
+      "authoritative": false,
+      "role": "compatibility_adapter_until_migrated"
+    }
+  },
+  "morphOwnedBoundaries": {
+    "surface_to_guide": "LocalCellMorphSystem",
+    "guide_to_hub": "SecondLocalCellMorphSystem"
+  },
+  "legacyMutationBoundariesStillToMigrate": [],
+  "migratedBoundaries": {
+    "hub_to_vascular": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "destinationPreparationOwner": "FirstSliceTransitionCoordinator",
+      "gameplayOwner": "VascularRhythmRouteSystem",
+      "recipeDriven": true
+    },
+    "vascular_to_hub": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "returnReadinessOwner": "VascularRhythmRouteSystem",
+      "gameplayOwner": "VascularRhythmRouteSystem",
+      "recipeDriven": true
+    },
+    "hub_to_silt": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "destinationPreparationOwner": "FirstSliceTransitionCoordinator",
+      "gameplayOwner": "SiltPressureRouteSystem",
+      "recipeDriven": true
+    },
+    "silt_to_hub": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "returnReadinessOwner": "SiltPressureRouteSystem",
+      "gameplayOwner": "SiltPressureRouteSystem",
+      "recipeDriven": true
+    },
+    "hub_to_grave": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "destinationPreparationOwner": "FirstSliceTransitionCoordinator",
+      "gameplayOwner": "GraveMemoryRouteSystem",
+      "recipeDriven": true
+    },
+    "grave_to_hub": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "returnReadinessOwner": "GraveMemoryRouteSystem",
+      "gameplayOwner": "GraveMemoryRouteSystem",
+      "recipeDriven": true
+    },
+    "hub_to_comb": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "recipeDriven": true,
+      "legacyGateMutationEnabled": false,
+      "destinationPreparationOwner": "FirstSliceTransitionCoordinator",
+      "gameplayOwner": "CombThresholdFoundationSystem + CombThresholdPlayableSystem"
+    },
+    "comb_to_hub": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "recipeDriven": true,
+      "legacyGateMutationEnabled": false,
+      "returnReadinessOwner": "CombThresholdFoundationSystem"
+    },
+    "comb_to_aperture": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "recipeDriven": true,
+      "legacyGateMutationEnabled": false,
+      "destinationPreparationOwner": "FirstSliceTransitionCoordinator",
+      "trigger": "stabilize_plus_pulse",
+      "gameplayOwner": "CombThresholdPlayableSystem -> ApertureFieldsArrivalSystem"
+    },
+    "aperture_to_comb": {
+      "owner": "LocalCellBoundaryMorphSystem",
+      "recipeDriven": true,
+      "legacyGateMutationEnabled": false,
+      "returnReadinessOwner": "ApertureFieldsArrivalSystem",
+      "trigger": "interact"
+    }
+  },
+  "consolidation": {
+    "removedRouteSpecificAdapterFiles": 6,
+    "replacementRuntimeSystems": 1,
+    "replacementRecipeRegistry": "LocalCellBoundaryRecipeRegistry.js",
+    "activeSystemRegistrationReduction": 5,
+    "goal": "reduce duplicate source and per-frame system updates before Comb/Aperture migration"
+  },
+  "gateSystemProductionMutationAuthority": "REMOVED",
+  "gateSystemRole": "RETIRED",
+  "cleanup": {
+    "removedMethods": [
+      "GateSystem.tryCross",
+      "GateSystem.completeCrossing"
+    ],
+    "removedPulseInteractConsumption": true,
+    "removedActiveCellMutation": true,
+    "observerStateRetained": true,
+    "gateSystemUnregistered": true,
+    "gateSystemFileDeleted": true,
+    "deadLegacyMutationFilesDeleted": 8,
+    "deadTargetFocusReturnBranchRemoved": true,
+    "scarFlowArrivalMutationRemoved": true
+  },
+  "gateCompatibilityReadModelOwner": "LocalCellBoundaryMorphSystem",
+  "activeCellOwnership": {
+    "authoritativeTransitionOwners": [
+      "LocalCellMorphSystem",
+      "SecondLocalCellMorphSystem",
+      "LocalCellBoundaryMorphSystem"
+    ],
+    "initializationOwner": "GameRuntime",
+    "safetyRollbackOwner": "FirstSliceTransitionCoordinator",
+    "debugBypass": "DebugAreaJumpSystem",
+    "unclassifiedWriters": 0
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "id": "HC004A_GRAVE_ROUTE_RUNTIME_PLANNING",
+  "build": "HC-004A",
+  "status": "planning_only_not_runtime_active",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "planningRule": "Define the Grave Memory / Residue-Scar route before runtime. This pass does not author a runtime cell, morph plan, gate, exit, branch menu, combat loop, or old chamber loader.",
+  "sourceTruth": {
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "hostLifecycle": "wounded_nursery_host",
+    "hostTemperament": [
+      "nurturing",
+      "wounded",
+      "fraying",
+      "confluence-seeking suppressed"
+    ],
+    "macroConflict": "protect new becoming while metabolizing old wounds",
+    "whyThisRouteComesNext": "The opening slice already proves safe seed absorption, scar pressure, Signal Chorus listening, and the optional Bloom Residue fork. The next branch should deepen memory/residue/scar meaning before widening into unrelated route mechanics."
+  },
+  "currentFoundation": {
+    "goldCandidateBuild": "HC-003N",
+    "requiredOpeningChain": [
+      "CELL_MEMBRANE_NURSERY_001",
+      "CELL_SCAR_FLOW_FOLD_001",
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "optionalBeyondMinuteFork": "CELL_BLOOM_RESIDUE_FORK_001",
+    "foundationMeaning": "The first playable minute teaches becoming, safe nourishment, scar caution, listening, and first route-awareness. Bloom Residue previews the cost of growth, but the next planned route should metabolize memory before broad expansion."
+  },
+  "selectedRoute": {
+    "id": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+    "label": "Grave Memory / Residue-Scar Route",
+    "status": "selected_for_next_design_branch_not_runtime_active",
+    "fromPriorPlan": "HC003G_FIRST_ROUTE_CHOICE_PLANNING",
+    "routeQuestion": "Can the player learn from remains without becoming trapped inside them?",
+    "emotionalPressure": "mourning, inheritance, unfinished becoming, and the temptation to turn old wounds into nourishment too quickly",
+    "gameplayPressure": "pulse-to-read before absorb, residue contamination risk, scar protection versus scar blockage, and memory condensation without a menu or loot system"
+  },
+  "hostAnatomySources": [
+    {
+      "id": "residue_beds",
+      "role": "primary",
+      "meaning": "break down remains, hold old becoming attempts, convert grief into usable matter"
+    },
+    {
+      "id": "scar_fields",
+      "role": "primary",
+      "meaning": "preserve injury, block flow, protect weak points, distort chemistry"
+    },
+    {
+      "id": "marrow_interior",
+      "role": "secondary",
+      "meaning": "stores inherited host identity and deeper seed memory"
+    },
+    {
+      "id": "signal_choir_tissue",
+      "role": "supporting",
+      "meaning": "lets old remains answer through pulse without turning into exposition"
+    }
+  ],
+  "chemicalPlan": {
+    "dominantDomains": [
+      "residue",
+      "scar",
+      "seed",
+      "signal"
+    ],
+    "secondaryDomains": [
+      "form",
+      "flux"
+    ],
+    "suppressedDomains": [
+      "bloom",
+      "inorganic",
+      "confluence"
+    ],
+    "plannedBias": {
+      "form": 0.38,
+      "flux": 0.22,
+      "scar": 0.72,
+      "residue": 0.82,
+      "bloom": 0.12,
+      "signal": 0.36,
+      "seed": 0.44,
+      "inorganic": 0.08,
+      "confluence": 0.03
+    },
+    "matterStates": [
+      "residue_silt",
+      "scarred",
+      "signal_vapor",
+      "dormant_seed",
+      "gel"
+    ]
+  },
+  "plannedRuntimeEntry": {
+    "mode": "no_gate_tissue_pressure",
+    "notRuntimeActiveInThisPass": true,
+    "entrySource": "after Signal Chorus route-awareness or after optional Bloom Residue preview",
+    "entryFeel": "the host does not open a door; old matter becomes louder, and the local tissue reorients toward a grave-listening pocket",
+    "forbiddenEntryForms": [
+      "gate",
+      "door",
+      "teleport",
+      "old chamber exit",
+      "stage node loader",
+      "branch select menu"
+    ]
+  },
+  "plannedLocalCell": {
+    "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "label": "Grave Memory Residue Bed",
+    "status": "planned_recipe_pack_only_not_runtime_active",
+    "mustNotExistInLocalCellRecipesYet": true,
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "anatomy": [
+      "residue_beds",
+      "scar_fields",
+      "marrow_interior"
+    ],
+    "function": "first playable residue/scar route pocket where old becoming can be read before it is consumed",
+    "playerExperience": [
+      "quiet",
+      "reverent",
+      "unsafe if rushed",
+      "memory-rich",
+      "settling rather than expanding"
+    ],
+    "teaches": [
+      "remains are not generic resources",
+      "pulse can read before absorb",
+      "scar can protect memory as much as block flow",
+      "residue can nourish but can also contaminate",
+      "the Wounded Nursery Host is full of prior becoming attempts"
+    ]
+  },
+  "plannedChemObjects": [
+    {
+      "id": "old_core_husk_memory_001",
+      "status": "planned_recipe_pack_only",
+      "domains": [
+        "residue",
+        "scar",
+        "seed"
+      ],
+      "matterState": "residue_silt",
+      "verbPriority": [
+        "Pulse",
+        "Condense",
+        "Absorb later"
+      ],
+      "function": "old unfinished becoming; should be read before any nourishment is allowed"
+    },
+    {
+      "id": "residue_silt_cloud_001",
+      "status": "planned_recipe_pack_only",
+      "domains": [
+        "residue",
+        "signal"
+      ],
+      "matterState": "signal_vapor",
+      "verbPriority": [
+        "Pulse",
+        "Tune"
+      ],
+      "function": "memory silt that briefly shapes old silhouettes under pulse"
+    },
+    {
+      "id": "scar_lock_plate_001",
+      "status": "planned_recipe_pack_only",
+      "domains": [
+        "scar",
+        "form"
+      ],
+      "matterState": "scarred",
+      "verbPriority": [
+        "Pulse",
+        "Mend later",
+        "Rupture forbidden early"
+      ],
+      "function": "protects the route from premature extraction"
+    },
+    {
+      "id": "inheritance_seed_remnant_001",
+      "status": "planned_recipe_pack_only",
+      "domains": [
+        "seed",
+        "residue",
+        "signal"
+      ],
+      "matterState": "dormant_seed",
+      "verbPriority": [
+        "Tune",
+        "Bind later"
+      ],
+      "function": "future-host potential left inside old remains"
+    }
+  ],
+  "plannedEntityAndOrbiterPressure": {
+    "guideRoleShift": "Guide becomes quieter and lets residue answer before interpreting it.",
+    "plannedWitnessOrbiter": {
+      "id": "witness_grave_listener_001",
+      "status": "planned_not_authored",
+      "function": "memory/grief interpreter line; should not become a dialogue tree"
+    },
+    "plannedRecyclerEntity": {
+      "id": "soft_residue_recycler_001",
+      "status": "defer_until_after_recipe_pack",
+      "function": "shows that residue is metabolized by the host, not looted by the player"
+    }
+  },
+  "interactionModel": {
+    "loopName": "read_before_absorb",
+    "plannedStages": [
+      "notice_old_core_husk",
+      "pulse_residue_silt",
+      "listen_to_memory_echo",
+      "respect_scar_lock",
+      "condense_safe_memory_trace",
+      "leave_unready_remains_unconsumed"
+    ],
+    "verbsIntroducedOrDeepened": [
+      "Pulse",
+      "Condense",
+      "Tune",
+      "Filter"
+    ],
+    "verbsDeferred": [
+      "Leech",
+      "Rupture",
+      "Hybridize"
+    ],
+    "forbiddenLoopForms": [
+      "loot pile",
+      "dialogue tree",
+      "binary moral choice menu",
+      "combat arena",
+      "boss gate"
+    ]
+  },
+  "visualDirection": {
+    "surfaceLanguage": [
+      "grave silt",
+      "half-dissolved core shells",
+      "memory motes",
+      "dark scar plates with delayed pulse echo",
+      "soft ash clouds inside membrane tissue"
+    ],
+    "motionLanguage": [
+      "settling",
+      "delayed echo",
+      "old forms briefly appearing under pulse",
+      "protective recoil from forced absorb"
+    ],
+    "playerReadabilityGoal": "The route should feel reverent and readable, not like a dark combat room. Objects should signal: read me first, do not eat me first."
+  },
+  "branchRules": {
+    "noLegacyRuntimeArchitecture": {
+      "strictMarker": "legacy runtime architecture does not return for the Grave route",
+      "plainLanguage": "This planning pass gives no permission to revive old gates, doors, teleports, old chamber exits, stage-node loaders, or branch select menu logic.",
+      "forbiddenRuntimeArchitecture": [
+        "no old gates",
+        "no doors",
+        "no teleports",
+        "no old chamber exits",
+        "no stage node loaders",
+        "no branch select menu",
+        "not runtime active"
+      ]
+    },
+    "contentRuntimeSeparation": "HC-004A defines route pressure and future recipe targets only. HC-004B may author recipes. Runtime morph activation must wait for a later pass.",
+    "nextBuildMode": "recipe_pack_before_runtime"
+  },
+  "acceptanceTests": [
+    "HC-004A boots from the HC-003N gold-candidate opening slice without changing gameplay flow.",
+    "Grave Memory / Residue-Scar route planning data loads and validates.",
+    "The planned Grave cell does not appear in localCellRecipes yet.",
+    "All planned dominant chemical domains exist in chemicalDomains.json.",
+    "The planning file explicitly forbids gates, doors, teleports, old chamber exits, stage-node loaders, and branch select menus.",
+    "No runtime route, new morph, combat, dialogue tree, or new cell spawn is added."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004B",
+    "label": "Grave Route Recipe Pack",
+    "mode": "data_recipe_pack_only",
+    "purpose": "Author the planned Grave Memory Residue Bed cell, chem objects, visual recipes, and placeholder contracts without activating runtime morph or route traversal."
+  }
+}

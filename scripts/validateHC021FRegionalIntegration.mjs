@@ -1,0 +1,17 @@
+import fs from "node:fs";
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),"utf8");
+const main=read("../src/main.js"), growth=read("../src/player/CoreGrowthSystem.js"), emb=read("../src/player/CoreEmbodimentSystem.js"), combo=read("../src/opening/SurfaceWakeGameplaySystem.js");
+const data=JSON.parse(read("../public/data/player/regionalRhythmAnatomy_HC021F.json"));
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-021F"'),"identity");
+for(const x of ["read_and_retain_what_remains","read_timing_and_maintain_relationship_in_motion","read_pressure_sort_and_commit_selectively"]) must(growth.includes(x),x);
+for(const x of ["retentionFeedsFromCirculation","circulationFeedsFiltration","filtrationProtectsRetention","organismIntegrated"]) must(growth.includes(x)&&emb.includes(x),x);
+must(emb.includes("newGeometryAdded: false"),"integration geometry scope");
+must(!data.newPrimaryMechanic&&!data.newRegion&&!data.newGeometryForIntegration,"data scope");
+must(!data.objectiveAuthority&&!data.gateAuthority,"authority");
+must(combo.includes('id: "surface_carried_matter_combination"'),"HC021D regression");
+must(growth.includes("filtering_care_trace")&&growth.includes("scar_tolerance_trace")&&growth.includes("nutrient_binding_trace"),"HC021E regression");
+console.log("[HC021F] regional rhythm PASS");
+console.log("[HC021F] three-way anatomical integration PASS");
+console.log("[HC021F] HC021D/E consequence chain retained PASS");
+console.log("[HC021F] no new mechanic/region/integration geometry PASS");

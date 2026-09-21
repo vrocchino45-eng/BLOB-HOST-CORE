@@ -1,0 +1,92 @@
+{
+  "pass": "HC-028C2",
+  "phaseEngine": {
+    "sequenceOwner": "CoreEngineSystem",
+    "visualOwner": "CoreEmbodimentSystem",
+    "visualGrammar": "spherical_triadic_gyroscope_3_6_12",
+    "functionPlanes": [
+      "pulse",
+      "absorb",
+      "stabilize"
+    ],
+    "orthogonalPlaneCount": 3,
+    "hasFixedTopBottom": false,
+    "architectures": [
+      {
+        "phaseCount": 3,
+        "phasesPerFunction": 1,
+        "read": "single firing position per function",
+        "motion": "chunky_precession"
+      },
+      {
+        "phaseCount": 6,
+        "phasesPerFunction": 2,
+        "read": "opposed firing pair per function",
+        "motion": "counterbalanced_precession"
+      },
+      {
+        "phaseCount": 12,
+        "phasesPerFunction": 4,
+        "read": "four firing positions per function",
+        "motion": "high_resolution_near_continuous_precession"
+      }
+    ],
+    "stabilizeVisualRole": "reduces precession / increases visible coherence without freezing orientation",
+    "architectureChangeBloomSeconds": 0.72,
+    "gameplayAuthority": false
+  },
+  "vascularAccentGrammar": {
+    "profileId": "vascular_psa_44_micro",
+    "key": "P-S-A",
+    "meter": "4/4",
+    "barsPerHostCycle": 2,
+    "hostCycleSeconds": 5.8,
+    "tempoBpm": 82.75862068965517,
+    "functionPattern": [
+      "pulse",
+      "stabilize",
+      "absorb",
+      "stabilize"
+    ],
+    "accentRoles": [
+      "transmit_downbeat",
+      "catch_hold",
+      "receive_draw",
+      "settle_prepare"
+    ],
+    "perceptualAccentPattern": [
+      1.0,
+      0.28,
+      0.64,
+      0.22
+    ],
+    "movementAccentPattern": [
+      1.0,
+      0.42,
+      0.68,
+      0.46
+    ],
+    "movementFlowScaleRange": [
+      0.96,
+      1.06
+    ],
+    "inputTimingGate": false,
+    "progressionAuthority": false,
+    "routeCompletionAuthority": false
+  },
+  "audio": {
+    "worldBeatBus": "ambience",
+    "articulationByBeat": true,
+    "masterMixChanged": false,
+    "busMixChanged": false
+  },
+  "locks": {
+    "engineSequencingChanged": false,
+    "rpmLawChanged": false,
+    "debugCycleKey": "O",
+    "movementForceRangeChanged": false,
+    "hc028b1ReachabilityChanged": false,
+    "siltGameplayChanged": false,
+    "graveGameplayChanged": false
+  }
+}

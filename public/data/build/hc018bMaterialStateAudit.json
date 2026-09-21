@@ -1,0 +1,28 @@
+{
+  "build": "HC018B",
+  "mode": "gameplay_convergence",
+  "prototype": "existing_silt_multi_verb_material_state",
+  "newStateMachine": false,
+  "existingAuthority": "SiltPressureRouteSystem",
+  "sequence": [
+    "compressed_unread",
+    "density_revealed",
+    "braced_and_open",
+    "porous_matter_received",
+    "released"
+  ],
+  "pulseRuleChanged": false,
+  "stabilizeRuleChanged": false,
+  "absorbRuleChanged": false,
+  "completionThresholdChanged": false,
+  "routeCrossingChanged": false,
+  "chemistryChanged": false,
+  "movementChanged": false,
+  "cameraChanged": false,
+  "presentationAdditions": [
+    "pulse_silt_scatter",
+    "porous_packet_reveal",
+    "safe_absorb_stream",
+    "dense_residue_hardening"
+  ]
+}

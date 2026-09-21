@@ -1,0 +1,121 @@
+{
+  "id": "HC004L_GRAVE_SCAR_MEMORY_SEAM_ARRIVAL_PLANNING",
+  "build": "HC-004L",
+  "version": "0.0.58",
+  "status": "arrival_planning_only_no_runtime_transition",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceContinuityPlan": "GRAVE_ROUTE_CONTINUITY_PLANNING_HC004I",
+  "sourceRecipePack": "HC004J_GRAVE_SCAR_MEMORY_SEAM_RECIPE_PACK",
+  "sourceVisualComposerSupport": "HC004K_GRAVE_SCAR_MEMORY_SEAM_VISUAL_COMPOSER_SUPPORT",
+  "sourceExitReadinessPrototype": "GRAVE_EXIT_READINESS_PROTOTYPE_HC004H",
+  "sourceCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "plannedArrivalCell": "CELL_GRAVE_SCAR_MEMORY_SEAM_001",
+  "plannedArrivalCellStatus": "authored_recipe_pack_not_runtime_active",
+  "structuralMeaning": "The scar-memory seam should eventually feel like entering a stitched memory pressure, not using a door. HC-004L defines that arrival shape before any player relocation or transition can exist.",
+  "arrivalPosture": {
+    "entryMode": "future_no_gate_continuity_arrival_after_separate_lock_decision",
+    "entryFeel": "slow_pull_along_read_scar_not_teleport",
+    "spawnPosture": "low_near_suture_thread_with_protected_remains_memory_behind_player",
+    "firstReadObject": "scar_memory_seam_thread_001",
+    "readabilityOrder": [
+      "scar_memory_seam_thread_001",
+      "residue_stitch_lattice_001",
+      "echo_husk_imprint_001",
+      "closed_inheritance_suture_001"
+    ],
+    "mustCarryForward": [
+      "old_core_husk_memory_001",
+      "scar_lock_plate_001",
+      "inheritance_seed_remnant_001"
+    ],
+    "safeTransferMemory": "residue_silt_cloud_001_trace_only"
+  },
+  "arrivalCameraPlan": {
+    "mode": "planned_close_low_suture_read",
+    "yaw": -0.18,
+    "pitch": 0.46,
+    "distance": 7.25,
+    "lift": 0.28,
+    "blendStrength": 1.15,
+    "reason": "future seam arrival should frame the suture thread first while keeping the closed inheritance suture visible as not-open"
+  },
+  "arrivalReadabilityRules": {
+    "requiresHC004HExitReadinessVisible": true,
+    "requiresHC004GPlanningReady": true,
+    "requiresSafeMemoryTransferComplete": true,
+    "requiresProtectedRemainsVisible": true,
+    "requiresNoForcedAbsorb": true,
+    "requiresHC004KVisualSupport": true,
+    "requiresSeamCellAuthoredInactive": true,
+    "runtimeTransitionThisPass": false,
+    "playerRelocationThisPass": false,
+    "newMorphActivationThisPass": false,
+    "targetFocusActivationThisPass": false,
+    "seamInteractionLoopThisPass": false,
+    "noGateDoorTeleportMenu": true,
+    "futureArrivalActivationRequiresSeparateLockDecision": true
+  },
+  "playerFacingLanguage": {
+    "guideLine": "The seam can be imagined now, but not entered. The scar is teaching direction before passage.",
+    "objectiveLine": "Hold the Grave readiness. Arrival into the seam is planned, not active.",
+    "hudStatus": "Seam Arrival Plan: readable / no transition",
+    "nextAction": "Keep the scar lock readable. No movement to the seam exists in HC-004L."
+  },
+  "seamObjects": [
+    "scar_memory_seam_thread_001",
+    "residue_stitch_lattice_001",
+    "echo_husk_imprint_001",
+    "closed_inheritance_suture_001"
+  ],
+  "runtimeActivation": {
+    "transition": "forbidden_this_pass",
+    "playerRelocation": "forbidden_this_pass",
+    "newMorphActivation": "forbidden_this_pass",
+    "targetFocusRule": "forbidden_this_pass",
+    "seamInteractionLoop": "forbidden_this_pass",
+    "newRouteBranch": "forbidden_this_pass"
+  },
+  "allowedScope": [
+    "arrival planning data",
+    "Guide/HUD readout language",
+    "RecipeDataSystem validation support",
+    "documentation",
+    "build identity update"
+  ],
+  "forbiddenScope": [
+    "runtime route activation",
+    "new morph activation",
+    "runtime exit activation",
+    "player relocation",
+    "moving the player to the scar-memory seam",
+    "new route branch",
+    "target focus activation",
+    "seam interaction loop",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "new entity spawns",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion",
+    "consuming the old core husk",
+    "opening the inheritance seed remnant",
+    "exit transition"
+  ],
+  "acceptanceTests": [
+    "Arrival planning points to CELL_GRAVE_SCAR_MEMORY_SEAM_001 without activating it.",
+    "All seam objects are named in the planned first-read order and remain not runtime spawned.",
+    "No morph, target focus, interaction loop, gate, door, teleport, or player relocation targets the seam.",
+    "HC-004H exit-readiness remains readout-only and the source Grave bed remains active as the current playable endpoint."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004M",
+    "label": "Grave Scar-Memory Seam Runtime Arrival Prototype",
+    "mode": "narrow_runtime_arrival_only_if_HC004L_lock_passes"
+  }
+}

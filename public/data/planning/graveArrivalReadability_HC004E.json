@@ -1,0 +1,89 @@
+{
+  "id": "GRAVE_ARRIVAL_READABILITY_HC004E",
+  "build": "HC-004E",
+  "status": "arrival_readability_active_no_interaction_loop",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceMorphPrototype": "HC004D_GRAVE_ROUTE_MORPH_PROTOTYPE",
+  "route": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+  "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "mode": "first_seconds_readability_before_interaction_loop",
+  "arrivalContract": {
+    "mustFeelLike": [
+      "lower quieter memory bed",
+      "reverent residue pocket",
+      "old becoming remains asking to be read",
+      "scar protecting memory rather than blocking a door"
+    ],
+    "mustPreserveControl": true,
+    "mustPreserveNoGateMorph": true,
+    "interactionLoopStatus": "deferred_to_HC004F_or_later"
+  },
+  "readabilityObjects": [
+    {
+      "id": "old_core_husk_memory_001",
+      "arrivalRole": "primary_memory_husk",
+      "firstRead": "old becoming remains; pulse to reveal silhouette, do not consume"
+    },
+    {
+      "id": "residue_silt_cloud_001",
+      "arrivalRole": "settling_memory_silt",
+      "firstRead": "silt answers pulse and settles into old-core shapes"
+    },
+    {
+      "id": "scar_lock_plate_001",
+      "arrivalRole": "protective_scar_lock",
+      "firstRead": "scar is protecting memory, not functioning as a door lock"
+    },
+    {
+      "id": "inheritance_seed_remnant_001",
+      "arrivalRole": "dim_future_seed",
+      "firstRead": "seed remnant stays closed until the remains are understood"
+    }
+  ],
+  "cameraTuning": {
+    "yaw": 0.18,
+    "pitch": 0.42,
+    "distance": 7.15,
+    "lift": 0.18,
+    "blendStrength": 1.35,
+    "manualOverridePreserved": true
+  },
+  "hudLanguage": {
+    "objective": "Grave route: read the remains before consuming anything.",
+    "action": "Pulse gently. Absorb is not the answer yet.",
+    "status": "Grave arrival readability active / no interaction loop"
+  },
+  "allowedScope": [
+    "arrival camera/readability tuning",
+    "arrival object opacity and role staging",
+    "guide/HUD text refinement",
+    "read-before-absorb warning readout",
+    "safe regression tests for Grave arrival"
+  ],
+  "forbiddenScope": [
+    "full Grave interaction loop",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "new entity spawns",
+    "new route branch",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion"
+  ],
+  "acceptanceTests": [
+    "Grave arrival activates only after the HC-004D Grave morph completes.",
+    "The four Grave objects are visible, staged, and readable as arrival roles.",
+    "Guide/HUD language says read before absorb and does not expose a quest log or dialogue tree.",
+    "No target focus rule, gate, door, teleport, branch menu, stage-node loader, combat, or full Grave interaction loop is added."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004F",
+    "label": "Grave Read-Before-Absorb Interaction Loop",
+    "mode": "minimal_sequence_after_arrival_reads_well"
+  }
+}

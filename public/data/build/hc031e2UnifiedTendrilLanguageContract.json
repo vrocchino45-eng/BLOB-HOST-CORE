@@ -1,0 +1,51 @@
+{
+  "pass": "HC-031E2",
+  "title": "Unified Tendril Language",
+  "mode": "visual convergence / anatomy-state unification",
+  "purpose": "Retire the separate free-space blue trail language so the Core's three open-space appendages and three surface contacts read as one suction-tendril anatomy changing state.",
+  "allowedScope": [
+    "free-space Core tendril geometry and animation",
+    "shared tendril material/palette grammar",
+    "free -> contact presentation crossfade",
+    "surface-contact tendril material references only",
+    "build telemetry describing the unified visual family"
+  ],
+  "forbiddenScope": [
+    "player translation, rotation, force, collision, or boundary ownership",
+    "new tendril controls or locomotion authority",
+    "targeting/Bond/verb changes",
+    "Grave octave, resonance, rupture, consequence, route, exit, or progression changes",
+    "new gameplay gating"
+  ],
+  "lockedTruth": {
+    "tendrilCount": 3,
+    "movementAuthority": "PlayerMovementController",
+    "surfaceSource": "trusted_authored_movement_boundary",
+    "locomotionDrivenByTendrils": false,
+    "addsMovementForce": false,
+    "addsCollider": false,
+    "addsRaycast": false,
+    "changesControls": false,
+    "visualFamily": "core_suction_tendril_v1"
+  },
+  "stateGrammar": [
+    "drift: relaxed tapered tendon with folded sucker",
+    "handoff: free anatomy fades as surface-contact anatomy reaches",
+    "reach: contact owner extends same tendon family toward authored surface",
+    "seal: sucker opens/flattens at the authored surface",
+    "peel: sucker stays planted while tendon lifts, then returns to drift"
+  ],
+  "visualTargets": [
+    "no legacy cone/ribbon travel veils remain on the player Core",
+    "free-space and attached tendrils share shaft/root/sucker color and material family",
+    "free-space tips look like folded versions of the surface sucker",
+    "exactly three locomotor tendrils are implied across free and attached states, not six simultaneous limbs",
+    "open-space motion reads as relaxed limbs rather than exhaust, ribbons, or decorative whiskers"
+  ],
+  "acceptanceTests": [
+    "a still frame in open space reads as three relaxed appendages capable of attaching",
+    "approaching a surface reads as the same appendages transitioning from drift to reach/seal",
+    "surface attachment does not visually double the limb count",
+    "movement feel and controls are unchanged from HC031E1"
+  ]
+}

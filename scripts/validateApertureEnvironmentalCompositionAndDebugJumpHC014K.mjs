@@ -1,0 +1,16 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { DebugAreaJumpSystem } from "../src/debug/DebugAreaJumpSystem.js";
+const manifest=JSON.parse(fs.readFileSync("public/data/build/buildManifest.json","utf8"));
+assert.equal(manifest.id,"HC-014K"); assert.equal(manifest.version,"0.0.144");
+const src=fs.readFileSync("src/fields/ApertureFieldsArrivalSystem.js","utf8");
+for(const marker of ["Arrival Cradle","Signal Plain receptive fan","Mid-field connective tissue","Host-scale silhouettes","environmentalCompositionLock"]) assert.ok(src.includes(marker),marker);
+const velocity={ cleared:false, set(){this.cleared=true;} }, fluidSlip={ cleared:false, set(){this.cleared=true;} };
+const sys=new DebugAreaJumpSystem({playerMovementController:{velocity,fluidSlip}});
+const frameState={frame:10,activeCellId:"CELL_MEMBRANE_NURSERY_001",input:{debugJumpSlot:8}};
+sys.update(0.016,frameState);
+assert.equal(frameState.activeCellId,"CELL_APERTURE_FIELDS_ARRIVAL_001");
+assert.equal(frameState.debugAreaJump.lastJump.slot,8); assert.equal(frameState.debugAreaJump.controls.length,8);
+assert.ok(velocity.cleared&&fluidSlip.cleared);
+assert.equal(frameState.debugAreaJump.mutatesProgression,false);
+console.log("PASS HC-014K Aperture environmental composition + debug area jump harness");

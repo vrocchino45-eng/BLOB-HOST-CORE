@@ -1,0 +1,56 @@
+{
+  "build": "HC-029A",
+  "parent": "HC-028R",
+  "label": "Relationship Targeting & Intentional Focus",
+  "problemEvidence": {
+    "source": "HC-028R 22:28 playthrough + matching telemetry",
+    "observedTargetPingPong": "scar_flow path thread / memory fleck rapid switching",
+    "retainedWindowAttempts": 478,
+    "noNewInformationAttempts": 460,
+    "designResponse": "separate soft candidate from retained P/A/S relationship"
+  },
+  "relationshipModel": {
+    "phases": [
+      "none",
+      "candidate",
+      "engaged",
+      "releasing"
+    ],
+    "candidateAuthority": "camera direction + distance + authored TargetFocusRegistry boosts",
+    "relationshipAuthority": "P/A/S engagement retains current candidate",
+    "releaseGraceSeconds": 0.28,
+    "handoff": "only deliberate camera redirect or invalid/out-of-range relationship",
+    "manualCycleButton": false
+  },
+  "symbolGrammarSeed": {
+    "pulse": "outward relationship triangle",
+    "absorb": "inward relationship triangle",
+    "stabilize": "coherence boundary with instability-driven asymmetry",
+    "chords": "compose existing primitives rather than inventing new icons",
+    "genericLockRingRetired": true
+  },
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.18",
+    "candidateEvent": "attention.candidate.changed",
+    "relationshipEvent": "attention.target.changed",
+    "semanticChurnSwitchMeaning": "retained relationship handoff only"
+  },
+  "locked": {
+    "targetFocusRegistry": true,
+    "playerMovement": true,
+    "ecology": true,
+    "routes": true,
+    "chemistry": true,
+    "hubCombTraversal": true,
+    "coreVerbPower": true
+  },
+  "forbidden": {
+    "newButton": false,
+    "shooterHardLock": false,
+    "cameraSnap": false,
+    "forcedPlayerRotation": false,
+    "newEcology": false,
+    "routeGate": false,
+    "progressionChange": false
+  }
+}

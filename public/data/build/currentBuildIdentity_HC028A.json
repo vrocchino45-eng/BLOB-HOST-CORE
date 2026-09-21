@@ -1,0 +1,36 @@
+{
+  "id": "HC-028A",
+  "label": "Structured Session Telemetry Foundation",
+  "parent": "HC-027L1",
+  "baseline": "HC027L1_GOLDEN_INQUIRY_BASELINE_01",
+  "status": "golden_inquiry_baseline_01_frozen_telemetry_active",
+  "sourceJsCount": 93,
+  "newSourceModules": 1,
+  "purpose": "Freeze HC027L1 as Golden Inquiry Baseline 01 and add read-only structured session telemetry for later AI and human blind-play analysis without changing gameplay.",
+  "locked": [
+    "HC027L1 Golden Inquiry gameplay",
+    "HC027D1 audio reference",
+    "HC027J2 physiology",
+    "HC027J1 quick/deep Pulse law",
+    "HC027K consequence relationships",
+    "movement/chemistry/progression/route authority",
+    "3\u21926\u219212 engine architecture"
+  ],
+  "scope": [
+    "SessionTelemetrySystem",
+    "read-only runtime mount",
+    "Status > Telemetry readout",
+    "F1 telemetry recorder status",
+    "local browser persistence/export",
+    "validation/governance"
+  ],
+  "forbidden": [
+    "AI decision agent",
+    "server transport",
+    "gameplay or balance change",
+    "new mechanics/content/regions",
+    "input remap",
+    "objective/waypoint/gate/progression authority",
+    "audio retune"
+  ]
+}

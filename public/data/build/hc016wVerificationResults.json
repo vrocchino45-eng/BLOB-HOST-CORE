@@ -1,0 +1,41 @@
+{
+  "build": "HC-016W",
+  "status": "PASS",
+  "vascularActiveBoundsBefore": [
+    4.8,
+    3.35,
+    7.2
+  ],
+  "vascularActiveBoundsAfter": [
+    4.5,
+    3.2,
+    22.5
+  ],
+  "checks": [
+    {
+      "name": "src/routes/Act1RouteContractSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/routes/GraveMemoryRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/routes/VascularRhythmRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/routes/SiltPressureRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "HC016W validator",
+      "status": "PASS",
+      "detail": "[HC016W] three-route scale family PASS\n[HC016W] Vascular active boundary authority PASS\n[HC016W] Grave + Silt expanded envelopes retained PASS\n[HC016W] no Core resize / no new gameplay PASS"
+    }
+  ]
+}

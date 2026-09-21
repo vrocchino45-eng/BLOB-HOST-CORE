@@ -1,0 +1,74 @@
+{
+  "id": "HC-028P",
+  "parent": "HC-028O",
+  "mode": "bounded_non_recursive_ecological_cross_influence",
+  "purpose": "Let recognition of another organism's temporary Host residue provoke one brief local Host-matter reply around the recognizing organism, proving organism-to-organism influence through the Host without recursive memory, residue, affinity, movement, or progression.",
+  "scope": {
+    "newEntityTypes": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newProgression": false,
+    "newAffinity": false,
+    "persistentSaveStateEcology": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": false,
+    "entityGameplayBehaviorChanged": false,
+    "routeLogicChanged": false,
+    "chemistryChanged": false,
+    "residueLifetimeChanged": false,
+    "residuePositionChanged": false,
+    "residueCreationChanged": false,
+    "newParticleFieldAdded": false,
+    "newGeometryAdded": false,
+    "newDrawCallsAdded": false,
+    "combReentryHotfixPreserved": true,
+    "startupScopeHotfixPreserved": true
+  },
+  "crossInfluence": {
+    "source": "HC028O other_trace residue recognition",
+    "otherOrganismResidueOnly": true,
+    "selfTraceTriggersCrossInfluence": false,
+    "oneShotPerContinuousRecognition": true,
+    "requiresRecognitionResetToRetrigger": true,
+    "createsResidue": false,
+    "refreshesResidue": false,
+    "consumesResidue": false,
+    "writesReciprocalMemory": false,
+    "recursivePropagation": false,
+    "responseDurationSeconds": [
+      3.8,
+      4.8
+    ],
+    "presentationOwner": "AmbientMaterialInteractionSystem",
+    "gameplayOwnerUnchanged": "EntitySystem",
+    "usesExistingHostMotes": true,
+    "newParticles": 0,
+    "tenderResponseModes": [
+      "protective_listening_hush",
+      "received_trace_settle"
+    ],
+    "watcherResponseModes": [
+      "foreign_signature_hold",
+      "cross_signature_compare"
+    ],
+    "causalChain": [
+      "organism_a_residue",
+      "organism_b_recognition",
+      "organism_b_local_host_reply"
+    ]
+  },
+  "authority": {
+    "saveState": false,
+    "playerMovement": false,
+    "entityMovement": false,
+    "entityBehavior": false,
+    "collision": false,
+    "chemistry": false,
+    "bond": false,
+    "repair": false,
+    "combat": false,
+    "targeting": false,
+    "progression": false,
+    "route": false
+  }
+}

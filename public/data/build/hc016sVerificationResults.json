@@ -1,0 +1,59 @@
+{
+  "build": "HC-016S",
+  "status": "PASS",
+  "runtimeMutation": false,
+  "measurements": {
+    "grave": {
+      "playableBoundsRadii": [
+        4.25,
+        3.1,
+        6.8
+      ],
+      "playableBoundsDiameter": [
+        8.5,
+        6.2,
+        13.6
+      ],
+      "authoredObjectSpan": {
+        "x": 2.55,
+        "y": 0.7,
+        "z": 3.5000000000000004,
+        "entryToDeepestZ": 5.65
+      },
+      "interactionObjectCount": 4,
+      "pulseRange": 2.2,
+      "safeTransferRange": 1.8,
+      "currentSpatialRead": "large legal boundary, but all four gameplay objects are compressed into a shallow ~3.5-unit depth band"
+    },
+    "vascular": {
+      "pathLength": 8.402452796757089,
+      "pathPointCount": 6,
+      "corridorRadius": 1.18,
+      "vesselRadius": 0.92,
+      "valveProgress": [
+        0.28,
+        0.55,
+        0.82
+      ],
+      "pulseRange": 1.3,
+      "followRange": 1.78,
+      "currentSpatialRead": "entire cadence journey is only a few body-length-scale world units long"
+    },
+    "silt": {
+      "pathLength": 7.453299417397773,
+      "pathPointCount": 6,
+      "passageRadius": 1.08,
+      "ribProgress": [
+        0.18,
+        0.34,
+        0.49,
+        0.68,
+        0.84
+      ],
+      "appetiteProgress": 0.56,
+      "deepOrganProgress": 0.88,
+      "currentSpatialRead": "pressure read, brace, appetite choice and deep organ are stacked along one short passage"
+    }
+  },
+  "nextPass": "HC-016T Grave Spatial Expansion"
+}

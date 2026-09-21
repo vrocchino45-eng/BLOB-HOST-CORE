@@ -1,0 +1,70 @@
+{
+  "id": "CINEMATIC_AWAKENING_BEAT_HC003D",
+  "build": "HC-003D",
+  "mode": "playable_awakened_cinematic_cues",
+  "purpose": "Add subtle first-awakening cinematic cues while preserving continuous player control and avoiding a cutscene lockout.",
+  "sourceBlueprintRules": [
+    "Host Core is the organizing object",
+    "visuals communicate meaning",
+    "debug panels are build tools, not final HUD",
+    "no hard gates or old chamber transitions"
+  ],
+  "requiredScope": [
+    "first awakening camera settle",
+    "distant host pulse",
+    "Folded Lantern reveal emphasis",
+    "micro-to-macro scale thread",
+    "first tissue fold emphasis"
+  ],
+  "forbiddenScope": [
+    "cutscene lockout",
+    "dialogue tree",
+    "new cell",
+    "new morph destination",
+    "new ability",
+    "combat",
+    "Act expansion"
+  ],
+  "beatDurations": {
+    "cameraSettleSeconds": 4.5,
+    "guideRevealSeconds": 4.0
+  },
+  "macroCue": {
+    "hostAnchor": [0.9, 2.8, -25.4],
+    "meaning": "macro host scale remains present while the player is microscopic"
+  },
+  "cameraBeats": {
+    "camera_settle": {
+      "yaw": 0.05,
+      "pitch": 0.38,
+      "distance": 8.15,
+      "lift": 0.06,
+      "blendStrength": 1.35,
+      "doNotOverrideManualLook": true
+    },
+    "host_pulse_seed_cue": {
+      "yaw": 0.12,
+      "pitch": 0.33,
+      "distance": 7.95,
+      "lift": 0.08,
+      "blendStrength": 1.05,
+      "doNotOverrideManualLook": true
+    },
+    "first_fold_emphasis": {
+      "yaw": 0.02,
+      "pitch": 0.42,
+      "distance": 8.55,
+      "lift": 0.12,
+      "blendStrength": 1.15,
+      "doNotOverrideManualLook": true
+    }
+  },
+  "acceptanceTests": [
+    "Opening camera settles without taking control away.",
+    "Distant host pulse is visible but subtle.",
+    "Guide reveal reads as interpreter presence, not dialogue NPC.",
+    "Micro-to-macro cue is visible in the first nursery minute.",
+    "First tissue fold gets emphasis without becoming a hard cutscene.",
+    "Right-stick/manual camera control overrides cinematic bias."
+  ]
+}

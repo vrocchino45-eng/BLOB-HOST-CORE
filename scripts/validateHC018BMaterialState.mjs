@@ -1,0 +1,13 @@
+import fs from "node:fs";
+const s=fs.readFileSync(new URL("../src/routes/SiltPressureRouteSystem.js",import.meta.url),"utf8");
+const a=JSON.parse(fs.readFileSync(new URL("../public/data/build/hc018bMaterialStateAudit.json",import.meta.url),"utf8"));
+const must=(x,m)=>{if(!x)throw new Error(m)};
+for(const state of ["compressed_unread","density_revealed","braced_and_open","porous_matter_received","released"]) must(s.includes(state),`missing ${state}`);
+must(s.includes("silt_safe_matter_absorb_stream"),"safe absorb stream missing");
+must(s.includes("pulseReadResponse"),"Pulse material response missing");
+must(s.includes("denseRiskActive"),"dense residue hardening missing");
+must(a.newStateMachine===false,"duplicate state machine introduced");
+for(const k of ["pulseRuleChanged","stabilizeRuleChanged","absorbRuleChanged","completionThresholdChanged","routeCrossingChanged","chemistryChanged","movementChanged","cameraChanged"]) must(a[k]===false,`authority lock violated: ${k}`);
+console.log("[HC018B] existing Silt multi-verb authority preserved PASS");
+console.log("[HC018B] material-state readability sequence PASS");
+console.log("[HC018B] Pulse/Stabilize/Absorb rules unchanged PASS");

@@ -1,0 +1,69 @@
+{
+  "id": "SILT_PRESSURE_RETURN_CONSEQUENCE_HC012B",
+  "pass": "HC-012B",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "routeId": "silt_burrow_route",
+  "runtimeCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+  "returnRegionId": "hub_chamber",
+  "returnCellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+  "historyOwner": "GateSystem",
+  "coreStateOwner": "CoreGrowthSystem",
+  "corePresentationOwner": "CoreEmbodimentSystem",
+  "hubPresentationOwner": "HubChamberFoundationSystem",
+  "promptSelectionOwner": "GuidePromptSystem",
+  "retentionCondition": {
+    "routeEntered": true,
+    "routeCompleted": true,
+    "routeReturned": true,
+    "pressureRead": true,
+    "ribsReleased": true,
+    "safeMatterAbsorbed": true,
+    "denseMatterLeftIntact": true
+  },
+  "coreAdaptation": {
+    "rootName": "player_silt_pressure_adaptation_root_HC012B",
+    "plateCount": 3,
+    "porousNodeCount": 1,
+    "residueNodeCount": 2,
+    "siltColor": 5719087,
+    "deepColor": 2432283,
+    "porousColor": 13802059,
+    "returnColor": 13210965,
+    "revealSeconds": 1.5,
+    "motionLanguage": "three low ventral brace plates open around one porous intake node while two dark residue knots remain closed",
+    "objectDefiningRings": 0,
+    "permanentHalos": 0
+  },
+  "hubEcho": {
+    "rootName": "hub_silt_pressure_return_echo_HC012B",
+    "position": [
+      3.55,
+      -2.08,
+      -2.08
+    ],
+    "plateCount": 3,
+    "porousNodeCount": 1,
+    "residueNodeCount": 2,
+    "breathSeconds": 2.8,
+    "motionLanguage": "lower Hub tissue braces outward around one porous opening while packed residue remains dark and closed",
+    "objectDefiningRings": 0,
+    "triggerMarkers": 0
+  },
+  "playerFacingLanguage": {
+    "guideLine": "The passage returned as restraint, not appetite. Your Core and the lower Hub tissue now brace around what yields while leaving packed residue closed.",
+    "objectiveLine": "Silt Pressure is retained. Grave Memory, Vascular Rhythm, and Silt Pressure now remain visible together in the Hub.",
+    "nextAction": "Observe the three retained route readings. The Hub has not yet combined them into the Combward threshold."
+  },
+  "constraints": {
+    "newAbilities": 0,
+    "newEntities": 0,
+    "combat": false,
+    "permanentClass": false,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "directActiveCellMutation": false,
+    "routeMechanicMutation": false,
+    "newRegisteredSystems": 0,
+    "archivedCompatibilitySystemsActivated": 0
+  }
+}

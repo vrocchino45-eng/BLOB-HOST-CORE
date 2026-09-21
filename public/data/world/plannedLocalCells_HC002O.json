@@ -1,0 +1,54 @@
+[
+  {
+    "id": "CELL_BLOOM_RESIDUE_FORK_001",
+    "status": "authored_in_HC002P_recipe_pack",
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "anatomyBlend": [
+      "bloom_organs",
+      "residue_beds",
+      "signal_choir_tissue"
+    ],
+    "arrivesFrom": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "purpose": "First no-menu choice fork where future growth and old memory both become playable matter.",
+    "chemistryBias": {
+      "bloom": 0.62,
+      "residue": 0.58,
+      "seed": 0.52,
+      "signal": 0.44,
+      "flux": 0.36,
+      "scar": 0.3,
+      "form": 0.34
+    },
+    "plannedObjects": [
+      {
+        "id": "bloom_spore_lantern_001",
+        "domain": "bloom",
+        "function": "tempts growth / risky nourishment"
+      },
+      {
+        "id": "residue_memory_silt_001",
+        "domain": "residue",
+        "function": "reveals prior core remains / memory nourishment"
+      },
+      {
+        "id": "seed_choice_braid_001",
+        "domain": "seed_signal",
+        "function": "keeps both paths connected without menu choice"
+      },
+      {
+        "id": "overgrowth_warning_tendril_001",
+        "domain": "bloom_scar",
+        "function": "warns against unchecked growth"
+      }
+    ],
+    "plannedLoop": "choose emphasis by interaction order, not a menu: bloom first biases expansion; residue first biases memory integration; braid keeps both viable.",
+    "forbidden": "No binary UI prompt. No door. No teleport. No irreversible faction selection in the prototype pass.",
+    "authoredCellRecipe": "public/data/world/localCellRecipes.json",
+    "authoredChemObjects": [
+      "bloom_spore_lantern_001",
+      "residue_memory_silt_001",
+      "seed_choice_braid_001",
+      "overgrowth_warning_tendril_001"
+    ]
+  }
+]

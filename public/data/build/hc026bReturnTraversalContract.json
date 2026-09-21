@@ -1,0 +1,42 @@
+{
+  "id": "HC026B_RETURN_TRAVERSAL_REFIND_HUB",
+  "build": "HC-026B",
+  "parent": "HC-026A1",
+  "owner": "LocalCellBoundaryMorphSystem",
+  "scope": "Surface Wake / Guide Threshold / Hub Chamber revisit only",
+  "seams": [
+    {
+      "id": "guide_surface_memory_seam",
+      "cells": ["CELL_MEMBRANE_NURSERY_001", "CELL_SCAR_FLOW_FOLD_001"],
+      "movementLed": true,
+      "requiresInteract": false
+    },
+    {
+      "id": "hub_guide_memory_seam",
+      "cells": ["CELL_SCAR_FLOW_FOLD_001", "CELL_SIGNAL_CHORUS_NERVE_001"],
+      "movementLed": true,
+      "requiresInteract": false
+    }
+  ],
+  "activation": {
+    "requiresHubReachedOnce": true,
+    "arrivalSideMustBeDepartedBeforeRearm": true,
+    "samePlayerPositionRetained": true
+  },
+  "revisitPresentation": {
+    "guideGameplayReactivated": true,
+    "surfaceGameplayUsesExistingActiveCellBehavior": true,
+    "hubMacroSpatialMirrorPreserved": true,
+    "seamVisual": "braided tissue crease, not a portal/gate"
+  },
+  "locked": {
+    "teleport": false,
+    "progressionMutation": false,
+    "routeGateMovement": false,
+    "routeCorridorMovement": false,
+    "newRegion": false,
+    "newSourceModule": false,
+    "contactAuthorityChanged": false,
+    "chemistryRulesChanged": false
+  }
+}

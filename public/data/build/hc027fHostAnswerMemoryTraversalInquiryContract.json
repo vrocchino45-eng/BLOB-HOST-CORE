@@ -1,0 +1,51 @@
+{
+  "id": "hc027f_host_answer_memory_traversal_inquiry",
+  "owner": "CoreSensoryResponseSystem + AmbientMaterialInteractionSystem",
+  "parent": "HC-027E",
+  "purpose": "Turn embodied sonar into optional traversal inquiry: probe, receive a real return, move toward the remembered answer, and read local material without introducing waypoint or progression authority.",
+  "loop": [
+    "observe",
+    "pulse_probe",
+    "return_answer",
+    "answer_memory",
+    "approach",
+    "optional_scan_read",
+    "world_releases"
+  ],
+  "answerMemory": {
+    "maxRecords": 4,
+    "defaultTtlSeconds": 7.2,
+    "hostBoundaryTtlSeconds": 5.8,
+    "approachRange": 3.6,
+    "readRange": 1.65,
+    "storesOnlyAlreadyReturnedPulseAnswers": true,
+    "hiddenStateReveal": false
+  },
+  "ambientResponse": {
+    "usesExistingMotes": true,
+    "addsGeometry": false,
+    "addsDrawCalls": false,
+    "localGatherRadius": 2.15,
+    "createsArrow": false,
+    "createsMarker": false
+  },
+  "scanRead": {
+    "optional": true,
+    "requiresNearbyMemory": true,
+    "yieldsMaterialClassNotRouteCorrectness": true,
+    "createsObjective": false,
+    "createsReward": false
+  },
+  "locked": {
+    "audioMixChanged": false,
+    "pulseGameplayRangeChanged": false,
+    "pulseReturnTimingChanged": false,
+    "radialPhysiologyChanged": false,
+    "movementAuthorityChanged": false,
+    "chemistryAuthorityChanged": false,
+    "progressionAuthorityChanged": false,
+    "routeTopologyChanged": false,
+    "engineGrammarChanged": false,
+    "newGameplaySystems": false
+  }
+}

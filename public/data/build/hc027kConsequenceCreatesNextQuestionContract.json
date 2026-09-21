@@ -1,0 +1,65 @@
+{
+  "pass": "HC-027K",
+  "law": "persistent_local_consequence_physically_couples_into_another_existing_condition_and_creates_information_without_route_authority",
+  "relationships": [
+    {
+      "sourceNode": 1,
+      "sourceConsequence": "redistributed_flow",
+      "targetNode": 3,
+      "id": "afterflow_exposes_phase_slip",
+      "meaning": "redistributed flow reaches unstable layers and makes their slip more legible",
+      "materialBehavior": "braided_afterflow_breaks_at_slip",
+      "delaySeconds": 1.25
+    },
+    {
+      "sourceNode": 2,
+      "sourceConsequence": "coherent_answer_cadence",
+      "targetNode": 1,
+      "id": "cadence_entrains_slow_breath",
+      "meaning": "coherent answer cadence wakes a sympathetic breathing rhythm elsewhere",
+      "materialBehavior": "resonance_entrains_breathing_volume",
+      "delaySeconds": 1.05
+    },
+    {
+      "sourceNode": 3,
+      "sourceConsequence": "held_phase_coherence",
+      "targetNode": 2,
+      "id": "coherence_reveals_resonant_gap",
+      "meaning": "stable coherence makes the call/wait gap of another receptor easier to perceive",
+      "materialBehavior": "coherence_band_exposes_resonant_gap",
+      "delaySeconds": 1.15
+    }
+  ],
+  "hierarchy": {
+    "latestSuccessfulConsequenceBecomesPrimaryRelationship": true,
+    "multipleRelationshipsMayCoexist": true,
+    "targetChangesOwnBehaviorInsteadOfReceivingMarker": true,
+    "relationshipUsesBroadExistingHostVolume": true,
+    "guideAndUnrelatedEffectsYieldWhileRelationshipIsPrimary": true
+  },
+  "audio": {
+    "targetSideReplyEnabled": true,
+    "usesWorldBus": true,
+    "globalReferenceMixChanged": false,
+    "musicLayerAdded": false
+  },
+  "authority": {
+    "createsObjective": false,
+    "createsWaypoint": false,
+    "createsRouteLine": false,
+    "prescribesCorrectOrder": false,
+    "grantsReward": false,
+    "changesProgression": false,
+    "changesRoute": false,
+    "changesCollision": false,
+    "changesMovement": false,
+    "newWorldStateFrameworkAdded": false
+  },
+  "locks": {
+    "quickPulseLocalActionableRange": 4.25,
+    "persistentConsequenceMinSeconds": 30,
+    "persistentConsequenceMaxSeconds": 36,
+    "verbPhysiologyChanged": false,
+    "engineArchitectureChanged": false
+  }
+}

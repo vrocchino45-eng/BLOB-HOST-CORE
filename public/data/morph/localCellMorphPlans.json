@@ -1,0 +1,95 @@
+[
+  {
+    "id": "MORPH_MEMBRANE_TO_SCAR_FLOW_001",
+    "build": "HC-002H",
+    "status": "scar_flow_arrival_stabilization_pending_playtest",
+    "sourceCell": "CELL_MEMBRANE_NURSERY_001",
+    "destinationCell": "CELL_SCAR_FLOW_FOLD_001",
+    "principle": "No gates. The local membrane pocket changes state as chemistry, pressure, and player composition make the scar/flow fold perceptible.",
+    "triggerConcept": {
+      "type": "chemistry_perception_shift",
+      "notAGate": true,
+      "requirements": [
+        "seed_nutrient_absorbed",
+        "pulse_has_contacted_scar_or_signal",
+        "player_has_nonzero_seed_and_form_growth",
+        "local_scar_pressure_visible"
+      ],
+      "debugPrototypeTrigger": "HC-002F: absorb seed, move near scar or signal, pulse. Composition growth uses tolerance to avoid exact-threshold deadlock."
+    },
+    "chemistryBlend": {
+      "from": {
+        "form": 0.72,
+        "flux": 0.41,
+        "scar": 0.22,
+        "residue": 0.08,
+        "bloom": 0.04,
+        "signal": 0.18,
+        "seed": 0.64,
+        "inorganic": 0.0,
+        "confluence": 0.0
+      },
+      "to": {
+        "form": 0.54,
+        "flux": 0.58,
+        "scar": 0.48,
+        "residue": 0.24,
+        "bloom": 0.06,
+        "signal": 0.26,
+        "seed": 0.42,
+        "inorganic": 0.02,
+        "confluence": 0.0
+      },
+      "blendCurve": "slow_breathing_fold_then_pressure_pull",
+      "playerRead": "the same tissue becomes newly readable rather than teleporting to a new room"
+    },
+    "visualBlend": {
+      "membranePocket": "veins tighten, pores narrow, pocket wall folds inward",
+      "scarPlate": "cracks spread into route-like fracture arcs",
+      "fluxRibbon": "current strengthens and begins carrying the player along a fold",
+      "signalThread": "thread becomes path outline, not UI arrow",
+      "distantHost": "scar band becomes more visible, macro host breath slows"
+    },
+    "cameraBlend": {
+      "rule": "camera follows host-pressure fold, not a door transition",
+      "motion": "slow push/roll toward scar-flow crease while maintaining player control",
+      "forbidden": [
+        "fade_to_black_gate",
+        "hard_loading_screen",
+        "instant_region_swap"
+      ]
+    },
+    "runtimeSystemsNeededNext": [
+      "LocalCellMorphSystem",
+      "ChemistryBlendSystem",
+      "EnvironmentMorphVisualSystem",
+      "MorphDebugPanel"
+    ],
+    "acceptance": [
+      "player stays in continuous control",
+      "source and destination cell are both recipe-derived",
+      "no gate prompt exists",
+      "old chamber transition code is absent",
+      "debug shows morph blend value 0..1",
+      "HC-002F: no stall at waiting_for_composition_growth after seed absorption"
+    ],
+    "destinationCellAuthored": true,
+    "candidateObjectsAuthored": [
+      "scar_memory_fleck_001",
+      "scar_flow_clot_001",
+      "resonant_path_thread_001",
+      "pressure_fold_current_001"
+    ],
+    "candidateVisualRecipesAuthored": [
+      "scar_flow_fold_surface_v01",
+      "scar_pressure_haze_v01",
+      "scar_memory_fleck_v01",
+      "scar_flow_clot_v01",
+      "resonant_path_thread_v01",
+      "pressure_fold_current_v01"
+    ],
+    "runtimePrototypeActive": true,
+    "debugPrototypeTrigger": "after seed absorption, pulse near scar plate or signal thread; after completion the active focus should stabilize on scar-flow hooks",
+    "arrivalStabilizationActive": true
+  }
+]

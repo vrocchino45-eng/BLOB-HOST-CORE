@@ -1,0 +1,21 @@
+{
+  "id": "HC-023D-HOTFIX1",
+  "type": "runtime_startup_hotfix",
+  "rootCause": "HC023A unreachable-source audit followed the static import graph but did not account for GameRuntime literal dynamic imports scheduled after first render.",
+  "falsePositiveArchivedModules": [
+    "src/debug/RecipeDebugOverlay.js",
+    "src/debug/ChemistryDebugPanel.js",
+    "src/debug/RuntimeDiagnosticSummary.js"
+  ],
+  "restorationSource": "docs/source_archive/HC023A_UNREACHABLE_SOURCE_ARCHIVE.zip",
+  "activeSourceModulesBeforeRepair": 85,
+  "activeSourceModulesAfterRepair": 88,
+  "gameplayChanges": 0,
+  "presentationChanges": 0,
+  "progressionChanges": 0,
+  "movementChanges": 0,
+  "cameraChanges": 0,
+  "debugInfrastructureOnly": true,
+  "newValidation": "validateHC023DHotfix1DynamicDebugRestore.mjs",
+  "regressionPurpose": "Fail any future checkpoint that contains unresolved local imports in active src, including literal dynamic imports."
+}

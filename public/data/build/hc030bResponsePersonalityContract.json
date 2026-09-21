@@ -1,0 +1,69 @@
+{
+  "build": "HC-030B",
+  "parent": "HC-030A",
+  "label": "Material / Entity Response Personality",
+  "lockedFoundation": {
+    "targeting": "HC029A relationship acquisition, retention and handoff unchanged",
+    "effectOwnership": "HC029B relationship effect ownership unchanged",
+    "composition": "HC029C chord meanings and modifiers unchanged",
+    "reactiveState": "HC030A coherent/strained/unstable/failing condition thresholds and state authority unchanged",
+    "newBaseVerbs": 0,
+    "newButtons": 0,
+    "newConditionStates": 0
+  },
+  "personalityOwner": "ResponsePersonalitySystem",
+  "authoredSources": [
+    "chemObjectRecipes[*].chemistry.matterState",
+    "chemObjectRecipes[*].chemistry.domains",
+    "entityRecipes[*].origin.hostFunction",
+    "entityRecipes[*].chemistry.matterState",
+    "existing entity role/behavior metadata"
+  ],
+  "materialFamilies": {
+    "elastic_membrane": "membrane/gel flex and rebound",
+    "flowing_current": "fluid stretches and redirects as waves",
+    "resonant_signal": "signal vapor/braid phases and echoes",
+    "dense_scar": "scarred matter resists, shears and slips",
+    "granular_residue": "residue/silt slumps, drags and scatters",
+    "contained_seed": "dormant seed compresses protectively and stays comparatively symmetric",
+    "volatile_growth": "blooming matter expands/contracts with asymmetric growth pressure",
+    "adaptive_matter": "bounded fallback only"
+  },
+  "entityFamilies": {
+    "protective_tender": "open/guard/support response",
+    "anchored_sensor": "counter-signal/retract/sample/anchor response",
+    "flow_relay": "open downstream/cup upstream/synchronize paired vanes",
+    "living_responder": "bounded fallback only"
+  },
+  "runtimeOrder": {
+    "targetingBeforeComposition": true,
+    "compositionBeforeReactiveState": true,
+    "reactiveStateBeforePersonality": true,
+    "personalityBeforeBond": true,
+    "entityPresentationConsumesPersonalityLaterSameFrame": true,
+    "chemObjectPresentationConsumesPriorFramePersonality": true,
+    "reorderedLockedOwners": false
+  },
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.20",
+    "eventCapacity": 16000,
+    "reactiveEventsIncludeMaterialPersonality": true,
+    "entityRelationshipEventsIncludeEntityPersonality": true,
+    "movementSamplesIncludeActiveMaterialPersonality": true
+  },
+  "forbidden": {
+    "reactiveThresholdRetune": false,
+    "targetingThresholdRetune": false,
+    "newAbility": false,
+    "newButton": false,
+    "newReticle": false,
+    "newConditionMeter": false,
+    "newEntityAI": false,
+    "newEntityType": false,
+    "newMaterialContent": false,
+    "routeChange": false,
+    "progressionChange": false,
+    "regionExpansion": false,
+    "newGeometryOwner": false
+  }
+}

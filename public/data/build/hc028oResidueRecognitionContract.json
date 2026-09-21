@@ -1,0 +1,76 @@
+{
+  "id": "HC-028O",
+  "parent": "HC-028N",
+  "mode": "passive_ecological_world_memory_recognition",
+  "purpose": "Let existing Tender and Watcher organisms notice and visibly interpret nearby temporary HC028N Host residue as information without consuming, refreshing, moving, scoring, or promoting that residue into gameplay state.",
+  "scope": {
+    "newEntityTypes": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newProgression": false,
+    "newAffinity": false,
+    "persistentSaveStateEcology": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": false,
+    "entityGameplayBehaviorChanged": false,
+    "routeLogicChanged": false,
+    "chemistryChanged": false,
+    "residueLifetimeChanged": false,
+    "residuePositionChanged": false,
+    "newParticleFieldAdded": false,
+    "newGeometryAdded": false,
+    "newDrawCallsAdded": false,
+    "combReentryHotfixPreserved": true,
+    "startupScopeHotfixPreserved": true
+  },
+  "recognition": {
+    "source": "HC028N active-cell ecological residue",
+    "readsPriorFrameResidue": true,
+    "oneFrameNonCircularHandoff": true,
+    "consumesResidue": false,
+    "refreshesResidue": false,
+    "writesReciprocalMemory": false,
+    "recognitionRadius": {
+      "tender": 3.25,
+      "watcher": 3.75,
+      "generic": 2.8
+    },
+    "tenderInterpretations": [
+      "familiar_care_trace",
+      "safe_care_trace",
+      "coherent_rest_trace",
+      "cautious_boundary_trace",
+      "sensor_trace_caution",
+      "counter_scan_caution",
+      "guarded_sensor_notice",
+      "ambient_trace_notice"
+    ],
+    "watcherInterpretations": [
+      "care_signature_sample",
+      "coherent_signature_sample",
+      "guarded_signature_sample",
+      "known_sample_verify",
+      "foreign_sample_compare",
+      "counter_echo_verify",
+      "counter_echo_compare",
+      "guarded_sensor_verify",
+      "ambient_trace_sample"
+    ],
+    "presentationOwner": "EntityEcologyResonanceSystem",
+    "gameplayOwnerUnchanged": "EntitySystem"
+  },
+  "authority": {
+    "saveState": false,
+    "playerMovement": false,
+    "entityMovement": false,
+    "entityBehavior": false,
+    "collision": false,
+    "chemistry": false,
+    "bond": false,
+    "repair": false,
+    "combat": false,
+    "targeting": false,
+    "progression": false,
+    "route": false
+  }
+}

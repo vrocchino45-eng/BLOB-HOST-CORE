@@ -1,0 +1,270 @@
+[
+  {
+    "id": "surface_to_guide_threshold",
+    "from": "surface_wake",
+    "to": "guide_threshold",
+    "type": "living_seam",
+    "requirements": [
+      "surface_absorb_first_nutrient"
+    ],
+    "interaction": "interact_scan_cross",
+    "prompts": {
+      "locked": "The nursery seam is still listening.",
+      "ready": "The seam recognizes the coherent core.",
+      "cross": "Cross into the guiding current."
+    },
+    "cinematic": "first_route_realization",
+    "runtimeTransitionAdapter": "LocalCellMorphSystem",
+    "implementationStatus": "runtime_bound"
+  },
+  {
+    "id": "guide_to_hub_chamber",
+    "from": "guide_threshold",
+    "to": "hub_chamber",
+    "type": "living_threshold",
+    "requirements": [
+      "guide_stabilize_and_cross"
+    ],
+    "interaction": "stabilize_release_cross",
+    "prompts": {
+      "locked": "The current has not accepted the crossing.",
+      "ready": "The settling ribs have accepted the release.",
+      "cross": "Let the Host carry the reading into the junction."
+    },
+    "cinematic": "hub_reveal",
+    "runtimeTransitionAdapter": "SecondLocalCellMorphSystem",
+    "implementationStatus": "runtime_bound"
+  },
+  {
+    "id": "hub_to_grave_memory_route",
+    "from": "hub_chamber",
+    "to": "grave_memory_route",
+    "type": "living_route_gate",
+    "requirements": [
+      "hub_read_route_gates"
+    ],
+    "interaction": "pulse_read_active_route",
+    "routeIdentity": "grave_memory_route",
+    "displayName": "Grave Memory",
+    "authoredStatus": "active_route",
+    "prompts": {
+      "locked": "The memory gate is still separating from the Chorus.",
+      "ready": "The Grave-memory route is answering through the junction.",
+      "cross": "Pulse the existing memory/residue bridge when the route is ready."
+    },
+    "cinematic": "first_route_realization",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "implementationStatus": "runtime_bound_authored_grave_memory_circuit_HC010B"
+  },
+  {
+    "id": "hub_to_vascular_route",
+    "from": "hub_chamber",
+    "to": "vascular_route",
+    "type": "living_route_gate",
+    "requirements": [
+      "grave_memory_read_and_stabilize"
+    ],
+    "interaction": "pulse_read_playable_vascular_route",
+    "routeIdentity": "vascular_route",
+    "displayName": "Vascular Rhythm",
+    "authoredStatus": "contract_bound_route",
+    "wakeCondition": "graveReturned",
+    "playableReady": true,
+    "prompts": {
+      "locked": "A vascular rhythm sleeps behind this gate.",
+      "ready": "The vascular route recognizes the Grave return and begins to circulate.",
+      "cross": "Pulse the living vessel and follow its moving charge."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "implementationStatus": "runtime_playable_vascular_rhythm_HC011A"
+  },
+  {
+    "id": "hub_to_silt_burrow_route",
+    "from": "hub_chamber",
+    "to": "silt_burrow_route",
+    "type": "living_route_gate",
+    "requirements": [
+      "grave_memory_read_and_stabilize"
+    ],
+    "interaction": "pulse_read_playable_silt_pressure_route",
+    "routeIdentity": "silt_burrow_route",
+    "displayName": "Silt Pressure",
+    "authoredStatus": "contract_bound_route",
+    "wakeCondition": "graveReturned",
+    "playableReady": true,
+    "prompts": {
+      "locked": "Dense silt pressure waits without accepting passage.",
+      "ready": "The silt route recognizes the Grave return and shifts under pressure.",
+      "cross": "Pulse the shifting pressure fold and enter the compressed living route."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_SILT_PRESSURE_ROUTE_001",
+    "implementationStatus": "runtime_playable_silt_pressure_HC012A"
+  },
+  {
+    "id": "grave_memory_to_hub_chamber",
+    "from": "grave_memory_route",
+    "to": "hub_chamber",
+    "type": "remembered_living_fold",
+    "requirements": [
+      "grave_memory_read_and_stabilize"
+    ],
+    "interaction": "interact_return_fold",
+    "routeIdentity": "grave_memory_route",
+    "displayName": "Remembered Hub Fold",
+    "authoredStatus": "active_return",
+    "prompts": {
+      "locked": "The settled trace has not yet become an attached memory pearl.",
+      "ready": "The return fold recognizes the memory pearl and remembers the Hub.",
+      "cross": "Press A/E inside the fold to carry the interpretation back."
+    },
+    "cinematic": "hub_return_memory_echo",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "implementationStatus": "runtime_bound_imprinted_hub_return_HC010B"
+  },
+  {
+    "id": "vascular_route_to_hub_chamber",
+    "from": "vascular_route",
+    "to": "hub_chamber",
+    "type": "route_contract_return_fold",
+    "requirements": [
+      "vascular_route_playable_circuit"
+    ],
+    "interaction": "interact_return_fold",
+    "routeIdentity": "vascular_route",
+    "displayName": "Vascular Hub Fold",
+    "authoredStatus": "contract_return",
+    "playableReady": true,
+    "prompts": {
+      "locked": "The vessel has not yet learned a stable return cadence.",
+      "ready": "The synchronized current has reversed toward the remembered Hub fold.",
+      "cross": "Press A/E inside the living fold to return without relocation."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "implementationStatus": "runtime_vascular_return_after_synchronization_HC011A"
+  },
+  {
+    "id": "silt_burrow_route_to_hub_chamber",
+    "from": "silt_burrow_route",
+    "to": "hub_chamber",
+    "type": "route_contract_return_fold",
+    "requirements": [
+      "silt_route_playable_circuit"
+    ],
+    "interaction": "interact_return_fold",
+    "routeIdentity": "silt_burrow_route",
+    "displayName": "Silt Hub Fold",
+    "authoredStatus": "contract_return",
+    "playableReady": true,
+    "prompts": {
+      "locked": "The compressed route has not yet released its return breath.",
+      "ready": "The released silt breath has opened the remembered Hub fold.",
+      "cross": "Press A/E inside the living fold to return without relocation."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "implementationStatus": "runtime_silt_return_after_pressure_release_HC012A"
+  },
+  {
+    "id": "hub_to_comb_threshold",
+    "from": "hub_chamber",
+    "to": "comb_threshold",
+    "type": "convergence_filter_threshold",
+    "requirements": [],
+    "allowNoRequirements": true,
+    "interaction": "pulse_read_combward_body",
+    "routeIdentity": "comb_threshold",
+    "displayName": "Comb Threshold",
+    "authoredStatus": "foundation_bound_threshold",
+    "wakeCondition": "hubThreeRouteConvergenceCompleted",
+    "playableReady": true,
+    "interactionRange": 1.75,
+    "prompts": {
+      "locked": "The three route readings have not yet become one held pattern.",
+      "ready": "The combined Grave, Vascular, and Silt reading opens the living Comb filter.",
+      "cross": "Pulse the six-rib Combward body to enter the threshold organ."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_COMB_THRESHOLD_FILTER_001",
+    "implementationStatus": "runtime_comb_foundation_entry_HC013A"
+  },
+  {
+    "id": "comb_threshold_to_hub_chamber",
+    "from": "comb_threshold",
+    "to": "hub_chamber",
+    "type": "remembered_convergence_return_fold",
+    "requirements": [],
+    "allowNoRequirements": true,
+    "interaction": "interact_return_fold",
+    "routeIdentity": "comb_threshold",
+    "displayName": "Converged Hub Fold",
+    "authoredStatus": "foundation_return",
+    "playableReady": true,
+    "interactionRange": 1.45,
+    "prompts": {
+      "locked": "The return fold is still settling around the carried three-route reading.",
+      "ready": "The three-part fold remembers the Hub convergence cradle.",
+      "cross": "Press A/E inside the fold to return to the Hub."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "implementationStatus": "runtime_comb_foundation_return_HC013A"
+  },
+  {
+    "id": "comb_threshold_to_aperture_fields",
+    "from": "comb_threshold",
+    "to": "aperture_fields",
+    "type": "first_field_arrival_boundary",
+    "requirements": [],
+    "allowNoRequirements": true,
+    "interaction": "pulse_stabilize_cross",
+    "routeIdentity": "aperture_fields",
+    "displayName": "Aperture Fields",
+    "authoredStatus": "foundation_bound_threshold",
+    "playableReady": true,
+    "interactionRange": 2.15,
+    "prompts": {
+      "locked": "Complete the Comb synthesis before crossing.",
+      "ready": "The field-facing membrane is open to the Arrival Shelf.",
+      "cross": "Hold Stabilize and Pulse inside the open seal to enter Aperture Fields."
+    },
+    "cinematic": "first_field_arrival_boundary",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_APERTURE_FIELDS_ARRIVAL_001",
+    "implementationStatus": "runtime_aperture_arrival_crossing_HC014A",
+    "wakeCondition": "combThresholdPlayableCompleted"
+  },
+  {
+    "id": "aperture_fields_to_comb_threshold",
+    "from": "aperture_fields",
+    "to": "comb_threshold",
+    "type": "retained_arrival_return_fold",
+    "requirements": [],
+    "allowNoRequirements": true,
+    "interaction": "interact_return_fold",
+    "routeIdentity": "aperture_fields",
+    "displayName": "Return to Comb Threshold",
+    "authoredStatus": "foundation_bound_threshold",
+    "playableReady": true,
+    "interactionRange": 1.65,
+    "prompts": {
+      "locked": "The return fold is outside reach.",
+      "ready": "The Comb membrane remains folded behind you.",
+      "cross": "Press A/E inside the fold to return to Comb Threshold."
+    },
+    "cinematic": "none",
+    "runtimeTransitionAdapter": "GateSystem",
+    "runtimeCompatibilityDestination": "CELL_COMB_THRESHOLD_FILTER_001",
+    "implementationStatus": "runtime_aperture_return_HC014A"
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "id": "HC-028A1",
+  "label": "Telemetry Calibration + Confusion Detection",
+  "parent": "HC-028A",
+  "baseline": "HC027L1_GOLDEN_INQUIRY_BASELINE_01",
+  "status": "golden_inquiry_baseline_01_frozen_telemetry_calibrated",
+  "sourceJsCount": 93,
+  "newSourceModules": 0,
+  "purpose": "Calibrate HC028A telemetry against the first human-labeled confusion marker with dual wall/simulation time, information-gain scoring, redundant sensing detection, attempt outcomes, semantic churn, and enriched manual-marker context while leaving Golden Inquiry gameplay frozen.",
+  "locked": [
+    "HC027L1 Golden Inquiry gameplay",
+    "HC027D1 audio reference",
+    "HC027J2 physiology",
+    "HC027J1 quick/deep Pulse law",
+    "HC027K consequence relationships",
+    "movement/chemistry/progression/route authority",
+    "3\u21926\u219212 engine architecture"
+  ],
+  "scope": [
+    "SessionTelemetrySystem calibration",
+    "dual wall/simulation timebase",
+    "information-gain events",
+    "redundant max-resolution sonar detection",
+    "attempt outcome summaries",
+    "semantic-churn detector",
+    "Shift+M context capture",
+    "F1/Status telemetry readout",
+    "validation/governance"
+  ],
+  "forbidden": [
+    "AI decision agent",
+    "server transport",
+    "gameplay or balance change",
+    "new mechanics/content/regions",
+    "input remap",
+    "objective/waypoint/gate/progression authority",
+    "audio retune"
+  ]
+}

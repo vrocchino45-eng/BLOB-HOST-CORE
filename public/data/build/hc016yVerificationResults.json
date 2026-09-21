@@ -1,0 +1,37 @@
+{
+  "build": "HC-016Y",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "src/player/PlayerMovementController.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/routes/GraveMemoryRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/routes/VascularRhythmRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/routes/SiltPressureRouteSystem.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "src/debug/RecipeDebugOverlay.js",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "HC016Y validator",
+      "status": "PASS",
+      "detail": "[HC016Y] shared physicalFeel movement contract PASS\n[HC016Y] Grave continuous residue weight PASS\n[HC016Y] Vascular with/against-flow traversal PASS\n[HC016Y] Silt compression/open-pocket/release traversal PASS\n[HC016Y] no new system / no resize / no route expansion PASS"
+    }
+  ],
+  "next": "gameplay test / video before HC016Z"
+}

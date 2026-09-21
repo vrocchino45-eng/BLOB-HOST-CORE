@@ -1,0 +1,18 @@
+{
+  "build": "HC018C",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "focusedValidator": "[HC018C] Vascular traversal-material response PASS\n[HC018C] Pulse/Absorb/Stabilize physical differentiation PASS\n[HC018C] cadence/completion/movement-controller locks PASS",
+  "runtimeSyntax": "PASS: 101 JS modules",
+  "lockedSystems": {
+    "src/core/GameRuntime.js": true,
+    "src/chemistry/BondSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/CoreVerbPhysicalizationSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/routes/GraveMemoryRouteSystem.js": true,
+    "src/routes/SiltPressureRouteSystem.js": true,
+    "src/camera/InspectionCameraSystem.js": true,
+    "src/presentation/InteractionCompositionSystem.js": true
+  },
+  "bundler": "NOT_RUN: packaged source omits node_modules; run npm install then npm run dev/build locally"
+}

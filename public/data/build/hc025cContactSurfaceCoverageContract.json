@@ -1,0 +1,45 @@
+{
+  "id": "HC025C_CONTACT_SURFACE_COVERAGE_LOCK",
+  "parent": "HC-025B",
+  "movementOwner": "PlayerMovementController",
+  "surfaceAuthority": "existing authored movement envelopes only",
+  "coverageClasses": [
+    {
+      "id": "shared_first_slice_envelope",
+      "meaning": "Surface / Guide / Hub fallback envelope when no region-local movementBounds are authored",
+      "physical": true,
+      "interiorDecorativeGeometryPhysical": false
+    },
+    {
+      "id": "region_local_envelope",
+      "meaning": "entry-anchored route/threshold movement envelope authored by the active system",
+      "physical": true,
+      "interiorDecorativeGeometryPhysical": false
+    },
+    {
+      "id": "field_volume_envelope",
+      "meaning": "authored large-field movement envelope such as Aperture / opened Signal Plain",
+      "physical": true,
+      "interiorDecorativeGeometryPhysical": false
+    },
+    {
+      "id": "authored_movement_envelope",
+      "meaning": "other explicitly authored PlayerMovementController envelope modes",
+      "physical": true,
+      "interiorDecorativeGeometryPhysical": false
+    }
+  ],
+  "knownTuningOwners": [
+    "default_first_slice_membrane",
+    "GraveMemoryRouteSystem",
+    "VascularRhythmRouteSystem",
+    "Act1RouteContractSystem",
+    "CombThresholdFoundationSystem",
+    "ApertureFieldsArrivalSystem"
+  ],
+  "addsCollider": false,
+  "addsRaycastSystem": false,
+  "geometryExpansionThisPass": false,
+  "progressionAuthority": false,
+  "acceptance": "Every attachment-capable frame identifies the exact trusted movement-envelope class/region/tuning owner; no visible interior/decorative Host mesh becomes physical merely because it looks touchable."
+}

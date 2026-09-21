@@ -1,0 +1,46 @@
+{
+  "id": "HC027H_TRAVERSAL_INTENTION_ARCHITECTURE",
+  "pilot": "Signal Plain / Shift+8",
+  "targetSeconds": "60-90",
+  "law": "enter_notice_multiple_questions_choose_investigate_without_authored_correct_order",
+  "candidates": [
+    {
+      "node": 1,
+      "signature": "slow_breath",
+      "usesExistingReceptor": true
+    },
+    {
+      "node": 2,
+      "signature": "paired_chirp",
+      "usesExistingReceptor": true
+    },
+    {
+      "node": 3,
+      "signature": "shear_drift",
+      "usesExistingReceptor": true
+    }
+  ],
+  "presentation": {
+    "allUnreadReadableTogether": true,
+    "nearestFirstRouteMarkersVisible": false,
+    "proximityLiftOnly": true,
+    "guidePrescribesNode": false,
+    "guidePrescribesButton": false
+  },
+  "authority": {
+    "createsTargets": false,
+    "createsObjectives": false,
+    "createsRewards": false,
+    "changesProgression": false,
+    "changesRoutes": false,
+    "changesVerbRanges": false
+  },
+  "locked": {
+    "sourceJsCount": 92,
+    "audioReference": "HC027D1",
+    "pulseRange": 4.25,
+    "answerMemoryMax": 4,
+    "materialReplyClassCount": 7,
+    "testPlatformHarness": "HC027G1"
+  }
+}

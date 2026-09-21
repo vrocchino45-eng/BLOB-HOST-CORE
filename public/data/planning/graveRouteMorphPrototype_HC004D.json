@@ -1,0 +1,61 @@
+{
+  "id": "HC004D_GRAVE_ROUTE_MORPH_PROTOTYPE",
+  "build": "HC-004D",
+  "status": "runtime_morph_prototype_active_no_interaction_loop",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourcePlan": "HC004A_GRAVE_ROUTE_RUNTIME_PLANNING",
+  "sourceRecipePack": "HC004B_GRAVE_ROUTE_RECIPE_PACK",
+  "sourceComposerSupport": "HC004C_GRAVE_ROUTE_VISUAL_COMPOSER_SUPPORT",
+  "route": {
+    "id": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+    "label": "Grave Memory / Residue-Scar Route",
+    "runtimeStatus": "reachable_only_by_no_gate_morph_after_bloom_residue_stability"
+  },
+  "morphPlan": "MORPH_BLOOM_RESIDUE_TO_GRAVE_MEMORY_001",
+  "sourceCell": "CELL_BLOOM_RESIDUE_FORK_001",
+  "destinationCell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+  "activationContract": {
+    "mustStartFrom": "Bloom Residue Fork active and stable",
+    "mustTriggerWith": "pulse near residue memory silt or seed-choice braid",
+    "mustFeelLike": "same-host tissue fold, not a gate or teleport",
+    "mustPreserveControl": true,
+    "interactionLoopStatus": "deferred_to_HC004E_or_later"
+  },
+  "allowedScope": [
+    "one new Grave morph plan",
+    "one new runtime morph system",
+    "destination environment spawn",
+    "destination chem object spawn",
+    "frameState Grave morph readout",
+    "morph selector awareness",
+    "validation and documentation"
+  ],
+  "forbiddenScope": [
+    "Grave interaction loop activation",
+    "new entity spawns",
+    "combat",
+    "dialogue tree",
+    "quest log",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "branch select menu",
+    "Act expansion"
+  ],
+  "acceptanceTests": [
+    "Grave morph plan exists and validates.",
+    "Grave morph source is CELL_BLOOM_RESIDUE_FORK_001 and destination is CELL_GRAVE_MEMORY_RESIDUE_BED_001.",
+    "Runtime imports and registers GraveRouteMorphSystem.",
+    "CELL_GRAVE_MEMORY_RESIDUE_BED_001 is a runtime morph destination prototype, not a legacy chamber target.",
+    "The four Grave chem objects are runtime-spawned only by the Grave morph prototype.",
+    "No Grave interaction loop, gate, door, teleport, branch menu, old chamber loader, combat, dialogue tree, or quest log exists."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004E",
+    "label": "Grave Arrival Readability Pass",
+    "mode": "arrival_readability_before_interaction_loop"
+  }
+}

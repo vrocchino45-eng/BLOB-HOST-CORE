@@ -1,0 +1,29 @@
+{
+  "build": "HC018E",
+  "mode": "whole_route_convergence",
+  "basis": "HC017E full playthrough + HC018A-D",
+  "rhythmSequence": [
+    "observe",
+    "move",
+    "manipulate",
+    "consequence",
+    "quiet",
+    "discover",
+    "transition"
+  ],
+  "consequenceHoldSeconds": 0.92,
+  "newGameplayMechanic": false,
+  "newProgressionAuthority": false,
+  "routeRulesChanged": false,
+  "completionThresholdsChanged": false,
+  "objectiveAuthorityChanged": false,
+  "movementChanged": false,
+  "cameraSystemChanged": false,
+  "chemistryChanged": false,
+  "verbGameplayChanged": false,
+  "routeCrossingChanged": false,
+  "modifiedFiles": [
+    "src/presentation/InteractionCompositionSystem.js",
+    "src/world/AmbientMaterialInteractionSystem.js"
+  ]
+}

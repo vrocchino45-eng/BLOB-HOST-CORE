@@ -1,0 +1,17 @@
+{
+  "build": "HC019E",
+  "status": "PASS_WITH_ENVIRONMENT_NOTE",
+  "validator": "[HC019E] material consequence precedes fold availability PASS\n[HC019E] objective is observer-only PASS\n[HC019E] pacing/cohesion observe world result PASS\n[HC019E] crossing/gameplay/ambient/chemistry locks PASS",
+  "runtimeSyntax": "PASS: 101 JS modules",
+  "lockedSystems": {
+    "src/morph/LocalCellBoundaryMorphSystem.js": true,
+    "src/opening/SurfaceWakeGameplaySystem.js": true,
+    "src/morph/GuideThresholdLayeredInteractionSystem.js": true,
+    "src/chemistry/BondSystem.js": true,
+    "src/chemistry/ChemObjectSystem.js": true,
+    "src/player/PlayerMovementController.js": true,
+    "src/camera/InspectionCameraSystem.js": true,
+    "src/world/AmbientMaterialInteractionSystem.js": true
+  },
+  "bundler": "NOT_RUN: packaged source omits node_modules; npm install then npm run dev/build locally"
+}

@@ -1,0 +1,136 @@
+{
+  "id": "HC004B_GRAVE_ROUTE_RECIPE_PACK",
+  "build": "HC-004B",
+  "status": "data_recipe_pack_only_not_runtime_active",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourcePlan": "HC004A_GRAVE_ROUTE_RUNTIME_PLANNING",
+  "route": {
+    "id": "ROUTE_GRAVE_MEMORY_RESIDUE_SCAR_001",
+    "label": "Grave Memory / Residue-Scar Route",
+    "question": "Can the player learn from remains without becoming trapped inside them?",
+    "runtimeStatus": "not_reachable_not_spawned_not_morphed"
+  },
+  "allowedScope": [
+    "local cell recipe authoring",
+    "chem object recipe authoring",
+    "visual composition recipe authoring",
+    "placeholder replacement contracts",
+    "validation and documentation"
+  ],
+  "forbiddenScope": [
+    "runtime route activation",
+    "new morph activation",
+    "new target focus activation",
+    "new interaction loop activation",
+    "gates",
+    "doors",
+    "teleports",
+    "old chamber runtime",
+    "old exit registries",
+    "stage-node loaders",
+    "branch select menu",
+    "combat",
+    "dialogue tree",
+    "quest log"
+  ],
+  "localCell": {
+    "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "status": "authored_recipe_pack_not_runtime_active",
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "anatomy": [
+      "residue_beds",
+      "scar_fields",
+      "marrow_interior",
+      "signal_choir_tissue"
+    ],
+    "dominantDomains": [
+      "residue",
+      "scar",
+      "seed",
+      "signal"
+    ],
+    "matterStates": [
+      "residue_silt",
+      "scarred",
+      "signal_vapor",
+      "dormant_seed",
+      "gel"
+    ],
+    "mustNotBeReferencedBy": [
+      "morphPlans",
+      "secondMorphPlans",
+      "thirdMorphPlans",
+      "targetFocusRules",
+      "interactionLoops"
+    ]
+  },
+  "chemObjects": [
+    {
+      "id": "old_core_husk_memory_001",
+      "status": "authored_recipe_pack_not_runtime_spawned",
+      "visualRecipe": "old_core_husk_memory_v01",
+      "placeholderRecipe": "debug_old_core_husk_memory_001"
+    },
+    {
+      "id": "residue_silt_cloud_001",
+      "status": "authored_recipe_pack_not_runtime_spawned",
+      "visualRecipe": "residue_silt_cloud_v01",
+      "placeholderRecipe": "debug_residue_silt_cloud_001"
+    },
+    {
+      "id": "scar_lock_plate_001",
+      "status": "authored_recipe_pack_not_runtime_spawned",
+      "visualRecipe": "scar_lock_plate_v01",
+      "placeholderRecipe": "debug_scar_lock_plate_001"
+    },
+    {
+      "id": "inheritance_seed_remnant_001",
+      "status": "authored_recipe_pack_not_runtime_spawned",
+      "visualRecipe": "inheritance_seed_remnant_v01",
+      "placeholderRecipe": "debug_inheritance_seed_remnant_001"
+    }
+  ],
+  "visualRecipes": [
+    "grave_memory_residue_bed_surface_v01",
+    "grave_memory_silt_haze_v01",
+    "old_core_husk_memory_v01",
+    "residue_silt_cloud_v01",
+    "scar_lock_plate_v01",
+    "inheritance_seed_remnant_v01"
+  ],
+  "placeholderContracts": [
+    "debug_grave_memory_residue_bed_surface_001",
+    "debug_grave_memory_silt_haze_001",
+    "debug_old_core_husk_memory_001",
+    "debug_residue_silt_cloud_001",
+    "debug_scar_lock_plate_001",
+    "debug_inheritance_seed_remnant_001"
+  ],
+  "noLegacyRuntimeArchitecture": {
+    "strictMarker": "legacy runtime architecture does not return for the Grave route",
+    "plainLanguage": "Recipes may exist, but there is still no permission to revive old gates, doors, teleports, old chamber exits, stage-node loaders, or branch select menus.",
+    "forbiddenRuntimeArchitecture": [
+      "no old gates",
+      "no doors",
+      "no teleports",
+      "no old chamber exits",
+      "no stage-node loaders",
+      "no branch select menu",
+      "not runtime active"
+    ]
+  },
+  "acceptanceTests": [
+    "Grave recipe pack data exists and validates.",
+    "The Grave local cell exists in localCellRecipes with authored_recipe_pack_not_runtime_active status.",
+    "The Grave local cell is not referenced by any active or planned morph destination.",
+    "The four Grave chem objects exist in chemObjectRecipes with authored_recipe_pack_not_runtime_spawned status.",
+    "The four Grave chem objects are referenced by the Grave local cell contents.",
+    "All Grave chem object visual recipes and placeholder contracts exist.",
+    "No target focus rule, runtime interaction loop, gate, door, teleport, or branch menu makes the Grave route playable yet."
+  ],
+  "nextRecommendedPass": {
+    "id": "HC-004C",
+    "label": "Grave Route Visual Composer Support",
+    "mode": "visual_support_only_before_runtime_activation"
+  }
+}

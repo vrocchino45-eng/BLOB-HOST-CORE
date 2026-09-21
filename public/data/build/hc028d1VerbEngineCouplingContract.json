@@ -1,0 +1,30 @@
+{
+  "id": "HC028D1_VERB_ENGINE_COUPLING_CONTRACT",
+  "authority": {
+    "engineSequencing": false,
+    "verbPower": false,
+    "movement": false,
+    "targeting": false,
+    "routeCompletion": false,
+    "controllerMapping": false,
+    "aButton": false,
+    "presentation": true,
+    "telemetry": true
+  },
+  "functions": {
+    "pulse": "outward_route_through_pulse_plane",
+    "absorb": "inward_route_through_absorb_plane",
+    "stabilize": "coherence_route_through_stabilize_plane_and_precession_damping"
+  },
+  "chords": [
+    "idle",
+    "project",
+    "draw",
+    "cohere",
+    "exchange",
+    "cohere_project",
+    "cohere_draw",
+    "full_system"
+  ],
+  "rule": "verbs_visibly_route_through_core_engine_planes_without_changing_gameplay_strength"
+}

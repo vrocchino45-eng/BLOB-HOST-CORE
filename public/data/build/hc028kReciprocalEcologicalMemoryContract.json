@@ -1,0 +1,41 @@
+{
+  "id": "HC-028K",
+  "parent": "HC-028J",
+  "rule": "meaningful_existing_entity_relationships_leave_short_lived_embodied_memory_without_affinity_points_or_new_gameplay_authority",
+  "scope": {
+    "entityTypesAdded": 0,
+    "newControls": false,
+    "newCombat": false,
+    "newTargeting": false,
+    "newBondRules": false,
+    "newRepairRules": false,
+    "newProgression": false,
+    "playerMovementChanged": false,
+    "entityMovementChanged": false,
+    "verbPowerChanged": false,
+    "routeLogicChanged": false,
+    "combReentryHotfixPreserved": true,
+    "entitySystemGameplayOwnerPreserved": true
+  },
+  "memory": {
+    "owner": "EntityReciprocalMemorySystem",
+    "source": "EntityRelationshipGrammarSystem",
+    "commitRequiresSustainedMeaningfulGesture": true,
+    "preciseBeatTimingRequired": false,
+    "hiddenAffinityScore": false,
+    "memoryPersistsAfterRelease": true,
+    "tenderTypicalSeconds": [
+      6.8,
+      10.5
+    ],
+    "watcherTypicalSeconds": [
+      7.8,
+      9.2
+    ],
+    "bodyPresentationOwner": "EntityEcologyResonanceSystem",
+    "bondMayBeChangedByThisPass": false,
+    "repairMayBeChangedByThisPass": false,
+    "progressionMayBeChangedByThisPass": false
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.11"
+}

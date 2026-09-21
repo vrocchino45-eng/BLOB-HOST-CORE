@@ -1,0 +1,25 @@
+{
+  "build": "HC-016K",
+  "readers": {
+    "presentation": [
+      "OpeningPacingSystem",
+      "MorphReadabilitySystem",
+      "StatusPageSystem",
+      "HubChamberFoundationSystem"
+    ],
+    "derived_progression": [
+      "CoreGrowthSystem",
+      "FirstSliceCohesionSystem",
+      "ThirdLocalCellMorphSystem"
+    ],
+    "debug": [
+      "ChemistryDebugPanel",
+      "RecipeDebugOverlay"
+    ],
+    "historical_data_validation": [
+      "RecipeDataSystem"
+    ]
+  },
+  "resolution": "firstSliceGates, gateState and act1RouteRuntimeContract are compatibility aliases produced by LocalCellBoundaryMorphSystem; no GateSystem runtime exists.",
+  "mutationAuthority": false
+}

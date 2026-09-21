@@ -1,0 +1,111 @@
+{
+  "id": "VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A",
+  "pass": "HC-011A",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "referenceContract": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC010G",
+  "routeId": "vascular_route",
+  "runtimeCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+  "entryGateId": "hub_to_vascular_route",
+  "returnGateId": "vascular_route_to_hub_chamber",
+  "objectiveId": "vascular_route_playable_circuit",
+  "gameplayOwner": "VascularRhythmRouteSystem",
+  "presentationOwner": "VascularRhythmRouteSystem",
+  "movementBoundaryOwner": "PlayerMovementController",
+  "crossingOwner": "GateSystem",
+  "objectiveOwner": "ObjectiveSystem",
+  "premise": "Move with a visible circulation charge, read its cadence with Pulse, and use Stabilize to keep or recover coherence while the vessel contracts.",
+  "anatomy": {
+    "pathPoints": [
+      [0.0, 0.0, 0.45],
+      [0.55, 0.18, -0.75],
+      [-0.68, 0.44, -1.9],
+      [0.78, 0.08, -3.12],
+      [-0.52, -0.3, -4.38],
+      [0.12, 0.24, -5.72]
+    ],
+    "vesselRadius": 0.92,
+    "braidRadius": 0.105,
+    "braidOffset": 0.58,
+    "corridorRadius": 1.18,
+    "valveProgress": [0.28, 0.55, 0.82],
+    "valveLobeCount": 3,
+    "currentMoteCount": 24,
+    "chargeTrailCount": 9
+  },
+  "cadence": {
+    "requiredReads": 3,
+    "secondsPerBeat": 2.35,
+    "pulseWindowStart": 0.68,
+    "pulseWindowEnd": 0.93,
+    "pulseRange": 1.3,
+    "followRange": 1.78,
+    "minimumValveApproachSlack": 0.19,
+    "onBeatSynchronizationGain": 0.22,
+    "onBeatIntegrityGain": 0.08,
+    "offBeatTurbulence": 0.27,
+    "offBeatIntegrityLoss": 0.17,
+    "matchedFlowSynchronizationPerSecond": 0.035,
+    "driftTurbulencePerSecond": 0.07,
+    "againstFlowTurbulencePerSecond": 0.1,
+    "contractionFrequency": 1.45
+  },
+  "stabilization": {
+    "rangeFromCenterline": 1.36,
+    "turbulenceRecoveryPerSecond": 0.46,
+    "integrityRecoveryPerSecond": 0.34,
+    "synchronizationPerSecondDuringContraction": 0.055,
+    "recoveryTurbulenceThreshold": 0.13,
+    "recoveryIntegrityThreshold": 0.92,
+    "desynchronizationTurbulenceThreshold": 0.34,
+    "desynchronizationIntegrityThreshold": 0.8
+  },
+  "completion": {
+    "minimumDeepProgress": 0.78,
+    "minimumSynchronization": 0.74,
+    "maximumTurbulence": 0.2,
+    "minimumIntegrity": 0.82,
+    "minimumStabilizeSeconds": 0.8,
+    "cleanRunMayCompleteWithoutFailure": true,
+    "failureMustRemainRecoverable": true
+  },
+  "returnFold": {
+    "position": [0.0, 0.05, 0.62],
+    "interactionRange": 1.35,
+    "formsAfterSynchronization": true,
+    "currentReversesTowardHub": true,
+    "input": "interact"
+  },
+  "visual": {
+    "vesselColor": 4616214,
+    "deepVesselColor": 1847110,
+    "signalColor": 7922687,
+    "readyColor": 16767416,
+    "desyncColor": 16341089,
+    "recoveryColor": 8585167,
+    "returnColor": 16762477,
+    "motionLanguages": [
+      "forward charge migration",
+      "asymmetric valve contraction",
+      "desynchronization scatter",
+      "stabilization reweave",
+      "outward return circulation"
+    ],
+    "genericRings": 0,
+    "triggerMarkers": 0,
+    "permanentHalos": 0
+  },
+  "constraints": {
+    "newAbilities": 0,
+    "newEntities": 0,
+    "combat": false,
+    "death": false,
+    "forcedRestart": false,
+    "forcedPlayerRelocation": false,
+    "permanentClass": false,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "directActiveCellMutation": false,
+    "siltGameplayActivated": false,
+    "archivedCompatibilitySystemsActivated": 0
+  }
+}

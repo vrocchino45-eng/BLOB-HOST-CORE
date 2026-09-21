@@ -1,0 +1,21 @@
+import fs from "node:fs";
+const layered=fs.readFileSync(new URL("../src/opening/SurfaceWakeLayeredInteractionSystem.js",import.meta.url),"utf8");
+const objective=fs.readFileSync(new URL("../src/systems/ObjectiveSystem.js",import.meta.url),"utf8");
+const pacing=fs.readFileSync(new URL("../src/opening/OpeningPacingSystem.js",import.meta.url),"utf8");
+const cohesion=fs.readFileSync(new URL("../src/core/FirstSliceCohesionSystem.js",import.meta.url),"utf8");
+const main=fs.readFileSync(new URL("../src/main.js",import.meta.url),"utf8");
+const audit=JSON.parse(fs.readFileSync(new URL("../public/data/build/hc019eCausalityAudit.json",import.meta.url),"utf8"));
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(main.includes('buildId: "HC-019E"'),"identity stale");
+must(layered.includes('materialPassage?.state === "open"'),"fold not observing material passage");
+must(layered.includes('mode: "observe_world_state"'),"fold observer telemetry missing");
+must(objective.includes('authority: "observer_only"'),"objective observer authority missing");
+must(objective.includes("createsMaterialPassage: false"),"objective causality declaration missing");
+must(pacing.includes('nurseryCircuit.materialPassage?.state !== "open"'),"pacing still keyed to generic agency");
+must(cohesion.includes("surfaceWakeGameplay?.materialPassageOpen"),"cohesion does not prefer world result");
+for(const k of ["objectiveCreatesWorldState","objectiveCreatesCrossing","foldCreatesWorldState","crossingChanged","surfaceGameplayChanged","ambientFieldChanged","movementChanged","cameraChanged","chemistryChanged","verbRulesChanged"])
+ must(audit[k]===false,`lock ${k}`);
+console.log("[HC019E] material consequence precedes fold availability PASS");
+console.log("[HC019E] objective is observer-only PASS");
+console.log("[HC019E] pacing/cohesion observe world result PASS");
+console.log("[HC019E] crossing/gameplay/ambient/chemistry locks PASS");

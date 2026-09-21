@@ -1,0 +1,54 @@
+{
+  "pass": "HC-016C",
+  "strategy": "R1_RUNTIME_OWNERSHIP_FIRST_BOUNDARY_MIGRATION",
+  "domains": {
+    "host": {
+      "owner": "HostState/rebuild blueprint",
+      "authoritative": true
+    },
+    "localCell": {
+      "owner": "activeCellId + morph systems",
+      "authoritative": true
+    },
+    "chemistry": {
+      "owner": "ChemObjectSystem + BondSystem + recipes",
+      "authoritative": true
+    },
+    "playerComposition": {
+      "owner": "CoreEmbodimentSystem + CoreGrowthSystem",
+      "authoritative": false,
+      "targetMilestone": "R4"
+    },
+    "presentation": {
+      "owner": "camera + Guide + HUD",
+      "authoritative": false,
+      "mayMutateGameplayTruth": false
+    },
+    "legacyGate": {
+      "owner": "GateSystem",
+      "authoritative": false,
+      "role": "compatibility_adapter_until_migrated"
+    }
+  },
+  "morphOwnedBoundaries": {
+    "surface_to_guide": "LocalCellMorphSystem",
+    "guide_to_hub": "SecondLocalCellMorphSystem"
+  },
+  "legacyMutationBoundariesStillToMigrate": [
+    "hub_to_grave",
+    "hub_to_silt",
+    "route_to_hub",
+    "hub_to_comb",
+    "comb_to_aperture",
+    "aperture_to_comb"
+  ],
+  "migratedBoundaries": {
+    "hub_to_vascular": {
+      "owner": "HubVascularMorphTransitionSystem",
+      "legacyGateMutationEnabled": false,
+      "playerPositionRetained": true,
+      "destinationPreparationOwner": "FirstSliceTransitionCoordinator",
+      "gameplayOwner": "VascularRhythmRouteSystem"
+    }
+  }
+}

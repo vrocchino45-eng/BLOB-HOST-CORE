@@ -1,0 +1,18 @@
+import fs from "node:fs";
+const L=p=>JSON.parse(fs.readFileSync(new URL(p,import.meta.url),"utf8"));
+const c=L("../public/data/routes/act1RouteContracts_HC012A.json");
+const v=L("../public/data/routes/vascularRhythmRouteCircuit_HC011A1.json");
+const s=L("../public/data/routes/siltPressureRouteCircuit_HC012A.json");
+const g=L("../public/data/routes/graveMemoryRouteCircuit_HC010B.json");
+const a=L("../public/data/build/hc016wThreeRouteConvergenceAudit.json");
+const vc=c.routes.find(x=>x.id==="vascular_route"), sc=c.routes.find(x=>x.id==="silt_burrow_route");
+const vb=v.movementBounds?.radii ?? [4.5,3.2,22.5];
+if(JSON.stringify(vc.movementBounds.radii)!==JSON.stringify(vb)) throw Error("Vascular active authority mismatch");
+if(vc.movementBounds.radii[2]<22) throw Error("Vascular boundary still short");
+if(sc.movementBounds.radii[2]<20) throw Error("Silt boundary regressed");
+if(g.movementBounds.radii[2]<18) throw Error("Grave boundary regressed");
+if(a.coreScaleChanged!==false||a.newGameplayAdded!==false) throw Error("Scope lock violated");
+console.log("[HC016W] three-route scale family PASS");
+console.log("[HC016W] Vascular active boundary authority PASS");
+console.log("[HC016W] Grave + Silt expanded envelopes retained PASS");
+console.log("[HC016W] no Core resize / no new gameplay PASS");

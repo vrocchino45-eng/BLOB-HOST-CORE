@@ -1,0 +1,14 @@
+import fs from "node:fs";
+const r=JSON.parse(fs.readFileSync(new URL("../public/data/routes/graveMemoryRouteCircuit_HC010B.json",import.meta.url),"utf8"));
+const pos=Object.fromEntries(r.objects.map(o=>[o.id,o.position]));
+if(r.spatialExpansion?.pass!=="HC-016T") throw new Error("Missing HC016T spatial contract.");
+if(r.spatialExpansion.coreScaleChanged!==false) throw new Error("Core scale lock violated.");
+if(r.spatialExpansion.gameplayRulesChanged!==false) throw new Error("Gameplay rule lock violated.");
+if(r.movementBounds.radii[2] < 18) throw new Error("Grave depth boundary not expanded.");
+if(pos.inheritance_seed_remnant_001[2] > -16) throw new Error("Deep consequence pocket not established.");
+if(r.interaction.requiredReadObjects.length!==4) throw new Error("Grave read contract changed.");
+if(r.interaction.protectedObjects.length!==3) throw new Error("Protected-remains contract changed.");
+if(r.constraints.newAbilityUnlocks!==0 || r.constraints.combat!==false) throw new Error("Forbidden scope activated.");
+console.log("[HC016T] Grave spatial expansion PASS");
+console.log("[HC016T] Core scale + gameplay contract locks PASS");
+console.log("[HC016T] protected remains + safe-transfer contract PASS");

@@ -1,0 +1,47 @@
+{
+  "pass": "HC-028C",
+  "law": "world areas are compositions of shared laws; Vascular proves key, meter, tempo and octave can coordinate movement, presentation and sound from one existing Host clock without becoming a timing gate",
+  "authority": {
+    "clockOwner": "HostRhythmSystem",
+    "profileOwner": "WorldCompositionRegistry",
+    "vascularInterpreter": "VascularRhythmRouteSystem",
+    "audioInterpreter": "EventAnchoredHostAudioSystem",
+    "newIndependentTimer": false
+  },
+  "vascularSignature": {
+    "key": "P-S-A",
+    "keyMeaning": ["pulse_dominant", "stabilize_secondary", "absorb_tertiary"],
+    "meter": "4/4",
+    "barsPerHostCycle": 2,
+    "hostCycleSeconds": 5.8,
+    "tempoBpmApprox": 82.7586,
+    "octave": "micro_local",
+    "beatFunctionPattern": ["pulse", "stabilize", "absorb", "stabilize"]
+  },
+  "movement": {
+    "rhythmicCurrentEnabled": true,
+    "maximumFlowDeviationFromBaseline": 0.06,
+    "minimumFlowScale": 0.96,
+    "maximumFlowScale": 1.06,
+    "completionAuthority": false,
+    "inputTimingGate": false
+  },
+  "presentation": {
+    "reusesExistingVessel": true,
+    "reusesExistingWallFolds": true,
+    "reusesExistingCurrentMotes": true,
+    "reusesExistingCharge": true,
+    "newGeometry": false,
+    "newDrawCalls": 0
+  },
+  "audio": {
+    "usesExistingAmbienceBus": true,
+    "masterMixChanged": false,
+    "busMixChanged": false,
+    "threeFunctionToneRatios": {
+      "stabilize": 1.0,
+      "absorb": 1.25,
+      "pulse": 1.5
+    }
+  }
+}

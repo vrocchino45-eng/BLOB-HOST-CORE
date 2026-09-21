@@ -1,0 +1,50 @@
+{
+  "pass": "HC-027K1",
+  "law": "playtest_instrumentation_observes_physical_input_and_interpreted_actions_without_mutating_gameplay",
+  "statusPage": {
+    "controlsTabOwnsHotButtonReference": true,
+    "listsDebugDisplayKeys": true,
+    "listsShiftTestPlatforms": true,
+    "listsLegacyDirectJumps": true,
+    "listsCoreWorkSeedKey": true,
+    "listsEngineCycleKey": true
+  },
+  "fullDebugHud": {
+    "dedicatedInputPanel": true,
+    "showsActivePhysicalInput": true,
+    "showsInterpretedActions": true,
+    "showsPulseHoldSeconds": true,
+    "showsPulseCharge": true,
+    "showsTriggerValues": true,
+    "showsRecentPressReleaseEvents": true,
+    "recentEventCapacity": 8
+  },
+  "hotButtons": {
+    "display": [
+      "F1",
+      "F2",
+      "F3"
+    ],
+    "testPlatformFamily": "Shift+1..8",
+    "directAreaFamily": "Ctrl+1..8",
+    "directSignalPlainReset": "Ctrl+Shift+8",
+    "coreWorkSeed": "P",
+    "engineCycle": "O"
+  },
+  "authority": {
+    "changesControlMap": false,
+    "changesInputTiming": false,
+    "changesDeadZones": false,
+    "changesGameplay": false,
+    "changesProgression": false,
+    "changesObjectives": false,
+    "changesRoutes": false
+  },
+  "locks": {
+    "quickPulseLocalActionableRange": 4.25,
+    "consequencePass": "HC-027K",
+    "verbPhysiologyPass": "HC-027J2",
+    "engineArchitecture": "3\u21926\u219212",
+    "audioReferencePass": "HC-027D1"
+  }
+}
