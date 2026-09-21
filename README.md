@@ -1,3 +1,7 @@
+## HC031H1 — Unified Physical Contact Authority
+
+The experimental tendril branch now uses one physical-contact law: an explicitly authored crawlable surface plus a valid world-planted suction support is sufficient for `PlayerMovementController` to acknowledge attachment. The older Silt/membrane chemistry proof remains supported but no longer universally gates authored suction. HC031G focused-Pulse grammar is unchanged.
+
 # HC-031H EXPERIMENTAL CHECKPOINT — Planted Contact Support Assimilation
 
 HC031H is the first Git-era locomotion assimilation experiment. It keeps HC031G's **Stabilize + Pulse = `cohere_project`** grammar locked and changes only the physical support logic beneath suction locomotion.

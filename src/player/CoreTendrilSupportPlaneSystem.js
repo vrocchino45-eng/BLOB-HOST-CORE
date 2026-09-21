@@ -41,7 +41,7 @@ export class CoreTendrilSupportPlaneSystem {
     const sealed = anchors.filter((anchor) => anchor?.sealed && anchor.anchorWorld);
     const surfaceTruth = frameState.coreSurfaceTruth ?? {};
 
-    if (!locomotion.active || sealed.length === 0 || !surfaceTruth.valid || surfaceTruth.mechanicalEligible === false) {
+    if (sealed.length === 0 || !surfaceTruth.valid || surfaceTruth.mechanicalEligible === false) {
       this.publishInactive("insufficient_planted_support");
       return;
     }
@@ -113,7 +113,7 @@ export class CoreTendrilSupportPlaneSystem {
     );
 
     this.frameState.coreTendrilSupportPlane = {
-      pass: "HC-031H",
+      pass: "HC-031H1",
       active: true,
       owner: "CoreTendrilSupportPlaneSystem",
       source: "world_planted_suction_anchors",
@@ -137,6 +137,8 @@ export class CoreTendrilSupportPlaneSystem {
       plantedContactsRemainWorldFixed: true,
       bodyRideHeightDerivedFromSupports: true,
       surfaceTruthStillOwnsEligibility: true,
+      supportActivationLaw: "sealed_world_anchor_plus_authored_surface_truth",
+      independentOfLegacyAttachmentGate: true,
       movementAuthority: "PlayerMovementController",
       anchorAuthority: "CoreTendrilSurfaceContactSystem",
       addsRaycast: false,
@@ -162,7 +164,7 @@ export class CoreTendrilSupportPlaneSystem {
 
   publishInactive(reason) {
     this.frameState.coreTendrilSupportPlane = {
-      pass: "HC-031H",
+      pass: "HC-031H1",
       active: false,
       owner: "CoreTendrilSupportPlaneSystem",
       source: "world_planted_suction_anchors",

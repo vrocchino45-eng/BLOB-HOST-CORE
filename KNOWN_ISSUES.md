@@ -1,3 +1,7 @@
+## HC031H1 validation target
+
+HC031H telemetry showed planted tendril supports while movement attachment remained `free`. HC031H1 addresses that authority mismatch. Runtime playtest is still required to confirm that support-plane activation, tendril locomotion, and surface-braced Stabilized Projection now overlap in actual play.
+
 # HC031H Experimental Notes
 
 - Support-plane data is intentionally a one-frame causal handoff: it interprets previously planted anchors before movement, then the tendril owner updates the next stance later in the frame.

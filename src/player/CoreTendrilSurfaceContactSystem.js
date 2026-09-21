@@ -637,7 +637,8 @@ export class CoreTendrilSurfaceContactSystem {
     const maxStretch = this.tendrils.reduce((value, tendril) => Math.max(value, tendril.stretch), 0);
     const handoffActive = reachingCount > 0 || peelingCount > 0;
     const support01 = THREE.MathUtils.clamp(sealedCount / 2, 0, 1);
-    const traction01 = contactState === "attached"
+    const mechanicalContactEligible = Boolean(this.surfaceTruthActive && sealedCount > 0);
+    const traction01 = mechanicalContactEligible
       ? THREE.MathUtils.clamp(support01 * (handoffActive ? 0.72 : 1), 0, 1)
       : 0;
 
@@ -657,7 +658,7 @@ export class CoreTendrilSurfaceContactSystem {
     }));
 
     this.frameState.coreTendrilContact = {
-      pass: "HC-031H",
+      pass: "HC-031H1",
       active: contactRequested || sealedCount > 0 || reachingCount > 0 || peelingCount > 0,
       contactState,
       tendrilCount: 3,
@@ -697,8 +698,10 @@ export class CoreTendrilSurfaceContactSystem {
       suctionPadSurfaceLocked: true,
       padVisibleOnlyDuringSeal: true,
       ordinaryContactMaxStretch: this.maxStretch,
+      mechanicalContactEligible,
+      physicalContactLaw: "authored_surface_plus_world_planted_suction_support",
       surfaceLocomotion: {
-        active: contactState === "attached" && sealedCount > 0,
+        active: mechanicalContactEligible,
         mode: handoffActive ? "anchor_handoff" : sealedCount >= 2 ? "supported_pull" : "single_anchor_pull",
         supportCount: sealedCount,
         support01: Number(support01.toFixed(3)),
@@ -713,6 +716,7 @@ export class CoreTendrilSurfaceContactSystem {
         requestOwner: "CoreTendrilSurfaceContactSystem",
         consumer: "PlayerMovementController",
         oneFrameCausalHandoff: true,
+        physicalContactEligible: mechanicalContactEligible,
         plantedContactPolicy: "world_fixed_until_stride_pressure_requires_replant",
         stepSelectionPolicy: "highest_stride_pressure_deterministic_tie_break",
         stepCandidateIndex: this.stepCandidateIndex,

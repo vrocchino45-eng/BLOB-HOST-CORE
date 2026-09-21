@@ -1,3 +1,11 @@
+## HC031H1 experimental lock
+
+- HC031G Stabilized Projection grammar: **LOCKED / unchanged**.
+- HC029C composition grammar: **LOCKED / unchanged**.
+- Targeting / Bond / Grave progression: **LOCKED / unchanged**.
+- New experimental authority law: authored crawlable surface + sealed suction support may establish physical attachment.
+- Do not merge to `main` until playtest telemetry confirms attachment/support/projection agreement.
+
 # HC031H Lock Status
 
 ## Locked gameplay grammar

@@ -1,3 +1,11 @@
+# HC031H1 — Unified Physical Contact Authority
+
+- Authored crawlable surface + sealed suction support can now establish physical attachment without the legacy Silt membrane gate.
+- Support-plane activation no longer waits for movement attachment to already be active.
+- Legacy chemistry attachment remains supported as a fallback/modifier.
+- Added explicit contact-authority telemetry for the HC031H finding.
+- HC031G Stabilized Projection and HC029C verb grammar remain locked.
+
 # Changelog
 
 ## HC031H — Planted Contact Support Assimilation

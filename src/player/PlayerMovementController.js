@@ -87,6 +87,17 @@ export class PlayerMovementController {
     this.surfaceTruthVerbTransmission = { pulse: 0.5, absorb: 0.5, stabilize: 0.5 };
     this.attachmentVisibleStandOffDistance = 0.38;
 
+    // HC031H1 — one physical-contact authority can now be satisfied either by
+    // the legacy Silt/membrane adhesion proof or by an explicitly authored
+    // crawlable surface with a world-planted suction support. Chemistry still
+    // modulates contact but no longer universally grants permission to attach.
+    this.attachmentAuthority = "none";
+    this.authoredSuctionSupportActive = false;
+    this.authoredSuctionSupportCount = 0;
+    this.authoredSuctionSupportGrace = 0;
+    this.authoredSuctionSupportSurfaceId = "none";
+    this.authoredSuctionSupportStrength = 0;
+
     // HC031H — prior-frame planted anchors define a stable support plane that
     // refines tangent motion and ride height without taking translation authority.
     this.tendrilSupportPlaneActive = false;
@@ -308,10 +319,15 @@ export class PlayerMovementController {
     const kineticGlow = Math.min(speed / 2.6, 1.0);
 
     frameState.playerAttachment = {
-      pass: "HC-025B",
+      pass: "HC-031H1",
       active: this.attachmentActive,
       state: this.attachmentState,
+      authority: this.attachmentAuthority,
       adhesionStrength: Number(this.attachmentStrength.toFixed(3)),
+      authoredSuctionSupportActive: this.authoredSuctionSupportActive,
+      authoredSuctionSupportCount: this.authoredSuctionSupportCount,
+      authoredSuctionSupportStrength: Number(this.authoredSuctionSupportStrength.toFixed(3)),
+      authoredSuctionSupportSurfaceId: this.authoredSuctionSupportSurfaceId,
       siltSurfaceAlignment: Number(this.attachmentSiltAlignment.toFixed(3)),
       releaseTension: Number(this.attachmentReleaseTension.toFixed(3)),
       surfaceTangentSpeed: Number(this.attachmentSurfaceTangentSpeed.toFixed(3)),
@@ -357,7 +373,10 @@ export class PlayerMovementController {
       authoredEcologicalSurfaceTruthPreferred: true,
       genericVisibleMeshSurfaceTruthAllowed: false,
       authoredBoundaryFallback: true,
-      requiresSiltMembrane: true,
+      requiresSiltMembrane: false,
+      legacySiltMembraneAttachmentSupported: true,
+      authoredSuctionSupportCanAttach: true,
+      governingContactLaw: "registered_crawlable_surface_plus_valid_suction_support_is_physical_contact",
       usesSiltWorldAlignment: true,
       addsCollider: false,
       addsRaycast: false,
@@ -711,12 +730,66 @@ export class PlayerMovementController {
     this.attachmentSiltAlignment = positiveAlignment;
     const membraneTopology = THREE.MathUtils.clamp(chemistry.surfaceExpression ?? 0, 0, 1);
     const patternScale = THREE.MathUtils.clamp((chemistry.patternStrength ?? 1) / 1.15, 0.82, 1.08);
-    this.attachmentStrength = siltZoneId === "membrane"
+    const legacyChemistryStrength = siltZoneId === "membrane"
       ? THREE.MathUtils.clamp(
           siltMembraneExposure
             * (0.20 + positiveAlignment * 0.80)
             * (0.84 + membraneTopology * 0.16)
             * patternScale,
+          0,
+          1
+        )
+      : 0;
+
+    // HC031H1: consume the prior-frame suction relationship directly. A sealed
+    // tendril on the same authored crawlable surface is legitimate physical
+    // support even when the old Silt membrane chemistry gate is absent.
+    const tendrilContact = frameState.coreTendrilContact ?? {};
+    const tendrilLocomotion = tendrilContact.surfaceLocomotion ?? {};
+    const sealedCount = Math.max(
+      0,
+      Math.floor(Math.max(tendrilContact.sealedCount ?? 0, tendrilLocomotion.supportCount ?? 0))
+    );
+    const tendrilSurfaceId = tendrilContact.surfaceTruthSurfaceId ?? "none";
+    const authoredSurfaceMatches = Boolean(
+      this.surfaceTruthActive
+      && tendrilContact.surfaceTruthActive !== false
+      && tendrilSurfaceId !== "none"
+      && tendrilSurfaceId === this.surfaceTruthSurfaceId
+    );
+    const authoredSuctionSupportNow = Boolean(
+      authoredSurfaceMatches
+      && sealedCount > 0
+      && tendrilContact.suctionPadSurfaceLocked !== false
+    );
+
+    if (authoredSuctionSupportNow) {
+      this.authoredSuctionSupportGrace = 0.22;
+      this.authoredSuctionSupportSurfaceId = this.surfaceTruthSurfaceId;
+    } else {
+      this.authoredSuctionSupportGrace = Math.max(0, this.authoredSuctionSupportGrace - Math.max(0, dt));
+      if (this.authoredSuctionSupportGrace <= 0) this.authoredSuctionSupportSurfaceId = "none";
+    }
+
+    const authoredSuctionSupportRetained = Boolean(
+      this.surfaceTruthActive
+      && this.surfaceTruthSurfaceId !== "none"
+      && (
+        authoredSuctionSupportNow
+        || (
+          this.authoredSuctionSupportGrace > 0
+          && this.authoredSuctionSupportSurfaceId === this.surfaceTruthSurfaceId
+        )
+      )
+    );
+    this.authoredSuctionSupportActive = authoredSuctionSupportRetained;
+    this.authoredSuctionSupportCount = authoredSuctionSupportRetained ? sealedCount : 0;
+    this.authoredSuctionSupportStrength = authoredSuctionSupportRetained
+      ? THREE.MathUtils.clamp(
+          0.38
+            + this.surfaceTruthAdhesion * 0.34
+            + this.surfaceTruthLoadTolerance * 0.18
+            + THREE.MathUtils.clamp(sealedCount / 3, 0, 1) * 0.10,
           0,
           1
         )
@@ -732,41 +805,63 @@ export class PlayerMovementController {
     this.attachmentReleaseAge += Math.max(0, dt);
 
     const convergenceReachability = this.resolveConvergenceReachability(frameState);
-    const canAdhere = !coreWorkActive
-      && !convergenceReachability.active
+    const contactAllowed = !coreWorkActive && !convergenceReachability.active;
+    const legacyChemistryCanAdhere = Boolean(
+      contactAllowed
       && siltZoneId === "membrane"
-      && this.attachmentStrength >= 0.45;
+      && legacyChemistryStrength >= 0.45
+    );
+    const authoredSuctionCanAdhere = Boolean(contactAllowed && authoredSuctionSupportRetained);
+    const canAdhere = authoredSuctionCanAdhere || legacyChemistryCanAdhere;
+
+    const desiredAuthority = authoredSuctionCanAdhere
+      ? "authored_suction_support"
+      : legacyChemistryCanAdhere
+        ? "legacy_chemistry_membrane"
+        : "none";
+    this.attachmentStrength = authoredSuctionCanAdhere
+      ? Math.max(this.authoredSuctionSupportStrength, legacyChemistryStrength * 0.72)
+      : legacyChemistryStrength;
 
     if (this.attachmentActive) {
       const releaseThreshold = 0.54 + this.attachmentStrength * 0.20;
       const pulledAway = awayIntent >= releaseThreshold;
-      const chemistryLost = !canAdhere;
-      const surfaceLost = this.surfaceTruthActive
-        ? this.surfaceTruthDistance > 0.92
-        : this.boundaryNormalizedDistance < 0.82;
-      if (pulledAway || chemistryLost || surfaceLost) {
+      const authorityLost = !canAdhere;
+      const surfaceLost = desiredAuthority === "authored_suction_support"
+        ? !this.surfaceTruthActive || this.surfaceTruthDistance > 0.92
+        : this.surfaceTruthActive
+          ? this.surfaceTruthDistance > 0.92
+          : this.boundaryNormalizedDistance < 0.82;
+
+      if (pulledAway || authorityLost || surfaceLost) {
         this.attachmentActive = false;
         this.attachmentState = "releasing";
+        this.attachmentAuthority = "none";
         this.attachmentReleaseAge = 0;
         this.attachmentCooldown = 0.30;
         this.attachmentAcquireAge = 0;
         // A small inward release impulse makes detachment read as peeling away
-        // from the inside of the membrane rather than simply losing a flag.
+        // from the contact plane rather than simply losing a flag.
         const releaseImpulse = 0.48 + this.attachmentStrength * 0.72;
         this.velocity.addScaledVector(activeContactNormal, -releaseImpulse);
       } else {
+        this.attachmentAuthority = desiredAuthority;
         this.attachmentState = "attached";
       }
     } else {
-      const nearSurface = this.surfaceTruthActive
-        ? this.surfaceTruthDistance <= 0.72
-        : this.boundaryProximity >= 0.74;
+      const nearSurface = authoredSuctionCanAdhere
+        ? this.surfaceTruthDistance <= 0.82
+        : this.surfaceTruthActive
+          ? this.surfaceTruthDistance <= 0.72
+          : this.boundaryProximity >= 0.74;
       const notRetreatingFast = this.boundaryRadialSpeed > -0.7;
       const canAcquire = canAdhere && nearSurface && notRetreatingFast && this.attachmentCooldown <= 0;
       if (canAcquire) {
         this.attachmentAcquireAge += Math.max(0, dt);
-        if (this.attachmentAcquireAge >= 0.085) {
+        const acquireThreshold = authoredSuctionCanAdhere ? 0.035 : 0.085;
+        if (this.attachmentAcquireAge >= acquireThreshold) {
           this.attachmentActive = true;
+          this.attachmentAuthority = desiredAuthority;
           this.attachmentState = "attached";
           this.attachmentShellNormalizedDistance = THREE.MathUtils.clamp(
             this.boundaryNormalizedDistance,
@@ -782,6 +877,7 @@ export class PlayerMovementController {
           // retain release state briefly for body-language continuity
         } else {
           this.attachmentState = nearSurface && canAdhere ? "brushing" : "free";
+          if (this.attachmentState === "free") this.attachmentAuthority = "none";
         }
       }
     }

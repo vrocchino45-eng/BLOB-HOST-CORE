@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031H assimilates proven planted-contact support mechanics beneath BLOB's
-// existing suction-tendril ecology. HC031G verb grammar remains locked.
+// HC031H1 unifies authored suction support with PlayerMovementController's
+// physical attachment state. HC031G verb grammar remains locked.
 
 
 const appRoot = document.querySelector("#app");
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031H",
-  buildLabel: "Planted Contact Support Assimilation"
+  buildId: "HC-031H1",
+  buildLabel: "Unified Physical Contact Authority"
 });
 
 runtime.start().catch((error) => {
