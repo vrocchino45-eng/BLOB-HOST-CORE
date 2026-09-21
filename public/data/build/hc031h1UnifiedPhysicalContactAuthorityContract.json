@@ -1,0 +1,60 @@
+{
+  "pass": "HC-031H1",
+  "title": "Unified Physical Contact Authority",
+  "parent": "HC-031H",
+  "purpose": "Collapse visible/authored suction support and movement attachment into one physical contact relationship without changing the HC031G verb grammar.",
+  "lockedTruth": {
+    "stabilizedProjectionGrammarLocked": true,
+    "compositionChord": "cohere_project",
+    "focusedProjectionRequiresSurfaceAnchor": false,
+    "movementAuthority": "PlayerMovementController",
+    "surfaceTruthAuthority": "CoreSurfaceTruthSystem",
+    "anchorAuthority": "CoreTendrilSurfaceContactSystem",
+    "supportPlaneAuthority": "CoreTendrilSupportPlaneSystem",
+    "supportPlaneReadOnly": true,
+    "tendrilCount": 3,
+    "addsNewButton": false,
+    "addsCollider": false,
+    "addsRaycastOwner": false,
+    "addsRuntimeDependency": false,
+    "changesProgression": false
+  },
+  "contactLaw": {
+    "governingLaw": "registered_crawlable_surface_plus_valid_suction_support_is_physical_contact",
+    "authoredSuctionCanEstablishAttachmentWithoutSiltMembrane": true,
+    "legacySiltMembraneAttachmentStillSupported": true,
+    "chemistryModifiesButDoesNotUniversallyGateAuthoredSuction": true,
+    "surfaceTruthStillOwnsEligibility": true,
+    "suctionPadMustBeWorldPlanted": true,
+    "supportGraceSeconds": 0.22,
+    "nonCrawlableGeometryCanAttach": false
+  },
+  "causalChain": [
+    "CoreSurfaceTruthSystem validates authored crawlable surface",
+    "CoreTendrilSurfaceContactSystem seals world-planted suction support",
+    "CoreTendrilSupportPlaneSystem interprets planted supports without waiting on legacy attachment",
+    "PlayerMovementController adopts unified physical attachment",
+    "surface tendril locomotion can become active",
+    "HC031G StabilizedProjection can observe the same attached relationship"
+  ],
+  "telemetryProof": {
+    "attachmentAuthority": true,
+    "authoredSuctionSupportActive": true,
+    "authoredSuctionSupportCount": true,
+    "authoredSuctionSupportSurfaceId": true,
+    "tendrilSupportPlaneActive": true,
+    "stabilizedProjectionSurfaceBraced": true
+  },
+  "forbiddenScope": [
+    "new movement control",
+    "new ability",
+    "surface anchor ability gate",
+    "targeting rewrite",
+    "Bond rewrite",
+    "new physics engine",
+    "three-mesh-bvh dependency",
+    "new region content",
+    "wall ceiling edge traversal expansion",
+    "Grave progression changes"
+  ]
+}

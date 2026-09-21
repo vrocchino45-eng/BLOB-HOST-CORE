@@ -1,14 +1,14 @@
 import * as THREE from "three";
 
 /**
- * HC031H — Planted Contact Support Assimilation
+ * HC031H2 — Anchor-Carried Surface Support Plane
  *
- * BLOB-native adaptation of a proven procedural-creature locomotion pattern:
- * world-planted contacts define a support plane; body ride height and contact
- * orientation are derived from those supports rather than from hidden translation.
+ * SurfaceTruth authorizes an anchor when it seals. The planted anchor then carries
+ * that authored surface identity until peel/release, so support does not depend on
+ * rediscovering the same mesh on the same frame as PlayerMovementController.
  *
- * This system is intentionally read-only. It does not move playerRoot, place
- * anchors, raycast, change controls, alter verbs, or own surface eligibility.
+ * Read-only: no player translation, anchor placement, raycast, controls, verbs, or
+ * progression ownership.
  */
 export class CoreTendrilSupportPlaneSystem {
   constructor({ playerRoot, frameState }) {
@@ -17,7 +17,6 @@ export class CoreTendrilSupportPlaneSystem {
 
     this.playerRoot = playerRoot;
     this.frameState = frameState;
-
     this.playerPosition = new THREE.Vector3();
     this.surfaceNormal = new THREE.Vector3(0, 1, 0);
     this.supportNormal = new THREE.Vector3(0, 1, 0);
@@ -38,32 +37,79 @@ export class CoreTendrilSupportPlaneSystem {
     const contact = frameState.coreTendrilContact ?? {};
     const locomotion = contact.surfaceLocomotion ?? {};
     const anchors = Array.isArray(locomotion.anchors) ? locomotion.anchors : [];
-    const sealed = anchors.filter((anchor) => anchor?.sealed && anchor.anchorWorld);
-    const surfaceTruth = frameState.coreSurfaceTruth ?? {};
+    const eligible = anchors.filter((anchor) => (
+      anchor?.sealed
+      && anchor.anchorWorld
+      && anchor.surface?.valid
+      && anchor.surface.surfaceId
+      && anchor.surface.surfaceId !== "none"
+    ));
 
-    if (sealed.length === 0 || !surfaceTruth.valid || surfaceTruth.mechanicalEligible === false) {
-      this.publishInactive("insufficient_planted_support");
+    if (eligible.length === 0) {
+      this.publishInactive("no_sealed_anchor_with_carried_surface_identity");
       return;
     }
 
-    const truthNormal = surfaceTruth.normal ?? {};
-    this.surfaceNormal.set(truthNormal.x ?? 0, truthNormal.y ?? 1, truthNormal.z ?? 0);
-    if (this.surfaceNormal.lengthSq() < 0.0001) this.surfaceNormal.set(0, 1, 0);
-    else this.surfaceNormal.normalize();
+    // A support plane must not silently span unrelated authored surfaces. Choose
+    // the dominant carried surface deterministically; ties resolve by anchor order.
+    const counts = new Map();
+    for (const anchor of eligible) {
+      const id = anchor.surface.surfaceId;
+      counts.set(id, (counts.get(id) ?? 0) + 1);
+    }
+    let surfaceId = "none";
+    let bestCount = 0;
+    for (const anchor of eligible) {
+      const id = anchor.surface.surfaceId;
+      const count = counts.get(id) ?? 0;
+      if (count > bestCount) {
+        surfaceId = id;
+        bestCount = count;
+      }
+    }
+    const sealed = eligible.filter((anchor) => anchor.surface.surfaceId === surfaceId);
+    const profile = sealed[0]?.surface ?? {};
 
+    this.surfaceNormal.set(0, 0, 0);
+    let adhesion = 0;
+    let loadTolerance = 0;
+    let compliance = 0;
+    let pulseTransmission = 0;
+    let absorbTransmission = 0;
+    let stabilizeTransmission = 0;
     this.centroid.set(0, 0, 0);
+
     for (const anchor of sealed) {
       const p = anchor.anchorWorld;
       this.centroid.x += p.x ?? 0;
       this.centroid.y += p.y ?? 0;
       this.centroid.z += p.z ?? 0;
+      const n = anchor.surface.normal ?? {};
+      this.surfaceNormal.x += n.x ?? 0;
+      this.surfaceNormal.y += n.y ?? 1;
+      this.surfaceNormal.z += n.z ?? 0;
+      adhesion += THREE.MathUtils.clamp(anchor.surface.adhesion ?? 0.75, 0, 1);
+      loadTolerance += THREE.MathUtils.clamp(anchor.surface.loadTolerance ?? 0.70, 0, 1);
+      compliance += THREE.MathUtils.clamp(anchor.surface.compliance ?? 0.50, 0, 1);
+      pulseTransmission += THREE.MathUtils.clamp(anchor.surface.verbTransmission?.pulse ?? 0.5, 0, 1);
+      absorbTransmission += THREE.MathUtils.clamp(anchor.surface.verbTransmission?.absorb ?? 0.5, 0, 1);
+      stabilizeTransmission += THREE.MathUtils.clamp(anchor.surface.verbTransmission?.stabilize ?? 0.5, 0, 1);
     }
-    this.centroid.multiplyScalar(1 / sealed.length);
+    const inv = 1 / sealed.length;
+    this.centroid.multiplyScalar(inv);
+    this.surfaceNormal.multiplyScalar(inv);
+    if (this.surfaceNormal.lengthSq() < 0.0001) this.surfaceNormal.set(0, 1, 0);
+    else this.surfaceNormal.normalize();
+    adhesion *= inv;
+    loadTolerance *= inv;
+    compliance *= inv;
+    pulseTransmission *= inv;
+    absorbTransmission *= inv;
+    stabilizeTransmission *= inv;
 
     let triangleArea = 0;
     let anchorPlaneConfidence01 = 0;
     this.supportNormal.copy(this.surfaceNormal);
-
     if (sealed.length >= 3) {
       this.readAnchor(sealed[0], this.a);
       this.readAnchor(sealed[1], this.b);
@@ -85,9 +131,6 @@ export class CoreTendrilSupportPlaneSystem {
 
     this.playerRoot.getWorldPosition(this.playerPosition);
     const rideHeight = this.temp.copy(this.playerPosition).sub(this.centroid).dot(this.supportNormal);
-    const compliance = THREE.MathUtils.clamp(surfaceTruth.compliance ?? 0.5, 0, 1);
-    const adhesion = THREE.MathUtils.clamp(surfaceTruth.adhesion ?? 0.75, 0, 1);
-    const loadTolerance = THREE.MathUtils.clamp(surfaceTruth.loadTolerance ?? 0.70, 0, 1);
     const targetRideHeight = THREE.MathUtils.lerp(0.385, 0.350, compliance);
     const rideHeightError = targetRideHeight - rideHeight;
 
@@ -112,12 +155,16 @@ export class CoreTendrilSupportPlaneSystem {
       1
     );
 
-    this.frameState.coreTendrilSupportPlane = {
-      pass: "HC-031H1",
+    frameState.coreTendrilSupportPlane = {
+      pass: "HC-031H2",
       active: true,
       owner: "CoreTendrilSupportPlaneSystem",
-      source: "world_planted_suction_anchors",
+      source: "sealed_anchor_carried_surface_identity",
+      carriedSurfaceIdentity: true,
+      currentSurfaceTruthRequiredAfterSeal: false,
+      surfaceEligibilityAuthorityAtSeal: "CoreSurfaceTruthSystem",
       supportCount: sealed.length,
+      rawEligibleAnchorCount: eligible.length,
       supportQuality01: Number(supportQuality01.toFixed(3)),
       supportCentroid: this.roundVector(this.centroid),
       supportNormal: this.roundVector(this.supportNormal),
@@ -127,17 +174,21 @@ export class CoreTendrilSupportPlaneSystem {
       rideHeight: Number(rideHeight.toFixed(4)),
       targetRideHeight: Number(targetRideHeight.toFixed(4)),
       rideHeightError: Number(rideHeightError.toFixed(4)),
-      surfaceId: surfaceTruth.surfaceId ?? contact.surfaceTruthSurfaceId ?? "none",
-      surfaceProfileId: surfaceTruth.profileId ?? contact.surfaceTruthProfileId ?? "none",
-      materialFamily: surfaceTruth.materialFamily ?? contact.surfaceTruthMaterialFamily ?? "none",
+      surfaceId,
+      surfaceProfileId: profile.profileId ?? "none",
+      materialFamily: profile.materialFamily ?? "none",
       adhesion: Number(adhesion.toFixed(3)),
       loadTolerance: Number(loadTolerance.toFixed(3)),
       compliance: Number(compliance.toFixed(3)),
+      verbTransmission: {
+        pulse: Number(pulseTransmission.toFixed(3)),
+        absorb: Number(absorbTransmission.toFixed(3)),
+        stabilize: Number(stabilizeTransmission.toFixed(3))
+      },
       handoffActive: Boolean(locomotion.handoffActive),
       plantedContactsRemainWorldFixed: true,
       bodyRideHeightDerivedFromSupports: true,
-      surfaceTruthStillOwnsEligibility: true,
-      supportActivationLaw: "sealed_world_anchor_plus_authored_surface_truth",
+      supportActivationLaw: "sealed_world_anchor_with_carried_authored_surface_identity",
       independentOfLegacyAttachmentGate: true,
       movementAuthority: "PlayerMovementController",
       anchorAuthority: "CoreTendrilSurfaceContactSystem",
@@ -164,16 +215,17 @@ export class CoreTendrilSupportPlaneSystem {
 
   publishInactive(reason) {
     this.frameState.coreTendrilSupportPlane = {
-      pass: "HC-031H1",
+      pass: "HC-031H2",
       active: false,
       owner: "CoreTendrilSupportPlaneSystem",
-      source: "world_planted_suction_anchors",
+      source: "sealed_anchor_carried_surface_identity",
       reason,
+      carriedSurfaceIdentity: false,
+      currentSurfaceTruthRequiredAfterSeal: false,
       supportCount: 0,
       supportQuality01: 0,
       plantedContactsRemainWorldFixed: true,
       bodyRideHeightDerivedFromSupports: true,
-      surfaceTruthStillOwnsEligibility: true,
       movementAuthority: "PlayerMovementController",
       anchorAuthority: "CoreTendrilSurfaceContactSystem",
       addsRaycast: false,

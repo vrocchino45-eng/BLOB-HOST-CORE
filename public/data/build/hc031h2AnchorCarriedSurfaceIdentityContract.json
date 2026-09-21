@@ -1,0 +1,27 @@
+{
+  "pass": "HC-031H2",
+  "parent": "HC-031H1",
+  "name": "Anchor-Carried Surface Identity",
+  "contactLaw": {
+    "surfaceTruthAuthorizesAtSeal": true,
+    "anchorCarriesSurfaceIdentityUntilPeelRelease": true,
+    "currentSurfaceTruthRequiredAfterSeal": false,
+    "unrelatedSurfaceAnchorsMayShareSupportPlane": false,
+    "legacySiltMembraneAttachmentStillSupported": true
+  },
+  "lockedTruth": {
+    "movementAuthority": "PlayerMovementController",
+    "surfaceEligibilityAuthorityAtSeal": "CoreSurfaceTruthSystem",
+    "anchorAuthority": "CoreTendrilSurfaceContactSystem",
+    "focusedProjectionRequiresSurfaceAnchor": false,
+    "verbGrammarOwner": "VerbCompositionSystem / HC029C",
+    "newControls": false,
+    "newPhysicsDependency": false
+  },
+  "acceptance": {
+    "supportPlaneCanRemainActiveWhenCurrentSurfaceTruthMovesOn": true,
+    "authoredSuctionAttachmentConsumesCarriedSurfaceIdentity": true,
+    "stabilizedProjectionCanBraceFromCarriedSurfaceIdentity": true,
+    "telemetryExposesBraceSource": true
+  }
+}

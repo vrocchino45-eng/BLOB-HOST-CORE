@@ -1280,6 +1280,11 @@ export class SessionTelemetrySystem {
         authoredSuctionSupportActive: Boolean(frameState.playerAttachment?.authoredSuctionSupportActive),
         authoredSuctionSupportCount: frameState.playerAttachment?.authoredSuctionSupportCount ?? 0,
         authoredSuctionSupportSurfaceId: frameState.playerAttachment?.authoredSuctionSupportSurfaceId ?? "none",
+        anchorCarriedSurfaceIdentityActive: Boolean(frameState.playerAttachment?.anchorCarriedSurfaceIdentityActive),
+        anchorCarriedSurfaceId: frameState.playerAttachment?.anchorCarriedSurfaceId ?? "none",
+        anchorCarriedSurfaceMaterialFamily: frameState.playerAttachment?.anchorCarriedSurfaceMaterialFamily ?? "none",
+        supportPlaneSource: frameState.coreTendrilSupportPlane?.source ?? "none",
+        supportPlaneCurrentSurfaceTruthRequiredAfterSeal: Boolean(frameState.coreTendrilSupportPlane?.currentSurfaceTruthRequiredAfterSeal),
         tendrilLocomotionActive: Boolean(frameState.playerAttachment?.tendrilLocomotionActive),
         tendrilSupportCount: frameState.playerAttachment?.tendrilSupportCount ?? 0,
         tendrilSupportPlaneActive: Boolean(frameState.playerAttachment?.tendrilSupportPlaneActive),
@@ -1287,7 +1292,9 @@ export class SessionTelemetrySystem {
         stabilizedProjectionActive: Boolean(frameState.stabilizedProjection?.active),
         stabilizedProjectionMode: frameState.stabilizedProjection?.mode ?? "inactive",
         stabilizedProjectionSurfaceBraced: Boolean(frameState.stabilizedProjection?.surfaceBraced),
-        stabilizedProjectionBraceQuality01: round(frameState.stabilizedProjection?.braceQuality01 ?? 0)
+        stabilizedProjectionBraceQuality01: round(frameState.stabilizedProjection?.braceQuality01 ?? 0),
+        stabilizedProjectionExternalBraceSource: frameState.stabilizedProjection?.externalBraceSource ?? "none",
+        stabilizedProjectionSurfaceId: frameState.stabilizedProjection?.surface?.id ?? "none"
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),

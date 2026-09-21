@@ -108,6 +108,12 @@ export class PlayerMovementController {
     this.tendrilSupportTargetRideHeight = 0.38;
     this.tendrilSupportRideHeightError = 0;
     this.tendrilSupportSurfaceId = "none";
+    this.tendrilSupportProfileId = "none";
+    this.tendrilSupportMaterialFamily = "none";
+    this.tendrilSupportAdhesion = 0;
+    this.tendrilSupportLoadTolerance = 0;
+    this.tendrilSupportCompliance = 0;
+    this.tendrilSupportVerbTransmission = { pulse: 0, absorb: 0, stabilize: 0 };
 
     const physicalFeel = localCellRecipe.physicalFeel ?? {};
     const flowVector = physicalFeel.flowVector ?? [0, 0, 0];
@@ -319,7 +325,7 @@ export class PlayerMovementController {
     const kineticGlow = Math.min(speed / 2.6, 1.0);
 
     frameState.playerAttachment = {
-      pass: "HC-031H1",
+      pass: "HC-031H2",
       active: this.attachmentActive,
       state: this.attachmentState,
       authority: this.attachmentAuthority,
@@ -328,6 +334,14 @@ export class PlayerMovementController {
       authoredSuctionSupportCount: this.authoredSuctionSupportCount,
       authoredSuctionSupportStrength: Number(this.authoredSuctionSupportStrength.toFixed(3)),
       authoredSuctionSupportSurfaceId: this.authoredSuctionSupportSurfaceId,
+      anchorCarriedSurfaceIdentityActive: this.tendrilSupportPlaneActive,
+      anchorCarriedSurfaceId: this.tendrilSupportSurfaceId,
+      anchorCarriedSurfaceProfileId: this.tendrilSupportProfileId,
+      anchorCarriedSurfaceMaterialFamily: this.tendrilSupportMaterialFamily,
+      anchorCarriedSurfaceAdhesion: Number(this.tendrilSupportAdhesion.toFixed(3)),
+      anchorCarriedSurfaceLoadTolerance: Number(this.tendrilSupportLoadTolerance.toFixed(3)),
+      anchorCarriedSurfaceCompliance: Number(this.tendrilSupportCompliance.toFixed(3)),
+      anchorCarriedSurfaceVerbTransmission: { ...this.tendrilSupportVerbTransmission },
       siltSurfaceAlignment: Number(this.attachmentSiltAlignment.toFixed(3)),
       releaseTension: Number(this.attachmentReleaseTension.toFixed(3)),
       surfaceTangentSpeed: Number(this.attachmentSurfaceTangentSpeed.toFixed(3)),
@@ -376,7 +390,7 @@ export class PlayerMovementController {
       requiresSiltMembrane: false,
       legacySiltMembraneAttachmentSupported: true,
       authoredSuctionSupportCanAttach: true,
-      governingContactLaw: "registered_crawlable_surface_plus_valid_suction_support_is_physical_contact",
+      governingContactLaw: "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
       usesSiltWorldAlignment: true,
       addsCollider: false,
       addsRaycast: false,
@@ -682,10 +696,10 @@ export class PlayerMovementController {
     const plane = frameState.coreTendrilSupportPlane ?? {};
     const centroid = plane.supportCentroid ?? {};
     const normal = plane.supportNormal ?? {};
-    const surfaceMatches = (plane.surfaceId ?? "none") === this.surfaceTruthSurfaceId;
     const valid = Boolean(
       plane.active
-      && surfaceMatches
+      && plane.carriedSurfaceIdentity === true
+      && (plane.surfaceId ?? "none") !== "none"
       && (plane.supportCount ?? 0) > 0
       && [centroid.x, centroid.y, centroid.z, normal.x, normal.y, normal.z].every(Number.isFinite)
     );
@@ -698,6 +712,16 @@ export class PlayerMovementController {
       : this.attachmentVisibleStandOffDistance;
     this.tendrilSupportRideHeightError = valid ? Number(plane.rideHeightError ?? 0) : 0;
     this.tendrilSupportSurfaceId = valid ? (plane.surfaceId ?? "none") : "none";
+    this.tendrilSupportProfileId = valid ? (plane.surfaceProfileId ?? "none") : "none";
+    this.tendrilSupportMaterialFamily = valid ? (plane.materialFamily ?? "none") : "none";
+    this.tendrilSupportAdhesion = valid ? THREE.MathUtils.clamp(plane.adhesion ?? 0.75, 0, 1) : 0;
+    this.tendrilSupportLoadTolerance = valid ? THREE.MathUtils.clamp(plane.loadTolerance ?? 0.70, 0, 1) : 0;
+    this.tendrilSupportCompliance = valid ? THREE.MathUtils.clamp(plane.compliance ?? 0.50, 0, 1) : 0;
+    this.tendrilSupportVerbTransmission = valid ? {
+      pulse: THREE.MathUtils.clamp(plane.verbTransmission?.pulse ?? 0.5, 0, 1),
+      absorb: THREE.MathUtils.clamp(plane.verbTransmission?.absorb ?? 0.5, 0, 1),
+      stabilize: THREE.MathUtils.clamp(plane.verbTransmission?.stabilize ?? 0.5, 0, 1)
+    } : { pulse: 0, absorb: 0, stabilize: 0 };
 
     if (!valid) {
       this.tendrilSupportNormal.copy(this.attachmentSurfaceNormal);
@@ -741,55 +765,42 @@ export class PlayerMovementController {
         )
       : 0;
 
-    // HC031H1: consume the prior-frame suction relationship directly. A sealed
-    // tendril on the same authored crawlable surface is legitimate physical
-    // support even when the old Silt membrane chemistry gate is absent.
-    const tendrilContact = frameState.coreTendrilContact ?? {};
-    const tendrilLocomotion = tendrilContact.surfaceLocomotion ?? {};
-    const sealedCount = Math.max(
-      0,
-      Math.floor(Math.max(tendrilContact.sealedCount ?? 0, tendrilLocomotion.supportCount ?? 0))
-    );
-    const tendrilSurfaceId = tendrilContact.surfaceTruthSurfaceId ?? "none";
-    const authoredSurfaceMatches = Boolean(
-      this.surfaceTruthActive
-      && tendrilContact.surfaceTruthActive !== false
-      && tendrilSurfaceId !== "none"
-      && tendrilSurfaceId === this.surfaceTruthSurfaceId
-    );
+    // HC031H2: consume the same-frame support plane derived from prior-frame
+    // anchors. SurfaceTruth authorized each sucker when it sealed; the anchor now
+    // carries that identity, so physical attachment no longer depends on current
+    // raycast overlap or on a second surface rediscovery.
+    const supportPlane = frameState.coreTendrilSupportPlane ?? {};
+    const supportCount = this.tendrilSupportPlaneActive ? this.tendrilSupportCount : 0;
     const authoredSuctionSupportNow = Boolean(
-      authoredSurfaceMatches
-      && sealedCount > 0
-      && tendrilContact.suctionPadSurfaceLocked !== false
+      this.tendrilSupportPlaneActive
+      && supportPlane.carriedSurfaceIdentity === true
+      && this.tendrilSupportSurfaceId !== "none"
+      && supportCount > 0
     );
 
     if (authoredSuctionSupportNow) {
       this.authoredSuctionSupportGrace = 0.22;
-      this.authoredSuctionSupportSurfaceId = this.surfaceTruthSurfaceId;
+      this.authoredSuctionSupportSurfaceId = this.tendrilSupportSurfaceId;
+      this.authoredSuctionSupportCount = supportCount;
     } else {
       this.authoredSuctionSupportGrace = Math.max(0, this.authoredSuctionSupportGrace - Math.max(0, dt));
-      if (this.authoredSuctionSupportGrace <= 0) this.authoredSuctionSupportSurfaceId = "none";
+      if (this.authoredSuctionSupportGrace <= 0) {
+        this.authoredSuctionSupportSurfaceId = "none";
+        this.authoredSuctionSupportCount = 0;
+      }
     }
 
     const authoredSuctionSupportRetained = Boolean(
-      this.surfaceTruthActive
-      && this.surfaceTruthSurfaceId !== "none"
-      && (
-        authoredSuctionSupportNow
-        || (
-          this.authoredSuctionSupportGrace > 0
-          && this.authoredSuctionSupportSurfaceId === this.surfaceTruthSurfaceId
-        )
-      )
+      authoredSuctionSupportNow
+      || (this.authoredSuctionSupportGrace > 0 && this.authoredSuctionSupportSurfaceId !== "none")
     );
     this.authoredSuctionSupportActive = authoredSuctionSupportRetained;
-    this.authoredSuctionSupportCount = authoredSuctionSupportRetained ? sealedCount : 0;
     this.authoredSuctionSupportStrength = authoredSuctionSupportRetained
       ? THREE.MathUtils.clamp(
           0.38
-            + this.surfaceTruthAdhesion * 0.34
-            + this.surfaceTruthLoadTolerance * 0.18
-            + THREE.MathUtils.clamp(sealedCount / 3, 0, 1) * 0.10,
+            + (authoredSuctionSupportNow ? this.tendrilSupportAdhesion : this.surfaceTruthAdhesion) * 0.34
+            + (authoredSuctionSupportNow ? this.tendrilSupportLoadTolerance : this.surfaceTruthLoadTolerance) * 0.18
+            + THREE.MathUtils.clamp(this.authoredSuctionSupportCount / 3, 0, 1) * 0.10,
           0,
           1
         )
@@ -828,7 +839,7 @@ export class PlayerMovementController {
       const pulledAway = awayIntent >= releaseThreshold;
       const authorityLost = !canAdhere;
       const surfaceLost = desiredAuthority === "authored_suction_support"
-        ? !this.surfaceTruthActive || this.surfaceTruthDistance > 0.92
+        ? !authoredSuctionSupportRetained
         : this.surfaceTruthActive
           ? this.surfaceTruthDistance > 0.92
           : this.boundaryNormalizedDistance < 0.82;
@@ -850,7 +861,7 @@ export class PlayerMovementController {
       }
     } else {
       const nearSurface = authoredSuctionCanAdhere
-        ? this.surfaceTruthDistance <= 0.82
+        ? true
         : this.surfaceTruthActive
           ? this.surfaceTruthDistance <= 0.72
           : this.boundaryProximity >= 0.74;

@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031H1 unifies authored suction support with PlayerMovementController's
-// physical attachment state. HC031G verb grammar remains locked.
+// HC031H2 lets a sealed suction anchor retain the authored surface identity
+// that SurfaceTruth granted at seal time. HC031G verb grammar remains locked.
 
 
 const appRoot = document.querySelector("#app");
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031H1",
-  buildLabel: "Unified Physical Contact Authority"
+  buildId: "HC-031H2",
+  buildLabel: "Anchor-Carried Surface Identity"
 });
 
 runtime.start().catch((error) => {

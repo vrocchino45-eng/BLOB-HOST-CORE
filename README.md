@@ -1,3 +1,15 @@
+# HC031H2 — Anchor-Carried Surface Identity
+
+HC031H2 closes the timing/identity handoff exposed by H1 telemetry. `CoreSurfaceTruthSystem` still decides whether a surface is authored and mechanically eligible, but once a sucker seals, that anchor carries the accepted surface relationship until peel/release. Support, movement attachment, and Stabilized Projection now read the retained anchor identity rather than requiring a second same-frame surface rediscovery.
+
+Runtime grammar:
+
+**SurfaceTruth authorizes seal → anchor carries surface identity → support plane → physical attachment/locomotion → optional external Stabilized Projection brace**
+
+This remains on the experimental HC031H branch until telemetry proves sustained overlap.
+
+---
+
 ## HC031H1 — Unified Physical Contact Authority
 
 The experimental tendril branch now uses one physical-contact law: an explicitly authored crawlable surface plus a valid world-planted suction support is sufficient for `PlayerMovementController` to acknowledge attachment. The older Silt/membrane chemistry proof remains supported but no longer universally gates authored suction. HC031G focused-Pulse grammar is unchanged.

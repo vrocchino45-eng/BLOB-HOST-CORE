@@ -32,15 +32,32 @@ export class StabilizedProjectionSystem {
 
     const contact = frameState.coreTendrilContact ?? {};
     const truth = frameState.coreSurfaceTruth ?? {};
-    const sealedCount = Math.max(0, Math.min(3, Number(contact.sealedCount) || 0));
-    const surfaceBraced = Boolean(
+    const support = frameState.coreTendrilSupportPlane ?? {};
+    const attachment = frameState.playerAttachment ?? {};
+    const carriedSupportActive = Boolean(
+      support.active
+      && support.carriedSurfaceIdentity === true
+      && (support.surfaceId ?? "none") !== "none"
+      && (support.supportCount ?? 0) > 0
+    );
+    const legacySurfaceBrace = Boolean(
       active
-      && sealedCount > 0
+      && contact.sealedCount > 0
       && contact.contactState === "attached"
       && truth.valid
       && truth.mechanicalEligible !== false
       && truth.authoredEcologicalSurface === true
     );
+    const surfaceBraced = Boolean(
+      active
+      && (
+        (carriedSupportActive && attachment.authoredSuctionSupportActive)
+        || legacySurfaceBrace
+      )
+    );
+    const sealedCount = surfaceBraced && carriedSupportActive
+      ? Math.max(0, Math.min(3, Number(support.supportCount) || 0))
+      : Math.max(0, Math.min(3, Number(contact.sealedCount) || 0));
 
     let mode = "inactive";
     if (active) {
@@ -55,12 +72,18 @@ export class StabilizedProjectionSystem {
       this.modeChangeCount += 1;
     }
 
-    const adhesion = surfaceBraced ? clamp01(truth.adhesion ?? contact.surfaceTruthAdhesion ?? 0.75) : 0;
-    const loadTolerance = surfaceBraced ? clamp01(truth.loadTolerance ?? contact.surfaceTruthLoadTolerance ?? 0.70) : 0;
-    const pulseTransmission = surfaceBraced
-      ? clamp01(truth.verbTransmission?.pulse ?? contact.surfaceTruthVerbTransmission?.pulse ?? 0.5)
+    const adhesion = surfaceBraced
+      ? clamp01(carriedSupportActive ? support.adhesion : (truth.adhesion ?? contact.surfaceTruthAdhesion ?? 0.75))
       : 0;
-    const compliance = surfaceBraced ? clamp01(truth.compliance ?? contact.surfaceTruthCompliance ?? 0.5) : 0;
+    const loadTolerance = surfaceBraced
+      ? clamp01(carriedSupportActive ? support.loadTolerance : (truth.loadTolerance ?? contact.surfaceTruthLoadTolerance ?? 0.70))
+      : 0;
+    const pulseTransmission = surfaceBraced
+      ? clamp01(carriedSupportActive ? support.verbTransmission?.pulse : (truth.verbTransmission?.pulse ?? contact.surfaceTruthVerbTransmission?.pulse ?? 0.5))
+      : 0;
+    const compliance = surfaceBraced
+      ? clamp01(carriedSupportActive ? support.compliance : (truth.compliance ?? contact.surfaceTruthCompliance ?? 0.5))
+      : 0;
     const support01 = surfaceBraced ? clamp01(sealedCount / 3) : 0;
     const surfaceQuality01 = surfaceBraced
       ? clamp01(adhesion * 0.34 + loadTolerance * 0.40 + pulseTransmission * 0.26)
@@ -116,9 +139,18 @@ export class StabilizedProjectionSystem {
       focusedResponseMultiplier,
       ambientResponseMultiplier,
       direction,
-      surfaceId: surfaceBraced ? (truth.surfaceId ?? contact.surfaceTruthSurfaceId ?? "authored_surface") : "none",
-      profileId: surfaceBraced ? (truth.profileId ?? contact.surfaceTruthProfileId ?? "unknown_profile") : "none",
-      materialFamily: surfaceBraced ? (truth.materialFamily ?? contact.surfaceTruthMaterialFamily ?? "unknown") : "none"
+      surfaceId: surfaceBraced
+        ? (carriedSupportActive ? support.surfaceId : (truth.surfaceId ?? contact.surfaceTruthSurfaceId ?? "authored_surface"))
+        : "none",
+      profileId: surfaceBraced
+        ? (carriedSupportActive ? support.surfaceProfileId : (truth.profileId ?? contact.surfaceTruthProfileId ?? "unknown_profile"))
+        : "none",
+      materialFamily: surfaceBraced
+        ? (carriedSupportActive ? support.materialFamily : (truth.materialFamily ?? contact.surfaceTruthMaterialFamily ?? "unknown"))
+        : "none",
+      externalBraceSource: surfaceBraced
+        ? (carriedSupportActive ? "anchor_carried_surface_identity" : "same_frame_surface_truth_legacy")
+        : "none"
     });
   }
 
@@ -140,6 +172,8 @@ export class StabilizedProjectionSystem {
       focus01: Number((data.focus01 ?? 0).toFixed(3)),
       recoilContainment01: Number((data.recoilContainment01 ?? 0).toFixed(3)),
       surfaceQuality01: Number((data.surfaceQuality01 ?? 0).toFixed(3)),
+      externalBraceSource: data.externalBraceSource ?? "none",
+      contactIntegrationPass: "HC-031H2",
       surface: {
         id: data.surfaceId ?? "none",
         profileId: data.profileId ?? "none",

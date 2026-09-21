@@ -1,3 +1,12 @@
+# HC031H2 — Anchor-Carried Surface Identity
+
+- SurfaceTruth now authorizes each suction relationship at seal time; the sealed anchor retains surface ID/profile/material/normal until peel/release.
+- Support-plane derivation no longer requires same-frame surface rediscovery after a valid seal.
+- PlayerMovementController consumes the anchor-carried support plane as authored suction authority.
+- Stabilized Projection can use the same retained support relationship for external Host bracing.
+- Added explicit carried-surface/support-source telemetry for the H1 mismatch.
+- HC029C verb grammar remains unchanged; no new control, ability, collider, raycast owner, or physics dependency.
+
 # HC031H1 — Unified Physical Contact Authority
 
 - Authored crawlable surface + sealed suction support can now establish physical attachment without the legacy Silt membrane gate.

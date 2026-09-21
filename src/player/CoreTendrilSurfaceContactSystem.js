@@ -7,7 +7,7 @@ const Y_AXIS = new THREE.Vector3(0, 1, 0);
 const Z_AXIS = new THREE.Vector3(0, 0, 1);
 
 /**
- * HC031F1B — Crawlable Surface Authority
+ * HC031H2 — Anchor-Carried Surface Identity
  *
  * The same three tendrils now consume only explicitly authored ecological surface
  * truth when a registered Host surface is present. The movement boundary remains a
@@ -180,7 +180,110 @@ export class CoreTendrilSurfaceContactSystem {
       stretch: 0,
       anchorDrift: 0,
       stepCount: 0,
-      stridePressure: 0
+      stridePressure: 0,
+      anchorSurface: this.createSurfaceRelation(),
+      reachSurface: this.createSurfaceRelation(),
+      pendingSurface: this.createSurfaceRelation()
+    };
+  }
+
+  createSurfaceRelation() {
+    return {
+      valid: false,
+      owner: "none",
+      meshName: "none",
+      surfaceId: "none",
+      profileId: "none",
+      materialFamily: "none",
+      adhesion: 0.75,
+      loadTolerance: 0.70,
+      compliance: 0.50,
+      verbTransmission: { pulse: 0.5, absorb: 0.5, stabilize: 0.5 },
+      normal: new THREE.Vector3(0, 1, 0)
+    };
+  }
+
+  clearSurfaceRelation(relation) {
+    relation.valid = false;
+    relation.owner = "none";
+    relation.meshName = "none";
+    relation.surfaceId = "none";
+    relation.profileId = "none";
+    relation.materialFamily = "none";
+    relation.adhesion = 0.75;
+    relation.loadTolerance = 0.70;
+    relation.compliance = 0.50;
+    relation.verbTransmission = { pulse: 0.5, absorb: 0.5, stabilize: 0.5 };
+    relation.normal.set(0, 1, 0);
+  }
+
+  copySurfaceRelation(target, source) {
+    if (!source?.valid || !source.surfaceId || source.surfaceId === "none") {
+      this.clearSurfaceRelation(target);
+      return false;
+    }
+    target.valid = true;
+    target.owner = source.owner ?? "CoreSurfaceTruthSystem";
+    target.meshName = source.meshName ?? "authored_surface";
+    target.surfaceId = source.surfaceId;
+    target.profileId = source.profileId ?? "unknown_profile";
+    target.materialFamily = source.materialFamily ?? "unknown";
+    target.adhesion = THREE.MathUtils.clamp(source.adhesion ?? 0.75, 0, 1);
+    target.loadTolerance = THREE.MathUtils.clamp(source.loadTolerance ?? 0.70, 0, 1);
+    target.compliance = THREE.MathUtils.clamp(source.compliance ?? 0.50, 0, 1);
+    target.verbTransmission = {
+      pulse: THREE.MathUtils.clamp(source.verbTransmission?.pulse ?? 0.5, 0, 1),
+      absorb: THREE.MathUtils.clamp(source.verbTransmission?.absorb ?? 0.5, 0, 1),
+      stabilize: THREE.MathUtils.clamp(source.verbTransmission?.stabilize ?? 0.5, 0, 1)
+    };
+    const normal = source.normal ?? {};
+    target.normal.set(normal.x ?? 0, normal.y ?? 1, normal.z ?? 0);
+    if (target.normal.lengthSq() < 0.0001) target.normal.set(0, 1, 0);
+    else target.normal.normalize();
+    return true;
+  }
+
+  captureCurrentSurfaceRelation(target) {
+    if (!this.surfaceTruthActive || this.surfaceTruthSurfaceId === "none") {
+      this.clearSurfaceRelation(target);
+      return false;
+    }
+    return this.copySurfaceRelation(target, {
+      valid: true,
+      owner: this.surfaceTruthOwner,
+      meshName: this.surfaceTruthMeshName,
+      surfaceId: this.surfaceTruthSurfaceId,
+      profileId: this.surfaceTruthProfileId,
+      materialFamily: this.surfaceTruthMaterialFamily,
+      adhesion: this.surfaceTruthAdhesion,
+      loadTolerance: this.surfaceTruthLoadTolerance,
+      compliance: this.surfaceTruthCompliance,
+      verbTransmission: this.surfaceTruthVerbTransmission,
+      normal: this.normal
+    });
+  }
+
+  serializeSurfaceRelation(relation) {
+    return {
+      valid: Boolean(relation?.valid),
+      owner: relation?.owner ?? "none",
+      meshName: relation?.meshName ?? "none",
+      surfaceId: relation?.surfaceId ?? "none",
+      profileId: relation?.profileId ?? "none",
+      materialFamily: relation?.materialFamily ?? "none",
+      adhesion: Number((relation?.adhesion ?? 0).toFixed(3)),
+      loadTolerance: Number((relation?.loadTolerance ?? 0).toFixed(3)),
+      compliance: Number((relation?.compliance ?? 0).toFixed(3)),
+      verbTransmission: {
+        pulse: Number((relation?.verbTransmission?.pulse ?? 0).toFixed(3)),
+        absorb: Number((relation?.verbTransmission?.absorb ?? 0).toFixed(3)),
+        stabilize: Number((relation?.verbTransmission?.stabilize ?? 0).toFixed(3))
+      },
+      normal: {
+        x: Number((relation?.normal?.x ?? 0).toFixed(4)),
+        y: Number((relation?.normal?.y ?? 1).toFixed(4)),
+        z: Number((relation?.normal?.z ?? 0).toFixed(4))
+      }
     };
   }
 
@@ -427,6 +530,17 @@ export class CoreTendrilSurfaceContactSystem {
     tendril.reachFrom.copy(this.computeStartWorld(tendril.index, this.tempB));
     tendril.reachTo.copy(targetAnchor);
     tendril.anchorWorld.copy(targetAnchor);
+
+    // HC031H2: SurfaceTruth authorizes the relationship when a reach is planted.
+    // From then until peel/release, the anchor carries that authored identity.
+    // A stride handoff inherits the prior sealed anchor identity if same-frame
+    // SurfaceTruth has already moved on.
+    if (!this.captureCurrentSurfaceRelation(tendril.reachSurface)) {
+      if (!this.copySurfaceRelation(tendril.reachSurface, tendril.pendingSurface)) {
+        this.copySurfaceRelation(tendril.reachSurface, tendril.anchorSurface);
+      }
+    }
+    this.clearSurfaceRelation(tendril.pendingSurface);
     tendril.pendingAnchorValid = false;
     tendril.seal = 0;
   }
@@ -439,9 +553,11 @@ export class CoreTendrilSurfaceContactSystem {
       tendril.reachTo.copy(nextAnchor);
       tendril.pendingAnchorWorld.copy(nextAnchor);
       tendril.pendingAnchorValid = true;
+      this.copySurfaceRelation(tendril.pendingSurface, tendril.anchorSurface);
     } else {
       tendril.reachTo.copy(this.computeStartWorld(tendril.index, this.tempB));
       tendril.pendingAnchorValid = false;
+      this.clearSurfaceRelation(tendril.pendingSurface);
     }
     tendril.seal = 1;
   }
@@ -467,6 +583,8 @@ export class CoreTendrilSurfaceContactSystem {
         tendril.phaseAge = 0;
         tendril.anchorWorld.copy(tendril.reachTo);
         tendril.displayEnd.copy(tendril.anchorWorld);
+        this.copySurfaceRelation(tendril.anchorSurface, tendril.reachSurface);
+        this.clearSurfaceRelation(tendril.reachSurface);
         tendril.reveal = 1;
         tendril.seal = 1;
         tendril.stepCount += 1;
@@ -500,6 +618,9 @@ export class CoreTendrilSurfaceContactSystem {
           tendril.phaseAge = 0;
           tendril.reveal = 0;
           tendril.seal = 0;
+          this.clearSurfaceRelation(tendril.anchorSurface);
+          this.clearSurfaceRelation(tendril.reachSurface);
+          this.clearSurfaceRelation(tendril.pendingSurface);
         }
       }
       return;
@@ -636,8 +757,26 @@ export class CoreTendrilSurfaceContactSystem {
     const peelingCount = this.tendrils.filter((tendril) => tendril.phase === "peeling").length;
     const maxStretch = this.tendrils.reduce((value, tendril) => Math.max(value, tendril.stretch), 0);
     const handoffActive = reachingCount > 0 || peelingCount > 0;
-    const support01 = THREE.MathUtils.clamp(sealedCount / 2, 0, 1);
-    const mechanicalContactEligible = Boolean(this.surfaceTruthActive && sealedCount > 0);
+    const carriedSealed = sealed.filter((tendril) => tendril.anchorSurface?.valid && tendril.anchorSurface.surfaceId !== "none");
+    const carriedCounts = new Map();
+    for (const tendril of carriedSealed) {
+      const id = tendril.anchorSurface.surfaceId;
+      carriedCounts.set(id, (carriedCounts.get(id) ?? 0) + 1);
+    }
+    let carriedSurfaceId = "none";
+    let carriedSurfaceCount = 0;
+    for (const tendril of carriedSealed) {
+      const id = tendril.anchorSurface.surfaceId;
+      const count = carriedCounts.get(id) ?? 0;
+      if (count > carriedSurfaceCount) {
+        carriedSurfaceId = id;
+        carriedSurfaceCount = count;
+      }
+    }
+    const carriedSurfaceAnchor = carriedSealed.find((tendril) => tendril.anchorSurface.surfaceId === carriedSurfaceId);
+    const carriedSurface = carriedSurfaceAnchor?.anchorSurface ?? this.createSurfaceRelation();
+    const support01 = THREE.MathUtils.clamp(carriedSurfaceCount / 2, 0, 1);
+    const mechanicalContactEligible = Boolean(carriedSurface.valid && carriedSurfaceCount > 0);
     const traction01 = mechanicalContactEligible
       ? THREE.MathUtils.clamp(support01 * (handoffActive ? 0.72 : 1), 0, 1)
       : 0;
@@ -654,11 +793,12 @@ export class CoreTendrilSurfaceContactSystem {
         x: Number(tendril.anchorWorld.x.toFixed(4)),
         y: Number(tendril.anchorWorld.y.toFixed(4)),
         z: Number(tendril.anchorWorld.z.toFixed(4))
-      }
+      },
+      surface: this.serializeSurfaceRelation(tendril.anchorSurface)
     }));
 
     this.frameState.coreTendrilContact = {
-      pass: "HC-031H1",
+      pass: "HC-031H2",
       active: contactRequested || sealedCount > 0 || reachingCount > 0 || peelingCount > 0,
       contactState,
       tendrilCount: 3,
@@ -699,11 +839,21 @@ export class CoreTendrilSurfaceContactSystem {
       padVisibleOnlyDuringSeal: true,
       ordinaryContactMaxStretch: this.maxStretch,
       mechanicalContactEligible,
-      physicalContactLaw: "authored_surface_plus_world_planted_suction_support",
+      carriedSurfaceIdentityActive: mechanicalContactEligible,
+      carriedSurfaceId: mechanicalContactEligible ? carriedSurface.surfaceId : "none",
+      carriedSurfaceProfileId: mechanicalContactEligible ? carriedSurface.profileId : "none",
+      carriedSurfaceMaterialFamily: mechanicalContactEligible ? carriedSurface.materialFamily : "none",
+      carriedSurfaceAdhesion: mechanicalContactEligible ? Number(carriedSurface.adhesion.toFixed(3)) : 0,
+      carriedSurfaceLoadTolerance: mechanicalContactEligible ? Number(carriedSurface.loadTolerance.toFixed(3)) : 0,
+      carriedSurfaceCompliance: mechanicalContactEligible ? Number(carriedSurface.compliance.toFixed(3)) : 0,
+      carriedSurfaceVerbTransmission: mechanicalContactEligible ? { ...carriedSurface.verbTransmission } : { pulse: 0, absorb: 0, stabilize: 0 },
+      physicalContactLaw: "surface_truth_authorizes_seal_then_anchor_carries_surface_identity_until_peel_release",
       surfaceLocomotion: {
         active: mechanicalContactEligible,
         mode: handoffActive ? "anchor_handoff" : sealedCount >= 2 ? "supported_pull" : "single_anchor_pull",
-        supportCount: sealedCount,
+        supportCount: carriedSurfaceCount,
+        rawSealedCount: sealedCount,
+        carriedSurfaceId: mechanicalContactEligible ? carriedSurface.surfaceId : "none",
         support01: Number(support01.toFixed(3)),
         traction01: Number(traction01.toFixed(3)),
         handoffActive,
@@ -717,14 +867,17 @@ export class CoreTendrilSurfaceContactSystem {
         consumer: "PlayerMovementController",
         oneFrameCausalHandoff: true,
         physicalContactEligible: mechanicalContactEligible,
-        plantedContactPolicy: "world_fixed_until_stride_pressure_requires_replant",
+        anchorCarriesAuthoredSurfaceIdentity: true,
+        currentSurfaceTruthRequiredAfterSeal: false,
+        surfaceEligibilityAuthorityAtSeal: "CoreSurfaceTruthSystem",
+        plantedContactPolicy: "world_fixed_with_surface_identity_until_stride_pressure_requires_replant",
         stepSelectionPolicy: "highest_stride_pressure_deterministic_tie_break",
         stepCandidateIndex: this.stepCandidateIndex,
         predictedFootholdInSurfaceTangentFrame: true
       },
       focusedProjectionBraceEligible: true,
       focusedProjectionRequiresAnchor: false,
-      proofGoal: "same_tendrils_support_locomotion_and_optionally_brace_stabilized_projection_without_gating_the_verb"
+      proofGoal: "sealed_anchor_retains_authored_surface_identity_so_support_movement_and_stabilized_projection_share_one_persistent_relationship"
     };
 
     this.playerRoot.userData.coreTendrilContactState = contactState;
