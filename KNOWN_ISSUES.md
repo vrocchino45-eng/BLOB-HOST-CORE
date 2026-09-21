@@ -1,3 +1,12 @@
+# HC031H Experimental Notes
+
+- Support-plane data is intentionally a one-frame causal handoff: it interprets previously planted anchors before movement, then the tendril owner updates the next stance later in the frame.
+- Wall/ceiling and edge-wrap traversal are not acceptance targets yet.
+- `three-mesh-bvh` is intentionally not installed in this experiment; authored SurfaceTruth remains the contact-query owner.
+- HC031H must be compared against the accepted HC031G baseline before merging to `main`.
+
+---
+
 # HC031C Known Issues / Playtest Questions
 
 - Rupture and fragment timing are structurally validated but require live controller feel tuning; the current target is partial harvest, not guaranteed full cleanup.

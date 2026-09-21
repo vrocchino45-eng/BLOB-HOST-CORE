@@ -2639,9 +2639,12 @@ export class CoreEmbodimentSystem {
     );
 
     const surfaceTruth = frameState.coreSurfaceTruth ?? {};
-    const normal = (surfaceTruth.valid && surfaceTruth.mechanicalEligible !== false)
-      ? (surfaceTruth.normal ?? {})
-      : (boundary.surfaceNormal ?? {});
+    const supportPlane = frameState.coreTendrilSupportPlane ?? {};
+    const normal = supportPlane.active
+      ? (supportPlane.supportNormal ?? {})
+      : (surfaceTruth.valid && surfaceTruth.mechanicalEligible !== false)
+        ? (surfaceTruth.normal ?? {})
+        : (boundary.surfaceNormal ?? {});
     this.coreContactWorldNormal.set(normal.x ?? 0, normal.y ?? 1, normal.z ?? 0);
     if (this.coreContactWorldNormal.lengthSq() < 0.0001) this.coreContactWorldNormal.set(0, 1, 0);
     else this.coreContactWorldNormal.normalize();
@@ -2809,6 +2812,8 @@ export class CoreEmbodimentSystem {
       movementConsequencesEnabled: true,
       movementConsequenceOwner: "PlayerMovementController",
       attachmentState: physicalAttachment.state ?? "free",
+      supportPlaneConformActive: Boolean(supportPlane.active),
+      supportPlaneQuality01: Number((supportPlane.supportQuality01 ?? 0).toFixed?.(3) ?? supportPlane.supportQuality01 ?? 0),
       adhesionStrength: Number((physicalAttachment.adhesionStrength ?? 0).toFixed(3)),
       siltSurfaceAlignment: Number((physicalAttachment.siltSurfaceAlignment ?? 0).toFixed(3)),
       collisionConsequencesEnabled: false,

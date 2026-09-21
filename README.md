@@ -1,3 +1,21 @@
+# HC-031H EXPERIMENTAL CHECKPOINT — Planted Contact Support Assimilation
+
+HC031H is the first Git-era locomotion assimilation experiment. It keeps HC031G's **Stabilize + Pulse = `cohere_project`** grammar locked and changes only the physical support logic beneath suction locomotion.
+
+The pass adapts four proven procedural-locomotion ideas into BLOB's existing three-tendril anatomy: world-planted contacts, strain-driven replant selection, predicted footholds in the surface tangent frame, and body ride height derived from the planted support plane.
+
+Runtime grammar:
+
+**authored crawlable surface -> world-planted suction anchors -> support plane -> ride-height/tangent refinement -> PlayerMovementController translation**
+
+`CoreTendrilSupportPlaneSystem` is read-only. `CoreSurfaceTruthSystem` still decides what is crawlable, `CoreTendrilSurfaceContactSystem` still owns anchors, and `PlayerMovementController` remains the only translation owner. No open-source source file is copied into BLOB; the architecture is independently adapted from the MIT-licensed procedural-spider reference.
+
+This checkpoint also expands telemetry so short playtests can finally confirm support count, support-plane quality, surface identity, and whether Stabilized Projection is self-braced or surface-braced.
+
+See `HC031H_BUILD_REPORT.md` and `HC031H_FOCUSED_PLAYTEST.md`.
+
+---
+
 # HC-031G ACTIVE CHECKPOINT — Stabilized Projection / Focused Pulse V1
 
 HC031G makes the existing **Stabilize + Pulse = `cohere_project`** chord the owner of focused Pulse everywhere.

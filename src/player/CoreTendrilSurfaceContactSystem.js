@@ -28,6 +28,7 @@ export class CoreTendrilSurfaceContactSystem {
     this.previousContactState = "suspended";
     this.contactAge = 0;
     this.stepCursor = 0;
+    this.stepCandidateIndex = -1;
     this.lastBoundaryOwner = "none";
     this.surfaceTruthActive = false;
     this.surfaceTruthOwner = "none";
@@ -170,13 +171,16 @@ export class CoreTendrilSurfaceContactSystem {
       reachFrom: new THREE.Vector3(),
       reachTo: new THREE.Vector3(),
       lastIdealAnchor: new THREE.Vector3(),
+      pendingAnchorWorld: new THREE.Vector3(),
+      pendingAnchorValid: false,
       startWorld: new THREE.Vector3(),
       controlA: new THREE.Vector3(),
       controlB: new THREE.Vector3(),
       displayEnd: new THREE.Vector3(),
       stretch: 0,
       anchorDrift: 0,
-      stepCount: 0
+      stepCount: 0,
+      stridePressure: 0
     };
   }
 
@@ -214,6 +218,33 @@ export class CoreTendrilSurfaceContactSystem {
     const idealAnchors = [0, 1, 2].map((index) => this.computeIdealAnchor(index));
     let stepClaimed = this.tendrils.some((tendril) => tendril.phase === "peeling" || tendril.phase === "reaching");
 
+    // HC031H: choose the support that the body has actually outrun instead of
+    // waiting for a fixed round-robin cursor to happen to reach the strained leg.
+    // Ties remain deterministic by beginning the scan at stepCursor.
+    this.stepCandidateIndex = -1;
+    let bestStridePressure = 1.0;
+    if (contactState === "attached" && !stepClaimed) {
+      for (let offset = 0; offset < 3; offset += 1) {
+        const index = (this.stepCursor + offset) % 3;
+        const tendril = this.tendrils[index];
+        if (!tendril || tendril.phase !== "sealed") continue;
+        const ideal = idealAnchors[index];
+        const anchorDrift = tendril.anchorWorld.distanceTo(ideal);
+        const stretch = this.computeStartWorld(index, this.tempA).distanceTo(tendril.anchorWorld);
+        const pressure = Math.max(
+          anchorDrift / Math.max(0.001, this.stepDistance),
+          stretch / Math.max(0.001, this.maxStretch)
+        );
+        tendril.anchorDrift = anchorDrift;
+        tendril.stretch = stretch;
+        tendril.stridePressure = pressure;
+        if (pressure > bestStridePressure + 0.015) {
+          bestStridePressure = pressure;
+          this.stepCandidateIndex = index;
+        }
+      }
+    }
+
     this.tendrils.forEach((tendril) => {
       const desired = tendril.index < desiredCount;
       const staggerReady = this.contactAge >= tendril.index * 0.075;
@@ -228,17 +259,14 @@ export class CoreTendrilSurfaceContactSystem {
         this.beginPeel(tendril);
       }
 
-      if (desired && tendril.phase === "sealed" && !stepClaimed) {
-        const anchorDrift = tendril.anchorWorld.distanceTo(ideal);
-        const stretch = this.computeStartWorld(tendril.index, this.tempA).distanceTo(tendril.anchorWorld);
-        tendril.anchorDrift = anchorDrift;
-        tendril.stretch = stretch;
-        const shouldStep = anchorDrift > this.stepDistance || stretch > this.maxStretch;
-        if (shouldStep && tendril.index === this.stepCursor) {
-          this.beginPeel(tendril, ideal);
-          stepClaimed = true;
-          this.stepCursor = (this.stepCursor + 1) % 3;
-        }
+      if (desired && tendril.phase === "sealed" && !stepClaimed && tendril.index === this.stepCandidateIndex) {
+        // Predict the next planted point slightly ahead in the tangent frame.
+        // The destination is frozen when the peel begins, so the body moves over
+        // a world-planted support rather than chasing a target attached to itself.
+        const predicted = this.computePredictedStepAnchor(tendril.index, ideal, this.tempD);
+        this.beginPeel(tendril, predicted);
+        stepClaimed = true;
+        this.stepCursor = (tendril.index + 1) % 3;
       }
 
       this.updateTendrilState(tendril, safeDt, ideal, desired);
@@ -347,6 +375,26 @@ export class CoreTendrilSurfaceContactSystem {
     return this.projectToBoundary(this.tempA, new THREE.Vector3());
   }
 
+  computePredictedStepAnchor(index, ideal, out) {
+    const speed01 = THREE.MathUtils.clamp(this.velocity.length() / 3.4, 0, 1);
+    const intent01 = THREE.MathUtils.clamp(this.desiredMove.length(), 0, 1);
+    const forwardLead = THREE.MathUtils.clamp(0.055 + speed01 * 0.085 + intent01 * 0.045, 0.055, 0.18);
+    const lateralBias = index === 1 ? -0.012 : index === 2 ? 0.012 : 0;
+
+    out.copy(ideal)
+      .addScaledVector(this.tangentForward, forwardLead)
+      .addScaledVector(this.tangentSide, lateralBias);
+
+    if (this.surfaceTruthActive) {
+      // Keep the predicted foothold on the same authored local contact plane.
+      this.tempC.copy(out).sub(this.surfacePoint);
+      out.addScaledVector(this.normal, -this.tempC.dot(this.normal));
+      return out;
+    }
+
+    return this.projectToBoundary(out, out);
+  }
+
   projectToBoundary(point, out) {
     const dx = point.x - this.center.x;
     const dy = point.y - this.center.y;
@@ -379,6 +427,7 @@ export class CoreTendrilSurfaceContactSystem {
     tendril.reachFrom.copy(this.computeStartWorld(tendril.index, this.tempB));
     tendril.reachTo.copy(targetAnchor);
     tendril.anchorWorld.copy(targetAnchor);
+    tendril.pendingAnchorValid = false;
     tendril.seal = 0;
   }
 
@@ -386,8 +435,14 @@ export class CoreTendrilSurfaceContactSystem {
     tendril.phase = "peeling";
     tendril.phaseAge = 0;
     tendril.reachFrom.copy(tendril.anchorWorld);
-    if (nextAnchor) tendril.reachTo.copy(nextAnchor);
-    else tendril.reachTo.copy(this.computeStartWorld(tendril.index, this.tempB));
+    if (nextAnchor) {
+      tendril.reachTo.copy(nextAnchor);
+      tendril.pendingAnchorWorld.copy(nextAnchor);
+      tendril.pendingAnchorValid = true;
+    } else {
+      tendril.reachTo.copy(this.computeStartWorld(tendril.index, this.tempB));
+      tendril.pendingAnchorValid = false;
+    }
     tendril.seal = 1;
   }
 
@@ -439,7 +494,7 @@ export class CoreTendrilSurfaceContactSystem {
 
       if (u >= 1) {
         if (desired) {
-          this.beginReach(tendril, ideal);
+          this.beginReach(tendril, tendril.pendingAnchorValid ? tendril.pendingAnchorWorld : ideal);
         } else {
           tendril.phase = "retracted";
           tendril.phaseAge = 0;
@@ -593,6 +648,7 @@ export class CoreTendrilSurfaceContactSystem {
       sealed: tendril.phase === "sealed",
       seal: Number(THREE.MathUtils.clamp(tendril.seal, 0, 1).toFixed(3)),
       stretch: Number(tendril.stretch.toFixed(3)),
+      stridePressure: Number((tendril.stridePressure ?? 0).toFixed(3)),
       anchorWorld: {
         x: Number(tendril.anchorWorld.x.toFixed(4)),
         y: Number(tendril.anchorWorld.y.toFixed(4)),
@@ -601,7 +657,7 @@ export class CoreTendrilSurfaceContactSystem {
     }));
 
     this.frameState.coreTendrilContact = {
-      pass: "HC-031G",
+      pass: "HC-031H",
       active: contactRequested || sealedCount > 0 || reachingCount > 0 || peelingCount > 0,
       contactState,
       tendrilCount: 3,
@@ -656,7 +712,11 @@ export class CoreTendrilSurfaceContactSystem {
         anchors: anchorStates,
         requestOwner: "CoreTendrilSurfaceContactSystem",
         consumer: "PlayerMovementController",
-        oneFrameCausalHandoff: true
+        oneFrameCausalHandoff: true,
+        plantedContactPolicy: "world_fixed_until_stride_pressure_requires_replant",
+        stepSelectionPolicy: "highest_stride_pressure_deterministic_tie_break",
+        stepCandidateIndex: this.stepCandidateIndex,
+        predictedFootholdInSurfaceTangentFrame: true
       },
       focusedProjectionBraceEligible: true,
       focusedProjectionRequiresAnchor: false,

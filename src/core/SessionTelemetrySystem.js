@@ -1274,7 +1274,16 @@ export class SessionTelemetrySystem {
         topologyFluidSlipDampingMultiplier: round(k.topologyEnvironmentalHandling?.fluidSlipDampingMultiplier ?? 1),
         topologyHandlingSuppressed: Boolean(k.topologyEnvironmentalHandling?.suppressed),
         attachmentActive: Boolean(frameState.playerAttachment?.active),
-        attachmentState: frameState.playerAttachment?.state ?? "free"
+        attachmentState: frameState.playerAttachment?.state ?? "free",
+        attachmentSurfaceId: frameState.playerAttachment?.surfaceTruthSurfaceId ?? "none",
+        tendrilLocomotionActive: Boolean(frameState.playerAttachment?.tendrilLocomotionActive),
+        tendrilSupportCount: frameState.playerAttachment?.tendrilSupportCount ?? 0,
+        tendrilSupportPlaneActive: Boolean(frameState.playerAttachment?.tendrilSupportPlaneActive),
+        tendrilSupportPlaneQuality01: round(frameState.playerAttachment?.tendrilSupportPlaneQuality01 ?? 0),
+        stabilizedProjectionActive: Boolean(frameState.stabilizedProjection?.active),
+        stabilizedProjectionMode: frameState.stabilizedProjection?.mode ?? "inactive",
+        stabilizedProjectionSurfaceBraced: Boolean(frameState.stabilizedProjection?.surfaceBraced),
+        stabilizedProjectionBraceQuality01: round(frameState.stabilizedProjection?.braceQuality01 ?? 0)
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),

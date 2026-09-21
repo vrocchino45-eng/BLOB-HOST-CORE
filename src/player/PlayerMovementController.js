@@ -87,6 +87,17 @@ export class PlayerMovementController {
     this.surfaceTruthVerbTransmission = { pulse: 0.5, absorb: 0.5, stabilize: 0.5 };
     this.attachmentVisibleStandOffDistance = 0.38;
 
+    // HC031H — prior-frame planted anchors define a stable support plane that
+    // refines tangent motion and ride height without taking translation authority.
+    this.tendrilSupportPlaneActive = false;
+    this.tendrilSupportNormal = new THREE.Vector3(0, 1, 0);
+    this.tendrilSupportCentroid = new THREE.Vector3();
+    this.tendrilSupportQuality01 = 0;
+    this.tendrilSupportCount = 0;
+    this.tendrilSupportTargetRideHeight = 0.38;
+    this.tendrilSupportRideHeightError = 0;
+    this.tendrilSupportSurfaceId = "none";
+
     const physicalFeel = localCellRecipe.physicalFeel ?? {};
     const flowVector = physicalFeel.flowVector ?? [0, 0, 0];
     this.flow.set(flowVector[0] ?? 0, flowVector[1] ?? 0, flowVector[2] ?? 0);
@@ -136,6 +147,7 @@ export class PlayerMovementController {
     // interpret the current Core-to-surface relationship without adding raycasts.
     this.sampleMembraneBoundaryTelemetry();
     this.syncAttachmentSurfaceTruth(frameState);
+    this.syncTendrilSupportPlane(frameState);
     this.updateChemistryAttachmentState(dt, frameState);
 
     const physicalFeel = frameState.physicalFeel ?? {};
@@ -310,7 +322,16 @@ export class PlayerMovementController {
       tendrilLoadPulse01: Number((this.tendrilLocomotionTelemetry.loadPulse01 ?? 0).toFixed(3)),
       tendrilPullAcceleration: Number((this.tendrilLocomotionTelemetry.pullAcceleration ?? 0).toFixed(3)),
       tendrilLeadingAnchorWorld: this.tendrilLocomotionTelemetry.leadingAnchorWorld ?? null,
-      standOffDistance: this.surfaceTruthActive ? this.attachmentVisibleStandOffDistance : this.attachmentStandOffDistance,
+      standOffDistance: this.tendrilSupportPlaneActive
+        ? this.tendrilSupportTargetRideHeight
+        : this.surfaceTruthActive
+          ? this.attachmentVisibleStandOffDistance
+          : this.attachmentStandOffDistance,
+      tendrilSupportPlaneActive: this.tendrilSupportPlaneActive,
+      tendrilSupportPlaneQuality01: Number(this.tendrilSupportQuality01.toFixed(3)),
+      tendrilSupportPlaneCount: this.tendrilSupportCount,
+      tendrilSupportPlaneSurfaceId: this.tendrilSupportSurfaceId,
+      tendrilSupportRideHeightError: Number(this.tendrilSupportRideHeightError.toFixed(3)),
       surfaceTruthActive: this.surfaceTruthActive,
       surfaceTruthDistance: Number.isFinite(this.surfaceTruthDistance) ? Number(this.surfaceTruthDistance.toFixed(3)) : null,
       surfaceTruthMeshName: this.surfaceTruthMeshName,
@@ -429,6 +450,19 @@ export class PlayerMovementController {
       inputMagnitude,
       thrust: acceleration * inputMagnitude,
       tendrilSurfaceLocomotion: { ...this.tendrilLocomotionTelemetry },
+      tendrilSupportPlane: {
+        active: this.tendrilSupportPlaneActive,
+        supportCount: this.tendrilSupportCount,
+        supportQuality01: Number(this.tendrilSupportQuality01.toFixed(3)),
+        targetRideHeight: Number(this.tendrilSupportTargetRideHeight.toFixed(3)),
+        rideHeightError: Number(this.tendrilSupportRideHeightError.toFixed(3)),
+        surfaceId: this.tendrilSupportSurfaceId,
+        normal: {
+          x: Number(this.tendrilSupportNormal.x.toFixed(4)),
+          y: Number(this.tendrilSupportNormal.y.toFixed(4)),
+          z: Number(this.tendrilSupportNormal.z.toFixed(4))
+        }
+      },
       movementFeel: this.tendrilLocomotionTelemetry.active
         ? "anchored_elastic_pull_handoff"
         : movementTuning.movementFeel ?? "embodied_viscous_current_swim",
@@ -624,6 +658,40 @@ export class PlayerMovementController {
     }
   }
 
+
+  syncTendrilSupportPlane(frameState) {
+    const plane = frameState.coreTendrilSupportPlane ?? {};
+    const centroid = plane.supportCentroid ?? {};
+    const normal = plane.supportNormal ?? {};
+    const surfaceMatches = (plane.surfaceId ?? "none") === this.surfaceTruthSurfaceId;
+    const valid = Boolean(
+      plane.active
+      && surfaceMatches
+      && (plane.supportCount ?? 0) > 0
+      && [centroid.x, centroid.y, centroid.z, normal.x, normal.y, normal.z].every(Number.isFinite)
+    );
+
+    this.tendrilSupportPlaneActive = valid;
+    this.tendrilSupportCount = valid ? Math.max(0, Math.floor(plane.supportCount ?? 0)) : 0;
+    this.tendrilSupportQuality01 = valid ? THREE.MathUtils.clamp(plane.supportQuality01 ?? 0, 0, 1) : 0;
+    this.tendrilSupportTargetRideHeight = valid
+      ? THREE.MathUtils.clamp(plane.targetRideHeight ?? this.attachmentVisibleStandOffDistance, 0.30, 0.44)
+      : this.attachmentVisibleStandOffDistance;
+    this.tendrilSupportRideHeightError = valid ? Number(plane.rideHeightError ?? 0) : 0;
+    this.tendrilSupportSurfaceId = valid ? (plane.surfaceId ?? "none") : "none";
+
+    if (!valid) {
+      this.tendrilSupportNormal.copy(this.attachmentSurfaceNormal);
+      this.tendrilSupportCentroid.copy(this.attachmentSurfacePoint);
+      return;
+    }
+
+    this.tendrilSupportCentroid.set(centroid.x, centroid.y, centroid.z);
+    this.tendrilSupportNormal.set(normal.x, normal.y, normal.z);
+    if (this.tendrilSupportNormal.lengthSq() < 0.0001) this.tendrilSupportNormal.copy(this.attachmentSurfaceNormal);
+    else this.tendrilSupportNormal.normalize();
+  }
+
   updateChemistryAttachmentState(dt, frameState) {
     const chemistry = frameState.coreChemistryOutput ?? {};
     const inspection = frameState.tightInspectionCamera ?? frameState.inspectionCamera ?? {};
@@ -654,7 +722,10 @@ export class PlayerMovementController {
         )
       : 0;
 
-    const outwardIntent = this.intent.dot(this.attachmentSurfaceNormal);
+    const activeContactNormal = this.tendrilSupportPlaneActive
+      ? this.tendrilSupportNormal
+      : this.attachmentSurfaceNormal;
+    const outwardIntent = this.intent.dot(activeContactNormal);
     const awayIntent = Math.max(0, -outwardIntent);
     this.attachmentReleaseTension = awayIntent;
     this.attachmentCooldown = Math.max(0, this.attachmentCooldown - Math.max(0, dt));
@@ -682,7 +753,7 @@ export class PlayerMovementController {
         // A small inward release impulse makes detachment read as peeling away
         // from the inside of the membrane rather than simply losing a flag.
         const releaseImpulse = 0.48 + this.attachmentStrength * 0.72;
-        this.velocity.addScaledVector(this.attachmentSurfaceNormal, -releaseImpulse);
+        this.velocity.addScaledVector(activeContactNormal, -releaseImpulse);
       } else {
         this.attachmentState = "attached";
       }
@@ -721,8 +792,11 @@ export class PlayerMovementController {
       this.attachmentSurfaceTangentSpeed = this.boundaryTangentialSpeed;
       return;
     }
-    const radialVelocity = this.velocity.dot(this.attachmentSurfaceNormal);
-    this.velocity.addScaledVector(this.attachmentSurfaceNormal, -radialVelocity);
+    const activeContactNormal = this.tendrilSupportPlaneActive
+      ? this.tendrilSupportNormal
+      : this.attachmentSurfaceNormal;
+    const radialVelocity = this.velocity.dot(activeContactNormal);
+    this.velocity.addScaledVector(activeContactNormal, -radialVelocity);
     this.attachmentTangentVelocity.copy(this.velocity);
     this.attachmentSurfaceTangentSpeed = this.attachmentTangentVelocity.length();
   }
@@ -750,8 +824,11 @@ export class PlayerMovementController {
 
     if (!this.attachmentActive || !request.active || supportCount <= 0) return inactive;
 
+    const locomotionNormal = this.tendrilSupportPlaneActive
+      ? this.tendrilSupportNormal
+      : this.attachmentSurfaceNormal;
     this.tendrilIntentTangent.copy(this.intent)
-      .addScaledVector(this.attachmentSurfaceNormal, -this.intent.dot(this.attachmentSurfaceNormal));
+      .addScaledVector(locomotionNormal, -this.intent.dot(locomotionNormal));
     const intentMagnitude = this.tendrilIntentTangent.length();
     if (intentMagnitude < 0.035) {
       // No player intent: retain attachment, but let residual tangential velocity
@@ -777,8 +854,8 @@ export class PlayerMovementController {
         (anchor.anchorWorld.z ?? this.playerRoot.position.z) - this.playerRoot.position.z
       );
       this.tendrilAnchorDelta.addScaledVector(
-        this.attachmentSurfaceNormal,
-        -this.tendrilAnchorDelta.dot(this.attachmentSurfaceNormal)
+        locomotionNormal,
+        -this.tendrilAnchorDelta.dot(locomotionNormal)
       );
       const distance = this.tendrilAnchorDelta.length();
       if (distance < 0.015) continue;
@@ -823,13 +900,17 @@ export class PlayerMovementController {
       ? THREE.MathUtils.lerp(0.76, 1.04, this.surfaceTruthLoadTolerance)
       : 1.0;
     const surfaceTractionScale = surfaceAdhesionScale * surfaceLoadScale;
+    const supportPlaneScale = this.tendrilSupportPlaneActive
+      ? THREE.MathUtils.lerp(0.88, 1.05, this.tendrilSupportQuality01)
+      : 1.0;
     const pullAcceleration = acceleration
       * (0.66 + traction01 * 0.50)
       * handoffScale
       * supportScale
       * anchorAlignmentScale
       * loadPulse01
-      * surfaceTractionScale;
+      * surfaceTractionScale
+      * supportPlaneScale;
 
     this.tendrilDriveDirection.copy(this.tendrilIntentTangent);
     if (forwardAnchorAvailable) {
@@ -866,6 +947,10 @@ export class PlayerMovementController {
       surfaceAdhesion: Number(this.surfaceTruthAdhesion.toFixed(3)),
       surfaceLoadTolerance: Number(this.surfaceTruthLoadTolerance.toFixed(3)),
       surfaceTractionScale: Number(surfaceTractionScale.toFixed(3)),
+      supportPlaneActive: this.tendrilSupportPlaneActive,
+      supportPlaneQuality01: Number(this.tendrilSupportQuality01.toFixed(3)),
+      supportPlaneScale: Number(supportPlaneScale.toFixed(3)),
+      supportSurfaceId: this.tendrilSupportSurfaceId,
       mode: request.mode ?? "supported_pull"
     };
   }
@@ -1055,19 +1140,24 @@ export class PlayerMovementController {
     // trusted ellipsoid and keep velocity tangent to it. No new surface source,
     // collider, or raycast is introduced.
     if (this.attachmentActive && this.surfaceTruthActive) {
-      // HC031F1A: visible geometry wins while a bounded local surface truth is
-      // available. Correct only along that plane normal; tangent motion remains
-      // entirely owned by PlayerMovementController.
+      // HC031H: once planted supports exist, their support plane owns ride-height
+      // refinement. SurfaceTruth still decides what is crawlable; movement remains
+      // the only system allowed to translate playerRoot.
       this.tempSurfaceDelta ??= new THREE.Vector3();
-      this.tempSurfaceDelta.copy(p).sub(this.attachmentSurfacePoint);
-      const signedDistance = this.tempSurfaceDelta.dot(this.attachmentSurfaceNormal);
-      const error = this.attachmentVisibleStandOffDistance - signedDistance;
+      const useSupportPlane = this.tendrilSupportPlaneActive && this.tendrilSupportCount >= 2;
+      const contactPoint = useSupportPlane ? this.tendrilSupportCentroid : this.attachmentSurfacePoint;
+      const contactNormal = useSupportPlane ? this.tendrilSupportNormal : this.attachmentSurfaceNormal;
+      const targetStandOff = useSupportPlane ? this.tendrilSupportTargetRideHeight : this.attachmentVisibleStandOffDistance;
+      this.tempSurfaceDelta.copy(p).sub(contactPoint);
+      const signedDistance = this.tempSurfaceDelta.dot(contactNormal);
+      const error = targetStandOff - signedDistance;
       const correction = THREE.MathUtils.clamp(error, -0.20, 0.20);
-      const settle = 1 - Math.exp(-Math.max(0, dt) * 16.0);
-      p.addScaledVector(this.attachmentSurfaceNormal, correction * settle);
+      const supportSettleScale = useSupportPlane ? THREE.MathUtils.lerp(0.78, 1.12, this.tendrilSupportQuality01) : 1;
+      const settle = 1 - Math.exp(-Math.max(0, dt) * 16.0 * supportSettleScale);
+      p.addScaledVector(contactNormal, correction * settle);
 
-      const normalVelocity = this.velocity.dot(this.attachmentSurfaceNormal);
-      this.velocity.addScaledVector(this.attachmentSurfaceNormal, -normalVelocity);
+      const normalVelocity = this.velocity.dot(contactNormal);
+      this.velocity.addScaledVector(contactNormal, -normalVelocity);
       this.boundaryRadialSpeed = 0;
       this.boundaryTangentialSpeed = this.velocity.length();
       this.attachmentSurfaceTangentSpeed = this.boundaryTangentialSpeed;

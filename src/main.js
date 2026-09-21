@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031G keeps Stabilize + Pulse available everywhere as a focused projection.
-// Free space self-braces; authored surface anchors enhance the same function.
+// HC031H assimilates proven planted-contact support mechanics beneath BLOB's
+// existing suction-tendril ecology. HC031G verb grammar remains locked.
 
 
 const appRoot = document.querySelector("#app");
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031G",
-  buildLabel: "Stabilized Projection / Focused Pulse V1"
+  buildId: "HC-031H",
+  buildLabel: "Planted Contact Support Assimilation"
 });
 
 runtime.start().catch((error) => {

@@ -1,3 +1,23 @@
+# HC031H Lock Status
+
+## Locked gameplay grammar
+
+HC031G Stabilized Projection is locked. `VerbCompositionSystem`, `StabilizedProjectionSystem`, Targeting/Focus, Bond/Absorb, reactive state, response personality, Grave II, rupture/harvest/consequence, Core growth, crawlable-surface profile vocabulary, and shared tendril visual language may not change in this experiment.
+
+## Controlled experimental changes
+
+- `src/player/CoreTendrilSupportPlaneSystem.js` — new read-only planted-support interpreter
+- `src/player/CoreTendrilSurfaceContactSystem.js` — strain-driven step selection + fixed predicted foothold
+- `src/player/PlayerMovementController.js` — consumes support-plane normal/ride height while retaining sole translation authority
+- `src/player/CoreEmbodimentSystem.js` — presentation conforms to support-plane normal
+- `src/core/SessionTelemetrySystem.js` — read-only support/brace telemetry
+- `src/core/GameRuntime.js` — construction/order
+- `src/main.js` — build identity
+
+No new input, collider, raycast owner, ability, target cycle, progression gate, physics engine, or external runtime dependency is introduced.
+
+---
+
 # HC031G Lock Status
 
 ## Locked parent systems

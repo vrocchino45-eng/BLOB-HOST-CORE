@@ -1,0 +1,56 @@
+{
+  "pass": "HC-031H",
+  "title": "Planted Contact Support Assimilation",
+  "parent": "HC-031G",
+  "lockedTruth": {
+    "stabilizedProjectionGrammarLocked": true,
+    "compositionChord": "cohere_project",
+    "focusedProjectionRequiresSurfaceAnchor": false,
+    "movementAuthority": "PlayerMovementController",
+    "surfaceTruthAuthority": "CoreSurfaceTruthSystem",
+    "anchorAuthority": "CoreTendrilSurfaceContactSystem",
+    "supportPlaneAuthority": "CoreTendrilSupportPlaneSystem",
+    "supportPlaneReadOnly": true,
+    "tendrilCount": 3,
+    "addsNewButton": false,
+    "addsCollider": false,
+    "addsRaycastOwner": false,
+    "addsRuntimeDependency": false,
+    "changesProgression": false
+  },
+  "assimilation": {
+    "architectureReference": "majidmanzarpour/threejs-procedural-spider",
+    "referenceLicense": "MIT",
+    "sourceCodeCopied": false,
+    "adaptedIdeas": [
+      "world_planted_contacts",
+      "stride_pressure_replant",
+      "predicted_foothold_in_surface_tangent_frame",
+      "support_plane_body_ride_height"
+    ]
+  },
+  "supportLaw": {
+    "sequence": "authored_surface -> planted_suction_anchors -> support_plane -> movement_consumer",
+    "minimumSupportForPlaneRideHeight": 2,
+    "threePointSupportMayRefineNormal": true,
+    "surfaceTruthStillOwnsEligibility": true,
+    "oneFrameCausalHandoff": true
+  },
+  "telemetryProof": {
+    "movementSamplesExposeAttachmentSurface": true,
+    "movementSamplesExposeTendrilSupport": true,
+    "movementSamplesExposeStabilizedProjectionMode": true,
+    "movementSamplesExposeSurfaceBraceQuality": true
+  },
+  "forbiddenScope": [
+    "new movement control",
+    "new ability",
+    "surface anchor ability gate",
+    "targeting rewrite",
+    "Bond rewrite",
+    "new physics engine",
+    "three-mesh-bvh dependency in this pass",
+    "wall ceiling edge traversal expansion",
+    "Grave progression changes"
+  ]
+}

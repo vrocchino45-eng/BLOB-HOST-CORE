@@ -1,5 +1,15 @@
 # Changelog
 
+## HC031H — Planted Contact Support Assimilation
+
+- Added read-only support-plane derivation from planted suction anchors.
+- Replant selection now chooses the actually over-strained support, with deterministic tie-breaking.
+- New footholds are predicted slightly ahead in the authored surface tangent frame and remain world-fixed through the reach.
+- Attached ride height and tangent refinement can use the planted support plane while movement authority remains unchanged.
+- Core contact presentation can conform to the support plane.
+- Session telemetry now records support-plane and stabilized-projection brace state.
+- HC031G verb grammar and surface ecology remain locked.
+
 ## HC031G — Stabilized Projection / Focused Pulse V1
 
 - Kept HC029C `Stabilize + Pulse = cohere_project` as the semantic owner.

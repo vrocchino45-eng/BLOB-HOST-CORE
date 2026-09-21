@@ -19,6 +19,7 @@ import { PlayerMovementController } from "../player/PlayerMovementController.js"
 import { CoreEmbodimentSystem } from "../player/CoreEmbodimentSystem.js";
 import { CoreTendrilSurfaceContactSystem } from "../player/CoreTendrilSurfaceContactSystem.js";
 import { CoreSurfaceTruthSystem } from "../player/CoreSurfaceTruthSystem.js";
+import { CoreTendrilSupportPlaneSystem } from "../player/CoreTendrilSupportPlaneSystem.js";
 import { CoreEngineSystem } from "../player/CoreEngineSystem.js";
 import { CoreRadialPerformanceSystem } from "../player/CoreRadialPerformanceSystem.js";
 import { CoreTopologyResonanceSystem } from "../player/CoreTopologyResonanceSystem.js";
@@ -121,6 +122,7 @@ export class GameRuntime {
     this.controllerComfortSystem = null;
     this.playerMovementController = null;
     this.coreSurfaceTruthSystem = null;
+    this.coreTendrilSupportPlaneSystem = null;
     this.hostContactShelfSystem = null;
     this.coreEmbodimentSystem = null;
     this.coreTendrilSurfaceContactSystem = null;
@@ -2002,6 +2004,10 @@ export class GameRuntime {
       playerRoot: this.playerCore,
       frameState: this.frameState
     });
+    this.coreTendrilSupportPlaneSystem = new CoreTendrilSupportPlaneSystem({
+      playerRoot: this.playerCore,
+      frameState: this.frameState
+    });
     this.playerMovementController = new PlayerMovementController({
       playerRoot: this.playerCore,
       camera: this.camera,
@@ -2565,6 +2571,9 @@ export class GameRuntime {
     // HC031F1B accepts only registered ecological surfaces as local contact truth.
     // Decorative/transparent world meshes can no longer become attachment targets.
     this.registry.register("coreSurfaceTruthSystem", this.coreSurfaceTruthSystem);
+    // HC031H derives a stable support plane from prior-frame planted suction anchors.
+    // It owns no movement; PlayerMovementController consumes the read-only support request.
+    this.registry.register("coreTendrilSupportPlaneSystem", this.coreTendrilSupportPlaneSystem);
     this.registry.register("playerMovement", this.playerMovementController);
     // HC028G reads the resolved environmental force after movement and renders
     // diegetic local streamlines only; it never owns force, pressure or traversal.
