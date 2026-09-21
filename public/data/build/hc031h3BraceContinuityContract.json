@@ -1,0 +1,43 @@
+{
+  "pass": "HC-031H3",
+  "label": "Brace Continuity",
+  "parent": "HC-031H2",
+  "purpose": "Keep Stabilize+Pulse externally braced through the same short authored-suction handoff grace already owned by PlayerMovementController.",
+  "bracePriority": [
+    "live_anchor_carried_surface_identity",
+    "authored_suction_attachment_continuity",
+    "same_frame_surface_truth_legacy",
+    "free_space_self_brace"
+  ],
+  "continuityLaw": {
+    "movementOwnsGraceTimer": true,
+    "addsNewGraceTimer": false,
+    "requiresAttachmentActive": true,
+    "requiresAttachmentAuthority": "authored_suction_support",
+    "requiresAuthoredSuctionSupportActive": true,
+    "requiresRetainedSurfaceId": true,
+    "requiresRetainedSupportCount": true,
+    "doesNotRequireLiveSupportPlaneDuringGrace": true,
+    "doesNotRequireSameFrameSurfaceTruthDuringGrace": true
+  },
+  "lockedTruth": {
+    "focusedProjectionChord": "cohere_project",
+    "focusedProjectionRequiresSurfaceAnchor": false,
+    "freeSpaceSelfBracePreserved": true,
+    "movementAuthority": "PlayerMovementController",
+    "supportPlaneAuthority": "CoreTendrilSupportPlaneSystem",
+    "surfaceTruthAuthority": "CoreSurfaceTruthSystem",
+    "targetingAuthorityChanged": false,
+    "bondAuthorityChanged": false,
+    "controlsChanged": false,
+    "locomotionTuningChanged": false,
+    "surfaceAuthoringChanged": false
+  },
+  "acceptance": {
+    "cleanChord": "stabilize+pulse with absorb off",
+    "continuityExpectedWhen": "attachmentActive && attachmentAuthority=authored_suction_support && authoredSuctionSupportActive && liveSupportPlane=false",
+    "expectedProjectionMode": "single/dual/tri_anchor_braced according to retained support count",
+    "expectedExternalBraceSource": "authored_suction_attachment_continuity",
+    "mergeGate": "surface-braced projection appears while clean cohere_project overlaps retained authored suction attachment"
+  }
+}

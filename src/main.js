@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031H2",
-  buildLabel: "Anchor-Carried Surface Identity"
+  buildId: "HC-031H3",
+  buildLabel: "Brace Continuity"
 });
 
 runtime.start().catch((error) => {

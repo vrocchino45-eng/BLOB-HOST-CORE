@@ -1293,6 +1293,9 @@ export class SessionTelemetrySystem {
         stabilizedProjectionMode: frameState.stabilizedProjection?.mode ?? "inactive",
         stabilizedProjectionSurfaceBraced: Boolean(frameState.stabilizedProjection?.surfaceBraced),
         stabilizedProjectionBraceQuality01: round(frameState.stabilizedProjection?.braceQuality01 ?? 0),
+        stabilizedProjectionLiveAnchorBraceActive: Boolean(frameState.stabilizedProjection?.liveAnchorBraceActive),
+        stabilizedProjectionAttachmentContinuityBraceActive: Boolean(frameState.stabilizedProjection?.authoredAttachmentContinuityBraceActive),
+        stabilizedProjectionContinuityStrength01: round(frameState.stabilizedProjection?.continuityStrength01 ?? 0),
         stabilizedProjectionExternalBraceSource: frameState.stabilizedProjection?.externalBraceSource ?? "none",
         stabilizedProjectionSurfaceId: frameState.stabilizedProjection?.surface?.id ?? "none"
       },

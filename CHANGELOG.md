@@ -1,3 +1,12 @@
+# HC031H3 — Brace Continuity
+
+- Stabilized Projection now consumes the existing PlayerMovementController authored-suction continuity during brief tendril handoffs.
+- Live anchor-carried support remains the first-priority brace source.
+- Added no new grace timer and changed no locomotion tuning.
+- Added explicit telemetry for live-anchor versus attachment-continuity brace source.
+- Free-space self-braced `cohere_project` remains unchanged.
+- HC029C verb grammar, targeting, Bond, controls, SurfaceTruth, support-plane logic, routes, and progression remain locked.
+
 # HC031H2 — Anchor-Carried Surface Identity
 
 - SurfaceTruth now authorizes each suction relationship at seal time; the sealed anchor retains surface ID/profile/material/normal until peel/release.

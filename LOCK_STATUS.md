@@ -1,9 +1,9 @@
-# HC031H2 Experimental Branch Lock Status
+# HC031H3 Experimental Branch Lock Status
 
 Parent main baseline remains **HC031G — Stabilized Projection**.
 
-Current experimental branch sequence: HC031H → HC031H1 → **HC031H2**.
+Current experimental branch sequence: HC031H → HC031H1 → HC031H2 → **HC031H3**.
 
-HC031H2 intentionally changes only the contact-identity handoff: sealed tendril anchors carry the authored surface relationship granted by CoreSurfaceTruthSystem until peel/release. PlayerMovementController remains translation authority. HC029C verb composition remains locked.
+HC031H3 changes only the Stabilized Projection consumer lifetime plus telemetry/build identity. `PlayerMovementController`, tendril contact/replant behavior, support-plane derivation, SurfaceTruth, HC029C composition, targeting, Bond/Absorb, Grave systems, controls, and progression are locked.
 
-Do not merge to `main` until telemetry proves sustained overlap of carried anchor identity, support plane, authored suction attachment, tendril locomotion, and surface-braced Stabilized Projection.
+Do not merge to `main` until a short telemetry test proves clean `cohere_project` remains surface-braced across both live anchor support and movement-retained authored-suction continuity.

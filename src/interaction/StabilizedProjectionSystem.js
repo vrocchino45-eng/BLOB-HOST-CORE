@@ -3,14 +3,19 @@ import * as THREE from "three";
 const clamp01 = (value) => THREE.MathUtils.clamp(Number.isFinite(value) ? value : 0, 0, 1);
 
 /**
- * HC031G — Stabilized Projection / Focused Pulse V1.
+ * HC031H3 — Stabilized Projection Brace Continuity.
  *
  * Resolves how the already-authored Stabilize + Pulse chord (HC029C cohere_project)
  * expresses physically. Focused Pulse is always available in free space through a
  * self-braced Core/tendril posture. Authored surface anchors can reinforce that same
  * function through adhesion, load tolerance and Pulse transmission, but never unlock it.
  *
- * This system owns no input, targeting, movement, surface authoring or progression.
+ * Live anchor support remains the highest-fidelity brace source. During a normal
+ * tendril peel/replant handoff, PlayerMovementController already retains authored
+ * suction attachment for 0.22 s; HC031H3 lets focused projection honor that same
+ * movement-owned continuity instead of dropping to self-brace for a frame.
+ *
+ * This system owns no input, targeting, movement, surface authoring, grace timer or progression.
  */
 export class StabilizedProjectionSystem {
   constructor({ frameState }) {
@@ -40,6 +45,20 @@ export class StabilizedProjectionSystem {
       && (support.surfaceId ?? "none") !== "none"
       && (support.supportCount ?? 0) > 0
     );
+    const liveAnchorBrace = Boolean(
+      active
+      && carriedSupportActive
+      && attachment.authoredSuctionSupportActive
+    );
+    const authoredAttachmentContinuityBrace = Boolean(
+      active
+      && !carriedSupportActive
+      && attachment.active
+      && attachment.authority === "authored_suction_support"
+      && attachment.authoredSuctionSupportActive
+      && (attachment.authoredSuctionSupportSurfaceId ?? "none") !== "none"
+      && (Number(attachment.authoredSuctionSupportCount) || 0) > 0
+    );
     const legacySurfaceBrace = Boolean(
       active
       && contact.sealedCount > 0
@@ -49,15 +68,15 @@ export class StabilizedProjectionSystem {
       && truth.authoredEcologicalSurface === true
     );
     const surfaceBraced = Boolean(
-      active
-      && (
-        (carriedSupportActive && attachment.authoredSuctionSupportActive)
-        || legacySurfaceBrace
-      )
+      liveAnchorBrace
+      || authoredAttachmentContinuityBrace
+      || legacySurfaceBrace
     );
-    const sealedCount = surfaceBraced && carriedSupportActive
+    const sealedCount = liveAnchorBrace
       ? Math.max(0, Math.min(3, Number(support.supportCount) || 0))
-      : Math.max(0, Math.min(3, Number(contact.sealedCount) || 0));
+      : authoredAttachmentContinuityBrace
+        ? Math.max(0, Math.min(3, Number(attachment.authoredSuctionSupportCount) || 0))
+        : Math.max(0, Math.min(3, Number(contact.sealedCount) || 0));
 
     let mode = "inactive";
     if (active) {
@@ -72,17 +91,42 @@ export class StabilizedProjectionSystem {
       this.modeChangeCount += 1;
     }
 
+    const continuityStrength = clamp01(attachment.authoredSuctionSupportStrength ?? 0);
     const adhesion = surfaceBraced
-      ? clamp01(carriedSupportActive ? support.adhesion : (truth.adhesion ?? contact.surfaceTruthAdhesion ?? 0.75))
+      ? clamp01(
+          liveAnchorBrace
+            ? support.adhesion
+            : authoredAttachmentContinuityBrace
+              ? continuityStrength
+              : (truth.adhesion ?? contact.surfaceTruthAdhesion ?? 0.75)
+        )
       : 0;
     const loadTolerance = surfaceBraced
-      ? clamp01(carriedSupportActive ? support.loadTolerance : (truth.loadTolerance ?? contact.surfaceTruthLoadTolerance ?? 0.70))
+      ? clamp01(
+          liveAnchorBrace
+            ? support.loadTolerance
+            : authoredAttachmentContinuityBrace
+              ? continuityStrength
+              : (truth.loadTolerance ?? contact.surfaceTruthLoadTolerance ?? 0.70)
+        )
       : 0;
     const pulseTransmission = surfaceBraced
-      ? clamp01(carriedSupportActive ? support.verbTransmission?.pulse : (truth.verbTransmission?.pulse ?? contact.surfaceTruthVerbTransmission?.pulse ?? 0.5))
+      ? clamp01(
+          liveAnchorBrace
+            ? support.verbTransmission?.pulse
+            : authoredAttachmentContinuityBrace
+              ? continuityStrength
+              : (truth.verbTransmission?.pulse ?? contact.surfaceTruthVerbTransmission?.pulse ?? 0.5)
+        )
       : 0;
     const compliance = surfaceBraced
-      ? clamp01(carriedSupportActive ? support.compliance : (truth.compliance ?? contact.surfaceTruthCompliance ?? 0.5))
+      ? clamp01(
+          liveAnchorBrace
+            ? support.compliance
+            : authoredAttachmentContinuityBrace
+              ? 0.5
+              : (truth.compliance ?? contact.surfaceTruthCompliance ?? 0.5)
+        )
       : 0;
     const support01 = surfaceBraced ? clamp01(sealedCount / 3) : 0;
     const surfaceQuality01 = surfaceBraced
@@ -139,17 +183,44 @@ export class StabilizedProjectionSystem {
       focusedResponseMultiplier,
       ambientResponseMultiplier,
       direction,
+      liveAnchorBrace,
+      authoredAttachmentContinuityBrace,
+      continuityStrength,
       surfaceId: surfaceBraced
-        ? (carriedSupportActive ? support.surfaceId : (truth.surfaceId ?? contact.surfaceTruthSurfaceId ?? "authored_surface"))
+        ? (
+            liveAnchorBrace
+              ? support.surfaceId
+              : authoredAttachmentContinuityBrace
+                ? attachment.authoredSuctionSupportSurfaceId
+                : (truth.surfaceId ?? contact.surfaceTruthSurfaceId ?? "authored_surface")
+          )
         : "none",
       profileId: surfaceBraced
-        ? (carriedSupportActive ? support.surfaceProfileId : (truth.profileId ?? contact.surfaceTruthProfileId ?? "unknown_profile"))
+        ? (
+            liveAnchorBrace
+              ? support.surfaceProfileId
+              : authoredAttachmentContinuityBrace
+                ? "retained_authored_suction_attachment"
+                : (truth.profileId ?? contact.surfaceTruthProfileId ?? "unknown_profile")
+          )
         : "none",
       materialFamily: surfaceBraced
-        ? (carriedSupportActive ? support.materialFamily : (truth.materialFamily ?? contact.surfaceTruthMaterialFamily ?? "unknown"))
+        ? (
+            liveAnchorBrace
+              ? support.materialFamily
+              : authoredAttachmentContinuityBrace
+                ? "retained_authored_surface"
+                : (truth.materialFamily ?? contact.surfaceTruthMaterialFamily ?? "unknown")
+          )
         : "none",
       externalBraceSource: surfaceBraced
-        ? (carriedSupportActive ? "anchor_carried_surface_identity" : "same_frame_surface_truth_legacy")
+        ? (
+            liveAnchorBrace
+              ? "anchor_carried_surface_identity"
+              : authoredAttachmentContinuityBrace
+                ? "authored_suction_attachment_continuity"
+                : "same_frame_surface_truth_legacy"
+          )
         : "none"
     });
   }
@@ -173,7 +244,10 @@ export class StabilizedProjectionSystem {
       recoilContainment01: Number((data.recoilContainment01 ?? 0).toFixed(3)),
       surfaceQuality01: Number((data.surfaceQuality01 ?? 0).toFixed(3)),
       externalBraceSource: data.externalBraceSource ?? "none",
-      contactIntegrationPass: "HC-031H2",
+      contactIntegrationPass: "HC-031H3",
+      liveAnchorBraceActive: Boolean(data.liveAnchorBrace),
+      authoredAttachmentContinuityBraceActive: Boolean(data.authoredAttachmentContinuityBrace),
+      continuityStrength01: Number((data.continuityStrength ?? 0).toFixed(3)),
       surface: {
         id: data.surfaceId ?? "none",
         profileId: data.profileId ?? "none",

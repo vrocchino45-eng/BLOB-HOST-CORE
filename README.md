@@ -1,3 +1,21 @@
+# HC031H3 — Brace Continuity
+
+HC031H3 keeps the HC031G `Stabilize + Pulse = cohere_project` grammar unchanged and closes the final H2 consumer-lifetime mismatch. Live anchor-carried support remains the preferred external brace. If that support disappears briefly during a normal peel/replant while `PlayerMovementController` still owns a valid `authored_suction_support` attachment, Stabilized Projection now preserves external Host bracing through that same movement-owned continuity.
+
+No new grace timer, movement tuning, ability, control, or surface rule is added. Free-space focused Pulse remains self-braced.
+
+Runtime grammar:
+
+**live anchor support → external brace**
+
+**anchor handoff + retained authored suction attachment → continuity brace**
+
+**no Host attachment → self brace**
+
+See `HC031H3_BUILD_REPORT.md` and `HC031H3_FOCUSED_PLAYTEST.md`.
+
+---
+
 # HC031H2 — Anchor-Carried Surface Identity
 
 HC031H2 closes the timing/identity handoff exposed by H1 telemetry. `CoreSurfaceTruthSystem` still decides whether a surface is authored and mechanically eligible, but once a sucker seals, that anchor carries the accepted surface relationship until peel/release. Support, movement attachment, and Stabilized Projection now read the retained anchor identity rather than requiring a second same-frame surface rediscovery.
