@@ -1,3 +1,15 @@
+# HC031I1 — Contact Ecology Entry and Visual Readability Lock
+
+HC031I1 fixes the focused test path exposed by cumulative HC031I telemetry. Shift+1 now lands directly above the central membrane inside contact range, and camera-forward movement follows the authored sequence instead of leaving it behind:
+
+**teal membrane pressure wave → orange scar brace bands → amber residue yield / Stabilize hex**
+
+The overlays are disabled for collision and targeting. They visualize existing contact, locomotion, projection, and Stabilize state without changing movement, controls, attachment rules, targeting, verb strength, progression, or ordinary playthrough behavior.
+
+Use **Shift+1**, move camera-forward, and export with **Shift+T**. See `HC031I1_FOCUSED_PLAYTEST.md` for the exact visual checks.
+
+---
+
 # HC031I — Host Contact Ecology Continuation
 
 HC031I is the first post-H3 environment/ecology pass. The H3 tendril/contact/brace architecture is treated as locked foundation. Surface Wake's Host Contact Shelf now continues into three linked Host material conditions: a living membrane causeway, a scar load buttress, and a weak residue wash.

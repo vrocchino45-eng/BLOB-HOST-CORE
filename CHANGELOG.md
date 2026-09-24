@@ -1,3 +1,12 @@
+# HC031I1 — Contact Ecology Entry and Visual Readability Lock
+
+- Moved the Shift+1 test landing to the central membrane within authored contact range.
+- Mirrored the continuation along negative Z so default camera-forward movement enters membrane, scar, then residue.
+- Added high-contrast presentation-only visual grammar: teal pressure wave, orange brace bands, amber residue hex/yield.
+- Added immediate visual response to existing attachment, locomotion, stabilized projection, and Stabilize state while retaining decaying material memory.
+- Added visual-cue strength and grammar telemetry.
+- Kept all H3 contact mechanics, controls, targeting, verbs, surface profiles, routes, progression, and normal play locked.
+
 # HC031I — Host Contact Ecology Continuation
 
 - Extended Host Contact Shelf from the original four-surface proof into a ten-surface continuous membrane/scar/residue ecology slice.

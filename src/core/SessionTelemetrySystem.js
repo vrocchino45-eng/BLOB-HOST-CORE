@@ -1302,6 +1302,8 @@ export class SessionTelemetrySystem {
         hostContactEcologySurfaceId: frameState.hostContactEcologyContinuation?.activeSurfaceId ?? "none",
         hostContactEcologyRole: frameState.hostContactEcologyContinuation?.activeRole ?? "none",
         hostContactEcologyResponseMode: frameState.hostContactEcologyContinuation?.responseMode ?? "inactive",
+        hostContactVisualCue01: round(frameState.hostContactEcologyContinuation?.visualCue01 ?? 0),
+        hostContactVisualGrammar: frameState.hostContactEcologyContinuation?.visualGrammar ?? "inactive",
         hostContactMembraneCarry01: round(frameState.hostContactEcologyContinuation?.localImprint?.membraneCarry01 ?? 0),
         hostContactScarBrace01: round(frameState.hostContactEcologyContinuation?.localImprint?.scarBrace01 ?? 0),
         hostContactResidueYield01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueYield01 ?? 0),

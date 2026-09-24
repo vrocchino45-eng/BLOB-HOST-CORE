@@ -1,0 +1,35 @@
+{
+  "pass": "HC-031I1",
+  "parent": "HC-031I",
+  "identity": "Contact Ecology Entry and Visual Readability Lock",
+  "entry": {
+    "shortcut": "Shift+1",
+    "position": [4.0, -0.4, -0.55],
+    "withinContactRange": true,
+    "forwardAxis": "negative_z_camera_forward",
+    "sequence": ["living_membrane_path", "scar_load_buttress", "residue_yield_field"]
+  },
+  "visualGrammar": {
+    "membrane": "teal_pressure_wave",
+    "scar": "orange_brace_bands",
+    "residueYield": "amber_yield_hex",
+    "residueStabilize": "amber_hex_coherence",
+    "telemetryOnlyAcceptance": false
+  },
+  "responseGeometry": {
+    "affectsContactTruth": false,
+    "targetable": false,
+    "collidable": false
+  },
+  "lockedTruth": {
+    "movementChanged": false,
+    "controlsChanged": false,
+    "attachmentChanged": false,
+    "surfaceProfilesChanged": false,
+    "braceContinuityChanged": false,
+    "targetingChanged": false,
+    "verbStrengthChanged": false,
+    "progressionChanged": false,
+    "normalPlaythroughChanged": false
+  }
+}

@@ -4,7 +4,7 @@ const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const clamp01 = (value) => THREE.MathUtils.clamp(Number.isFinite(value) ? value : 0, 0, 1);
 
 /**
- * HC031I — Host Contact Ecology Continuation.
+ * HC031I1 — Contact Ecology Entry and Visual Readability Lock.
  *
  * Presentation/ecology consumer for the already-proven H3 contact architecture.
  * It never creates movement, attachment, targeting, verb strength, progression,
@@ -33,6 +33,8 @@ export class HostContactEcologyContinuationSystem {
     };
     this.lastActiveSurfaceId = "none";
     this.surfaceChangeCount = 0;
+    this.visualCue01 = 0;
+    this.visualGrammar = "inactive";
   }
 
   init() {
@@ -51,12 +53,14 @@ export class HostContactEcologyContinuationSystem {
       const surfaceId = object?.userData?.crawlableSurfaceId;
       if (!object?.isMesh || !role || !surfaceId) return;
       const responseShell = this.createResponseShell(object, role);
+      const grammarCue = this.createGrammarCue(object, role);
       this.entries.set(surfaceId, {
         surfaceId,
         role,
         segment: object.userData.hostContactEcologySegment ?? "unassigned",
         mesh: object,
         responseShell,
+        grammarCue,
         profileId: object.userData.crawlableSurfaceProfileId ?? "unknown_profile",
         materialFamily: object.userData.crawlableSurfaceProfile?.materialFamily ?? "unknown"
       });
@@ -81,7 +85,7 @@ export class HostContactEcologyContinuationSystem {
       side: THREE.DoubleSide
     });
     const shell = new THREE.Mesh(surface.geometry.clone(), material);
-    shell.name = `${surface.name}_hc031i_ecology_response`;
+    shell.name = `${surface.name}_hc031i1_ecology_response`;
     shell.scale.setScalar(1.025);
     shell.renderOrder = 1;
     shell.userData.surfaceContactDisabled = true;
@@ -92,13 +96,54 @@ export class HostContactEcologyContinuationSystem {
     return shell;
   }
 
+  createGrammarCue(surface, role) {
+    const cue = new THREE.Group();
+    cue.name = `${surface.name}_hc031i1_visual_grammar`;
+    cue.userData.surfaceContactDisabled = true;
+    cue.userData.targetingSuppressed = true;
+    cue.userData.hostContactVisualCue = true;
+
+    const makeMaterial = (color) => new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending
+    });
+
+    if (role === "scar_load_buttress") {
+      for (const y of [-0.42, 0, 0.42]) {
+        const band = new THREE.Mesh(
+          new THREE.TorusGeometry(0.39, 0.035, 6, 28),
+          makeMaterial(0xff8a62)
+        );
+        band.position.y = y;
+        band.rotation.x = Math.PI * 0.5;
+        cue.add(band);
+      }
+    } else {
+      const isResidue = role === "residue_yield_field";
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(0.34, 0.50, isResidue ? 6 : 36),
+        makeMaterial(isResidue ? 0xffca72 : 0x79ffe1)
+      );
+      ring.rotation.x = -Math.PI * 0.5;
+      ring.position.y = 1.035;
+      cue.add(ring);
+    }
+
+    surface.add(cue);
+    return cue;
+  }
+
   update(dt, frameState = this.frameState) {
     const safeDt = Math.max(0, Math.min(dt, 0.05));
     this.time += safeDt;
     const active = frameState.activeCellId === CELL_ID;
     if (!active) {
       this.decayImprint(safeDt, 2.5);
-      this.applyResponseVisuals("none", "none", false);
+      this.applyResponseVisuals({ surfaceId: "none", role: "none" }, frameState, "inactive", false);
       this.publish(false, {
         activeSurfaceId: "none",
         activeRole: "none",
@@ -117,7 +162,7 @@ export class HostContactEcologyContinuationSystem {
 
     this.updateImprint(safeDt, relationship, frameState);
     const responseMode = this.resolveResponseMode(relationship, frameState);
-    this.applyResponseVisuals(relationship.surfaceId, relationship.role, true);
+    this.applyResponseVisuals(relationship, frameState, responseMode, true);
 
     this.publish(true, {
       ...relationship,
@@ -228,12 +273,28 @@ export class HostContactEcologyContinuationSystem {
     return "ambient_contact_ecology";
   }
 
-  applyResponseVisuals(activeSurfaceId, activeRole, visible) {
+  applyResponseVisuals(relationship, frameState, responseMode, visible) {
     const membraneCarry = this.imprint.membraneCarry01;
     const scarBrace = this.imprint.scarBrace01;
     const residueYield = this.imprint.residueYield01;
     const residueCohesion = this.imprint.residueCohesion01;
     const breathe = 0.5 + Math.sin(this.time * 1.35) * 0.5;
+    const chord = frameState.verbComposition?.chord ?? "idle";
+    const activeSurfaceId = relationship.surfaceId ?? "none";
+    const attachedBoost = relationship.attached ? 1 : 0;
+    const locomotionBoost = relationship.locomotionActive ? 1 : 0;
+    const projectionBoost = relationship.projectionSurfaceBraced ? 1 : 0;
+    let strongestCue = 0;
+
+    const setCue = (cue, opacity, scale, rotation = 0) => {
+      if (!cue) return;
+      cue.visible = visible && opacity > 0.01;
+      cue.scale.setScalar(scale);
+      cue.rotation.y = rotation;
+      cue.traverse((part) => {
+        if (part?.material) part.material.opacity = opacity;
+      });
+    };
 
     for (const entry of this.entries.values()) {
       const shell = entry.responseShell;
@@ -242,39 +303,60 @@ export class HostContactEcologyContinuationSystem {
       const activeBoost = entry.surfaceId === activeSurfaceId ? 1 : 0;
 
       if (entry.role === "living_membrane_path") {
-        const intensity = clamp01(membraneCarry * 0.78 + activeBoost * 0.22);
-        shell.material.opacity = 0.015 + intensity * 0.16;
-        shell.material.emissiveIntensity = 0.10 + intensity * 0.68 + breathe * 0.04;
-        const swell = 1.018 + intensity * 0.025;
-        shell.scale.set(swell, 1.02 + intensity * 0.015, swell);
-        shell.position.set(0, Math.sin(this.time * 1.8 + entry.surfaceId.length) * 0.008 * intensity, 0);
+        const immediate = activeBoost * (0.16 + attachedBoost * 0.20 + locomotionBoost * 0.44 + projectionBoost * 0.34);
+        const intensity = clamp01(membraneCarry * 0.68 + immediate);
+        shell.material.opacity = 0.025 + intensity * 0.29;
+        shell.material.emissiveIntensity = 0.12 + intensity * 1.05 + breathe * 0.06;
+        const swell = 1.018 + intensity * 0.080;
+        shell.scale.set(swell, 1.02 + intensity * 0.055, swell);
+        shell.position.set(0, Math.sin(this.time * 2.25 + entry.surfaceId.length) * 0.018 * intensity, 0);
+        const wave = intensity * (0.72 + breathe * 0.28);
+        setCue(entry.grammarCue, wave * 0.58, 0.82 + ((this.time * 0.68) % 1) * 0.72, this.time * 0.08);
+        strongestCue = Math.max(strongestCue, wave);
       } else if (entry.role === "scar_load_buttress") {
-        const intensity = clamp01(scarBrace * 0.84 + activeBoost * 0.16);
-        shell.material.opacity = 0.018 + intensity * 0.22;
-        shell.material.emissiveIntensity = 0.12 + intensity * 0.92;
-        shell.scale.set(1.018 + intensity * 0.018, 1.018 - intensity * 0.010, 1.018 + intensity * 0.018);
+        const immediate = activeBoost * (0.14 + attachedBoost * 0.18 + projectionBoost * 0.68);
+        const intensity = clamp01(scarBrace * 0.68 + immediate);
+        shell.material.opacity = 0.030 + intensity * 0.34;
+        shell.material.emissiveIntensity = 0.14 + intensity * 1.30;
+        shell.scale.set(1.018 + intensity * 0.045, 1.018 - intensity * 0.060, 1.018 + intensity * 0.045);
         shell.position.set(0, 0, 0);
+        const bracePulse = intensity * (0.82 + Math.sin(this.time * 5.2) * 0.18);
+        setCue(entry.grammarCue, bracePulse * 0.68, 1.14 - bracePulse * 0.20);
+        strongestCue = Math.max(strongestCue, bracePulse);
       } else if (entry.role === "residue_yield_field") {
-        const yield01 = clamp01(residueYield * 0.86 + activeBoost * 0.14);
-        const cohere01 = clamp01(residueCohesion);
-        shell.material.opacity = 0.014 + Math.max(yield01, cohere01 * 0.62) * 0.19;
-        shell.material.emissiveIntensity = 0.08 + cohere01 * 0.50 + yield01 * 0.20;
+        const yieldImmediate = activeBoost * (0.12 + attachedBoost * 0.14 + locomotionBoost * 0.42 + projectionBoost * 0.56);
+        const cohereImmediate = activeBoost * (chord === "cohere" && relationship.attached ? 0.58 : 0);
+        const yield01 = clamp01(residueYield * 0.70 + yieldImmediate);
+        const cohere01 = clamp01(residueCohesion * 0.72 + cohereImmediate);
+        shell.material.opacity = 0.025 + Math.max(yield01, cohere01) * 0.31;
+        shell.material.emissiveIntensity = 0.10 + cohere01 * 1.02 + yield01 * 0.36;
         shell.scale.set(
-          1.02 + yield01 * 0.105 - cohere01 * 0.020,
-          Math.max(0.82, 1.02 - yield01 * 0.16 + cohere01 * 0.055),
-          1.02 + yield01 * 0.09 - cohere01 * 0.016
+          1.02 + yield01 * 0.20 - cohere01 * 0.050,
+          Math.max(0.72, 1.02 - yield01 * 0.28 + cohere01 * 0.11),
+          1.02 + yield01 * 0.18 - cohere01 * 0.045
         );
-        shell.position.set(0, -yield01 * 0.075 + cohere01 * 0.018, yield01 * 0.025);
+        shell.position.set(0, -yield01 * 0.13 + cohere01 * 0.038, yield01 * 0.040);
+        const residueCue = Math.max(yield01 * 0.62, cohere01);
+        setCue(entry.grammarCue, residueCue * 0.70, 1.08 + yield01 * 0.38 - cohere01 * 0.22, cohere01 * this.time * 0.34);
+        strongestCue = Math.max(strongestCue, residueCue);
       }
     }
+
+    this.visualCue01 = visible ? clamp01(strongestCue) : 0;
+    this.visualGrammar = !visible ? "inactive"
+      : responseMode.startsWith("membrane_") ? "teal_pressure_wave"
+        : responseMode.startsWith("scar_") ? "orange_brace_bands"
+          : responseMode === "residue_temporarily_cohering" ? "amber_hex_coherence"
+            : responseMode.startsWith("residue_") ? "amber_yield_hex"
+              : "ambient_contact_ecology";
   }
 
   publish(active, data) {
     this.frameState.hostContactEcologyContinuation = {
-      pass: "HC-031I",
+      pass: "HC-031I1",
       active,
       cellId: CELL_ID,
-      identity: "Host Contact Ecology Continuation",
+      identity: "Contact Ecology Entry and Visual Readability Lock",
       surfaceRelationshipSource: data.source ?? "none",
       activeSurfaceId: data.surfaceId ?? "none",
       activeRole: data.role ?? "none",
@@ -282,6 +364,9 @@ export class HostContactEcologyContinuationSystem {
       activeProfileId: data.profileId ?? "none",
       activeMaterialFamily: data.materialFamily ?? "none",
       responseMode: data.responseMode ?? "inactive",
+      visualCue01: Number(this.visualCue01.toFixed(3)),
+      visualGrammar: this.visualGrammar,
+      visualProofRequired: true,
       attached: Boolean(data.attached),
       tendrilLocomotionActive: Boolean(data.locomotionActive),
       supportCount: Number(data.supportCount ?? 0),

@@ -20,9 +20,10 @@ const TEST_PLATFORMS = [
     slot: 1,
     label: "Surface Wake / Host Contact Shelf",
     cellId: "CELL_MEMBRANE_NURSERY_001",
-    position: [1.55, 0.45, -0.75],
+    position: [4.0, -0.40, -0.55],
     suggestedSeconds: 60,
-    purpose: "approach authored membrane/slope surfaces + tendril attach/pull + surface-profile readability"
+    purpose: "land in membrane contact range + move camera-forward through membrane, scar, and residue visual grammar",
+    entryLockPass: "HC-031I1"
   },
   {
     slot: 2,
@@ -207,6 +208,7 @@ export class DebugAreaJumpSystem {
       shortcut: `Shift+${slot}`,
       label: platform.label,
       purpose: platform.purpose,
+      entryLockPass: platform.entryLockPass ?? "none",
       sourceCellId,
       destinationCellId: platform.cellId,
       canonicalPosition: { x: position[0] ?? 0, y: position[1] ?? 0, z: position[2] ?? 0 },

@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031I extends the proven H3 contact foundation into a small Host ecology
-// continuation. Tendril/contact/brace authority remains locked; the environment
-// now answers the same body grammar through membrane, scar, and residue.
+// HC031I1 repairs the deterministic ecology entry and makes the already-authored
+// membrane, scar, and residue answers visually unmistakable. Contact mechanics,
+// controls, targeting, verbs, progression, and ordinary play remain locked.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031I",
-  buildLabel: "Host Contact Ecology Continuation"
+  buildId: "HC-031I1",
+  buildLabel: "Contact Ecology Entry and Visual Readability Lock"
 });
 
 runtime.start().catch((error) => {
