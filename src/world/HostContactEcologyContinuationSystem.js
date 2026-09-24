@@ -4,7 +4,7 @@ const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const clamp01 = (value) => THREE.MathUtils.clamp(Number.isFinite(value) ? value : 0, 0, 1);
 
 /**
- * HC031I1 — Contact Ecology Entry and Visual Readability Lock.
+ * HC031I2 — Entry Sequence and Residue Coherence Lock.
  *
  * Presentation/ecology consumer for the already-proven H3 contact architecture.
  * It never creates movement, attachment, targeting, verb strength, progression,
@@ -35,6 +35,10 @@ export class HostContactEcologyContinuationSystem {
     this.surfaceChangeCount = 0;
     this.visualCue01 = 0;
     this.visualGrammar = "inactive";
+    this.residueCohereVisualHoldSeconds = 0;
+    this.residueCohereVisualHoldDuration = 1.2;
+    this.residueCohereSurfaceId = "none";
+    this.residueCohereTriggerCount = 0;
   }
 
   init() {
@@ -211,6 +215,7 @@ export class HostContactEcologyContinuationSystem {
   }
 
   updateImprint(dt, relationship, frameState) {
+    this.residueCohereVisualHoldSeconds = Math.max(0, this.residueCohereVisualHoldSeconds - dt);
     const decay = (key, rate) => {
       this.imprint[key] = Math.max(0, this.imprint[key] - dt * rate);
     };
@@ -236,6 +241,9 @@ export class HostContactEcologyContinuationSystem {
       if (chord === "cohere" && relationship.attached) {
         this.imprint.residueCohesion01 += dt * 0.82;
         this.imprint.residueYield01 -= dt * 0.34;
+        if (this.residueCohereVisualHoldSeconds <= 0) this.residueCohereTriggerCount += 1;
+        this.residueCohereVisualHoldSeconds = this.residueCohereVisualHoldDuration;
+        this.residueCohereSurfaceId = relationship.surfaceId;
       }
     }
 
@@ -243,6 +251,7 @@ export class HostContactEcologyContinuationSystem {
   }
 
   decayImprint(dt, multiplier = 1) {
+    this.residueCohereVisualHoldSeconds = Math.max(0, this.residueCohereVisualHoldSeconds - dt * multiplier);
     this.imprint.membraneCarry01 = Math.max(0, this.imprint.membraneCarry01 - dt * 0.075 * multiplier);
     this.imprint.scarBrace01 = Math.max(0, this.imprint.scarBrace01 - dt * 0.045 * multiplier);
     this.imprint.residueYield01 = Math.max(0, this.imprint.residueYield01 - dt * 0.035 * multiplier);
@@ -265,11 +274,13 @@ export class HostContactEcologyContinuationSystem {
     if (relationship.role === "residue_yield_field") {
       const chord = frameState.verbComposition?.chord ?? "idle";
       if (chord === "cohere" && relationship.attached) return "residue_temporarily_cohering";
+      if (this.residueCohereVisualHoldSeconds > 0) return "residue_coherence_afterglow";
       if (relationship.projectionSurfaceBraced) return "residue_yielding_under_focused_recoil";
       if (relationship.locomotionActive) return "residue_slumping_under_traversal";
       if (relationship.attached) return "residue_holding_temporary_seal";
       return "residue_settling";
     }
+    if (this.residueCohereVisualHoldSeconds > 0) return "residue_coherence_afterglow";
     return "ambient_contact_ecology";
   }
 
@@ -284,6 +295,8 @@ export class HostContactEcologyContinuationSystem {
     const attachedBoost = relationship.attached ? 1 : 0;
     const locomotionBoost = relationship.locomotionActive ? 1 : 0;
     const projectionBoost = relationship.projectionSurfaceBraced ? 1 : 0;
+    const cohereVisualActive = this.residueCohereVisualHoldSeconds > 0;
+    const cohereHold01 = clamp01(this.residueCohereVisualHoldSeconds / this.residueCohereVisualHoldDuration);
     let strongestCue = 0;
 
     const setCue = (cue, opacity, scale, rotation = 0) => {
@@ -325,7 +338,11 @@ export class HostContactEcologyContinuationSystem {
         strongestCue = Math.max(strongestCue, bracePulse);
       } else if (entry.role === "residue_yield_field") {
         const yieldImmediate = activeBoost * (0.12 + attachedBoost * 0.14 + locomotionBoost * 0.42 + projectionBoost * 0.56);
-        const cohereImmediate = activeBoost * (chord === "cohere" && relationship.attached ? 0.58 : 0);
+        const cohereSurfaceBoost = entry.surfaceId === this.residueCohereSurfaceId && cohereVisualActive ? 1 : 0;
+        const cohereImmediate = Math.max(
+          activeBoost * (chord === "cohere" && relationship.attached ? 0.58 : 0),
+          cohereSurfaceBoost * (0.42 + cohereHold01 * 0.34)
+        );
         const yield01 = clamp01(residueYield * 0.70 + yieldImmediate);
         const cohere01 = clamp01(residueCohesion * 0.72 + cohereImmediate);
         shell.material.opacity = 0.025 + Math.max(yield01, cohere01) * 0.31;
@@ -346,17 +363,17 @@ export class HostContactEcologyContinuationSystem {
     this.visualGrammar = !visible ? "inactive"
       : responseMode.startsWith("membrane_") ? "teal_pressure_wave"
         : responseMode.startsWith("scar_") ? "orange_brace_bands"
-          : responseMode === "residue_temporarily_cohering" ? "amber_hex_coherence"
+          : responseMode === "residue_temporarily_cohering" || responseMode === "residue_coherence_afterglow" ? "amber_hex_coherence"
             : responseMode.startsWith("residue_") ? "amber_yield_hex"
               : "ambient_contact_ecology";
   }
 
   publish(active, data) {
     this.frameState.hostContactEcologyContinuation = {
-      pass: "HC-031I1",
+      pass: "HC-031I2",
       active,
       cellId: CELL_ID,
-      identity: "Contact Ecology Entry and Visual Readability Lock",
+      identity: "Entry Sequence and Residue Coherence Lock",
       surfaceRelationshipSource: data.source ?? "none",
       activeSurfaceId: data.surfaceId ?? "none",
       activeRole: data.role ?? "none",
@@ -367,6 +384,9 @@ export class HostContactEcologyContinuationSystem {
       visualCue01: Number(this.visualCue01.toFixed(3)),
       visualGrammar: this.visualGrammar,
       visualProofRequired: true,
+      visualCueSurfaceId: this.visualGrammar === "amber_hex_coherence" ? this.residueCohereSurfaceId : data.surfaceId ?? "none",
+      residueCohereVisualHold01: Number(clamp01(this.residueCohereVisualHoldSeconds / this.residueCohereVisualHoldDuration).toFixed(3)),
+      residueCohereTriggerCount: this.residueCohereTriggerCount,
       attached: Boolean(data.attached),
       tendrilLocomotionActive: Boolean(data.locomotionActive),
       supportCount: Number(data.supportCount ?? 0),

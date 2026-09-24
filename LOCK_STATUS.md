@@ -1,3 +1,15 @@
+# HC031I2 Feature Branch Lock Status
+
+HC031I2 is a convergence correction based on HC031I1 telemetry. Allowed runtime edits are limited to the Shift+1 canonical test position, the bounded presentation-only residue coherence hold, and read-only telemetry.
+
+The same 24 H3 authority owners remain SHA-256 locked. The residue visual hold must never populate movement attachment, anchor support, surface truth, stabilized-projection bracing, verb composition, targeting, objectives, or progression.
+
+Acceptance requires membrane-first entry plus at least one sampled `amber_hex_coherence` cue following a legitimate attached Stabilize event.
+
+Recommended Git branch: `feature/hc031i2-entry-sequence-residue-coherence-lock`.
+
+---
+
 # HC031I1 Feature Branch Lock Status
 
 HC031I1 is a narrow entry/readability correction over HC031I. Only the Shift+1 canonical position, the orientation of the authored ecology continuation, presentation-only response overlays, telemetry proof, and build documentation may change.

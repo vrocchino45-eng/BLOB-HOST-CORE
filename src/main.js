@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031I1 repairs the deterministic ecology entry and makes the already-authored
-// membrane, scar, and residue answers visually unmistakable. Contact mechanics,
-// controls, targeting, verbs, progression, and ordinary play remain locked.
+// HC031I2 aligns the deterministic landing with the observed camera-forward
+// vector and preserves a valid residue coherence cue through brief attachment
+// handoffs. Contact mechanics and all ordinary play authorities remain locked.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031I1",
-  buildLabel: "Contact Ecology Entry and Visual Readability Lock"
+  buildId: "HC-031I2",
+  buildLabel: "Entry Sequence and Residue Coherence Lock"
 });
 
 runtime.start().catch((error) => {

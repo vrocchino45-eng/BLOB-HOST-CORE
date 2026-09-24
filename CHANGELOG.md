@@ -1,3 +1,11 @@
+# HC031I2 — Entry Sequence and Residue Coherence Lock
+
+- Shifted the focused landing from X `4.0` to `3.2` to compensate for the measured positive-X/negative-Z camera-forward path.
+- Kept the Core within the same central membrane contact bed while separating first contact from the scar priority volume.
+- Added a 1.2-second presentation-only residue coherence hold after a valid attached `cohere` event.
+- Added explicit coherence trigger, visual hold, and cue-surface telemetry.
+- Kept movement, contact eligibility, suction lifecycle, support plane, projection mechanics, controls, targeting, verbs, surface profiles, routes, objectives, and progression locked.
+
 # HC031I1 — Contact Ecology Entry and Visual Readability Lock
 
 - Moved the Shift+1 test landing to the central membrane within authored contact range.

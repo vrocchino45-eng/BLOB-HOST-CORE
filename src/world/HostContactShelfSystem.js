@@ -4,7 +4,7 @@ import { applyCrawlableSurfaceMetadata } from "./CrawlableSurfaceRegistry.js";
 const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 
 /**
- * HC031I1 — Contact Ecology Entry and Visual Readability Lock.
+ * HC031I2 — Entry Sequence and Residue Coherence Lock.
  *
  * Extends the HC031F1B contact shelf into a small continuous ecology proof.
  * The same authored surface profiles remain the mechanical truth; this system
@@ -21,9 +21,9 @@ export class HostContactShelfSystem {
     this.playerRoot = playerRoot;
     this.frameState = frameState;
     this.root = new THREE.Group();
-    this.root.name = "host_contact_shelf_HC031I1";
+    this.root.name = "host_contact_shelf_HC031I2";
     this.root.userData.systemOwner = "HostContactShelfSystem";
-    this.root.userData.ecologyContinuation = "HC031I1";
+    this.root.userData.ecologyContinuation = "HC031I2";
     this.root.position.set(4.0, -1.15, -0.75);
     this.surfaces = [];
     this.time = 0;
@@ -316,7 +316,7 @@ export class HostContactShelfSystem {
     });
     mesh.userData.hostContactEcologyRole = ecologyRole;
     mesh.userData.hostContactEcologySegment = ecologySegment;
-    mesh.userData.hostContactEcologyPass = "HC031I1";
+    mesh.userData.hostContactEcologyPass = "HC031I2";
     mesh.userData.targetingSuppressed = true;
     this.addSurface(mesh);
   }
@@ -373,7 +373,7 @@ export class HostContactShelfSystem {
     }, {});
 
     this.frameState.hostContactShelf = {
-      pass: "HC-031I1",
+      pass: "HC-031I2",
       parentSurfacePass: "HC-031F1B",
       active,
       cellId: CELL_ID,
@@ -390,8 +390,8 @@ export class HostContactShelfSystem {
       nearestEcologySegment: nearest?.userData?.hostContactEcologySegment ?? "none",
       nearestSurfaceCenterDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(3)) : null,
       continuationSequence: ["living_membrane_path", "scar_load_buttress", "residue_yield_field"],
-      testEntryPosition: { x: 4.0, y: -0.40, z: -0.55 },
-      entryForwardAxis: "negative_z_camera_forward",
+      testEntryPosition: { x: 3.20, y: -0.40, z: -0.55 },
+      entryForwardAxis: "observed_positive_x_negative_z_camera_forward",
       testLandingWithinContactRange: true,
       progressionAuthority: false,
       objectiveAuthority: false,

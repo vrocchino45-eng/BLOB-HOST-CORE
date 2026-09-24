@@ -1,0 +1,31 @@
+{
+  "pass": "HC-031I2",
+  "parent": "HC-031I1",
+  "identity": "Entry Sequence and Residue Coherence Lock",
+  "evidenceSession": "88e89022-5008-4868-af18-00ccf1db2150",
+  "entry": {
+    "position": [3.2, -0.4, -0.55],
+    "observedForwardAxis": "positive_x_negative_z",
+    "firstRequiredRole": "living_membrane_path"
+  },
+  "residueCoherencePresentation": {
+    "trigger": "cohere_chord_and_authored_suction_attachment_on_residue",
+    "holdSeconds": 1.2,
+    "grammar": "amber_hex_coherence",
+    "mechanicalGrace": false,
+    "attachmentAuthority": false,
+    "braceAuthority": false
+  },
+  "lockedTruth": {
+    "movementChanged": false,
+    "controlsChanged": false,
+    "surfaceTruthChanged": false,
+    "attachmentChanged": false,
+    "supportPlaneChanged": false,
+    "projectionMechanicsChanged": false,
+    "targetingChanged": false,
+    "verbCompositionChanged": false,
+    "surfaceProfilesChanged": false,
+    "progressionChanged": false
+  }
+}

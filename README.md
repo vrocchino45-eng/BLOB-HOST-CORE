@@ -1,3 +1,15 @@
+# HC031I2 — Entry Sequence and Residue Coherence Lock
+
+HC031I2 closes the two remaining findings from the five-minute HC031I1 run. Shift+1 moves left to account for the observed diagonal camera-forward vector, keeping the first deliberate contact on living membrane before the path reaches scar and residue. A valid attached Stabilize event on residue now holds its amber hex presentation for 1.2 seconds through brief suction handoffs.
+
+The hold is visual memory only. It cannot create attachment, extend support, alter a verb, move the Core, or authorize progression. The acceptance order is:
+
+**teal membrane pressure → orange scar bracing → amber residue yield → amber Stabilize hex**
+
+Use **Shift+1** and test for roughly two minutes. Export with **Shift+T**.
+
+---
+
 # HC031I1 — Contact Ecology Entry and Visual Readability Lock
 
 HC031I1 fixes the focused test path exposed by cumulative HC031I telemetry. Shift+1 now lands directly above the central membrane inside contact range, and camera-forward movement follows the authored sequence instead of leaving it behind:

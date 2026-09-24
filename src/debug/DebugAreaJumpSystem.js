@@ -20,10 +20,10 @@ const TEST_PLATFORMS = [
     slot: 1,
     label: "Surface Wake / Host Contact Shelf",
     cellId: "CELL_MEMBRANE_NURSERY_001",
-    position: [4.0, -0.40, -0.55],
+    position: [3.20, -0.40, -0.55],
     suggestedSeconds: 60,
     purpose: "land in membrane contact range + move camera-forward through membrane, scar, and residue visual grammar",
-    entryLockPass: "HC-031I1"
+    entryLockPass: "HC-031I2"
   },
   {
     slot: 2,
