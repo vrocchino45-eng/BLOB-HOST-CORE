@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031J makes active contact verbs readable through canonical direction symbols
-// while preserving the accepted I4 contact ecology and all gameplay authority.
+// HC031J1 repairs the surface-to-free-movement handoff while preserving HC031J
+// contact symbols, surface crawl grammar, controls, verbs, and progression.
 
 const appRoot = document.querySelector("#app");
 
@@ -11,8 +11,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031J",
-  buildLabel: "Contact Verb Symbol Grammar Lock"
+  buildId: "HC-031J1",
+  buildLabel: "Surface Detachment and Free-Movement Handoff"
 });
 
 runtime.start().catch((error) => {

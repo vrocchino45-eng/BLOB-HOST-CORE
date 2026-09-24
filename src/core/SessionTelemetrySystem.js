@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.27";
+    this.schemaVersion = "blob.session.telemetry.v1.28";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -65,6 +65,8 @@ export class SessionTelemetrySystem {
     this.lastRuptureConsequenceEventId = 0;
     this.lastDeliberateCommitmentEventId = "none";
     this.lastDebugPlatformSlot = 0;
+    this.lastAttachmentActive = Boolean(frameState.playerAttachment?.active);
+    this.lastAttachmentReacquireBlocked = Boolean(frameState.playerAttachment?.reacquireBlocked);
     this.lastPulseEventId = 0;
     this.prevHeld = { absorb: false, stabilize: false, boost: false };
     this.holdStartedAt = { absorb: null, stabilize: null, boost: null };
@@ -158,6 +160,7 @@ export class SessionTelemetrySystem {
     this.observeDeliberateCommitment(frameState);
     this.observeCoreTopology(frameState);
     this.observeDebugPlatform(frameState);
+    this.observeSurfaceDetachment(frameState);
     this.resolvePendingAttempts(wallNow);
     this.observeSemanticChurn(frameState, wallNow);
 
@@ -1093,6 +1096,54 @@ export class SessionTelemetrySystem {
     });
   }
 
+  observeSurfaceDetachment(frameState) {
+    const attachment = frameState.playerAttachment ?? {};
+    const active = Boolean(attachment.active);
+    const reacquireBlocked = Boolean(attachment.reacquireBlocked);
+
+    if (this.lastAttachmentActive && !active && attachment.state === "releasing") {
+      this.record("movement.surface_detached", "perceptual", {
+        percept: {
+          reason: attachment.detachReason ?? "unknown",
+          deliberate: attachment.detachReason === "deliberate_away_input",
+          surface: this.aliasSource(attachment.releaseSurfaceId ?? "none")
+        },
+        developer: {
+          releaseTension: round(attachment.releaseTension ?? 0),
+          releaseClearance: round(attachment.releaseClearance ?? 0),
+          cooldownSeconds: round(attachment.releaseCooldown ?? 0),
+          attachmentAuthority: attachment.authority ?? "none"
+        }
+      });
+    } else if (!this.lastAttachmentActive && active) {
+      this.record("movement.surface_attached", "perceptual", {
+        percept: {
+          surface: this.aliasSource(attachment.surfaceTruthSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none"),
+          authority: attachment.authority ?? "none"
+        },
+        developer: {
+          supportCount: attachment.authoredSuctionSupportCount ?? 0,
+          releaseClearanceBeforeAttach: round(attachment.releaseClearance ?? 0)
+        }
+      });
+    }
+
+    if (this.lastAttachmentReacquireBlocked && !reacquireBlocked) {
+      this.record("movement.surface_reacquire_unblocked", "analysis", {
+        percept: {
+          clearanceReached: true
+        },
+        developer: {
+          releaseClearance: round(attachment.releaseClearance ?? 0),
+          releaseSurfaceId: attachment.releaseSurfaceId ?? "none"
+        }
+      });
+    }
+
+    this.lastAttachmentActive = active;
+    this.lastAttachmentReacquireBlocked = reacquireBlocked;
+  }
+
   noteInformationGain(reason, score = 1, detail = {}) {
     const wallT = this.wallTime();
     const simT = this.simTime();
@@ -1277,6 +1328,14 @@ export class SessionTelemetrySystem {
         attachmentState: frameState.playerAttachment?.state ?? "free",
         attachmentAuthority: frameState.playerAttachment?.authority ?? "none",
         attachmentSurfaceId: frameState.playerAttachment?.surfaceTruthSurfaceId ?? "none",
+        attachmentReleaseTension: round(frameState.playerAttachment?.releaseTension ?? 0),
+        attachmentPeelIntent01: round(frameState.playerAttachment?.peelIntent01 ?? 0),
+        attachmentPeelHoldAge: round(frameState.playerAttachment?.peelHoldAge ?? 0),
+        attachmentReleaseArmed: Boolean(frameState.playerAttachment?.releaseArmed),
+        attachmentDetachReason: frameState.playerAttachment?.detachReason ?? "none",
+        attachmentReacquireBlocked: Boolean(frameState.playerAttachment?.reacquireBlocked),
+        attachmentReleaseSurfaceId: frameState.playerAttachment?.releaseSurfaceId ?? "none",
+        attachmentReleaseClearance: round(frameState.playerAttachment?.releaseClearance ?? 0),
         authoredSuctionSupportActive: Boolean(frameState.playerAttachment?.authoredSuctionSupportActive),
         authoredSuctionSupportCount: frameState.playerAttachment?.authoredSuctionSupportCount ?? 0,
         authoredSuctionSupportSurfaceId: frameState.playerAttachment?.authoredSuctionSupportSurfaceId ?? "none",
@@ -1595,6 +1654,13 @@ export class SessionTelemetrySystem {
       transitionAvailabilityEvents: count("transition.available"),
       transitionEntries: count("transition.entered"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
+      surfaceDetachments: count("movement.surface_detached"),
+      deliberateSurfaceDetachments: this.events.filter((event) => (
+        event.type === "movement.surface_detached"
+        && event.percept?.deliberate === true
+      )).length,
+      surfaceAttachments: count("movement.surface_attached"),
+      surfaceReacquireUnblocks: count("movement.surface_reacquire_unblocked"),
       coreWorldResonanceChanges: count("core.world_resonance.changed"),
       coreTopologyResonanceModeChanges: count("core.topology_resonance.mode_changed"),
       coreTopologyEnvironmentalHandlingModeChanges: count("core.topology_environmental_handling.mode_changed"),

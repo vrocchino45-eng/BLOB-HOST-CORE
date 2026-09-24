@@ -1,3 +1,13 @@
+# HC031J1 — Surface Detachment and Free-Movement Handoff
+
+HC031J1 repairs the movement restriction measured in the HC031J playtest. Authored surface normals point from the contact toward the Core, so deliberate movement in that direction now unloads suction and releases after a short intentional hold. The prior sign interpreted that direction backwards, discarded the real away component, and allowed rapid recapture.
+
+The accepted surface crawl remains anchor-driven. Neutral input stays attached, tangent input crawls, and only sustained away input gains partial direct authority before detachment. After release, the Core receives an away impulse and cannot reacquire suction until the cooldown expires and it has gained measurable clearance from the released contact plane.
+
+Focused check: use **Shift+1**, establish suction, crawl sideways, then hold directly away from the contacted surface. The Core should peel free within roughly a quarter second and remain free long enough to clear the shelf. Export with **Shift+T**.
+
+---
+
 # HC031J — Contact Verb Symbol Grammar Lock
 
 HC031J converts the already-locked Pulse / Absorb / Stabilize language into a small, consistent contact glyph above the active authored Host surface:

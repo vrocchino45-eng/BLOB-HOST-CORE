@@ -1,0 +1,39 @@
+{
+  "pass": "HC-031J1",
+  "parent": "HC-031J",
+  "identity": "Surface Detachment and Free-Movement Handoff",
+  "evidenceSession": "7b392514-7cd3-449d-8e12-d957956158b1",
+  "mode": "feel_repair_convergence",
+  "detachmentLaw": {
+    "surfaceNormalMeaning": "contact_to_core",
+    "awayIntentUsesPositiveNormalDot": true,
+    "peelIntentStart": 0.20,
+    "fullPeelIntent": 0.72,
+    "deliberateHoldFloorSeconds": 0.11,
+    "releaseThresholdBase": 0.50,
+    "releaseCooldownSeconds": 0.55,
+    "minimumClearanceBeforeReacquire": 0.26,
+    "neutralInputRemainsAttached": true,
+    "tangentCrawlRemainsAnchorDriven": true
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.28",
+    "recordsPeelIntent": true,
+    "recordsReleaseReason": true,
+    "recordsClearance": true,
+    "recordsReacquireBlock": true,
+    "recordsDiscreteDetachAttachEvents": true
+  },
+  "lockedTruth": {
+    "controlsChanged": false,
+    "verbMeaningChanged": false,
+    "verbOutputChanged": false,
+    "contactEligibilityChanged": false,
+    "surfaceProfilesChanged": false,
+    "supportPlaneDerivationChanged": false,
+    "contactSymbolGrammarChanged": false,
+    "targetingChanged": false,
+    "routesChanged": false,
+    "progressionChanged": false
+  }
+}

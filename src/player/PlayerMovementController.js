@@ -63,6 +63,19 @@ export class PlayerMovementController {
     this.attachmentStrength = 0;
     this.attachmentSiltAlignment = 0;
     this.attachmentReleaseTension = 0;
+    // HC031J1 — the authored surface normal always points from contact toward
+    // the Core. A deliberate input in that direction progressively unloads the
+    // suction brace before release instead of being discarded as radial motion.
+    this.attachmentPeelIntent01 = 0;
+    this.attachmentPeelHoldAge = 0;
+    this.attachmentReleaseArmed = false;
+    this.attachmentDetachReason = "none";
+    this.attachmentReacquireBlocked = false;
+    this.attachmentReleaseSurfaceId = "none";
+    this.attachmentReleasePoint = new THREE.Vector3();
+    this.attachmentReleaseNormal = new THREE.Vector3(0, 1, 0);
+    this.attachmentReleaseStartDistance = 0;
+    this.attachmentReleaseClearance = 0;
     this.attachmentTargetNormalizedDistance = 0.955;
     this.attachmentShellNormalizedDistance = 0.955;
     this.attachmentStandOffDistance = 0.30;
@@ -267,9 +280,12 @@ export class PlayerMovementController {
       && tendrilSurfaceRequest.active
       && (tendrilSurfaceRequest.supportCount ?? 0) > 0
     );
-    // Once attached, raw controller thrust becomes only a small intention cue.
-    // The planted-anchor traction below supplies the actual surface acceleration.
-    const directInputAccelerationScale = tendrilSurfaceDriveActive ? 0.04 : 1.0;
+    // Tangential crawl remains planted-anchor driven. Deliberate away input gains
+    // progressively more direct authority so suction can visibly unload before
+    // the attachment releases; ordinary crawl retains the accepted 4% cue.
+    const directInputAccelerationScale = tendrilSurfaceDriveActive
+      ? THREE.MathUtils.lerp(0.04, 0.52, this.attachmentPeelIntent01)
+      : 1.0;
 
     this.desiredMoveAcceleration.copy(this.intent).multiplyScalar(acceleration);
     this.environmentFlowAcceleration.copy(this.flow).multiplyScalar(flowStrength);
@@ -344,6 +360,13 @@ export class PlayerMovementController {
       anchorCarriedSurfaceVerbTransmission: { ...this.tendrilSupportVerbTransmission },
       siltSurfaceAlignment: Number(this.attachmentSiltAlignment.toFixed(3)),
       releaseTension: Number(this.attachmentReleaseTension.toFixed(3)),
+      peelIntent01: Number(this.attachmentPeelIntent01.toFixed(3)),
+      peelHoldAge: Number(this.attachmentPeelHoldAge.toFixed(3)),
+      releaseArmed: this.attachmentReleaseArmed,
+      detachReason: this.attachmentDetachReason,
+      reacquireBlocked: this.attachmentReacquireBlocked,
+      releaseSurfaceId: this.attachmentReleaseSurfaceId,
+      releaseClearance: Number(this.attachmentReleaseClearance.toFixed(3)),
       surfaceTangentSpeed: Number(this.attachmentSurfaceTangentSpeed.toFixed(3)),
       tendrilLocomotionActive: Boolean(this.tendrilLocomotionTelemetry.active),
       tendrilSupportCount: this.tendrilLocomotionTelemetry.supportCount ?? 0,
@@ -809,11 +832,39 @@ export class PlayerMovementController {
     const activeContactNormal = this.tendrilSupportPlaneActive
       ? this.tendrilSupportNormal
       : this.attachmentSurfaceNormal;
+    // CoreSurfaceTruth orients its normal from the contact point toward the Core,
+    // so a positive dot is away from the surface. The previous negative sign
+    // interpreted into-surface input as release intent and made actual peel input
+    // feel locked.
     const outwardIntent = this.intent.dot(activeContactNormal);
-    const awayIntent = Math.max(0, -outwardIntent);
+    const awayIntent = THREE.MathUtils.clamp(Math.max(0, outwardIntent), 0, 1);
     this.attachmentReleaseTension = awayIntent;
     this.attachmentCooldown = Math.max(0, this.attachmentCooldown - Math.max(0, dt));
     this.attachmentReleaseAge += Math.max(0, dt);
+
+    if (this.attachmentActive && awayIntent >= 0.34) {
+      this.attachmentPeelHoldAge += Math.max(0, dt);
+    } else {
+      this.attachmentPeelHoldAge = Math.max(0, this.attachmentPeelHoldAge - Math.max(0, dt) * 3.2);
+    }
+    this.attachmentPeelIntent01 = this.attachmentActive
+      ? THREE.MathUtils.smoothstep(awayIntent, 0.20, 0.72)
+      : 0;
+
+    if (this.attachmentReleaseSurfaceId !== "none") {
+      this.tempReleaseDelta ??= new THREE.Vector3();
+      this.tempReleaseDelta.copy(this.playerRoot.position).sub(this.attachmentReleasePoint);
+      const signedDistance = this.tempReleaseDelta.dot(this.attachmentReleaseNormal);
+      this.attachmentReleaseClearance = Math.max(0, signedDistance - this.attachmentReleaseStartDistance);
+      const clearanceReached = this.attachmentReleaseClearance >= 0.26;
+      this.attachmentReacquireBlocked = this.attachmentCooldown > 0 || !clearanceReached;
+      if (!this.attachmentReacquireBlocked) {
+        this.attachmentReleaseSurfaceId = "none";
+      }
+    } else {
+      this.attachmentReleaseClearance = 0;
+      this.attachmentReacquireBlocked = this.attachmentCooldown > 0;
+    }
 
     const convergenceReachability = this.resolveConvergenceReachability(frameState);
     const contactAllowed = !coreWorkActive && !convergenceReachability.active;
@@ -835,8 +886,13 @@ export class PlayerMovementController {
       : legacyChemistryStrength;
 
     if (this.attachmentActive) {
-      const releaseThreshold = 0.54 + this.attachmentStrength * 0.20;
-      const pulledAway = awayIntent >= releaseThreshold;
+      const releaseThreshold = 0.50 + this.attachmentStrength * 0.08;
+      const releaseHoldThreshold = 0.11 + this.attachmentStrength * 0.035;
+      this.attachmentReleaseArmed = Boolean(
+        awayIntent >= releaseThreshold
+        && this.attachmentPeelHoldAge >= releaseHoldThreshold
+      );
+      const pulledAway = this.attachmentReleaseArmed;
       const authorityLost = !canAdhere;
       const surfaceLost = desiredAuthority === "authored_suction_support"
         ? !authoredSuctionSupportRetained
@@ -849,24 +905,51 @@ export class PlayerMovementController {
         this.attachmentState = "releasing";
         this.attachmentAuthority = "none";
         this.attachmentReleaseAge = 0;
-        this.attachmentCooldown = 0.30;
+        this.attachmentCooldown = 0.55;
         this.attachmentAcquireAge = 0;
-        // A small inward release impulse makes detachment read as peeling away
-        // from the contact plane rather than simply losing a flag.
-        const releaseImpulse = 0.48 + this.attachmentStrength * 0.72;
-        this.velocity.addScaledVector(activeContactNormal, -releaseImpulse);
+        this.attachmentDetachReason = pulledAway
+          ? "deliberate_away_input"
+          : authorityLost
+            ? "contact_authority_lost"
+            : "surface_lost";
+        this.attachmentReleaseSurfaceId = this.tendrilSupportPlaneActive
+          ? this.tendrilSupportSurfaceId
+          : this.surfaceTruthSurfaceId !== "none"
+            ? this.surfaceTruthSurfaceId
+            : "legacy_membrane";
+        this.attachmentReleasePoint.copy(
+          this.tendrilSupportPlaneActive ? this.tendrilSupportCentroid : this.attachmentSurfacePoint
+        );
+        this.attachmentReleaseNormal.copy(activeContactNormal).normalize();
+        this.tempReleaseDelta ??= new THREE.Vector3();
+        this.tempReleaseDelta.copy(this.playerRoot.position).sub(this.attachmentReleasePoint);
+        this.attachmentReleaseStartDistance = this.tempReleaseDelta.dot(this.attachmentReleaseNormal);
+        this.attachmentReleaseClearance = 0;
+        this.attachmentReacquireBlocked = true;
+        this.attachmentReleaseArmed = false;
+        this.attachmentPeelHoldAge = 0;
+        this.attachmentPeelIntent01 = 0;
+        // The normal is contact-to-Core, so positive normal impulse is always
+        // physically away from the released surface.
+        const releaseImpulse = 0.66 + this.attachmentStrength * 0.56;
+        this.velocity.addScaledVector(activeContactNormal, releaseImpulse);
       } else {
         this.attachmentAuthority = desiredAuthority;
         this.attachmentState = "attached";
       }
     } else {
+      this.attachmentReleaseArmed = false;
       const nearSurface = authoredSuctionCanAdhere
         ? true
         : this.surfaceTruthActive
           ? this.surfaceTruthDistance <= 0.72
           : this.boundaryProximity >= 0.74;
       const notRetreatingFast = this.boundaryRadialSpeed > -0.7;
-      const canAcquire = canAdhere && nearSurface && notRetreatingFast && this.attachmentCooldown <= 0;
+      const canAcquire = canAdhere
+        && nearSurface
+        && notRetreatingFast
+        && this.attachmentCooldown <= 0
+        && !this.attachmentReacquireBlocked;
       if (canAcquire) {
         this.attachmentAcquireAge += Math.max(0, dt);
         const acquireThreshold = authoredSuctionCanAdhere ? 0.035 : 0.085;
@@ -874,6 +957,7 @@ export class PlayerMovementController {
           this.attachmentActive = true;
           this.attachmentAuthority = desiredAuthority;
           this.attachmentState = "attached";
+          this.attachmentDetachReason = "none";
           this.attachmentShellNormalizedDistance = THREE.MathUtils.clamp(
             this.boundaryNormalizedDistance,
             0.90,
@@ -903,7 +987,8 @@ export class PlayerMovementController {
       ? this.tendrilSupportNormal
       : this.attachmentSurfaceNormal;
     const radialVelocity = this.velocity.dot(activeContactNormal);
-    this.velocity.addScaledVector(activeContactNormal, -radialVelocity);
+    const retainedAwayVelocity = radialVelocity > 0 ? this.attachmentPeelIntent01 : 0;
+    this.velocity.addScaledVector(activeContactNormal, -radialVelocity * (1 - retainedAwayVelocity));
     this.attachmentTangentVelocity.copy(this.velocity);
     this.attachmentSurfaceTangentSpeed = this.attachmentTangentVelocity.length();
   }
@@ -938,6 +1023,9 @@ export class PlayerMovementController {
       .addScaledVector(locomotionNormal, -this.intent.dot(locomotionNormal));
     const intentMagnitude = this.tendrilIntentTangent.length();
     if (intentMagnitude < 0.035) {
+      if (this.attachmentPeelIntent01 > 0.03) {
+        return { ...inactive, active: true, mode: "peel_unloading" };
+      }
       // No player intent: retain attachment, but let residual tangential velocity
       // settle so the Core looks suctioned rather than endlessly skating.
       this.velocity.multiplyScalar(Math.max(0, 1 - Math.min(1, dt * (2.8 + traction01 * 2.2))));
@@ -1017,7 +1105,8 @@ export class PlayerMovementController {
       * anchorAlignmentScale
       * loadPulse01
       * surfaceTractionScale
-      * supportPlaneScale;
+      * supportPlaneScale
+      * THREE.MathUtils.lerp(1, 0.28, this.attachmentPeelIntent01);
 
     this.tendrilDriveDirection.copy(this.tendrilIntentTangent);
     if (forwardAnchorAvailable) {
@@ -1028,7 +1117,10 @@ export class PlayerMovementController {
     } else {
       // No forward support means a real hesitation while the third tendril seeks
       // the next plant. This is the missing causal read from the F1 playtest.
-      this.velocity.multiplyScalar(Math.max(0, 1 - Math.min(0.42, dt * 4.8)));
+      this.velocity.multiplyScalar(Math.max(
+        0,
+        1 - Math.min(0.42, dt * THREE.MathUtils.lerp(4.8, 0.9, this.attachmentPeelIntent01))
+      ));
       this.velocity.addScaledVector(this.tendrilDriveDirection, pullAcceleration * dt);
     }
 
@@ -1058,6 +1150,7 @@ export class PlayerMovementController {
       supportPlaneQuality01: Number(this.tendrilSupportQuality01.toFixed(3)),
       supportPlaneScale: Number(supportPlaneScale.toFixed(3)),
       supportSurfaceId: this.tendrilSupportSurfaceId,
+      peelIntent01: Number(this.attachmentPeelIntent01.toFixed(3)),
       mode: request.mode ?? "supported_pull"
     };
   }
@@ -1260,11 +1353,13 @@ export class PlayerMovementController {
       const error = targetStandOff - signedDistance;
       const correction = THREE.MathUtils.clamp(error, -0.20, 0.20);
       const supportSettleScale = useSupportPlane ? THREE.MathUtils.lerp(0.78, 1.12, this.tendrilSupportQuality01) : 1;
-      const settle = 1 - Math.exp(-Math.max(0, dt) * 16.0 * supportSettleScale);
+      const peelSettleScale = THREE.MathUtils.lerp(1, 0.08, this.attachmentPeelIntent01);
+      const settle = 1 - Math.exp(-Math.max(0, dt) * 16.0 * supportSettleScale * peelSettleScale);
       p.addScaledVector(contactNormal, correction * settle);
 
       const normalVelocity = this.velocity.dot(contactNormal);
-      this.velocity.addScaledVector(contactNormal, -normalVelocity);
+      const retainedAwayVelocity = normalVelocity > 0 ? this.attachmentPeelIntent01 : 0;
+      this.velocity.addScaledVector(contactNormal, -normalVelocity * (1 - retainedAwayVelocity));
       this.boundaryRadialSpeed = 0;
       this.boundaryTangentialSpeed = this.velocity.length();
       this.attachmentSurfaceTangentSpeed = this.boundaryTangentialSpeed;

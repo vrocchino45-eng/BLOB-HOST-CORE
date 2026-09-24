@@ -1,3 +1,13 @@
+# HC031J1 — Surface Detachment and Free-Movement Handoff
+
+- Corrected the authored surface-normal sign used to interpret deliberate away input.
+- Added a short suction-unloading peel before release while preserving neutral attachment and tangent crawl.
+- Directed the release impulse away from the actual contact plane.
+- Raised direct movement authority only during deliberate peel input.
+- Blocked suction reacquisition until both the cooldown and measured surface clearance are satisfied.
+- Added detachment, peel, clearance, and reacquisition telemetry plus discrete attachment events.
+- Preserved HC031J contact symbols, controls, verbs, surface eligibility, targeting, routes, and progression.
+
 # HC031J — Contact Verb Symbol Grammar Lock
 
 - Added canonical contact glyphs for Pulse outward, Absorb inward, and Stabilize coherence.
