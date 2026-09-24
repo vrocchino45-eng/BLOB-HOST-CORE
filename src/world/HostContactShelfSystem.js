@@ -4,12 +4,13 @@ import { applyCrawlableSurfaceMetadata } from "./CrawlableSurfaceRegistry.js";
 const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 
 /**
- * HC031F1B — Host Contact Shelf
+ * HC031I — Host Contact Ecology Continuation.
  *
- * A small continuation inside Surface Wake that gives the tendril system an
- * explicitly authored ecological surface vocabulary. It owns presentation and
- * surface metadata only: no player translation, objectives, gates, targeting,
- * verb strength, or progression.
+ * Extends the HC031F1B contact shelf into a small continuous ecology proof.
+ * The same authored surface profiles remain the mechanical truth; this system
+ * only authors additional reachable anatomy and labels its ecological role.
+ * No objectives, hard gates, player translation, targeting, verb strength, or
+ * progression are introduced here.
  */
 export class HostContactShelfSystem {
   constructor({ scene, playerRoot, frameState }) {
@@ -20,8 +21,9 @@ export class HostContactShelfSystem {
     this.playerRoot = playerRoot;
     this.frameState = frameState;
     this.root = new THREE.Group();
-    this.root.name = "host_contact_shelf_HC031F1B";
+    this.root.name = "host_contact_shelf_HC031I";
     this.root.userData.systemOwner = "HostContactShelfSystem";
+    this.root.userData.ecologyContinuation = "HC031I";
     this.root.position.set(4.0, -1.15, -0.75);
     this.surfaces = [];
     this.time = 0;
@@ -32,33 +34,49 @@ export class HostContactShelfSystem {
 
   init() {
     this.createShelf();
+    this.createEcologyContinuation();
     this.scene.add(this.root);
     this.publish(false);
+  }
+
+  makeMembraneMaterial({ opacity = 0.76, emissiveIntensity = 0.18, color = 0x347b78 } = {}) {
+    return new THREE.MeshStandardMaterial({
+      color,
+      emissive: 0x153f42,
+      emissiveIntensity,
+      roughness: 0.80,
+      metalness: 0.0,
+      transparent: true,
+      opacity
+    });
+  }
+
+  makeResidueMaterial({ opacity = 0.62, color = 0x8b785c } = {}) {
+    return new THREE.MeshStandardMaterial({
+      color,
+      emissive: 0x3f3325,
+      emissiveIntensity: 0.12,
+      roughness: 1.0,
+      transparent: true,
+      opacity
+    });
   }
 
   createShelf() {
     const membrane = new THREE.Mesh(
       new THREE.SphereGeometry(1, 28, 16),
-      new THREE.MeshStandardMaterial({
-        color: 0x347b78,
-        emissive: 0x153f42,
-        emissiveIntensity: 0.18,
-        roughness: 0.80,
-        metalness: 0.0,
-        transparent: true,
-        opacity: 0.76
-      })
+      this.makeMembraneMaterial()
     );
     membrane.name = "contact_shelf_membrane_bed";
     membrane.position.set(0, 0, 0);
     membrane.scale.set(2.35, 0.30, 1.25);
-    applyCrawlableSurfaceMetadata(membrane, {
+    this.authorSurface(membrane, {
       surfaceId: "HOST_CONTACT_SHELF_MEMBRANE",
       profileId: "membrane_stable",
-      cellId: CELL_ID,
-      contactPriority: 0.06
+      contactPriority: 0.06,
+      ecologyRole: "living_membrane_path",
+      ecologySegment: "entry_membrane"
     });
-    this.addSurface(membrane);
 
     const slope = new THREE.Mesh(
       new THREE.SphereGeometry(0.86, 24, 14),
@@ -75,13 +93,13 @@ export class HostContactShelfSystem {
     slope.position.set(-1.72, 0.62, 0.16);
     slope.rotation.z = -0.48;
     slope.scale.set(1.25, 0.34, 0.86);
-    applyCrawlableSurfaceMetadata(slope, {
+    this.authorSurface(slope, {
       surfaceId: "HOST_CONTACT_SHELF_SOFT_SLOPE",
       profileId: "soft_tissue",
-      cellId: CELL_ID,
-      contactPriority: 0.08
+      contactPriority: 0.08,
+      ecologyRole: "living_membrane_path",
+      ecologySegment: "entry_soft_slope"
     });
-    this.addSurface(slope);
 
     const scarMaterial = new THREE.MeshStandardMaterial({
       color: 0x7c403f,
@@ -97,39 +115,31 @@ export class HostContactShelfSystem {
     scar.rotation.z = Math.PI * 0.40;
     scar.rotation.x = Math.PI * 0.08;
     scar.scale.set(1.0, 1.0, 1.22);
-    applyCrawlableSurfaceMetadata(scar, {
+    this.authorSurface(scar, {
       surfaceId: "HOST_CONTACT_SHELF_SCAR_BRACE",
       profileId: "scar_brace",
-      cellId: CELL_ID,
-      contactPriority: 0.16
+      contactPriority: 0.16,
+      ecologyRole: "scar_load_buttress",
+      ecologySegment: "entry_scar_rib"
     });
-    this.addSurface(scar);
 
     const residue = new THREE.Mesh(
       new THREE.SphereGeometry(0.66, 20, 12),
-      new THREE.MeshStandardMaterial({
-        color: 0x8b785c,
-        emissive: 0x3f3325,
-        emissiveIntensity: 0.12,
-        roughness: 1.0,
-        transparent: true,
-        opacity: 0.62
-      })
+      this.makeResidueMaterial()
     );
     residue.name = "contact_shelf_residue_patch";
     residue.position.set(1.52, 0.36, 0.72);
     residue.scale.set(1.0, 0.20, 0.72);
-    applyCrawlableSurfaceMetadata(residue, {
+    this.authorSurface(residue, {
       surfaceId: "HOST_CONTACT_SHELF_RESIDUE_PATCH",
       profileId: "residue_weak",
-      cellId: CELL_ID,
-      contactPriority: 0.10
+      contactPriority: 0.10,
+      ecologyRole: "residue_yield_field",
+      ecologySegment: "entry_residue_patch"
     });
-    this.addSurface(residue);
 
-    // A faint non-crawlable connective lip makes the shelf read as part of the
-    // Host while proving that nearby visible geometry no longer becomes a target
-    // merely because it is large and transparent.
+    // A faint non-crawlable connective lip keeps the contact shelf visually part
+    // of the Host without becoming hidden contact geometry.
     const connective = new THREE.Mesh(
       new THREE.TorusGeometry(1.9, 0.10, 8, 56, Math.PI * 1.18),
       new THREE.MeshStandardMaterial({
@@ -150,6 +160,167 @@ export class HostContactShelfSystem {
     this.root.add(connective);
   }
 
+  createEcologyContinuation() {
+    // 1) Living membrane causeway — broad enough to crawl naturally rather than
+    // behaving like a narrow traversal beam. It turns away from the original
+    // test shelf instead of simply making the shelf longer.
+    const membraneA = new THREE.Mesh(
+      new THREE.SphereGeometry(0.92, 26, 15),
+      this.makeMembraneMaterial({ opacity: 0.72, emissiveIntensity: 0.14, color: 0x3d8580 })
+    );
+    membraneA.name = "host_contact_membrane_causeway_01";
+    membraneA.position.set(-0.20, 0.12, 1.36);
+    membraneA.rotation.y = -0.20;
+    membraneA.scale.set(1.62, 0.25, 0.78);
+    this.authorSurface(membraneA, {
+      surfaceId: "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+      profileId: "membrane_stable",
+      contactPriority: 0.09,
+      ecologyRole: "living_membrane_path",
+      ecologySegment: "membrane_causeway"
+    });
+
+    const membraneB = new THREE.Mesh(
+      new THREE.SphereGeometry(0.88, 26, 15),
+      this.makeMembraneMaterial({ opacity: 0.70, emissiveIntensity: 0.13, color: 0x428d85 })
+    );
+    membraneB.name = "host_contact_membrane_causeway_02";
+    membraneB.position.set(0.04, 0.25, 2.18);
+    membraneB.rotation.y = 0.28;
+    membraneB.scale.set(1.42, 0.23, 0.72);
+    this.authorSurface(membraneB, {
+      surfaceId: "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+      profileId: "membrane_stable",
+      contactPriority: 0.10,
+      ecologyRole: "living_membrane_path",
+      ecologySegment: "membrane_causeway"
+    });
+
+    // 2) Scar buttress — a dense brace anatomy that intersects the living path.
+    // The player can pass around it, crawl it, or use it for stronger focused
+    // projection. It is leverage, not a keyhole or permission gate.
+    const scarMaterial = new THREE.MeshStandardMaterial({
+      color: 0x824745,
+      emissive: 0x3a1717,
+      emissiveIntensity: 0.13,
+      roughness: 0.95,
+      transparent: true,
+      opacity: 0.9
+    });
+    const scarButtress = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 1.95, 8, 18), scarMaterial);
+    scarButtress.name = "host_contact_scar_buttress_01";
+    scarButtress.position.set(0.94, 0.76, 2.54);
+    scarButtress.rotation.z = Math.PI * 0.34;
+    scarButtress.rotation.x = -Math.PI * 0.16;
+    scarButtress.scale.set(1.0, 1.0, 1.28);
+    this.authorSurface(scarButtress, {
+      surfaceId: "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+      profileId: "scar_brace",
+      contactPriority: 0.18,
+      ecologyRole: "scar_load_buttress",
+      ecologySegment: "scar_buttress"
+    });
+
+    const scarFoot = new THREE.Mesh(
+      new THREE.SphereGeometry(0.68, 22, 13),
+      new THREE.MeshStandardMaterial({
+        color: 0x75413f,
+        emissive: 0x351616,
+        emissiveIntensity: 0.11,
+        roughness: 0.96,
+        transparent: true,
+        opacity: 0.86
+      })
+    );
+    scarFoot.name = "host_contact_scar_buttress_foot";
+    scarFoot.position.set(1.18, 0.12, 2.44);
+    scarFoot.scale.set(1.05, 0.24, 0.72);
+    this.authorSurface(scarFoot, {
+      surfaceId: "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+      profileId: "scar_brace",
+      contactPriority: 0.17,
+      ecologyRole: "scar_load_buttress",
+      ecologySegment: "scar_buttress"
+    });
+
+    // 3) Residue wash — broad, weak material after the brace. It remains fully
+    // traversable but should visibly yield and poorly carry sustained recoil.
+    const residueA = new THREE.Mesh(
+      new THREE.SphereGeometry(0.82, 22, 13),
+      this.makeResidueMaterial({ opacity: 0.58, color: 0x907b5d })
+    );
+    residueA.name = "host_contact_residue_wash_01";
+    residueA.position.set(-0.78, 0.10, 2.84);
+    residueA.rotation.y = -0.24;
+    residueA.scale.set(1.42, 0.20, 0.82);
+    this.authorSurface(residueA, {
+      surfaceId: "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+      profileId: "residue_weak",
+      contactPriority: 0.11,
+      ecologyRole: "residue_yield_field",
+      ecologySegment: "residue_wash"
+    });
+
+    const residueB = new THREE.Mesh(
+      new THREE.SphereGeometry(0.70, 20, 12),
+      this.makeResidueMaterial({ opacity: 0.54, color: 0x9a8260 })
+    );
+    residueB.name = "host_contact_residue_wash_02";
+    residueB.position.set(-1.18, 0.04, 3.42);
+    residueB.rotation.y = 0.38;
+    residueB.scale.set(1.26, 0.18, 0.72);
+    this.authorSurface(residueB, {
+      surfaceId: "HOST_CONTACT_CONTINUATION_RESIDUE_02",
+      profileId: "residue_weak",
+      contactPriority: 0.10,
+      ecologyRole: "residue_yield_field",
+      ecologySegment: "residue_wash"
+    });
+
+    // Non-crawlable connective tissue visually joins the three material regimes
+    // without creating a hidden traversal rail.
+    const tissue = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(0.78, 0.045, 72, 8, 2, 3),
+      new THREE.MeshStandardMaterial({
+        color: 0x31565b,
+        emissive: 0x132d31,
+        emissiveIntensity: 0.08,
+        roughness: 0.9,
+        transparent: true,
+        opacity: 0.16,
+        depthWrite: false
+      })
+    );
+    tissue.name = "host_contact_ecology_connective_tissue";
+    tissue.position.set(-0.05, 0.52, 2.55);
+    tissue.rotation.x = Math.PI * 0.48;
+    tissue.scale.set(1.65, 0.64, 1.35);
+    tissue.userData.surfaceContactDisabled = true;
+    tissue.userData.targetingSuppressed = true;
+    tissue.userData.ecologyRole = "connective_tissue_only";
+    this.root.add(tissue);
+  }
+
+  authorSurface(mesh, {
+    surfaceId,
+    profileId,
+    contactPriority,
+    ecologyRole,
+    ecologySegment
+  }) {
+    applyCrawlableSurfaceMetadata(mesh, {
+      surfaceId,
+      profileId,
+      cellId: CELL_ID,
+      contactPriority
+    });
+    mesh.userData.hostContactEcologyRole = ecologyRole;
+    mesh.userData.hostContactEcologySegment = ecologySegment;
+    mesh.userData.hostContactEcologyPass = "HC031I";
+    mesh.userData.targetingSuppressed = true;
+    this.addSurface(mesh);
+  }
+
   addSurface(mesh) {
     this.root.add(mesh);
     this.surfaces.push(mesh);
@@ -165,8 +336,9 @@ export class HostContactShelfSystem {
       return;
     }
 
-    // Very small Host motion: enough to read living anatomy, never enough to
-    // invalidate the local planar-contact proof or act as moving-platform logic.
+    // Only the original entry shelf breathes mechanically. Continuation response
+    // is presentation-only in HostContactEcologyContinuationSystem so planted
+    // world anchors never chase moving traversal geometry.
     const breathe = Math.sin(this.time * 0.72);
     const membrane = this.surfaces[0];
     const slope = this.surfaces[1];
@@ -194,25 +366,36 @@ export class HostContactShelfSystem {
   }
 
   publish(active, nearest = null, nearestDistance = Infinity) {
+    const roleCounts = this.surfaces.reduce((counts, surface) => {
+      const role = surface.userData.hostContactEcologyRole ?? "unassigned";
+      counts[role] = (counts[role] ?? 0) + 1;
+      return counts;
+    }, {});
+
     this.frameState.hostContactShelf = {
-      pass: "HC-031F1B",
+      pass: "HC-031I",
+      parentSurfacePass: "HC-031F1B",
       active,
       cellId: CELL_ID,
-      identity: "Host Contact Shelf",
+      identity: "Host Contact Shelf / Ecology Continuation",
       role: "surface_ecology_continuation",
       surfaceAuthority: "authored_crawlable_surface_metadata",
       surfaceCount: this.surfaces.length,
       surfaceIds: this.surfaces.map((surface) => surface.userData.crawlableSurfaceId),
       profiles: this.surfaces.map((surface) => surface.userData.crawlableSurfaceProfileId),
+      ecologicalRoles: roleCounts,
       nearestSurfaceId: nearest?.userData?.crawlableSurfaceId ?? "none",
       nearestSurfaceProfileId: nearest?.userData?.crawlableSurfaceProfileId ?? "none",
+      nearestEcologyRole: nearest?.userData?.hostContactEcologyRole ?? "none",
+      nearestEcologySegment: nearest?.userData?.hostContactEcologySegment ?? "none",
       nearestSurfaceCenterDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(3)) : null,
+      continuationSequence: ["living_membrane_path", "scar_load_buttress", "residue_yield_field"],
       progressionAuthority: false,
       objectiveAuthority: false,
       movementAuthority: false,
       verbAuthority: false,
       noHardGate: true,
-      nextEcologyProof: "stabilized_projection_reads_surface_load_without_anchor_gate"
+      ecologicalLaw: "same_body_grammar_different_host_material_answer"
     };
   }
 }

@@ -32,6 +32,7 @@ import { AmbientMaterialInteractionSystem } from "../world/AmbientMaterialIntera
 import { HostRhythmSystem } from "../world/HostRhythmSystem.js";
 import { RegionalPhysicalEmbodimentSystem } from "../world/RegionalPhysicalEmbodimentSystem.js";
 import { HostContactShelfSystem } from "../world/HostContactShelfSystem.js";
+import { HostContactEcologyContinuationSystem } from "../world/HostContactEcologyContinuationSystem.js";
 import { LiftFieldReadabilitySystem } from "../world/LiftFieldReadabilitySystem.js";
 import { CoreWorldResonanceSystem } from "../world/CoreWorldResonanceSystem.js";
 import { EventAnchoredHostAudioSystem } from "../audio/EventAnchoredHostAudioSystem.js";
@@ -124,6 +125,7 @@ export class GameRuntime {
     this.coreSurfaceTruthSystem = null;
     this.coreTendrilSupportPlaneSystem = null;
     this.hostContactShelfSystem = null;
+    this.hostContactEcologyContinuationSystem = null;
     this.coreEmbodimentSystem = null;
     this.coreTendrilSurfaceContactSystem = null;
     this.coreEngineSystem = null;
@@ -2044,6 +2046,10 @@ export class GameRuntime {
     this.stabilizedProjectionSystem = new StabilizedProjectionSystem({
       frameState: this.frameState
     });
+    this.hostContactEcologyContinuationSystem = new HostContactEcologyContinuationSystem({
+      scene: this.scene,
+      frameState: this.frameState
+    });
 
     this.coreVerbPhysicalizationSystem = new CoreVerbPhysicalizationSystem({
       scene: this.scene,
@@ -2595,6 +2601,9 @@ export class GameRuntime {
     // HC031G expresses the existing HC029C Stabilize + Pulse chord as a focused
     // projection. Free space self-braces; authored surface anchors only enhance it.
     this.registry.register("stabilizedProjectionSystem", this.stabilizedProjectionSystem);
+    // HC031I consumes the same-frame H3 contact/brace state and gives the authored
+    // membrane/scar/residue continuation a visible ecological answer only.
+    this.registry.register("hostContactEcologyContinuationSystem", this.hostContactEcologyContinuationSystem);
     // HC027C reads the topology published by CoreEmbodimentSystem through CoreGrowthSystem.
     // PlayerMovementController consumes these modifiers on the following frame, preserving
     // movement ownership and preventing radial physiology from moving the player directly.

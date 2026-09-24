@@ -1297,7 +1297,15 @@ export class SessionTelemetrySystem {
         stabilizedProjectionAttachmentContinuityBraceActive: Boolean(frameState.stabilizedProjection?.authoredAttachmentContinuityBraceActive),
         stabilizedProjectionContinuityStrength01: round(frameState.stabilizedProjection?.continuityStrength01 ?? 0),
         stabilizedProjectionExternalBraceSource: frameState.stabilizedProjection?.externalBraceSource ?? "none",
-        stabilizedProjectionSurfaceId: frameState.stabilizedProjection?.surface?.id ?? "none"
+        stabilizedProjectionSurfaceId: frameState.stabilizedProjection?.surface?.id ?? "none",
+        hostContactEcologyActive: Boolean(frameState.hostContactEcologyContinuation?.active),
+        hostContactEcologySurfaceId: frameState.hostContactEcologyContinuation?.activeSurfaceId ?? "none",
+        hostContactEcologyRole: frameState.hostContactEcologyContinuation?.activeRole ?? "none",
+        hostContactEcologyResponseMode: frameState.hostContactEcologyContinuation?.responseMode ?? "inactive",
+        hostContactMembraneCarry01: round(frameState.hostContactEcologyContinuation?.localImprint?.membraneCarry01 ?? 0),
+        hostContactScarBrace01: round(frameState.hostContactEcologyContinuation?.localImprint?.scarBrace01 ?? 0),
+        hostContactResidueYield01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueYield01 ?? 0),
+        hostContactResidueCohesion01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueCohesion01 ?? 0)
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),

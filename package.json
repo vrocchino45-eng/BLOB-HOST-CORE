@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.17",
+  "version": "0.31.18",
   "private": true,
-  "description": "BLOB: HOST CORE — HC-031H3 Brace Continuity",
+  "description": "BLOB: HOST CORE \u2014 HC-031I Host Contact Ecology Continuation",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031h3 && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031i && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031f1a": "node scripts/validateHC031F1ASurfaceTruthPullReadability.mjs",
     "validate:hc031c2": "node scripts/validateHC031C2FragmentFieldCapture.mjs",
     "validate:hc023b": "node scripts/validateHC023BSurfaceLivingStates.mjs",
@@ -245,7 +245,8 @@
     "validate:hc031h": "node scripts/validateHC031HPlantedContactSupportAssimilation.mjs",
     "validate:hc031h1": "node scripts/validateHC031H1UnifiedPhysicalContactAuthority.mjs",
     "validate:hc031h2": "node scripts/validateHC031H2AnchorCarriedSurfaceIdentity.mjs",
-    "validate:hc031h3": "node scripts/validateHC031H3BraceContinuity.mjs"
+    "validate:hc031h3": "node scripts/validateHC031H3BraceContinuity.mjs",
+    "validate:hc031i": "node scripts/validateHC031IHostContactEcologyContinuation.mjs"
   },
   "dependencies": {
     "three": "^0.179.1",

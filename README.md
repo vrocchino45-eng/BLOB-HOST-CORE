@@ -1,3 +1,17 @@
+# HC031I — Host Contact Ecology Continuation
+
+HC031I is the first post-H3 environment/ecology pass. The H3 tendril/contact/brace architecture is treated as locked foundation. Surface Wake's Host Contact Shelf now continues into three linked Host material conditions: a living membrane causeway, a scar load buttress, and a weak residue wash.
+
+The same controls and body grammar apply everywhere. The environment changes how that grammar is received:
+
+**membrane carries → scar braces → residue yields**
+
+`HostContactEcologyContinuationSystem` adds only presentation and bounded local ecological response. HC031I does not add movement to the crawlable continuation geometry; disabled response shells visualize carry/load/yield without moving planted world anchors. The original entry shelf keeps its pre-existing subtle breathing. No objective, gate, new ability, new button, targeting rule, movement owner, or progression authority is added.
+
+Use **Shift+1** for the focused continuation test and **Shift+T** to export telemetry. See `HC031I_BUILD_REPORT.md` and `HC031I_FOCUSED_PLAYTEST.md`.
+
+---
+
 # HC031H3 — Brace Continuity
 
 HC031H3 keeps the HC031G `Stabilize + Pulse = cohere_project` grammar unchanged and closes the final H2 consumer-lifetime mismatch. Live anchor-carried support remains the preferred external brace. If that support disappears briefly during a normal peel/replant while `PlayerMovementController` still owns a valid `authored_suction_support` attachment, Stabilized Projection now preserves external Host bracing through that same movement-owned continuity.

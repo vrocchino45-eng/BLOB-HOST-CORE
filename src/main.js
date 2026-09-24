@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031H2 lets a sealed suction anchor retain the authored surface identity
-// that SurfaceTruth granted at seal time. HC031G verb grammar remains locked.
-
+// HC031I extends the proven H3 contact foundation into a small Host ecology
+// continuation. Tendril/contact/brace authority remains locked; the environment
+// now answers the same body grammar through membrane, scar, and residue.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031H3",
-  buildLabel: "Brace Continuity"
+  buildId: "HC-031I",
+  buildLabel: "Host Contact Ecology Continuation"
 });
 
 runtime.start().catch((error) => {

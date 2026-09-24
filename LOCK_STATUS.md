@@ -1,9 +1,13 @@
-# HC031H3 Experimental Branch Lock Status
+# HC031I Feature Branch Lock Status
 
-Parent main baseline remains **HC031G — Stabilized Projection**.
+Accepted/merged foundation: **HC031H3 — Brace Continuity**.
 
-Current experimental branch sequence: HC031H → HC031H1 → HC031H2 → **HC031H3**.
+HC031I treats H3 contact locomotion and Stabilized Projection as locked. This pass changes only the authored Surface Wake contact continuation, one new presentation/ecology consumer, telemetry, and build/documentation identity.
 
-HC031H3 changes only the Stabilized Projection consumer lifetime plus telemetry/build identity. `PlayerMovementController`, tendril contact/replant behavior, support-plane derivation, SurfaceTruth, HC029C composition, targeting, Bond/Absorb, Grave systems, controls, and progression are locked.
+Locked H3 owners include PlayerMovementController, CoreSurfaceTruthSystem, CoreTendrilSurfaceContactSystem, CoreTendrilSupportPlaneSystem, StabilizedProjectionSystem, VerbCompositionSystem, TargetingSystem, TargetFocusRegistry, BondSystem, ChemObjectSystem, CrawlableSurfaceRegistry, Grave systems, Core growth/embodiment and controls.
 
-Do not merge to `main` until a short telemetry test proves clean `cohere_project` remains surface-braced across both live anchor support and movement-retained authored-suction continuity.
+Do not tune tendril gait, brace continuity, surface profile values, targeting, Bond/Absorb, or progression during HC031I acceptance. If the ecology continuation fails visually, fix the continuation/presentation first rather than reopening H3.
+
+Recommended Git branch: `feature/hc031i-host-contact-ecology`.
+
+Merge to `main` only after a focused Shift+1 playtest confirms the three material answers read as one continuous Host space and no traversal/regression issue appears.

@@ -1,3 +1,13 @@
+# HC031I — Host Contact Ecology Continuation
+
+- Extended Host Contact Shelf from the original four-surface proof into a ten-surface continuous membrane/scar/residue ecology slice.
+- Added a living membrane causeway, scar load buttress, and weak residue wash with the existing authored crawlable-surface profiles.
+- Added `HostContactEcologyContinuationSystem` after Stabilized Projection as presentation/bounded-local-ecology only.
+- Added non-contact response shells so the Host can visibly carry load, brace recoil, or yield without moving the physical crawlable mesh.
+- Added decaying local-imprint channels for membrane carry, scar brace, residue yield, and residue coherence; none own progression or regional history.
+- Added telemetry for active ecology surface/role/response and local imprint.
+- Locked PlayerMovementController, SurfaceTruth, tendril anchor/replant, support plane, H3 brace continuity, HC029C composition, targeting, Bond/Absorb, Grave, controls, and surface-profile values.
+
 # HC031H3 — Brace Continuity
 
 - Stabilized Projection now consumes the existing PlayerMovementController authored-suction continuity during brief tendril handoffs.
