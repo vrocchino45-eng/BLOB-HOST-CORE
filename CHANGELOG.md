@@ -1,3 +1,13 @@
+# HC031I3 — Residue Attempt / Confirmation Lock
+
+- Preserved the accepted HC031I2 membrane-first Shift+1 landing.
+- Repositioned the continuation residue wash after scar on the measured positive-X/negative-Z travel line.
+- Raised and thickened residue geometry without changing the locked `residue_weak` profile.
+- Split residue presentation into proximity, open-hex attempt, actual yield, and closed-hex confirmed coherence.
+- Prevented passive residue proximity from being mislabeled as a yield event.
+- Added attempt count, attempt activity, interaction stage, and cue-surface telemetry.
+- Kept all H3 contact mechanics and normal play authorities locked.
+
 # HC031I2 — Entry Sequence and Residue Coherence Lock
 
 - Shifted the focused landing from X `4.0` to `3.2` to compensate for the measured positive-X/negative-Z camera-forward path.

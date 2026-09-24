@@ -1,3 +1,18 @@
+# HC031I3 — Residue Attempt / Confirmation Lock
+
+HC031I3 preserves the accepted membrane-first Shift+1 entry and corrects the remaining residue failure. The residue wash now follows the measured positive-X/negative-Z travel line after scar and is modestly raised/thickened while retaining the same `residue_weak` surface profile.
+
+Residue visual language now distinguishes truthfully between stages:
+
+- **proximity:** low amber material recognition
+- **attempt:** an open, wavering amber hex when `cohere` reaches residue without suction support
+- **confirmed:** a closed bright amber hex only after authored suction attachment validates coherence
+- **afterglow:** the confirmed hex persists for 1.2 seconds through contact handoff
+
+No attempt state grants attachment, bracing, verb strength, targeting, progression, or movement authority.
+
+---
+
 # HC031I2 — Entry Sequence and Residue Coherence Lock
 
 HC031I2 closes the two remaining findings from the five-minute HC031I1 run. Shift+1 moves left to account for the observed diagonal camera-forward vector, keeping the first deliberate contact on living membrane before the path reaches scar and residue. A valid attached Stabilize event on residue now holds its amber hex presentation for 1.2 seconds through brief suction handoffs.

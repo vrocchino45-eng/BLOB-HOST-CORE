@@ -4,7 +4,7 @@ import { applyCrawlableSurfaceMetadata } from "./CrawlableSurfaceRegistry.js";
 const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 
 /**
- * HC031I2 — Entry Sequence and Residue Coherence Lock.
+ * HC031I3 — Residue Attempt / Confirmation Lock.
  *
  * Extends the HC031F1B contact shelf into a small continuous ecology proof.
  * The same authored surface profiles remain the mechanical truth; this system
@@ -21,9 +21,9 @@ export class HostContactShelfSystem {
     this.playerRoot = playerRoot;
     this.frameState = frameState;
     this.root = new THREE.Group();
-    this.root.name = "host_contact_shelf_HC031I2";
+    this.root.name = "host_contact_shelf_HC031I3";
     this.root.userData.systemOwner = "HostContactShelfSystem";
-    this.root.userData.ecologyContinuation = "HC031I2";
+    this.root.userData.ecologyContinuation = "HC031I3";
     this.root.position.set(4.0, -1.15, -0.75);
     this.surfaces = [];
     this.time = 0;
@@ -250,9 +250,9 @@ export class HostContactShelfSystem {
       this.makeResidueMaterial({ opacity: 0.58, color: 0x907b5d })
     );
     residueA.name = "host_contact_residue_wash_01";
-    residueA.position.set(-0.78, 0.10, -2.84);
+    residueA.position.set(1.58, 0.18, -2.92);
     residueA.rotation.y = -0.24;
-    residueA.scale.set(1.42, 0.20, 0.82);
+    residueA.scale.set(1.48, 0.30, 0.88);
     this.authorSurface(residueA, {
       surfaceId: "HOST_CONTACT_CONTINUATION_RESIDUE_01",
       profileId: "residue_weak",
@@ -266,9 +266,9 @@ export class HostContactShelfSystem {
       this.makeResidueMaterial({ opacity: 0.54, color: 0x9a8260 })
     );
     residueB.name = "host_contact_residue_wash_02";
-    residueB.position.set(-1.18, 0.04, -3.42);
+    residueB.position.set(2.12, 0.14, -3.56);
     residueB.rotation.y = 0.38;
-    residueB.scale.set(1.26, 0.18, 0.72);
+    residueB.scale.set(1.34, 0.28, 0.80);
     this.authorSurface(residueB, {
       surfaceId: "HOST_CONTACT_CONTINUATION_RESIDUE_02",
       profileId: "residue_weak",
@@ -292,7 +292,7 @@ export class HostContactShelfSystem {
       })
     );
     tissue.name = "host_contact_ecology_connective_tissue";
-    tissue.position.set(-0.05, 0.52, -2.55);
+    tissue.position.set(1.02, 0.52, -2.74);
     tissue.rotation.x = Math.PI * 0.48;
     tissue.scale.set(1.65, 0.64, 1.35);
     tissue.userData.surfaceContactDisabled = true;
@@ -316,7 +316,7 @@ export class HostContactShelfSystem {
     });
     mesh.userData.hostContactEcologyRole = ecologyRole;
     mesh.userData.hostContactEcologySegment = ecologySegment;
-    mesh.userData.hostContactEcologyPass = "HC031I2";
+    mesh.userData.hostContactEcologyPass = "HC031I3";
     mesh.userData.targetingSuppressed = true;
     this.addSurface(mesh);
   }
@@ -373,7 +373,7 @@ export class HostContactShelfSystem {
     }, {});
 
     this.frameState.hostContactShelf = {
-      pass: "HC-031I2",
+      pass: "HC-031I3",
       parentSurfacePass: "HC-031F1B",
       active,
       cellId: CELL_ID,
@@ -390,6 +390,8 @@ export class HostContactShelfSystem {
       nearestEcologySegment: nearest?.userData?.hostContactEcologySegment ?? "none",
       nearestSurfaceCenterDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(3)) : null,
       continuationSequence: ["living_membrane_path", "scar_load_buttress", "residue_yield_field"],
+      residueRouteAxis: "positive_x_negative_z_after_scar",
+      residueAccessibilityPass: "raised_thickened_profile_values_unchanged",
       testEntryPosition: { x: 3.20, y: -0.40, z: -0.55 },
       entryForwardAxis: "observed_positive_x_negative_z_camera_forward",
       testLandingWithinContactRange: true,

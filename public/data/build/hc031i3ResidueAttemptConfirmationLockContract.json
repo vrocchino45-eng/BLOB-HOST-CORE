@@ -1,0 +1,36 @@
+{
+  "pass": "HC-031I3",
+  "parent": "HC-031I2",
+  "identity": "Residue Attempt / Confirmation Lock",
+  "evidenceSession": "a77df4fc-1ec9-4e82-9848-2d73fa9c937c",
+  "acceptedEntry": {
+    "position": [3.2, -0.4, -0.55],
+    "firstRole": "living_membrane_path",
+    "changed": false
+  },
+  "residueRoute": {
+    "axis": "positive_x_negative_z_after_scar",
+    "profileId": "residue_weak",
+    "profileValuesChanged": false,
+    "geometryAccessibilityChanged": true
+  },
+  "visualStages": {
+    "proximity": "amber_residue_proximity",
+    "attempt": "amber_open_hex_attempt",
+    "confirmed": "amber_hex_coherence",
+    "attemptGrantsMechanicalSuccess": false,
+    "confirmedVisualHoldGrantsMechanicalGrace": false
+  },
+  "lockedTruth": {
+    "movementChanged": false,
+    "controlsChanged": false,
+    "surfaceProfilesChanged": false,
+    "contactEligibilityChanged": false,
+    "attachmentChanged": false,
+    "supportPlaneChanged": false,
+    "projectionMechanicsChanged": false,
+    "targetingChanged": false,
+    "verbCompositionChanged": false,
+    "progressionChanged": false
+  }
+}

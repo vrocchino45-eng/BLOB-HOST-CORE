@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031I2 aligns the deterministic landing with the observed camera-forward
-// vector and preserves a valid residue coherence cue through brief attachment
-// handoffs. Contact mechanics and all ordinary play authorities remain locked.
+// HC031I3 aligns residue anatomy with the accepted membrane/scar travel line
+// and distinguishes attempted from confirmed coherence without changing contact,
+// attachment, verb, targeting, movement, or progression authority.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031I2",
-  buildLabel: "Entry Sequence and Residue Coherence Lock"
+  buildId: "HC-031I3",
+  buildLabel: "Residue Attempt / Confirmation Lock"
 });
 
 runtime.start().catch((error) => {

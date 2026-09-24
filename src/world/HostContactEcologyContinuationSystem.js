@@ -4,7 +4,7 @@ const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const clamp01 = (value) => THREE.MathUtils.clamp(Number.isFinite(value) ? value : 0, 0, 1);
 
 /**
- * HC031I2 — Entry Sequence and Residue Coherence Lock.
+ * HC031I3 — Residue Attempt / Confirmation Lock.
  *
  * Presentation/ecology consumer for the already-proven H3 contact architecture.
  * It never creates movement, attachment, targeting, verb strength, progression,
@@ -39,6 +39,9 @@ export class HostContactEcologyContinuationSystem {
     this.residueCohereVisualHoldDuration = 1.2;
     this.residueCohereSurfaceId = "none";
     this.residueCohereTriggerCount = 0;
+    this.residueCohereAttemptCount = 0;
+    this.residueCohereAttemptActive = false;
+    this.residueCohereAttemptSurfaceId = "none";
   }
 
   init() {
@@ -126,11 +129,28 @@ export class HostContactEcologyContinuationSystem {
         band.rotation.x = Math.PI * 0.5;
         cue.add(band);
       }
+    } else if (role === "residue_yield_field") {
+      const attempt = new THREE.Mesh(
+        new THREE.RingGeometry(0.34, 0.50, 6, 1, 0.28, Math.PI * 1.52),
+        makeMaterial(0xffb85f)
+      );
+      attempt.rotation.x = -Math.PI * 0.5;
+      attempt.position.y = 1.035;
+      attempt.userData.residueCuePhase = "attempt";
+      cue.add(attempt);
+
+      const confirmed = new THREE.Mesh(
+        new THREE.RingGeometry(0.34, 0.50, 6),
+        makeMaterial(0xffe19a)
+      );
+      confirmed.rotation.x = -Math.PI * 0.5;
+      confirmed.position.y = 1.04;
+      confirmed.userData.residueCuePhase = "confirmed";
+      cue.add(confirmed);
     } else {
-      const isResidue = role === "residue_yield_field";
       const ring = new THREE.Mesh(
-        new THREE.RingGeometry(0.34, 0.50, isResidue ? 6 : 36),
-        makeMaterial(isResidue ? 0xffca72 : 0x79ffe1)
+        new THREE.RingGeometry(0.34, 0.50, 36),
+        makeMaterial(0x79ffe1)
       );
       ring.rotation.x = -Math.PI * 0.5;
       ring.position.y = 1.035;
@@ -225,6 +245,10 @@ export class HostContactEcologyContinuationSystem {
     decay("residueCohesion01", 0.09);
 
     const chord = frameState.verbComposition?.chord ?? "idle";
+    const attemptingResidueCohere = relationship.role === "residue_yield_field" && chord === "cohere" && !relationship.attached;
+    if (attemptingResidueCohere && !this.residueCohereAttemptActive) this.residueCohereAttemptCount += 1;
+    this.residueCohereAttemptActive = attemptingResidueCohere;
+    if (attemptingResidueCohere) this.residueCohereAttemptSurfaceId = relationship.surfaceId;
     if (relationship.role === "living_membrane_path") {
       if (relationship.attached) this.imprint.membraneCarry01 += dt * 0.18;
       if (relationship.locomotionActive) this.imprint.membraneCarry01 += dt * 0.62;
@@ -275,6 +299,7 @@ export class HostContactEcologyContinuationSystem {
       const chord = frameState.verbComposition?.chord ?? "idle";
       if (chord === "cohere" && relationship.attached) return "residue_temporarily_cohering";
       if (this.residueCohereVisualHoldSeconds > 0) return "residue_coherence_afterglow";
+      if (chord === "cohere") return "residue_coherence_attempting";
       if (relationship.projectionSurfaceBraced) return "residue_yielding_under_focused_recoil";
       if (relationship.locomotionActive) return "residue_slumping_under_traversal";
       if (relationship.attached) return "residue_holding_temporary_seal";
@@ -299,13 +324,15 @@ export class HostContactEcologyContinuationSystem {
     const cohereHold01 = clamp01(this.residueCohereVisualHoldSeconds / this.residueCohereVisualHoldDuration);
     let strongestCue = 0;
 
-    const setCue = (cue, opacity, scale, rotation = 0) => {
+    const setCue = (cue, opacity, scale, rotation = 0, residuePhase = "all") => {
       if (!cue) return;
       cue.visible = visible && opacity > 0.01;
       cue.scale.setScalar(scale);
       cue.rotation.y = rotation;
       cue.traverse((part) => {
-        if (part?.material) part.material.opacity = opacity;
+        if (!part?.material) return;
+        const partPhase = part.userData?.residueCuePhase;
+        part.material.opacity = partPhase && residuePhase !== "all" && partPhase !== residuePhase ? 0 : opacity;
       });
     };
 
@@ -343,6 +370,7 @@ export class HostContactEcologyContinuationSystem {
           activeBoost * (chord === "cohere" && relationship.attached ? 0.58 : 0),
           cohereSurfaceBoost * (0.42 + cohereHold01 * 0.34)
         );
+        const attemptingCohere = entry.surfaceId === this.residueCohereAttemptSurfaceId && this.residueCohereAttemptActive;
         const yield01 = clamp01(residueYield * 0.70 + yieldImmediate);
         const cohere01 = clamp01(residueCohesion * 0.72 + cohereImmediate);
         shell.material.opacity = 0.025 + Math.max(yield01, cohere01) * 0.31;
@@ -353,8 +381,16 @@ export class HostContactEcologyContinuationSystem {
           1.02 + yield01 * 0.18 - cohere01 * 0.045
         );
         shell.position.set(0, -yield01 * 0.13 + cohere01 * 0.038, yield01 * 0.040);
-        const residueCue = Math.max(yield01 * 0.62, cohere01);
-        setCue(entry.grammarCue, residueCue * 0.70, 1.08 + yield01 * 0.38 - cohere01 * 0.22, cohere01 * this.time * 0.34);
+        const attemptPulse = attemptingCohere ? 0.48 + Math.sin(this.time * 8.0) * 0.18 : 0;
+        const residueCue = Math.max(yield01 * 0.62, cohere01, attemptPulse);
+        const residuePhase = cohere01 > 0.18 ? "confirmed" : "attempt";
+        setCue(
+          entry.grammarCue,
+          residueCue * 0.70,
+          attemptingCohere ? 1.18 + Math.sin(this.time * 5.5) * 0.10 : 1.08 + yield01 * 0.38 - cohere01 * 0.22,
+          attemptingCohere ? Math.sin(this.time * 7.0) * 0.14 : cohere01 * this.time * 0.34,
+          residuePhase
+        );
         strongestCue = Math.max(strongestCue, residueCue);
       }
     }
@@ -364,16 +400,18 @@ export class HostContactEcologyContinuationSystem {
       : responseMode.startsWith("membrane_") ? "teal_pressure_wave"
         : responseMode.startsWith("scar_") ? "orange_brace_bands"
           : responseMode === "residue_temporarily_cohering" || responseMode === "residue_coherence_afterglow" ? "amber_hex_coherence"
-            : responseMode.startsWith("residue_") ? "amber_yield_hex"
+            : responseMode === "residue_coherence_attempting" ? "amber_open_hex_attempt"
+              : responseMode === "residue_settling" ? "amber_residue_proximity"
+                : responseMode.startsWith("residue_") ? "amber_yield_hex"
               : "ambient_contact_ecology";
   }
 
   publish(active, data) {
     this.frameState.hostContactEcologyContinuation = {
-      pass: "HC-031I2",
+      pass: "HC-031I3",
       active,
       cellId: CELL_ID,
-      identity: "Entry Sequence and Residue Coherence Lock",
+      identity: "Residue Attempt / Confirmation Lock",
       surfaceRelationshipSource: data.source ?? "none",
       activeSurfaceId: data.surfaceId ?? "none",
       activeRole: data.role ?? "none",
@@ -384,7 +422,22 @@ export class HostContactEcologyContinuationSystem {
       visualCue01: Number(this.visualCue01.toFixed(3)),
       visualGrammar: this.visualGrammar,
       visualProofRequired: true,
-      visualCueSurfaceId: this.visualGrammar === "amber_hex_coherence" ? this.residueCohereSurfaceId : data.surfaceId ?? "none",
+      visualCueSurfaceId: this.visualGrammar === "amber_hex_coherence"
+        ? this.residueCohereSurfaceId
+        : this.visualGrammar === "amber_open_hex_attempt"
+          ? this.residueCohereAttemptSurfaceId
+          : data.surfaceId ?? "none",
+      residueInteractionStage: this.visualGrammar === "amber_hex_coherence"
+        ? "confirmed"
+        : this.visualGrammar === "amber_open_hex_attempt"
+          ? "attempt"
+          : this.visualGrammar === "amber_yield_hex"
+            ? "yield"
+            : this.visualGrammar === "amber_residue_proximity"
+              ? "proximity"
+              : "none",
+      residueCohereAttemptActive: this.residueCohereAttemptActive,
+      residueCohereAttemptCount: this.residueCohereAttemptCount,
       residueCohereVisualHold01: Number(clamp01(this.residueCohereVisualHoldSeconds / this.residueCohereVisualHoldDuration).toFixed(3)),
       residueCohereTriggerCount: this.residueCohereTriggerCount,
       attached: Boolean(data.attached),

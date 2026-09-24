@@ -1,3 +1,15 @@
+# HC031I3 Feature Branch Lock Status
+
+HC031I3 is a residue-route and truthful-feedback convergence pass. Allowed runtime changes are limited to authored residue mesh placement/scale, presentation-only attempt/confirmation grammar, read-only telemetry, and build identity.
+
+The accepted HC031I2 entry position remains unchanged. All 24 H3 authority owners remain byte-locked. The open attempt hex must never be interpreted as attachment, support, bracing, yield imprint, verb success, objective progress, or progression.
+
+Acceptance requires both `amber_open_hex_attempt` while unsupported and `amber_hex_coherence` after a valid authored suction confirmation.
+
+Recommended Git branch: `feature/hc031i3-residue-attempt-confirmation-lock`.
+
+---
+
 # HC031I2 Feature Branch Lock Status
 
 HC031I2 is a convergence correction based on HC031I1 telemetry. Allowed runtime edits are limited to the Shift+1 canonical test position, the bounded presentation-only residue coherence hold, and read-only telemetry.
