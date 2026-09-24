@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031I4 closes the measured scar-to-residue contact handoff gap with authored
-// mesh overlap while preserving the accepted entry and I3 visual event grammar.
+// HC031J makes active contact verbs readable through canonical direction symbols
+// while preserving the accepted I4 contact ecology and all gameplay authority.
 
 const appRoot = document.querySelector("#app");
 
@@ -11,8 +11,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031I4",
-  buildLabel: "Residue Contact Bridge Lock"
+  buildId: "HC-031J",
+  buildLabel: "Contact Verb Symbol Grammar Lock"
 });
 
 runtime.start().catch((error) => {

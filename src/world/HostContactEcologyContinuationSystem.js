@@ -4,7 +4,7 @@ const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const clamp01 = (value) => THREE.MathUtils.clamp(Number.isFinite(value) ? value : 0, 0, 1);
 
 /**
- * HC031I4 — Residue Contact Bridge Lock.
+ * HC031J — Contact Verb Symbol Grammar Lock.
  *
  * Presentation/ecology consumer for the already-proven H3 contact architecture.
  * It never creates movement, attachment, targeting, verb strength, progression,
@@ -35,6 +35,9 @@ export class HostContactEcologyContinuationSystem {
     this.surfaceChangeCount = 0;
     this.visualCue01 = 0;
     this.visualGrammar = "inactive";
+    this.contactVerbSymbol = "inactive";
+    this.contactVerbSymbolIntensity01 = 0;
+    this.contactVerbSymbolSurfaceId = "none";
     this.residueCohereVisualHoldSeconds = 0;
     this.residueCohereVisualHoldDuration = 1.2;
     this.residueCohereSurfaceId = "none";
@@ -61,6 +64,7 @@ export class HostContactEcologyContinuationSystem {
       if (!object?.isMesh || !role || !surfaceId) return;
       const responseShell = this.createResponseShell(object, role);
       const grammarCue = this.createGrammarCue(object, role);
+      const verbGlyph = this.createVerbGlyph(object);
       this.entries.set(surfaceId, {
         surfaceId,
         role,
@@ -68,6 +72,7 @@ export class HostContactEcologyContinuationSystem {
         mesh: object,
         responseShell,
         grammarCue,
+        verbGlyph,
         profileId: object.userData.crawlableSurfaceProfileId ?? "unknown_profile",
         materialFamily: object.userData.crawlableSurfaceProfile?.materialFamily ?? "unknown"
       });
@@ -161,6 +166,61 @@ export class HostContactEcologyContinuationSystem {
     return cue;
   }
 
+  createVerbGlyph(surface) {
+    const glyph = new THREE.Group();
+    glyph.name = `${surface.name}_hc031j_contact_verb_glyph`;
+    glyph.renderOrder = 2;
+    glyph.userData.surfaceContactDisabled = true;
+    glyph.userData.targetingSuppressed = true;
+    glyph.userData.contactVerbSymbolGrammar = true;
+
+    const makeMaterial = (color) => new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending
+    });
+
+    const pulse = new THREE.Mesh(
+      new THREE.RingGeometry(0.27, 0.42, 3),
+      makeMaterial(0xff8668)
+    );
+    pulse.name = "contact_verb_pulse_outward_triangle";
+    pulse.rotation.x = -Math.PI * 0.5;
+    pulse.rotation.z = Math.PI;
+    pulse.position.y = 1.095;
+    pulse.renderOrder = 2;
+    pulse.userData.contactVerbGlyphPhase = "pulse";
+    glyph.add(pulse);
+
+    const absorb = new THREE.Mesh(
+      new THREE.RingGeometry(0.27, 0.42, 3),
+      makeMaterial(0x78e8ff)
+    );
+    absorb.name = "contact_verb_absorb_inward_triangle";
+    absorb.rotation.x = -Math.PI * 0.5;
+    absorb.position.y = 1.10;
+    absorb.renderOrder = 2;
+    absorb.userData.contactVerbGlyphPhase = "absorb";
+    glyph.add(absorb);
+
+    const stabilize = new THREE.Mesh(
+      new THREE.RingGeometry(0.29, 0.40, 36),
+      makeMaterial(0xffe19a)
+    );
+    stabilize.name = "contact_verb_stabilize_coherence_ring";
+    stabilize.rotation.x = -Math.PI * 0.5;
+    stabilize.position.y = 1.105;
+    stabilize.renderOrder = 2;
+    stabilize.userData.contactVerbGlyphPhase = "stabilize";
+    glyph.add(stabilize);
+
+    surface.add(glyph);
+    return glyph;
+  }
+
   update(dt, frameState = this.frameState) {
     const safeDt = Math.max(0, Math.min(dt, 0.05));
     this.time += safeDt;
@@ -168,6 +228,7 @@ export class HostContactEcologyContinuationSystem {
     if (!active) {
       this.decayImprint(safeDt, 2.5);
       this.applyResponseVisuals({ surfaceId: "none", role: "none" }, frameState, "inactive", false);
+      this.applyContactVerbGlyphs({ surfaceId: "none", role: "none", attached: false }, frameState, false);
       this.publish(false, {
         activeSurfaceId: "none",
         activeRole: "none",
@@ -187,6 +248,7 @@ export class HostContactEcologyContinuationSystem {
     this.updateImprint(safeDt, relationship, frameState);
     const responseMode = this.resolveResponseMode(relationship, frameState);
     this.applyResponseVisuals(relationship, frameState, responseMode, true);
+    this.applyContactVerbGlyphs(relationship, frameState, true);
 
     this.publish(true, {
       ...relationship,
@@ -217,6 +279,13 @@ export class HostContactEcologyContinuationSystem {
     }
 
     const entry = this.entries.get(surfaceId);
+    const attachmentSurfaceId = attachment.authoredSuctionSupportSurfaceId ?? "none";
+    const attachedToActiveSurface = Boolean(
+      attachment.active
+      && attachment.authority === "authored_suction_support"
+      && attachmentSurfaceId !== "none"
+      && attachmentSurfaceId === surfaceId
+    );
     return {
       surfaceId,
       role: entry?.role ?? "none",
@@ -224,7 +293,8 @@ export class HostContactEcologyContinuationSystem {
       profileId: entry?.profileId ?? projection.surface?.profileId ?? truth.profileId ?? "none",
       materialFamily: entry?.materialFamily ?? projection.surface?.materialFamily ?? truth.materialFamily ?? "none",
       source,
-      attached: Boolean(attachment.active && attachment.authority === "authored_suction_support"),
+      attached: attachedToActiveSurface,
+      attachmentSurfaceId,
       locomotionActive: Boolean(attachment.tendrilLocomotionActive),
       supportCount: Number(attachment.tendrilSupportCount ?? attachment.authoredSuctionSupportCount ?? 0),
       supportQuality01: clamp01(attachment.tendrilSupportPlaneQuality01 ?? support.supportQuality01 ?? 0),
@@ -406,12 +476,75 @@ export class HostContactEcologyContinuationSystem {
               : "ambient_contact_ecology";
   }
 
+  applyContactVerbGlyphs(relationship, frameState, visible) {
+    const composition = frameState.verbComposition ?? {};
+    const intent = composition.intent ?? {};
+    const pulseActive = Boolean(intent.pulse);
+    const absorbActive = Boolean(intent.absorb);
+    const stabilizeActive = Boolean(intent.stabilize);
+    const activeEntry = this.entries.get(relationship.surfaceId ?? "none");
+    const glyphVisible = Boolean(visible && activeEntry && relationship.role !== "none" && composition.active);
+    const pulseEnvelope = clamp01(intent.pulseReleaseEnvelope ?? 0);
+    const breathe = 0.5 + Math.sin(this.time * 4.6) * 0.5;
+
+    for (const entry of this.entries.values()) {
+      const glyph = entry.verbGlyph;
+      if (!glyph) continue;
+      const isActive = glyphVisible && entry.surfaceId === relationship.surfaceId;
+      glyph.visible = isActive;
+      glyph.rotation.y = 0;
+      glyph.traverse((part) => {
+        if (!part?.material) return;
+        const phase = part.userData?.contactVerbGlyphPhase;
+        const phaseActive = phase === "pulse"
+          ? pulseActive
+          : phase === "absorb"
+            ? absorbActive
+            : phase === "stabilize"
+              ? stabilizeActive
+              : false;
+        part.material.opacity = isActive && phaseActive ? 0.76 : 0;
+      });
+      if (!isActive) continue;
+
+      const pulse = glyph.children.find((part) => part.userData?.contactVerbGlyphPhase === "pulse");
+      const absorb = glyph.children.find((part) => part.userData?.contactVerbGlyphPhase === "absorb");
+      const stabilize = glyph.children.find((part) => part.userData?.contactVerbGlyphPhase === "stabilize");
+      if (pulse) {
+        const expansion = 1.0 + pulseEnvelope * 0.38 + breathe * 0.10;
+        pulse.scale.setScalar(expansion);
+      }
+      if (absorb) {
+        const contraction = 1.18 - breathe * 0.18;
+        absorb.scale.setScalar(contraction);
+        absorb.rotation.z = 0;
+      }
+      if (stabilize) {
+        const unsettled = relationship.attached ? 0.02 : 0.10;
+        stabilize.scale.set(1 + Math.sin(this.time * 7.0) * unsettled, 1, 1 - Math.sin(this.time * 7.0) * unsettled);
+        stabilize.rotation.z = relationship.attached ? 0 : Math.sin(this.time * 5.2) * 0.10;
+      }
+    }
+
+    this.contactVerbSymbol = !glyphVisible ? "inactive"
+      : pulseActive && absorbActive && stabilizeActive ? "triune_equilibrium"
+        : pulseActive && absorbActive ? "opposed_direction_triangles"
+          : pulseActive && stabilizeActive ? "coherent_outward_triangle"
+            : absorbActive && stabilizeActive ? "coherent_inward_triangle"
+              : pulseActive ? "pulse_outward_triangle"
+                : absorbActive ? "absorb_inward_triangle"
+                  : stabilizeActive ? "stabilize_coherence_ring"
+                    : "inactive";
+    this.contactVerbSymbolIntensity01 = glyphVisible ? 0.76 : 0;
+    this.contactVerbSymbolSurfaceId = glyphVisible ? relationship.surfaceId : "none";
+  }
+
   publish(active, data) {
     this.frameState.hostContactEcologyContinuation = {
-      pass: "HC-031I4",
+      pass: "HC-031J",
       active,
       cellId: CELL_ID,
-      identity: "Residue Contact Bridge Lock",
+      identity: "Contact Verb Symbol Grammar Lock",
       surfaceRelationshipSource: data.source ?? "none",
       activeSurfaceId: data.surfaceId ?? "none",
       activeRole: data.role ?? "none",
@@ -421,6 +554,10 @@ export class HostContactEcologyContinuationSystem {
       responseMode: data.responseMode ?? "inactive",
       visualCue01: Number(this.visualCue01.toFixed(3)),
       visualGrammar: this.visualGrammar,
+      contactVerbSymbol: this.contactVerbSymbol,
+      contactVerbSymbolIntensity01: Number(this.contactVerbSymbolIntensity01.toFixed(3)),
+      contactVerbSymbolSurfaceId: this.contactVerbSymbolSurfaceId,
+      contactVerbSymbolTruth: "reads_HC029C_intent_and_same_surface_attachment_only",
       visualProofRequired: true,
       visualCueSurfaceId: this.visualGrammar === "amber_hex_coherence"
         ? this.residueCohereSurfaceId
@@ -441,6 +578,7 @@ export class HostContactEcologyContinuationSystem {
       residueCohereVisualHold01: Number(clamp01(this.residueCohereVisualHoldSeconds / this.residueCohereVisualHoldDuration).toFixed(3)),
       residueCohereTriggerCount: this.residueCohereTriggerCount,
       attached: Boolean(data.attached),
+      attachmentSurfaceId: data.attachmentSurfaceId ?? "none",
       tendrilLocomotionActive: Boolean(data.locomotionActive),
       supportCount: Number(data.supportCount ?? 0),
       supportQuality01: Number((data.supportQuality01 ?? 0).toFixed(3)),

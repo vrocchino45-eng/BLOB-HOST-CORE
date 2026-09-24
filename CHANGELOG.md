@@ -1,3 +1,12 @@
+# HC031J — Contact Verb Symbol Grammar Lock
+
+- Added canonical contact glyphs for Pulse outward, Absorb inward, and Stabilize coherence.
+- Composed chords display their primitive symbols together instead of inventing new controls or abilities.
+- Limited glyphs to the currently resolved authored surface.
+- Tightened presentation truth so attachment-dependent ecology cues require suction on that exact active surface.
+- Added read-only symbol and attachment-surface telemetry.
+- Preserved HC031I4 geometry, contact mechanics, verb output, targeting, movement, progression, and material response grammar.
+
 # HC031I4 — Residue Contact Bridge Lock
 
 - Overlapped the first continuation residue pad with the scar foot at a matching usable height.

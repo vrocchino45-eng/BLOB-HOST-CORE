@@ -1,3 +1,13 @@
+# HC031J Feature Branch Lock Status
+
+HC031J is a Visual Lock/Convergence pass over the accepted HC031I4 contact ecology proof. Runtime scope is limited to presentation-only contact glyphs, same-surface visual-truth resolution, read-only telemetry, and build identity.
+
+HC029C remains the sole chord-meaning owner. PlayerMovementController, surface truth, suction attachment, support plane, Stabilized Projection output, targeting, Bond/Absorb, controls, surface profiles, Grave systems, routes, objectives, and progression remain locked.
+
+Recommended Git branch: `feature/hc031j-contact-verb-symbol-grammar-lock`.
+
+---
+
 # HC031I4 Feature Branch Lock Status
 
 HC031I4 is a geometry-only scar-to-residue contact bridge over HC031I3. Runtime changes are limited to continuation residue mesh placement/scale, presentation identity, and build metadata.

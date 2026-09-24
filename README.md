@@ -1,3 +1,16 @@
+# HC031J — Contact Verb Symbol Grammar Lock
+
+HC031J converts the already-locked Pulse / Absorb / Stabilize language into a small, consistent contact glyph above the active authored Host surface:
+
+- **Pulse:** warm triangle pointing outward from the Core
+- **Absorb:** cool inverse triangle drawing inward
+- **Stabilize:** gold coherence ring; unsupported contact visibly wavers while same-surface suction settles it
+- **composed chords:** the primitive symbols coexist rather than becoming a new ability icon
+
+The glyph reads HC029C intent and HC031I4 surface truth only. It cannot move the Core, change verb output, attach a tendril, select a target, unlock progress, or create a contact surface. Material responses remain the second layer beneath the shared verb symbol: teal membrane pressure, orange scar bracing, and amber residue yield/coherence.
+
+---
+
 # HC031I4 — Residue Contact Bridge Lock
 
 HC031I4 fixes the physical handoff exposed by the HC031I3 playtest. The visual attempt event fired, proving the residue could be recognized, but residue contact lasted only one telemetry sample and never became sustained authored suction. The first residue pad now overlaps the scar foot at the same usable height, and the second residue pad overlaps the first.
