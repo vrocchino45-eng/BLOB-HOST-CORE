@@ -1,8 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031I3 aligns residue anatomy with the accepted membrane/scar travel line
-// and distinguishes attempted from confirmed coherence without changing contact,
-// attachment, verb, targeting, movement, or progression authority.
+// HC031I4 closes the measured scar-to-residue contact handoff gap with authored
+// mesh overlap while preserving the accepted entry and I3 visual event grammar.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +11,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031I3",
-  buildLabel: "Residue Attempt / Confirmation Lock"
+  buildId: "HC-031I4",
+  buildLabel: "Residue Contact Bridge Lock"
 });
 
 runtime.start().catch((error) => {

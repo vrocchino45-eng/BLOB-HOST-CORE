@@ -4,7 +4,7 @@ const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const clamp01 = (value) => THREE.MathUtils.clamp(Number.isFinite(value) ? value : 0, 0, 1);
 
 /**
- * HC031I3 — Residue Attempt / Confirmation Lock.
+ * HC031I4 — Residue Contact Bridge Lock.
  *
  * Presentation/ecology consumer for the already-proven H3 contact architecture.
  * It never creates movement, attachment, targeting, verb strength, progression,
@@ -408,10 +408,10 @@ export class HostContactEcologyContinuationSystem {
 
   publish(active, data) {
     this.frameState.hostContactEcologyContinuation = {
-      pass: "HC-031I3",
+      pass: "HC-031I4",
       active,
       cellId: CELL_ID,
-      identity: "Residue Attempt / Confirmation Lock",
+      identity: "Residue Contact Bridge Lock",
       surfaceRelationshipSource: data.source ?? "none",
       activeSurfaceId: data.surfaceId ?? "none",
       activeRole: data.role ?? "none",

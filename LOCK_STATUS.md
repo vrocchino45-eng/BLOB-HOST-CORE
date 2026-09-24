@@ -1,3 +1,13 @@
+# HC031I4 Feature Branch Lock Status
+
+HC031I4 is a geometry-only scar-to-residue contact bridge over HC031I3. Runtime changes are limited to continuation residue mesh placement/scale, presentation identity, and build metadata.
+
+The accepted Shift+1 entry, `residue_weak` surface profile, HC031I3 attempt/confirmation grammar, and all 24 H3 authority owners remain locked. Acceptance requires a continuous scar-to-residue handoff and a legitimate attached residue confirmation, with no mechanical success granted by the open attempt cue.
+
+Recommended Git branch: `feature/hc031i4-residue-contact-bridge-lock`.
+
+---
+
 # HC031I3 Feature Branch Lock Status
 
 HC031I3 is a residue-route and truthful-feedback convergence pass. Allowed runtime changes are limited to authored residue mesh placement/scale, presentation-only attempt/confirmation grammar, read-only telemetry, and build identity.

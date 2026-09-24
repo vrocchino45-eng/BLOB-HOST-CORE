@@ -1,3 +1,15 @@
+# HC031I4 — Residue Contact Bridge Lock
+
+HC031I4 fixes the physical handoff exposed by the HC031I3 playtest. The visual attempt event fired, proving the residue could be recognized, but residue contact lasted only one telemetry sample and never became sustained authored suction. The first residue pad now overlaps the scar foot at the same usable height, and the second residue pad overlaps the first.
+
+The accepted membrane-first Shift+1 entry, `residue_weak` profile, contact rules, controls, attachment mechanics, and HC031I3 visual grammar are unchanged. The expected sequence remains:
+
+**teal membrane pressure → orange scar bracing → amber residue proximity → open attempt hex → closed confirmed hex after attached Stabilize**
+
+Use **Shift+1**, cross membrane and scar without jumping the seam, then test residue. Export with **Shift+T**.
+
+---
+
 # HC031I3 — Residue Attempt / Confirmation Lock
 
 HC031I3 preserves the accepted membrane-first Shift+1 entry and corrects the remaining residue failure. The residue wash now follows the measured positive-X/negative-Z travel line after scar and is modestly raised/thickened while retaining the same `residue_weak` surface profile.

@@ -4,7 +4,7 @@ import { applyCrawlableSurfaceMetadata } from "./CrawlableSurfaceRegistry.js";
 const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 
 /**
- * HC031I3 — Residue Attempt / Confirmation Lock.
+ * HC031I4 — Residue Contact Bridge Lock.
  *
  * Extends the HC031F1B contact shelf into a small continuous ecology proof.
  * The same authored surface profiles remain the mechanical truth; this system
@@ -21,9 +21,9 @@ export class HostContactShelfSystem {
     this.playerRoot = playerRoot;
     this.frameState = frameState;
     this.root = new THREE.Group();
-    this.root.name = "host_contact_shelf_HC031I3";
+    this.root.name = "host_contact_shelf_HC031I4";
     this.root.userData.systemOwner = "HostContactShelfSystem";
-    this.root.userData.ecologyContinuation = "HC031I3";
+    this.root.userData.ecologyContinuation = "HC031I4";
     this.root.position.set(4.0, -1.15, -0.75);
     this.surfaces = [];
     this.time = 0;
@@ -243,16 +243,17 @@ export class HostContactShelfSystem {
       ecologySegment: "scar_buttress"
     });
 
-    // 3) Residue wash — broad, weak material after the brace. It remains fully
-    // traversable but should visibly yield and poorly carry sustained recoil.
+    // 3) Residue wash — broad, weak material after the brace. HC031I4 overlaps
+    // the first pad with the scar foot at a matching contact height, then overlaps
+    // the second pad with the first. Profiles and contact rules remain unchanged.
     const residueA = new THREE.Mesh(
       new THREE.SphereGeometry(0.82, 22, 13),
       this.makeResidueMaterial({ opacity: 0.58, color: 0x907b5d })
     );
     residueA.name = "host_contact_residue_wash_01";
-    residueA.position.set(1.58, 0.18, -2.92);
+    residueA.position.set(1.05, 0.02, -2.72);
     residueA.rotation.y = -0.24;
-    residueA.scale.set(1.48, 0.30, 0.88);
+    residueA.scale.set(1.38, 0.32, 0.95);
     this.authorSurface(residueA, {
       surfaceId: "HOST_CONTACT_CONTINUATION_RESIDUE_01",
       profileId: "residue_weak",
@@ -266,9 +267,9 @@ export class HostContactShelfSystem {
       this.makeResidueMaterial({ opacity: 0.54, color: 0x9a8260 })
     );
     residueB.name = "host_contact_residue_wash_02";
-    residueB.position.set(2.12, 0.14, -3.56);
+    residueB.position.set(1.55, 0.02, -3.45);
     residueB.rotation.y = 0.38;
-    residueB.scale.set(1.34, 0.28, 0.80);
+    residueB.scale.set(1.30, 0.28, 0.88);
     this.authorSurface(residueB, {
       surfaceId: "HOST_CONTACT_CONTINUATION_RESIDUE_02",
       profileId: "residue_weak",
@@ -292,7 +293,7 @@ export class HostContactShelfSystem {
       })
     );
     tissue.name = "host_contact_ecology_connective_tissue";
-    tissue.position.set(1.02, 0.52, -2.74);
+    tissue.position.set(1.20, 0.45, -2.90);
     tissue.rotation.x = Math.PI * 0.48;
     tissue.scale.set(1.65, 0.64, 1.35);
     tissue.userData.surfaceContactDisabled = true;
@@ -316,7 +317,7 @@ export class HostContactShelfSystem {
     });
     mesh.userData.hostContactEcologyRole = ecologyRole;
     mesh.userData.hostContactEcologySegment = ecologySegment;
-    mesh.userData.hostContactEcologyPass = "HC031I3";
+    mesh.userData.hostContactEcologyPass = "HC031I4";
     mesh.userData.targetingSuppressed = true;
     this.addSurface(mesh);
   }
@@ -373,7 +374,7 @@ export class HostContactShelfSystem {
     }, {});
 
     this.frameState.hostContactShelf = {
-      pass: "HC-031I3",
+      pass: "HC-031I4",
       parentSurfacePass: "HC-031F1B",
       active,
       cellId: CELL_ID,
@@ -391,7 +392,12 @@ export class HostContactShelfSystem {
       nearestSurfaceCenterDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(3)) : null,
       continuationSequence: ["living_membrane_path", "scar_load_buttress", "residue_yield_field"],
       residueRouteAxis: "positive_x_negative_z_after_scar",
-      residueAccessibilityPass: "raised_thickened_profile_values_unchanged",
+      residueAccessibilityPass: "scar_foot_to_residue_overlap_bridge_profile_values_unchanged",
+      residueContactBridge: {
+        scarToResidueOverlap: true,
+        residueToResidueOverlap: true,
+        matchingSurfaceHeight: true
+      },
       testEntryPosition: { x: 3.20, y: -0.40, z: -0.55 },
       entryForwardAxis: "observed_positive_x_negative_z_camera_forward",
       testLandingWithinContactRange: true,

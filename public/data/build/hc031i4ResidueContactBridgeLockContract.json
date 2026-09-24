@@ -1,0 +1,43 @@
+{
+  "pass": "HC-031I4",
+  "parent": "HC-031I3",
+  "identity": "Residue Contact Bridge Lock",
+  "evidenceSession": "cc238349-a441-483e-a6ab-14b42c7530c1",
+  "acceptedEntry": {
+    "position": [3.2, -0.4, -0.55],
+    "firstRole": "living_membrane_path",
+    "changed": false
+  },
+  "contactBridge": {
+    "scarFootCenter": [1.18, 0.12, -2.44],
+    "residueACenter": [1.05, 0.02, -2.72],
+    "residueAScale": [1.38, 0.32, 0.95],
+    "residueBCenter": [1.55, 0.02, -3.45],
+    "residueBScale": [1.3, 0.28, 0.88],
+    "scarToResidueOverlap": true,
+    "residueToResidueOverlap": true,
+    "matchingSurfaceHeight": true,
+    "profileId": "residue_weak",
+    "profileValuesChanged": false
+  },
+  "visualGrammar": {
+    "changed": false,
+    "proximity": "amber_residue_proximity",
+    "attempt": "amber_open_hex_attempt",
+    "confirmed": "amber_hex_coherence",
+    "attemptGrantsMechanicalSuccess": false,
+    "confirmedVisualHoldGrantsMechanicalGrace": false
+  },
+  "lockedTruth": {
+    "movementChanged": false,
+    "controlsChanged": false,
+    "surfaceProfilesChanged": false,
+    "contactEligibilityChanged": false,
+    "attachmentChanged": false,
+    "supportPlaneChanged": false,
+    "projectionMechanicsChanged": false,
+    "targetingChanged": false,
+    "verbCompositionChanged": false,
+    "progressionChanged": false
+  }
+}

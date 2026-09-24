@@ -1,3 +1,11 @@
+# HC031I4 — Residue Contact Bridge Lock
+
+- Overlapped the first continuation residue pad with the scar foot at a matching usable height.
+- Overlapped the second residue pad with the first to preserve continuous surface contact.
+- Kept the `residue_weak` profile and all contact, attachment, movement, input, targeting, and verb mechanics unchanged.
+- Preserved HC031I3 proximity, open-attempt, confirmed-hex, and afterglow visual grammar.
+- Added a changed-files-only delta package based on HC031I3.
+
 # HC031I3 — Residue Attempt / Confirmation Lock
 
 - Preserved the accepted HC031I2 membrane-first Shift+1 landing.
