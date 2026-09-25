@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031J1 repairs the surface-to-free-movement handoff while preserving HC031J
-// contact symbols, surface crawl grammar, controls, verbs, and progression.
+// HC031K-HF1 closes the remaining contact-permission bypass while preserving
+// HC031K attachment ownership, J1 peel/reacquire truth, verbs, camera, and ecology.
 
 const appRoot = document.querySelector("#app");
 
@@ -11,8 +11,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031J1",
-  buildLabel: "Surface Detachment and Free-Movement Handoff"
+  buildId: "HC-031K-HF1",
+  buildLabel: "Contact Lock Closure"
 });
 
 runtime.start().catch((error) => {

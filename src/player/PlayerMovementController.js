@@ -76,6 +76,18 @@ export class PlayerMovementController {
     this.attachmentReleaseNormal = new THREE.Vector3(0, 1, 0);
     this.attachmentReleaseStartDistance = 0;
     this.attachmentReleaseClearance = 0;
+    // HC031K — attachment ownership survives brief contact uncertainty. Contact
+    // samples may flicker during anchor handoff, but the attached relationship is
+    // not revoked until the unresolved gap exceeds a bounded tolerance.
+    this.attachmentOwnerSurfaceId = "none";
+    this.attachmentOwnerAuthority = "none";
+    this.attachmentOwnerPoint = new THREE.Vector3();
+    this.attachmentOwnerNormal = new THREE.Vector3(0, 1, 0);
+    this.attachmentContactGapAge = 0;
+    this.attachmentContactGapTolerance = 0.34;
+    this.attachmentContactGapActive = false;
+    this.attachmentContinuityMode = "none";
+    this.attachmentSupportIdentityTransferCount = 0;
     this.attachmentTargetNormalizedDistance = 0.955;
     this.attachmentShellNormalizedDistance = 0.955;
     this.attachmentStandOffDistance = 0.30;
@@ -280,12 +292,20 @@ export class PlayerMovementController {
       && tendrilSurfaceRequest.active
       && (tendrilSurfaceRequest.supportCount ?? 0) > 0
     );
-    // Tangential crawl remains planted-anchor driven. Deliberate away input gains
-    // progressively more direct authority so suction can visibly unload before
-    // the attachment releases; ordinary crawl retains the accepted 4% cue.
+    const attachmentContinuityDriveActive = Boolean(
+      this.attachmentActive
+      && this.attachmentContactGapActive
+      && this.attachmentOwnerAuthority !== "none"
+    );
+    // Tangential crawl remains planted-anchor driven. During a tolerated contact
+    // gap, the carried attachment owner keeps a small direct tangent cue so a
+    // one-frame support dropout cannot suddenly become full free-flight input.
+    // Deliberate peel still ramps toward the same J1 direct-input ceiling.
     const directInputAccelerationScale = tendrilSurfaceDriveActive
       ? THREE.MathUtils.lerp(0.04, 0.52, this.attachmentPeelIntent01)
-      : 1.0;
+      : attachmentContinuityDriveActive
+        ? THREE.MathUtils.lerp(0.10, 0.52, this.attachmentPeelIntent01)
+        : 1.0;
 
     this.desiredMoveAcceleration.copy(this.intent).multiplyScalar(acceleration);
     this.environmentFlowAcceleration.copy(this.flow).multiplyScalar(flowStrength);
@@ -341,7 +361,7 @@ export class PlayerMovementController {
     const kineticGlow = Math.min(speed / 2.6, 1.0);
 
     frameState.playerAttachment = {
-      pass: "HC-031H2",
+      pass: "HC-031K-HF1",
       active: this.attachmentActive,
       state: this.attachmentState,
       authority: this.attachmentAuthority,
@@ -367,6 +387,14 @@ export class PlayerMovementController {
       reacquireBlocked: this.attachmentReacquireBlocked,
       releaseSurfaceId: this.attachmentReleaseSurfaceId,
       releaseClearance: Number(this.attachmentReleaseClearance.toFixed(3)),
+      ownerSurfaceId: this.attachmentOwnerSurfaceId,
+      ownerAuthority: this.attachmentOwnerAuthority,
+      acquireAge: Number(this.attachmentAcquireAge.toFixed(3)),
+      contactGapActive: this.attachmentContactGapActive,
+      contactGapAge: Number(this.attachmentContactGapAge.toFixed(3)),
+      contactGapTolerance: Number(this.attachmentContactGapTolerance.toFixed(3)),
+      continuityMode: this.attachmentContinuityMode,
+      supportIdentityTransferCount: this.attachmentSupportIdentityTransferCount,
       surfaceTangentSpeed: Number(this.attachmentSurfaceTangentSpeed.toFixed(3)),
       tendrilLocomotionActive: Boolean(this.tendrilLocomotionTelemetry.active),
       tendrilSupportCount: this.tendrilLocomotionTelemetry.supportCount ?? 0,
@@ -829,27 +857,8 @@ export class PlayerMovementController {
         )
       : 0;
 
-    const activeContactNormal = this.tendrilSupportPlaneActive
-      ? this.tendrilSupportNormal
-      : this.attachmentSurfaceNormal;
-    // CoreSurfaceTruth orients its normal from the contact point toward the Core,
-    // so a positive dot is away from the surface. The previous negative sign
-    // interpreted into-surface input as release intent and made actual peel input
-    // feel locked.
-    const outwardIntent = this.intent.dot(activeContactNormal);
-    const awayIntent = THREE.MathUtils.clamp(Math.max(0, outwardIntent), 0, 1);
-    this.attachmentReleaseTension = awayIntent;
     this.attachmentCooldown = Math.max(0, this.attachmentCooldown - Math.max(0, dt));
     this.attachmentReleaseAge += Math.max(0, dt);
-
-    if (this.attachmentActive && awayIntent >= 0.34) {
-      this.attachmentPeelHoldAge += Math.max(0, dt);
-    } else {
-      this.attachmentPeelHoldAge = Math.max(0, this.attachmentPeelHoldAge - Math.max(0, dt) * 3.2);
-    }
-    this.attachmentPeelIntent01 = this.attachmentActive
-      ? THREE.MathUtils.smoothstep(awayIntent, 0.20, 0.72)
-      : 0;
 
     if (this.attachmentReleaseSurfaceId !== "none") {
       this.tempReleaseDelta ??= new THREE.Vector3();
@@ -884,6 +893,121 @@ export class PlayerMovementController {
     this.attachmentStrength = authoredSuctionCanAdhere
       ? Math.max(this.authoredSuctionSupportStrength, legacyChemistryStrength * 0.72)
       : legacyChemistryStrength;
+    this.attachmentContactGapTolerance = THREE.MathUtils.lerp(0.30, 0.40, this.attachmentStrength);
+
+    // HC031K distinguishes live resolved contact from a retained/grace contact.
+    // The latter may keep adhesion eligible briefly, but it must not silently
+    // replace the persistent attachment owner or its last reliable contact plane.
+    const ownerRequiresAuthoredSupport = Boolean(
+      this.attachmentActive
+      && this.attachmentOwnerAuthority === "authored_suction_support"
+    );
+    const ownerRequiresLegacyMembrane = Boolean(
+      this.attachmentActive
+      && this.attachmentOwnerAuthority === "legacy_chemistry_membrane"
+    );
+    // HC031K-HF1 — global contact permission is part of contact resolution, not an
+    // immediate detach command. When permission drops briefly (for example during
+    // a transient runtime handoff), the existing owner enters the same bounded
+    // continuity window as a missing support sample.
+    const liveAuthoredContactResolved = Boolean(contactAllowed && authoredSuctionSupportNow);
+    const liveLegacyContactResolved = legacyChemistryCanAdhere;
+    const liveContactResolved = ownerRequiresAuthoredSupport
+      ? liveAuthoredContactResolved
+      : ownerRequiresLegacyMembrane
+        ? liveLegacyContactResolved
+        : Boolean(liveAuthoredContactResolved || liveLegacyContactResolved);
+    const useLiveAuthoredContact = liveAuthoredContactResolved
+      && (!ownerRequiresLegacyMembrane || !this.attachmentActive);
+    const liveContactSurfaceId = useLiveAuthoredContact
+      ? this.tendrilSupportSurfaceId
+      : liveLegacyContactResolved && !ownerRequiresAuthoredSupport
+        ? (this.surfaceTruthSurfaceId !== "none" ? this.surfaceTruthSurfaceId : "legacy_membrane")
+        : "none";
+    const liveContactPoint = useLiveAuthoredContact
+      ? this.tendrilSupportCentroid
+      : this.attachmentSurfacePoint;
+    const liveContactNormal = useLiveAuthoredContact
+      ? this.tendrilSupportNormal
+      : this.surfaceTruthActive
+        ? this.attachmentSurfaceNormal
+        : this.boundarySurfaceNormal;
+
+    let incompatibleSurfaceChange = false;
+    let supportIdentityTransferred = false;
+    if (
+      this.attachmentActive
+      && liveContactResolved
+      && this.attachmentOwnerSurfaceId !== "none"
+      && liveContactSurfaceId !== "none"
+      && liveContactSurfaceId !== this.attachmentOwnerSurfaceId
+    ) {
+      const ownerNormalAlignment = THREE.MathUtils.clamp(
+        this.attachmentOwnerNormal.dot(liveContactNormal),
+        -1,
+        1
+      );
+      // Adjacent authored patches and triangulated surfaces are allowed to hand
+      // ownership across seams. Only a strongly opposed contact normal is treated
+      // as an incompatible jump to a different physical side of the environment.
+      incompatibleSurfaceChange = ownerNormalAlignment < -0.25;
+      if (!incompatibleSurfaceChange) {
+        this.attachmentOwnerSurfaceId = liveContactSurfaceId;
+        this.attachmentOwnerAuthority = desiredAuthority !== "none"
+          ? desiredAuthority
+          : this.attachmentOwnerAuthority;
+        this.attachmentSupportIdentityTransferCount += 1;
+        supportIdentityTransferred = true;
+      }
+    }
+
+    if (this.attachmentActive && liveContactResolved && !incompatibleSurfaceChange) {
+      this.attachmentOwnerSurfaceId = liveContactSurfaceId !== "none"
+        ? liveContactSurfaceId
+        : this.attachmentOwnerSurfaceId;
+      this.attachmentOwnerAuthority = desiredAuthority !== "none"
+        ? desiredAuthority
+        : this.attachmentOwnerAuthority;
+      this.attachmentOwnerPoint.copy(liveContactPoint);
+      this.attachmentOwnerNormal.copy(liveContactNormal);
+      if (this.attachmentOwnerNormal.lengthSq() < 0.0001) this.attachmentOwnerNormal.copy(this.boundarySurfaceNormal);
+      else this.attachmentOwnerNormal.normalize();
+      this.attachmentContactGapAge = 0;
+      this.attachmentContactGapActive = false;
+      this.attachmentContinuityMode = supportIdentityTransferred
+        ? "support_identity_transferred"
+        : "attached_contact_resolved";
+    } else if (this.attachmentActive && !incompatibleSurfaceChange) {
+      this.attachmentContactGapAge += Math.max(0, dt);
+      this.attachmentContactGapActive = this.attachmentOwnerAuthority !== "none";
+      this.attachmentContinuityMode = this.attachmentContactGapAge <= this.attachmentContactGapTolerance
+        ? "contact_gap_tolerated"
+        : "contact_gap_expired";
+    }
+
+    const ownerNormalAvailable = Boolean(
+      this.attachmentActive
+      && this.attachmentOwnerAuthority !== "none"
+      && this.attachmentOwnerNormal.lengthSq() > 0.0001
+    );
+    const activeContactNormal = (!liveContactResolved && ownerNormalAvailable)
+      ? this.attachmentOwnerNormal
+      : liveContactNormal;
+    // CoreSurfaceTruth orients its normal from the contact point toward the Core,
+    // so a positive dot is away from the surface. The J1 deliberate peel law is
+    // unchanged; K only stabilizes ownership underneath it.
+    const outwardIntent = this.intent.dot(activeContactNormal);
+    const awayIntent = THREE.MathUtils.clamp(Math.max(0, outwardIntent), 0, 1);
+    this.attachmentReleaseTension = awayIntent;
+
+    if (this.attachmentActive && awayIntent >= 0.34) {
+      this.attachmentPeelHoldAge += Math.max(0, dt);
+    } else {
+      this.attachmentPeelHoldAge = Math.max(0, this.attachmentPeelHoldAge - Math.max(0, dt) * 3.2);
+    }
+    this.attachmentPeelIntent01 = this.attachmentActive
+      ? THREE.MathUtils.smoothstep(awayIntent, 0.20, 0.72)
+      : 0;
 
     if (this.attachmentActive) {
       const releaseThreshold = 0.50 + this.attachmentStrength * 0.08;
@@ -893,34 +1017,70 @@ export class PlayerMovementController {
         && this.attachmentPeelHoldAge >= releaseHoldThreshold
       );
       const pulledAway = this.attachmentReleaseArmed;
-      const authorityLost = !canAdhere;
-      const surfaceLost = desiredAuthority === "authored_suction_support"
-        ? !authoredSuctionSupportRetained
-        : this.surfaceTruthActive
-          ? this.surfaceTruthDistance > 0.92
-          : this.boundaryNormalizedDistance < 0.82;
+      const continuityHolds = Boolean(
+        contactAllowed
+        && this.attachmentContactGapActive
+        && this.attachmentContactGapAge <= this.attachmentContactGapTolerance
+        && this.attachmentOwnerAuthority !== "none"
+      );
+      const sustainedContactLoss = Boolean(
+        this.attachmentContactGapActive
+        && this.attachmentContactGapAge > this.attachmentContactGapTolerance
+      );
+      const globalContactPermissionLost = Boolean(
+        !contactAllowed
+        && !continuityHolds
+        && !sustainedContactLoss
+      );
+      const authorityLost = Boolean(
+        globalContactPermissionLost
+        || (!canAdhere && !continuityHolds && !sustainedContactLoss)
+      );
+      const legacySurfaceLost = Boolean(
+        this.attachmentOwnerAuthority === "legacy_chemistry_membrane"
+        && !continuityHolds
+        && !this.surfaceTruthActive
+        && this.boundaryNormalizedDistance < 0.82
+      );
 
-      if (pulledAway || authorityLost || surfaceLost) {
+      if (pulledAway || incompatibleSurfaceChange || sustainedContactLoss || authorityLost || legacySurfaceLost) {
+        const detachReason = pulledAway
+          ? "deliberate_away_input"
+          : incompatibleSurfaceChange
+            ? "incompatible_surface_change"
+            : sustainedContactLoss || legacySurfaceLost
+              ? "sustained_contact_loss"
+              : globalContactPermissionLost
+                ? "contact_permission_lost"
+                : "contact_authority_lost";
         this.attachmentActive = false;
         this.attachmentState = "releasing";
         this.attachmentAuthority = "none";
         this.attachmentReleaseAge = 0;
         this.attachmentCooldown = 0.55;
         this.attachmentAcquireAge = 0;
-        this.attachmentDetachReason = pulledAway
-          ? "deliberate_away_input"
-          : authorityLost
-            ? "contact_authority_lost"
-            : "surface_lost";
-        this.attachmentReleaseSurfaceId = this.tendrilSupportPlaneActive
-          ? this.tendrilSupportSurfaceId
-          : this.surfaceTruthSurfaceId !== "none"
-            ? this.surfaceTruthSurfaceId
-            : "legacy_membrane";
-        this.attachmentReleasePoint.copy(
-          this.tendrilSupportPlaneActive ? this.tendrilSupportCentroid : this.attachmentSurfacePoint
+        this.attachmentDetachReason = detachReason;
+        this.attachmentReleaseSurfaceId = this.attachmentOwnerSurfaceId !== "none"
+          ? this.attachmentOwnerSurfaceId
+          : this.tendrilSupportPlaneActive
+            ? this.tendrilSupportSurfaceId
+            : this.surfaceTruthSurfaceId !== "none"
+              ? this.surfaceTruthSurfaceId
+              : "legacy_membrane";
+        const releaseUsesOwnerPlane = Boolean(
+          this.attachmentOwnerAuthority !== "none"
+          && (this.attachmentContactGapActive || incompatibleSurfaceChange)
         );
-        this.attachmentReleaseNormal.copy(activeContactNormal).normalize();
+        this.attachmentReleasePoint.copy(
+          releaseUsesOwnerPlane
+            ? this.attachmentOwnerPoint
+            : this.tendrilSupportPlaneActive
+              ? this.tendrilSupportCentroid
+              : this.attachmentSurfacePoint
+        );
+        this.attachmentReleaseNormal.copy(
+          releaseUsesOwnerPlane ? this.attachmentOwnerNormal : activeContactNormal
+        ).normalize();
         this.tempReleaseDelta ??= new THREE.Vector3();
         this.tempReleaseDelta.copy(this.playerRoot.position).sub(this.attachmentReleasePoint);
         this.attachmentReleaseStartDistance = this.tempReleaseDelta.dot(this.attachmentReleaseNormal);
@@ -929,16 +1089,24 @@ export class PlayerMovementController {
         this.attachmentReleaseArmed = false;
         this.attachmentPeelHoldAge = 0;
         this.attachmentPeelIntent01 = 0;
-        // The normal is contact-to-Core, so positive normal impulse is always
-        // physically away from the released surface.
+        this.attachmentContactGapActive = false;
+        this.attachmentContinuityMode = `released_${detachReason}`;
+        // Preserve the accepted J1 outward handoff impulse. K changes ownership
+        // timing, not the release/momentum law; K1 remains the momentum pass.
         const releaseImpulse = 0.66 + this.attachmentStrength * 0.56;
-        this.velocity.addScaledVector(activeContactNormal, releaseImpulse);
+        this.velocity.addScaledVector(this.attachmentReleaseNormal, releaseImpulse);
       } else {
-        this.attachmentAuthority = desiredAuthority;
+        this.attachmentAuthority = continuityHolds
+          ? this.attachmentOwnerAuthority
+          : desiredAuthority !== "none"
+            ? desiredAuthority
+            : this.attachmentOwnerAuthority;
         this.attachmentState = "attached";
       }
     } else {
       this.attachmentReleaseArmed = false;
+      this.attachmentContactGapAge = 0;
+      this.attachmentContactGapActive = false;
       const nearSurface = authoredSuctionCanAdhere
         ? true
         : this.surfaceTruthActive
@@ -958,6 +1126,17 @@ export class PlayerMovementController {
           this.attachmentAuthority = desiredAuthority;
           this.attachmentState = "attached";
           this.attachmentDetachReason = "none";
+          this.attachmentOwnerSurfaceId = liveContactSurfaceId !== "none"
+            ? liveContactSurfaceId
+            : authoredSuctionSupportRetained
+              ? this.authoredSuctionSupportSurfaceId
+              : "legacy_membrane";
+          this.attachmentOwnerAuthority = desiredAuthority;
+          this.attachmentOwnerPoint.copy(liveContactPoint);
+          this.attachmentOwnerNormal.copy(liveContactNormal);
+          if (this.attachmentOwnerNormal.lengthSq() < 0.0001) this.attachmentOwnerNormal.copy(this.boundarySurfaceNormal);
+          else this.attachmentOwnerNormal.normalize();
+          this.attachmentContinuityMode = "attachment_acquired";
           this.attachmentShellNormalizedDistance = THREE.MathUtils.clamp(
             this.boundaryNormalizedDistance,
             0.90,
@@ -965,6 +1144,7 @@ export class PlayerMovementController {
           );
         } else {
           this.attachmentState = "brushing";
+          this.attachmentContinuityMode = "brush_only";
         }
       } else {
         this.attachmentAcquireAge = Math.max(0, this.attachmentAcquireAge - Math.max(0, dt) * 2.8);
@@ -972,6 +1152,7 @@ export class PlayerMovementController {
           // retain release state briefly for body-language continuity
         } else {
           this.attachmentState = nearSurface && canAdhere ? "brushing" : "free";
+          this.attachmentContinuityMode = this.attachmentState === "brushing" ? "brush_only" : "none";
           if (this.attachmentState === "free") this.attachmentAuthority = "none";
         }
       }
@@ -983,9 +1164,11 @@ export class PlayerMovementController {
       this.attachmentSurfaceTangentSpeed = this.boundaryTangentialSpeed;
       return;
     }
-    const activeContactNormal = this.tendrilSupportPlaneActive
-      ? this.tendrilSupportNormal
-      : this.attachmentSurfaceNormal;
+    const activeContactNormal = this.attachmentContactGapActive && this.attachmentOwnerAuthority !== "none"
+      ? this.attachmentOwnerNormal
+      : this.tendrilSupportPlaneActive
+        ? this.tendrilSupportNormal
+        : this.attachmentSurfaceNormal;
     const radialVelocity = this.velocity.dot(activeContactNormal);
     const retainedAwayVelocity = radialVelocity > 0 ? this.attachmentPeelIntent01 : 0;
     this.velocity.addScaledVector(activeContactNormal, -radialVelocity * (1 - retainedAwayVelocity));
@@ -1339,15 +1522,31 @@ export class PlayerMovementController {
     // HC025B: while chemically attached, settle against the inside of the same
     // trusted ellipsoid and keep velocity tangent to it. No new surface source,
     // collider, or raycast is introduced.
-    if (this.attachmentActive && this.surfaceTruthActive) {
-      // HC031H: once planted supports exist, their support plane owns ride-height
-      // refinement. SurfaceTruth still decides what is crawlable; movement remains
-      // the only system allowed to translate playerRoot.
+    if (
+      this.attachmentActive
+      && (this.surfaceTruthActive || this.tendrilSupportPlaneActive || this.attachmentContactGapActive)
+    ) {
+      // HC031K: a tolerated contact gap keeps the last reliable owner plane. This
+      // prevents a brief support dropout from snapping attached motion back to the
+      // coarse safety ellipsoid before the contact relationship is truly lost.
       this.tempSurfaceDelta ??= new THREE.Vector3();
       const useSupportPlane = this.tendrilSupportPlaneActive && this.tendrilSupportCount >= 2;
-      const contactPoint = useSupportPlane ? this.tendrilSupportCentroid : this.attachmentSurfacePoint;
-      const contactNormal = useSupportPlane ? this.tendrilSupportNormal : this.attachmentSurfaceNormal;
-      const targetStandOff = useSupportPlane ? this.tendrilSupportTargetRideHeight : this.attachmentVisibleStandOffDistance;
+      const useOwnerPlane = !useSupportPlane
+        && this.attachmentContactGapActive
+        && this.attachmentOwnerAuthority !== "none";
+      const contactPoint = useSupportPlane
+        ? this.tendrilSupportCentroid
+        : useOwnerPlane
+          ? this.attachmentOwnerPoint
+          : this.attachmentSurfacePoint;
+      const contactNormal = useSupportPlane
+        ? this.tendrilSupportNormal
+        : useOwnerPlane
+          ? this.attachmentOwnerNormal
+          : this.attachmentSurfaceNormal;
+      const targetStandOff = useSupportPlane
+        ? this.tendrilSupportTargetRideHeight
+        : this.attachmentVisibleStandOffDistance;
       this.tempSurfaceDelta.copy(p).sub(contactPoint);
       const signedDistance = this.tempSurfaceDelta.dot(contactNormal);
       const error = targetStandOff - signedDistance;

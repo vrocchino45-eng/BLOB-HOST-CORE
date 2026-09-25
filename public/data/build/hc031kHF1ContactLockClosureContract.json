@@ -1,0 +1,42 @@
+{
+  "pass": "HC-031K-HF1",
+  "parent": "HC-031K",
+  "identity": "Contact Lock Closure",
+  "mode": "hotfix_convergence",
+  "purpose": "Close the remaining global contact-permission bypass without changing J1 peel/reacquire or K owner-continuity feel.",
+  "allowedScope": [
+    "src/player/PlayerMovementController.js",
+    "src/core/SessionTelemetrySystem.js",
+    "src/main.js",
+    "package.json",
+    "package-lock.json",
+    "scripts/validateHC031KHF1ContactLockClosure.mjs",
+    "public/data/build/hc031kHF1ContactLockClosureContract.json",
+    "public/data/build/hc031kHF1LockedHashes.json",
+    "HC031K_HF1_BUILD_REPORT.md",
+    "HC031K_HF1_FOCUSED_PLAYTEST.md",
+    "HC031K_HF1_PATCH_APPLY.md",
+    "HC031K_HF1_DELTA_MANIFEST.txt"
+  ],
+  "contactClosureLaw": {
+    "globalContactPermissionUsesOwnerGrace": true,
+    "ownerPlanePersistsAcrossUnresolvedContact": true,
+    "compatibleSurfaceTransferPrecedesLossEvaluation": true,
+    "deliberatePeelLawUnchangedFromK": true
+  },
+  "lockedTruth": {
+    "freeFlightRetune": false,
+    "boostRetune": false,
+    "cameraChanges": false,
+    "verbChanges": false,
+    "targetingChanges": false,
+    "ecologyChanges": false,
+    "routeChanges": false,
+    "progressionChanges": false
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.30",
+    "buildId": "HC-031K-HF1",
+    "implementationPassStamp": true
+  }
+}

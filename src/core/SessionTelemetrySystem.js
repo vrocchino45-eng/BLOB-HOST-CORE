@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.28";
+    this.schemaVersion = "blob.session.telemetry.v1.30";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -66,7 +66,11 @@ export class SessionTelemetrySystem {
     this.lastDeliberateCommitmentEventId = "none";
     this.lastDebugPlatformSlot = 0;
     this.lastAttachmentActive = Boolean(frameState.playerAttachment?.active);
+    this.lastAttachmentState = frameState.playerAttachment?.state ?? "free";
     this.lastAttachmentReacquireBlocked = Boolean(frameState.playerAttachment?.reacquireBlocked);
+    this.lastAttachmentContactGapActive = Boolean(frameState.playerAttachment?.contactGapActive);
+    this.lastAttachmentOwnerSurfaceId = frameState.playerAttachment?.ownerSurfaceId ?? "none";
+    this.lastAttachmentSupportIdentityTransferCount = frameState.playerAttachment?.supportIdentityTransferCount ?? 0;
     this.lastPulseEventId = 0;
     this.prevHeld = { absorb: false, stabilize: false, boost: false };
     this.holdStartedAt = { absorb: null, stabilize: null, boost: null };
@@ -1099,9 +1103,58 @@ export class SessionTelemetrySystem {
   observeSurfaceDetachment(frameState) {
     const attachment = frameState.playerAttachment ?? {};
     const active = Boolean(attachment.active);
+    const state = attachment.state ?? "free";
     const reacquireBlocked = Boolean(attachment.reacquireBlocked);
+    const contactGapActive = Boolean(attachment.contactGapActive);
+    const ownerSurfaceId = attachment.ownerSurfaceId ?? "none";
+    const transferCount = attachment.supportIdentityTransferCount ?? 0;
 
-    if (this.lastAttachmentActive && !active && attachment.state === "releasing") {
+    if (!active && state === "brushing" && this.lastAttachmentState !== "brushing") {
+      this.record("movement.surface_brush", "perceptual", {
+        percept: {
+          surface: this.aliasSource(
+            attachment.surfaceTruthSurfaceId && attachment.surfaceTruthSurfaceId !== "none"
+              ? attachment.surfaceTruthSurfaceId
+              : attachment.authoredSuctionSupportSurfaceId ?? "none"
+          ),
+          outcome: "brush_only"
+        },
+        developer: {
+          attachmentAuthority: attachment.authority ?? "none",
+          acquireAge: round(attachment.acquireAge ?? 0)
+        }
+      });
+    }
+
+    if (!this.lastAttachmentContactGapActive && contactGapActive && active) {
+      this.record("movement.surface_contact_gap_tolerated", "analysis", {
+        percept: {
+          surface: this.aliasSource(ownerSurfaceId),
+          relationshipHeld: true
+        },
+        developer: {
+          contactGapAge: round(attachment.contactGapAge ?? 0),
+          contactGapTolerance: round(attachment.contactGapTolerance ?? 0),
+          continuityMode: attachment.continuityMode ?? "contact_gap_tolerated"
+        }
+      });
+    }
+
+    if (transferCount > this.lastAttachmentSupportIdentityTransferCount) {
+      this.record("movement.surface_support_identity_transferred", "analysis", {
+        percept: {
+          from: this.aliasSource(this.lastAttachmentOwnerSurfaceId),
+          to: this.aliasSource(ownerSurfaceId),
+          attachmentPreserved: active
+        },
+        developer: {
+          transferCount,
+          continuityMode: attachment.continuityMode ?? "support_identity_transferred"
+        }
+      });
+    }
+
+    if (this.lastAttachmentActive && !active && state === "releasing") {
       this.record("movement.surface_detached", "perceptual", {
         percept: {
           reason: attachment.detachReason ?? "unknown",
@@ -1112,18 +1165,24 @@ export class SessionTelemetrySystem {
           releaseTension: round(attachment.releaseTension ?? 0),
           releaseClearance: round(attachment.releaseClearance ?? 0),
           cooldownSeconds: round(attachment.releaseCooldown ?? 0),
-          attachmentAuthority: attachment.authority ?? "none"
+          attachmentAuthority: attachment.authority ?? "none",
+          contactGapAge: round(attachment.contactGapAge ?? 0),
+          contactGapTolerance: round(attachment.contactGapTolerance ?? 0),
+          continuityMode: attachment.continuityMode ?? "none"
         }
       });
     } else if (!this.lastAttachmentActive && active) {
       this.record("movement.surface_attached", "perceptual", {
         percept: {
-          surface: this.aliasSource(attachment.surfaceTruthSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none"),
+          surface: this.aliasSource(ownerSurfaceId !== "none"
+            ? ownerSurfaceId
+            : attachment.surfaceTruthSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none"),
           authority: attachment.authority ?? "none"
         },
         developer: {
           supportCount: attachment.authoredSuctionSupportCount ?? 0,
-          releaseClearanceBeforeAttach: round(attachment.releaseClearance ?? 0)
+          releaseClearanceBeforeAttach: round(attachment.releaseClearance ?? 0),
+          continuityMode: attachment.continuityMode ?? "attachment_acquired"
         }
       });
     }
@@ -1141,7 +1200,11 @@ export class SessionTelemetrySystem {
     }
 
     this.lastAttachmentActive = active;
+    this.lastAttachmentState = state;
     this.lastAttachmentReacquireBlocked = reacquireBlocked;
+    this.lastAttachmentContactGapActive = contactGapActive;
+    this.lastAttachmentOwnerSurfaceId = ownerSurfaceId;
+    this.lastAttachmentSupportIdentityTransferCount = transferCount;
   }
 
   noteInformationGain(reason, score = 1, detail = {}) {
@@ -1336,6 +1399,13 @@ export class SessionTelemetrySystem {
         attachmentReacquireBlocked: Boolean(frameState.playerAttachment?.reacquireBlocked),
         attachmentReleaseSurfaceId: frameState.playerAttachment?.releaseSurfaceId ?? "none",
         attachmentReleaseClearance: round(frameState.playerAttachment?.releaseClearance ?? 0),
+        attachmentOwnerSurfaceId: frameState.playerAttachment?.ownerSurfaceId ?? "none",
+        attachmentOwnerAuthority: frameState.playerAttachment?.ownerAuthority ?? "none",
+        attachmentContactGapActive: Boolean(frameState.playerAttachment?.contactGapActive),
+        attachmentContactGapAge: round(frameState.playerAttachment?.contactGapAge ?? 0),
+        attachmentContactGapTolerance: round(frameState.playerAttachment?.contactGapTolerance ?? 0),
+        attachmentContinuityMode: frameState.playerAttachment?.continuityMode ?? "none",
+        attachmentSupportIdentityTransferCount: frameState.playerAttachment?.supportIdentityTransferCount ?? 0,
         authoredSuctionSupportActive: Boolean(frameState.playerAttachment?.authoredSuctionSupportActive),
         authoredSuctionSupportCount: frameState.playerAttachment?.authoredSuctionSupportCount ?? 0,
         authoredSuctionSupportSurfaceId: frameState.playerAttachment?.authoredSuctionSupportSurfaceId ?? "none",
@@ -1600,7 +1670,8 @@ export class SessionTelemetrySystem {
         wallMinusSimSeconds: round(this.wallTime() - this.simTime()),
         exportedAtIso: new Date().toISOString(),
         telemetryAuthority: "read_only_observer",
-        gameplayAuthority: false
+        gameplayAuthority: false,
+        implementationPass: this.frameState.playerAttachment?.pass ?? this.frameState.buildId ?? "unknown"
       },
       summary: this.buildSummary(),
       events: this.events,
@@ -1609,6 +1680,7 @@ export class SessionTelemetrySystem {
       developerTruth: {
         sourceAliasMap: Object.fromEntries(this.sourceInternalByAlias.entries()),
         semanticAliasMap: Object.fromEntries(this.semanticInternalByAlias.entries()),
+        implementationPass: this.frameState.playerAttachment?.pass ?? this.frameState.buildId ?? "unknown",
         note: "Later AI perceptual-firewall consumers must not receive developerTruth."
       }
     };
@@ -1660,6 +1732,9 @@ export class SessionTelemetrySystem {
         && event.percept?.deliberate === true
       )).length,
       surfaceAttachments: count("movement.surface_attached"),
+      surfaceBrushes: count("movement.surface_brush"),
+      surfaceContactGapTolerations: count("movement.surface_contact_gap_tolerated"),
+      surfaceSupportIdentityTransfers: count("movement.surface_support_identity_transferred"),
       surfaceReacquireUnblocks: count("movement.surface_reacquire_unblocked"),
       coreWorldResonanceChanges: count("core.world_resonance.changed"),
       coreTopologyResonanceModeChanges: count("core.topology_resonance.mode_changed"),
