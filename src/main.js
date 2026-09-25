@@ -1,7 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031K-HF1 closes the remaining contact-permission bypass while preserving
-// HC031K attachment ownership, J1 peel/reacquire truth, verbs, camera, and ecology.
+// HC031K1 preserves the locked K/HF1 attachment grammar while making free→surface
+// and surface→free velocity handoff continuous. Verbs, camera, ecology, targeting,
+// and contact ownership remain outside this pass.
 
 const appRoot = document.querySelector("#app");
 
@@ -11,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031K-HF1",
-  buildLabel: "Contact Lock Closure"
+  buildId: "HC-031K1",
+  buildLabel: "Surface / Free Momentum Handoff"
 });
 
 runtime.start().catch((error) => {

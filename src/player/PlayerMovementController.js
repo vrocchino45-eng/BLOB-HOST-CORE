@@ -94,6 +94,21 @@ export class PlayerMovementController {
     this.attachmentSurfaceTangentSpeed = 0;
     this.attachmentSiltWorldDirection = new THREE.Vector3(0, 0, -1);
     this.attachmentTangentVelocity = new THREE.Vector3();
+    // HC031K1 — surface/free momentum handoff. Attachment remains owned by the
+    // locked K/HF1 contact grammar; these fields only preserve/reproject motion
+    // across an already-authorized landing or release.
+    this.attachmentLandingEntryVelocity = new THREE.Vector3();
+    this.attachmentLandingTangentVelocity = new THREE.Vector3();
+    this.attachmentReleaseTangentVelocity = new THREE.Vector3();
+    this.attachmentLandingEntrySpeed = 0;
+    this.attachmentLandingEntryTangentSpeed = 0;
+    this.attachmentLandingRetainedTangentSpeed = 0;
+    this.attachmentLandingHandoffAge = 99;
+    this.attachmentLandingHandoffDuration = 0.38;
+    this.attachmentLandingCarry01 = 0;
+    this.attachmentReleaseInheritedTangentSpeed = 0;
+    this.attachmentReleaseNormalImpulse = 0;
+    this.attachmentMomentumHandoffMode = "none";
     // HC031F1A — visible surface truth becomes the effective attachment plane
     // while valid. The authored ellipsoid remains only a safety/fallback envelope.
     this.attachmentSurfaceNormal = new THREE.Vector3(0, 1, 0);
@@ -318,9 +333,18 @@ export class PlayerMovementController {
 
     const assistStrength = this.computeInteractionAssist(input, frameState, dt);
     const coastingDragScale = inputMagnitude > 0.04 ? 0.72 : 1;
+    // HC031K1: an authorized landing keeps its already-existing tangential motion
+    // for a short capture window. We reduce only transitional damping; normal
+    // impact is still projected out by applyChemistryAttachmentVelocity below.
+    this.attachmentLandingCarry01 = this.attachmentActive
+      ? THREE.MathUtils.clamp(1 - this.attachmentLandingHandoffAge / this.attachmentLandingHandoffDuration, 0, 1)
+      : 0;
+    const landingDragScale = this.attachmentActive
+      ? THREE.MathUtils.lerp(1, 0.30, this.attachmentLandingCarry01)
+      : 1;
     this.velocity.addScaledVector(
       this.fluidSlip,
-      -Math.min(drag * coastingDragScale * topologyFluidSlipDampingScale * dt, 0.92)
+      -Math.min(drag * coastingDragScale * topologyFluidSlipDampingScale * landingDragScale * dt, 0.92)
     );
 
     // Attached motion remains camera-relative but becomes tangent to the current
@@ -361,7 +385,7 @@ export class PlayerMovementController {
     const kineticGlow = Math.min(speed / 2.6, 1.0);
 
     frameState.playerAttachment = {
-      pass: "HC-031K-HF1",
+      pass: "HC-031K1",
       active: this.attachmentActive,
       state: this.attachmentState,
       authority: this.attachmentAuthority,
@@ -396,6 +420,15 @@ export class PlayerMovementController {
       continuityMode: this.attachmentContinuityMode,
       supportIdentityTransferCount: this.attachmentSupportIdentityTransferCount,
       surfaceTangentSpeed: Number(this.attachmentSurfaceTangentSpeed.toFixed(3)),
+      momentumHandoffMode: this.attachmentMomentumHandoffMode,
+      landingHandoffAge: Number(this.attachmentLandingHandoffAge.toFixed(3)),
+      landingHandoffDuration: Number(this.attachmentLandingHandoffDuration.toFixed(3)),
+      landingCarry01: Number(this.attachmentLandingCarry01.toFixed(3)),
+      landingEntrySpeed: Number(this.attachmentLandingEntrySpeed.toFixed(3)),
+      landingEntryTangentialSpeed: Number(this.attachmentLandingEntryTangentSpeed.toFixed(3)),
+      landingRetainedTangentialSpeed: Number(this.attachmentLandingRetainedTangentSpeed.toFixed(3)),
+      releaseInheritedTangentialSpeed: Number(this.attachmentReleaseInheritedTangentSpeed.toFixed(3)),
+      releaseNormalImpulse: Number(this.attachmentReleaseNormalImpulse.toFixed(3)),
       tendrilLocomotionActive: Boolean(this.tendrilLocomotionTelemetry.active),
       tendrilSupportCount: this.tendrilLocomotionTelemetry.supportCount ?? 0,
       tendrilTraction01: Number((this.tendrilLocomotionTelemetry.traction01 ?? 0).toFixed(3)),
@@ -859,6 +892,9 @@ export class PlayerMovementController {
 
     this.attachmentCooldown = Math.max(0, this.attachmentCooldown - Math.max(0, dt));
     this.attachmentReleaseAge += Math.max(0, dt);
+    if (this.attachmentActive) {
+      this.attachmentLandingHandoffAge += Math.max(0, dt);
+    }
 
     if (this.attachmentReleaseSurfaceId !== "none") {
       this.tempReleaseDelta ??= new THREE.Vector3();
@@ -1091,10 +1127,22 @@ export class PlayerMovementController {
         this.attachmentPeelIntent01 = 0;
         this.attachmentContactGapActive = false;
         this.attachmentContinuityMode = `released_${detachReason}`;
-        // Preserve the accepted J1 outward handoff impulse. K changes ownership
-        // timing, not the release/momentum law; K1 remains the momentum pass.
-        const releaseImpulse = 0.66 + this.attachmentStrength * 0.56;
-        this.velocity.addScaledVector(this.attachmentReleaseNormal, releaseImpulse);
+        // HC031K1: release inherits the attached tangent exactly, then adds only
+        // the outward peel component. This makes surface→free a continuation of
+        // motion rather than a fresh locomotion-mode velocity.
+        const releaseNormalSpeed = this.velocity.dot(this.attachmentReleaseNormal);
+        this.attachmentReleaseTangentVelocity.copy(this.velocity)
+          .addScaledVector(this.attachmentReleaseNormal, -releaseNormalSpeed);
+        this.attachmentReleaseInheritedTangentSpeed = this.attachmentReleaseTangentVelocity.length();
+        const releaseImpulse = 0.54
+          + this.attachmentStrength * 0.40
+          + THREE.MathUtils.clamp(this.attachmentReleaseTension, 0, 1) * 0.34;
+        this.attachmentReleaseNormalImpulse = releaseImpulse;
+        this.velocity.copy(this.attachmentReleaseTangentVelocity)
+          .addScaledVector(this.attachmentReleaseNormal, Math.max(0, releaseNormalSpeed) + releaseImpulse);
+        this.attachmentMomentumHandoffMode = pulledAway
+          ? "surface_to_free_deliberate"
+          : "surface_to_free_forced";
       } else {
         this.attachmentAuthority = continuityHolds
           ? this.attachmentOwnerAuthority
@@ -1136,6 +1184,19 @@ export class PlayerMovementController {
           this.attachmentOwnerNormal.copy(liveContactNormal);
           if (this.attachmentOwnerNormal.lengthSq() < 0.0001) this.attachmentOwnerNormal.copy(this.boundarySurfaceNormal);
           else this.attachmentOwnerNormal.normalize();
+          // HC031K1: capture the free-flight velocity before attached projection.
+          // The normal component is impact/compression; the tangent component is
+          // legitimate inherited travel and should not disappear at mode handoff.
+          this.attachmentLandingEntryVelocity.copy(this.velocity);
+          this.attachmentLandingEntrySpeed = this.attachmentLandingEntryVelocity.length();
+          const landingNormalSpeed = this.attachmentLandingEntryVelocity.dot(this.attachmentOwnerNormal);
+          this.attachmentLandingTangentVelocity.copy(this.attachmentLandingEntryVelocity)
+            .addScaledVector(this.attachmentOwnerNormal, -landingNormalSpeed);
+          this.attachmentLandingEntryTangentSpeed = this.attachmentLandingTangentVelocity.length();
+          this.attachmentLandingRetainedTangentSpeed = this.attachmentLandingEntryTangentSpeed;
+          this.attachmentLandingHandoffAge = 0;
+          this.attachmentLandingCarry01 = 1;
+          this.attachmentMomentumHandoffMode = "landing_capture";
           this.attachmentContinuityMode = "attachment_acquired";
           this.attachmentShellNormalizedDistance = THREE.MathUtils.clamp(
             this.boundaryNormalizedDistance,
@@ -1174,6 +1235,12 @@ export class PlayerMovementController {
     this.velocity.addScaledVector(activeContactNormal, -radialVelocity * (1 - retainedAwayVelocity));
     this.attachmentTangentVelocity.copy(this.velocity);
     this.attachmentSurfaceTangentSpeed = this.attachmentTangentVelocity.length();
+    if (this.attachmentLandingCarry01 > 0) {
+      this.attachmentLandingRetainedTangentSpeed = this.attachmentSurfaceTangentSpeed;
+      this.attachmentMomentumHandoffMode = "landing_tangent_carry";
+    } else if (this.attachmentMomentumHandoffMode.startsWith("landing_")) {
+      this.attachmentMomentumHandoffMode = "attached_settled";
+    }
   }
 
   applyTendrilSurfaceLocomotion(dt, acceleration, frameState, directInputScale = 1) {
@@ -1209,10 +1276,18 @@ export class PlayerMovementController {
       if (this.attachmentPeelIntent01 > 0.03) {
         return { ...inactive, active: true, mode: "peel_unloading" };
       }
-      // No player intent: retain attachment, but let residual tangential velocity
-      // settle so the Core looks suctioned rather than endlessly skating.
-      this.velocity.multiplyScalar(Math.max(0, 1 - Math.min(1, dt * (2.8 + traction01 * 2.2))));
-      return { ...inactive, active: true, mode: "anchored_rest" };
+      // No player intent: after the short landing-carry window, return to the
+      // established suctioned-rest damping. During capture, inherited tangent is
+      // allowed to settle progressively instead of being erased on contact.
+      const settledRestDamping = 2.8 + traction01 * 2.2;
+      const landingRestDamping = 0.72 + traction01 * 0.48;
+      const restDampingRate = THREE.MathUtils.lerp(
+        settledRestDamping,
+        landingRestDamping,
+        this.attachmentLandingCarry01
+      );
+      this.velocity.multiplyScalar(Math.max(0, 1 - Math.min(1, dt * restDampingRate)));
+      return { ...inactive, active: true, mode: this.attachmentLandingCarry01 > 0 ? "landing_carry" : "anchored_rest" };
     }
     this.tendrilIntentTangent.multiplyScalar(1 / intentMagnitude);
 
@@ -1300,9 +1375,16 @@ export class PlayerMovementController {
     } else {
       // No forward support means a real hesitation while the third tendril seeks
       // the next plant. This is the missing causal read from the F1 playtest.
+      const settledHesitationDamping = THREE.MathUtils.lerp(4.8, 0.9, this.attachmentPeelIntent01);
+      const landingHesitationDamping = THREE.MathUtils.lerp(1.15, 0.72, this.attachmentPeelIntent01);
+      const hesitationDamping = THREE.MathUtils.lerp(
+        settledHesitationDamping,
+        landingHesitationDamping,
+        this.attachmentLandingCarry01
+      );
       this.velocity.multiplyScalar(Math.max(
         0,
-        1 - Math.min(0.42, dt * THREE.MathUtils.lerp(4.8, 0.9, this.attachmentPeelIntent01))
+        1 - Math.min(0.42, dt * hesitationDamping)
       ));
       this.velocity.addScaledVector(this.tendrilDriveDirection, pullAcceleration * dt);
     }

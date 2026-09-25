@@ -1,0 +1,58 @@
+{
+  "pass": "HC-031K1",
+  "parent": "HC-031K-HF1",
+  "identity": "Surface / Free Momentum Handoff",
+  "mode": "convergence_movement_physics",
+  "purpose": "Preserve existing motion across free-to-surface landing and surface-to-free peel without retuning free flight or changing the locked K/HF1 contact grammar.",
+  "allowedScope": [
+    "src/player/PlayerMovementController.js",
+    "src/core/SessionTelemetrySystem.js",
+    "src/main.js",
+    "package.json",
+    "package-lock.json",
+    "scripts/validateHC031K1SurfaceFreeMomentumHandoff.mjs",
+    "public/data/build/hc031k1SurfaceFreeMomentumHandoffContract.json",
+    "public/data/build/hc031k1LockedHashes.json",
+    "HC031K1_BUILD_REPORT.md",
+    "HC031K1_FOCUSED_PLAYTEST.md",
+    "HC031K1_PATCH_APPLY.md",
+    "HC031K1_DELTA_MANIFEST.txt"
+  ],
+  "momentumLaw": {
+    "landingNormalImpactProjectedOut": true,
+    "landingTangentialMotionTemporarilyCarried": true,
+    "settledSurfaceDampingRestoredAfterCapture": true,
+    "releaseInheritsSurfaceTangent": true,
+    "releaseAddsOutwardPeelOnly": true,
+    "surfaceIdentityTransferLawUnchanged": true
+  },
+  "lockedTruth": {
+    "freeFlightAccelerationRetune": false,
+    "freeFlightSpeedLimitRetune": false,
+    "boostRetune": false,
+    "attachmentAcquireThresholdRetune": false,
+    "contactGapToleranceRetune": false,
+    "deliberatePeelThresholdRetune": false,
+    "reacquireCooldownRetune": false,
+    "cameraChanges": false,
+    "verbChanges": false,
+    "targetingChanges": false,
+    "ecologyChanges": false,
+    "routeChanges": false,
+    "progressionChanges": false
+  },
+  "tuning": {
+    "landingHandoffDurationSeconds": 0.38,
+    "landingFluidDragScaleAtCapture": 0.3,
+    "landingRestDampingBase": 0.72,
+    "landingRestDampingTractionGain": 0.48,
+    "releaseImpulseBase": 0.54,
+    "releaseImpulseAdhesionGain": 0.4,
+    "releaseImpulseTensionGain": 0.34
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.31",
+    "buildId": "HC-031K1",
+    "momentumHandoffFields": true
+  }
+}

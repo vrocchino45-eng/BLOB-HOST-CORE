@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.30";
+    this.schemaVersion = "blob.session.telemetry.v1.31";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -1168,7 +1168,10 @@ export class SessionTelemetrySystem {
           attachmentAuthority: attachment.authority ?? "none",
           contactGapAge: round(attachment.contactGapAge ?? 0),
           contactGapTolerance: round(attachment.contactGapTolerance ?? 0),
-          continuityMode: attachment.continuityMode ?? "none"
+          continuityMode: attachment.continuityMode ?? "none",
+          momentumHandoffMode: attachment.momentumHandoffMode ?? "none",
+          inheritedTangentialSpeed: round(attachment.releaseInheritedTangentialSpeed ?? 0),
+          releaseNormalImpulse: round(attachment.releaseNormalImpulse ?? 0)
         }
       });
     } else if (!this.lastAttachmentActive && active) {
@@ -1182,7 +1185,11 @@ export class SessionTelemetrySystem {
         developer: {
           supportCount: attachment.authoredSuctionSupportCount ?? 0,
           releaseClearanceBeforeAttach: round(attachment.releaseClearance ?? 0),
-          continuityMode: attachment.continuityMode ?? "attachment_acquired"
+          continuityMode: attachment.continuityMode ?? "attachment_acquired",
+          momentumHandoffMode: attachment.momentumHandoffMode ?? "landing_capture",
+          entrySpeed: round(attachment.landingEntrySpeed ?? 0),
+          entryTangentialSpeed: round(attachment.landingEntryTangentialSpeed ?? 0),
+          landingCarryDuration: round(attachment.landingHandoffDuration ?? 0)
         }
       });
     }
@@ -1406,6 +1413,15 @@ export class SessionTelemetrySystem {
         attachmentContactGapTolerance: round(frameState.playerAttachment?.contactGapTolerance ?? 0),
         attachmentContinuityMode: frameState.playerAttachment?.continuityMode ?? "none",
         attachmentSupportIdentityTransferCount: frameState.playerAttachment?.supportIdentityTransferCount ?? 0,
+        attachmentMomentumHandoffMode: frameState.playerAttachment?.momentumHandoffMode ?? "none",
+        attachmentLandingHandoffAge: round(frameState.playerAttachment?.landingHandoffAge ?? 0),
+        attachmentLandingHandoffDuration: round(frameState.playerAttachment?.landingHandoffDuration ?? 0),
+        attachmentLandingCarry01: round(frameState.playerAttachment?.landingCarry01 ?? 0),
+        attachmentLandingEntrySpeed: round(frameState.playerAttachment?.landingEntrySpeed ?? 0),
+        attachmentLandingEntryTangentialSpeed: round(frameState.playerAttachment?.landingEntryTangentialSpeed ?? 0),
+        attachmentLandingRetainedTangentialSpeed: round(frameState.playerAttachment?.landingRetainedTangentialSpeed ?? 0),
+        attachmentReleaseInheritedTangentialSpeed: round(frameState.playerAttachment?.releaseInheritedTangentialSpeed ?? 0),
+        attachmentReleaseNormalImpulse: round(frameState.playerAttachment?.releaseNormalImpulse ?? 0),
         authoredSuctionSupportActive: Boolean(frameState.playerAttachment?.authoredSuctionSupportActive),
         authoredSuctionSupportCount: frameState.playerAttachment?.authoredSuctionSupportCount ?? 0,
         authoredSuctionSupportSurfaceId: frameState.playerAttachment?.authoredSuctionSupportSurfaceId ?? "none",
