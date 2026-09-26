@@ -1,0 +1,52 @@
+{
+  "pass": "HC-031L",
+  "parent": "HC-031K1",
+  "identity": "Movement + Verb Physical Grammar",
+  "mode": "convergence_interaction_physics",
+  "purpose": "Carry the existing Pulse / Absorb / Stabilize composition grammar into the Core body and surface relationship without changing targeting, contact ownership, free-flight tuning, primitive target effects, ecology, routes or progression.",
+  "physicalLaw": {
+    "stabilizeRegulatesRelationship": true,
+    "pulseProjectsOutwardThroughRelationship": true,
+    "absorbDrawsInwardThroughRelationship": true,
+    "surfaceStabilizeBracesAgainstAmbientFlow": true,
+    "freeStabilizeHoldsSpatialRelationshipWithoutFreezingInput": true,
+    "pulseCanAssistOnlyAlreadyDeliberatePeel": true,
+    "absorbCannotGrantAttachmentAuthority": true
+  },
+  "movementEffects": {
+    "surfaceBraceEnvironmentalFlowMultiplier": 0.84,
+    "spatialHoldEnvironmentalFlowMultiplier": 0.92,
+    "surfaceBraceTractionMultiplier": 1.1,
+    "freeInputAccelerationMultiplier": 1.0,
+    "speedLimitMultiplier": 1.0,
+    "attachmentAcquireMultiplier": 1.0,
+    "attachmentReleaseThresholdMultiplier": 1.0,
+    "pulsePeelAssistBase": 0.07,
+    "pulsePeelAssistReleaseEnvelopeGain": 0.05,
+    "pulsePeelAssistStabilizeGain": 0.04
+  },
+  "lockedTruth": {
+    "targetingThresholdRetune": false,
+    "targetSelectionChange": false,
+    "inputRemap": false,
+    "cameraChange": false,
+    "freeFlightAccelerationRetune": false,
+    "freeFlightSpeedLimitRetune": false,
+    "boostRetune": false,
+    "attachmentAcquireThresholdRetune": false,
+    "contactGapToleranceRetune": false,
+    "deliberatePeelThresholdRetune": false,
+    "reacquireCooldownRetune": false,
+    "primitivePulseTargetEffectRetune": false,
+    "primitiveAbsorbTargetEffectRetune": false,
+    "primitiveStabilizeTargetEffectRetune": false,
+    "ecologyChange": false,
+    "routeChange": false,
+    "progressionChange": false
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.32",
+    "buildId": "HC-031L",
+    "physicalGrammarEvent": "movement.verb_physical_grammar.changed"
+  }
+}

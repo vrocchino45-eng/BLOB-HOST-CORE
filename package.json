@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.27",
+  "version": "0.31.28",
   "private": true,
-  "description": "BLOB: HOST CORE \u2014 HC-031K1 Surface / Free Momentum Handoff",
+  "description": "BLOB: HOST CORE — HC-031L Movement + Verb Physical Grammar",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031k1 && npm run validate:hc031k1-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031l && npm run validate:hc031l-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031f1a": "node scripts/validateHC031F1ASurfaceTruthPullReadability.mjs",
     "validate:hc031c2": "node scripts/validateHC031C2FragmentFieldCapture.mjs",
     "validate:hc023b": "node scripts/validateHC023BSurfaceLivingStates.mjs",
@@ -256,7 +256,9 @@
     "validate:hc031k": "node scripts/validateHC031KSurfaceContactIntentLock.mjs",
     "validate:hc031k-hf1": "node scripts/validateHC031KHF1ContactLockClosure.mjs",
     "validate:hc031k1": "node scripts/validateHC031K1SurfaceFreeMomentumHandoff.mjs",
-    "validate:hc031k1-syntax": "node --check src/player/PlayerMovementController.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
+    "validate:hc031k1-syntax": "node --check src/player/PlayerMovementController.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
+    "validate:hc031l": "node scripts/validateHC031LMovementVerbPhysicalGrammar.mjs",
+    "validate:hc031l-syntax": "node --check src/player/PlayerMovementController.js && node --check src/interaction/VerbCompositionSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
   },
   "dependencies": {
     "three": "^0.179.1",

@@ -1,8 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031K1 preserves the locked K/HF1 attachment grammar while making free→surface
-// and surface→free velocity handoff continuous. Verbs, camera, ecology, targeting,
-// and contact ownership remain outside this pass.
+// HC031L extends the locked K/K1 physical foundation into the existing triadic verb
+// grammar. Stabilize regulates a relationship, Pulse projects outward through it,
+// and Absorb draws inward through it. Targeting, attachment ownership, camera,
+// ecology, routes and progression remain outside this pass.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031K1",
-  buildLabel: "Surface / Free Momentum Handoff"
+  buildId: "HC-031L",
+  buildLabel: "Movement + Verb Physical Grammar"
 });
 
 runtime.start().catch((error) => {

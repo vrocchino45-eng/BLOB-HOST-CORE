@@ -82,12 +82,14 @@ const PROFILES = Object.freeze({
 });
 
 /**
- * HC029C — Verb Composition Grammar.
+ * HC031L — Movement + Verb Physical Grammar, extending HC029C composition.
  *
- * Owns only the meaning of simultaneous Pulse / Absorb / Stabilize intent on the
- * retained HC029A relationship. Primitive verb systems keep their existing
- * authority. This system publishes bounded composition modifiers so those owners
- * can agree on one relationship instead of inventing independent combo behavior.
+ * Owns the canonical meaning of simultaneous Pulse / Absorb / Stabilize intent on
+ * one retained relationship. Primitive verb systems keep their existing authority.
+ * HC031L does not retarget or add abilities; it locks the triadic physical law:
+ * Stabilize regulates the relationship, Pulse projects outward through it, and
+ * Absorb draws inward through it. PlayerMovementController consumes only the
+ * body/environment side of that law.
  */
 export class VerbCompositionSystem {
   constructor({ frameState }) {
@@ -161,7 +163,7 @@ export class VerbCompositionSystem {
       || chord === "full_system";
 
     frameState.verbComposition = {
-      pass: "HC-029C",
+      pass: "HC-031L",
       active: chord !== "idle",
       owner: "VerbCompositionSystem",
       relationshipOwner: "TargetingSystem / HC029A",
@@ -198,10 +200,15 @@ export class VerbCompositionSystem {
         addsNewAbility: false,
         addsNewButton: false,
         changesTargetingThresholds: false,
+        stabilizeRole: "establish_or_regulate_relationship",
+        pulseRole: "project_outward_through_relationship",
+        absorbRole: "draw_inward_through_relationship",
         pulseStabilize: "cohere_then_project_as_controlled_push",
         absorbStabilize: "draw_while_preserving_coherence",
         pulseAbsorb: "opposed_forces_form_tension_not_double_strength",
-        fullSystem: "high_strain_equilibrium_not_super_move"
+        fullSystem: "high_strain_equilibrium_not_super_move",
+        surfaceAttachmentOwnedByMovementOnly: true,
+        aimChoosesTargetVerbsModifyRelationship: true
       }
     };
   }

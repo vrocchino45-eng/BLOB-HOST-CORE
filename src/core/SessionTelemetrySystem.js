@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.31";
+    this.schemaVersion = "blob.session.telemetry.v1.32";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -59,6 +59,7 @@ export class SessionTelemetrySystem {
     this.lastEntityResidueRecognitionKey = "inactive";
     this.lastEntityEcologicalCrossInfluenceKey = "inactive";
     this.lastCoreVerbEngineChord = "idle";
+    this.lastVerbPhysicalGrammarMode = frameState.verbPhysicalGrammar?.mode ?? "idle";
     this.lastReactiveStateEventId = 0;
     this.lastReturnRegionKey = "inactive";
     this.lastRuptureHarvestEventId = 0;
@@ -157,6 +158,7 @@ export class SessionTelemetrySystem {
     this.observeEntityResidueRecognition(frameState);
     this.observeEntityEcologicalCrossInfluence(frameState);
     this.observeCoreVerbEngineCoupling(frameState);
+    this.observeVerbPhysicalGrammar(frameState);
     this.observeReactiveStateGrammar(frameState);
     this.observeReturnRegion(frameState);
     this.observeRuptureHarvest(frameState);
@@ -903,6 +905,35 @@ export class SessionTelemetrySystem {
     this.lastCoreVerbEngineChord = chord;
   }
 
+  observeVerbPhysicalGrammar(frameState) {
+    const grammar = frameState.verbPhysicalGrammar ?? {};
+    const mode = grammar.mode ?? "idle";
+    if (mode === this.lastVerbPhysicalGrammarMode) return;
+
+    this.record("movement.verb_physical_grammar.changed", "analysis", {
+      percept: {
+        from: this.lastVerbPhysicalGrammarMode,
+        to: mode,
+        chord: grammar.chord ?? "idle",
+        relationshipSource: grammar.relationshipSource ?? "none",
+        surfaceBound: Boolean(grammar.surfaceBound)
+      },
+      developer: {
+        environmentalFlowMultiplier: round(grammar.effects?.environmentalFlowMultiplier ?? 1),
+        surfaceTractionMultiplier: round(grammar.effects?.surfaceTractionMultiplier ?? 1),
+        pulsePeelAssistEligible: Boolean(grammar.effects?.pulsePeelAssistEligible),
+        absorbAttachmentAuthority: false,
+        freeInputAccelerationMultiplier: 1,
+        speedLimitMultiplier: 1,
+        attachmentAcquireMultiplier: 1,
+        attachmentReleaseThresholdMultiplier: 1,
+        targetingAuthority: false,
+        movementAuthority: "PlayerMovementController"
+      }
+    });
+    this.lastVerbPhysicalGrammarMode = mode;
+  }
+
   observeReactiveStateGrammar(frameState) {
     const event = frameState.reactiveStateGrammarLastEvent ?? null;
     if (!event?.eventId || event.eventId === this.lastReactiveStateEventId) return;
@@ -1171,7 +1202,9 @@ export class SessionTelemetrySystem {
           continuityMode: attachment.continuityMode ?? "none",
           momentumHandoffMode: attachment.momentumHandoffMode ?? "none",
           inheritedTangentialSpeed: round(attachment.releaseInheritedTangentialSpeed ?? 0),
-          releaseNormalImpulse: round(attachment.releaseNormalImpulse ?? 0)
+          releaseNormalImpulse: round(attachment.releaseNormalImpulse ?? 0),
+          pulsePeelAssist: round(attachment.pulsePeelAssist ?? 0),
+          verbPhysicalGrammarMode: attachment.verbPhysicalGrammarMode ?? frameState.verbPhysicalGrammar?.mode ?? "idle"
         }
       });
     } else if (!this.lastAttachmentActive && active) {
@@ -1422,6 +1455,11 @@ export class SessionTelemetrySystem {
         attachmentLandingRetainedTangentialSpeed: round(frameState.playerAttachment?.landingRetainedTangentialSpeed ?? 0),
         attachmentReleaseInheritedTangentialSpeed: round(frameState.playerAttachment?.releaseInheritedTangentialSpeed ?? 0),
         attachmentReleaseNormalImpulse: round(frameState.playerAttachment?.releaseNormalImpulse ?? 0),
+        attachmentPulsePeelAssist: round(frameState.playerAttachment?.pulsePeelAssist ?? 0),
+        verbPhysicalGrammarMode: frameState.verbPhysicalGrammar?.mode ?? "idle",
+        verbPhysicalRelationshipSource: frameState.verbPhysicalGrammar?.relationshipSource ?? "none",
+        verbPhysicalEnvironmentalFlowMultiplier: round(frameState.verbPhysicalGrammar?.effects?.environmentalFlowMultiplier ?? 1),
+        verbPhysicalSurfaceTractionMultiplier: round(frameState.verbPhysicalGrammar?.effects?.surfaceTractionMultiplier ?? 1),
         authoredSuctionSupportActive: Boolean(frameState.playerAttachment?.authoredSuctionSupportActive),
         authoredSuctionSupportCount: frameState.playerAttachment?.authoredSuctionSupportCount ?? 0,
         authoredSuctionSupportSurfaceId: frameState.playerAttachment?.authoredSuctionSupportSurfaceId ?? "none",
@@ -1765,6 +1803,7 @@ export class SessionTelemetrySystem {
       entityResidueRecognitionChanges: count("ecology.entity_residue_recognition.changed"),
       entityEcologicalCrossInfluenceChanges: count("ecology.entity_cross_influence.changed"),
       coreVerbEngineChordChanges: count("core.verb_engine.chord_changed"),
+      verbPhysicalGrammarChanges: count("movement.verb_physical_grammar.changed"),
       reactiveStateChanges: count("chem.reactive_state.changed"),
       returnRegionStateChanges: count("return_region.state_changed"),
       returnRegionCredits: this.frameState.returnRegionEngine?.creditCount ?? 0,

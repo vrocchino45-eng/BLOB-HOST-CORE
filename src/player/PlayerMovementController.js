@@ -108,6 +108,7 @@ export class PlayerMovementController {
     this.attachmentLandingCarry01 = 0;
     this.attachmentReleaseInheritedTangentSpeed = 0;
     this.attachmentReleaseNormalImpulse = 0;
+    this.attachmentPulsePeelAssist = 0;
     this.attachmentMomentumHandoffMode = "none";
     // HC031F1A — visible surface truth becomes the effective attachment plane
     // while valid. The authored ellipsoid remains only a safety/fallback envelope.
@@ -206,6 +207,7 @@ export class PlayerMovementController {
     this.syncAttachmentSurfaceTruth(frameState);
     this.syncTendrilSupportPlane(frameState);
     this.updateChemistryAttachmentState(dt, frameState);
+    const verbPhysicalGrammar = this.resolveVerbPhysicalGrammar(frameState);
 
     const physicalFeel = frameState.physicalFeel ?? {};
     const routeAccelerationScale = THREE.MathUtils.clamp(
@@ -293,12 +295,18 @@ export class PlayerMovementController {
           0.94,
           1.07
         );
+    const verbEnvironmentalFlowMultiplier = THREE.MathUtils.clamp(
+      verbPhysicalGrammar.effects?.environmentalFlowMultiplier ?? 1,
+      0.78,
+      1
+    );
     const flowStrength = (
       0.38
       + this.pressure * (movementTuning.flowPressureMultiplier ?? 0.75)
     ) * flowCouplingMultiplier
       * convergenceReachability.environmentScale
-      * topologyEnvironmentalCouplingScale;
+      * topologyEnvironmentalCouplingScale
+      * verbEnvironmentalFlowMultiplier;
     const inputMagnitude = Math.min(1, this.intent.length());
 
     const tendrilSurfaceRequest = frameState.coreTendrilContact?.surfaceLocomotion ?? {};
@@ -385,7 +393,7 @@ export class PlayerMovementController {
     const kineticGlow = Math.min(speed / 2.6, 1.0);
 
     frameState.playerAttachment = {
-      pass: "HC-031K1",
+      pass: "HC-031L",
       active: this.attachmentActive,
       state: this.attachmentState,
       authority: this.attachmentAuthority,
@@ -429,6 +437,11 @@ export class PlayerMovementController {
       landingRetainedTangentialSpeed: Number(this.attachmentLandingRetainedTangentSpeed.toFixed(3)),
       releaseInheritedTangentialSpeed: Number(this.attachmentReleaseInheritedTangentSpeed.toFixed(3)),
       releaseNormalImpulse: Number(this.attachmentReleaseNormalImpulse.toFixed(3)),
+      pulsePeelAssist: Number(this.attachmentPulsePeelAssist.toFixed(3)),
+      verbPhysicalGrammarMode: verbPhysicalGrammar.mode,
+      verbPhysicalRelationshipSource: verbPhysicalGrammar.relationshipSource,
+      verbEnvironmentalFlowMultiplier: Number((verbPhysicalGrammar.effects?.environmentalFlowMultiplier ?? 1).toFixed(3)),
+      verbSurfaceTractionMultiplier: Number((verbPhysicalGrammar.effects?.surfaceTractionMultiplier ?? 1).toFixed(3)),
       tendrilLocomotionActive: Boolean(this.tendrilLocomotionTelemetry.active),
       tendrilSupportCount: this.tendrilLocomotionTelemetry.supportCount ?? 0,
       tendrilTraction01: Number((this.tendrilLocomotionTelemetry.traction01 ?? 0).toFixed(3)),
@@ -511,6 +524,17 @@ export class PlayerMovementController {
       radialPerformanceBoostSpeedScale: performanceBoostSpeedScale,
       radialVerbCommitmentMovementScale: verbCommitmentMovementScale,
       radialPerformanceOwner: "CoreRadialPerformanceSystem",
+      verbPhysicalGrammar: {
+        pass: "HC-031L",
+        mode: verbPhysicalGrammar.mode,
+        relationshipSource: verbPhysicalGrammar.relationshipSource,
+        environmentalFlowMultiplier: Number((verbPhysicalGrammar.effects?.environmentalFlowMultiplier ?? 1).toFixed(3)),
+        surfaceTractionMultiplier: Number((verbPhysicalGrammar.effects?.surfaceTractionMultiplier ?? 1).toFixed(3)),
+        freeInputAccelerationMultiplier: 1,
+        speedLimitMultiplier: 1,
+        attachmentAcquireMultiplier: 1,
+        attachmentReleaseThresholdMultiplier: 1
+      },
       topologyEnvironmentalHandling: {
         pass: "HC-028H1",
         active: Boolean(frameState.coreTopologyEnvironmentalHandling?.active),
@@ -673,6 +697,118 @@ export class PlayerMovementController {
     this.playerRoot.userData.dynamicPosition = frameState.playerKinematics.position;
     this.playerRoot.userData.speed = speed;
     this.playerRoot.userData.boundaryPressure = boundaryPressure;
+  }
+
+  resolveVerbPhysicalGrammar(frameState) {
+    const composition = frameState.verbComposition ?? {};
+    const intent = composition.intent ?? {};
+    const chord = composition.chord ?? "idle";
+    const relationshipBound = Boolean(
+      composition.relationshipBound
+      && (composition.targetId ?? "none") !== "none"
+    );
+    const surfaceBound = Boolean(this.attachmentActive);
+    const stabilize = Boolean(intent.stabilize);
+    const pulse = Boolean(intent.pulse);
+    const absorb = Boolean(intent.absorb);
+
+    let mode = "idle";
+    if (chord === "cohere") {
+      mode = surfaceBound
+        ? "surface_brace"
+        : relationshipBound
+          ? "spatial_hold"
+          : "self_coherence";
+    } else if (chord === "cohere_project") {
+      mode = surfaceBound
+        ? "braced_project"
+        : relationshipBound
+          ? "controlled_project"
+          : "self_braced_project";
+    } else if (chord === "cohere_draw") {
+      mode = surfaceBound
+        ? "braced_draw"
+        : relationshipBound
+          ? "controlled_draw"
+          : "coherent_draw";
+    } else if (chord === "full_system") {
+      mode = surfaceBound ? "surface_equilibrium" : "spatial_equilibrium";
+    } else if (chord === "exchange") {
+      mode = "push_pull_tension";
+    } else if (chord === "project") {
+      mode = "impulse_project";
+    } else if (chord === "draw") {
+      mode = "inward_draw";
+    }
+
+    const relationshipSource = surfaceBound
+      ? relationshipBound
+        ? "surface_plus_retained_target"
+        : "surface_attachment"
+      : relationshipBound
+        ? "retained_target"
+        : stabilize
+          ? "self"
+          : "none";
+
+    // HC031L: Stabilize changes how the Core receives ambient motion, not how
+    // strongly input moves the Core. Surface brace is deliberately stronger than
+    // a free-space spatial hold, but neither path changes speed limits or K/K1
+    // attachment thresholds.
+    const environmentalFlowMultiplier = stabilize
+      ? surfaceBound
+        ? 0.84
+        : relationshipBound
+          ? 0.92
+          : 1
+      : 1;
+    const surfaceTractionMultiplier = stabilize && surfaceBound ? 1.10 : 1;
+
+    const state = {
+      pass: "HC-031L",
+      owner: "PlayerMovementController",
+      grammarOwner: "VerbCompositionSystem",
+      mode,
+      chord,
+      relationshipBound,
+      relationshipSource,
+      surfaceBound,
+      intent: {
+        pulse,
+        absorb,
+        stabilize
+      },
+      roles: {
+        stabilize: "establish_or_regulate_relationship",
+        pulse: "project_outward_through_relationship",
+        absorb: "draw_inward_through_relationship"
+      },
+      effects: {
+        environmentalFlowMultiplier,
+        surfaceTractionMultiplier,
+        freeInputAccelerationMultiplier: 1,
+        speedLimitMultiplier: 1,
+        attachmentAcquireMultiplier: 1,
+        attachmentReleaseThresholdMultiplier: 1,
+        pulsePeelAssistEligible: Boolean(surfaceBound && pulse && this.attachmentPeelIntent01 > 0.12),
+        absorbAttachmentAuthority: false
+      },
+      rules: {
+        stabilizeSurface: "brace_against_environment_without_increasing_adhesion",
+        stabilizeFree: "hold_spatial_relationship_without_freezing_locomotion",
+        pulseDuringPeel: "may_add_bounded_outward_impulse_only_after_deliberate_peel_arms",
+        absorbNearSurface: "may_draw_relationship_target_but_never_grants_attachment_authority",
+        aimChoosesTarget: true,
+        verbsModifyRelationship: true,
+        changesTargetingAuthority: false,
+        changesAttachmentAuthority: false,
+        changesFreeFlightAcceleration: false,
+        changesSpeedLimit: false
+      }
+    };
+
+    frameState.verbPhysicalGrammar = state;
+    return state;
   }
 
   buildCameraRelativeIntent(input, verticalScale) {
@@ -1134,9 +1270,24 @@ export class PlayerMovementController {
         this.attachmentReleaseTangentVelocity.copy(this.velocity)
           .addScaledVector(this.attachmentReleaseNormal, -releaseNormalSpeed);
         this.attachmentReleaseInheritedTangentSpeed = this.attachmentReleaseTangentVelocity.length();
+        const composition = frameState.verbComposition ?? {};
+        const compositionIntent = composition.intent ?? {};
+        const pulsePeelEligible = Boolean(pulledAway && compositionIntent.pulse);
+        const pulseEnvelope = THREE.MathUtils.clamp(compositionIntent.pulseReleaseEnvelope ?? 0, 0, 1);
+        const stabilizedPeel = Boolean(compositionIntent.stabilize);
+        const peelTension01 = THREE.MathUtils.clamp(this.attachmentReleaseTension, 0, 1);
+        // HC031L: Pulse can reinforce an already-deliberate peel, but it never
+        // lowers the peel threshold or creates a detach on its own. Stabilize makes
+        // the same projection slightly more coherent rather than turning it into
+        // a stronger standalone ability.
+        this.attachmentPulsePeelAssist = pulsePeelEligible
+          ? (0.07 + pulseEnvelope * 0.05 + (stabilizedPeel ? 0.04 : 0))
+            * THREE.MathUtils.smoothstep(peelTension01, 0.45, 0.90)
+          : 0;
         const releaseImpulse = 0.54
           + this.attachmentStrength * 0.40
-          + THREE.MathUtils.clamp(this.attachmentReleaseTension, 0, 1) * 0.34;
+          + peelTension01 * 0.34
+          + this.attachmentPulsePeelAssist;
         this.attachmentReleaseNormalImpulse = releaseImpulse;
         this.velocity.copy(this.attachmentReleaseTangentVelocity)
           .addScaledVector(this.attachmentReleaseNormal, Math.max(0, releaseNormalSpeed) + releaseImpulse);
@@ -1187,6 +1338,7 @@ export class PlayerMovementController {
           // HC031K1: capture the free-flight velocity before attached projection.
           // The normal component is impact/compression; the tangent component is
           // legitimate inherited travel and should not disappear at mode handoff.
+          this.attachmentPulsePeelAssist = 0;
           this.attachmentLandingEntryVelocity.copy(this.velocity);
           this.attachmentLandingEntrySpeed = this.attachmentLandingEntryVelocity.length();
           const landingNormalSpeed = this.attachmentLandingEntryVelocity.dot(this.attachmentOwnerNormal);
@@ -1356,6 +1508,11 @@ export class PlayerMovementController {
     const supportPlaneScale = this.tendrilSupportPlaneActive
       ? THREE.MathUtils.lerp(0.88, 1.05, this.tendrilSupportQuality01)
       : 1.0;
+    const verbSurfaceTractionScale = THREE.MathUtils.clamp(
+      frameState.verbPhysicalGrammar?.effects?.surfaceTractionMultiplier ?? 1,
+      1,
+      1.10
+    );
     const pullAcceleration = acceleration
       * (0.66 + traction01 * 0.50)
       * handoffScale
@@ -1364,6 +1521,7 @@ export class PlayerMovementController {
       * loadPulse01
       * surfaceTractionScale
       * supportPlaneScale
+      * verbSurfaceTractionScale
       * THREE.MathUtils.lerp(1, 0.28, this.attachmentPeelIntent01);
 
     this.tendrilDriveDirection.copy(this.tendrilIntentTangent);
@@ -1414,6 +1572,7 @@ export class PlayerMovementController {
       supportPlaneActive: this.tendrilSupportPlaneActive,
       supportPlaneQuality01: Number(this.tendrilSupportQuality01.toFixed(3)),
       supportPlaneScale: Number(supportPlaneScale.toFixed(3)),
+      verbSurfaceTractionScale: Number(verbSurfaceTractionScale.toFixed(3)),
       supportSurfaceId: this.tendrilSupportSurfaceId,
       peelIntent01: Number(this.attachmentPeelIntent01.toFixed(3)),
       mode: request.mode ?? "supported_pull"
