@@ -1,0 +1,82 @@
+{
+  "buildId": "HC-031M",
+  "buildLabel": "Targeting / Attention Ownership",
+  "parent": "HC-031L",
+  "mode": "convergence_targeting_attention",
+  "purpose": "Make aim own the target noun and make verbs modify only the aim-owned relationship.",
+  "stateGrammar": [
+    "available",
+    "candidate",
+    "engaged",
+    "held",
+    "released"
+  ],
+  "canonicalLaw": {
+    "aim": "chooses_and_holds_noun",
+    "verbs": "modify_held_relationship_only",
+    "candidate": "camera_alignment_dominates_context_priority",
+    "handoff": "release_then_reacquire_by_aim",
+    "activeVerb": "protects_current_attention_owner_from_brief_camera_motion",
+    "verbRetargetingAllowed": false
+  },
+  "thresholds": {
+    "candidateAimDot": 0.42,
+    "engageAimDot": 0.68,
+    "holdAimDot": 0.24,
+    "engageDwellSeconds": 0.1,
+    "engagedToHeldSeconds": 0.12,
+    "releaseGraceSeconds": 0.3,
+    "releasedPhaseSeconds": 0.12,
+    "redirectAimLead": 0.22,
+    "candidateSwitchMargin": 0.62,
+    "relationshipReleaseGraceSeconds": 0.28
+  },
+  "aimOwnershipScore": {
+    "aimDotMultiplier": 12,
+    "priorityInfluenceClamp": [
+      -2,
+      6
+    ],
+    "priorityMultiplier": 0.35,
+    "distanceInfluenceClamp": [
+      0,
+      6.8
+    ],
+    "distanceMultiplier": 0.18,
+    "verbSpecificCandidateBoostRemoved": true
+  },
+  "visual": {
+    "persistentGenericLockRing": false,
+    "engagedConfirmation": "brief_low_opacity_existing_halo",
+    "engagedConfirmationMaxOpacity": 0.14,
+    "heldState": "body_only_until_verb_relationship_glyph"
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.33",
+    "events": [
+      "attention.candidate.changed",
+      "attention.owner.changed",
+      "attention.phase.changed",
+      "attention.target.changed"
+    ],
+    "movementSampleFields": [
+      "attentionTarget",
+      "attentionPhase",
+      "attentionAimDot",
+      "attentionLossGraceRemaining",
+      "relationshipTarget"
+    ]
+  },
+  "lockedTruth": {
+    "changesMovementLaw": false,
+    "changesAttachmentLaw": false,
+    "changesVerbMeaning": false,
+    "changesInputMapping": false,
+    "changesCameraControl": false,
+    "changesChemistryEffects": false,
+    "changesEcology": false,
+    "changesRoutesOrProgression": false,
+    "addsNewButton": false,
+    "addsNewAbility": false
+  }
+}

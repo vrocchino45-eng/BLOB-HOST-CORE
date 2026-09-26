@@ -1,9 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031L extends the locked K/K1 physical foundation into the existing triadic verb
-// grammar. Stabilize regulates a relationship, Pulse projects outward through it,
-// and Absorb draws inward through it. Targeting, attachment ownership, camera,
-// ecology, routes and progression remain outside this pass.
+// HC031M makes attention ownership explicit over the locked K/K1/L physical grammar.
+// Aim selects and holds the noun; Pulse / Absorb / Stabilize only modify that held
+// relationship. Movement, verb meaning, camera, ecology, routes and progression remain locked.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031L",
-  buildLabel: "Movement + Verb Physical Grammar"
+  buildId: "HC-031M",
+  buildLabel: "Targeting / Attention Ownership"
 });
 
 runtime.start().catch((error) => {

@@ -1,0 +1,22 @@
+BLOB: HOST CORE — HC-031M DELTA MANIFEST
+Required parent: HC-031L
+Mode: convergence_targeting_attention
+Purpose: Aim owns the noun; verbs modify the aim-owned relationship.
+Files deleted: none
+
+Changed / new files:
+package.json | 27709 bytes | sha256 fcb7672646588bd38b2ac5650501e4b9ed908f9ee9b6101b11731a333ab77287
+package-lock.json | 35723 bytes | sha256 d09f292adda75e6c371bfa744b31f98a8892733b71a60e8695069e3451da4049
+src/main.js | 1244 bytes | sha256 7609b3aeda9e69ec616a5f027ebdf4a1336a4ac927dc8eb555cdecd07d8483ce
+src/targeting/TargetingSystem.js | 34562 bytes | sha256 3e463024564f0899c90101b816390677e155bf24543225c059f9d97c104e7463
+src/core/SessionTelemetrySystem.js | 97092 bytes | sha256 0bf49503bcbfd275cd32255600a1a87042cec255fbd5c6337fbfbaca2d8e4f7d
+scripts/validateHC031MTargetingAttentionOwnership.mjs | 8636 bytes | sha256 1354a9b5be530a3e8d6cc94c605f0b69e326f2170aa11ca83401277d999c564a
+public/data/build/hc031mTargetingAttentionOwnershipContract.json | 2295 bytes | sha256 1db3e5e3e0c725ea80f51d39bc3f40f36370ef79f78e4b94747664d834379d4d
+public/data/build/hc031mLockedHashes.json | 1833 bytes | sha256 7829f65077e1db62a0811a84b36c9b716bb76e973c136af93f6569d6ec827c85
+HC031M_BUILD_REPORT.md | 5717 bytes | sha256 f4c5923c8473e0ca0b6fdb96c19735315d6648025b4416be4ea2b51abe29fa59
+HC031M_FOCUSED_PLAYTEST.md | 2638 bytes | sha256 f5b099641f0495ce00272d204d8899e9b0b8fddbd254eb1acace9a01312c9be7
+HC031M_PATCH_APPLY.md | 290 bytes | sha256 d3f8042035d5cd67355190765c923b6b2098d1dec91112bbda58369a4308bc10
+
+Apply: copy this ZIP over the HC-031L project root and allow overwrite.
+Validate: npm run validate:current
+Playtest: HC031M_FOCUSED_PLAYTEST.md

@@ -18,18 +18,38 @@ export class TargetingSystem {
     this.chemObjectSystem = chemObjectSystem;
     this.frameState = frameState;
 
-    // HC029A: candidate selection and committed relationship are separate states.
-    // Candidate may drift softly with gaze/context; the relationship target may not.
+    // HC031M: attention owns the noun; verbs only modify the held relationship.
+    // AVAILABLE -> CANDIDATE -> ENGAGED -> HELD -> RELEASED is aim-driven.
     this.candidate = null;
     this.target = null;
+    this.availableBest = null;
+    this.availableTargetCount = 0;
+    this.candidateAimThreshold = 0.42;
+    this.attentionEngageAimThreshold = 0.68;
+    this.attentionHoldAimThreshold = 0.24;
+    this.attentionEngageDwellSeconds = 0.10;
+    this.attentionHoldPromoteSeconds = 0.12;
+    this.attentionReleaseGraceSeconds = 0.30;
+    this.attentionReleasePhaseSeconds = 0.12;
+    this.attentionTarget = null;
+    this.attentionTargetId = "none";
+    this.attentionSequence = 0;
+    this.attentionAge = 0;
+    this.attentionPhase = "none";
+    this.attentionReason = "not_initialized";
+    this.attentionLossGraceRemaining = 0;
+    this.attentionReleaseAge = 0;
+    this.attentionCandidateDwellId = "none";
+    this.attentionCandidateDwellAge = 0;
+
+    // Relationship state remains verb-scoped for downstream chemistry/effect owners.
     this.relationshipTarget = null;
     this.relationshipTargetId = "none";
     this.relationshipSequence = 0;
     this.relationshipAge = 0;
     this.relationshipReleaseGraceRemaining = 0;
     this.relationshipReleaseGraceSeconds = 0.28;
-    this.relationshipHandoffCooldownSeconds = 0.24;
-    this.candidateSwitchMargin = 0.52;
+    this.candidateSwitchMargin = 0.62;
     this.candidateSnapshotsById = new Map();
 
     this.reticle = null;
@@ -75,9 +95,11 @@ export class TargetingSystem {
     }
 
     const intent = this.resolveRelationshipIntent(frameState.input);
+    const safeDt = Math.max(0, dt ?? 0);
     this.candidate = this.pickTarget(this.candidate);
-    this.updateRelationship(Math.max(0, dt ?? 0), frameState, intent);
-    this.target = this.relationshipTarget ?? this.candidate;
+    this.updateAttention(safeDt, frameState, intent);
+    this.updateRelationship(safeDt, frameState, intent);
+    this.target = this.relationshipTarget ?? this.attentionTarget ?? this.candidate;
 
     this.updateFrameState(frameState, intent);
     this.updateReticle(frameState);
@@ -109,6 +131,17 @@ export class TargetingSystem {
   clearTargetState(frameState, reason = "explicit_target_clear") {
     this.candidate = null;
     this.target = null;
+    this.availableBest = null;
+    this.availableTargetCount = 0;
+    this.attentionTarget = null;
+    this.attentionTargetId = "none";
+    this.attentionAge = 0;
+    this.attentionPhase = "none";
+    this.attentionReason = reason;
+    this.attentionLossGraceRemaining = 0;
+    this.attentionReleaseAge = 0;
+    this.attentionCandidateDwellId = "none";
+    this.attentionCandidateDwellAge = 0;
     this.relationshipTarget = null;
     this.relationshipTargetId = "none";
     this.relationshipAge = 0;
@@ -127,6 +160,7 @@ export class TargetingSystem {
 
   createEmptyTargetingState(frameState, message = "no_target") {
     return {
+      pass: "HC-031M",
       active: false,
       targetId: "none",
       targetKind: "none",
@@ -142,6 +176,20 @@ export class TargetingSystem {
       candidateDistance: 0,
       candidateAimDot: -1,
       candidateScore: 0,
+      candidateContextScore: 0,
+      availableTargetCount: this.availableTargetCount,
+      attentionActive: false,
+      attentionPhase: this.attentionPhase === "released"
+        ? "released"
+        : (this.availableTargetCount > 0 ? "available" : "none"),
+      attentionTargetId: "none",
+      attentionSequence: this.attentionSequence,
+      attentionAge: 0,
+      attentionReason: this.attentionReason,
+      attentionAimDot: -1,
+      attentionLossGraceRemaining: 0,
+      aimOwnershipPolicy: "aim_selects_attention_verbs_modify_relationship",
+      verbRetargetingAllowed: false,
       relationshipActive: false,
       relationshipPhase: "none",
       relationshipTargetId: "none",
@@ -149,7 +197,7 @@ export class TargetingSystem {
       relationshipVerbs: [],
       relationshipSequence: this.relationshipSequence,
       relationshipAge: 0,
-      handoffPolicy: "camera_intent_plus_score_margin",
+      handoffPolicy: "release_then_reacquire_by_aim",
       regionClearSequence: this.regionClearSequence,
       lastRegionClearReason: this.lastRegionClearReason,
       visualArtifactsCleared: true
@@ -177,33 +225,160 @@ export class TargetingSystem {
     };
   }
 
-  updateRelationship(dt, frameState, intent) {
-    const currentSnapshot = this.relationshipTargetId !== "none"
-      ? this.candidateSnapshotsById.get(this.relationshipTargetId) ?? null
+  updateAttention(dt, frameState, intent) {
+    const currentSnapshot = this.attentionTargetId !== "none"
+      ? this.candidateSnapshotsById.get(this.attentionTargetId) ?? null
       : null;
 
-    if (this.relationshipTarget && !currentSnapshot) {
-      this.releaseRelationship("relationship_target_invalid");
+    if (this.attentionTarget && !currentSnapshot) {
+      this.releaseAttention("attention_target_invalid");
     } else if (currentSnapshot) {
-      this.relationshipTarget = currentSnapshot;
+      this.attentionTarget = currentSnapshot;
     }
 
-    if (intent.active) {
-      this.relationshipReleaseGraceRemaining = this.relationshipReleaseGraceSeconds;
+    if (this.attentionTarget?.root?.userData) {
+      frameState.selectedObject = this.attentionTarget.root.userData;
+    }
 
-      if (!this.relationshipTarget && this.candidate) {
-        this.setRelationshipTarget(this.candidate, "verb_engaged");
-      } else if (
-        this.relationshipTarget
-        && this.candidate
-        && this.candidate.recipe.id !== this.relationshipTarget.recipe.id
-        && this.relationshipAge >= this.relationshipHandoffCooldownSeconds
-        && this.shouldHandoff(this.relationshipTarget, this.candidate)
-      ) {
-        this.setRelationshipTarget(this.candidate, "intentional_camera_handoff");
+    if (!this.attentionTarget) {
+      if (this.attentionPhase === "released") {
+        this.attentionReleaseAge += dt;
+        if (this.attentionReleaseAge < this.attentionReleasePhaseSeconds) return;
+        this.attentionPhase = this.candidate
+          ? "candidate"
+          : (this.availableTargetCount > 0 ? "available" : "none");
+        this.attentionReason = "release_settled";
       }
 
-      if (this.relationshipTarget) this.relationshipAge += dt;
+      const candidateEligible = Boolean(
+        this.candidate
+        && (this.candidate.aimDot ?? -1) >= this.attentionEngageAimThreshold
+      );
+
+      if (!candidateEligible) {
+        this.attentionCandidateDwellId = "none";
+        this.attentionCandidateDwellAge = 0;
+        this.attentionPhase = this.candidate
+          ? "candidate"
+          : (this.availableTargetCount > 0 ? "available" : "none");
+        return;
+      }
+
+      const candidateId = this.candidate.recipe?.id ?? "none";
+      if (candidateId !== this.attentionCandidateDwellId) {
+        this.attentionCandidateDwellId = candidateId;
+        this.attentionCandidateDwellAge = 0;
+      } else {
+        this.attentionCandidateDwellAge += dt;
+      }
+
+      this.attentionPhase = "candidate";
+      this.attentionReason = "aim_candidate_centered";
+
+      if (this.attentionCandidateDwellAge >= this.attentionEngageDwellSeconds) {
+        this.setAttentionTarget(this.candidate, "aim_engaged");
+      }
+      return;
+    }
+
+    this.attentionAge += dt;
+    if (
+      this.attentionPhase === "engaged"
+      && this.attentionAge >= this.attentionHoldPromoteSeconds
+    ) {
+      this.attentionPhase = "held";
+      this.attentionReason = "aim_hold_confirmed";
+    }
+
+    // An active verb may never choose a different noun. It simply protects the
+    // already aim-owned target from brief camera motion while the action resolves.
+    if (intent.active) {
+      this.attentionLossGraceRemaining = this.attentionReleaseGraceSeconds;
+      return;
+    }
+
+    const currentAim = Number.isFinite(this.attentionTarget?.aimDot)
+      ? this.attentionTarget.aimDot
+      : -1;
+    const candidateId = this.candidate?.recipe?.id ?? "none";
+    const candidateAim = Number.isFinite(this.candidate?.aimDot) ? this.candidate.aimDot : -1;
+    const deliberatelyRedirected = Boolean(
+      candidateId !== "none"
+      && candidateId !== this.attentionTargetId
+      && candidateAim >= this.attentionEngageAimThreshold
+      && candidateAim - currentAim >= 0.22
+    );
+
+    if (deliberatelyRedirected) {
+      this.releaseAttention("aim_redirected");
+      return;
+    }
+
+    if (currentAim >= this.attentionHoldAimThreshold) {
+      this.attentionLossGraceRemaining = this.attentionReleaseGraceSeconds;
+      return;
+    }
+
+    this.attentionLossGraceRemaining = Math.max(0, this.attentionLossGraceRemaining - dt);
+    if (this.attentionLossGraceRemaining <= 0) {
+      this.releaseAttention("aim_left_hold_cone");
+    }
+
+    if (this.attentionTarget?.root?.userData) {
+      frameState.selectedObject = this.attentionTarget.root.userData;
+    }
+  }
+
+  setAttentionTarget(target, reason) {
+    if (!target) return;
+    const nextId = target.recipe?.id ?? "none";
+    if (nextId === "none") return;
+    const changed = this.attentionTargetId !== nextId;
+    this.attentionTarget = target;
+    this.attentionTargetId = nextId;
+    this.attentionAge = 0;
+    this.attentionPhase = "engaged";
+    this.attentionReason = reason;
+    this.attentionLossGraceRemaining = this.attentionReleaseGraceSeconds;
+    this.attentionReleaseAge = 0;
+    this.attentionCandidateDwellId = nextId;
+    this.attentionCandidateDwellAge = 0;
+    if (changed) this.attentionSequence += 1;
+  }
+
+  releaseAttention(reason) {
+    this.attentionTarget = null;
+    this.attentionTargetId = "none";
+    this.attentionAge = 0;
+    this.attentionPhase = "released";
+    this.attentionReason = reason;
+    this.attentionLossGraceRemaining = 0;
+    this.attentionReleaseAge = 0;
+    this.attentionCandidateDwellId = "none";
+    this.attentionCandidateDwellAge = 0;
+  }
+
+  updateRelationship(dt, frameState, intent) {
+    if (
+      this.relationshipTarget
+      && (
+        !this.attentionTarget
+        || this.relationshipTargetId !== this.attentionTargetId
+      )
+    ) {
+      this.releaseRelationship("attention_owner_released");
+    }
+
+    if (intent.active && this.attentionTarget) {
+      this.relationshipReleaseGraceRemaining = this.relationshipReleaseGraceSeconds;
+
+      if (!this.relationshipTarget || this.relationshipTargetId !== this.attentionTargetId) {
+        this.setRelationshipTarget(this.attentionTarget, "verb_modified_aim_owned_target");
+      } else {
+        this.relationshipTarget = this.attentionTarget;
+      }
+
+      this.relationshipAge += dt;
     } else if (this.relationshipTarget) {
       this.relationshipReleaseGraceRemaining = Math.max(0, this.relationshipReleaseGraceRemaining - dt);
       this.relationshipAge += dt;
@@ -214,6 +389,8 @@ export class TargetingSystem {
 
     if (this.relationshipTarget?.root?.userData) {
       frameState.selectedObject = this.relationshipTarget.root.userData;
+    } else if (this.attentionTarget?.root?.userData) {
+      frameState.selectedObject = this.attentionTarget.root.userData;
     }
   }
 
@@ -237,29 +414,13 @@ export class TargetingSystem {
     this.lastRelationshipReason = reason;
   }
 
-  shouldHandoff(current, candidate) {
-    if (!current || !candidate || current.recipe?.id === candidate.recipe?.id) return false;
-
-    // A nearby object passing through the score field cannot steal an established
-    // relationship. The current target must leave the player's intentional view
-    // while the replacement is clearly in view and meaningfully better scored.
-    const currentAim = Number.isFinite(current.aimDot) ? current.aimDot : -1;
-    const candidateAim = Number.isFinite(candidate.aimDot) ? candidate.aimDot : -1;
-    const scoreLead = (candidate.score ?? 0) - (current.score ?? 0);
-    const deliberateRedirect = currentAim < 0.18 && candidateAim > 0.68 && scoreLead > 0.48;
-    const distanceEscape = current.distance > 7.4
-      && candidate.distance + 0.85 < current.distance
-      && candidateAim > currentAim + 0.36
-      && scoreLead > 0.18;
-
-    return deliberateRedirect || distanceEscape;
-  }
-
   pickTarget(incumbent = null) {
     let best = null;
     let incumbentSnapshot = null;
     const focus = this.frameState.targetFocus ?? {};
     this.candidateSnapshotsById.clear();
+    this.availableBest = null;
+    this.availableTargetCount = 0;
     if (this.frameState.activeCellId === HUB_CELL_ID) return null;
     if (focus.suppressTargeting) return null;
     const allowedCells = new Set(focus.allowedCells ?? []);
@@ -277,15 +438,23 @@ export class TargetingSystem {
 
       const snapshot = this.scoreCandidate(item, focus);
       this.candidateSnapshotsById.set(item.recipe.id, snapshot);
+      this.availableTargetCount += 1;
+      if (!this.availableBest || snapshot.score > this.availableBest.score) {
+        this.availableBest = snapshot;
+      }
+
+      // HC031M: verbs cannot expand or bias the target cone. Candidate ownership
+      // begins only when the camera/aim actually places an available noun in view.
+      if ((snapshot.aimDot ?? -1) < this.candidateAimThreshold) continue;
       if (item.recipe.id === incumbentId) incumbentSnapshot = snapshot;
-      if (!best || snapshot.score > best.score) best = snapshot;
+      if (!best || snapshot.aimOwnershipScore > best.aimOwnershipScore) best = snapshot;
     }
 
     if (
       best
       && incumbentSnapshot
       && best.recipe.id !== incumbentSnapshot.recipe.id
-      && best.score < incumbentSnapshot.score + this.candidateSwitchMargin
+      && best.aimOwnershipScore < incumbentSnapshot.aimOwnershipScore + this.candidateSwitchMargin
     ) {
       return incumbentSnapshot;
     }
@@ -311,7 +480,6 @@ export class TargetingSystem {
     if (item.cellId && focus.cellBoosts?.[item.cellId]) priority += focus.cellBoosts[item.cellId];
     if (focus.objectBoosts?.[item.recipe.id]) priority += focus.objectBoosts[item.recipe.id];
     if (focus.preferredTargetId === item.recipe.id) priority += targetingTuning.preferredTargetBoost ?? 3.5;
-    if (this.frameState.input?.absorbHeld && isAbsorbable) priority += targetingTuning.absorbHeldTargetBoost ?? 0;
 
     const distanceScore = Math.max(0, (targetingTuning.scoreDistanceRange ?? 6.0) - distance);
     this.tmpToTarget.copy(this.tmpTargetPosition).sub(this.tmpCameraPosition);
@@ -324,6 +492,12 @@ export class TargetingSystem {
       : aimDot * 2.6;
     const score = priority + distanceScore + aimScore;
 
+    // HC031M: authored/context priority can suggest a noun, but it cannot overpower
+    // a materially better camera alignment. This is the canonical aim-ownership score.
+    const boundedPriorityInfluence = Math.max(-2, Math.min(6, priority)) * 0.35;
+    const boundedDistanceInfluence = Math.max(0, Math.min(6.8, distanceScore)) * 0.18;
+    const aimOwnershipScore = aimDot * 12 + boundedPriorityInfluence + boundedDistanceInfluence;
+
     return {
       ...item,
       distance,
@@ -331,6 +505,7 @@ export class TargetingSystem {
       priority,
       aimDot,
       aimScore,
+      aimOwnershipScore,
       isAbsorbable,
       isSignal,
       isScar
@@ -345,7 +520,8 @@ export class TargetingSystem {
 
   updateFrameState(frameState, intent = this.resolveRelationshipIntent(frameState.input)) {
     const candidate = this.candidate;
-    const effective = this.relationshipTarget ?? candidate;
+    const attentionTarget = this.attentionTarget;
+    const effective = this.relationshipTarget ?? attentionTarget ?? candidate;
     if (!effective) {
       frameState.targeting = this.createEmptyTargetingState(frameState);
       return;
@@ -373,10 +549,13 @@ export class TargetingSystem {
     const relationshipActive = Boolean(this.relationshipTarget);
     const relationshipPhase = relationshipActive
       ? intent.active ? "engaged" : "releasing"
-      : candidate ? "candidate" : "none";
+      : "none";
+    const attentionActive = Boolean(attentionTarget);
     const candidateKind = candidate ? this.getTargetKind(candidate.recipe.id, candidate, frameState) : "none";
+    const attentionAimDot = Number.isFinite(attentionTarget?.aimDot) ? attentionTarget.aimDot : -1;
 
     frameState.targeting = {
+      pass: "HC-031M",
       active: true,
       targetId: recipe.id,
       targetKind,
@@ -385,7 +564,11 @@ export class TargetingSystem {
       distance: effective.distance,
       lockStrength,
       reticleState,
-      message: relationshipActive ? `${intent.chord}:relationship` : `${targetKind}:candidate`,
+      message: relationshipActive
+        ? `${intent.chord}:relationship`
+        : attentionActive
+          ? `${this.attentionPhase}:attention`
+          : `${targetKind}:candidate`,
       absorbHint,
       focusProvider: frameState.targetFocus?.provider ?? "none",
       focusRuleId: frameState.targetFocus?.ruleId ?? "none",
@@ -395,7 +578,19 @@ export class TargetingSystem {
       candidateKind,
       candidateDistance: candidate?.distance ?? 0,
       candidateAimDot: candidate?.aimDot ?? -1,
-      candidateScore: candidate?.score ?? 0,
+      candidateScore: candidate?.aimOwnershipScore ?? 0,
+      candidateContextScore: candidate?.score ?? 0,
+      availableTargetCount: this.availableTargetCount,
+      attentionActive,
+      attentionPhase: this.attentionPhase,
+      attentionTargetId: this.attentionTargetId,
+      attentionSequence: this.attentionSequence,
+      attentionAge: this.attentionAge,
+      attentionReason: this.attentionReason,
+      attentionAimDot,
+      attentionLossGraceRemaining: this.attentionLossGraceRemaining,
+      aimOwnershipPolicy: "aim_selects_attention_verbs_modify_relationship",
+      verbRetargetingAllowed: false,
       relationshipActive,
       relationshipPhase,
       relationshipTargetId: this.relationshipTargetId,
@@ -405,8 +600,14 @@ export class TargetingSystem {
       relationshipAge: this.relationshipAge,
       relationshipReason: this.lastRelationshipReason ?? "none",
       releaseGraceRemaining: this.relationshipReleaseGraceRemaining,
-      handoffPolicy: "camera_intent_plus_score_margin",
-      visualPolicy: relationshipActive ? "diegetic_relationship_glyph" : "candidate_body_only",
+      handoffPolicy: "release_then_reacquire_by_aim",
+      visualPolicy: relationshipActive
+        ? "diegetic_relationship_glyph"
+        : this.attentionPhase === "engaged"
+          ? "brief_attention_confirmation"
+          : attentionActive
+            ? "attention_body_hold"
+            : "candidate_body_only",
       idlePointerSuppressed: !relationshipActive,
       regionClearSequence: this.regionClearSequence,
       lastRegionClearReason: this.lastRegionClearReason,
@@ -450,7 +651,7 @@ export class TargetingSystem {
     });
 
     const halo = new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.01, 8, 64), material);
-    halo.name = "legacy_selected_object_halo_hc029a_disabled";
+    halo.name = "attention_engagement_confirmation_hc031m";
     halo.rotation.x = Math.PI / 2;
     halo.visible = false;
     this.scene.add(halo);
@@ -519,11 +720,31 @@ export class TargetingSystem {
     this.scene.add(this.coherenceBoundary);
   }
 
-  updateReticle() {
-    // HC029A retires the generic lock ring from normal play. Candidate state is
-    // intentionally almost unmarked; committed P/A/S relationships own the glyphs.
+  updateReticle(frameState) {
+    // HC031M keeps the persistent generic lock ring retired. Aim ownership gets only
+    // a brief, low-opacity confirmation during ENGAGED; HELD returns to body-only
+    // readability until a verb supplies the existing relationship glyphs.
     if (this.reticle) this.reticle.visible = false;
-    if (this.selectedHalo) this.selectedHalo.visible = false;
+    if (!this.selectedHalo) return;
+
+    const showAttentionConfirm = Boolean(
+      this.attentionTarget
+      && frameState.targeting?.attentionPhase === "engaged"
+      && !frameState.targeting?.relationshipActive
+    );
+    this.selectedHalo.visible = showAttentionConfirm;
+    if (!showAttentionConfirm) return;
+
+    this.getWorldPosition(this.attentionTarget.root, this.tmpTargetPosition);
+    this.selectedHalo.position.copy(this.tmpTargetPosition);
+    this.selectedHalo.quaternion.copy(this.camera.quaternion);
+    const engage01 = clamp01(this.attentionAge / Math.max(0.001, this.attentionHoldPromoteSeconds));
+    const scale = 0.82 + engage01 * 0.24;
+    this.selectedHalo.scale.setScalar(scale);
+    this.selectedHalo.material.color.set(
+      this.getTargetColor(frameState.targeting?.targetKind, frameState.targeting?.reticleState)
+    );
+    this.selectedHalo.material.opacity = 0.14 * (1 - engage01 * 0.45);
   }
 
   updatePointerLine(frameState) {

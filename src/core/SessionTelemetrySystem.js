@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.32";
+    this.schemaVersion = "blob.session.telemetry.v1.33";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -39,9 +39,11 @@ export class SessionTelemetrySystem {
     this.lastPersistAtWall = -999;
     this.lastCellId = frameState.activeCellId ?? "none";
     this.lastCandidateId = frameState.targeting?.candidateId ?? "none";
+    this.lastAttentionTargetId = frameState.targeting?.attentionTargetId ?? "none";
+    this.lastAttentionPhase = frameState.targeting?.attentionPhase ?? "none";
     this.lastRelationshipTargetId = frameState.targeting?.relationshipTargetId ?? "none";
-    // Compatibility alias: HC029A attention.target.changed now means an actual
-    // retained relationship change, not a soft candidate-score fluctuation.
+    // Compatibility alias: attention.target.changed remains verb-relationship scoped.
+    // HC031M adds aim-owned attention.owner/phase events alongside it.
     this.lastTargetId = this.lastRelationshipTargetId;
     this.lastTopologyId = frameState.corePerformance?.topologyId ?? "forming_topology";
     this.lastRelationshipEventId = "none";
@@ -252,6 +254,49 @@ export class SessionTelemetrySystem {
         }
       });
       this.lastCandidateId = candidateId;
+    }
+
+    const attentionTargetId = targeting.attentionTargetId ?? "none";
+    const attentionPhase = targeting.attentionPhase ?? "none";
+    if (attentionTargetId !== this.lastAttentionTargetId) {
+      this.record("attention.owner.changed", "perceptual", {
+        percept: {
+          from: this.aliasSource(this.lastAttentionTargetId),
+          to: this.aliasSource(attentionTargetId),
+          active: attentionTargetId !== "none",
+          phase: attentionPhase
+        },
+        developer: {
+          fromAttentionTargetId: this.lastAttentionTargetId,
+          toAttentionTargetId: attentionTargetId,
+          attentionSequence: targeting.attentionSequence ?? 0,
+          attentionReason: targeting.attentionReason ?? "none",
+          attentionAimDot: round(targeting.attentionAimDot ?? -1),
+          candidateId,
+          aimOwnershipPolicy: targeting.aimOwnershipPolicy ?? "unknown",
+          verbRetargetingAllowed: Boolean(targeting.verbRetargetingAllowed)
+        }
+      });
+      this.lastAttentionTargetId = attentionTargetId;
+    }
+
+    if (attentionPhase !== this.lastAttentionPhase) {
+      this.record("attention.phase.changed", "analysis", {
+        percept: {
+          from: this.lastAttentionPhase,
+          to: attentionPhase,
+          target: this.aliasSource(attentionTargetId)
+        },
+        developer: {
+          attentionTargetId,
+          attentionReason: targeting.attentionReason ?? "none",
+          attentionAge: round(targeting.attentionAge ?? 0),
+          lossGraceRemaining: round(targeting.attentionLossGraceRemaining ?? 0),
+          candidateId,
+          availableTargetCount: targeting.availableTargetCount ?? 0
+        }
+      });
+      this.lastAttentionPhase = attentionPhase;
     }
 
     const targetId = targeting.relationshipTargetId ?? "none";
@@ -1407,6 +1452,11 @@ export class SessionTelemetrySystem {
       velocity: this.roundVector(k.velocity),
       speed: round(k.speed ?? 0),
       target: this.aliasSource(frameState.targeting?.targetId ?? "none"),
+      attentionTarget: this.aliasSource(frameState.targeting?.attentionTargetId ?? "none"),
+      attentionPhase: frameState.targeting?.attentionPhase ?? "none",
+      attentionAimDot: round(frameState.targeting?.attentionAimDot ?? -1),
+      attentionLossGraceRemaining: round(frameState.targeting?.attentionLossGraceRemaining ?? 0),
+      relationshipTarget: this.aliasSource(frameState.targeting?.relationshipTargetId ?? "none"),
       responsePersonality: frameState.responsePersonality?.activeChemPersonality?.family ?? "none",
       reactiveStage: frameState.reactiveStateGrammar?.focus?.stage ?? "none",
       beat: frameState.interactionComposition?.rhythm?.beat ?? "observe",
@@ -1725,7 +1775,7 @@ export class SessionTelemetrySystem {
         exportedAtIso: new Date().toISOString(),
         telemetryAuthority: "read_only_observer",
         gameplayAuthority: false,
-        implementationPass: this.frameState.playerAttachment?.pass ?? this.frameState.buildId ?? "unknown"
+        implementationPass: this.frameState.targeting?.pass ?? this.frameState.buildId ?? this.frameState.playerAttachment?.pass ?? "unknown"
       },
       summary: this.buildSummary(),
       events: this.events,
@@ -1734,7 +1784,7 @@ export class SessionTelemetrySystem {
       developerTruth: {
         sourceAliasMap: Object.fromEntries(this.sourceInternalByAlias.entries()),
         semanticAliasMap: Object.fromEntries(this.semanticInternalByAlias.entries()),
-        implementationPass: this.frameState.playerAttachment?.pass ?? this.frameState.buildId ?? "unknown",
+        implementationPass: this.frameState.targeting?.pass ?? this.frameState.buildId ?? this.frameState.playerAttachment?.pass ?? "unknown",
         note: "Later AI perceptual-firewall consumers must not receive developerTruth."
       }
     };
@@ -1780,6 +1830,9 @@ export class SessionTelemetrySystem {
       transitionAvailabilityEvents: count("transition.available"),
       transitionEntries: count("transition.entered"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
+      attentionOwnerChanges: count("attention.owner.changed"),
+      attentionPhaseChanges: count("attention.phase.changed"),
+      relationshipTargetChanges: count("attention.target.changed"),
       surfaceDetachments: count("movement.surface_detached"),
       deliberateSurfaceDetachments: this.events.filter((event) => (
         event.type === "movement.surface_detached"
