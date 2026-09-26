@@ -1,6 +1,6 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.29",
+  "version": "0.31.30",
   "private": true,
   "description": "BLOB: HOST CORE \u2014 HC-031M Targeting / Attention Ownership",
   "type": "module",
@@ -50,7 +50,9 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031m && npm run validate:hc031m-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031n && npm run validate:hc031n-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
+    "validate:hc031n-syntax": "node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031f1a": "node scripts/validateHC031F1ASurfaceTruthPullReadability.mjs",
     "validate:hc031c2": "node scripts/validateHC031C2FragmentFieldCapture.mjs",
     "validate:hc023b": "node scripts/validateHC023BSurfaceLivingStates.mjs",

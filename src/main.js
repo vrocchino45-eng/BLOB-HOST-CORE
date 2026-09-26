@@ -1,8 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031M makes attention ownership explicit over the locked K/K1/L physical grammar.
-// Aim selects and holds the noun; Pulse / Absorb / Stabilize only modify that held
-// relationship. Movement, verb meaning, camera, ecology, routes and progression remain locked.
+// HC031N adds a read-only first physical-language validation probe over the locked
+// K/K1/L/M interaction stack. It changes no gameplay; telemetry now measures whether
+// attention, Host contact, traversal, verbs, world answer, release and re-entry form
+// one continuous readable chain.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031M",
-  buildLabel: "Targeting / Attention Ownership"
+  buildId: "HC-031N",
+  buildLabel: "First Physical-Language Validation"
 });
 
 runtime.start().catch((error) => {

@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.33";
+    this.schemaVersion = "blob.session.telemetry.v1.34";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -108,6 +108,28 @@ export class SessionTelemetrySystem {
     this.maxEvents = 16000;
     this.maxMovementSamples = 7200;
     this.maxCoreSnapshots = 720;
+
+    // HC031N — read-only first physical-language validation probe. This does not
+    // feed back into gameplay. It watches the already-locked K/K1/L/M chain and
+    // asks whether one continuous interaction can be read from attention through
+    // Host contact, traversal, verb use, world answer, deliberate release and
+    // re-entry.
+    this.physicalLanguageValidation = {
+      pass: "HC-031N",
+      sequence: 0,
+      activeChain: null,
+      completedCount: 0,
+      abandonedCount: 0,
+      bestStageIndex: 0,
+      waitForOwnerReset: false,
+      lastWallT: 0,
+      travelHoldSeconds: 0,
+      lastAttachmentActive: Boolean(frameState.playerAttachment?.active),
+      lastOwnerId: frameState.targeting?.attentionTargetId ?? "none",
+      timeoutSeconds: 90,
+      travelConfirmSeconds: 0.18,
+      travelSpeedThreshold: 0.12
+    };
     this.movementSampleIntervalSeconds = 0.5;
     this.coreSnapshotIntervalSeconds = 10;
     this.persistIntervalSeconds = 8;
@@ -171,6 +193,7 @@ export class SessionTelemetrySystem {
     this.observeSurfaceDetachment(frameState);
     this.resolvePendingAttempts(wallNow);
     this.observeSemanticChurn(frameState, wallNow);
+    this.observePhysicalLanguageValidation(frameState, wallNow);
 
     if (wallNow - this.lastMovementSampleAt >= this.movementSampleIntervalSeconds) {
       this.lastMovementSampleAt = wallNow;
@@ -1440,6 +1463,345 @@ export class SessionTelemetrySystem {
     };
   }
 
+  observePhysicalLanguageValidation(frameState, wallNow) {
+    const probe = this.physicalLanguageValidation;
+    if (!probe) return;
+
+    const safeDt = probe.lastWallT > 0 ? clamp(wallNow - probe.lastWallT, 0, 0.1) : 0;
+    probe.lastWallT = wallNow;
+
+    const targeting = frameState.targeting ?? {};
+    const attachment = frameState.playerAttachment ?? {};
+    const ownerId = targeting.attentionTargetId ?? "none";
+    const candidateId = targeting.candidateId ?? "none";
+    const relationshipTargetId = targeting.relationshipTargetId ?? "none";
+    const attentionPhase = targeting.attentionPhase ?? "none";
+    const chord = frameState.verbComposition?.chord ?? "idle";
+    const attachmentActive = Boolean(attachment.active);
+
+    if (probe.waitForOwnerReset && ownerId === "none") {
+      probe.waitForOwnerReset = false;
+    }
+
+    if (!probe.activeChain && !probe.waitForOwnerReset && ownerId !== "none" && (attentionPhase === "engaged" || attentionPhase === "held")) {
+      this.startPhysicalLanguageValidationChain(frameState, wallNow, ownerId, candidateId);
+    }
+
+    const chain = probe.activeChain;
+    if (!chain) {
+      probe.lastAttachmentActive = attachmentActive;
+      probe.lastOwnerId = ownerId;
+      return;
+    }
+
+    if (wallNow - chain.startedWallT >= probe.timeoutSeconds) {
+      this.abandonPhysicalLanguageValidationChain(frameState, "chain_timeout");
+      probe.lastAttachmentActive = attachmentActive;
+      probe.lastOwnerId = ownerId;
+      return;
+    }
+
+    // Before deliberate surface release, losing the aim-owned noun breaks the
+    // intended continuous chain. After release the player is free to reacquire.
+    if (chain.stageIndex < 7 && ownerId !== chain.targetId) {
+      this.abandonPhysicalLanguageValidationChain(
+        frameState,
+        ownerId === "none" ? "attention_owner_lost_before_release" : "attention_owner_changed_before_release"
+      );
+      probe.lastAttachmentActive = attachmentActive;
+      probe.lastOwnerId = ownerId;
+      return;
+    }
+
+    if (chain.stageIndex < 3 && attachmentActive) {
+      chain.surfaceId = attachment.ownerSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none";
+      this.reachPhysicalLanguageValidationStage(frameState, "contact", 3, {
+        surfaceId: chain.surfaceId,
+        attachmentAuthority: attachment.authority ?? "none"
+      });
+    }
+
+    if (chain.stageIndex >= 3 && chain.stageIndex < 4) {
+      const movingOnSurface = attachmentActive && (
+        (attachment.surfaceTangentSpeed ?? 0) >= probe.travelSpeedThreshold
+        || Boolean(attachment.tendrilLocomotionActive)
+      );
+      probe.travelHoldSeconds = movingOnSurface ? probe.travelHoldSeconds + safeDt : 0;
+      if (probe.travelHoldSeconds >= probe.travelConfirmSeconds) {
+        this.reachPhysicalLanguageValidationStage(frameState, "surface_travel", 4, {
+          surfaceId: attachment.ownerSurfaceId ?? chain.surfaceId ?? "none",
+          surfaceTangentSpeed: round(attachment.surfaceTangentSpeed ?? 0),
+          tendrilLocomotionActive: Boolean(attachment.tendrilLocomotionActive),
+          travelConfirmSeconds: round(probe.travelHoldSeconds)
+        });
+      }
+    }
+
+    if (
+      chain.stageIndex >= 4
+      && chain.stageIndex < 5
+      && relationshipTargetId === chain.targetId
+      && chord !== "idle"
+    ) {
+      chain.primaryChord = chord;
+      chain.verbAppliedAtWallT = wallNow;
+      this.reachPhysicalLanguageValidationStage(frameState, "verb_applied", 5, {
+        chord,
+        physicalMode: frameState.verbPhysicalGrammar?.mode ?? "idle",
+        relationshipSource: frameState.verbPhysicalGrammar?.relationshipSource ?? "none"
+      });
+    }
+
+    if (chain.stageIndex >= 5 && chain.stageIndex < 6) {
+      const answer = this.collectPhysicalLanguageAnswer(frameState, chain.targetId);
+      if (answer.kinds.length > 0) {
+        chain.answerKinds = answer.kinds;
+        chain.answerCategories = answer.categories;
+        this.record("validation.physical_language.world_answer", "analysis", {
+          percept: {
+            chainId: chain.id,
+            target: this.aliasSource(chain.targetId),
+            chord: chord !== "idle" ? chord : chain.primaryChord,
+            answerCategories: answer.categories
+          },
+          developer: {
+            answerKinds: answer.kinds,
+            targetId: chain.targetId,
+            surfaceId: attachment.ownerSurfaceId ?? chain.surfaceId ?? "none",
+            hostCoreInterpretation: "small_core_operating_through_existing_host_anatomy_or_community"
+          }
+        });
+        this.reachPhysicalLanguageValidationStage(frameState, "world_answer", 6, {
+          answerKinds: answer.kinds,
+          answerCategories: answer.categories
+        });
+      }
+    }
+
+    const justDetached = probe.lastAttachmentActive && !attachmentActive;
+    if (chain.stageIndex >= 3 && chain.stageIndex < 7 && justDetached) {
+      const reason = attachment.detachReason ?? "none";
+      if (chain.stageIndex >= 6 && reason === "deliberate_away_input") {
+        chain.releaseSurfaceId = attachment.releaseSurfaceId ?? chain.surfaceId ?? "none";
+        this.reachPhysicalLanguageValidationStage(frameState, "deliberate_release", 7, {
+          reason,
+          surfaceId: chain.releaseSurfaceId,
+          inheritedTangentialSpeed: round(attachment.releaseInheritedTangentialSpeed ?? 0)
+        });
+      } else {
+        this.abandonPhysicalLanguageValidationChain(frameState, `surface_release_${reason || "unknown"}`);
+        probe.lastAttachmentActive = attachmentActive;
+        probe.lastOwnerId = ownerId;
+        return;
+      }
+    }
+
+    const justReattached = !probe.lastAttachmentActive && attachmentActive;
+    if (chain.stageIndex >= 7 && chain.stageIndex < 8 && justReattached) {
+      chain.reacquiredSurfaceId = attachment.ownerSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none";
+      this.reachPhysicalLanguageValidationStage(frameState, "reacquired_contact", 8, {
+        surfaceId: chain.reacquiredSurfaceId,
+        momentumHandoffMode: attachment.momentumHandoffMode ?? "none"
+      });
+    }
+
+    if (
+      chain.stageIndex >= 8
+      && relationshipTargetId !== "none"
+      && chord !== "idle"
+    ) {
+      chain.reinteractionTargetId = relationshipTargetId;
+      chain.reinteractionChord = chord;
+      this.reachPhysicalLanguageValidationStage(frameState, "reinteracted", 9, {
+        targetId: relationshipTargetId,
+        chord,
+        physicalMode: frameState.verbPhysicalGrammar?.mode ?? "idle"
+      });
+      this.completePhysicalLanguageValidationChain(frameState);
+    }
+
+    probe.lastAttachmentActive = attachmentActive;
+    probe.lastOwnerId = ownerId;
+  }
+
+  startPhysicalLanguageValidationChain(frameState, wallNow, ownerId, candidateId) {
+    const probe = this.physicalLanguageValidation;
+    const id = `physical_chain_${String(++probe.sequence).padStart(3, "0")}`;
+    const noticed = candidateId === ownerId;
+    probe.travelHoldSeconds = 0;
+    probe.activeChain = {
+      id,
+      targetId: ownerId,
+      startedWallT: wallNow,
+      startedSimT: this.simTime(),
+      stage: "owned",
+      stageIndex: 2,
+      surfaceId: "none",
+      primaryChord: "idle",
+      answerKinds: [],
+      answerCategories: [],
+      noticed
+    };
+    probe.bestStageIndex = Math.max(probe.bestStageIndex, 2);
+    this.record("validation.physical_language.chain_started", "analysis", {
+      percept: {
+        chainId: id,
+        target: this.aliasSource(ownerId),
+        noticed,
+        stage: "owned"
+      },
+      developer: {
+        targetId: ownerId,
+        candidateId,
+        attentionPhase: frameState.targeting?.attentionPhase ?? "none",
+        aimOwnershipPolicy: frameState.targeting?.aimOwnershipPolicy ?? "unknown",
+        gameplayAuthority: false
+      }
+    });
+    this.record("validation.physical_language.stage_reached", "analysis", {
+      percept: { chainId: id, stage: "noticed", stageIndex: 1, target: this.aliasSource(ownerId) },
+      developer: { observedThroughAimCandidate: noticed, gameplayAuthority: false }
+    });
+    this.record("validation.physical_language.stage_reached", "analysis", {
+      percept: { chainId: id, stage: "owned", stageIndex: 2, target: this.aliasSource(ownerId) },
+      developer: { attentionPhase: frameState.targeting?.attentionPhase ?? "none", gameplayAuthority: false }
+    });
+  }
+
+  reachPhysicalLanguageValidationStage(frameState, stage, stageIndex, developer = {}) {
+    const probe = this.physicalLanguageValidation;
+    const chain = probe?.activeChain;
+    if (!chain || stageIndex <= chain.stageIndex) return;
+    chain.stage = stage;
+    chain.stageIndex = stageIndex;
+    probe.bestStageIndex = Math.max(probe.bestStageIndex, stageIndex);
+    this.record("validation.physical_language.stage_reached", "analysis", {
+      percept: {
+        chainId: chain.id,
+        stage,
+        stageIndex,
+        target: this.aliasSource(chain.targetId)
+      },
+      developer: {
+        ...developer,
+        targetId: chain.targetId,
+        elapsedSeconds: round(this.wallTime() - chain.startedWallT),
+        gameplayAuthority: false
+      }
+    });
+  }
+
+  collectPhysicalLanguageAnswer(frameState, targetId) {
+    const kinds = [];
+    const categories = new Set();
+    const reactive = frameState.reactiveStateGrammar ?? {};
+    const pulse = frameState.pulse ?? {};
+    const bond = frameState.bondState ?? {};
+    const physicalization = frameState.verbPhysicalization ?? {};
+    const hostContact = frameState.hostContactEcologyContinuation ?? {};
+    const projection = frameState.stabilizedProjection ?? {};
+    const community = frameState.entityRelationshipGrammar ?? {};
+    const matter = frameState.entityLocalMatterCoupling ?? {};
+
+    if (reactive.targetId === targetId && reactive.focus && reactive.focus.lastCause && reactive.focus.lastCause !== "none") {
+      kinds.push("target_reactive_condition");
+      categories.add("chosen_target");
+    }
+    if (pulse.focusedObject === targetId && (pulse.affectedObjects ?? []).includes(targetId)) {
+      kinds.push("target_focused_pulse");
+      categories.add("chosen_target");
+    }
+    if (bond.objectId === targetId && (bond.active || (bond.absorbProgress ?? 0) > 0.01)) {
+      kinds.push("target_bond_draw");
+      categories.add("chosen_target");
+    }
+    if (physicalization.stabilizeTargetId === targetId && (physicalization.stabilizeProgress ?? 0) > 0.02) {
+      kinds.push("target_stabilize_hold");
+      categories.add("chosen_target");
+    }
+
+    const hostSurfaceAnswer = Boolean(hostContact.active) && (
+      (hostContact.contactVerbSymbolIntensity01 ?? 0) > 0.04
+      || (hostContact.responseMode && !["none", "inactive"].includes(hostContact.responseMode))
+      || Boolean(hostContact.stabilizedProjectionActive)
+    );
+    if (hostSurfaceAnswer) {
+      kinds.push("host_anatomy_response");
+      categories.add("host_anatomy");
+    }
+    if (projection.active && projection.surfaceBraced) {
+      kinds.push("surface_amplified_projection");
+      categories.add("host_anatomy");
+    }
+
+    if (community.active && community.primary?.entityId && community.primary.entityId !== "none" && community.chord !== "idle") {
+      kinds.push("community_interpretation");
+      categories.add("community_ecology");
+    }
+    if (matter.active) {
+      kinds.push("community_local_matter_reply");
+      categories.add("community_ecology");
+    }
+
+    return { kinds: [...new Set(kinds)], categories: [...categories] };
+  }
+
+  abandonPhysicalLanguageValidationChain(frameState, reason) {
+    const probe = this.physicalLanguageValidation;
+    const chain = probe?.activeChain;
+    if (!chain) return;
+    probe.abandonedCount += 1;
+    probe.waitForOwnerReset = (frameState.targeting?.attentionTargetId ?? "none") !== "none";
+    this.record("validation.physical_language.chain_abandoned", "analysis", {
+      percept: {
+        chainId: chain.id,
+        stage: chain.stage,
+        stageIndex: chain.stageIndex,
+        reason
+      },
+      developer: {
+        targetId: chain.targetId,
+        surfaceId: chain.surfaceId,
+        primaryChord: chain.primaryChord,
+        answerKinds: chain.answerKinds,
+        elapsedSeconds: round(this.wallTime() - chain.startedWallT),
+        gameplayAuthority: false
+      }
+    });
+    probe.activeChain = null;
+    probe.travelHoldSeconds = 0;
+  }
+
+  completePhysicalLanguageValidationChain(frameState) {
+    const probe = this.physicalLanguageValidation;
+    const chain = probe?.activeChain;
+    if (!chain) return;
+    probe.completedCount += 1;
+    probe.bestStageIndex = Math.max(probe.bestStageIndex, 9);
+    this.record("validation.physical_language.chain_completed", "analysis", {
+      percept: {
+        chainId: chain.id,
+        target: this.aliasSource(chain.targetId),
+        initialChord: chain.primaryChord,
+        reinteractionChord: chain.reinteractionChord ?? "idle",
+        answerCategories: chain.answerCategories
+      },
+      developer: {
+        targetId: chain.targetId,
+        initialSurfaceId: chain.surfaceId,
+        reacquiredSurfaceId: chain.reacquiredSurfaceId ?? "none",
+        reinteractionTargetId: chain.reinteractionTargetId ?? "none",
+        answerKinds: chain.answerKinds,
+        elapsedSeconds: round(this.wallTime() - chain.startedWallT),
+        interpretation: "core_operated_through_host_contact_then_reentered_and_interacted_again",
+        gameplayAuthority: false
+      }
+    });
+    probe.waitForOwnerReset = (frameState.targeting?.attentionTargetId ?? "none") !== "none";
+    probe.activeChain = null;
+    probe.travelHoldSeconds = 0;
+  }
+
   captureMovementSample(frameState = this.frameState) {
     const k = frameState.playerKinematics ?? {};
     const sample = {
@@ -1457,6 +1819,9 @@ export class SessionTelemetrySystem {
       attentionAimDot: round(frameState.targeting?.attentionAimDot ?? -1),
       attentionLossGraceRemaining: round(frameState.targeting?.attentionLossGraceRemaining ?? 0),
       relationshipTarget: this.aliasSource(frameState.targeting?.relationshipTargetId ?? "none"),
+      physicalLanguageValidationStage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",
+      physicalLanguageValidationStageIndex: this.physicalLanguageValidation?.activeChain?.stageIndex ?? 0,
+      physicalLanguageValidationChain: this.physicalLanguageValidation?.activeChain?.id ?? "none",
       responsePersonality: frameState.responsePersonality?.activeChemPersonality?.family ?? "none",
       reactiveStage: frameState.reactiveStateGrammar?.focus?.stage ?? "none",
       beat: frameState.interactionComposition?.rhythm?.beat ?? "observe",
@@ -1833,6 +2198,23 @@ export class SessionTelemetrySystem {
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),
       relationshipTargetChanges: count("attention.target.changed"),
+      physicalLanguageChainsStarted: count("validation.physical_language.chain_started"),
+      physicalLanguageChainsCompleted: count("validation.physical_language.chain_completed"),
+      physicalLanguageChainsAbandoned: count("validation.physical_language.chain_abandoned"),
+      physicalLanguageWorldAnswers: count("validation.physical_language.world_answer"),
+      physicalLanguageHostAnatomyAnswers: this.events.filter((event) => (
+        event.type === "validation.physical_language.world_answer"
+        && (event.percept?.answerCategories ?? []).includes("host_anatomy")
+      )).length,
+      physicalLanguageCommunityAnswers: this.events.filter((event) => (
+        event.type === "validation.physical_language.world_answer"
+        && (event.percept?.answerCategories ?? []).includes("community_ecology")
+      )).length,
+      physicalLanguageChosenTargetAnswers: this.events.filter((event) => (
+        event.type === "validation.physical_language.world_answer"
+        && (event.percept?.answerCategories ?? []).includes("chosen_target")
+      )).length,
+      physicalLanguageBestStageIndex: this.physicalLanguageValidation?.bestStageIndex ?? 0,
       surfaceDetachments: count("movement.surface_detached"),
       deliberateSurfaceDetachments: this.events.filter((event) => (
         event.type === "movement.surface_detached"
@@ -1907,6 +2289,17 @@ export class SessionTelemetrySystem {
       developerTruthSeparated: true,
       readOnlyObserver: true,
       gameplayAuthority: false,
+      physicalLanguageValidation: {
+        pass: "HC-031N",
+        active: Boolean(this.physicalLanguageValidation?.activeChain),
+        chainId: this.physicalLanguageValidation?.activeChain?.id ?? "none",
+        stage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",
+        stageIndex: this.physicalLanguageValidation?.activeChain?.stageIndex ?? 0,
+        completedCount: this.physicalLanguageValidation?.completedCount ?? 0,
+        abandonedCount: this.physicalLanguageValidation?.abandonedCount ?? 0,
+        bestStageIndex: this.physicalLanguageValidation?.bestStageIndex ?? 0,
+        rule: "observe_locked_language_only_no_gameplay_feedback"
+      },
       summary: this.buildSummary()
     };
   }
