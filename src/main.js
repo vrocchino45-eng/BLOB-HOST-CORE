@@ -1,9 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031N adds a read-only first physical-language validation probe over the locked
-// K/K1/L/M interaction stack. It changes no gameplay; telemetry now measures whether
-// attention, Host contact, traversal, verbs, world answer, release and re-entry form
-// one continuous readable chain.
+// HC031N1 repairs the read-only physical-language validation lens over the locked
+// K/K1/L/M interaction stack. It changes no gameplay; telemetry now preserves causal
+// continuity through natural attention release and resolves stable Host-anatomy identity
+// above micro support transfers.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031N",
-  buildLabel: "First Physical-Language Validation"
+  buildId: "HC-031N1",
+  buildLabel: "Physical-Language Causal Continuity"
 });
 
 runtime.start().catch((error) => {
