@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.35";
+    this.schemaVersion = "blob.session.telemetry.v1.36";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -115,7 +115,7 @@ export class SessionTelemetrySystem {
     // Host contact, requires post-verb evidence before declaring a world answer,
     // and resolves stable Host-anatomy identity above micro support IDs.
     this.physicalLanguageValidation = {
-      pass: "HC-031N1",
+      pass: "HC-031N2",
       sequence: 0,
       activeChain: null,
       completedCount: 0,
@@ -1298,13 +1298,18 @@ export class SessionTelemetrySystem {
     }
 
     if (this.lastAttachmentReacquireBlocked && !reacquireBlocked) {
+      const unblockReason = attachment.reacquireUnblockReason ?? "release_clearance_reached";
       this.record("movement.surface_reacquire_unblocked", "analysis", {
         percept: {
-          clearanceReached: true
+          clearanceReached: unblockReason === "release_clearance_reached",
+          differentSurfaceAvailable: unblockReason === "different_surface_after_deliberate_peel"
         },
         developer: {
+          reason: unblockReason,
           releaseClearance: round(attachment.releaseClearance ?? 0),
-          releaseSurfaceId: attachment.releaseSurfaceId ?? "none"
+          releaseSurfaceId: attachment.releaseSurfaceId ?? "none",
+          fromSurfaceId: attachment.reacquireUnblockFromSurfaceId ?? "none",
+          toSurfaceId: attachment.reacquireUnblockToSurfaceId ?? attachment.reacquireCandidateSurfaceId ?? "none"
         }
       });
     }
@@ -2472,6 +2477,10 @@ export class SessionTelemetrySystem {
       surfaceContactGapTolerations: count("movement.surface_contact_gap_tolerated"),
       surfaceSupportIdentityTransfers: count("movement.surface_support_identity_transferred"),
       surfaceReacquireUnblocks: count("movement.surface_reacquire_unblocked"),
+      surfaceReacquireDifferentSurfaceUnblocks: this.events.filter((event) => (
+        event.type === "movement.surface_reacquire_unblocked"
+        && event.developer?.reason === "different_surface_after_deliberate_peel"
+      )).length,
       coreWorldResonanceChanges: count("core.world_resonance.changed"),
       coreTopologyResonanceModeChanges: count("core.topology_resonance.mode_changed"),
       coreTopologyEnvironmentalHandlingModeChanges: count("core.topology_environmental_handling.mode_changed"),
@@ -2537,7 +2546,7 @@ export class SessionTelemetrySystem {
       readOnlyObserver: true,
       gameplayAuthority: false,
       physicalLanguageValidation: {
-        pass: "HC-031N1",
+        pass: "HC-031N2",
         active: Boolean(this.physicalLanguageValidation?.activeChain),
         chainId: this.physicalLanguageValidation?.activeChain?.id ?? "none",
         stage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",

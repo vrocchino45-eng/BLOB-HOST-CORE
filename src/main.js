@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031N1",
-  buildLabel: "Physical-Language Causal Continuity"
+  buildId: "HC-031N2",
+  buildLabel: "Reacquire Closure"
 });
 
 runtime.start().catch((error) => {

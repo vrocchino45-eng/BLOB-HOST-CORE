@@ -76,6 +76,13 @@ export class PlayerMovementController {
     this.attachmentReleaseNormal = new THREE.Vector3(0, 1, 0);
     this.attachmentReleaseStartDistance = 0;
     this.attachmentReleaseClearance = 0;
+    // HC031N2 — reacquire closure instrumentation. The release surface keeps
+    // same-surface snap-back blocked, while a genuinely different valid Host
+    // support can become eligible after the existing cooldown.
+    this.attachmentReacquireCandidateSurfaceId = "none";
+    this.attachmentReacquireUnblockReason = "none";
+    this.attachmentReacquireUnblockFromSurfaceId = "none";
+    this.attachmentReacquireUnblockToSurfaceId = "none";
     // HC031K — attachment ownership survives brief contact uncertainty. Contact
     // samples may flicker during anchor handoff, but the attached relationship is
     // not revoked until the unresolved gap exceeds a bounded tolerance.
@@ -417,6 +424,10 @@ export class PlayerMovementController {
       releaseArmed: this.attachmentReleaseArmed,
       detachReason: this.attachmentDetachReason,
       reacquireBlocked: this.attachmentReacquireBlocked,
+      reacquireCandidateSurfaceId: this.attachmentReacquireCandidateSurfaceId,
+      reacquireUnblockReason: this.attachmentReacquireUnblockReason,
+      reacquireUnblockFromSurfaceId: this.attachmentReacquireUnblockFromSurfaceId,
+      reacquireUnblockToSurfaceId: this.attachmentReacquireUnblockToSurfaceId,
       releaseSurfaceId: this.attachmentReleaseSurfaceId,
       releaseClearance: Number(this.attachmentReleaseClearance.toFixed(3)),
       ownerSurfaceId: this.attachmentOwnerSurfaceId,
@@ -1032,15 +1043,49 @@ export class PlayerMovementController {
       this.attachmentLandingHandoffAge += Math.max(0, dt);
     }
 
+    const reacquireCandidateSurfaceId = authoredSuctionSupportNow
+      && this.tendrilSupportSurfaceId !== "none"
+      ? this.tendrilSupportSurfaceId
+      : this.surfaceTruthActive && this.surfaceTruthSurfaceId !== "none"
+        ? this.surfaceTruthSurfaceId
+        : "none";
+    this.attachmentReacquireCandidateSurfaceId = reacquireCandidateSurfaceId;
+
     if (this.attachmentReleaseSurfaceId !== "none") {
+      const blockedReleaseSurfaceId = this.attachmentReleaseSurfaceId;
       this.tempReleaseDelta ??= new THREE.Vector3();
       this.tempReleaseDelta.copy(this.playerRoot.position).sub(this.attachmentReleasePoint);
       const signedDistance = this.tempReleaseDelta.dot(this.attachmentReleaseNormal);
       this.attachmentReleaseClearance = Math.max(0, signedDistance - this.attachmentReleaseStartDistance);
       const clearanceReached = this.attachmentReleaseClearance >= 0.26;
-      this.attachmentReacquireBlocked = this.attachmentCooldown > 0 || !clearanceReached;
-      if (!this.attachmentReacquireBlocked) {
+      const differentSurfaceCandidate = Boolean(
+        reacquireCandidateSurfaceId !== "none"
+        && reacquireCandidateSurfaceId !== blockedReleaseSurfaceId
+      );
+      const deliberateDifferentSurfaceEscape = Boolean(
+        this.attachmentDetachReason === "deliberate_away_input"
+        && differentSurfaceCandidate
+        && this.attachmentCooldown <= 0
+      );
+
+      // HC031N2: deliberate peel blocks snap-back only to the surface that was
+      // intentionally left. Once the existing 0.55 s cooldown has expired, a
+      // different valid authored support may clear the old release ownership
+      // even when motion never reached 0.26 m along the old release normal.
+      if (deliberateDifferentSurfaceEscape) {
+        this.attachmentReacquireBlocked = false;
+        this.attachmentReacquireUnblockReason = "different_surface_after_deliberate_peel";
+        this.attachmentReacquireUnblockFromSurfaceId = blockedReleaseSurfaceId;
+        this.attachmentReacquireUnblockToSurfaceId = reacquireCandidateSurfaceId;
         this.attachmentReleaseSurfaceId = "none";
+      } else {
+        this.attachmentReacquireBlocked = this.attachmentCooldown > 0 || !clearanceReached;
+        if (!this.attachmentReacquireBlocked) {
+          this.attachmentReacquireUnblockReason = "release_clearance_reached";
+          this.attachmentReacquireUnblockFromSurfaceId = blockedReleaseSurfaceId;
+          this.attachmentReacquireUnblockToSurfaceId = reacquireCandidateSurfaceId;
+          this.attachmentReleaseSurfaceId = "none";
+        }
       }
     } else {
       this.attachmentReleaseClearance = 0;
@@ -1258,6 +1303,10 @@ export class PlayerMovementController {
         this.attachmentReleaseStartDistance = this.tempReleaseDelta.dot(this.attachmentReleaseNormal);
         this.attachmentReleaseClearance = 0;
         this.attachmentReacquireBlocked = true;
+        this.attachmentReacquireCandidateSurfaceId = "none";
+        this.attachmentReacquireUnblockReason = "none";
+        this.attachmentReacquireUnblockFromSurfaceId = "none";
+        this.attachmentReacquireUnblockToSurfaceId = "none";
         this.attachmentReleaseArmed = false;
         this.attachmentPeelHoldAge = 0;
         this.attachmentPeelIntent01 = 0;

@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.31",
+  "version": "0.31.32",
   "private": true,
-  "description": "BLOB: HOST CORE \u2014 HC-031N1 Physical-Language Causal Continuity",
+  "description": "BLOB: HOST CORE \u2014 HC-031N2 Reacquire Closure",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031n1 && npm run validate:hc031n1-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031n2 && npm run validate:hc031n2-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
     "validate:hc031n-syntax": "node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031f1a": "node scripts/validateHC031F1ASurfaceTruthPullReadability.mjs",
@@ -264,7 +264,9 @@
     "validate:hc031m": "node scripts/validateHC031MTargetingAttentionOwnership.mjs",
     "validate:hc031m-syntax": "node --check src/targeting/TargetingSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n1": "node scripts/validateHC031N1PhysicalLanguageCausalContinuity.mjs",
-    "validate:hc031n1-syntax": "node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
+    "validate:hc031n1-syntax": "node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
+    "validate:hc031n2": "node scripts/validateHC031N2ReacquireClosure.mjs",
+    "validate:hc031n2-syntax": "node --check src/player/PlayerMovementController.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
   },
   "dependencies": {
     "three": "^0.179.1",

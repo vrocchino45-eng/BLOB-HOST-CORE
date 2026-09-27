@@ -1,0 +1,23 @@
+{
+  "pass": "HC-031N2",
+  "parent": "HC-031N1",
+  "purpose": "Lock neighboring gameplay owners while HC031N2 changes only PlayerMovementController reacquire ownership plus read-only telemetry/build identity.",
+  "files": {
+    "src/core/GameRuntime.js": "dff2ae1cba23e1872dc33a906d3f04fb02fd6524376d7bd5c860e4758baaf260",
+    "src/targeting/TargetingSystem.js": "3e463024564f0899c90101b816390677e155bf24543225c059f9d97c104e7463",
+    "src/interaction/VerbCompositionSystem.js": "93fc6b8c6dcabfcb88e592c71ee5739e99dc83c6dedf5645237ff64a34d1d124",
+    "src/interaction/StabilizedProjectionSystem.js": "4cc0d8bd76fc483afb32e226f85b9d6fdea60314a6ecbc37eff11aff9543321c",
+    "src/interaction/ReactiveStateGrammarSystem.js": "d54ee80927da4b68a9ecd590a779c222d06fa071711024c5dedf65e05bf739a7",
+    "src/chemistry/BondSystem.js": "c99058bec04e5d945b607acd4fe9352002366a7036df2b54259cb6899a08c43e",
+    "src/chemistry/ChemObjectSystem.js": "36b50b3cbd7137fc6d7d6686795cec279e69b7200504f2bf040fe73a00a21e04",
+    "src/input/InputSystem.js": "5117dc831d6dcc5be0fd9f38fc58c6a8eb125dd6f30a34c910d6ea07e669c0f1",
+    "src/input/ControlMap.js": "97aa4b95d202e79efa5da8a75bf65be6dfad055a71dc0aa5bba95639aa0c9397",
+    "src/targeting/TargetFocusRegistry.js": "36a8ebe88d0d11a2a914ef9529cf20eb5bc394586856e8ecf7efac3c565232a8",
+    "src/presentation/VisualHierarchyCompressionSystem.js": "a9fdc1eda521345a464a95141ad6164266ecd82587a10fcf36ccc6ef804a9b96",
+    "src/camera/InspectionCameraSystem.js": "9e4fadc53f880f15d4744607f78c7253f34a5715d1d09e3d7f577b8e7282393b",
+    "src/ecology/EntityRelationshipGrammarSystem.js": "efcd83d901f182c216752e064b1576506dfde2bee084a7f17c3c22073d85fcf8",
+    "src/ecology/EntityLocalMatterCouplingSystem.js": "9e1a8c9a1ff85e20f467a11df359f7a29c920fc97c442c6947c508f3d7c2bec6",
+    "src/world/HostContactEcologyContinuationSystem.js": "094364637a1beb1b48a179477d1eafa69664f71af2b39f941e29bfe7ca0d5c7d",
+    "src/player/CoreVerbPhysicalizationSystem.js": "83ebe369ab9f49529eb0f7637f3f84b2302ddfab3d988b26dea3412b4f6f8bcd"
+  }
+}

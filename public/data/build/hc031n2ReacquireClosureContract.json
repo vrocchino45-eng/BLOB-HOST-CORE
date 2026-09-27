@@ -1,0 +1,54 @@
+{
+  "buildId": "HC-031N2",
+  "buildLabel": "Reacquire Closure",
+  "parent": "HC-031N1",
+  "mode": "convergence_movement_hotfix",
+  "purpose": "Close the deliberate-peel reacquire loop without weakening same-surface release clearance or changing targeting, verbs, ecology, routes, or progression.",
+  "evidenceFromHC031N1": {
+    "observedBlock": "After deliberate peel from HOST_CONTACT_CONTINUATION_SCAR_BRACE_01, attachmentReacquireBlocked remained true while later brushing HOST_CONTACT_CONTINUATION_MEMBRANE_02.",
+    "staleReleaseClearanceApproxMaxObserved": 0.125,
+    "requiredSameSurfaceClearance": 0.26,
+    "result": "physical-language chain reached deliberate_release but timed out before reacquired_contact."
+  },
+  "reacquireLaw": {
+    "sameSurfaceSnapBackBlocked": true,
+    "sameSurfaceClearanceMeters": 0.26,
+    "cooldownSeconds": 0.55,
+    "differentSurfaceEscapeOnlyAfterDeliberatePeel": true,
+    "differentSurfaceRequiresValidCurrentSupport": true,
+    "differentSurfaceRequiresCooldownExpired": true,
+    "forcedDetachBehaviorUnchanged": true,
+    "rule": "The release surface owns only its own snap-back block; after a deliberate peel and the existing cooldown, a different valid Host support may clear that old release ownership."
+  },
+  "unchangedLocks": {
+    "peelThresholds": true,
+    "releaseImpulseLaw": true,
+    "landingMomentumHandoff": true,
+    "surfaceContinuityLaw": true,
+    "targetingOwnership": true,
+    "verbMeaning": true,
+    "inputMapping": true,
+    "cameraControl": true,
+    "chemistryEffects": true,
+    "ecology": true,
+    "routesOrProgression": true
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.36",
+    "implementationPass": "HC-031N2",
+    "unblockReasons": [
+      "release_clearance_reached",
+      "different_surface_after_deliberate_peel"
+    ],
+    "summaryAdds": [
+      "surfaceReacquireDifferentSurfaceUnblocks"
+    ]
+  },
+  "acceptance": [
+    "Deliberate peel from surface A still blocks immediate reattachment to surface A until 0.26 clearance.",
+    "After the existing 0.55 s cooldown, live support on different surface B clears the stale surface-A reacquire block even if old-normal clearance remains below 0.26.",
+    "A different-surface unblock is telemetered with from/to surface IDs.",
+    "The N1 observer can progress from deliberate_release to reacquired_contact on a different valid Host support.",
+    "No neighboring gameplay owner changes."
+  ]
+}
