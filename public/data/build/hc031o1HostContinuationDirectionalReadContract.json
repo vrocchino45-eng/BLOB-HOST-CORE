@@ -1,0 +1,49 @@
+{
+  "buildId": "HC-031O1",
+  "buildLabel": "Host Continuation Directional Read",
+  "parent": "HC-031O",
+  "mode": "convergence_route_presentation",
+  "purpose": "Make the already-functional Surface Wake continuation physically readable at reveal time without changing HC031O progression law, route ownership, movement, targeting, verb meaning, or authored topology.",
+  "problemEvidence": {
+    "hc031oRevealSeconds": 17.075,
+    "hc031oEntrySeconds": 122.46,
+    "observedDelaySeconds": 105.385,
+    "semanticState": "turning_toward_listening_fold",
+    "presentationBug": "Watcher semantic state named the Listening Fold while body facing still tracked the player."
+  },
+  "directionalReadLaw": {
+    "watcherCue": "When fold invitation is open and no nursery packet owns attention, the existing Watcher physically orients toward surface_wake_listening_fold_001.",
+    "watcherRouteAuthority": false,
+    "watcherLivingScanPreserved": true,
+    "foldCue": "For 5.5 seconds after continuation reveal, existing Fold meshes/light receive a bounded reveal pulse while stage 0 is active.",
+    "newGeometry": false,
+    "newEntity": false,
+    "routeCriteriaChanged": false,
+    "foldInteractionTimingChanged": false,
+    "crossingOwner": "LocalCellMorphSystem",
+    "revealOwner": "SurfaceWakeGameplaySystem"
+  },
+  "locks": {
+    "HC031ORevealLaw": true,
+    "HC031ONoSeedGate": true,
+    "movementKToN": true,
+    "targetingM": true,
+    "verbMeaningL": true,
+    "reacquireN2": true,
+    "GuideThresholdGameplay": true,
+    "GuideThresholdSecondMorph": true,
+    "ecologyInterpretation": true
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.37",
+    "newEvents": [],
+    "measurement": "Use existing opening.host_continuation.revealed and transition.entered timestamps to measure reveal-to-entry delay."
+  },
+  "acceptance": [
+    "HC031O Host relationship or preserved material path still reveals the same Listening Fold.",
+    "Watcher body turns toward the actual Listening Fold while state is turning_toward_listening_fold.",
+    "Fold gives a short reveal emphasis using existing meshes only and then returns to normal stage visuals.",
+    "No route criteria, safe-seed rule, morph trigger, movement, targeting, verb, or ecology semantics change.",
+    "A focused playtest reaches the existing first morph with a materially shorter/naturally clearer reveal-to-entry read than HC031O."
+  ]
+}

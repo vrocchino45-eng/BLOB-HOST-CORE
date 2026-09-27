@@ -116,7 +116,7 @@ export class SessionTelemetrySystem {
     // Host contact, requires post-verb evidence before declaring a world answer,
     // and resolves stable Host-anatomy identity above micro support IDs.
     this.physicalLanguageValidation = {
-      pass: "HC-031O",
+      pass: "HC-031O1",
       sequence: 0,
       activeChain: null,
       completedCount: 0,
@@ -2613,7 +2613,7 @@ export class SessionTelemetrySystem {
       readOnlyObserver: true,
       gameplayAuthority: false,
       physicalLanguageValidation: {
-        pass: "HC-031O",
+        pass: "HC-031O1",
         active: Boolean(this.physicalLanguageValidation?.activeChain),
         chainId: this.physicalLanguageValidation?.activeChain?.id ?? "none",
         stage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",

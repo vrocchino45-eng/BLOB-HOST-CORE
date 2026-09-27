@@ -360,25 +360,39 @@ export class SurfaceWakeLayeredInteractionSystem {
           : 0.18 + this.approachHold * 0.22;
 
     const emergence = this.completed ? 1 : this.emergenceProgress;
+    const invitation = this.frameState.surfaceWakeGameplay?.hostContinuationInvitation ?? {};
+    const openedAt = Number(invitation.openedAt ?? -1);
+    const routeCueAge = invitation.open && openedAt >= 0 ? Math.max(0, runtimeSeconds - openedAt) : Infinity;
+    const routeCueWindowSeconds = 5.5;
+    const routeCue01 = !this.completed && this.stageIndex === 0 && routeCueAge <= routeCueWindowSeconds
+      ? this.clamp01(1 - routeCueAge / routeCueWindowSeconds)
+      : 0;
+    const routeCuePulse01 = routeCue01 * (0.62 + (Math.sin(runtimeSeconds * 5.2) * 0.5 + 0.5) * 0.38);
     const emergenceScale = 0.52 + emergence * 0.48;
     this.foldCore.scale.set(
       1.62 * breathe * emergenceScale,
       0.38 * breathe * emergenceScale,
       1.12 * breathe * emergenceScale
     );
-    this.foldCore.material.emissiveIntensity = 0.1 + energy * 0.62;
-    this.foldCore.material.opacity = (0.42 + energy * 0.28) * emergence;
+    this.foldCore.material.emissiveIntensity = 0.1 + energy * 0.62 + routeCuePulse01 * 0.44;
+    this.foldCore.material.opacity = (0.42 + energy * 0.28 + routeCue01 * 0.08) * emergence;
 
-    this.readingRing.rotation.z += 0.006 + energy * 0.008;
-    this.readingRing.scale.setScalar(0.94 + Math.sin(runtimeSeconds * 2.9) * 0.04 + energy * 0.12);
+    this.readingRing.rotation.z += 0.006 + energy * 0.008 + routeCue01 * 0.006;
+    this.readingRing.scale.setScalar(
+      0.94 + Math.sin(runtimeSeconds * 2.9) * 0.04 + energy * 0.12 + routeCuePulse01 * 0.16
+    );
     const readingActive = !this.completed && this.stageIndex >= 1 && this.stageIndex <= 2;
-    this.readingRing.material.opacity = readingActive ? 0.035 + energy * 0.22 : 0;
+    this.readingRing.material.opacity = routeCue01 > 0
+      ? (0.1 + routeCuePulse01 * 0.32) * emergence
+      : readingActive
+        ? 0.035 + energy * 0.22
+        : 0;
 
     this.lobes.forEach((lobe, index) => {
       const wave = 1 + Math.sin(runtimeSeconds * 1.7 + index * 0.72) * 0.07;
       lobe.scale.set(1.45 * wave, 0.28 * wave, 0.92 * wave);
-      lobe.material.opacity = (0.2 + energy * 0.18) * emergence;
-      lobe.material.emissiveIntensity = 0.03 + energy * 0.18;
+      lobe.material.opacity = (0.2 + energy * 0.18 + routeCue01 * 0.07) * emergence;
+      lobe.material.emissiveIntensity = 0.03 + energy * 0.18 + routeCuePulse01 * 0.16;
     });
 
     this.responseRings.forEach((ring, index) => {
@@ -402,7 +416,15 @@ export class SurfaceWakeLayeredInteractionSystem {
       ) * emergence;
     });
 
-    if (this.light) this.light.intensity = (0.15 + energy * 0.85) * emergence;
+    if (this.light) this.light.intensity = (0.15 + energy * 0.85 + routeCuePulse01 * 0.72) * emergence;
+
+    if (this.root) {
+      this.root.userData.routeCueActive = routeCue01 > 0.01;
+      this.root.userData.routeCueTargetId = this.recipe?.focusObjectId ?? "surface_wake_listening_fold_001";
+      this.root.userData.routeCueMode = routeCue01 > 0.01 ? "existing_fold_reveal_pulse" : "none";
+      this.root.userData.routeCueAgeSeconds = Number.isFinite(routeCueAge) ? Number(routeCueAge.toFixed(3)) : -1;
+      this.root.userData.addsRouteGeometry = false;
+    }
   }
 
   publishPromptState(frameState) {
@@ -466,6 +488,9 @@ export class SurfaceWakeLayeredInteractionSystem {
       completed: Boolean(this.completed),
       foldAvailable: Boolean(foldAvailable),
       foldEmergenceProgress: foldAvailable ? this.emergenceProgress : 0,
+      directionalCueActive: Boolean(active && this.root?.userData?.routeCueActive),
+      directionalCueTargetId: active ? (this.root?.userData?.routeCueTargetId ?? "none") : "none",
+      directionalCueMode: active ? (this.root?.userData?.routeCueMode ?? "none") : "none",
       emergedFromNurseryAgency: Boolean(foldAvailable && this.frameState.nurseryCircuit?.agencyProven),
       emergedFromMaterialPassage: Boolean(
         foldAvailable

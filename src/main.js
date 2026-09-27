@@ -1,9 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031O converges the first onward route onto the physical Host language proven in K→N.
-// Surface Wake may now reveal its existing Listening Fold through coherent Host/community
-// causality or the older moving-matter path; LocalCellMorphSystem still owns the continuous
-// no-gate morph into Guide Threshold.
+// HC031O1 keeps the HC031O route law unchanged and repairs its directional presentation.
+// The existing Watcher now physically turns toward the already-authored Listening Fold,
+// while that Fold briefly emphasizes itself using existing meshes only. No route authority,
+// movement rule, target rule, verb meaning, gate, or new geometry is added.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031O",
-  buildLabel: "Host Continuation / First Route Legibility"
+  buildId: "HC-031O1",
+  buildLabel: "Host Continuation Directional Read"
 });
 
 runtime.start().catch((error) => {

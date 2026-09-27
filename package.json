@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.33",
+  "version": "0.31.34",
   "private": true,
-  "description": "BLOB: HOST CORE \u2014 HC-031N2 Reacquire Closure",
+  "description": "BLOB: HOST CORE \u2014 HC-031O1 Host Continuation Directional Read",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031o && npm run validate:hc031o-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031o1 && npm run validate:hc031o1-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
     "validate:hc031n-syntax": "node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031f1a": "node scripts/validateHC031F1ASurfaceTruthPullReadability.mjs",
@@ -268,7 +268,9 @@
     "validate:hc031n2": "node scripts/validateHC031N2ReacquireClosure.mjs",
     "validate:hc031n2-syntax": "node --check src/player/PlayerMovementController.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031o": "node scripts/validateHC031OHostContinuation.mjs",
-    "validate:hc031o-syntax": "node --check src/opening/SurfaceWakeGameplaySystem.js && node --check src/opening/SurfaceWakeLayeredInteractionSystem.js && node --check src/opening/OpeningPacingSystem.js && node --check src/morph/LocalCellMorphSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
+    "validate:hc031o-syntax": "node --check src/opening/SurfaceWakeGameplaySystem.js && node --check src/opening/SurfaceWakeLayeredInteractionSystem.js && node --check src/opening/OpeningPacingSystem.js && node --check src/morph/LocalCellMorphSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
+    "validate:hc031o1": "node scripts/validateHC031O1HostContinuationDirectionalRead.mjs",
+    "validate:hc031o1-syntax": "node --check src/ecology/EntitySystem.js && node --check src/opening/SurfaceWakeLayeredInteractionSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
   },
   "dependencies": {
     "three": "^0.179.1",

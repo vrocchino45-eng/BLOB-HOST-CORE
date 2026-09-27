@@ -487,9 +487,36 @@ export class EntitySystem {
     entity.root.position.copy(entity.basePosition);
     entity.root.position.y += Math.sin(t * 0.55) * 0.04;
 
+    // HC031O1: when the Host has revealed its existing continuation, the Watcher
+    // must physically tell the same truth as its semantic state. Route direction
+    // temporarily outranks player-facing attention, but does not gain route authority.
+    const routeCueRequested = Boolean(circuit.foldInvitation && !circuit.packetActive);
+    let routeCueTargetId = "player_core";
     this.tempVector.copy(this.playerRoot.position).sub(entity.root.position);
-    const angle = Math.atan2(this.tempVector.x, this.tempVector.z);
-    if (reciprocalMode === "baseline") {
+    let angle = Math.atan2(this.tempVector.x, this.tempVector.z);
+
+    if (routeCueRequested) {
+      const fold = this.visualComposer.scene?.getObjectByName?.("surface_wake_listening_fold_001") ?? null;
+      if (fold?.visible) {
+        fold.getWorldPosition(this.followTarget);
+        this.tempVector.copy(this.followTarget).sub(entity.root.position);
+        if (this.tempVector.lengthSq() > 0.0001) {
+          angle = Math.atan2(this.tempVector.x, this.tempVector.z);
+          routeCueTargetId = fold.name;
+        }
+      }
+    }
+
+    const routeCueActive = routeCueTargetId === "surface_wake_listening_fold_001";
+    if (routeCueActive) {
+      const livingScan = Math.sin(t * 1.1) * 0.045 * (0.35 + reciprocalStrength * 0.65);
+      const targetYaw = angle + livingScan;
+      entity.root.rotation.y = this.approachAngle(
+        entity.root.rotation.y,
+        targetYaw,
+        1 - Math.exp(-Math.max(0, dt) * 3.4)
+      );
+    } else if (reciprocalMode === "baseline") {
       entity.root.rotation.y = angle;
     } else {
       const scanOffset = reciprocalMode === "counter_scan"
@@ -507,6 +534,11 @@ export class EntitySystem {
             : 2.0;
       entity.root.rotation.y = this.approachAngle(entity.root.rotation.y, targetYaw, 1 - Math.exp(-Math.max(0, dt) * trackRate));
     }
+
+    entity.root.userData.routeCueActive = routeCueActive;
+    entity.root.userData.routeCueTargetId = routeCueActive ? routeCueTargetId : "none";
+    entity.root.userData.routeCueMode = routeCueActive ? "body_orients_to_listening_fold" : "none";
+    entity.root.userData.routeAuthority = false;
     entity.root.rotation.x = Math.sin(t * 0.6) * 0.035 + pulseT * 0.04
       + (reciprocalMode === "hold_sample" ? Math.sin(t * 0.9) * 0.018 * reciprocalStrength : 0);
 
