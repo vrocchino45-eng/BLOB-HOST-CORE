@@ -1,9 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031N1 repairs the read-only physical-language validation lens over the locked
-// K/K1/L/M interaction stack. It changes no gameplay; telemetry now preserves causal
-// continuity through natural attention release and resolves stable Host-anatomy identity
-// above micro support transfers.
+// HC031O converges the first onward route onto the physical Host language proven in K→N.
+// Surface Wake may now reveal its existing Listening Fold through coherent Host/community
+// causality or the older moving-matter path; LocalCellMorphSystem still owns the continuous
+// no-gate morph into Guide Threshold.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031N2",
-  buildLabel: "Reacquire Closure"
+  buildId: "HC-031O",
+  buildLabel: "Host Continuation / First Route Legibility"
 });
 
 runtime.start().catch((error) => {

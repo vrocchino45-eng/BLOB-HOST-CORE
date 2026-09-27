@@ -78,16 +78,19 @@ export class OpeningPacingSystem {
     const activeCellId = frameState.activeCellId ?? "none";
     const seedAbsorbed = this.isSeedAbsorbed();
     const surfaceWake = frameState.surfaceWakeLayeredInteraction ?? {};
+    const surfaceWakeGameplay = frameState.surfaceWakeGameplay ?? {};
+    const hostContinuation = surfaceWakeGameplay.hostContinuationInvitation ?? {};
     const nurseryCircuit = frameState.nurseryCircuit ?? {};
 
     if (
       activeCellId === "CELL_MEMBRANE_NURSERY_001"
       && nurseryCircuit.materialPassage?.state !== "open"
+      && !hostContinuation.open
     ) {
       return "live_nursery_cycle";
     }
     if (activeCellId === "CELL_MEMBRANE_NURSERY_001" && !surfaceWake.completed) return "read_surface_wake";
-    if (!seedAbsorbed && activeCellId === "CELL_MEMBRANE_NURSERY_001") return "find_safe_seed";
+    if (!seedAbsorbed && activeCellId === "CELL_MEMBRANE_NURSERY_001" && !hostContinuation.open) return "find_safe_seed";
 
     const firstMorph = frameState.localCellMorph ?? {};
     if (activeCellId === "CELL_MEMBRANE_NURSERY_001") {
@@ -129,7 +132,14 @@ export class OpeningPacingSystem {
       this.seedBaseScale = seed.root.scale.clone();
     }
 
-    const shouldCue = frameState.activeCellId === "CELL_MEMBRANE_NURSERY_001" && Boolean(frameState.surfaceWakeLayeredInteraction?.completed) && !this.isSeedAbsorbed();
+    const routeReadable = Boolean(
+      frameState.surfaceWakeLayeredInteraction?.completed
+      && frameState.surfaceWakeGameplay?.hostContinuationInvitation?.open
+    );
+    const shouldCue = frameState.activeCellId === "CELL_MEMBRANE_NURSERY_001"
+      && Boolean(frameState.surfaceWakeLayeredInteraction?.completed)
+      && !this.isSeedAbsorbed()
+      && !routeReadable;
     if (shouldCue) {
       const t = frameState.runtimeSeconds ?? 0;
       const pulseScale = this.config.safeSeedTuning?.readabilityPulseScale ?? 0.06;
@@ -145,7 +155,11 @@ export class OpeningPacingSystem {
     return {
       visible: seed.root.visible,
       distance,
-      cue: shouldCue ? "safe_seed_warm_readability_pulse" : "inactive"
+      cue: shouldCue
+        ? "safe_seed_warm_readability_pulse"
+        : routeReadable && !this.isSeedAbsorbed()
+          ? "optional_seed_available_not_route_gate"
+          : "inactive"
     };
   }
 
@@ -205,7 +219,7 @@ export class OpeningPacingSystem {
     if (stage === "live_nursery_cycle") return "Read the moving matter and change it until the membrane opens.";
     if (stage === "read_surface_wake") return "Approach the listening fold, pulse-read it, sustain resonance, then release.";
     if (stage === "find_safe_seed") return "Drift to the safe seed and hold absorb.";
-    if (stage === "read_scar_response") return "Pulse the scar; do not absorb it.";
+    if (stage === "read_scar_response") return "Follow the Host's scar/signal pressure and pulse it; the safe seed is nourishment, not a route gate.";
     if (stage === "pulse_first_fold") return "Pulse when the tissue answers.";
     if (stage === "stabilize_scar_flow") return "Read memory, follow pressure, respect the clot.";
     if (stage === "investigate_hub") return "Read all three route territories and the memory fragment, then return to center.";

@@ -77,12 +77,14 @@ export class SurfaceWakeLayeredInteractionSystem {
       return;
     }
 
-    // HC019E: this interaction is an observer of the changed world.
-    // It does not create progression. SurfaceWakeGameplaySystem owns the
-    // material consequence; this system becomes available only after that
-    // physical passage state exists (completion remains retained on revisit).
+    // HC031O: this interaction remains an observer of changed world state.
+    // It does not create progression. SurfaceWakeGameplaySystem owns the reveal
+    // invitation, which may now come from the older safe-material path or from
+    // coherent surface → community memory → Host-matter causality.
+    const hostContinuation = frameState.surfaceWakeGameplay?.hostContinuationInvitation ?? {};
     this.foldAvailable = Boolean(
       this.completed
+      || hostContinuation.open
       || (
         frameState.nurseryCircuit?.materialPassage?.state === "open"
         && frameState.surfaceWakeGameplay?.materialPassageOpen
@@ -457,7 +459,7 @@ export class SurfaceWakeLayeredInteractionSystem {
           ? "surface_wake_language_learned"
           : "surface_wake_language_learned_retained"
         : !foldAvailable
-          ? "listening_fold_latent_until_material_passage_opens"
+          ? "listening_fold_latent_until_host_or_material_answer"
           : "surface_wake_layered_interaction_in_progress",
       progress: active ? this.overallProgress() : this.completed ? 1 : 0,
       ready: Boolean(active && foldAvailable && (inApproachRange || this.stageIndex > 0)),
@@ -470,11 +472,20 @@ export class SurfaceWakeLayeredInteractionSystem {
         && this.frameState.nurseryCircuit?.materialPassage?.state === "open"
         && this.frameState.surfaceWakeGameplay?.materialPassageOpen
       ),
+      emergedFromHostRelationship: Boolean(
+        foldAvailable
+        && this.frameState.surfaceWakeGameplay?.hostContinuationInvitation?.relationshipProof
+      ),
+      emergenceCause: foldAvailable
+        ? (this.frameState.surfaceWakeGameplay?.hostContinuationInvitation?.cause ?? "retained_completion")
+        : "none",
       progressionObservation: {
         mode: "observe_world_state",
-        observedState: this.frameState.surfaceWakeGameplay?.materialPassageOpen
-          ? "surface_membrane_passage_open"
-          : "surface_membrane_passage_closed",
+        observedState: this.frameState.surfaceWakeGameplay?.hostContinuationInvitation?.open
+          ? "host_continuation_invitation_open"
+          : this.frameState.surfaceWakeGameplay?.materialPassageOpen
+            ? "surface_membrane_passage_open"
+            : "host_continuation_not_yet_readable",
         createsWorldState: false,
         createsCrossingPermission: false
       },
@@ -503,34 +514,34 @@ export class SurfaceWakeLayeredInteractionSystem {
       safeSeedAbsorbUnlocked: Boolean(this.completed),
       blocksSafeSeedAbsorb: Boolean(active && !this.completed),
       hudStatus: active && !foldAvailable
-        ? "Surface Wake: membrane passage closed"
+        ? "Surface Wake: Host continuation still latent"
         : active
         ? `Surface Wake: ${stage?.id ?? "listening fold"}`
         : this.completed
           ? "Surface Wake: lesson complete / retained"
           : "Surface Wake: inactive",
       guideLine: active && !foldAvailable
-        ? "The deeper Fold remains latent while the membrane passage is closed."
+        ? "The deeper Fold has not answered yet. Work through the surface, community, or moving matter until the Host carries the response forward."
         : active
         ? (stage?.guideLine ?? "The listening fold is waiting.")
         : this.completed
           ? "The first tissue language remains learned."
           : "The Surface Wake lesson belongs to the opening cell.",
       objectiveLine: active && !foldAvailable
-        ? "Change the moving matter until the membrane itself opens."
+        ? "Establish a coherent relationship here and watch what the Host retains—or change the moving matter until the tissue opens."
         : active
         ? (stage?.objectiveLine ?? "Approach the listening fold.")
         : this.completed
           ? "Continue with the learned interaction language."
           : "Return to Surface Wake.",
       nextAction: active && !foldAvailable
-        ? "Read the material response and open the membrane passage."
+        ? "Brace into the Host and let a relationship persist, or resolve a safe moving-matter cycle."
         : active
         ? (stage?.nextAction ?? "Approach the listening fold.")
         : this.completed
           ? "Continue; Surface Wake completion is retained."
           : "Return to the opening cell.",
-      blocker: active && !foldAvailable ? "surface_material_passage_closed" : "none_detected",
+      blocker: active && !foldAvailable ? "host_continuation_not_yet_revealed" : "none_detected",
       routeActivated: false,
       thresholdOpened: false,
       activeCellChanges: false,

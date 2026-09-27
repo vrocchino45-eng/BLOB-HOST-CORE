@@ -3,6 +3,7 @@ import * as THREE from "three";
 const RECIPE_ID = "SURFACE_WAKE_GAMEPLAY_FILL_HC007A";
 const CIRCUIT_RECIPE_ID = "SURFACE_WAKE_LIVING_NURSERY_CIRCUIT_HC009C";
 const CELL_ID = "CELL_MEMBRANE_NURSERY_001";
+const HOST_CONTINUATION_SURFACE_MODES = new Set(["surface_brace", "braced_project", "braced_draw", "surface_equilibrium"]);
 
 /**
  * HC-007A fills the space between the existing Surface Wake triggers with
@@ -85,6 +86,20 @@ export class SurfaceWakeGameplaySystem {
     this.materialPassageOpen = false;
     this.materialPassageStrength = 0;
     this.materialPassageCause = "none";
+
+    // HC031O: route revelation can now emerge from the physical Host language
+    // proven in K→N without converting ecology/telemetry into progression owners.
+    // SurfaceWakeGameplaySystem owns only the invitation; LocalCellMorphSystem
+    // still owns the actual continuous cell morph. The older material/seed path
+    // remains valid and can reveal the same fold.
+    this.hostContinuationSurfaceHoldSeconds = 0;
+    this.hostContinuationSurfaceRelationshipProven = false;
+    this.hostContinuationCommunityMemoryProven = false;
+    this.hostContinuationMatterAnswerProven = false;
+    this.hostContinuationRelationshipProven = false;
+    this.hostContinuationInvitationOpen = false;
+    this.hostContinuationCause = "none";
+    this.hostContinuationOpenedAt = -1;
 
     this.circuitHistory = [];
     this.packetPosition = new THREE.Vector3();
@@ -224,6 +239,7 @@ export class SurfaceWakeGameplaySystem {
       * (1 - Math.exp(-dt * (passageTarget > this.materialPassageStrength ? 3.8 : 5.2)));
     this.animatePressureFronts(t, rawIntensity, stabilizing);
     this.updateLivingCircuit(dt, frameState, t);
+    this.updateHostContinuation(dt, frameState);
 
     const choiceState = this.absorbedMotes.has("surface_wake_membrane_mote_003")
       ? "risk_reward_edge_mote_taken"
@@ -246,6 +262,72 @@ export class SurfaceWakeGameplaySystem {
         nurseryCircuit: frameState.nurseryCircuit
       }
     );
+  }
+
+
+  updateHostContinuation(dt, frameState) {
+    const attachment = frameState.playerAttachment ?? {};
+    const grammar = frameState.verbPhysicalGrammar ?? {};
+    const relationship = frameState.entityRelationshipGrammar ?? {};
+    const memory = frameState.entityReciprocalMemory ?? {};
+    const matter = frameState.entityLocalMatterCoupling ?? {};
+
+    const surfaceRelationshipLive = Boolean(
+      attachment.active
+      && grammar.surfaceBound
+      && HOST_CONTINUATION_SURFACE_MODES.has(grammar.mode ?? "idle")
+      && relationship.active
+      && (relationship.primary?.engagement01 ?? 0) >= 0.14
+    );
+
+    if (surfaceRelationshipLive) {
+      this.hostContinuationSurfaceHoldSeconds = Math.min(2, this.hostContinuationSurfaceHoldSeconds + Math.max(0, dt));
+    } else {
+      this.hostContinuationSurfaceHoldSeconds = Math.max(0, this.hostContinuationSurfaceHoldSeconds - Math.max(0, dt) * 0.55);
+    }
+
+    if (this.hostContinuationSurfaceHoldSeconds >= 0.42) {
+      this.hostContinuationSurfaceRelationshipProven = true;
+    }
+
+    const memoryPrimary = memory.primary ?? {};
+    if (
+      (memory.commitCount ?? 0) > 0
+      && (memoryPrimary.entityId ?? "none") !== "none"
+      && (memoryPrimary.strength01 ?? 0) >= 0.45
+    ) {
+      this.hostContinuationCommunityMemoryProven = true;
+    }
+
+    const matterPrimary = matter.primary ?? {};
+    if (
+      matter.active
+      && ["answering", "expressing"].includes(matterPrimary.causalStage ?? "inactive")
+      && (matterPrimary.strength01 ?? 0) >= 0.08
+    ) {
+      this.hostContinuationMatterAnswerProven = true;
+    }
+
+    if (
+      this.hostContinuationSurfaceRelationshipProven
+      && this.hostContinuationCommunityMemoryProven
+      && this.hostContinuationMatterAnswerProven
+    ) {
+      this.hostContinuationRelationshipProven = true;
+    }
+
+    const invitationOpen = Boolean(this.materialPassageOpen || this.hostContinuationRelationshipProven);
+    if (invitationOpen && !this.hostContinuationInvitationOpen) {
+      this.hostContinuationOpenedAt = frameState.runtimeSeconds ?? 0;
+      this.hostContinuationCause = this.materialPassageOpen
+        ? `material_passage:${this.materialPassageCause}`
+        : "surface_relationship_to_community_memory_to_host_matter_answer";
+    }
+    this.hostContinuationInvitationOpen = invitationOpen;
+
+    // The Watcher/Tender presentation may turn toward the same authored fold for
+    // either causal path. This does not open a gate or change activeCellId.
+    this.foldInvitation = invitationOpen;
   }
 
   createLivingCircuit() {
@@ -1112,6 +1194,28 @@ export class SurfaceWakeGameplaySystem {
       materialPassageOpen: Boolean(active && this.materialPassageOpen),
       materialPassageStrength: active ? this.materialPassageStrength : 0,
       materialPassageCause: active ? this.materialPassageCause : "none",
+      hostContinuationInvitation: {
+        pass: "HC-031O",
+        open: Boolean(active && this.hostContinuationInvitationOpen),
+        cause: active ? this.hostContinuationCause : "none",
+        openedAt: active ? this.hostContinuationOpenedAt : -1,
+        surfaceRelationshipProven: Boolean(active && this.hostContinuationSurfaceRelationshipProven),
+        surfaceRelationshipHoldSeconds: active ? Number(this.hostContinuationSurfaceHoldSeconds.toFixed(3)) : 0,
+        communityMemoryProven: Boolean(active && this.hostContinuationCommunityMemoryProven),
+        hostMatterAnswerProven: Boolean(active && this.hostContinuationMatterAnswerProven),
+        relationshipProof: Boolean(active && this.hostContinuationRelationshipProven),
+        chemistryPassageOpen: Boolean(active && this.materialPassageOpen),
+        revealOwner: "SurfaceWakeGameplaySystem",
+        crossingOwner: "LocalCellMorphSystem",
+        revealAuthority: true,
+        crossingAuthority: false,
+        noGate: true,
+        oldMatterPathPreserved: true,
+        safeSeedRemainsOptionalNourishment: true,
+        nextAction: this.hostContinuationInvitationOpen
+          ? "Follow the Listening Fold; its scar/signal pressure continues deeper into the Host."
+          : "Establish a coherent surface relationship and watch what the community and Host matter retain."
+      },
       causalProgressionMode: active ? "world_state_before_objective" : "inactive",
       mechanicalCombination: {
         pass: "HC-021D",

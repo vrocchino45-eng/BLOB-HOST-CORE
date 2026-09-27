@@ -1,0 +1,23 @@
+HC-031O — Host Continuation / First Route Legibility
+Parent: HC-031N2 — Reacquire Closure
+Mode: convergence / route legibility
+Deletions: none
+
+Files in delta:
+HC031O_BUILD_REPORT.md
+HC031O_FOCUSED_PLAYTEST.md
+HC031O_PATCH_APPLY.md
+HC031O_DELTA_MANIFEST.txt
+package.json
+package-lock.json
+public/data/build/hc031oHostContinuationContract.json
+public/data/build/hc031oLockedHashes.json
+scripts/validateHC031OHostContinuation.mjs
+src/core/SessionTelemetrySystem.js
+src/main.js
+src/morph/LocalCellMorphSystem.js
+src/opening/OpeningPacingSystem.js
+src/opening/SurfaceWakeGameplaySystem.js
+src/opening/SurfaceWakeLayeredInteractionSystem.js
+
+Apply all files at repository root over a committed HC-031N2 parent.

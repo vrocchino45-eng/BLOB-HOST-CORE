@@ -17,12 +17,12 @@ export class LocalCellMorphSystem {
     this.sourceCell = null;
     this.destinationCell = null;
     this.progress = 0;
-    this.phase = "waiting_for_seed_absorb";
+    this.phase = "waiting_for_host_language_or_seed_support";
     this.started = false;
     this.completed = false;
     this.progressHold = 0;
     this.lastTriggerConfidence = 0;
-    this.lastNextAction = "absorb_seed_then_pulse_scar_or_signal";
+    this.lastNextAction = "complete_listening_fold_then_pulse_scar_or_signal";
     this.spawnedDestination = false;
     this.destinationPrepared = false;
     this.destinationActivated = false;
@@ -48,9 +48,9 @@ export class LocalCellMorphSystem {
     this.frameState.localCellMorph = this.createMorphState({
       phase: this.phase,
       triggerReady: false,
-      triggerReason: "absorb_seed_then_pulse_scar_or_signal",
+      triggerReason: "waiting_for_host_language_or_seed_support",
       triggerConfidence: 0,
-      nextAction: "absorb the safe seed nutrient first"
+      nextAction: "complete the Listening Fold; the safe seed remains optional chemistry support"
     });
   }
 
@@ -101,11 +101,12 @@ export class LocalCellMorphSystem {
     const seedGrowth = playerSeed >= thresholds.seed || seedAbsorbed;
     const compositionSettled = seedAbsorbed && formGrowth && seedGrowth;
 
-    // HC-006EA ownership repair:
-    // The foundational Surface Wake lesson owns the opening until it completes.
-    // The older seed/morph prerequisite must remain dormant and must not publish
-    // a competing "absorb the seed first" instruction during that lesson.
+    // HC031O ownership convergence:
+    // The foundational Surface Wake lesson still owns the opening until it completes.
+    // After completion, either the learned Host language or the older seed/composition
+    // chemistry may arm the existing no-gate morph. Seed absorption is support, not a gate.
     const surfaceWake = frameState.surfaceWakeLayeredInteraction ?? {};
+    const hostContinuation = frameState.surfaceWakeGameplay?.hostContinuationInvitation ?? {};
     const deferredToSurfaceWake = Boolean(
       frameState.activeCellId === (this.sourceCell?.id ?? "CELL_MEMBRANE_NURSERY_001") &&
       surfaceWake.active &&
@@ -139,6 +140,10 @@ export class LocalCellMorphSystem {
       };
     }
 
+    const hostLanguageReady = Boolean(surfaceWake.completed && hostContinuation.open);
+    const chemistryContinuationReady = Boolean(compositionSettled);
+    const continuationReady = Boolean(hostLanguageReady || chemistryContinuationReady);
+
     const affected = frameState.pulse?.affectedObjects ?? [];
     const pulseTouchedScarOrSignal =
       affected.includes("scar_contamination_plate_001") ||
@@ -153,25 +158,29 @@ export class LocalCellMorphSystem {
     const pressureVisible = playerNearScar || playerNearSignal || scarOrSignalTargeted;
     const pulseAttemptedUnderPressure = Boolean(frameState.input?.pulsePressed) && pressureVisible;
 
-    const ready = compositionSettled && pressureVisible;
+    const ready = continuationReady && pressureVisible;
     const start = ready && (pulseTouchedScarOrSignal || pulseAttemptedUnderPressure);
 
     let confidence = 0;
-    if (seedAbsorbed) confidence += 0.34;
-    if (compositionSettled) confidence += 0.26;
+    if (hostLanguageReady) confidence += 0.60;
+    if (seedAbsorbed) confidence += 0.18;
+    if (compositionSettled) confidence += 0.18;
     if (pressureVisible) confidence += 0.26;
     if (pulseTouchedScarOrSignal || pulseAttemptedUnderPressure) confidence += 0.14;
     confidence = Math.max(0, Math.min(1, confidence));
 
-    let reason = "waiting_for_seed_absorb";
-    let nextAction = "absorb the safe seed nutrient first";
+    let reason = "waiting_for_host_language_or_seed_support";
+    let nextAction = "complete the Listening Fold, or absorb the safe seed as optional chemistry support";
 
-    if (seedAbsorbed && !compositionSettled) {
+    if (seedAbsorbed && !compositionSettled && !hostLanguageReady) {
       reason = "composition_settling";
       nextAction = `seed absorbed; Form ${playerForm.toFixed(2)} / Seed ${playerSeed.toFixed(2)} settling`;
     }
 
-    if (compositionSettled && !pressureVisible) {
+    if (hostLanguageReady && !pressureVisible) {
+      reason = "host_continuation_revealed_move_near_scar_or_signal";
+      nextAction = "follow the revealed scar/signal pressure; the seed is optional nourishment";
+    } else if (chemistryContinuationReady && !pressureVisible) {
       reason = "move_near_scar_or_signal";
       nextAction = "move toward scar plate or signal thread";
     }
@@ -209,6 +218,9 @@ export class LocalCellMorphSystem {
       formGrowth,
       seedGrowth,
       compositionSettled,
+      hostLanguageReady,
+      chemistryContinuationReady,
+      continuationReady,
       playerForm,
       playerSeed,
       thresholds,
@@ -304,7 +316,8 @@ export class LocalCellMorphSystem {
     const pulseBoost = trigger.pulseTouchedScarOrSignal || trigger.pulseAttemptedUnderPressure ? 0.08 : 0;
     const targetBoost = trigger.scarOrSignalTargeted ? 0.035 : 0;
     const confidenceBoost = Math.max(0, (trigger.triggerConfidence ?? 0) - 0.6) * 0.055;
-    const progressRate = 0.20 + pulseBoost + targetBoost + confidenceBoost;
+    const seedSupportBoost = trigger.seedAbsorbed ? 0.025 : 0;
+    const progressRate = 0.20 + pulseBoost + targetBoost + confidenceBoost + seedSupportBoost;
     this.progress = Math.min(1, this.progress + dt * progressRate);
     this.progressHold = progressRate;
 
@@ -427,6 +440,11 @@ export class LocalCellMorphSystem {
       formGrowth: Boolean(trigger.formGrowth),
       seedGrowth: Boolean(trigger.seedGrowth),
       compositionSettled: Boolean(trigger.compositionSettled),
+      hostLanguageReady: Boolean(trigger.hostLanguageReady),
+      chemistryContinuationReady: Boolean(trigger.chemistryContinuationReady),
+      continuationReady: Boolean(trigger.continuationReady),
+      seedRouteGateRemoved: true,
+      seedSupportActive: Boolean(trigger.seedAbsorbed),
       playerForm: trigger.playerForm ?? 0,
       playerSeed: trigger.playerSeed ?? 0,
       formThreshold: trigger.thresholds?.form ?? 0,

@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.36";
+    this.schemaVersion = "blob.session.telemetry.v1.37";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -95,8 +95,9 @@ export class SessionTelemetrySystem {
     this.lastInfoGainEventSeq = 0;
     this.lastPersistStatus = "not_attempted";
     this.manualMarkerCount = 0;
-    this.lastRouteResolved = { vascular: false, silt: false };
-    this.lastTransitionAvailable = { vascular: false, silt: false };
+    this.lastRouteResolved = { opening: false, vascular: false, silt: false };
+    this.lastTransitionAvailable = { opening: false, vascular: false, silt: false };
+    this.lastHostContinuationOpen = Boolean(frameState.surfaceWakeGameplay?.hostContinuationInvitation?.open);
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -115,7 +116,7 @@ export class SessionTelemetrySystem {
     // Host contact, requires post-verb evidence before declaring a world answer,
     // and resolves stable Host-anatomy identity above micro support IDs.
     this.physicalLanguageValidation = {
-      pass: "HC-031N2",
+      pass: "HC-031O",
       sequence: 0,
       activeChain: null,
       completedCount: 0,
@@ -164,6 +165,7 @@ export class SessionTelemetrySystem {
   update(_dt, frameState = this.frameState) {
     const wallNow = this.wallTime();
     this.observeCell(frameState);
+    this.observeHostContinuation(frameState);
     this.observeRouteResolution(frameState);
     this.observeTarget(frameState);
     this.observeInput(frameState, wallNow);
@@ -213,6 +215,13 @@ export class SessionTelemetrySystem {
   observeCell(frameState) {
     const cellId = frameState.activeCellId ?? "none";
     if (cellId === this.lastCellId) return;
+    if (this.lastCellId === "CELL_MEMBRANE_NURSERY_001" && cellId === "CELL_SCAR_FLOW_FOLD_001") {
+      this.record("transition.entered", "perceptual", {
+        percept: { route: "surface_to_guide", destination: this.aliasCell(cellId), activation: "continuous_host_morph" },
+        developer: { fromCellId: this.lastCellId, toCellId: cellId, owner: "LocalCellMorphSystem", noGate: true }
+      });
+    }
+
     const returnedRoute = this.lastCellId === "CELL_VASCULAR_RHYTHM_ROUTE_001"
       ? "vascular_route"
       : this.lastCellId === "CELL_SILT_PRESSURE_ROUTE_001"
@@ -232,7 +241,64 @@ export class SessionTelemetrySystem {
     this.lastCellId = cellId;
   }
 
+  observeHostContinuation(frameState) {
+    const invitation = frameState.surfaceWakeGameplay?.hostContinuationInvitation ?? {};
+    const open = Boolean(invitation.open);
+    if (open && !this.lastHostContinuationOpen) {
+      this.record("opening.host_continuation.revealed", "perceptual", {
+        percept: {
+          route: "surface_to_guide",
+          reveal: "listening_fold_became_readable",
+          cause: invitation.relationshipProof ? "host_relationship" : "material_passage"
+        },
+        developer: {
+          cause: invitation.cause ?? "unknown",
+          surfaceRelationshipProven: Boolean(invitation.surfaceRelationshipProven),
+          communityMemoryProven: Boolean(invitation.communityMemoryProven),
+          hostMatterAnswerProven: Boolean(invitation.hostMatterAnswerProven),
+          chemistryPassageOpen: Boolean(invitation.chemistryPassageOpen),
+          revealOwner: invitation.revealOwner ?? "SurfaceWakeGameplaySystem",
+          crossingOwner: invitation.crossingOwner ?? "LocalCellMorphSystem"
+        }
+      });
+      this.noteInformationGain("host_continuation_revealed", 1.5, { route: "surface_to_guide" });
+    }
+    this.lastHostContinuationOpen = open;
+  }
+
   observeRouteResolution(frameState) {
+    const openingMorph = frameState.localCellMorph ?? {};
+    const openingInvitation = frameState.surfaceWakeGameplay?.hostContinuationInvitation ?? {};
+    const openingResolved = Boolean(openingMorph.completed);
+    const openingAvailable = Boolean(openingInvitation.open);
+
+    if (openingAvailable && !this.lastTransitionAvailable.opening) {
+      this.record("transition.available", "perceptual", {
+        percept: { route: "surface_to_guide", activation: "follow_listening_fold" },
+        developer: {
+          routeId: "surface_to_guide",
+          cause: openingInvitation.cause ?? "unknown",
+          noGate: true,
+          sourceCellId: openingMorph.sourceCell ?? "CELL_MEMBRANE_NURSERY_001",
+          destinationCellId: openingMorph.destinationCell ?? "CELL_SCAR_FLOW_FOLD_001"
+        }
+      });
+    }
+    if (openingResolved && !this.lastRouteResolved.opening) {
+      this.record("route.resolved", "perceptual", {
+        percept: { route: "surface_to_guide", releaseState: openingMorph.phase ?? "completed" },
+        developer: {
+          routeId: "surface_to_guide",
+          sourceCellId: openingMorph.sourceCell ?? "CELL_MEMBRANE_NURSERY_001",
+          destinationCellId: openingMorph.destinationCell ?? "CELL_SCAR_FLOW_FOLD_001",
+          hostLanguageReady: Boolean(openingMorph.hostLanguageReady),
+          seedSupportActive: Boolean(openingMorph.seedSupportActive)
+        }
+      });
+    }
+    this.lastTransitionAvailable.opening = openingAvailable;
+    this.lastRouteResolved.opening = openingResolved;
+
     const routes = [
       ["vascular", frameState.vascularRhythmRoute ?? {}, "vascular_route"],
       ["silt", frameState.siltPressureRoute ?? {}, "silt_burrow_route"]
@@ -2435,6 +2501,7 @@ export class SessionTelemetrySystem {
       cellChanges: count("world.cell.changed"),
       manualMarkers: count("playtest.marker"),
       routeResolutions: count("route.resolved"),
+      hostContinuationReveals: count("opening.host_continuation.revealed"),
       transitionAvailabilityEvents: count("transition.available"),
       transitionEntries: count("transition.entered"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
@@ -2546,7 +2613,7 @@ export class SessionTelemetrySystem {
       readOnlyObserver: true,
       gameplayAuthority: false,
       physicalLanguageValidation: {
-        pass: "HC-031N2",
+        pass: "HC-031O",
         active: Boolean(this.physicalLanguageValidation?.activeChain),
         chainId: this.physicalLanguageValidation?.activeChain?.id ?? "none",
         stage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",
