@@ -1,8 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031H2 lets a sealed suction anchor retain the authored surface identity
-// that SurfaceTruth granted at seal time. HC031G verb grammar remains locked.
-
+// HC031N1 repairs the read-only physical-language validation lens over the locked
+// K/K1/L/M interaction stack. It changes no gameplay; telemetry now preserves causal
+// continuity through natural attention release and resolves stable Host-anatomy identity
+// above micro support transfers.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031H3",
-  buildLabel: "Brace Continuity"
+  buildId: "HC-031N1",
+  buildLabel: "Physical-Language Causal Continuity"
 });
 
 runtime.start().catch((error) => {

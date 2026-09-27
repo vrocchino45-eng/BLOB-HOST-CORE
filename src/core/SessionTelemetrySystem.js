@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.27";
+    this.schemaVersion = "blob.session.telemetry.v1.35";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -39,9 +39,11 @@ export class SessionTelemetrySystem {
     this.lastPersistAtWall = -999;
     this.lastCellId = frameState.activeCellId ?? "none";
     this.lastCandidateId = frameState.targeting?.candidateId ?? "none";
+    this.lastAttentionTargetId = frameState.targeting?.attentionTargetId ?? "none";
+    this.lastAttentionPhase = frameState.targeting?.attentionPhase ?? "none";
     this.lastRelationshipTargetId = frameState.targeting?.relationshipTargetId ?? "none";
-    // Compatibility alias: HC029A attention.target.changed now means an actual
-    // retained relationship change, not a soft candidate-score fluctuation.
+    // Compatibility alias: attention.target.changed remains verb-relationship scoped.
+    // HC031M adds aim-owned attention.owner/phase events alongside it.
     this.lastTargetId = this.lastRelationshipTargetId;
     this.lastTopologyId = frameState.corePerformance?.topologyId ?? "forming_topology";
     this.lastRelationshipEventId = "none";
@@ -59,12 +61,19 @@ export class SessionTelemetrySystem {
     this.lastEntityResidueRecognitionKey = "inactive";
     this.lastEntityEcologicalCrossInfluenceKey = "inactive";
     this.lastCoreVerbEngineChord = "idle";
+    this.lastVerbPhysicalGrammarMode = frameState.verbPhysicalGrammar?.mode ?? "idle";
     this.lastReactiveStateEventId = 0;
     this.lastReturnRegionKey = "inactive";
     this.lastRuptureHarvestEventId = 0;
     this.lastRuptureConsequenceEventId = 0;
     this.lastDeliberateCommitmentEventId = "none";
     this.lastDebugPlatformSlot = 0;
+    this.lastAttachmentActive = Boolean(frameState.playerAttachment?.active);
+    this.lastAttachmentState = frameState.playerAttachment?.state ?? "free";
+    this.lastAttachmentReacquireBlocked = Boolean(frameState.playerAttachment?.reacquireBlocked);
+    this.lastAttachmentContactGapActive = Boolean(frameState.playerAttachment?.contactGapActive);
+    this.lastAttachmentOwnerSurfaceId = frameState.playerAttachment?.ownerSurfaceId ?? "none";
+    this.lastAttachmentSupportIdentityTransferCount = frameState.playerAttachment?.supportIdentityTransferCount ?? 0;
     this.lastPulseEventId = 0;
     this.prevHeld = { absorb: false, stabilize: false, boost: false };
     this.holdStartedAt = { absorb: null, stabilize: null, boost: null };
@@ -99,6 +108,30 @@ export class SessionTelemetrySystem {
     this.maxEvents = 16000;
     this.maxMovementSamples = 7200;
     this.maxCoreSnapshots = 720;
+
+    // HC031N1 — read-only physical-language causal continuity repair. This does not
+    // feed back into gameplay. It keeps the HC031N chain observer alive through
+    // natural attention release after a verb/world answer, arms chains at meaningful
+    // Host contact, requires post-verb evidence before declaring a world answer,
+    // and resolves stable Host-anatomy identity above micro support IDs.
+    this.physicalLanguageValidation = {
+      pass: "HC-031N1",
+      sequence: 0,
+      activeChain: null,
+      completedCount: 0,
+      abandonedCount: 0,
+      bestStageIndex: 0,
+      lastWallT: 0,
+      travelHoldSeconds: 0,
+      lastAttachmentActive: Boolean(frameState.playerAttachment?.active),
+      lastOwnerId: frameState.targeting?.attentionTargetId ?? "none",
+      lastObservedSurfaceId: frameState.playerAttachment?.ownerSurfaceId ?? "none",
+      lastObservedSurfaceIdentity: null,
+      previousEvidenceSnapshot: null,
+      timeoutSeconds: 45,
+      travelConfirmSeconds: 0.18,
+      travelSpeedThreshold: 0.12
+    };
     this.movementSampleIntervalSeconds = 0.5;
     this.coreSnapshotIntervalSeconds = 10;
     this.persistIntervalSeconds = 8;
@@ -151,6 +184,7 @@ export class SessionTelemetrySystem {
     this.observeEntityResidueRecognition(frameState);
     this.observeEntityEcologicalCrossInfluence(frameState);
     this.observeCoreVerbEngineCoupling(frameState);
+    this.observeVerbPhysicalGrammar(frameState);
     this.observeReactiveStateGrammar(frameState);
     this.observeReturnRegion(frameState);
     this.observeRuptureHarvest(frameState);
@@ -158,8 +192,10 @@ export class SessionTelemetrySystem {
     this.observeDeliberateCommitment(frameState);
     this.observeCoreTopology(frameState);
     this.observeDebugPlatform(frameState);
+    this.observeSurfaceDetachment(frameState);
     this.resolvePendingAttempts(wallNow);
     this.observeSemanticChurn(frameState, wallNow);
+    this.observePhysicalLanguageValidation(frameState, wallNow);
 
     if (wallNow - this.lastMovementSampleAt >= this.movementSampleIntervalSeconds) {
       this.lastMovementSampleAt = wallNow;
@@ -243,6 +279,49 @@ export class SessionTelemetrySystem {
         }
       });
       this.lastCandidateId = candidateId;
+    }
+
+    const attentionTargetId = targeting.attentionTargetId ?? "none";
+    const attentionPhase = targeting.attentionPhase ?? "none";
+    if (attentionTargetId !== this.lastAttentionTargetId) {
+      this.record("attention.owner.changed", "perceptual", {
+        percept: {
+          from: this.aliasSource(this.lastAttentionTargetId),
+          to: this.aliasSource(attentionTargetId),
+          active: attentionTargetId !== "none",
+          phase: attentionPhase
+        },
+        developer: {
+          fromAttentionTargetId: this.lastAttentionTargetId,
+          toAttentionTargetId: attentionTargetId,
+          attentionSequence: targeting.attentionSequence ?? 0,
+          attentionReason: targeting.attentionReason ?? "none",
+          attentionAimDot: round(targeting.attentionAimDot ?? -1),
+          candidateId,
+          aimOwnershipPolicy: targeting.aimOwnershipPolicy ?? "unknown",
+          verbRetargetingAllowed: Boolean(targeting.verbRetargetingAllowed)
+        }
+      });
+      this.lastAttentionTargetId = attentionTargetId;
+    }
+
+    if (attentionPhase !== this.lastAttentionPhase) {
+      this.record("attention.phase.changed", "analysis", {
+        percept: {
+          from: this.lastAttentionPhase,
+          to: attentionPhase,
+          target: this.aliasSource(attentionTargetId)
+        },
+        developer: {
+          attentionTargetId,
+          attentionReason: targeting.attentionReason ?? "none",
+          attentionAge: round(targeting.attentionAge ?? 0),
+          lossGraceRemaining: round(targeting.attentionLossGraceRemaining ?? 0),
+          candidateId,
+          availableTargetCount: targeting.availableTargetCount ?? 0
+        }
+      });
+      this.lastAttentionPhase = attentionPhase;
     }
 
     const targetId = targeting.relationshipTargetId ?? "none";
@@ -896,6 +975,35 @@ export class SessionTelemetrySystem {
     this.lastCoreVerbEngineChord = chord;
   }
 
+  observeVerbPhysicalGrammar(frameState) {
+    const grammar = frameState.verbPhysicalGrammar ?? {};
+    const mode = grammar.mode ?? "idle";
+    if (mode === this.lastVerbPhysicalGrammarMode) return;
+
+    this.record("movement.verb_physical_grammar.changed", "analysis", {
+      percept: {
+        from: this.lastVerbPhysicalGrammarMode,
+        to: mode,
+        chord: grammar.chord ?? "idle",
+        relationshipSource: grammar.relationshipSource ?? "none",
+        surfaceBound: Boolean(grammar.surfaceBound)
+      },
+      developer: {
+        environmentalFlowMultiplier: round(grammar.effects?.environmentalFlowMultiplier ?? 1),
+        surfaceTractionMultiplier: round(grammar.effects?.surfaceTractionMultiplier ?? 1),
+        pulsePeelAssistEligible: Boolean(grammar.effects?.pulsePeelAssistEligible),
+        absorbAttachmentAuthority: false,
+        freeInputAccelerationMultiplier: 1,
+        speedLimitMultiplier: 1,
+        attachmentAcquireMultiplier: 1,
+        attachmentReleaseThresholdMultiplier: 1,
+        targetingAuthority: false,
+        movementAuthority: "PlayerMovementController"
+      }
+    });
+    this.lastVerbPhysicalGrammarMode = mode;
+  }
+
   observeReactiveStateGrammar(frameState) {
     const event = frameState.reactiveStateGrammarLastEvent ?? null;
     if (!event?.eventId || event.eventId === this.lastReactiveStateEventId) return;
@@ -1093,6 +1201,122 @@ export class SessionTelemetrySystem {
     });
   }
 
+  observeSurfaceDetachment(frameState) {
+    const attachment = frameState.playerAttachment ?? {};
+    const active = Boolean(attachment.active);
+    const state = attachment.state ?? "free";
+    const reacquireBlocked = Boolean(attachment.reacquireBlocked);
+    const contactGapActive = Boolean(attachment.contactGapActive);
+    const ownerSurfaceId = attachment.ownerSurfaceId ?? "none";
+    const transferCount = attachment.supportIdentityTransferCount ?? 0;
+
+    if (!active && state === "brushing" && this.lastAttachmentState !== "brushing") {
+      this.record("movement.surface_brush", "perceptual", {
+        percept: {
+          surface: this.aliasSource(
+            attachment.surfaceTruthSurfaceId && attachment.surfaceTruthSurfaceId !== "none"
+              ? attachment.surfaceTruthSurfaceId
+              : attachment.authoredSuctionSupportSurfaceId ?? "none"
+          ),
+          outcome: "brush_only"
+        },
+        developer: {
+          attachmentAuthority: attachment.authority ?? "none",
+          acquireAge: round(attachment.acquireAge ?? 0)
+        }
+      });
+    }
+
+    if (!this.lastAttachmentContactGapActive && contactGapActive && active) {
+      this.record("movement.surface_contact_gap_tolerated", "analysis", {
+        percept: {
+          surface: this.aliasSource(ownerSurfaceId),
+          relationshipHeld: true
+        },
+        developer: {
+          contactGapAge: round(attachment.contactGapAge ?? 0),
+          contactGapTolerance: round(attachment.contactGapTolerance ?? 0),
+          continuityMode: attachment.continuityMode ?? "contact_gap_tolerated"
+        }
+      });
+    }
+
+    if (transferCount > this.lastAttachmentSupportIdentityTransferCount) {
+      this.record("movement.surface_support_identity_transferred", "analysis", {
+        percept: {
+          from: this.aliasSource(this.lastAttachmentOwnerSurfaceId),
+          to: this.aliasSource(ownerSurfaceId),
+          attachmentPreserved: active
+        },
+        developer: {
+          transferCount,
+          continuityMode: attachment.continuityMode ?? "support_identity_transferred"
+        }
+      });
+    }
+
+    if (this.lastAttachmentActive && !active && state === "releasing") {
+      this.record("movement.surface_detached", "perceptual", {
+        percept: {
+          reason: attachment.detachReason ?? "unknown",
+          deliberate: attachment.detachReason === "deliberate_away_input",
+          surface: this.aliasSource(attachment.releaseSurfaceId ?? "none")
+        },
+        developer: {
+          releaseTension: round(attachment.releaseTension ?? 0),
+          releaseClearance: round(attachment.releaseClearance ?? 0),
+          cooldownSeconds: round(attachment.releaseCooldown ?? 0),
+          attachmentAuthority: attachment.authority ?? "none",
+          contactGapAge: round(attachment.contactGapAge ?? 0),
+          contactGapTolerance: round(attachment.contactGapTolerance ?? 0),
+          continuityMode: attachment.continuityMode ?? "none",
+          momentumHandoffMode: attachment.momentumHandoffMode ?? "none",
+          inheritedTangentialSpeed: round(attachment.releaseInheritedTangentialSpeed ?? 0),
+          releaseNormalImpulse: round(attachment.releaseNormalImpulse ?? 0),
+          pulsePeelAssist: round(attachment.pulsePeelAssist ?? 0),
+          verbPhysicalGrammarMode: attachment.verbPhysicalGrammarMode ?? frameState.verbPhysicalGrammar?.mode ?? "idle"
+        }
+      });
+    } else if (!this.lastAttachmentActive && active) {
+      this.record("movement.surface_attached", "perceptual", {
+        percept: {
+          surface: this.aliasSource(ownerSurfaceId !== "none"
+            ? ownerSurfaceId
+            : attachment.surfaceTruthSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none"),
+          authority: attachment.authority ?? "none"
+        },
+        developer: {
+          supportCount: attachment.authoredSuctionSupportCount ?? 0,
+          releaseClearanceBeforeAttach: round(attachment.releaseClearance ?? 0),
+          continuityMode: attachment.continuityMode ?? "attachment_acquired",
+          momentumHandoffMode: attachment.momentumHandoffMode ?? "landing_capture",
+          entrySpeed: round(attachment.landingEntrySpeed ?? 0),
+          entryTangentialSpeed: round(attachment.landingEntryTangentialSpeed ?? 0),
+          landingCarryDuration: round(attachment.landingHandoffDuration ?? 0)
+        }
+      });
+    }
+
+    if (this.lastAttachmentReacquireBlocked && !reacquireBlocked) {
+      this.record("movement.surface_reacquire_unblocked", "analysis", {
+        percept: {
+          clearanceReached: true
+        },
+        developer: {
+          releaseClearance: round(attachment.releaseClearance ?? 0),
+          releaseSurfaceId: attachment.releaseSurfaceId ?? "none"
+        }
+      });
+    }
+
+    this.lastAttachmentActive = active;
+    this.lastAttachmentState = state;
+    this.lastAttachmentReacquireBlocked = reacquireBlocked;
+    this.lastAttachmentContactGapActive = contactGapActive;
+    this.lastAttachmentOwnerSurfaceId = ownerSurfaceId;
+    this.lastAttachmentSupportIdentityTransferCount = transferCount;
+  }
+
   noteInformationGain(reason, score = 1, detail = {}) {
     const wallT = this.wallTime();
     const simT = this.simTime();
@@ -1241,6 +1465,581 @@ export class SessionTelemetrySystem {
     };
   }
 
+  observePhysicalLanguageValidation(frameState, wallNow) {
+    const probe = this.physicalLanguageValidation;
+    if (!probe) return;
+
+    const safeDt = probe.lastWallT > 0 ? clamp(wallNow - probe.lastWallT, 0, 0.1) : 0;
+    probe.lastWallT = wallNow;
+
+    const targeting = frameState.targeting ?? {};
+    const attachment = frameState.playerAttachment ?? {};
+    const ownerId = targeting.attentionTargetId ?? "none";
+    const candidateId = targeting.candidateId ?? "none";
+    const relationshipTargetId = targeting.relationshipTargetId ?? "none";
+    const attentionPhase = targeting.attentionPhase ?? "none";
+    const chord = frameState.verbComposition?.chord ?? "idle";
+    const attachmentActive = Boolean(attachment.active);
+    const activeSurfaceId = attachment.ownerSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none";
+    const activeAnatomy = this.resolveHostAnatomyIdentity(activeSurfaceId);
+    const evidenceTargetId = probe.activeChain?.targetId ?? ownerId ?? relationshipTargetId ?? "none";
+    const currentEvidence = this.capturePhysicalLanguageEvidence(frameState, evidenceTargetId);
+    const previousEvidence = probe.previousEvidenceSnapshot;
+
+    try {
+      // HC031N1: a physical-language chain is armed at meaningful Host contact,
+      // not merely because an aim owner happens to persist in free space. This
+      // avoids long-lived "owned" chains that never enter the physical grammar.
+      if (
+        !probe.activeChain
+        && attachmentActive
+        && ownerId !== "none"
+        && (attentionPhase === "engaged" || attentionPhase === "held")
+      ) {
+        this.startPhysicalLanguageValidationChain(frameState, wallNow, ownerId, candidateId, activeAnatomy);
+      }
+
+      const chain = probe.activeChain;
+      if (!chain) return;
+
+      if (wallNow - chain.startedWallT >= probe.timeoutSeconds) {
+        this.abandonPhysicalLanguageValidationChain(frameState, "chain_timeout");
+        return;
+      }
+
+      // The aim-owned noun must stay coherent until a verb has actually been
+      // applied. After stage 5, the chain pins causal history to the committed
+      // noun so looking away does not erase a valid Host/community response or
+      // prevent the later deliberate peel from completing the physical sequence.
+      if (chain.stageIndex < 5 && ownerId !== chain.targetId) {
+        this.abandonPhysicalLanguageValidationChain(
+          frameState,
+          ownerId === "none" ? "attention_owner_lost_before_verb" : "attention_owner_changed_before_verb"
+        );
+        return;
+      }
+
+      if (chain.stageIndex < 3 && attachmentActive) {
+        chain.surfaceId = activeSurfaceId;
+        chain.hostInstrumentId = activeAnatomy.hostInstrumentId;
+        chain.anatomyUnitId = activeAnatomy.anatomyUnitId;
+        this.reachPhysicalLanguageValidationStage(frameState, "contact", 3, {
+          surfaceId: chain.surfaceId,
+          attachmentAuthority: attachment.authority ?? "none",
+          hostInstrumentId: chain.hostInstrumentId,
+          anatomyUnitId: chain.anatomyUnitId
+        });
+      }
+
+      if (chain.stageIndex >= 3 && chain.stageIndex < 4) {
+        const movingOnSurface = attachmentActive && (
+          (attachment.surfaceTangentSpeed ?? 0) >= probe.travelSpeedThreshold
+          || Boolean(attachment.tendrilLocomotionActive)
+        );
+        probe.travelHoldSeconds = movingOnSurface ? probe.travelHoldSeconds + safeDt : 0;
+        if (probe.travelHoldSeconds >= probe.travelConfirmSeconds) {
+          const anatomy = this.resolveHostAnatomyIdentity(activeSurfaceId !== "none" ? activeSurfaceId : chain.surfaceId);
+          this.reachPhysicalLanguageValidationStage(frameState, "surface_travel", 4, {
+            surfaceId: activeSurfaceId !== "none" ? activeSurfaceId : (chain.surfaceId ?? "none"),
+            hostInstrumentId: anatomy.hostInstrumentId,
+            anatomyUnitId: anatomy.anatomyUnitId,
+            surfaceTangentSpeed: round(attachment.surfaceTangentSpeed ?? 0),
+            tendrilLocomotionActive: Boolean(attachment.tendrilLocomotionActive),
+            travelConfirmSeconds: round(probe.travelHoldSeconds)
+          });
+        }
+      }
+
+      if (
+        chain.stageIndex >= 4
+        && chain.stageIndex < 5
+        && relationshipTargetId === chain.targetId
+        && chord !== "idle"
+      ) {
+        chain.primaryChord = chord;
+        chain.verbAppliedAtWallT = wallNow;
+        chain.verbAppliedFrame = frameState.frame ?? 0;
+        // Use the previous frame as the causal baseline. This lets an immediate
+        // same-frame answer count only when something actually changed after the
+        // gesture, rather than treating pre-existing surface state as proof.
+        chain.answerBaseline = previousEvidence ?? this.capturePhysicalLanguageEvidence(frameState, chain.targetId);
+        this.reachPhysicalLanguageValidationStage(frameState, "verb_applied", 5, {
+          chord,
+          physicalMode: frameState.verbPhysicalGrammar?.mode ?? "idle",
+          relationshipSource: frameState.verbPhysicalGrammar?.relationshipSource ?? "none",
+          evidenceBaselineFrame: chain.answerBaseline?.frame ?? -1
+        });
+      }
+
+      if (chain.stageIndex >= 5 && chain.stageIndex < 6) {
+        const answer = this.collectPhysicalLanguageAnswer(frameState, chain.targetId, chain.answerBaseline);
+        if (answer.kinds.length > 0) {
+          chain.answerKinds = answer.kinds;
+          chain.answerCategories = answer.categories;
+          chain.answerEvidence = answer.evidence;
+          this.record("validation.physical_language.world_answer", "analysis", {
+            percept: {
+              chainId: chain.id,
+              target: this.aliasSource(chain.targetId),
+              chord: chord !== "idle" ? chord : chain.primaryChord,
+              answerCategories: answer.categories
+            },
+            developer: {
+              answerKinds: answer.kinds,
+              evidence: answer.evidence,
+              targetId: chain.targetId,
+              surfaceId: activeSurfaceId !== "none" ? activeSurfaceId : (chain.surfaceId ?? "none"),
+              hostInstrumentId: activeAnatomy.hostInstrumentId,
+              anatomyUnitId: activeAnatomy.anatomyUnitId,
+              verbAppliedFrame: chain.verbAppliedFrame ?? -1,
+              answerFrame: frameState.frame ?? -1,
+              causalRule: "post_verb_state_change_required",
+              hostCoreInterpretation: "small_core_operating_through_existing_host_anatomy_or_community"
+            }
+          });
+          this.reachPhysicalLanguageValidationStage(frameState, "world_answer", 6, {
+            answerKinds: answer.kinds,
+            answerCategories: answer.categories,
+            causalRule: "post_verb_state_change_required"
+          });
+        }
+      }
+
+      const justDetached = probe.lastAttachmentActive && !attachmentActive;
+      if (chain.stageIndex >= 3 && chain.stageIndex < 7 && justDetached) {
+        const reason = attachment.detachReason ?? "none";
+        if (chain.stageIndex >= 6 && reason === "deliberate_away_input") {
+          chain.releaseSurfaceId = attachment.releaseSurfaceId ?? chain.surfaceId ?? "none";
+          const releaseAnatomy = this.resolveHostAnatomyIdentity(chain.releaseSurfaceId);
+          this.reachPhysicalLanguageValidationStage(frameState, "deliberate_release", 7, {
+            reason,
+            surfaceId: chain.releaseSurfaceId,
+            hostInstrumentId: releaseAnatomy.hostInstrumentId,
+            anatomyUnitId: releaseAnatomy.anatomyUnitId,
+            inheritedTangentialSpeed: round(attachment.releaseInheritedTangentialSpeed ?? 0)
+          });
+        } else {
+          this.abandonPhysicalLanguageValidationChain(frameState, `surface_release_${reason || "unknown"}`);
+          return;
+        }
+      }
+
+      const justReattached = !probe.lastAttachmentActive && attachmentActive;
+      if (chain.stageIndex >= 7 && chain.stageIndex < 8 && justReattached) {
+        chain.reacquiredSurfaceId = activeSurfaceId;
+        const reacquiredAnatomy = this.resolveHostAnatomyIdentity(chain.reacquiredSurfaceId);
+        this.reachPhysicalLanguageValidationStage(frameState, "reacquired_contact", 8, {
+          surfaceId: chain.reacquiredSurfaceId,
+          hostInstrumentId: reacquiredAnatomy.hostInstrumentId,
+          anatomyUnitId: reacquiredAnatomy.anatomyUnitId,
+          sameHostInstrumentAsInitial: reacquiredAnatomy.hostInstrumentId !== "none"
+            && reacquiredAnatomy.hostInstrumentId === chain.hostInstrumentId,
+          momentumHandoffMode: attachment.momentumHandoffMode ?? "none"
+        });
+      }
+
+      if (
+        chain.stageIndex >= 8
+        && relationshipTargetId !== "none"
+        && chord !== "idle"
+      ) {
+        chain.reinteractionTargetId = relationshipTargetId;
+        chain.reinteractionChord = chord;
+        this.reachPhysicalLanguageValidationStage(frameState, "reinteracted", 9, {
+          targetId: relationshipTargetId,
+          chord,
+          physicalMode: frameState.verbPhysicalGrammar?.mode ?? "idle"
+        });
+        this.completePhysicalLanguageValidationChain(frameState);
+      }
+    } finally {
+      // Read-only continuity identity sits above the collision/support solver.
+      // Micro support transfers may change surface IDs while the player is still
+      // operating within one Host instrument or one authored anatomy unit.
+      if (
+        probe.lastAttachmentActive
+        && attachmentActive
+        && probe.lastObservedSurfaceId !== "none"
+        && activeSurfaceId !== "none"
+        && activeSurfaceId !== probe.lastObservedSurfaceId
+      ) {
+        const fromAnatomy = probe.lastObservedSurfaceIdentity ?? this.resolveHostAnatomyIdentity(probe.lastObservedSurfaceId);
+        this.record("validation.host_anatomy.identity_changed", "analysis", {
+          percept: {
+            from: this.aliasSource(probe.lastObservedSurfaceId),
+            to: this.aliasSource(activeSurfaceId),
+            sameAnatomyUnit: fromAnatomy.anatomyUnitId === activeAnatomy.anatomyUnitId,
+            sameHostInstrument: fromAnatomy.hostInstrumentId === activeAnatomy.hostInstrumentId
+          },
+          developer: {
+            fromSurfaceId: probe.lastObservedSurfaceId,
+            toSurfaceId: activeSurfaceId,
+            fromAnatomyUnitId: fromAnatomy.anatomyUnitId,
+            toAnatomyUnitId: activeAnatomy.anatomyUnitId,
+            fromHostInstrumentId: fromAnatomy.hostInstrumentId,
+            toHostInstrumentId: activeAnatomy.hostInstrumentId,
+            semanticAuthority: false,
+            gameplayAuthority: false
+          }
+        });
+      }
+      probe.lastObservedSurfaceId = attachmentActive ? activeSurfaceId : "none";
+      probe.lastObservedSurfaceIdentity = attachmentActive ? activeAnatomy : null;
+      probe.previousEvidenceSnapshot = this.capturePhysicalLanguageEvidence(
+        frameState,
+        probe.activeChain?.targetId ?? ownerId ?? relationshipTargetId ?? "none"
+      );
+      probe.lastAttachmentActive = attachmentActive;
+      probe.lastOwnerId = ownerId;
+    }
+  }
+
+  startPhysicalLanguageValidationChain(frameState, wallNow, ownerId, candidateId, anatomyIdentity = null) {
+    const probe = this.physicalLanguageValidation;
+    const id = `physical_chain_${String(++probe.sequence).padStart(3, "0")}`;
+    const noticed = candidateId === ownerId || ["engaged", "held"].includes(frameState.targeting?.attentionPhase ?? "none");
+    const attachment = frameState.playerAttachment ?? {};
+    const surfaceId = attachment.ownerSurfaceId ?? attachment.authoredSuctionSupportSurfaceId ?? "none";
+    const anatomy = anatomyIdentity ?? this.resolveHostAnatomyIdentity(surfaceId);
+    probe.travelHoldSeconds = 0;
+    probe.activeChain = {
+      id,
+      targetId: ownerId,
+      startedWallT: wallNow,
+      startedSimT: this.simTime(),
+      stage: "owned",
+      stageIndex: 2,
+      surfaceId,
+      hostInstrumentId: anatomy.hostInstrumentId,
+      anatomyUnitId: anatomy.anatomyUnitId,
+      primaryChord: "idle",
+      answerKinds: [],
+      answerCategories: [],
+      noticed
+    };
+    probe.bestStageIndex = Math.max(probe.bestStageIndex, 2);
+    this.record("validation.physical_language.chain_started", "analysis", {
+      percept: {
+        chainId: id,
+        target: this.aliasSource(ownerId),
+        noticed,
+        stage: "owned"
+      },
+      developer: {
+        targetId: ownerId,
+        candidateId,
+        attentionPhase: frameState.targeting?.attentionPhase ?? "none",
+        surfaceId,
+        hostInstrumentId: anatomy.hostInstrumentId,
+        anatomyUnitId: anatomy.anatomyUnitId,
+        armRule: "aim_owned_noun_plus_live_host_contact",
+        aimOwnershipPolicy: frameState.targeting?.aimOwnershipPolicy ?? "unknown",
+        gameplayAuthority: false
+      }
+    });
+    this.record("validation.physical_language.stage_reached", "analysis", {
+      percept: { chainId: id, stage: "noticed", stageIndex: 1, target: this.aliasSource(ownerId) },
+      developer: { observedThroughAimOwnership: noticed, gameplayAuthority: false }
+    });
+    this.record("validation.physical_language.stage_reached", "analysis", {
+      percept: { chainId: id, stage: "owned", stageIndex: 2, target: this.aliasSource(ownerId) },
+      developer: { attentionPhase: frameState.targeting?.attentionPhase ?? "none", gameplayAuthority: false }
+    });
+  }
+
+  reachPhysicalLanguageValidationStage(frameState, stage, stageIndex, developer = {}) {
+    const probe = this.physicalLanguageValidation;
+    const chain = probe?.activeChain;
+    if (!chain || stageIndex <= chain.stageIndex) return;
+    chain.stage = stage;
+    chain.stageIndex = stageIndex;
+    probe.bestStageIndex = Math.max(probe.bestStageIndex, stageIndex);
+    this.record("validation.physical_language.stage_reached", "analysis", {
+      percept: {
+        chainId: chain.id,
+        stage,
+        stageIndex,
+        target: this.aliasSource(chain.targetId)
+      },
+      developer: {
+        ...developer,
+        targetId: chain.targetId,
+        elapsedSeconds: round(this.wallTime() - chain.startedWallT),
+        gameplayAuthority: false
+      }
+    });
+  }
+
+  resolveHostAnatomyIdentity(surfaceId = "none") {
+    const id = String(surfaceId ?? "none");
+    if (!id || id === "none") {
+      return { hostInstrumentId: "none", anatomyUnitId: "none", microSurfaceId: "none" };
+    }
+
+    let hostInstrumentId = "unclassified_host_surface";
+    let anatomyUnitId = id;
+    if (id.startsWith("HOST_CONTACT_")) hostInstrumentId = "host_contact_shared_first_slice";
+
+    if (id.includes("CONTINUATION_MEMBRANE")) anatomyUnitId = "membrane_causeway";
+    else if (id.includes("CONTINUATION_SCAR_BRACE")) anatomyUnitId = "scar_buttress";
+    else if (id.includes("CONTINUATION_RESIDUE")) anatomyUnitId = "residue_wash";
+    else if (id.includes("SHELF_MEMBRANE") || id.includes("SHELF_SOFT_SLOPE")) anatomyUnitId = "entry_contact_shelf_living_tissue";
+    else if (id.includes("SHELF_SCAR_BRACE")) anatomyUnitId = "entry_contact_shelf_scar_brace";
+    else if (id.includes("SHELF_RESIDUE")) anatomyUnitId = "entry_contact_shelf_residue";
+
+    return { hostInstrumentId, anatomyUnitId, microSurfaceId: id };
+  }
+
+  capturePhysicalLanguageEvidence(frameState, targetId = "none") {
+    const reactive = frameState.reactiveStateGrammar ?? {};
+    const focus = reactive.targetId === targetId ? reactive.focus ?? {} : {};
+    const pulse = frameState.pulse ?? {};
+    const bond = frameState.bondState ?? {};
+    const physicalization = frameState.verbPhysicalization ?? {};
+    const hostContact = frameState.hostContactEcologyContinuation ?? {};
+    const projection = frameState.stabilizedProjection ?? {};
+    const relationship = frameState.entityRelationshipGrammar ?? {};
+    const memory = frameState.entityReciprocalMemory ?? {};
+    const behavior = frameState.entityReciprocalBehavior ?? {};
+    const matter = frameState.entityLocalMatterCoupling ?? {};
+    const imprint = hostContact.localImprint ?? {};
+
+    return {
+      frame: frameState.frame ?? 0,
+      pulseEventId: frameState.input?.pulseEventId ?? 0,
+      target: {
+        reactiveStateChangeCount: reactive.stateChangeCount ?? 0,
+        reactiveTargetId: reactive.targetId ?? "none",
+        reactiveStage: focus.stage ?? "none",
+        reactiveCause: focus.lastCause ?? "none",
+        pulseFocusedObject: pulse.focusedObject ?? "none",
+        pulseAffectedTarget: Boolean((pulse.affectedObjects ?? []).includes(targetId)),
+        bondObjectId: bond.objectId ?? "none",
+        bondActive: Boolean(bond.active),
+        absorbProgress: Number(bond.absorbProgress ?? 0),
+        stabilizeTargetId: physicalization.stabilizeTargetId ?? "none",
+        stabilizeProgress: Number(physicalization.stabilizeProgress ?? 0)
+      },
+      host: {
+        active: Boolean(hostContact.active),
+        surfaceId: hostContact.activeSurfaceId ?? hostContact.attachmentSurfaceId ?? "none",
+        responseMode: hostContact.responseMode ?? "inactive",
+        visualGrammar: hostContact.visualGrammar ?? "inactive",
+        contactVerbSymbol: hostContact.contactVerbSymbol ?? "inactive",
+        contactVerbSymbolIntensity01: Number(hostContact.contactVerbSymbolIntensity01 ?? 0),
+        residueInteractionStage: hostContact.residueInteractionStage ?? "none",
+        residueCohereTriggerCount: Number(hostContact.residueCohereTriggerCount ?? 0),
+        projectionActive: Boolean(projection.active),
+        projectionMode: projection.mode ?? "inactive",
+        projectionModeChangeCount: Number(projection.modeChangeCount ?? 0),
+        projectionSurfaceBraced: Boolean(projection.surfaceBraced),
+        projectionBraceQuality01: Number(projection.braceQuality01 ?? 0),
+        membraneCarry01: Number(imprint.membraneCarry01 ?? 0),
+        scarBrace01: Number(imprint.scarBrace01 ?? 0),
+        residueYield01: Number(imprint.residueYield01 ?? 0),
+        residueCohesion01: Number(imprint.residueCohesion01 ?? 0)
+      },
+      community: {
+        relationshipActive: Boolean(relationship.active),
+        relationshipChangeCount: Number(relationship.changeCount ?? 0),
+        relationshipChord: relationship.chord ?? "idle",
+        relationshipPrimaryKey: relationship.primary?.entityId && relationship.primary.entityId !== "none"
+          ? `${relationship.primary.entityId}:${relationship.primary.interpretation ?? "none"}`
+          : "none",
+        memoryCommitCount: Number(memory.commitCount ?? 0),
+        memoryPrimaryKey: memory.primary?.entityId && memory.primary.entityId !== "none"
+          ? `${memory.primary.entityId}:${memory.primary.mode ?? "none"}`
+          : "none",
+        behaviorChangeCount: Number(behavior.changeCount ?? 0),
+        behaviorPrimaryKey: behavior.primary?.entityId && behavior.primary.entityId !== "none"
+          ? `${behavior.primary.entityId}:${behavior.primary.mode ?? "none"}`
+          : "none",
+        matterActive: Boolean(matter.active),
+        matterChangeCount: Number(matter.changeCount ?? 0),
+        matterPrimaryKey: matter.primary?.entityId && matter.primary.entityId !== "none"
+          ? `${matter.primary.entityId}:${matter.primary.mode ?? "none"}:${matter.primary.causalStage ?? "none"}`
+          : "none"
+      }
+    };
+  }
+
+  collectPhysicalLanguageAnswer(frameState, targetId, baseline = null) {
+    const kinds = [];
+    const categories = new Set();
+    const evidence = [];
+    const current = this.capturePhysicalLanguageEvidence(frameState, targetId);
+    const before = baseline ?? current;
+
+    if (
+      current.target.reactiveTargetId === targetId
+      && current.target.reactiveCause !== "none"
+      && (
+        current.target.reactiveStateChangeCount > before.target.reactiveStateChangeCount
+        || current.target.reactiveStage !== before.target.reactiveStage
+        || current.target.reactiveCause !== before.target.reactiveCause
+      )
+    ) {
+      kinds.push("target_reactive_condition");
+      categories.add("chosen_target");
+      evidence.push("target_reactive_state_changed");
+    }
+    if (
+      current.pulseEventId > before.pulseEventId
+      && current.target.pulseFocusedObject === targetId
+      && current.target.pulseAffectedTarget
+    ) {
+      kinds.push("target_focused_pulse");
+      categories.add("chosen_target");
+      evidence.push("focused_pulse_event_changed_target");
+    }
+    if (
+      current.target.bondObjectId === targetId
+      && (
+        (!before.target.bondActive && current.target.bondActive)
+        || current.target.absorbProgress > before.target.absorbProgress + 0.01
+      )
+    ) {
+      kinds.push("target_bond_draw");
+      categories.add("chosen_target");
+      evidence.push("target_absorb_progress_changed");
+    }
+    if (
+      current.target.stabilizeTargetId === targetId
+      && current.target.stabilizeProgress > before.target.stabilizeProgress + 0.02
+    ) {
+      kinds.push("target_stabilize_hold");
+      categories.add("chosen_target");
+      evidence.push("target_stabilize_progress_changed");
+    }
+
+    const hostImprintChanged = ["membraneCarry01", "scarBrace01", "residueYield01", "residueCohesion01"]
+      .some((key) => Math.abs((current.host[key] ?? 0) - (before.host[key] ?? 0)) > 0.025);
+    const hostExpressionChanged = current.host.active && (
+      current.host.responseMode !== before.host.responseMode
+      || current.host.visualGrammar !== before.host.visualGrammar
+      || current.host.contactVerbSymbol !== before.host.contactVerbSymbol
+      || Math.abs(current.host.contactVerbSymbolIntensity01 - before.host.contactVerbSymbolIntensity01) > 0.04
+      || current.host.residueInteractionStage !== before.host.residueInteractionStage
+      || current.host.residueCohereTriggerCount > before.host.residueCohereTriggerCount
+      || hostImprintChanged
+    );
+    if (hostExpressionChanged) {
+      kinds.push("host_anatomy_response");
+      categories.add("host_anatomy");
+      evidence.push("host_expression_changed_after_verb");
+    }
+
+    const projectionChanged = current.host.projectionActive && current.host.projectionSurfaceBraced && (
+      current.host.projectionModeChangeCount > before.host.projectionModeChangeCount
+      || current.host.projectionMode !== before.host.projectionMode
+      || Math.abs(current.host.projectionBraceQuality01 - before.host.projectionBraceQuality01) > 0.02
+    );
+    if (projectionChanged) {
+      kinds.push("surface_amplified_projection");
+      categories.add("host_anatomy");
+      evidence.push("surface_projection_state_changed_after_verb");
+    }
+
+    const relationshipChanged = current.community.relationshipActive && (
+      current.community.relationshipChangeCount > before.community.relationshipChangeCount
+      || current.community.relationshipPrimaryKey !== before.community.relationshipPrimaryKey
+    );
+    if (relationshipChanged && current.community.relationshipChord !== "idle") {
+      kinds.push("community_interpretation");
+      categories.add("community_ecology");
+      evidence.push("community_relationship_changed_after_verb");
+    }
+    if (current.community.memoryCommitCount > before.community.memoryCommitCount) {
+      kinds.push("community_retained_memory");
+      categories.add("community_ecology");
+      evidence.push("community_memory_committed_after_verb");
+    }
+    if (
+      current.community.behaviorChangeCount > before.community.behaviorChangeCount
+      && current.community.behaviorPrimaryKey !== "none"
+    ) {
+      kinds.push("community_reciprocal_behavior");
+      categories.add("community_ecology");
+      evidence.push("community_behavior_changed_after_verb");
+    }
+    if (
+      current.community.matterActive
+      && current.community.matterChangeCount > before.community.matterChangeCount
+      && current.community.matterPrimaryKey !== before.community.matterPrimaryKey
+    ) {
+      kinds.push("community_local_matter_reply");
+      categories.add("community_ecology");
+      evidence.push("community_matter_changed_after_verb");
+    }
+
+    return {
+      kinds: [...new Set(kinds)],
+      categories: [...categories],
+      evidence: [...new Set(evidence)],
+      baselineFrame: before.frame ?? -1,
+      answerFrame: current.frame ?? -1
+    };
+  }
+
+  abandonPhysicalLanguageValidationChain(frameState, reason) {
+    const probe = this.physicalLanguageValidation;
+    const chain = probe?.activeChain;
+    if (!chain) return;
+    probe.abandonedCount += 1;
+    this.record("validation.physical_language.chain_abandoned", "analysis", {
+      percept: {
+        chainId: chain.id,
+        stage: chain.stage,
+        stageIndex: chain.stageIndex,
+        reason
+      },
+      developer: {
+        targetId: chain.targetId,
+        surfaceId: chain.surfaceId,
+        hostInstrumentId: chain.hostInstrumentId ?? "none",
+        anatomyUnitId: chain.anatomyUnitId ?? "none",
+        primaryChord: chain.primaryChord,
+        answerKinds: chain.answerKinds,
+        elapsedSeconds: round(this.wallTime() - chain.startedWallT),
+        gameplayAuthority: false
+      }
+    });
+    probe.activeChain = null;
+    probe.travelHoldSeconds = 0;
+  }
+
+  completePhysicalLanguageValidationChain(frameState) {
+    const probe = this.physicalLanguageValidation;
+    const chain = probe?.activeChain;
+    if (!chain) return;
+    probe.completedCount += 1;
+    probe.bestStageIndex = Math.max(probe.bestStageIndex, 9);
+    this.record("validation.physical_language.chain_completed", "analysis", {
+      percept: {
+        chainId: chain.id,
+        target: this.aliasSource(chain.targetId),
+        initialChord: chain.primaryChord,
+        reinteractionChord: chain.reinteractionChord ?? "idle",
+        answerCategories: chain.answerCategories
+      },
+      developer: {
+        targetId: chain.targetId,
+        initialSurfaceId: chain.surfaceId,
+        initialHostInstrumentId: chain.hostInstrumentId ?? "none",
+        initialAnatomyUnitId: chain.anatomyUnitId ?? "none",
+        reacquiredSurfaceId: chain.reacquiredSurfaceId ?? "none",
+        reinteractionTargetId: chain.reinteractionTargetId ?? "none",
+        answerKinds: chain.answerKinds,
+        answerEvidence: chain.answerEvidence ?? [],
+        elapsedSeconds: round(this.wallTime() - chain.startedWallT),
+        interpretation: "core_operated_through_host_contact_then_reentered_and_interacted_again",
+        gameplayAuthority: false
+      }
+    });
+    probe.activeChain = null;
+    probe.travelHoldSeconds = 0;
+  }
+
   captureMovementSample(frameState = this.frameState) {
     const k = frameState.playerKinematics ?? {};
     const sample = {
@@ -1253,6 +2052,14 @@ export class SessionTelemetrySystem {
       velocity: this.roundVector(k.velocity),
       speed: round(k.speed ?? 0),
       target: this.aliasSource(frameState.targeting?.targetId ?? "none"),
+      attentionTarget: this.aliasSource(frameState.targeting?.attentionTargetId ?? "none"),
+      attentionPhase: frameState.targeting?.attentionPhase ?? "none",
+      attentionAimDot: round(frameState.targeting?.attentionAimDot ?? -1),
+      attentionLossGraceRemaining: round(frameState.targeting?.attentionLossGraceRemaining ?? 0),
+      relationshipTarget: this.aliasSource(frameState.targeting?.relationshipTargetId ?? "none"),
+      physicalLanguageValidationStage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",
+      physicalLanguageValidationStageIndex: this.physicalLanguageValidation?.activeChain?.stageIndex ?? 0,
+      physicalLanguageValidationChain: this.physicalLanguageValidation?.activeChain?.id ?? "none",
       responsePersonality: frameState.responsePersonality?.activeChemPersonality?.family ?? "none",
       reactiveStage: frameState.reactiveStateGrammar?.focus?.stage ?? "none",
       beat: frameState.interactionComposition?.rhythm?.beat ?? "observe",
@@ -1277,6 +2084,35 @@ export class SessionTelemetrySystem {
         attachmentState: frameState.playerAttachment?.state ?? "free",
         attachmentAuthority: frameState.playerAttachment?.authority ?? "none",
         attachmentSurfaceId: frameState.playerAttachment?.surfaceTruthSurfaceId ?? "none",
+        attachmentReleaseTension: round(frameState.playerAttachment?.releaseTension ?? 0),
+        attachmentPeelIntent01: round(frameState.playerAttachment?.peelIntent01 ?? 0),
+        attachmentPeelHoldAge: round(frameState.playerAttachment?.peelHoldAge ?? 0),
+        attachmentReleaseArmed: Boolean(frameState.playerAttachment?.releaseArmed),
+        attachmentDetachReason: frameState.playerAttachment?.detachReason ?? "none",
+        attachmentReacquireBlocked: Boolean(frameState.playerAttachment?.reacquireBlocked),
+        attachmentReleaseSurfaceId: frameState.playerAttachment?.releaseSurfaceId ?? "none",
+        attachmentReleaseClearance: round(frameState.playerAttachment?.releaseClearance ?? 0),
+        attachmentOwnerSurfaceId: frameState.playerAttachment?.ownerSurfaceId ?? "none",
+        attachmentOwnerAuthority: frameState.playerAttachment?.ownerAuthority ?? "none",
+        attachmentContactGapActive: Boolean(frameState.playerAttachment?.contactGapActive),
+        attachmentContactGapAge: round(frameState.playerAttachment?.contactGapAge ?? 0),
+        attachmentContactGapTolerance: round(frameState.playerAttachment?.contactGapTolerance ?? 0),
+        attachmentContinuityMode: frameState.playerAttachment?.continuityMode ?? "none",
+        attachmentSupportIdentityTransferCount: frameState.playerAttachment?.supportIdentityTransferCount ?? 0,
+        attachmentMomentumHandoffMode: frameState.playerAttachment?.momentumHandoffMode ?? "none",
+        attachmentLandingHandoffAge: round(frameState.playerAttachment?.landingHandoffAge ?? 0),
+        attachmentLandingHandoffDuration: round(frameState.playerAttachment?.landingHandoffDuration ?? 0),
+        attachmentLandingCarry01: round(frameState.playerAttachment?.landingCarry01 ?? 0),
+        attachmentLandingEntrySpeed: round(frameState.playerAttachment?.landingEntrySpeed ?? 0),
+        attachmentLandingEntryTangentialSpeed: round(frameState.playerAttachment?.landingEntryTangentialSpeed ?? 0),
+        attachmentLandingRetainedTangentialSpeed: round(frameState.playerAttachment?.landingRetainedTangentialSpeed ?? 0),
+        attachmentReleaseInheritedTangentialSpeed: round(frameState.playerAttachment?.releaseInheritedTangentialSpeed ?? 0),
+        attachmentReleaseNormalImpulse: round(frameState.playerAttachment?.releaseNormalImpulse ?? 0),
+        attachmentPulsePeelAssist: round(frameState.playerAttachment?.pulsePeelAssist ?? 0),
+        verbPhysicalGrammarMode: frameState.verbPhysicalGrammar?.mode ?? "idle",
+        verbPhysicalRelationshipSource: frameState.verbPhysicalGrammar?.relationshipSource ?? "none",
+        verbPhysicalEnvironmentalFlowMultiplier: round(frameState.verbPhysicalGrammar?.effects?.environmentalFlowMultiplier ?? 1),
+        verbPhysicalSurfaceTractionMultiplier: round(frameState.verbPhysicalGrammar?.effects?.surfaceTractionMultiplier ?? 1),
         authoredSuctionSupportActive: Boolean(frameState.playerAttachment?.authoredSuctionSupportActive),
         authoredSuctionSupportCount: frameState.playerAttachment?.authoredSuctionSupportCount ?? 0,
         authoredSuctionSupportSurfaceId: frameState.playerAttachment?.authoredSuctionSupportSurfaceId ?? "none",
@@ -1297,7 +2133,27 @@ export class SessionTelemetrySystem {
         stabilizedProjectionAttachmentContinuityBraceActive: Boolean(frameState.stabilizedProjection?.authoredAttachmentContinuityBraceActive),
         stabilizedProjectionContinuityStrength01: round(frameState.stabilizedProjection?.continuityStrength01 ?? 0),
         stabilizedProjectionExternalBraceSource: frameState.stabilizedProjection?.externalBraceSource ?? "none",
-        stabilizedProjectionSurfaceId: frameState.stabilizedProjection?.surface?.id ?? "none"
+        stabilizedProjectionSurfaceId: frameState.stabilizedProjection?.surface?.id ?? "none",
+        hostContactEcologyActive: Boolean(frameState.hostContactEcologyContinuation?.active),
+        hostContactEcologySurfaceId: frameState.hostContactEcologyContinuation?.activeSurfaceId ?? "none",
+        hostContactEcologyRole: frameState.hostContactEcologyContinuation?.activeRole ?? "none",
+        hostContactEcologyResponseMode: frameState.hostContactEcologyContinuation?.responseMode ?? "inactive",
+        hostContactVisualCue01: round(frameState.hostContactEcologyContinuation?.visualCue01 ?? 0),
+        hostContactVisualGrammar: frameState.hostContactEcologyContinuation?.visualGrammar ?? "inactive",
+        hostContactVisualCueSurfaceId: frameState.hostContactEcologyContinuation?.visualCueSurfaceId ?? "none",
+        hostContactVerbSymbol: frameState.hostContactEcologyContinuation?.contactVerbSymbol ?? "inactive",
+        hostContactVerbSymbolIntensity01: round(frameState.hostContactEcologyContinuation?.contactVerbSymbolIntensity01 ?? 0),
+        hostContactVerbSymbolSurfaceId: frameState.hostContactEcologyContinuation?.contactVerbSymbolSurfaceId ?? "none",
+        hostContactAttachmentSurfaceId: frameState.hostContactEcologyContinuation?.attachmentSurfaceId ?? "none",
+        hostContactResidueInteractionStage: frameState.hostContactEcologyContinuation?.residueInteractionStage ?? "none",
+        hostContactResidueCohereAttemptActive: Boolean(frameState.hostContactEcologyContinuation?.residueCohereAttemptActive),
+        hostContactResidueCohereAttemptCount: frameState.hostContactEcologyContinuation?.residueCohereAttemptCount ?? 0,
+        hostContactResidueCohereVisualHold01: round(frameState.hostContactEcologyContinuation?.residueCohereVisualHold01 ?? 0),
+        hostContactResidueCohereTriggerCount: frameState.hostContactEcologyContinuation?.residueCohereTriggerCount ?? 0,
+        hostContactMembraneCarry01: round(frameState.hostContactEcologyContinuation?.localImprint?.membraneCarry01 ?? 0),
+        hostContactScarBrace01: round(frameState.hostContactEcologyContinuation?.localImprint?.scarBrace01 ?? 0),
+        hostContactResidueYield01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueYield01 ?? 0),
+        hostContactResidueCohesion01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueCohesion01 ?? 0)
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),
@@ -1521,7 +2377,8 @@ export class SessionTelemetrySystem {
         wallMinusSimSeconds: round(this.wallTime() - this.simTime()),
         exportedAtIso: new Date().toISOString(),
         telemetryAuthority: "read_only_observer",
-        gameplayAuthority: false
+        gameplayAuthority: false,
+        implementationPass: this.physicalLanguageValidation?.pass ?? this.frameState.buildId ?? "unknown"
       },
       summary: this.buildSummary(),
       events: this.events,
@@ -1530,6 +2387,7 @@ export class SessionTelemetrySystem {
       developerTruth: {
         sourceAliasMap: Object.fromEntries(this.sourceInternalByAlias.entries()),
         semanticAliasMap: Object.fromEntries(this.semanticInternalByAlias.entries()),
+        implementationPass: this.physicalLanguageValidation?.pass ?? this.frameState.buildId ?? "unknown",
         note: "Later AI perceptual-firewall consumers must not receive developerTruth."
       }
     };
@@ -1575,6 +2433,45 @@ export class SessionTelemetrySystem {
       transitionAvailabilityEvents: count("transition.available"),
       transitionEntries: count("transition.entered"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
+      attentionOwnerChanges: count("attention.owner.changed"),
+      attentionPhaseChanges: count("attention.phase.changed"),
+      relationshipTargetChanges: count("attention.target.changed"),
+      physicalLanguageChainsStarted: count("validation.physical_language.chain_started"),
+      physicalLanguageChainsCompleted: count("validation.physical_language.chain_completed"),
+      physicalLanguageChainsAbandoned: count("validation.physical_language.chain_abandoned"),
+      physicalLanguageWorldAnswers: count("validation.physical_language.world_answer"),
+      physicalLanguageHostAnatomyAnswers: this.events.filter((event) => (
+        event.type === "validation.physical_language.world_answer"
+        && (event.percept?.answerCategories ?? []).includes("host_anatomy")
+      )).length,
+      physicalLanguageCommunityAnswers: this.events.filter((event) => (
+        event.type === "validation.physical_language.world_answer"
+        && (event.percept?.answerCategories ?? []).includes("community_ecology")
+      )).length,
+      physicalLanguageChosenTargetAnswers: this.events.filter((event) => (
+        event.type === "validation.physical_language.world_answer"
+        && (event.percept?.answerCategories ?? []).includes("chosen_target")
+      )).length,
+      physicalLanguageBestStageIndex: this.physicalLanguageValidation?.bestStageIndex ?? 0,
+      hostAnatomyIdentityChanges: count("validation.host_anatomy.identity_changed"),
+      hostAnatomySameUnitTransfers: this.events.filter((event) => (
+        event.type === "validation.host_anatomy.identity_changed"
+        && event.percept?.sameAnatomyUnit === true
+      )).length,
+      hostAnatomySameInstrumentTransfers: this.events.filter((event) => (
+        event.type === "validation.host_anatomy.identity_changed"
+        && event.percept?.sameHostInstrument === true
+      )).length,
+      surfaceDetachments: count("movement.surface_detached"),
+      deliberateSurfaceDetachments: this.events.filter((event) => (
+        event.type === "movement.surface_detached"
+        && event.percept?.deliberate === true
+      )).length,
+      surfaceAttachments: count("movement.surface_attached"),
+      surfaceBrushes: count("movement.surface_brush"),
+      surfaceContactGapTolerations: count("movement.surface_contact_gap_tolerated"),
+      surfaceSupportIdentityTransfers: count("movement.surface_support_identity_transferred"),
+      surfaceReacquireUnblocks: count("movement.surface_reacquire_unblocked"),
       coreWorldResonanceChanges: count("core.world_resonance.changed"),
       coreTopologyResonanceModeChanges: count("core.topology_resonance.mode_changed"),
       coreTopologyEnvironmentalHandlingModeChanges: count("core.topology_environmental_handling.mode_changed"),
@@ -1588,6 +2485,7 @@ export class SessionTelemetrySystem {
       entityResidueRecognitionChanges: count("ecology.entity_residue_recognition.changed"),
       entityEcologicalCrossInfluenceChanges: count("ecology.entity_cross_influence.changed"),
       coreVerbEngineChordChanges: count("core.verb_engine.chord_changed"),
+      verbPhysicalGrammarChanges: count("movement.verb_physical_grammar.changed"),
       reactiveStateChanges: count("chem.reactive_state.changed"),
       returnRegionStateChanges: count("return_region.state_changed"),
       returnRegionCredits: this.frameState.returnRegionEngine?.creditCount ?? 0,
@@ -1638,6 +2536,17 @@ export class SessionTelemetrySystem {
       developerTruthSeparated: true,
       readOnlyObserver: true,
       gameplayAuthority: false,
+      physicalLanguageValidation: {
+        pass: "HC-031N1",
+        active: Boolean(this.physicalLanguageValidation?.activeChain),
+        chainId: this.physicalLanguageValidation?.activeChain?.id ?? "none",
+        stage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",
+        stageIndex: this.physicalLanguageValidation?.activeChain?.stageIndex ?? 0,
+        completedCount: this.physicalLanguageValidation?.completedCount ?? 0,
+        abandonedCount: this.physicalLanguageValidation?.abandonedCount ?? 0,
+        bestStageIndex: this.physicalLanguageValidation?.bestStageIndex ?? 0,
+        rule: "observe_locked_language_post_verb_causality_no_gameplay_feedback"
+      },
       summary: this.buildSummary()
     };
   }

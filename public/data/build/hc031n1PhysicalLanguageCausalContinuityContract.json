@@ -1,0 +1,75 @@
+{
+  "buildId": "HC-031N1",
+  "buildLabel": "Physical-Language Causal Continuity",
+  "parent": "HC-031N",
+  "mode": "convergence_validation_lens_repair",
+  "purpose": "Repair HC031N causal continuity measurement without changing movement, attachment, targeting, verbs, ecology, chemistry, routes, or progression.",
+  "hostCoreLens": {
+    "interpretation": "a small Core operates through established Host anatomy/community inside another Core accumulated Host",
+    "validationQuestion": "can one physical gesture be causally followed from owned noun through Host contact, post-verb answer, deliberate peel, re-entry, and reinteraction",
+    "identityHierarchy": [
+      "micro_support",
+      "anatomy_unit",
+      "host_instrument"
+    ],
+    "hostInstrument": "host_contact_shared_first_slice"
+  },
+  "chain": [
+    "noticed",
+    "owned",
+    "contact",
+    "surface_travel",
+    "verb_applied",
+    "world_answer",
+    "deliberate_release",
+    "reacquired_contact",
+    "reinteracted"
+  ],
+  "repairs": {
+    "armAtMeaningfulContact": true,
+    "attentionReleaseAfterVerbPreservesCausalHistory": true,
+    "worldAnswerRequiresPostVerbStateChange": true,
+    "surfaceBraceAloneIsNotWorldAnswer": true,
+    "stableHostAnatomyIdentityAboveMicroSupportIds": true,
+    "sameInstrumentTransferIsTelemetryOnly": true
+  },
+  "worldAnswerCategories": [
+    "chosen_target",
+    "host_anatomy",
+    "community_ecology"
+  ],
+  "probe": {
+    "readOnly": true,
+    "gameplayAuthority": false,
+    "timeoutSeconds": 45,
+    "travelConfirmSeconds": 0.18,
+    "travelSpeedThreshold": 0.12,
+    "completionRequires": "post_verb_world_answer_then_deliberate_surface_release_then_contact_reacquisition_then_reinteraction"
+  },
+  "telemetry": {
+    "schemaVersion": "blob.session.telemetry.v1.35",
+    "implementationPass": "HC-031N1",
+    "events": [
+      "validation.physical_language.chain_started",
+      "validation.physical_language.stage_reached",
+      "validation.physical_language.world_answer",
+      "validation.physical_language.chain_completed",
+      "validation.physical_language.chain_abandoned",
+      "validation.host_anatomy.identity_changed"
+    ]
+  },
+  "lockedTruth": {
+    "changesMovementLaw": false,
+    "changesAttachmentLaw": false,
+    "changesTargetingLaw": false,
+    "changesVerbMeaning": false,
+    "changesInputMapping": false,
+    "changesCameraControl": false,
+    "changesChemistryEffects": false,
+    "changesEcology": false,
+    "changesRoutesOrProgression": false,
+    "addsNewButton": false,
+    "addsNewAbility": false,
+    "addsHostAmplifierMechanic": false
+  }
+}
