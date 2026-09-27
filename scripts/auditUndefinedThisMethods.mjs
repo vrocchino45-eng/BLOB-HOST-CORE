@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { readdirSync, statSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("../src", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../src", import.meta.url));
 const ALLOWED_EXTERNAL_THIS_CALLS = new Set([
   "loadRecipeData"
 ]);

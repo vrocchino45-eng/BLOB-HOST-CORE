@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { RecipeDataSystem } from "../src/data/RecipeDataSystem.js";
 
-const root = new URL("../", import.meta.url).pathname;
+const root = fileURLToPath(new URL("../", import.meta.url));
 const recipeData = new RecipeDataSystem();
 
 recipeData.loadJson = async function loadLocalJson(path) {
