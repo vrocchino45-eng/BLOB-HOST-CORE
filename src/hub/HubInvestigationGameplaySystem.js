@@ -39,6 +39,7 @@ export class HubInvestigationGameplaySystem {
     this.commitCandidate = null;
     this.lastCommittedRouteId = "none";
     this.lastCommittedGateId = "none";
+    this.commitLatch = null;
 
     this.convergenceStarted = false;
     this.convergenceCompleted = false;
@@ -69,6 +70,7 @@ export class HubInvestigationGameplaySystem {
       this.convergenceLastAngle = null;
       this.convergenceHasLastPosition = false;
       this.commitCandidate = null;
+      this.commitLatch = null;
       if (frameState.commitmentOpportunity?.sourceId === "hub_chamber") {
         frameState.commitmentOpportunity = null;
       }
@@ -78,6 +80,7 @@ export class HubInvestigationGameplaySystem {
     }
 
     this.setVisible(true);
+    this.updateCommitLatch(frameState);
     this.updateNearestRoute();
     this.updateConvergence(dt, frameState);
     this.updateCommitCandidate(frameState);
@@ -146,6 +149,11 @@ export class HubInvestigationGameplaySystem {
   }
 
   updateCommitCandidate(frameState) {
+    if (this.commitLatch) {
+      this.commitCandidate = null;
+      return;
+    }
+
     const foundation = frameState.hubChamberFoundation ?? {};
     const firstDestinationInvitation = foundation.firstDestinationInvitation ?? {};
     const firstDestinationWindow = Boolean(
@@ -178,12 +186,51 @@ export class HubInvestigationGameplaySystem {
     this.commitCandidate = candidates[0] ?? null;
   }
 
+  updateCommitLatch(frameState) {
+    const latch = this.commitLatch;
+    if (!latch) return;
+
+    const flight = frameState.hubRouteCommitFlight ?? null;
+    const boundary = frameState.localCellBoundaryMorph ?? null;
+    const matchingFlight = Boolean(
+      flight
+      && flight.owner === "LocalCellBoundaryMorphSystem"
+      && flight.routeId === latch.routeId
+      && flight.gateId === latch.gateId
+    );
+
+    if (matchingFlight && flight.active) latch.ownerStarted = true;
+
+    // Once the boundary owner has claimed the route, only an explicit cancel while
+    // still in the Hub may release the latch. Normal completion changes activeCellId,
+    // and the inactive-Hub branch clears the latch on the next ownership update.
+    if (
+      latch.ownerStarted
+      && frameState.activeCellId === HUB_CELL_ID
+      && !boundary?.active
+      && matchingFlight
+      && flight.active === false
+      && (flight.progress ?? 0) < 0.999
+    ) {
+      this.commitLatch = null;
+      if (frameState.hubRouteCommitRequest?.eventId === latch.eventId) {
+        frameState.hubRouteCommitRequest = null;
+      }
+      this.lastAction = `${latch.routeId}_destination_commit_cancelled`;
+    }
+  }
+
   handleCommitEvent(frameState) {
     const event = frameState.deliberateCommitmentEvent ?? null;
     if (!event || event.eventId === this.lastCommitEventId) return;
     if (event.kind !== "hub_route_destination" || event.sourceId !== "hub_chamber") return;
 
     this.lastCommitEventId = event.eventId;
+    if (this.commitLatch) {
+      this.lastAction = `${this.commitLatch.routeId}_destination_commit_in_flight`;
+      return;
+    }
+
     const candidate = this.commitCandidate;
     if (!candidate || candidate.id !== event.targetId) {
       this.lastAction = "hub_commit_target_no_longer_available";
@@ -192,20 +239,36 @@ export class HubInvestigationGameplaySystem {
 
     this.lastCommittedRouteId = candidate.id;
     this.lastCommittedGateId = candidate.gateId ?? "none";
+    this.commitLatch = {
+      routeId: candidate.id,
+      gateId: candidate.gateId ?? "none",
+      eventId: event.eventId,
+      startedFrame: frameState.frame ?? 0,
+      ownerStarted: false
+    };
     frameState.hubRouteCommitRequest = {
-      pass: "HC-028F1",
+      pass: "HC-031P1-HF1",
       eventId: event.eventId,
       routeId: candidate.id,
       gateId: candidate.gateId ?? "none",
       sourceCellId: HUB_CELL_ID,
       frame: frameState.frame ?? 0,
       status: "deliberate_route_commit_requested",
+      latched: true,
       consequenceAuthority: "LocalCellBoundaryMorphSystem"
     };
     this.lastAction = `${candidate.id}_deliberate_route_commit`;
   }
 
   publishCommitmentOpportunity(frameState) {
+    if (this.commitLatch) {
+      if (frameState.commitmentOpportunity?.sourceId === "hub_chamber") {
+        frameState.commitmentOpportunity = null;
+      }
+      frameState.hubRouteCommit = this.createCommitState(true);
+      return;
+    }
+
     const candidate = this.commitCandidate;
     if (!candidate) {
       if (frameState.commitmentOpportunity?.sourceId === "hub_chamber") {
@@ -231,20 +294,24 @@ export class HubInvestigationGameplaySystem {
   }
 
   createCommitState(active) {
-    const candidate = active ? this.commitCandidate : null;
+    const candidate = active && !this.commitLatch ? this.commitCandidate : null;
+    const pending = Boolean(active && this.commitLatch);
     return {
-      pass: "HC-028F1",
+      pass: "HC-031P1-HF1",
       active: Boolean(active),
       available: Boolean(candidate),
-      routeId: candidate?.id ?? "none",
-      gateId: candidate?.gateId ?? "none",
-      displayName: candidate?.displayName ?? "none",
+      pending,
+      routeId: candidate?.id ?? this.commitLatch?.routeId ?? "none",
+      gateId: candidate?.gateId ?? this.commitLatch?.gateId ?? "none",
+      displayName: candidate?.displayName ?? (pending ? "Committed destination" : "none"),
       distance: Number.isFinite(candidate?.distanceToPlayer) ? candidate.distanceToPlayer : 0,
       selectionRadius: this.commitSelectionRadius,
       lastCommittedRouteId: this.lastCommittedRouteId,
       lastCommittedGateId: this.lastCommittedGateId,
+      pendingEventId: this.commitLatch?.eventId ?? "none",
       control: "A / E",
       role: "deliberate_destination_commit",
+      status: pending ? "commit_in_flight" : candidate ? "ready_for_deliberate_commit" : "no_commit_candidate",
       guidedApproach: true,
       genericInteract: false
     };

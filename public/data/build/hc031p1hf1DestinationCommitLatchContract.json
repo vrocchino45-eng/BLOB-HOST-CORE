@@ -1,0 +1,29 @@
+{
+  "pass": "HC-031P1-HF1",
+  "parent": "HC-031P1",
+  "mode": "hotfix_destination_commit_latch",
+  "purpose": "One deliberate Hub destination choice creates one commitment request and remains owned until the boundary morph completes or cancels.",
+  "commitLaw": {
+    "oneChoiceOneRequest": true,
+    "clearOpportunityWhilePending": true,
+    "repeatPressCannotReplacePendingRequest": true,
+    "boundaryOwner": "LocalCellBoundaryMorphSystem",
+    "cancelMayReleaseWhileStillInHub": true,
+    "normalCompletionClearsOnHubOwnershipExit": true
+  },
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.39",
+    "pendingStatus": "commit_in_flight",
+    "implementationPassMatchesBuild": true,
+    "returnReadinessBlockerClearedWhenCommitAvailable": true
+  },
+  "locks": {
+    "movement": true,
+    "verbs": true,
+    "targeting": true,
+    "routeGeometry": true,
+    "graveGameplay": true,
+    "hubPresentation": true,
+    "firstDestinationPermissionLawFromP1": true
+  }
+}

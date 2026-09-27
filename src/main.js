@@ -1,9 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031P1 repairs first-Hub destination commitment ownership.
-// The authored Grave destination may become commit-ready once its body is revealed and
-// its destination is prepared. The stricter all-routes-on-screen Hub presentation proof
-// remains a visual validator and no longer owns permission to make the first A/E commit.
+// HC031P1-HF1 latches a deliberate Hub destination choice until the boundary morph
+// completes or cancels. One A/E choice creates one route-commit request; repeated presses
+// during the living-tissue handoff cannot create duplicate commitment events.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031P1",
-  buildLabel: "First Destination Commitment Unblock"
+  buildId: "HC-031P1-HF1",
+  buildLabel: "Destination Commit Latch"
 });
 
 runtime.start().catch((error) => {

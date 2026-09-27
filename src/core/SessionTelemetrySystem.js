@@ -121,7 +121,7 @@ export class SessionTelemetrySystem {
     // Host contact, requires post-verb evidence before declaring a world answer,
     // and resolves stable Host-anatomy identity above micro support IDs.
     this.physicalLanguageValidation = {
-      pass: "HC-031P",
+      pass: frameState.buildId ?? "HC-031P1-HF1",
       sequence: 0,
       activeChain: null,
       completedCount: 0,
@@ -377,13 +377,16 @@ export class SessionTelemetrySystem {
     const inHub = frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001";
     const selectionRadius = Number.isFinite(commit.selectionRadius) ? commit.selectionRadius : 2.1;
     const invitationDistance = Number.isFinite(invitation.distanceToPlayer) ? invitation.distanceToPlayer : 0;
-    const readinessReason = commit.available
-      ? "ready_for_deliberate_commit"
-      : invitation.active
-        ? "outside_commit_radius"
-        : (invitation.blocker ?? "destination_not_available");
+    const commitPending = Boolean(commit.pending);
+    const readinessReason = commitPending
+      ? "commit_in_flight"
+      : commit.available
+        ? "ready_for_deliberate_commit"
+        : invitation.active
+          ? "outside_commit_radius"
+          : (invitation.blocker ?? "destination_not_available");
     const readinessKey = inHub
-      ? `${invitation.active ? 1 : 0}|${commit.available ? 1 : 0}|${readinessReason}`
+      ? `${invitation.active ? 1 : 0}|${commit.available ? 1 : 0}|${commitPending ? 1 : 0}|${readinessReason}`
       : "outside_hub";
 
     if (inHub && readinessKey !== this.lastHubDestinationReadinessKey) {
@@ -398,7 +401,13 @@ export class SessionTelemetrySystem {
           gateId: invitation.gateId ?? commit.gateId ?? "hub_to_grave_memory_route",
           invitationActive: Boolean(invitation.active),
           commitAvailable: Boolean(commit.available),
-          invitationBlocker: invitation.blocker ?? "none",
+          commitPending,
+          invitationBlocker: (commit.available || commitPending) ? "none" : (invitation.blocker ?? "none"),
+          readinessSource: commitPending
+            ? "latched_destination_commit"
+            : commit.available
+              ? (invitation.active ? "first_destination_invitation" : "route_body_commit_state")
+              : "destination_readiness",
           distance: round(invitationDistance),
           selectionRadius: round(selectionRadius),
           destinationPrepared: Boolean(frameState.transitionContinuity?.hubToGraveReady),

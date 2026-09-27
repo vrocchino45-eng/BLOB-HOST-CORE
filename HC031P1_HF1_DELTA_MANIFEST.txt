@@ -1,0 +1,24 @@
+BLOB: HOST CORE — HC031P1-HF1 Destination Commit Latch
+Required parent: HC-031P1
+Deletes: none
+
+Changed runtime/build files:
+- src/hub/HubInvestigationGameplaySystem.js
+- src/core/SessionTelemetrySystem.js
+- src/main.js
+- package.json
+- package-lock.json
+
+New validation/build contract files:
+- scripts/validateHC031P1HF1DestinationCommitLatch.mjs
+- public/data/build/hc031p1hf1DestinationCommitLatchContract.json
+- public/data/build/hc031p1hf1LockedHashes.json
+
+Documentation:
+- HC031P1_HF1_BUILD_REPORT.md
+- HC031P1_HF1_FOCUSED_PLAYTEST.md
+- HC031P1_HF1_PATCH_APPLY.md
+- HC031P1_HF1_DELTA_MANIFEST.txt
+
+Design law:
+One deliberate A/E destination choice creates one route-commit request. The Hub stops publishing a second commitment opportunity while LocalCellBoundaryMorphSystem owns the living-tissue handoff. Explicit cancel may re-arm; normal completion clears on Hub ownership exit.
