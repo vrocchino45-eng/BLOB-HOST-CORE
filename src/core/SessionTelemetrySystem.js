@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.37";
+    this.schemaVersion = "blob.session.telemetry.v1.38";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -98,6 +98,10 @@ export class SessionTelemetrySystem {
     this.lastRouteResolved = { opening: false, vascular: false, silt: false };
     this.lastTransitionAvailable = { opening: false, vascular: false, silt: false };
     this.lastHostContinuationOpen = Boolean(frameState.surfaceWakeGameplay?.hostContinuationInvitation?.open);
+    this.lastHubDestinationAvailableRouteId = frameState.hubRouteCommit?.available
+      ? (frameState.hubRouteCommit?.routeId ?? "none")
+      : "none";
+    this.lastHubRouteCommitRequestEventId = frameState.hubRouteCommitRequest?.eventId ?? 0;
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -116,7 +120,7 @@ export class SessionTelemetrySystem {
     // Host contact, requires post-verb evidence before declaring a world answer,
     // and resolves stable Host-anatomy identity above micro support IDs.
     this.physicalLanguageValidation = {
-      pass: "HC-031O1",
+      pass: "HC-031P",
       sequence: 0,
       activeChain: null,
       completedCount: 0,
@@ -167,6 +171,7 @@ export class SessionTelemetrySystem {
     this.observeCell(frameState);
     this.observeHostContinuation(frameState);
     this.observeRouteResolution(frameState);
+    this.observeHubDestinationCommitment(frameState);
     this.observeTarget(frameState);
     this.observeInput(frameState, wallNow);
     this.observeSonar(frameState);
@@ -219,6 +224,42 @@ export class SessionTelemetrySystem {
       this.record("transition.entered", "perceptual", {
         percept: { route: "surface_to_guide", destination: this.aliasCell(cellId), activation: "continuous_host_morph" },
         developer: { fromCellId: this.lastCellId, toCellId: cellId, owner: "LocalCellMorphSystem", noGate: true }
+      });
+    }
+
+    if (this.lastCellId === "CELL_SIGNAL_CHORUS_NERVE_001" && cellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001") {
+      this.record("transition.entered", "perceptual", {
+        percept: { route: "grave_memory_route", destination: this.aliasCell(cellId), activation: "deliberate_destination_commit" },
+        developer: {
+          fromCellId: this.lastCellId,
+          toCellId: cellId,
+          gateId: "hub_to_grave_memory_route",
+          owner: "LocalCellBoundaryMorphSystem",
+          commitmentOwner: "HubInvestigationGameplaySystem",
+          automaticCrossing: false
+        }
+      });
+      this.record("route.resolved", "perceptual", {
+        percept: { route: "grave_memory_route", releaseState: "arrived_in_grave_memory" },
+        developer: {
+          routeId: "grave_memory_route",
+          sourceCellId: this.lastCellId,
+          destinationCellId: cellId,
+          transitionOwner: "LocalCellBoundaryMorphSystem",
+          deliberateCommitRequired: true
+        }
+      });
+    }
+
+    if (this.lastCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001" && cellId === "CELL_SIGNAL_CHORUS_NERVE_001") {
+      this.record("transition.entered", "perceptual", {
+        percept: { route: "grave_memory_route", destination: this.aliasCell(cellId), activation: "remembered_return_fold" },
+        developer: {
+          fromCellId: this.lastCellId,
+          toCellId: cellId,
+          gateId: "grave_memory_to_hub_chamber",
+          owner: "LocalCellBoundaryMorphSystem"
+        }
       });
     }
 
@@ -324,6 +365,54 @@ export class SessionTelemetrySystem {
       }
       this.lastRouteResolved[key] = resolved;
       this.lastTransitionAvailable[key] = available;
+    }
+  }
+
+  observeHubDestinationCommitment(frameState) {
+    const commit = frameState.hubRouteCommit ?? {};
+    const invitation = frameState.hubChamberFoundation?.firstDestinationInvitation ?? {};
+    const availableRouteId = commit.available ? (commit.routeId ?? "none") : "none";
+
+    if (availableRouteId !== this.lastHubDestinationAvailableRouteId) {
+      if (availableRouteId !== "none") {
+        this.record("hub.destination.available", "perceptual", {
+          percept: {
+            route: this.aliasSemantic(availableRouteId),
+            displayName: commit.displayName ?? invitation.displayName ?? "destination",
+            control: commit.control ?? invitation.commitControl ?? "A / E"
+          },
+          developer: {
+            routeId: availableRouteId,
+            gateId: commit.gateId ?? invitation.gateId ?? "none",
+            distance: round(commit.distance ?? invitation.distanceToPlayer ?? 0),
+            selectionRadius: round(commit.selectionRadius ?? 0),
+            bodyCue: invitation.bodyCue ?? "existing_route_body",
+            deliberateCommitRequired: true,
+            automaticCrossing: false,
+            transitionOwner: invitation.transitionOwner ?? "LocalCellBoundaryMorphSystem"
+          }
+        });
+      }
+      this.lastHubDestinationAvailableRouteId = availableRouteId;
+    }
+
+    const request = frameState.hubRouteCommitRequest ?? null;
+    const requestEventId = request?.eventId ?? 0;
+    if (requestEventId && requestEventId !== this.lastHubRouteCommitRequestEventId) {
+      this.lastHubRouteCommitRequestEventId = requestEventId;
+      this.record("hub.destination.committed", "input", {
+        percept: {
+          route: this.aliasSemantic(request.routeId ?? "unknown_route"),
+          activation: "deliberate_A_or_E_commit"
+        },
+        developer: {
+          eventId: requestEventId,
+          routeId: request.routeId ?? "none",
+          gateId: request.gateId ?? "none",
+          sourceCellId: request.sourceCellId ?? "CELL_SIGNAL_CHORUS_NERVE_001",
+          consequenceAuthority: request.consequenceAuthority ?? "LocalCellBoundaryMorphSystem"
+        }
+      });
     }
   }
 
@@ -2504,6 +2593,8 @@ export class SessionTelemetrySystem {
       hostContinuationReveals: count("opening.host_continuation.revealed"),
       transitionAvailabilityEvents: count("transition.available"),
       transitionEntries: count("transition.entered"),
+      hubDestinationAvailabilityEvents: count("hub.destination.available"),
+      hubDestinationCommitEvents: count("hub.destination.committed"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),
@@ -2613,7 +2704,7 @@ export class SessionTelemetrySystem {
       readOnlyObserver: true,
       gameplayAuthority: false,
       physicalLanguageValidation: {
-        pass: "HC-031O1",
+        pass: "HC-031P",
         active: Boolean(this.physicalLanguageValidation?.activeChain),
         chainId: this.physicalLanguageValidation?.activeChain?.id ?? "none",
         stage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",

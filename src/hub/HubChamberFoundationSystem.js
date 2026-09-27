@@ -1432,6 +1432,18 @@ export class HubChamberFoundationSystem {
       const commitReady = item.route.id === commitTargetId;
       const near = commitReady || (item.route.id === nearestRouteId && nearestRouteDistance <= 2.8);
       const responding = item.route.id === responseRouteId;
+      const firstDestinationInvitation = Boolean(
+        item.route.id === "grave_memory_route"
+        && !frameState.act1RouteHistory?.graveEntered
+        && routeIdentityReady
+        && activeRoute
+        && publishedGate?.destinationMounted
+        && publishedGate?.playableReady !== false
+        && !gameplayPending
+      );
+      const invitationStrength = firstDestinationInvitation
+        ? THREE.MathUtils.clamp(this.routeIdentityReveal * this.reveal, 0, 1)
+        : 0;
       const baseOpacity = convergenceCompletedForReadability
         ? (activeRoute ? 0.055 : 0.025)
         : (activeRoute ? 0.2 : 0.13);
@@ -1441,18 +1453,31 @@ export class HubChamberFoundationSystem {
         const responseWave = responding
           ? (Math.sin(runtimeSeconds * 7.2 - segmentIndex * 0.65) + 1) * 0.5
           : 0;
+        // HC031P: the first awake destination uses only its existing anatomical
+        // corridor as a body-led invitation. The wave travels from Hub center toward
+        // Grave; no arrow, waypoint, gate authority, or automatic crossing is added.
+        const invitationWave = firstDestinationInvitation
+          ? (Math.sin(runtimeSeconds * 3.15 - segmentIndex * 0.82) + 1) * 0.5
+          : 0;
         const bodyOpacity = baseOpacity
           + (near ? 0.08 : 0)
           + (read ? 0.07 : 0)
-          + responseWave * 0.22;
-        segment.material.opacity = Math.min(0.62, bodyOpacity * this.reveal);
+          + responseWave * 0.22
+          + invitationWave * invitationStrength * 0.12;
+        segment.material.opacity = Math.min(0.68, bodyOpacity * this.reveal);
         segment.material.emissiveIntensity = convergenceCompletedForReadability
           ? (read ? 0.025 : 0.008)
           : responding
             ? 0.18 + responseWave * 0.34
-            : commitReady ? 0.24 : near ? 0.11 : read ? 0.08 : 0.025;
-        const swell = 1 + responseWave * 0.07;
+            : commitReady
+              ? 0.24
+              : firstDestinationInvitation
+                ? 0.08 + invitationWave * invitationStrength * 0.18
+                : near ? 0.11 : read ? 0.08 : 0.025;
+        const swell = 1 + responseWave * 0.07 + invitationWave * invitationStrength * 0.025;
         segment.scale.set(baseScale.x * swell, baseScale.y * swell, baseScale.z * swell);
+        segment.userData.firstDestinationInvitation = firstDestinationInvitation;
+        segment.userData.invitationDirection = firstDestinationInvitation ? "hub_center_to_grave" : "none";
       });
 
       if (item.territoryBackdrop?.material) {
@@ -1497,6 +1522,8 @@ export class HubChamberFoundationSystem {
         ? 1.04 + Math.sin(runtimeSeconds * 4.8) * 0.07
         : commitReady
           ? 1.05 + Math.sin(runtimeSeconds * 3.2) * 0.055
+        : firstDestinationInvitation
+          ? 1.025 + Math.sin(runtimeSeconds * 2.4) * 0.03 * invitationStrength
         : routeCrossable
           ? 1.02 + Math.sin(runtimeSeconds * 2.2) * 0.035
           : 1;
@@ -1517,6 +1544,10 @@ export class HubChamberFoundationSystem {
         presentationOwner: "HubChamberFoundationSystem",
         read,
         responding,
+        firstDestinationInvitation,
+        invitationDirection: firstDestinationInvitation ? "hub_center_to_grave" : "none",
+        deliberateCommitRequired: firstDestinationInvitation,
+        routeAuthority: false,
         routeIndex
       });
     });
@@ -2618,6 +2649,29 @@ export class HubChamberFoundationSystem {
       };
     });
 
+    const graveFirstDestination = routes.find((route) => route.id === "grave_memory_route") ?? null;
+    const firstDestinationInvitation = {
+      pass: "HC-031P",
+      active: Boolean(
+        active
+        && !graveHistory.graveEntered
+        && graveFirstDestination?.activeRoute
+        && graveFirstDestination?.destinationMounted
+        && graveFirstDestination?.playableReady
+        && !graveFirstDestination?.gameplayPending
+      ),
+      routeId: "grave_memory_route",
+      gateId: "hub_to_grave_memory_route",
+      displayName: graveFirstDestination?.displayName ?? "Grave Memory",
+      distanceToPlayer: graveFirstDestination?.distanceToPlayer ?? 0,
+      bodyCue: "existing_corridor_wave_from_hub_center_to_grave",
+      commitControl: "A / E",
+      deliberateCommitRequired: true,
+      automaticCrossing: false,
+      progressionAuthority: false,
+      transitionOwner: "LocalCellBoundaryMorphSystem"
+    };
+
     const combGate = this.frameState.firstSliceGates?.hub_to_comb_threshold ?? null;
     const combWorldPosition = this.combwardBodyRoot
       ? this.combwardBodyRoot.getWorldPosition(this.tempDirection).clone()
@@ -2728,6 +2782,7 @@ export class HubChamberFoundationSystem {
       routeContractsAwake: Boolean(graveHistory.graveReturned && routes.filter((route) => route.activeRoute).length === 3),
       siltPressurePlayable: siltPlayable,
       routes,
+      firstDestinationInvitation,
       thresholds,
       thresholdCount: thresholds.length,
       activeThresholdCount: thresholds.filter((threshold) => threshold.activeRoute).length,

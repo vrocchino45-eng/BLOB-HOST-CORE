@@ -1,0 +1,36 @@
+BLOB: HOST CORE — HC-031P DELTA MANIFEST
+=========================================
+Parent: HC-031O1 — Host Continuation Directional Read
+Build: HC-031P — First Host Destination Commitment
+Package: 0.31.35
+Telemetry: blob.session.telemetry.v1.38
+Mode: convergence / first destination commitment
+Deletions: none
+
+Changed / added files (12):
+- HC031P_BUILD_REPORT.md
+- HC031P_FOCUSED_PLAYTEST.md
+- HC031P_PATCH_APPLY.md
+- HC031P_DELTA_MANIFEST.txt
+- package.json
+- package-lock.json
+- public/data/build/hc031pFirstHostDestinationCommitmentContract.json
+- public/data/build/hc031pLockedHashes.json
+- scripts/validateHC031PFirstHostDestinationCommitment.mjs
+- src/core/SessionTelemetrySystem.js
+- src/hub/HubChamberFoundationSystem.js
+- src/main.js
+
+Gameplay-facing change:
+- Reuses existing Grave corridor/gate anatomy to carry a subtle center→Grave invitation while Grave is the first awake destination.
+- A/E remains the explicit destination commitment.
+- No automatic crossing, new route, waypoint, objective arrow, or geometry.
+
+Read-only telemetry additions:
+- hub.destination.available
+- hub.destination.committed
+- Hub→Grave transition.entered
+- Grave route.resolved on arrival
+- Grave→Hub transition.entered
+
+Locked neighboring gameplay owners: 19 (normalized-text SHA-256).

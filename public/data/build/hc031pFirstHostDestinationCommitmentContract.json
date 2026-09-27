@@ -1,0 +1,45 @@
+{
+  "pass": "HC-031P",
+  "label": "First Host Destination Commitment",
+  "parent": "HC-031O1",
+  "mode": "convergence_first_destination_commitment",
+  "purpose": "Carry the established Host language through the first Hub destination choice without changing route ownership: Grave is the one awake first destination, its existing anatomy invites approach, A/E deliberately commits, and LocalCellBoundaryMorphSystem remains the sole transition owner.",
+  "routeLaw": {
+    "source": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "destination": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "routeId": "grave_memory_route",
+    "gateId": "hub_to_grave_memory_route",
+    "presentationOwner": "HubChamberFoundationSystem",
+    "commitmentOwner": "HubInvestigationGameplaySystem",
+    "transitionOwner": "LocalCellBoundaryMorphSystem",
+    "commitControl": "A / E",
+    "automaticCrossing": false
+  },
+  "presentation": {
+    "addsGeometry": false,
+    "addsWaypoint": false,
+    "addsObjectiveArrow": false,
+    "existingCorridorWave": "hub_center_to_grave",
+    "activeUntil": "graveEntered"
+  },
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.38",
+    "events": [
+      "hub.destination.available",
+      "hub.destination.committed",
+      "transition.entered",
+      "route.resolved"
+    ],
+    "readOnly": true
+  },
+  "locked": {
+    "movement": true,
+    "attachment": true,
+    "verbs": true,
+    "targeting": true,
+    "hubCommitLogic": true,
+    "boundaryMorphLogic": true,
+    "graveGameplay": true,
+    "regionTopology": true
+  }
+}

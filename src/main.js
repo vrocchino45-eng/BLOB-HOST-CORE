@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031O1",
-  buildLabel: "Host Continuation Directional Read"
+  buildId: "HC-031P",
+  buildLabel: "First Host Destination Commitment"
 });
 
 runtime.start().catch((error) => {
