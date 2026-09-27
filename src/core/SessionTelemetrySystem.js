@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.38";
+    this.schemaVersion = "blob.session.telemetry.v1.39";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -101,6 +101,7 @@ export class SessionTelemetrySystem {
     this.lastHubDestinationAvailableRouteId = frameState.hubRouteCommit?.available
       ? (frameState.hubRouteCommit?.routeId ?? "none")
       : "none";
+    this.lastHubDestinationReadinessKey = "none";
     this.lastHubRouteCommitRequestEventId = frameState.hubRouteCommitRequest?.eventId ?? 0;
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
@@ -370,8 +371,45 @@ export class SessionTelemetrySystem {
 
   observeHubDestinationCommitment(frameState) {
     const commit = frameState.hubRouteCommit ?? {};
-    const invitation = frameState.hubChamberFoundation?.firstDestinationInvitation ?? {};
+    const foundation = frameState.hubChamberFoundation ?? {};
+    const invitation = foundation.firstDestinationInvitation ?? {};
     const availableRouteId = commit.available ? (commit.routeId ?? "none") : "none";
+    const inHub = frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001";
+    const selectionRadius = Number.isFinite(commit.selectionRadius) ? commit.selectionRadius : 2.1;
+    const invitationDistance = Number.isFinite(invitation.distanceToPlayer) ? invitation.distanceToPlayer : 0;
+    const readinessReason = commit.available
+      ? "ready_for_deliberate_commit"
+      : invitation.active
+        ? "outside_commit_radius"
+        : (invitation.blocker ?? "destination_not_available");
+    const readinessKey = inHub
+      ? `${invitation.active ? 1 : 0}|${commit.available ? 1 : 0}|${readinessReason}`
+      : "outside_hub";
+
+    if (inHub && readinessKey !== this.lastHubDestinationReadinessKey) {
+      this.record("hub.destination.readiness_changed", "analysis", {
+        percept: {
+          route: this.aliasSemantic(invitation.routeId ?? "grave_memory_route"),
+          status: readinessReason,
+          control: invitation.commitControl ?? commit.control ?? "A / E"
+        },
+        developer: {
+          routeId: invitation.routeId ?? "grave_memory_route",
+          gateId: invitation.gateId ?? commit.gateId ?? "hub_to_grave_memory_route",
+          invitationActive: Boolean(invitation.active),
+          commitAvailable: Boolean(commit.available),
+          invitationBlocker: invitation.blocker ?? "none",
+          distance: round(invitationDistance),
+          selectionRadius: round(selectionRadius),
+          destinationPrepared: Boolean(frameState.transitionContinuity?.hubToGraveReady),
+          foundationCompleted: Boolean(foundation.completed),
+          wholeHubScreenTruthVerified: Boolean(invitation.wholeHubScreenTruthVerified),
+          screenTruthRequiredForCommit: false,
+          gameplayAuthority: false
+        }
+      });
+    }
+    this.lastHubDestinationReadinessKey = readinessKey;
 
     if (availableRouteId !== this.lastHubDestinationAvailableRouteId) {
       if (availableRouteId !== "none") {
@@ -2595,6 +2633,7 @@ export class SessionTelemetrySystem {
       transitionEntries: count("transition.entered"),
       hubDestinationAvailabilityEvents: count("hub.destination.available"),
       hubDestinationCommitEvents: count("hub.destination.committed"),
+      hubDestinationReadinessEvents: count("hub.destination.readiness_changed"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),

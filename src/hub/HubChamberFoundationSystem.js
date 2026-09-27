@@ -2650,21 +2650,45 @@ export class HubChamberFoundationSystem {
     });
 
     const graveFirstDestination = routes.find((route) => route.id === "grave_memory_route") ?? null;
+    const firstDestinationBodyRevealed = Boolean(
+      active
+      && routeIdentityReady
+      && this.reveal >= 0.58
+      && this.routeIdentityReveal >= 0.58
+    );
+    const firstDestinationInvitationActive = Boolean(
+      firstDestinationBodyRevealed
+      && !graveHistory.graveEntered
+      && graveFirstDestination?.activeRoute
+      && graveFirstDestination?.destinationMounted
+      && graveFirstDestination?.playableReady
+      && !graveFirstDestination?.gameplayPending
+    );
+    const firstDestinationBlocker = !active
+      ? "hub_inactive"
+      : graveHistory.graveEntered
+        ? "grave_already_entered"
+        : !firstDestinationBodyRevealed
+          ? "route_body_revealing"
+          : !graveFirstDestination?.activeRoute
+            ? "grave_route_not_awake"
+            : !graveFirstDestination?.destinationMounted
+              ? "grave_destination_preparing"
+              : graveFirstDestination?.playableReady === false || graveFirstDestination?.gameplayPending
+                ? "grave_destination_not_playable"
+                : "none";
     const firstDestinationInvitation = {
-      pass: "HC-031P",
-      active: Boolean(
-        active
-        && !graveHistory.graveEntered
-        && graveFirstDestination?.activeRoute
-        && graveFirstDestination?.destinationMounted
-        && graveFirstDestination?.playableReady
-        && !graveFirstDestination?.gameplayPending
-      ),
+      pass: "HC-031P1",
+      active: firstDestinationInvitationActive,
+      blocker: firstDestinationBlocker,
       routeId: "grave_memory_route",
       gateId: "hub_to_grave_memory_route",
       displayName: graveFirstDestination?.displayName ?? "Grave Memory",
       distanceToPlayer: graveFirstDestination?.distanceToPlayer ?? 0,
       bodyCue: "existing_corridor_wave_from_hub_center_to_grave",
+      bodyRevealProgress: Math.min(this.reveal, this.routeIdentityReveal),
+      wholeHubScreenTruthVerified: Boolean(this.spatialTruth.verified),
+      screenTruthRequiredForCommit: false,
       commitControl: "A / E",
       deliberateCommitRequired: true,
       automaticCrossing: false,

@@ -1,0 +1,56 @@
+{
+  "pass": "HC-031P1",
+  "label": "First Destination Commitment Unblock",
+  "parent": "HC-031P",
+  "mode": "hotfix_first_destination_commitment_ownership",
+  "purpose": "Repair the first Hub\u2192Grave commitment so an authored destination body plus prepared destination can offer deliberate A/E commitment without requiring the stricter whole-Hub screen-composition validator to pass. Preserve all later route laws and LocalCellBoundaryMorphSystem crossing ownership.",
+  "telemetryFinding": {
+    "sourceBuild": "HC-031P",
+    "observedHubCell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "hubDestinationAvailabilityEvents": 0,
+    "hubDestinationCommitEvents": 0,
+    "deliberateCommitments": 0,
+    "reservedCommitPresses": 44,
+    "diagnosis": "first destination opportunity remained withheld behind foundation.completed / screen-truth presentation validation"
+  },
+  "firstDestinationLaw": {
+    "source": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "destination": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "routeId": "grave_memory_route",
+    "gateId": "hub_to_grave_memory_route",
+    "destinationMustBePrepared": true,
+    "bodyMustBeRevealed": true,
+    "wholeHubScreenTruthRequiredForCommit": false,
+    "commitControl": "A / E",
+    "automaticCrossing": false,
+    "transitionOwner": "LocalCellBoundaryMorphSystem"
+  },
+  "ownership": {
+    "presentation": "HubChamberFoundationSystem",
+    "deliberateCommitment": "HubInvestigationGameplaySystem",
+    "boundaryReadinessAndCrossing": "LocalCellBoundaryMorphSystem",
+    "telemetry": "SessionTelemetrySystem"
+  },
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.39",
+    "events": [
+      "hub.destination.readiness_changed",
+      "hub.destination.available",
+      "hub.destination.committed",
+      "transition.entered",
+      "route.resolved"
+    ],
+    "readOnly": true
+  },
+  "locked": {
+    "movement": true,
+    "attachment": true,
+    "verbs": true,
+    "targeting": true,
+    "graveGameplay": true,
+    "surfaceWake": true,
+    "guideThreshold": true,
+    "laterHubRouteOrdering": true,
+    "automaticCrossing": false
+  }
+}

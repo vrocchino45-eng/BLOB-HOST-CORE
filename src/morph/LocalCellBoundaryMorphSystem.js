@@ -854,6 +854,14 @@ export class LocalCellBoundaryMorphSystem {
 
   hubEntryReadiness(recipe, frameState, { requireGraveReturn, preparationFlag }) {
     const foundation = frameState.hubChamberFoundation ?? {};
+    const firstGraveEntry = Boolean(
+      recipe.id === "hub_to_grave"
+      && !frameState.act1RouteHistory?.graveEntered
+    );
+    const firstDestinationInvitation = foundation.firstDestinationInvitation ?? {};
+    const foundationReady = firstGraveEntry
+      ? firstDestinationInvitation.active === true
+      : foundation.completed === true;
     const routeBody = [
       ...(foundation.routes ?? []),
       ...(foundation.thresholds ?? [])
@@ -876,7 +884,7 @@ export class LocalCellBoundaryMorphSystem {
 
     return {
       ready: Boolean(
-        foundation.completed &&
+        foundationReady &&
         prerequisites &&
         destinationPrepared &&
         distance <= recipe.interactionRange
@@ -887,6 +895,10 @@ export class LocalCellBoundaryMorphSystem {
       graveReturned,
       graveObjectiveComplete,
       hubReadComplete,
+      firstGraveEntry,
+      foundationReady,
+      firstDestinationInvitationActive: Boolean(firstDestinationInvitation.active),
+      screenTruthOwnsFirstDestinationPermission: false,
       targetPosition: routeBody?.position
         ? { x: routeBody.position[0] ?? 0, y: routeBody.position[1] ?? 0, z: routeBody.position[2] ?? 0 }
         : null
@@ -1494,6 +1506,13 @@ export class LocalCellBoundaryMorphSystem {
 
   compatibilityAwake(recipe, frameState, readiness) {
     if (recipe.id === "hub_to_grave") {
+      const firstGraveEntry = !frameState.act1RouteHistory?.graveEntered;
+      if (firstGraveEntry) {
+        return Boolean(
+          frameState.activeCellId === recipe.sourceCellId
+          && readiness.destinationPrepared
+        );
+      }
       return Boolean(frameState.hubChamberFoundation?.completed);
     }
     if (recipe.id === "hub_to_vascular" || recipe.id === "hub_to_silt") {

@@ -1,0 +1,31 @@
+BLOB: HOST CORE — HC031P1 First Destination Commitment Unblock
+Required parent: HC031P — First Host Destination Commitment
+Mode: narrow hotfix / convergence repair
+Deletes: none
+
+Files in this delta:
+HC031P1_BUILD_REPORT.md
+HC031P1_FOCUSED_PLAYTEST.md
+HC031P1_PATCH_APPLY.md
+HC031P1_DELTA_MANIFEST.txt
+package.json
+package-lock.json
+public/data/build/hc031p1FirstDestinationCommitmentUnblockContract.json
+public/data/build/hc031p1LockedHashes.json
+scripts/validateHC031P1FirstDestinationCommitmentUnblock.mjs
+src/main.js
+src/core/SessionTelemetrySystem.js
+src/hub/HubChamberFoundationSystem.js
+src/hub/HubInvestigationGameplaySystem.js
+src/morph/LocalCellBoundaryMorphSystem.js
+
+Intentional gameplay-owner changes:
+- HubChamberFoundationSystem: first Grave body invitation publishes blocker/readiness without whole-Hub screen truth owning permission.
+- HubInvestigationGameplaySystem: first Grave A/E candidate may exist before foundation.completed when the authored invitation is active.
+- LocalCellBoundaryMorphSystem: first Grave gate wakes from active Hub + prepared destination and crosses from body invitation + distance; later routes retain old foundation completion law.
+
+Read-only telemetry change:
+- schema v1.39
+- hub.destination.readiness_changed
+
+Locked unchanged neighbors: 17 gameplay owners.

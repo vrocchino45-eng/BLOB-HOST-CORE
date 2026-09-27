@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.35",
+  "version": "0.31.36",
   "private": true,
-  "description": "BLOB: HOST CORE \u2014 HC-031P First Host Destination Commitment",
+  "description": "BLOB: HOST CORE \u2014 HC-031P1 First Destination Commitment Unblock",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031p && npm run validate:hc031p-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031p1 && npm run validate:hc031p1-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031p": "node scripts/validateHC031PFirstHostDestinationCommitment.mjs",
     "validate:hc031p-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
@@ -272,7 +272,9 @@
     "validate:hc031o": "node scripts/validateHC031OHostContinuation.mjs",
     "validate:hc031o-syntax": "node --check src/opening/SurfaceWakeGameplaySystem.js && node --check src/opening/SurfaceWakeLayeredInteractionSystem.js && node --check src/opening/OpeningPacingSystem.js && node --check src/morph/LocalCellMorphSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031o1": "node scripts/validateHC031O1HostContinuationDirectionalRead.mjs",
-    "validate:hc031o1-syntax": "node --check src/ecology/EntitySystem.js && node --check src/opening/SurfaceWakeLayeredInteractionSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
+    "validate:hc031o1-syntax": "node --check src/ecology/EntitySystem.js && node --check src/opening/SurfaceWakeLayeredInteractionSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
+    "validate:hc031p1": "node scripts/validateHC031P1FirstDestinationCommitmentUnblock.mjs",
+    "validate:hc031p1-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/hub/HubInvestigationGameplaySystem.js && node --check src/morph/LocalCellBoundaryMorphSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
   },
   "dependencies": {
     "three": "^0.179.1",

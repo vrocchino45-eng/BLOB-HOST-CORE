@@ -147,7 +147,16 @@ export class HubInvestigationGameplaySystem {
 
   updateCommitCandidate(frameState) {
     const foundation = frameState.hubChamberFoundation ?? {};
-    if (!foundation.completed) {
+    const firstDestinationInvitation = foundation.firstDestinationInvitation ?? {};
+    const firstDestinationWindow = Boolean(
+      firstDestinationInvitation.active
+      && !frameState.act1RouteHistory?.graveEntered
+    );
+
+    // HC031P1: the first Grave commitment no longer waits on the stricter whole-Hub
+    // screen-composition validator. That validator remains presentation truth only.
+    // Later Hub destinations keep the established foundation.completed requirement.
+    if (!foundation.completed && !firstDestinationWindow) {
       this.commitCandidate = null;
       return;
     }

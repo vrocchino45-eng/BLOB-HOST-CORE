@@ -1,9 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031O1 keeps the HC031O route law unchanged and repairs its directional presentation.
-// The existing Watcher now physically turns toward the already-authored Listening Fold,
-// while that Fold briefly emphasizes itself using existing meshes only. No route authority,
-// movement rule, target rule, verb meaning, gate, or new geometry is added.
+// HC031P1 repairs first-Hub destination commitment ownership.
+// The authored Grave destination may become commit-ready once its body is revealed and
+// its destination is prepared. The stricter all-routes-on-screen Hub presentation proof
+// remains a visual validator and no longer owns permission to make the first A/E commit.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031P",
-  buildLabel: "First Host Destination Commitment"
+  buildId: "HC-031P1",
+  buildLabel: "First Destination Commitment Unblock"
 });
 
 runtime.start().catch((error) => {
