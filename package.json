@@ -1,6 +1,6 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.38",
+  "version": "0.31.39",
   "private": true,
   "description": "BLOB: HOST CORE \u2014 HC-031Q Return Consequence Canonicalization",
   "type": "module",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031q && npm run validate:hc031q-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031r && npm run validate:hc031r-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031p": "node scripts/validateHC031PFirstHostDestinationCommitment.mjs",
     "validate:hc031p-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
@@ -278,7 +278,9 @@
     "validate:hc031p1-hf1": "node scripts/validateHC031P1HF1DestinationCommitLatch.mjs",
     "validate:hc031p1-hf1-syntax": "node --check src/hub/HubInvestigationGameplaySystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031q": "node scripts/validateHC031QReturnConsequenceCanonicalization.mjs",
-    "validate:hc031q-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
+    "validate:hc031q-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
+    "validate:hc031r": "node scripts/validateHC031RVascularRelationshipCurrentization.mjs",
+    "validate:hc031r-syntax": "node --check src/routes/VascularRhythmRouteSystem.js && node --check src/systems/ObjectiveSystem.js && node --check src/ui/PlaytestHudSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
   },
   "dependencies": {
     "three": "^0.179.1",

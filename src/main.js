@@ -1,8 +1,10 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031P1-HF1 latches a deliberate Hub destination choice until the boundary morph
-// completes or cancels. One A/E choice creates one route-commit request; repeated presses
-// during the living-tissue handoff cannot create duplicate commitment events.
+// HC031R currentizes Vascular without rebuilding it. Stabilize establishes a
+// relationship with the living current at each authored valve; Pulse projects
+// through that held relationship. Rhythm alignment remains expressive/qualitative
+// rather than a hidden input-timing gate. Existing movement, return, Hub memory,
+// and crossing owners remain unchanged.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +14,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031Q",
-  buildLabel: "Return Consequence Canonicalization"
+  buildId: "HC-031R",
+  buildLabel: "Vascular Relationship Currentization"
 });
 
 runtime.start().catch((error) => {

@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.40";
+    this.schemaVersion = "blob.session.telemetry.v1.41";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -104,6 +104,8 @@ export class SessionTelemetrySystem {
     this.lastHubDestinationReadinessKey = "none";
     this.lastHubRouteCommitRequestEventId = frameState.hubRouteCommitRequest?.eventId ?? 0;
     this.lastHubReturnRecompositionKey = "none";
+    this.lastVascularRelationshipReadSequence = frameState.vascularRhythmRoute?.relationshipReadSequence ?? 0;
+    this.lastVascularCurrentizedComplete = Boolean(frameState.vascularRhythmRoute?.completed);
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -173,6 +175,7 @@ export class SessionTelemetrySystem {
     this.observeCell(frameState);
     this.observeHostContinuation(frameState);
     this.observeRouteResolution(frameState);
+    this.observeVascularCurrentization(frameState);
     this.observeHubDestinationCommitment(frameState);
     this.observeHubReturnRecomposition(frameState);
     this.observeTarget(frameState);
@@ -369,6 +372,68 @@ export class SessionTelemetrySystem {
       this.lastRouteResolved[key] = resolved;
       this.lastTransitionAvailable[key] = available;
     }
+  }
+
+  observeVascularCurrentization(frameState) {
+    const route = frameState.vascularRhythmRoute ?? {};
+    const sequence = Number.isFinite(route.relationshipReadSequence)
+      ? route.relationshipReadSequence
+      : 0;
+    if (sequence > this.lastVascularRelationshipReadSequence) {
+      this.record("vascular.relationship_read", "perceptual", {
+        percept: {
+          readCount: route.relationshipReads ?? route.lockedCadenceReads ?? 0,
+          requiredReads: route.requiredRelationshipReads ?? route.requiredCadenceReads ?? 3,
+          relationship: "environmental_current",
+          action: "stabilize_then_pulse",
+          beatAligned: Boolean(route.lastRelationshipReadBeatAligned),
+          readQuality: round(route.lastRelationshipReadQuality ?? 0)
+        },
+        developer: {
+          sequence,
+          runtimeCellId: route.runtimeCellId ?? "CELL_VASCULAR_RHYTHM_ROUTE_001",
+          chord: route.lastRelationshipReadChord ?? "cohere_project",
+          activeValveDistance: round(route.activeValveDistance ?? 0),
+          maxDepthProgress: round(route.maxDepthProgress ?? 0),
+          synchronization: round(route.synchronization ?? 0),
+          circulationIntegrity: round(route.circulationIntegrity ?? 0),
+          turbulence: round(route.turbulence ?? 0),
+          legacyCadenceWindowProgressionAuthority: false,
+          inputTimingGate: false,
+          gameplayAuthority: false
+        }
+      });
+      this.noteInformationGain("vascular_relationship_read", 0.8, {
+        readCount: route.relationshipReads ?? route.lockedCadenceReads ?? 0,
+        beatAligned: Boolean(route.lastRelationshipReadBeatAligned)
+      });
+    }
+    this.lastVascularRelationshipReadSequence = Math.max(
+      this.lastVascularRelationshipReadSequence,
+      sequence
+    );
+
+    const completed = Boolean(route.completed);
+    if (completed && !this.lastVascularCurrentizedComplete) {
+      this.record("vascular.relationship_route.completed", "perceptual", {
+        percept: {
+          relationshipReads: route.relationshipReads ?? route.lockedCadenceReads ?? 0,
+          releaseState: route.stage ?? "return_current",
+          retainedMeaning: "rhythm_current"
+        },
+        developer: {
+          runtimeCellId: route.runtimeCellId ?? "CELL_VASCULAR_RHYTHM_ROUTE_001",
+          synchronization: round(route.synchronization ?? 0),
+          circulationIntegrity: round(route.circulationIntegrity ?? 0),
+          turbulence: round(route.turbulence ?? 0),
+          currentReversedTowardHub: Boolean(route.currentReversedTowardHub),
+          progressionOwner: "VascularRhythmRouteSystem",
+          crossingOwner: "LocalCellBoundaryMorphSystem",
+          legacyCadenceWindowProgressionAuthority: false
+        }
+      });
+    }
+    this.lastVascularCurrentizedComplete = completed;
   }
 
   observeHubDestinationCommitment(frameState) {
@@ -2705,6 +2770,8 @@ export class SessionTelemetrySystem {
       hubDestinationCommitEvents: count("hub.destination.committed"),
       hubDestinationReadinessEvents: count("hub.destination.readiness_changed"),
       hubReturnRecompositionChanges: count("hub.return_recomposition.changed"),
+      vascularRelationshipReads: count("vascular.relationship_read"),
+      vascularRelationshipRouteCompletions: count("vascular.relationship_route.completed"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),

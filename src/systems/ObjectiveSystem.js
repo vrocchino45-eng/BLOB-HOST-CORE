@@ -252,16 +252,18 @@ export class ObjectiveSystem {
   vascularRhythmState(frameState) {
     const route = frameState.vascularRhythmRoute ?? {};
     const inRoute = frameState.activeCellId === "CELL_VASCULAR_RHYTHM_ROUTE_001";
-    const requiredReads = route.requiredCadenceReads ?? 3;
+    const requiredReads = route.requiredRelationshipReads ?? route.requiredCadenceReads ?? 3;
     const currentEntered = Boolean(route.active || route.completed);
-    const cadenceRead = (route.lockedCadenceReads ?? 0) >= requiredReads;
+    // HC031R: route-local cadence counters remain as a compatibility alias, but
+    // the canonical completion meaning is three Stabilize→Pulse current-relationship reads.
+    const relationshipRead = (route.relationshipReads ?? route.lockedCadenceReads ?? 0) >= requiredReads;
     const deepValveReached = (route.maxDepthProgress ?? 0) >= 0.78;
     const contractionStabilized = (route.stabilizeSeconds ?? 0) >= 0.8;
     const synchronized = Boolean(route.synchronizationComplete || route.completed);
     const returnCurrentFormed = Boolean(route.returnFoldReady && route.currentReversedTowardHub);
     const complete = Boolean(
       route.completed
-      && cadenceRead
+      && relationshipRead
       && deepValveReached
       && contractionStabilized
       && synchronized
@@ -280,13 +282,14 @@ export class ObjectiveSystem {
       complete,
       stepState: {
         living_current_entered: currentEntered,
-        three_cadence_windows_pulse_read: cadenceRead,
+        three_current_relationship_reads: relationshipRead,
+        three_cadence_windows_pulse_read: relationshipRead,
         deep_valve_reached: deepValveReached,
         contraction_pressure_stabilized: contractionStabilized,
         circulation_synchronized: synchronized,
         return_current_formed: returnCurrentFormed
       },
-      completionSource: "VascularRhythmRouteSystem observed by ObjectiveSystem",
+      completionSource: "HC031R Vascular relationship reads observed from VascularRhythmRouteSystem by ObjectiveSystem",
       blocker: complete
         ? "none_detected"
         : !inRoute

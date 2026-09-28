@@ -1,7 +1,7 @@
 {
   "id": "VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1",
   "pass": "HC-011A1",
-  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip + HC031 current physical-language locks",
   "referenceContract": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC010G",
   "referencePlayableBuild": "HC-011A",
   "routeId": "vascular_route",
@@ -14,7 +14,7 @@
   "movementBoundaryOwner": "PlayerMovementController",
   "crossingOwner": "GateSystem",
   "objectiveOwner": "ObjectiveSystem",
-  "premise": "Move with a visible circulation charge, read its cadence with Pulse, and use Stabilize to keep or recover coherence while the vessel contracts.",
+  "premise": "Move with the visible circulation current, hold Stabilize to establish a relationship with each living valve, then Pulse through that held current. Rhythm alignment strengthens the read but never gates permission.",
   "anatomy": {
     "pathPoints": [
       [
@@ -105,7 +105,10 @@
     "cleanRunMayCompleteWithoutFailure": true,
     "failureMustRemainRecoverable": true,
     "lockedCadenceReadsIrreversible": true,
-    "postReadPulseCanDesynchronize": false
+    "postReadPulseCanDesynchronize": false,
+    "relationshipReadsAreCanonical": true,
+    "cadenceWindowIsProgressionGate": false,
+    "legacyLockedCadenceReadsCompatibilityAlias": true
   },
   "returnFold": {
     "position": [
@@ -163,5 +166,22 @@
     "tuningOwner": "VascularRhythmRouteSystem",
     "restoresPriorBoundaryOnExit": true,
     "purpose": "Keep the Core at locked scale while allowing the authored ~24-unit vascular current to remain continuously traversable."
-  }
+  },
+  "currentization": {
+    "pass": "HC-031R",
+    "relationshipSource": "environmental_current",
+    "minimumRelationshipHoldSeconds": 0.18,
+    "relationshipReleaseRate": 3.6,
+    "valveRelationshipRange": 1.9,
+    "unalignedReadQuality": 0.72,
+    "stabilizeEstablishesRelationship": true,
+    "pulseProjectsThroughRelationship": true,
+    "absorbRemainsNonGatingDrawWake": true,
+    "beatAlignmentAffectsQualityOnly": true,
+    "inputTimingGate": false,
+    "legacyCadenceWindowProgressionAuthority": false,
+    "aimChoosesTargetForTargetableNouns": true,
+    "environmentalCurrentMayBeRelatedWithoutNounTarget": true
+  },
+  "currentizationPass": "HC-031R"
 }

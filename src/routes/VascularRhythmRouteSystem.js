@@ -86,6 +86,23 @@ export class VascularRhythmRouteSystem {
     this.stabilizationInRange = false;
     this.stabilizationRange = 0;
     this.postReadPulseIgnoredCount = 0;
+
+    // HC031R — Vascular Currentization. Cadence remains visible rhythm, but it no
+    // longer acts as a hidden input-timing gate. Stabilize establishes a temporary
+    // relationship with the living current at the next authored valve; Pulse then
+    // projects through that held relationship. Beat alignment changes read quality
+    // and synchronization gain only. The legacy lockedCadenceReads field is kept as
+    // a compatibility alias for existing objective/save/history consumers.
+    this.currentRelationshipHeld = false;
+    this.currentRelationshipReady = false;
+    this.currentRelationshipSeconds = 0;
+    this.activeValveDistance = Number.POSITIVE_INFINITY;
+    this.relationshipReadSequence = 0;
+    this.lastRelationshipReadBeatAligned = false;
+    this.lastRelationshipReadQuality = 0;
+    this.lastRelationshipReadChord = "idle";
+    this.unboundPulseCount = 0;
+
     this.completed = false;
     this.returnFoldReady = false;
     this.lastPulseEventId = 0;
@@ -645,15 +662,17 @@ export class VascularRhythmRouteSystem {
   updateCadence(dt, frameState, sample) {
     const cadence = this.recipe.cadence ?? {};
     const stabilization = this.recipe.stabilization ?? {};
+    const currentization = this.recipe.currentization ?? {};
     const input = frameState.input ?? {};
+    const composition = frameState.verbComposition ?? {};
     const requiredReads = cadence.requiredReads ?? 3;
     const readsComplete = this.lockedCadenceReads >= requiredReads;
     const valveProgress = this.recipe.anatomy?.valveProgress ?? [0.28, 0.55, 0.82];
     const corridorRadius = this.recipe.anatomy?.corridorRadius ?? 1.18;
-    // Preserve the last published window for one simulation step. Input is
-    // sampled before this updater advances the beat, so a Pulse shown as valid
-    // on the preceding rendered frame must not become a false miss at the
-    // closing edge solely because one fixed step elapsed.
+
+    // Cadence is still a world rhythm and visual language. HC031R removes its
+    // authority as a pass/fail input window: alignment may strengthen a valid
+    // relationship read, but never decides whether that read is accepted.
     const previousPulseWindowOpen = this.pulseWindowOpen();
 
     if (this.completed) {
@@ -676,6 +695,12 @@ export class VascularRhythmRouteSystem {
     this.tempPoint.copy(this.pathCurve.getPointAt(THREE.MathUtils.clamp(this.chargeProgress, 0, 1)));
     this.chargeWorldPosition.copy(this.entryAnchor).add(this.tempPoint);
     this.chargeDistance = this.playerRoot.position.distanceTo(this.chargeWorldPosition);
+
+    const activeValveProgress = valveProgress[Math.min(this.lockedCadenceReads, valveProgress.length - 1)] ?? 0.82;
+    this.tempPointB.copy(this.pathCurve.getPointAt(THREE.MathUtils.clamp(activeValveProgress, 0, 1)));
+    this.tempPointB.add(this.entryAnchor);
+    this.activeValveDistance = this.playerRoot.position.distanceTo(this.tempPointB);
+
     const contractionWave = (Math.sin(
       (this.elapsed * (cadence.contractionFrequency ?? 1.45) + this.pathProgress * 1.4) * Math.PI * 2
     ) + 1) * 0.5;
@@ -712,6 +737,29 @@ export class VascularRhythmRouteSystem {
     this.stabilizationInRange = sample.distance <= this.stabilizationRange;
     const stabilizing = Boolean(input.stabilizeHeld && this.stabilizationInRange);
     this.stabilizing = stabilizing;
+
+    const approachReady = this.pathProgress >= activeValveProgress
+      - (cadence.minimumValveApproachSlack ?? 0.19);
+    const valveRelationshipRange = currentization.valveRelationshipRange ?? 1.9;
+    const valveSpatiallyReady = Boolean(
+      !readsComplete
+      && withinCurrent
+      && approachReady
+      && this.activeValveDistance <= valveRelationshipRange
+    );
+    this.currentRelationshipHeld = Boolean(stabilizing && valveSpatiallyReady && !this.completed);
+    if (this.currentRelationshipHeld) {
+      this.currentRelationshipSeconds += dt;
+    } else {
+      const releaseRate = currentization.relationshipReleaseRate ?? 3.6;
+      this.currentRelationshipSeconds = Math.max(0, this.currentRelationshipSeconds - dt * releaseRate);
+    }
+    const minimumRelationshipHoldSeconds = currentization.minimumRelationshipHoldSeconds ?? 0.18;
+    this.currentRelationshipReady = Boolean(
+      this.currentRelationshipHeld
+      && this.currentRelationshipSeconds >= minimumRelationshipHoldSeconds
+    );
+
     if (stabilizing && !this.completed) {
       this.stabilizeSeconds += dt;
       if (readsComplete) {
@@ -739,6 +787,9 @@ export class VascularRhythmRouteSystem {
         this.recoverySeconds += dt;
         this.lastInteraction = "stabilize_reweaving_scattered_circulation";
         this.warning = "recoverable_desynchronization_settling";
+      } else if (this.currentRelationshipReady && !readsComplete) {
+        this.lastInteraction = "stabilize_established_living_current_relationship";
+        this.warning = "pulse_through_held_current_relationship";
       } else if (this.contractionIntensity > 0.38) {
         this.synchronization += dt
           * (stabilization.synchronizationPerSecondDuringContraction ?? 0.055)
@@ -753,38 +804,41 @@ export class VascularRhythmRouteSystem {
     if (freshPulse) {
       this.lastPulseEventId = pulseEventId;
       this.pulseFlashAge = 0;
-      if (
-        !this.completed
-        && this.lockedCadenceReads < requiredReads
-        && (this.pulseWindowOpen() || previousPulseWindowOpen)
-      ) {
-        const activeValveProgress = valveProgress[this.lockedCadenceReads] ?? 0.82;
-        const approachReady = this.pathProgress >= activeValveProgress
-          - (cadence.minimumValveApproachSlack ?? 0.19);
-        const pulseRangeReady = this.chargeDistance <= (cadence.pulseRange ?? 1.3);
-        if (approachReady && pulseRangeReady && withinCurrent) {
-          this.lockedCadenceReads += 1;
-          // Valve progress is authored on the Catmull-Rom vessel curve while
-          // samplePlayerPath measures the nearest piecewise control segment.
-          // Retain the authored valve depth when its cadence is successfully
-          // read so the same physical landmark cannot disagree with the deep
-          // completion requirement.
-          this.maxDepthProgress = Math.max(this.maxDepthProgress, activeValveProgress);
-          this.synchronization += cadence.onBeatSynchronizationGain ?? 0.22;
-          this.circulationIntegrity += cadence.onBeatIntegrityGain ?? 0.08;
-          this.turbulence = Math.max(0, this.turbulence - 0.08);
-          this.beatElapsed = 0;
-          this.lastInteraction = `cadence_${this.lockedCadenceReads}_recognized_by_pulse`;
-          this.warning = "none";
-        } else {
-          this.registerDesynchronization(cadence, "pulse_missed_moving_charge");
-        }
+      if (!this.completed && this.lockedCadenceReads < requiredReads && this.currentRelationshipReady) {
+        const beatAligned = Boolean(this.pulseWindowOpen() || previousPulseWindowOpen);
+        const readQuality = beatAligned
+          ? 1
+          : (currentization.unalignedReadQuality ?? 0.72);
+        this.lockedCadenceReads += 1;
+        this.relationshipReadSequence += 1;
+        this.lastRelationshipReadBeatAligned = beatAligned;
+        this.lastRelationshipReadQuality = THREE.MathUtils.clamp(readQuality, 0, 1);
+        this.lastRelationshipReadChord = composition.chord ?? "cohere_project";
+        this.maxDepthProgress = Math.max(this.maxDepthProgress, activeValveProgress);
+        const gainScale = 0.78 + this.lastRelationshipReadQuality * 0.22;
+        this.synchronization += (cadence.onBeatSynchronizationGain ?? 0.22) * gainScale;
+        this.circulationIntegrity += (cadence.onBeatIntegrityGain ?? 0.08) * gainScale;
+        this.turbulence = Math.max(0, this.turbulence - (0.06 + 0.02 * this.lastRelationshipReadQuality));
+        this.beatElapsed = 0;
+        this.currentRelationshipSeconds = 0;
+        this.currentRelationshipReady = false;
+        this.lastInteraction = `current_relationship_${this.lockedCadenceReads}_projected_through_valve`;
+        this.warning = "none";
       } else if (!this.completed && this.lockedCadenceReads < requiredReads) {
-        this.registerDesynchronization(cadence, "pulse_outside_living_cadence");
+        this.unboundPulseCount += 1;
+        this.lastRelationshipReadChord = composition.chord ?? "project";
+        this.lastInteraction = !withinCurrent
+          ? "pulse_dispersed_outside_living_current"
+          : !approachReady || this.activeValveDistance > valveRelationshipRange
+            ? "pulse_answered_before_next_valve_relationship"
+            : !stabilizing
+              ? "pulse_without_stabilized_current_relationship"
+              : "current_relationship_not_yet_settled";
+        this.warning = "stabilize_current_then_pulse_through_next_valve";
       } else if (!this.completed) {
         this.postReadPulseIgnoredCount += 1;
-        this.lastInteraction = "three_locked_cadence_reads_retained_extra_pulse_harmless";
-        if (!this.desynchronized) this.warning = "three_cadence_reads_locked_hold_stabilize_to_settle";
+        this.lastInteraction = "three_relationship_reads_retained_extra_pulse_harmless";
+        if (!this.desynchronized) this.warning = "three_current_reads_locked_hold_stabilize_to_settle";
       } else {
         this.lastInteraction = "pulse_echoed_through_synchronized_return_current";
       }
@@ -793,10 +847,22 @@ export class VascularRhythmRouteSystem {
     this.synchronization = THREE.MathUtils.clamp(this.synchronization, 0, 1);
     this.circulationIntegrity = THREE.MathUtils.clamp(this.circulationIntegrity, 0, 1);
     this.turbulence = THREE.MathUtils.clamp(this.turbulence, 0, 1);
-    this.desynchronized = Boolean(
+
+    const wasDesynchronized = this.desynchronized;
+    const nextDesynchronized = Boolean(
       this.turbulence >= (stabilization.desynchronizationTurbulenceThreshold ?? 0.34)
       || this.circulationIntegrity <= (stabilization.desynchronizationIntegrityThreshold ?? 0.8)
     );
+    if (nextDesynchronized && !wasDesynchronized) {
+      this.riskEventCount += 1;
+      this.desynchronizationRecovered = false;
+      if (!freshPulse || this.currentRelationshipReady) {
+        this.lastInteraction = "living_current_relationship_scattered_by_flow";
+      }
+      this.warning = "recoverable_desynchronization_hold_stabilize_in_current";
+    }
+    this.desynchronized = nextDesynchronized;
+
     if (
       this.riskEventCount > 0
       && this.turbulence <= (stabilization.recoveryTurbulenceThreshold ?? 0.13)
@@ -820,7 +886,9 @@ export class VascularRhythmRouteSystem {
       this.completed = true;
       this.returnFoldReady = true;
       this.returnElapsed = 0;
-      this.lastInteraction = "circulation_synchronized_current_reversed_toward_hub";
+      this.currentRelationshipHeld = false;
+      this.currentRelationshipReady = false;
+      this.lastInteraction = "circulation_synchronized_relationship_reversed_toward_hub";
       this.warning = "none";
     }
   }
@@ -1263,13 +1331,12 @@ export class VascularRhythmRouteSystem {
     const requiredReads = this.recipe.cadence?.requiredReads ?? 3;
     const readsComplete = this.lockedCadenceReads >= requiredReads;
     if (readsComplete && (this.desynchronized || this.warning.includes("desynchronization"))) {
-      return "recover_locked_cadences";
+      return "recover_retained_current_relationships";
     }
-    if (readsComplete) return "settle_locked_cadences";
+    if (readsComplete) return "settle_retained_current_relationships";
     if (this.desynchronized || this.warning.includes("desynchronization")) return "recover_desynchronization";
-    if (this.pulseWindowOpen() && this.chargeDistance <= (this.recipe.cadence?.pulseRange ?? 1.3) * 1.35) {
-      return "read_living_cadence";
-    }
+    if (this.currentRelationshipReady) return "project_through_stabilized_current";
+    if (this.currentRelationshipHeld) return "establish_current_relationship";
     return [
       "ride_intake_current",
       "ride_branch_current",
@@ -1279,22 +1346,25 @@ export class VascularRhythmRouteSystem {
   }
 
   guideLine() {
-    if (this.completed) return "The vessel has learned your cadence. Its current now carries you back toward the Hub.";
+    if (this.completed) return "The vessel retained the relationship. Its current now carries you back toward the Hub.";
     const requiredReads = this.recipe.cadence?.requiredReads ?? 3;
     const readsComplete = this.lockedCadenceReads >= requiredReads;
     if (readsComplete && (this.desynchronized || this.warning.includes("desynchronization"))) {
-      return "All three cadences are retained. Stop pulsing; hold Stabilize while the scattered current turns green and reweaves.";
+      return "All three current reads are retained. Hold Stabilize while the scattered flow reweaves.";
     }
     if (readsComplete) {
-      return "All three cadences are retained. Hold Stabilize for one settling contraction; the return current will turn gold.";
+      return "All three current reads are retained. Hold Stabilize long enough for the circulation to settle and reverse.";
     }
     if (this.desynchronized || this.warning.includes("desynchronization")) {
-      return "The rhythm scattered, but it is not lost. Hold Stabilize while you remain inside the living current.";
+      return "The current scattered, but the relationship is recoverable. Hold Stabilize inside the living flow.";
     }
-    if (this.pulseWindowOpen() && this.chargeDistance <= (this.recipe.cadence?.pulseRange ?? 1.3) * 1.35) {
-      return "The charge swells as the valve yields. Pulse with it now.";
+    if (this.currentRelationshipReady) {
+      return "The current is held against the next valve. Pulse through that relationship; the beat changes strength, not permission.";
     }
-    return "Move with the bright charge. The walls contract; the current is the path.";
+    if (this.currentRelationshipHeld) {
+      return "Keep Stabilize held for a moment so the next valve and Core settle into one current.";
+    }
+    return "Move with the bright charge to the next valve, then Stabilize to establish the current relationship.";
   }
 
   nextAction() {
@@ -1303,19 +1373,19 @@ export class VascularRhythmRouteSystem {
     const readsComplete = this.lockedCadenceReads >= requiredReads;
     if (readsComplete) {
       return this.stabilizationInRange
-        ? "Hold LT until the current turns gold. The three reads are already safe."
-        : "Move back inside the braided vessel, then hold LT. Do not Pulse again.";
+        ? "Hold Stabilize until the retained current settles and reverses toward the Hub."
+        : "Move back inside the braided current, then hold Stabilize to settle it.";
     }
     if (this.desynchronized || this.warning.includes("desynchronization")) {
-      return "Hold LT near the center current until the scattered charge reweaves.";
+      return "Hold Stabilize near the center current until the scattered flow reweaves.";
     }
-    if (this.pulseWindowOpen() && this.chargeDistance <= (this.recipe.cadence?.pulseRange ?? 1.3) * 1.35) {
-      return "Press X while the charge and valve brighten together.";
+    if (this.currentRelationshipReady) {
+      return "Pulse while Stabilize is held. Rhythm alignment strengthens the read but is not a timing gate.";
     }
-    if (this.stabilizeSeconds < (this.recipe.completion?.minimumStabilizeSeconds ?? 0.8)) {
-      return "Ride deeper with the charge; hold LT through a strong vessel contraction.";
+    if (this.currentRelationshipHeld) {
+      return "Keep Stabilize held briefly; then Pulse through the next valve.";
     }
-    return "Stay with the moving charge until the next valve opens.";
+    return "Ride to the next valve and hold Stabilize to establish a relationship with the current.";
   }
 
   publish(frameState, active) {
@@ -1323,7 +1393,7 @@ export class VascularRhythmRouteSystem {
     const requiredReads = this.recipe?.cadence?.requiredReads ?? 3;
     const stage = this.stage();
     frameState.vascularRhythmRoute = {
-      pass: "HC-018D",
+      pass: "HC-031R",
       id: this.recipe?.id ?? RECIPE_ID,
       active: Boolean(active),
       regionId: "vascular_route",
@@ -1349,8 +1419,35 @@ export class VascularRhythmRouteSystem {
         y: this.chargeWorldPosition.y,
         z: this.chargeWorldPosition.z
       } : null,
+      // Compatibility fields remain for old objective/save consumers. HC031R's
+      // canonical progression language is relationshipReads below.
       lockedCadenceReads: this.lockedCadenceReads,
       requiredCadenceReads: requiredReads,
+      relationshipReads: this.lockedCadenceReads,
+      requiredRelationshipReads: requiredReads,
+      relationshipReadSequence: this.relationshipReadSequence,
+      currentRelationshipHeld: Boolean(active && this.currentRelationshipHeld),
+      currentRelationshipReady: Boolean(active && this.currentRelationshipReady),
+      currentRelationshipSeconds: active ? this.currentRelationshipSeconds : 0,
+      activeValveDistance: active && Number.isFinite(this.activeValveDistance) ? this.activeValveDistance : 0,
+      lastRelationshipReadBeatAligned: this.lastRelationshipReadBeatAligned,
+      lastRelationshipReadQuality: this.lastRelationshipReadQuality,
+      lastRelationshipReadChord: this.lastRelationshipReadChord,
+      unboundPulseCount: this.unboundPulseCount,
+      currentization: {
+        pass: "HC-031R",
+        canonicalRead: "stabilize_establishes_environmental_current_relationship_then_pulse_projects_through_it",
+        relationshipSource: "environmental_current",
+        nounTargetingAuthorityChanged: false,
+        aimChoosesTargetForTargetableNouns: true,
+        environmentalCurrentMayBeRelatedWithoutNounTarget: true,
+        beatAlignmentAffectsQualityOnly: true,
+        inputTimingGate: false,
+        legacyCadenceWindowProgressionAuthority: false,
+        legacyLockedCadenceReadsCompatibilityAlias: true,
+        progressionAuthority: true,
+        crossingAuthority: false
+      },
       synchronization: this.synchronization,
       circulationIntegrity: this.circulationIntegrity,
       turbulence: this.turbulence,

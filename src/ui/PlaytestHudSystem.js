@@ -258,7 +258,7 @@ export class PlaytestHudSystem {
             ? "return current formed"
             : vascularRhythmRoute.desynchronized
               ? `reweaving ${Math.round((1 - (vascularRhythmRoute.turbulence ?? 0)) * 100)}%`
-              : `${vascularRhythmRoute.lockedCadenceReads ?? 0}/${vascularRhythmRoute.requiredCadenceReads ?? 3} cadences`
+              : `${vascularRhythmRoute.relationshipReads ?? vascularRhythmRoute.lockedCadenceReads ?? 0}/${vascularRhythmRoute.requiredRelationshipReads ?? vascularRhythmRoute.requiredCadenceReads ?? 3} current reads`
         } / ${Math.round((vascularRhythmRoute.progress ?? 0) * 100)}%`
       : inSiltPressure
       ? `Silt Pressure: ${
@@ -727,7 +727,7 @@ export class PlaytestHudSystem {
     }
     if (frameState.activeCellId === "CELL_VASCULAR_RHYTHM_ROUTE_001") {
       const route = frameState.vascularRhythmRoute ?? {};
-      return route.nextAction ?? "Move with the circulation charge and read its living cadence.";
+      return route.nextAction ?? "Move with the circulation current, Stabilize the next valve relationship, then Pulse through it.";
     }
     if (frameState.activeCellId === "CELL_SILT_PRESSURE_ROUTE_001") {
       const route = frameState.siltPressureRoute ?? {};
