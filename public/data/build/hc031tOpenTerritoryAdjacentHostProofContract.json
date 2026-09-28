@@ -1,0 +1,53 @@
+{
+  "pass": "HC-031T",
+  "label": "Open Territory / Adjacent Host Proof",
+  "parent": "HC-031S",
+  "mode": "continuous_host_adjacent_territory_proof",
+  "purpose": "Convert the existing Gathering Ground ghost/background landmark inside Aperture Fields into the first remotely observable, remotely reactive, continuously reachable neighboring Host territory without adding a world-map UI, teleport, new verb, or new active cell.",
+  "canonicalLaw": [
+    "Background is unresolved world, not decorative nothing.",
+    "The active territory remains full-detail; neighboring territory can exist at lower detail and answer before physical entry.",
+    "Aim toward the large neighboring body and Pulse to resolve contour/function at distance.",
+    "Stabilize can establish a bounded remote Host relationship; Absorb receives a weak inward answer but cannot pull a macro territory toward the Core.",
+    "Reading Membrane Ridge opens connective anatomy and expands the existing Aperture movement volume; no cell swap or teleport is required.",
+    "Physical approach promotes Gathering Ground from distant/neighbor presentation to local territory while the Arrival Shelf remains visible behind the player."
+  ],
+  "territory": {
+    "id": "gathering_ground_cluster",
+    "activeCellId": "CELL_APERTURE_FIELDS_ARRIVAL_001",
+    "rings": {
+      "ring_c_distant": "ghost silhouette / Host-scale context",
+      "ring_b_neighbor": "remote observation + limited macro relationship + lower-detail anatomy",
+      "ring_a_local": "continuous physical approach promotes neighboring territory to local detail"
+    }
+  },
+  "ownership": {
+    "territoryPresentationAndReadOnlyState": "ApertureAdjacentTerritorySystem",
+    "movementBounds": "ApertureFieldsArrivalSystem",
+    "playerMovement": "PlayerMovementController",
+    "localFieldGameplay": ["SignalPlainEcologySystem", "MembraneRidgeGameplaySystem"],
+    "activeCellAndCrossing": "unchanged; no adjacent-territory cell transition"
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.43",
+  "events": [
+    "world.adjacent_territory.observed",
+    "world.adjacent_territory.relationship_established",
+    "world.adjacent_territory.traversal_opened",
+    "world.adjacent_territory.entered"
+  ],
+  "forbiddenScope": [
+    "Silt internal gameplay",
+    "Vascular internal gameplay",
+    "Grave gameplay",
+    "Comb synthesis gameplay",
+    "global movement tuning",
+    "global targeting rules",
+    "global verb strength",
+    "controller mapping",
+    "chemistry ownership",
+    "entity AI ownership",
+    "new world-map HUD",
+    "teleportation",
+    "Act 2 full ecology implementation"
+  ]
+}

@@ -270,7 +270,13 @@ export class PlaytestHudSystem {
                 ? "porous matter accepted"
                 : siltPressureRoute.ribsReleased
                   ? "appetite pocket open"
-                  : siltPressureRoute.pressureRead ? "bracing living ribs" : "compression unread"
+                  : siltPressureRoute.pressureRead
+                    ? "bracing living ribs"
+                    : siltPressureRoute.pressureRelationshipReady
+                      ? "pressure relationship ready / Pulse"
+                      : siltPressureRoute.pressureRelationshipHeld
+                        ? "catching pressure"
+                        : "compression unread"
         } / ${Math.round((siltPressureRoute.progress ?? 0) * 100)}%`
       : inCombThreshold
       ? `Comb Threshold: ${combThresholdPlayable.challengeComplete ? "synthesis complete / Aperture readable" : `${combThresholdPlayable.successfulReadCount ?? 0}/${combThresholdPlayable.requiredReadCount ?? 6} filter reads`}`

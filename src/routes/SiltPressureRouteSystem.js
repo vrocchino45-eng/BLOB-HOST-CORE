@@ -65,6 +65,21 @@ export class SiltPressureRouteSystem {
     this.pathDistance = 0;
     this.pressureRead = false;
     this.pressureReadCount = 0;
+
+    // HC031S — Silt currentization. The compressed passage is treated as an
+    // environmental pressure relationship rather than a route-local Pulse flag.
+    // Stabilize establishes/holds that relationship; Pulse projects through it
+    // to read compression. The retained pressure read then supports the existing
+    // rib brace, selective appetite choice, recoverable failure and return breath.
+    this.pressureRelationshipHeld = false;
+    this.pressureRelationshipReady = false;
+    this.pressureRelationshipSeconds = 0;
+    this.pressureReadSequence = 0;
+    this.lastPressureReadChord = "idle";
+    this.unboundPulseCount = 0;
+    this.appetiteDrawSequence = 0;
+    this.lastAppetiteDrawKind = "none";
+
     this.braceSeconds = 0;
     this.ribsReleased = false;
     this.safeAbsorbSeconds = 0;
@@ -620,33 +635,71 @@ export class SiltPressureRouteSystem {
 
   updatePlay(dt, frameState, sample) {
     const input = frameState.input ?? {};
+    const composition = frameState.verbComposition ?? {};
     const pressure = this.recipe.pressure ?? {};
     const appetite = this.recipe.appetite ?? {};
     const recovery = this.recipe.recovery ?? {};
     const completion = this.recipe.completion ?? {};
+    const currentization = this.recipe.currentization ?? {};
 
     this.stabilizationInRange = sample.distance <= (recovery.stabilizeRangeFromPassage ?? 1.9);
     this.stabilizing = Boolean(input.stabilizeHeld && this.stabilizationInRange);
     this.absorbHeld = Boolean(input.absorbHeld);
+
+    // HC031S: pressure is an environmental relationship. The Core must first
+    // occupy the authored rib-reading band and hold Stabilize long enough to
+    // establish that relation. Pulse then projects through it. There is no new
+    // noun target and no TargetingSystem exception.
+    const pressureSpatiallyReady = Boolean(
+      sample.progress >= (pressure.readProgressMin ?? 0.08)
+      && sample.progress <= (pressure.readProgressMax ?? 0.46)
+      && sample.distance <= (pressure.pulseReadRangeFromPassage ?? 1.55)
+    );
+    this.pressureRelationshipHeld = Boolean(
+      !this.completed
+      && !this.compressionFailure
+      && this.stabilizing
+      && pressureSpatiallyReady
+    );
+    if (this.pressureRelationshipHeld) {
+      this.pressureRelationshipSeconds += dt;
+    } else {
+      const releaseRate = currentization.relationshipReleaseRate ?? 3.6;
+      this.pressureRelationshipSeconds = Math.max(
+        0,
+        this.pressureRelationshipSeconds - dt * releaseRate
+      );
+    }
+    const minimumRelationshipHoldSeconds = currentization.minimumRelationshipHoldSeconds ?? 0.18;
+    this.pressureRelationshipReady = Boolean(
+      this.pressureRelationshipHeld
+      && this.pressureRelationshipSeconds >= minimumRelationshipHoldSeconds
+    );
 
     const pulseEventId = input.pulseEventId ?? (frameState.frame ?? 0);
     const freshPulse = Boolean(input.pulsePressed && pulseEventId !== this.lastPulseEventId);
     if (freshPulse) {
       this.lastPulseEventId = pulseEventId;
       this.pulseFlashAge = 0;
-      const readReady = sample.progress >= (pressure.readProgressMin ?? 0.08)
-        && sample.progress <= (pressure.readProgressMax ?? 0.46)
-        && sample.distance <= (pressure.pulseReadRangeFromPassage ?? 1.55);
-      if (!this.pressureRead && readReady) {
+      if (!this.pressureRead && this.pressureRelationshipReady) {
         this.pressureRead = true;
         this.pressureReadCount += 1;
-        this.lastInteraction = "pulse_read_compression_direction";
-        this.warning = "none";
+        this.pressureReadSequence += 1;
+        this.lastPressureReadChord = composition.chord ?? "cohere_project";
+        this.lastInteraction = "stabilized_pressure_relationship_read_by_pulse";
+        this.warning = "keep_stabilize_held_to_brace_living_ribs";
       } else if (this.pressureRead) {
-        this.lastInteraction = "pulse_echoes_through_retained_pressure_read";
+        this.lastPressureReadChord = composition.chord ?? "project";
+        this.lastInteraction = "pulse_echoes_through_retained_pressure_relationship";
       } else {
-        this.lastInteraction = "pulse_scattered_outside_compressed_ribs";
-        this.warning = "move_inside_the_low_rib_passage_to_read_pressure";
+        this.unboundPulseCount += 1;
+        this.lastPressureReadChord = composition.chord ?? "project";
+        this.lastInteraction = !pressureSpatiallyReady
+          ? "pulse_scattered_outside_compressed_rib_relationship"
+          : !this.stabilizing
+            ? "pulse_without_stabilized_pressure_relationship"
+            : "pressure_relationship_not_yet_settled";
+        this.warning = "hold_stabilize_then_pulse_to_read_pressure";
       }
     }
 
@@ -663,6 +716,9 @@ export class SiltPressureRouteSystem {
           this.lastInteraction = "compressed_passage_reopened_without_lost_progress";
           this.warning = "none";
         }
+      } else if (!this.pressureRead && this.pressureRelationshipReady) {
+        this.lastInteraction = "stabilize_established_compressed_pressure_relationship";
+        this.warning = "pulse_through_held_pressure_relationship";
       } else if (this.pressureRead && !this.ribsReleased) {
         this.braceSeconds += dt;
         this.compression = Math.max(0.26, this.compression - dt * (pressure.braceReleasePerSecond ?? 0.28));
@@ -692,19 +748,22 @@ export class SiltPressureRouteSystem {
         this.warning = "none";
         if (this.safeAbsorbSeconds >= (appetite.requiredSafeAbsorbSeconds ?? 0.68)) {
           this.safeMatterAbsorbed = true;
+          this.appetiteDrawSequence += 1;
+          this.lastAppetiteDrawKind = "porous_nutrient";
           this.lastInteraction = "porous_nutrient_accepted_dense_residue_left_intact";
         }
       } else if (this.nearestDenseDistance <= denseRange) {
         this.greedyAbsorbSeconds += dt;
         this.lastInteraction = "greedy_absorb_loading_packed_residue";
         if (this.greedyAbsorbSeconds >= (appetite.greedyFailureSeconds ?? 0.38)) {
+          this.lastAppetiteDrawKind = "packed_residue_risk";
           this.registerCompressionFailure();
         }
       } else {
         this.greedyAbsorbSeconds = Math.max(0, this.greedyAbsorbSeconds - dt * 1.5);
         this.lastInteraction = this.ribsReleased
-          ? "absorb_reaches_no_selectable_matter"
-          : "appetite_waits_for_pressure_read_and_brace";
+          ? "absorb_reaches_no_selected_spatial_matter"
+          : "appetite_waits_for_pressure_relationship_and_brace";
       }
     } else if (!this.absorbHeld) {
       this.greedyAbsorbSeconds = Math.max(0, this.greedyAbsorbSeconds - dt * 2.5);
@@ -728,7 +787,9 @@ export class SiltPressureRouteSystem {
     ) {
       this.completed = true;
       this.returnFoldReady = true;
-      this.lastInteraction = "deep_pressure_released_silt_route_breathes_toward_hub";
+      this.pressureRelationshipHeld = false;
+      this.pressureRelationshipReady = false;
+      this.lastInteraction = "deep_pressure_relationship_released_silt_route_breathes_toward_hub";
       this.warning = "none";
     }
 
@@ -1005,8 +1066,8 @@ export class SiltPressureRouteSystem {
   guideLine() {
     if (this.completed) return "The silt has stopped closing around appetite. Its released breath now returns to the Hub.";
     if (this.compressionFailure) return "Packed residue compressed the route. Nothing is lost—hold Stabilize until the ribs reopen.";
-    if (!this.pressureRead) return "The low ribs close in sequence. Move inside them and Pulse to read where the pressure travels.";
-    if (!this.ribsReleased) return "You have read the pressure. Hold Stabilize inside the passage and let the ribs move around your brace.";
+    if (!this.pressureRead) return "The low ribs close in sequence. Move inside them, hold Stabilize to catch the pressure, then Pulse through that relationship.";
+    if (!this.ribsReleased) return "The pressure relationship is retained. Keep Stabilize held and let the ribs move around your brace.";
     if (!this.safeMatterAbsorbed) return "Only the warm porous packet yields. The dark packed clumps will close the passage if you pull them.";
     return "The route has accepted enough. Move through the opened ribs toward the deep pressure organ.";
   }
@@ -1016,8 +1077,12 @@ export class SiltPressureRouteSystem {
     if (this.compressionFailure) return this.stabilizationInRange
       ? "Hold LT until the compressed ribs reopen. Your earlier progress is safe."
       : "Move back inside the silt passage, then hold LT to reopen it.";
-    if (!this.pressureRead) return "Move between the first low ribs and press X/Space once.";
-    if (!this.ribsReleased) return "Hold LT inside the passage until the ribs open and stay open.";
+    if (!this.pressureRead) {
+      if (this.pressureRelationshipReady) return "Pulse while Stabilize is held to read the compression direction.";
+      if (this.pressureRelationshipHeld) return "Keep Stabilize held briefly, then Pulse through the compressed passage.";
+      return "Move between the first low ribs and hold Stabilize to establish the pressure relationship.";
+    }
+    if (!this.ribsReleased) return "Keep LT held inside the passage until the living ribs open and stay open.";
     if (!this.safeMatterAbsorbed) {
       if (this.safePacketDistance <= (this.recipe.appetite?.safeAbsorbRange ?? 0.92)) {
         return "Hold RT on the warm porous packet; leave the dark packed clumps intact.";
@@ -1030,7 +1095,7 @@ export class SiltPressureRouteSystem {
   publish(frameState, active) {
     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
     frameState.siltPressureRoute = {
-      pass: "HC-018D",
+      pass: "HC-031S",
       id: this.recipe?.id ?? RECIPE_ID,
       active: Boolean(active),
       regionId: "silt_burrow_route",
@@ -1069,9 +1134,19 @@ export class SiltPressureRouteSystem {
       completed: this.completed,
       pressureRead: this.pressureRead,
       pressureReadCount: this.pressureReadCount,
+      pressureReadSequence: this.pressureReadSequence,
+      pressureRelationshipHeld: Boolean(active && this.pressureRelationshipHeld),
+      pressureRelationshipReady: Boolean(active && this.pressureRelationshipReady),
+      pressureRelationshipSeconds: active ? this.pressureRelationshipSeconds : 0,
+      minimumPressureRelationshipHoldSeconds: this.recipe?.currentization?.minimumRelationshipHoldSeconds ?? 0.18,
+      lastPressureReadChord: this.lastPressureReadChord,
+      unboundPulseCount: this.unboundPulseCount,
       braceSeconds: this.braceSeconds,
       ribsReleased: this.ribsReleased,
       safeMatterAbsorbed: this.safeMatterAbsorbed,
+      appetiteDrawSequence: this.appetiteDrawSequence,
+      lastAppetiteDrawKind: this.lastAppetiteDrawKind,
+      appetiteSelectionMode: "spatial_body_choice",
       safeAbsorbSeconds: this.safeAbsorbSeconds,
       safeAbsorbRequiredSeconds: this.recipe?.appetite?.requiredSafeAbsorbSeconds ?? 0.68,
       safePacketDistance: active && Number.isFinite(this.safePacketDistance) ? this.safePacketDistance : 0,
@@ -1106,6 +1181,23 @@ export class SiltPressureRouteSystem {
       triggerMarkerCount: 0,
       lastInteraction: this.lastInteraction,
       warning: this.warning,
+      currentization: {
+        pass: "HC-031S",
+        canonicalPressureRead: "stabilize_establishes_environmental_pressure_relationship_then_pulse_projects_through_it",
+        relationshipSource: "environmental_pressure",
+        stabilizeEstablishesRelationship: true,
+        pulseProjectsThroughRelationship: true,
+        pulseAloneCanReadPressure: false,
+        appetiteSelectionMode: "spatial_body_choice",
+        appetiteSelectionAuthority: "player_spatial_approach",
+        absorbDrawsMatterFromChosenSpatialBody: true,
+        nounTargetingAuthorityChanged: false,
+        aimChoosesTargetForTargetableNouns: true,
+        environmentalPressureMayBeRelatedWithoutNounTarget: true,
+        packedResidueFailureRecoverable: true,
+        progressionAuthority: true,
+        crossingAuthority: false
+      },
       guideLine: this.guideLine(),
       objectiveLine: this.nextAction(),
       nextAction: this.nextAction(),

@@ -1,10 +1,10 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031R currentizes Vascular without rebuilding it. Stabilize establishes a
-// relationship with the living current at each authored valve; Pulse projects
-// through that held relationship. Rhythm alignment remains expressive/qualitative
-// rather than a hidden input-timing gate. Existing movement, return, Hub memory,
-// and crossing owners remain unchanged.
+// HC031T opens the first adjacent Host territory without adding a map UI or
+// teleport. The existing Gathering Ground background body in Aperture Fields can
+// be remotely read, can answer a held relationship, and becomes continuously
+// reachable after Membrane Ridge is read. Existing movement/crossing owners stay
+// authoritative.
 
 const appRoot = document.querySelector("#app");
 
@@ -14,8 +14,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031R",
-  buildLabel: "Vascular Relationship Currentization"
+  buildId: "HC-031T",
+  buildLabel: "Open Territory / Adjacent Host Proof"
 });
 
 runtime.start().catch((error) => {

@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.41";
+    this.schemaVersion = "blob.session.telemetry.v1.43";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -106,6 +106,13 @@ export class SessionTelemetrySystem {
     this.lastHubReturnRecompositionKey = "none";
     this.lastVascularRelationshipReadSequence = frameState.vascularRhythmRoute?.relationshipReadSequence ?? 0;
     this.lastVascularCurrentizedComplete = Boolean(frameState.vascularRhythmRoute?.completed);
+    this.lastSiltPressureReadSequence = frameState.siltPressureRoute?.pressureReadSequence ?? 0;
+    this.lastSiltAppetiteDrawSequence = frameState.siltPressureRoute?.appetiteDrawSequence ?? 0;
+    this.lastSiltCurrentizedComplete = Boolean(frameState.siltPressureRoute?.completed);
+    this.lastAdjacentTerritoryObservationSequence = frameState.adjacentHostTerritory?.observationSequence ?? 0;
+    this.lastAdjacentTerritoryRelationshipSequence = frameState.adjacentHostTerritory?.relationshipSequence ?? 0;
+    this.lastAdjacentTerritoryTraversalSequence = frameState.adjacentHostTerritory?.traversalSequence ?? 0;
+    this.lastAdjacentTerritoryEntrySequence = frameState.adjacentHostTerritory?.entrySequence ?? 0;
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -176,6 +183,8 @@ export class SessionTelemetrySystem {
     this.observeHostContinuation(frameState);
     this.observeRouteResolution(frameState);
     this.observeVascularCurrentization(frameState);
+    this.observeSiltCurrentization(frameState);
+    this.observeAdjacentTerritory(frameState);
     this.observeHubDestinationCommitment(frameState);
     this.observeHubReturnRecomposition(frameState);
     this.observeTarget(frameState);
@@ -436,6 +445,100 @@ export class SessionTelemetrySystem {
     this.lastVascularCurrentizedComplete = completed;
   }
 
+  observeSiltCurrentization(frameState) {
+    const route = frameState.siltPressureRoute ?? {};
+    const readSequence = Number.isFinite(route.pressureReadSequence)
+      ? route.pressureReadSequence
+      : 0;
+    if (readSequence > this.lastSiltPressureReadSequence) {
+      this.record("silt.pressure_relationship_read", "perceptual", {
+        percept: {
+          readCount: route.pressureReadCount ?? Number(route.pressureRead),
+          relationship: "environmental_pressure",
+          action: "stabilize_then_pulse",
+          compression: round(route.compression ?? 0),
+          ribsReleased: Boolean(route.ribsReleased)
+        },
+        developer: {
+          sequence: readSequence,
+          runtimeCellId: route.runtimeCellId ?? "CELL_SILT_PRESSURE_ROUTE_001",
+          chord: route.lastPressureReadChord ?? "cohere_project",
+          relationshipSeconds: round(route.pressureRelationshipSeconds ?? 0),
+          pathProgress: round(route.pathProgress ?? 0),
+          maxDepthProgress: round(route.maxDepthProgress ?? 0),
+          braceSeconds: round(route.braceSeconds ?? 0),
+          unboundPulseCount: route.unboundPulseCount ?? 0,
+          pulseAloneCanReadPressure: false,
+          nounTargetingAuthorityChanged: false,
+          gameplayAuthority: false
+        }
+      });
+      this.noteInformationGain("silt_pressure_relationship_read", 0.8, {
+        readCount: route.pressureReadCount ?? Number(route.pressureRead),
+        compression: round(route.compression ?? 0)
+      });
+    }
+    this.lastSiltPressureReadSequence = Math.max(
+      this.lastSiltPressureReadSequence,
+      readSequence
+    );
+
+    const appetiteSequence = Number.isFinite(route.appetiteDrawSequence)
+      ? route.appetiteDrawSequence
+      : 0;
+    if (appetiteSequence > this.lastSiltAppetiteDrawSequence) {
+      this.record("silt.selective_draw.completed", "perceptual", {
+        percept: {
+          selection: route.lastAppetiteDrawKind ?? "porous_nutrient",
+          action: "approach_then_absorb",
+          packedResidueLeftIntact: route.denseMatterLeftIntact !== false,
+          safeMatterAbsorbed: Boolean(route.safeMatterAbsorbed)
+        },
+        developer: {
+          sequence: appetiteSequence,
+          runtimeCellId: route.runtimeCellId ?? "CELL_SILT_PRESSURE_ROUTE_001",
+          selectionMode: route.appetiteSelectionMode ?? "spatial_body_choice",
+          selectionAuthority: route.currentization?.appetiteSelectionAuthority ?? "player_spatial_approach",
+          safePacketDistance: round(route.safePacketDistance ?? 0),
+          nearestDenseDistance: round(route.nearestDenseDistance ?? 0),
+          automaticVerbRetargeting: false,
+          gameplayAuthority: false
+        }
+      });
+      this.noteInformationGain("silt_selective_draw", 0.8, {
+        packedResidueLeftIntact: route.denseMatterLeftIntact !== false
+      });
+    }
+    this.lastSiltAppetiteDrawSequence = Math.max(
+      this.lastSiltAppetiteDrawSequence,
+      appetiteSequence
+    );
+
+    const completed = Boolean(route.completed);
+    if (completed && !this.lastSiltCurrentizedComplete) {
+      this.record("silt.relationship_route.completed", "perceptual", {
+        percept: {
+          pressureRelationshipRead: Boolean(route.pressureRead),
+          ribsReleased: Boolean(route.ribsReleased),
+          selectiveDrawComplete: Boolean(route.safeMatterAbsorbed),
+          releaseState: route.stage ?? "return_breath",
+          retainedMeaning: "pressure_density"
+        },
+        developer: {
+          runtimeCellId: route.runtimeCellId ?? "CELL_SILT_PRESSURE_ROUTE_001",
+          maxDepthProgress: round(route.maxDepthProgress ?? 0),
+          compression: round(route.compression ?? 0),
+          failureCount: route.failureCount ?? 0,
+          failureRecovered: Boolean(route.failureRecovered),
+          progressionOwner: "SiltPressureRouteSystem",
+          crossingOwner: "LocalCellBoundaryMorphSystem",
+          pulseAloneCanReadPressure: false
+        }
+      });
+    }
+    this.lastSiltCurrentizedComplete = completed;
+  }
+
   observeHubDestinationCommitment(frameState) {
     const commit = frameState.hubRouteCommit ?? {};
     const foundation = frameState.hubChamberFoundation ?? {};
@@ -557,6 +660,97 @@ export class SessionTelemetrySystem {
         }
       });
     }
+  }
+
+  observeAdjacentTerritory(frameState) {
+    const territory = frameState.adjacentHostTerritory ?? {};
+    const territoryId = territory.territoryId ?? "gathering_ground_cluster";
+
+    const observationSequence = Number.isFinite(territory.observationSequence) ? territory.observationSequence : 0;
+    if (observationSequence > this.lastAdjacentTerritoryObservationSequence) {
+      this.record("world.adjacent_territory.observed", "perceptual", {
+        percept: {
+          territory: territoryId,
+          observationStage: territory.observationStage ?? "contour",
+          observationCount: territory.observationCount ?? 0,
+          distance: round(territory.distance ?? 0),
+          action: "pulse"
+        },
+        developer: {
+          sequence: observationSequence,
+          runtimeCellId: territory.runtimeCellId ?? "CELL_APERTURE_FIELDS_ARRIVAL_001",
+          detailTier: territory.detailTier ?? "ring_b_neighbor",
+          aimDot: round(territory.aimDot ?? -1),
+          targetingAuthorityChanged: false,
+          gameplayAuthority: false
+        }
+      });
+      this.noteInformationGain("adjacent_territory_remote_observation", 0.7, {
+        territory: territoryId,
+        observationStage: territory.observationStage ?? "contour"
+      });
+    }
+    this.lastAdjacentTerritoryObservationSequence = Math.max(this.lastAdjacentTerritoryObservationSequence, observationSequence);
+
+    const relationshipSequence = Number.isFinite(territory.relationshipSequence) ? territory.relationshipSequence : 0;
+    if (relationshipSequence > this.lastAdjacentTerritoryRelationshipSequence) {
+      this.record("world.adjacent_territory.relationship_established", "perceptual", {
+        percept: {
+          territory: territoryId,
+          relationship: "remote_host_relationship",
+          action: "stabilize",
+          distance: round(territory.distance ?? 0)
+        },
+        developer: {
+          sequence: relationshipSequence,
+          relationshipSeconds: round(territory.relationshipSeconds ?? 0),
+          movementAuthority: territory.movementAuthority ?? "PlayerMovementController",
+          movementBoundsOwner: territory.movementBoundsOwner ?? "ApertureFieldsArrivalSystem",
+          gameplayAuthority: false
+        }
+      });
+    }
+    this.lastAdjacentTerritoryRelationshipSequence = Math.max(this.lastAdjacentTerritoryRelationshipSequence, relationshipSequence);
+
+    const traversalSequence = Number.isFinite(territory.traversalSequence) ? territory.traversalSequence : 0;
+    if (traversalSequence > this.lastAdjacentTerritoryTraversalSequence) {
+      this.record("world.adjacent_territory.traversal_opened", "perceptual", {
+        percept: {
+          territory: territoryId,
+          connectiveAnatomyVisible: Boolean(territory.connectiveAnatomyVisible),
+          activation: "membrane_ridge_read_continuation"
+        },
+        developer: {
+          sequence: traversalSequence,
+          activeCellChangesRequired: false,
+          teleportRequired: false,
+          movementBoundsExpansionRequested: Boolean(territory.movementBoundsExpansionRequested),
+          movementBoundsOwner: territory.movementBoundsOwner ?? "ApertureFieldsArrivalSystem"
+        }
+      });
+    }
+    this.lastAdjacentTerritoryTraversalSequence = Math.max(this.lastAdjacentTerritoryTraversalSequence, traversalSequence);
+
+    const entrySequence = Number.isFinite(territory.entrySequence) ? territory.entrySequence : 0;
+    if (entrySequence > this.lastAdjacentTerritoryEntrySequence) {
+      this.record("world.adjacent_territory.entered", "perceptual", {
+        percept: {
+          territory: territoryId,
+          detailTier: territory.detailTier ?? "ring_a_local",
+          distance: round(territory.distance ?? 0),
+          activation: "continuous_physical_approach"
+        },
+        developer: {
+          sequence: entrySequence,
+          runtimeCellId: territory.runtimeCellId ?? "CELL_APERTURE_FIELDS_ARRIVAL_001",
+          sameActiveCell: true,
+          teleportRequired: false,
+          crossingOwner: "none_same_field_volume"
+        }
+      });
+      this.noteInformationGain("adjacent_territory_became_local", 1.0, { territory: territoryId });
+    }
+    this.lastAdjacentTerritoryEntrySequence = Math.max(this.lastAdjacentTerritoryEntrySequence, entrySequence);
   }
 
   observeHubReturnRecomposition(frameState) {
@@ -2772,6 +2966,13 @@ export class SessionTelemetrySystem {
       hubReturnRecompositionChanges: count("hub.return_recomposition.changed"),
       vascularRelationshipReads: count("vascular.relationship_read"),
       vascularRelationshipRouteCompletions: count("vascular.relationship_route.completed"),
+      siltPressureRelationshipReads: count("silt.pressure_relationship_read"),
+      siltSelectiveDrawCompletions: count("silt.selective_draw.completed"),
+      siltRelationshipRouteCompletions: count("silt.relationship_route.completed"),
+      adjacentTerritoryObservations: count("world.adjacent_territory.observed"),
+      adjacentTerritoryRelationships: count("world.adjacent_territory.relationship_established"),
+      adjacentTerritoryTraversalOpenings: count("world.adjacent_territory.traversal_opened"),
+      adjacentTerritoryEntries: count("world.adjacent_territory.entered"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),

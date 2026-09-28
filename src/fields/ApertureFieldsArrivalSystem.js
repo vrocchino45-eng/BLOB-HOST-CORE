@@ -404,12 +404,27 @@ export class ApertureFieldsArrivalSystem {
 
     frameState.physicalFeel = frameState.physicalFeel ?? {};
     const expandedBoundsCenter = this.entryAnchor.clone().add(new THREE.Vector3(3.5, 0.8, -20.5));
-    const activeBoundsCenter = signalPlainCompleted ? expandedBoundsCenter : this.boundsCenter;
-    const activeBoundsRadii = signalPlainCompleted
-      ? { x: 27.0, y: 10.0, z: 37.0 }
-      : { x: 20.0, y: 8.0, z: 28.0 };
+    // HC031T: after Membrane Ridge has actually been read, the existing distant
+    // Gathering Ground stops behaving like a ghost endpoint. Keep movement ownership
+    // here, but expand the same field volume far enough for continuous approach.
+    const adjacentTerritoryOpen = Boolean(frameState.adjacentHostTerritory?.traversalOpen);
+    const adjacentTerritoryBoundsCenter = this.entryAnchor.clone().add(new THREE.Vector3(3.5, 2.8, -35.0));
+    const activeBoundsCenter = adjacentTerritoryOpen
+      ? adjacentTerritoryBoundsCenter
+      : signalPlainCompleted
+        ? expandedBoundsCenter
+        : this.boundsCenter;
+    const activeBoundsRadii = adjacentTerritoryOpen
+      ? { x: 32.0, y: 15.0, z: 52.0 }
+      : signalPlainCompleted
+        ? { x: 27.0, y: 10.0, z: 37.0 }
+        : { x: 20.0, y: 8.0, z: 28.0 };
     frameState.physicalFeel.movementBounds = {
-      mode: signalPlainCompleted ? "signal_plain_opened_deeper_field_ellipsoid" : "entry_anchored_ellipsoid",
+      mode: adjacentTerritoryOpen
+        ? "adjacent_gathering_territory_open_ellipsoid"
+        : signalPlainCompleted
+          ? "signal_plain_opened_deeper_field_ellipsoid"
+          : "entry_anchored_ellipsoid",
       owner: "PlayerMovementController",
       tuningOwner: "ApertureFieldsArrivalSystem",
       regionId: "aperture_fields",
@@ -449,14 +464,19 @@ export class ApertureFieldsArrivalSystem {
       signalPlainCompleted,
       continuationBlend,
       deeperFieldOpened: signalPlainCompleted,
-      continuationLandmarkId: signalPlainCompleted ? "membrane_ridge_arc" : null,
+      adjacentTerritoryOpen,
+      adjacentTerritoryId: frameState.adjacentHostTerritory?.territoryId ?? "gathering_ground_cluster",
+      adjacentTerritoryStage: frameState.adjacentHostTerritory?.stage ?? "distant_unresolved",
+      continuationLandmarkId: adjacentTerritoryOpen
+        ? "gathering_ground_cluster"
+        : signalPlainCompleted ? "membrane_ridge_arc" : null,
       guideSightlineActive: Boolean(this.guideSightline?.visible),
       unfinishedSignalReturnCueActive: Boolean(this.signalReturnFilament?.visible),
       futureLandmarksSubduedUntilSignalComplete: !signalPlainCompleted,
       sceneRings: { immediate: "arrival_cradle_shelf_and_core", objective: "signal_plain_receptive_fan", worldMeaning: ["membrane_ridge_arc", "gathering_ground_cluster"] },
       nextAction: signalPlainCompleted
         ? (frameState.membraneRidgeGameplay?.completed
-            ? "read_gathering_ground_beyond_membrane_ridge"
+            ? (frameState.adjacentHostTerritory?.nextAction ?? "read_and_approach_gathering_ground_beyond_membrane_ridge")
             : membraneApproachReadable ? "enter_membrane_ridge_living_contours" : "move_deeper_toward_membrane_ridge")
         : this.reveal < 0.34
           ? "move_out_of_the_comb_fold"

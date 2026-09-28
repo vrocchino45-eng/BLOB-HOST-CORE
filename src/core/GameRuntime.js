@@ -100,6 +100,7 @@ import { CombThresholdPlayableSystem } from "../thresholds/CombThresholdPlayable
 import { ApertureFieldsArrivalSystem } from "../fields/ApertureFieldsArrivalSystem.js";
 import { SignalPlainEcologySystem } from "../fields/SignalPlainEcologySystem.js";
 import { MembraneRidgeGameplaySystem } from "../fields/MembraneRidgeGameplaySystem.js";
+import { ApertureAdjacentTerritorySystem } from "../fields/ApertureAdjacentTerritorySystem.js";
 
 export class GameRuntime {
   constructor({ appRoot, buildId, buildLabel }) {
@@ -199,6 +200,7 @@ export class GameRuntime {
     this.apertureFieldsArrivalSystem = null;
     this.signalPlainEcologySystem = null;
     this.membraneRidgeGameplaySystem = null;
+    this.apertureAdjacentTerritorySystem = null;
     this.firstSliceTransitionCoordinator = null;
     this.localCellBoundaryMorphSystem = null;
     this.runtimeStateLedgerSystem = null;
@@ -2397,6 +2399,12 @@ export class GameRuntime {
       playerRoot: this.playerCore,
       frameState: this.frameState
     });
+    this.apertureAdjacentTerritorySystem = new ApertureAdjacentTerritorySystem({
+      scene: this.scene,
+      camera: this.camera,
+      playerRoot: this.playerCore,
+      frameState: this.frameState
+    });
     this.localCellBoundaryMorphSystem = new LocalCellBoundaryMorphSystem({
       frameState: this.frameState,
       scene: this.scene,
@@ -2560,6 +2568,9 @@ export class GameRuntime {
     this.registry.register("apertureFieldsArrivalSystem", this.apertureFieldsArrivalSystem, regionScoped);
     this.registry.register("signalPlainEcologySystem", this.signalPlainEcologySystem, regionScoped);
     this.registry.register("membraneRidgeGameplaySystem", this.membraneRidgeGameplaySystem, regionScoped);
+    // HC031T turns the existing Gathering Ground background silhouette into a
+    // remotely readable adjacent territory. It owns no movement or crossing truth.
+    this.registry.register("apertureAdjacentTerritorySystem", this.apertureAdjacentTerritorySystem, regionScoped);
     // HC-016C: boundary morph owner runs before ledger; legacy gate runtime retired.
     this.registry.register("localCellBoundaryMorphSystem", this.localCellBoundaryMorphSystem);
     this.registry.register("runtimeStateLedgerSystem", this.runtimeStateLedgerSystem);

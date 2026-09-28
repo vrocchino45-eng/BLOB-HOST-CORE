@@ -727,16 +727,20 @@ export class GuidePromptSystem {
       beat: ridge.stage ?? "membrane_ridge_active",
       priority: 780,
       guideLine: ridge.completed
-        ? "The ridge has yielded its pressure reading. This is the current playable endpoint; Gathering Ground is only a distant landmark in this build."
+        ? (frameState.adjacentHostTerritory?.enteredTerritory
+            ? "The distant body is no longer background. The Aperture now lies behind you as part of the same Host."
+            : frameState.adjacentHostTerritory?.relationshipEstablished
+              ? "The larger body is answering before you reach it. The ridge now connects into that response."
+              : "The ridge has yielded its pressure reading. Something larger is gathering beyond it.")
         : ridge.tracing
           ? "The membrane answers motion, not force."
           : "The ridge is carrying a living pressure contour.",
       objectiveLine: ridge.completed
-        ? "Read what gathers beyond the ridge."
+        ? (frameState.adjacentHostTerritory?.nextAction ?? "Read what gathers beyond the ridge.")
         : ridge.tracing
           ? "Keep moving through the bright contour."
           : "Enter the bright contour and move along it.",
-      debugFallback: `ridge ${ridge.contourIndex ?? 1}/${ridge.contourCount ?? 3} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)}`,
+      debugFallback: `ridge ${ridge.contourIndex ?? 1}/${ridge.contourCount ?? 3} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)} | neighbor ${frameState.adjacentHostTerritory?.stage ?? "distant"}`,
       tone: ridge.completed ? "membrane_ridge_read" : ridge.tracing ? "membrane_ridge_motion" : "membrane_ridge_approach",
       contentOwner: "MembraneRidgeGameplaySystem",
       source: "activeRegionState"

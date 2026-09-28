@@ -123,7 +123,9 @@
     "selectiveAbsorbRequired": true,
     "packedResidueMustRemain": true,
     "failureMustRemainRecoverable": true,
-    "cleanRunMayCompleteWithoutFailure": true
+    "cleanRunMayCompleteWithoutFailure": true,
+    "pressureRelationshipReadIsCanonical": true,
+    "pulseAloneCanReadPressure": false
   },
   "returnFold": {
     "position": [
@@ -192,5 +194,20 @@
     ],
     "identity": "tight-to-open-to-tight, sedimentary, compressive, selective",
     "rule": "space is inserted between existing mechanics; pressure read, brace, selective absorb, recoverable failure, deep release, and return remain the same gameplay contract"
+  },
+  "currentizationPass": "HC-031S",
+  "currentization": {
+    "relationshipSource": "environmental_pressure",
+    "stabilizeEstablishesRelationship": true,
+    "pulseProjectsThroughRelationship": true,
+    "pulseAloneCanReadPressure": false,
+    "minimumRelationshipHoldSeconds": 0.18,
+    "relationshipReleaseRate": 3.6,
+    "appetiteSelectionMode": "spatial_body_choice",
+    "appetiteSelectionAuthority": "player_spatial_approach",
+    "nounTargetingAuthorityChanged": false,
+    "aimChoosesTargetForTargetableNouns": true,
+    "environmentalPressureMayBeRelatedWithoutNounTarget": true,
+    "packedResidueFailureRecoverable": true
   }
 }

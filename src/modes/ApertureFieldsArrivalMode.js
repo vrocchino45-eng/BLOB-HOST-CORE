@@ -5,7 +5,7 @@ export class ApertureFieldsArrivalMode extends BaseMode {
     super({
       id: "aperture_fields_arrival_mode",
       label: "Aperture Fields Arrival Mode",
-      acceptedActions: ["move", "pulse", "stabilize", "interact_return_fold", "guide_focus", "status_page"],
+      acceptedActions: ["move", "pulse", "absorb", "stabilize", "interact_return_fold", "guide_focus", "status_page"],
       runtimeMount
     });
   }

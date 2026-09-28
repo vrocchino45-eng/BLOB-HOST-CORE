@@ -308,6 +308,7 @@ export class ObjectiveSystem {
     const route = frameState.siltPressureRoute ?? {};
     const inRoute = frameState.activeCellId === "CELL_SILT_PRESSURE_ROUTE_001";
     const pressureRead = Boolean(route.pressureRead);
+    const pressureRelationshipRead = Boolean(route.pressureRead && (route.pressureReadSequence ?? 0) > 0);
     const ribsReleased = Boolean(route.ribsReleased);
     const selectiveAbsorb = Boolean(route.safeMatterAbsorbed);
     const packedResidueIntact = route.denseMatterLeftIntact !== false;
@@ -334,6 +335,7 @@ export class ObjectiveSystem {
       progress: complete ? 1 : Math.max(0, Math.min(1, route.progress ?? 0)),
       complete,
       stepState: {
+        pressure_relationship_stabilize_then_pulse_read: pressureRelationshipRead,
         pressure_direction_pulse_read: pressureRead,
         living_ribs_stabilized_open: ribsReleased,
         porous_nutrient_selectively_absorbed: selectiveAbsorb,
@@ -341,7 +343,7 @@ export class ObjectiveSystem {
         deep_pressure_organ_reached: deepReached,
         return_breath_formed: returnBreathFormed
       },
-      completionSource: "SiltPressureRouteSystem observed by ObjectiveSystem",
+      completionSource: "HC031S Silt pressure relationship observed from SiltPressureRouteSystem by ObjectiveSystem",
       blocker: complete
         ? "none_detected"
         : !inRoute
@@ -401,6 +403,7 @@ export class ObjectiveSystem {
     const arrival = frameState.apertureFieldsArrival ?? {};
     const signalPlain = frameState.signalPlainEcology ?? {};
     const membraneRidge = frameState.membraneRidgeGameplay ?? {};
+    const adjacent = frameState.adjacentHostTerritory ?? {};
     const inField = frameState.activeCellId === "CELL_APERTURE_FIELDS_ARRIVAL_001";
     const entered = Boolean(inField || frameState.act1RouteHistory?.apertureFieldsEntered);
     const shelfReadable = Boolean(arrival.reveal >= 0.72 || frameState.act1RouteHistory?.apertureArrivalShelfRead);
@@ -425,7 +428,11 @@ export class ObjectiveSystem {
         ? "aperture_arrival_pending_crossing"
         : signalPlainComplete
           ? membraneRidgeComplete
-            ? "aperture_signal_plain_complete_membrane_ridge_read"
+            ? adjacent.enteredTerritory
+              ? "aperture_adjacent_gathering_territory_local"
+              : adjacent.traversalOpen
+                ? "aperture_adjacent_gathering_territory_open"
+                : "aperture_signal_plain_complete_membrane_ridge_read"
             : membraneRidgeActive
               ? "aperture_signal_plain_complete_membrane_ridge_active"
               : "aperture_signal_plain_complete_deeper_field_open"
@@ -441,7 +448,11 @@ export class ObjectiveSystem {
         comb_return_fold_retained: returnRetained,
         signal_plain_local_response_complete: signalPlainComplete,
         membrane_ridge_gameplay_active: membraneRidgeActive,
-        membrane_ridge_pressure_read: membraneRidgeComplete
+        membrane_ridge_pressure_read: membraneRidgeComplete,
+        adjacent_territory_remotely_observed: (adjacent.observationCount ?? 0) > 0,
+        adjacent_territory_relationship_established: Boolean(adjacent.relationshipEstablished),
+        adjacent_territory_continuous_traversal_open: Boolean(adjacent.traversalOpen),
+        adjacent_territory_entered_without_cell_change: Boolean(adjacent.enteredTerritory)
       },
       completionSource: signalPlainComplete
         ? "SignalPlainEcologySystem completion observed by ObjectiveSystem"
@@ -452,9 +463,11 @@ export class ObjectiveSystem {
           ? (signalPlain.nextAction ?? arrival.nextAction ?? "complete_signal_plain")
           : "complete_comb_and_cross_the_open_membrane",
       foundationOnly: false,
-      fullEcologyMounted: Boolean(signalPlain.active || signalPlainComplete || membraneRidgeActive),
+      fullEcologyMounted: Boolean(signalPlain.active || signalPlainComplete || membraneRidgeActive || adjacent.active),
       ecologyGameplayReady: Boolean(signalPlain.active || signalPlainComplete),
-      continuationOwner: signalPlainComplete ? "MembraneRidgeGameplaySystem" : "SignalPlainEcologySystem",
+      continuationOwner: membraneRidgeComplete
+        ? "ApertureAdjacentTerritorySystem"
+        : signalPlainComplete ? "MembraneRidgeGameplaySystem" : "SignalPlainEcologySystem",
       newAbilityUnlocks: 0
     };
   }
