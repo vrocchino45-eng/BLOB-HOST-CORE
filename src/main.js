@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031P1-HF1",
-  buildLabel: "Destination Commit Latch"
+  buildId: "HC-031Q",
+  buildLabel: "Return Consequence Canonicalization"
 });
 
 runtime.start().catch((error) => {

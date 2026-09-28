@@ -2794,7 +2794,9 @@ export class HubChamberFoundationSystem {
       activeRouteGateId: latestReturnedRouteGateId,
       activeRouteRuntimeCompatibility: latestReturnedRouteId === "vascular_route"
         ? "CELL_VASCULAR_RHYTHM_ROUTE_001"
-        : "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+        : latestReturnedRouteId === "silt_burrow_route"
+          ? "CELL_SILT_PRESSURE_ROUTE_001"
+          : "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
       routeCount: routes.length,
       routeCorridorCount: routes.length,
       solidTerritoryLandmarkCount: this.territoryLandmarks.length,
@@ -2814,6 +2816,42 @@ export class HubChamberFoundationSystem {
       routeActivated: false,
       routeEntryRetained: Boolean(this.frameState.act1RouteHistory?.graveEntered),
       routeReturnRetained: Boolean(graveHistory.graveReturned),
+      returnedReadings: {
+        graveMemory: {
+          routeId: "grave_memory_route",
+          retained: returnedGraveImprint,
+          hostFunction: "memory_residue",
+          returnSignature: "retained_memory_imprint",
+          historyOwner: "LocalCellBoundaryMorphSystem",
+          coreInterpretationOwner: "CoreGrowthSystem",
+          hubPresentationOwner: "HubChamberFoundationSystem"
+        },
+        vascularRhythm: {
+          routeId: "vascular_route",
+          retained: returnedVascularCadence,
+          hostFunction: "rhythm_current",
+          returnSignature: "synchronized_return_current",
+          historyOwner: "LocalCellBoundaryMorphSystem",
+          coreInterpretationOwner: "CoreGrowthSystem",
+          hubPresentationOwner: "HubChamberFoundationSystem"
+        },
+        siltPressure: {
+          routeId: "silt_burrow_route",
+          retained: returnedSiltPressure,
+          hostFunction: "pressure_density",
+          returnSignature: "released_return_breath",
+          historyOwner: "LocalCellBoundaryMorphSystem",
+          coreInterpretationOwner: "CoreGrowthSystem",
+          hubPresentationOwner: "HubChamberFoundationSystem"
+        }
+      },
+      returnReadingCount: Number(returnedGraveImprint) + Number(returnedVascularCadence) + Number(returnedSiltPressure),
+      returnRecompositionState: returnedGraveImprint && returnedVascularCadence && returnedSiltPressure
+        ? "three_reading_host_recomposition"
+        : (returnedGraveImprint || returnedVascularCadence || returnedSiltPressure)
+          ? "partial_host_recomposition"
+          : "none",
+      returnRecompositionGameplayAuthority: false,
       graveMemoryImprintRecognized: graveImprintHeld,
       graveMemoryTraceIntegrity: graveHistory.graveTraceIntegrity
         ?? coreGrowth.graveMemoryTraceIntegrity
@@ -2851,13 +2889,17 @@ export class HubChamberFoundationSystem {
         && returnedGraveImprint
         && this.consequenceLayoutTruth.centralCradleQuieted
       ),
-      postRouteLayerHierarchy: active && returnedVascularCadence
-        ? ["immediate_core_guide_and_filament", "objective_upper_vascular_echo", "retained_grave_echo", "background_host_anatomy"]
-        : active && returnedGraveImprint
-        ? ["immediate_core_and_guide", "objective_grave_echo", "background_host_anatomy"]
-        : active
-          ? ["immediate_player", "objective_route_territories", "background_host_anatomy"]
-          : [],
+      postRouteLayerHierarchy: active && returnedSiltPressure && returnedVascularCadence && returnedGraveImprint
+        ? ["immediate_core_guide_and_retained_anatomy", "objective_three_return_echoes", "background_host_anatomy"]
+        : active && returnedSiltPressure
+          ? ["immediate_core_guide_and_silt_adaptation", "objective_lower_silt_echo", "retained_vascular_and_grave_echoes", "background_host_anatomy"]
+          : active && returnedVascularCadence
+            ? ["immediate_core_guide_and_filament", "objective_upper_vascular_echo", "retained_grave_echo", "background_host_anatomy"]
+            : active && returnedGraveImprint
+              ? ["immediate_core_and_guide", "objective_grave_echo", "background_host_anatomy"]
+              : active
+                ? ["immediate_player", "objective_route_territories", "background_host_anatomy"]
+                : [],
       postRouteConsequenceSilhouettesReadable: Boolean(
         active
         && returnedGraveImprint

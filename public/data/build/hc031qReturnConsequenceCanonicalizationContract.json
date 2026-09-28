@@ -1,0 +1,38 @@
+{
+  "id": "HC031Q_RETURN_CONSEQUENCE_CANONICALIZATION",
+  "pass": "HC-031Q",
+  "parent": "HC-031P1-HF1",
+  "mode": "convergence_return_consequence_canonicalization",
+  "purpose": "Expose the already-working Grave, Vascular, and Silt return consequences as one canonical Host recomposition read without changing route gameplay or progression authority.",
+  "ownership": {
+    "historyOwner": "LocalCellBoundaryMorphSystem",
+    "coreInterpretationOwner": "CoreGrowthSystem",
+    "corePresentationOwner": "CoreEmbodimentSystem",
+    "hubPresentationOwner": "HubChamberFoundationSystem",
+    "telemetryOwner": "SessionTelemetrySystem"
+  },
+  "returnReadings": {
+    "grave_memory_route": "memory_residue",
+    "vascular_route": "rhythm_current",
+    "silt_burrow_route": "pressure_density"
+  },
+  "locks": {
+    "routeCompletionCriteria": true,
+    "routeEntryRequirements": true,
+    "movement": true,
+    "verbs": true,
+    "targeting": true,
+    "graveGameplay": true,
+    "vascularGameplay": true,
+    "siltGameplay": true,
+    "combProgression": true
+  },
+  "telemetrySchema": "blob.session.telemetry.v1.40",
+  "acceptance": [
+    "Hub publishes all three retained readings through one read-only returnedReadings surface.",
+    "Destination readiness telemetry reports the actual pending/available route instead of defaulting to Grave.",
+    "Silt runtime compatibility metadata resolves to CELL_SILT_PRESSURE_ROUTE_001.",
+    "Return recomposition telemetry changes only when the retained-reading set changes.",
+    "Neighbor gameplay owners remain byte-for-byte unchanged."
+  ]
+}

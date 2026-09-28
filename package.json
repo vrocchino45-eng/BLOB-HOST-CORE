@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.37",
+  "version": "0.31.38",
   "private": true,
-  "description": "BLOB: HOST CORE \u2014 HC-031P1-HF1 Destination Commit Latch",
+  "description": "BLOB: HOST CORE \u2014 HC-031Q Return Consequence Canonicalization",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031p1-hf1 && npm run validate:hc031p1-hf1-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
+    "validate:current": "npm run validate:hc031q && npm run validate:hc031q-syntax && npm run validate:recipe-data && npm run audit:undefined-methods",
     "validate:hc031p": "node scripts/validateHC031PFirstHostDestinationCommitment.mjs",
     "validate:hc031p-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
@@ -276,7 +276,9 @@
     "validate:hc031p1": "node scripts/validateHC031P1FirstDestinationCommitmentUnblock.mjs",
     "validate:hc031p1-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/hub/HubInvestigationGameplaySystem.js && node --check src/morph/LocalCellBoundaryMorphSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031p1-hf1": "node scripts/validateHC031P1HF1DestinationCommitLatch.mjs",
-    "validate:hc031p1-hf1-syntax": "node --check src/hub/HubInvestigationGameplaySystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
+    "validate:hc031p1-hf1-syntax": "node --check src/hub/HubInvestigationGameplaySystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
+    "validate:hc031q": "node scripts/validateHC031QReturnConsequenceCanonicalization.mjs",
+    "validate:hc031q-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js"
   },
   "dependencies": {
     "three": "^0.179.1",

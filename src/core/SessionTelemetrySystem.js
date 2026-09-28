@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.39";
+    this.schemaVersion = "blob.session.telemetry.v1.40";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -103,6 +103,7 @@ export class SessionTelemetrySystem {
       : "none";
     this.lastHubDestinationReadinessKey = "none";
     this.lastHubRouteCommitRequestEventId = frameState.hubRouteCommitRequest?.eventId ?? 0;
+    this.lastHubReturnRecompositionKey = "none";
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -173,6 +174,7 @@ export class SessionTelemetrySystem {
     this.observeHostContinuation(frameState);
     this.observeRouteResolution(frameState);
     this.observeHubDestinationCommitment(frameState);
+    this.observeHubReturnRecomposition(frameState);
     this.observeTarget(frameState);
     this.observeInput(frameState, wallNow);
     this.observeSonar(frameState);
@@ -376,8 +378,34 @@ export class SessionTelemetrySystem {
     const availableRouteId = commit.available ? (commit.routeId ?? "none") : "none";
     const inHub = frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001";
     const selectionRadius = Number.isFinite(commit.selectionRadius) ? commit.selectionRadius : 2.1;
-    const invitationDistance = Number.isFinite(invitation.distanceToPlayer) ? invitation.distanceToPlayer : 0;
     const commitPending = Boolean(commit.pending);
+    const activeRouteId = (commitPending || commit.available)
+      ? (commit.routeId ?? "none")
+      : (invitation.routeId ?? "grave_memory_route");
+    const activeGateId = (commitPending || commit.available)
+      ? (commit.gateId ?? "none")
+      : (invitation.gateId ?? "hub_to_grave_memory_route");
+    const routeBody = [
+      ...(foundation.routes ?? []),
+      ...(foundation.thresholds ?? [])
+    ].find((item) => item?.id === activeRouteId || item?.gateId === activeGateId) ?? null;
+    const activeDistance = Number.isFinite(commit.distance) && commit.available
+      ? commit.distance
+      : Number.isFinite(routeBody?.distanceToPlayer)
+        ? routeBody.distanceToPlayer
+        : Number.isFinite(invitation.distanceToPlayer)
+          ? invitation.distanceToPlayer
+          : 0;
+    const preparationByGate = {
+      hub_to_grave_memory_route: "hubToGraveReady",
+      hub_to_vascular_route: "hubToVascularPlayableReady",
+      hub_to_silt_burrow_route: "hubToSiltPlayableReady",
+      hub_to_comb_threshold: "hubToCombFoundationReady"
+    };
+    const preparationFlag = preparationByGate[activeGateId] ?? "none";
+    const destinationPrepared = preparationFlag === "none"
+      ? Boolean(routeBody?.destinationMounted)
+      : frameState.transitionContinuity?.[preparationFlag] === true;
     const readinessReason = commitPending
       ? "commit_in_flight"
       : commit.available
@@ -386,31 +414,34 @@ export class SessionTelemetrySystem {
           ? "outside_commit_radius"
           : (invitation.blocker ?? "destination_not_available");
     const readinessKey = inHub
-      ? `${invitation.active ? 1 : 0}|${commit.available ? 1 : 0}|${commitPending ? 1 : 0}|${readinessReason}`
+      ? `${activeRouteId}|${activeGateId}|${commit.available ? 1 : 0}|${commitPending ? 1 : 0}|${readinessReason}`
       : "outside_hub";
 
     if (inHub && readinessKey !== this.lastHubDestinationReadinessKey) {
       this.record("hub.destination.readiness_changed", "analysis", {
         percept: {
-          route: this.aliasSemantic(invitation.routeId ?? "grave_memory_route"),
+          route: this.aliasSemantic(activeRouteId),
           status: readinessReason,
-          control: invitation.commitControl ?? commit.control ?? "A / E"
+          control: commit.control ?? invitation.commitControl ?? "A / E"
         },
         developer: {
-          routeId: invitation.routeId ?? "grave_memory_route",
-          gateId: invitation.gateId ?? commit.gateId ?? "hub_to_grave_memory_route",
-          invitationActive: Boolean(invitation.active),
+          routeId: activeRouteId,
+          gateId: activeGateId,
+          invitationActive: Boolean(invitation.active && activeRouteId === (invitation.routeId ?? "grave_memory_route")),
           commitAvailable: Boolean(commit.available),
           commitPending,
           invitationBlocker: (commit.available || commitPending) ? "none" : (invitation.blocker ?? "none"),
           readinessSource: commitPending
             ? "latched_destination_commit"
             : commit.available
-              ? (invitation.active ? "first_destination_invitation" : "route_body_commit_state")
+              ? (invitation.active && activeRouteId === (invitation.routeId ?? "grave_memory_route")
+                  ? "first_destination_invitation"
+                  : "route_body_commit_state")
               : "destination_readiness",
-          distance: round(invitationDistance),
+          distance: round(activeDistance),
           selectionRadius: round(selectionRadius),
-          destinationPrepared: Boolean(frameState.transitionContinuity?.hubToGraveReady),
+          destinationPrepared: Boolean(destinationPrepared),
+          preparationFlag,
           foundationCompleted: Boolean(foundation.completed),
           wholeHubScreenTruthVerified: Boolean(invitation.wholeHubScreenTruthVerified),
           screenTruthRequiredForCommit: false,
@@ -433,10 +464,10 @@ export class SessionTelemetrySystem {
             gateId: commit.gateId ?? invitation.gateId ?? "none",
             distance: round(commit.distance ?? invitation.distanceToPlayer ?? 0),
             selectionRadius: round(commit.selectionRadius ?? 0),
-            bodyCue: invitation.bodyCue ?? "existing_route_body",
+            bodyCue: routeBody?.bodyCue ?? invitation.bodyCue ?? "existing_route_body",
             deliberateCommitRequired: true,
             automaticCrossing: false,
-            transitionOwner: invitation.transitionOwner ?? "LocalCellBoundaryMorphSystem"
+            transitionOwner: routeBody?.transitionOwner ?? invitation.transitionOwner ?? "LocalCellBoundaryMorphSystem"
           }
         });
       }
@@ -461,6 +492,36 @@ export class SessionTelemetrySystem {
         }
       });
     }
+  }
+
+  observeHubReturnRecomposition(frameState) {
+    const foundation = frameState.hubChamberFoundation ?? {};
+    const readings = foundation.returnedReadings ?? {};
+    const retained = [
+      readings.graveMemory,
+      readings.vascularRhythm,
+      readings.siltPressure
+    ].filter((item) => item?.retained);
+    const key = retained.map((item) => item.routeId).sort().join("|") || "none";
+    if (key === this.lastHubReturnRecompositionKey) return;
+
+    this.lastHubReturnRecompositionKey = key;
+    this.record("hub.return_recomposition.changed", "perceptual", {
+      percept: {
+        retainedReadingCount: retained.length,
+        retainedFunctions: retained.map((item) => item.hostFunction ?? "unknown"),
+        state: foundation.returnRecompositionState ?? (retained.length >= 3 ? "three_reading_host_recomposition" : retained.length ? "partial_host_recomposition" : "none")
+      },
+      developer: {
+        retainedRoutes: retained.map((item) => item.routeId),
+        historyOwner: "LocalCellBoundaryMorphSystem",
+        coreInterpretationOwner: "CoreGrowthSystem",
+        corePresentationOwner: "CoreEmbodimentSystem",
+        hubPresentationOwner: "HubChamberFoundationSystem",
+        gameplayAuthority: false,
+        routeAuthority: false
+      }
+    });
   }
 
   observeTarget(frameState) {
@@ -2643,6 +2704,7 @@ export class SessionTelemetrySystem {
       hubDestinationAvailabilityEvents: count("hub.destination.available"),
       hubDestinationCommitEvents: count("hub.destination.committed"),
       hubDestinationReadinessEvents: count("hub.destination.readiness_changed"),
+      hubReturnRecompositionChanges: count("hub.return_recomposition.changed"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),
