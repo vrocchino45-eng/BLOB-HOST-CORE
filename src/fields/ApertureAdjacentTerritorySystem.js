@@ -6,7 +6,7 @@ const TERRITORY_ID = "gathering_ground_cluster";
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
 /**
- * HC031T1 — adjacent-territory access + detachment-truth repair.
+ * HC031T3 — Ridge completion world-release readability pass.
  *
  * Converts the existing Gathering Ground background landmark into a three-ring
  * world-space relationship without creating a new level or teleport:
@@ -57,13 +57,16 @@ export class ApertureAdjacentTerritorySystem {
     this.entrySequence = 0;
     this.absorbEcho = 0;
     this.pulseResponse = 0;
+    this.openResponse = 0;
+    this.openResponseAge = 99;
+    this.releaseRings = [];
   }
 
   init() {
     if (this.root) return;
 
     this.root = new THREE.Group();
-    this.root.name = "aperture_adjacent_gathering_territory_HC031T1";
+    this.root.name = "aperture_adjacent_gathering_territory_HC031T3";
     this.root.visible = false;
     this.scene.add(this.root);
 
@@ -163,6 +166,31 @@ export class ApertureAdjacentTerritorySystem {
       this.root.add(conduit);
       this.connectiveBodies.push(conduit);
     }
+
+    // HC031T3: completion must read as a world event, not a quiet boolean flip.
+    // These waves originate at the Membrane Ridge and expand toward the newly
+    // traversable connective anatomy. They carry no collision or progression authority.
+    const releaseMat = new THREE.MeshBasicMaterial({
+      color: 0xc9ead7,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+    const ridgeReleaseLocal = new THREE.Vector3(20.0, 1.7, -46.0);
+    for (let i = 0; i < 3; i += 1) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(2.7 + i * 0.55, 0.07 + i * 0.012, 7, 56),
+        releaseMat.clone()
+      );
+      ring.position.copy(ridgeReleaseLocal);
+      ring.rotation.set(Math.PI / 2.35, 0.08 * i, -0.35 + i * 0.18);
+      ring.visible = false;
+      ring.name = `membrane_ridge_completion_release_${i + 1}`;
+      ring.userData.delay = i * 0.11;
+      this.root.add(ring);
+      this.releaseRings.push(ring);
+    }
   }
 
   resetState() {
@@ -178,6 +206,13 @@ export class ApertureAdjacentTerritorySystem {
     this.entrySequence = 0;
     this.absorbEcho = 0;
     this.pulseResponse = 0;
+    this.openResponse = 0;
+    this.openResponseAge = 99;
+    for (const ring of this.releaseRings) {
+      ring.visible = false;
+      ring.material.opacity = 0;
+      ring.scale.setScalar(1);
+    }
   }
 
   onRuntimeMount(frameState) {
@@ -209,7 +244,7 @@ export class ApertureAdjacentTerritorySystem {
   onRuntimePrepare(frameState) {
     this.init();
     frameState.adjacentHostTerritoryPreparation = {
-      pass: "HC-031T1",
+      pass: "HC-031T3",
       status: "prepared_hidden",
       mutatesProgression: false,
       mutatesActiveCell: false
@@ -284,6 +319,16 @@ export class ApertureAdjacentTerritorySystem {
     if (ridgeComplete && !this.traversalOpened) {
       this.traversalOpened = true;
       this.traversalSequence += 1;
+      this.openResponse = 1;
+      this.openResponseAge = 0;
+      for (const ring of this.releaseRings) ring.visible = true;
+    }
+
+    if (this.traversalOpened && this.openResponseAge < 2.4) {
+      this.openResponseAge += dt;
+      this.openResponse = 1 - clamp01(this.openResponseAge / 2.4);
+    } else if (this.traversalOpened) {
+      this.openResponse = 0;
     }
 
     const entryRadius = 13.5;
@@ -303,9 +348,10 @@ export class ApertureAdjacentTerritorySystem {
 
     if (this.ghostBody?.material) {
       const breath = 1 + Math.sin(time * (0.32 + relationship01 * 0.55)) * (0.018 + relationship01 * 0.035);
-      this.ghostBody.scale.set(1.45 * breath, 0.82 * (1 + relationship01 * 0.025), 1.85 * breath);
-      this.ghostBody.material.opacity = 0.11 + observation01 * 0.16 + local01 * 0.16;
-      this.ghostBody.material.emissiveIntensity = 0.06 + observation01 * 0.16 + relationship01 * 0.24 + this.pulseResponse * 0.22;
+      const releaseLift = this.openResponse * 0.16;
+      this.ghostBody.scale.set(1.45 * breath * (1 + releaseLift), 0.82 * (1 + relationship01 * 0.025 + releaseLift * 0.55), 1.85 * breath * (1 + releaseLift));
+      this.ghostBody.material.opacity = 0.11 + observation01 * 0.16 + local01 * 0.16 + this.openResponse * 0.22;
+      this.ghostBody.material.emissiveIntensity = 0.06 + observation01 * 0.16 + relationship01 * 0.24 + this.pulseResponse * 0.22 + this.openResponse * 0.95;
     }
 
     this.detailBodies.forEach((body, index) => {
@@ -323,17 +369,33 @@ export class ApertureAdjacentTerritorySystem {
       halo.rotation.z += dt * (0.05 + relationship01 * (0.12 + index * 0.025));
       halo.material.opacity = observation01 * (0.04 + index * 0.012)
         + this.pulseResponse * (0.12 - index * 0.018)
-        + relationship01 * 0.055;
+        + relationship01 * 0.055
+        + this.openResponse * Math.max(0.18, 0.56 - index * 0.11);
     });
 
     this.connectiveBodies.forEach((body, index) => {
       const baseOpacity = body.userData.baseOpacity ?? 0.025;
       body.material.opacity = this.traversalOpened
-        ? 0.18 + relationship01 * 0.10 + local01 * 0.12 + index * 0.012
+        ? 0.30 + relationship01 * 0.12 + local01 * 0.14 + index * 0.014 + this.openResponse * Math.max(0.24, 0.56 - index * 0.08)
         : baseOpacity + observation01 * 0.025 + relationship01 * 0.055;
       body.material.emissiveIntensity = this.traversalOpened
-        ? 0.28 + relationship01 * 0.22
+        ? 0.46 + relationship01 * 0.26 + this.openResponse * 0.92
         : 0.10 + relationship01 * 0.12;
+    });
+
+    this.releaseRings.forEach((ring, index) => {
+      if (!this.traversalOpened) {
+        ring.visible = false;
+        ring.material.opacity = 0;
+        return;
+      }
+      const delay = ring.userData.delay ?? index * 0.11;
+      const progress = clamp01((this.openResponseAge - delay) / 1.45);
+      const envelope = progress <= 0 || progress >= 1 ? 0 : Math.sin(progress * Math.PI);
+      ring.visible = envelope > 0.001;
+      ring.material.opacity = envelope * 0.82;
+      ring.scale.setScalar(0.72 + progress * 2.65);
+      ring.rotation.z += dt * (0.18 + index * 0.05);
     });
 
     const stage = this.enteredTerritory
@@ -354,7 +416,9 @@ export class ApertureAdjacentTerritorySystem {
       playerDistance,
       cameraDistance,
       absorbAnswering,
-      entryRadius
+      entryRadius,
+      openingResponse01: this.openResponse,
+      openingResponseAge: this.openResponseAge
     });
   }
 
@@ -373,7 +437,7 @@ export class ApertureAdjacentTerritorySystem {
         : "ring_c_distant";
 
     frameState.adjacentHostTerritory = {
-      pass: "HC-031T1",
+      pass: "HC-031T3",
       active: true,
       territoryId: TERRITORY_ID,
       regionId: "aperture_fields",
@@ -390,6 +454,10 @@ export class ApertureAdjacentTerritorySystem {
       traversalOpen: this.traversalOpened,
       traversalSequence: this.traversalSequence,
       connectiveAnatomyVisible: this.traversalOpened,
+      worldReleaseReadable: this.traversalOpened,
+      openingResponse01: Number.isFinite(metrics.openingResponse01) ? metrics.openingResponse01 : this.openResponse,
+      openingResponseAge: Number.isFinite(metrics.openingResponseAge) ? metrics.openingResponseAge : this.openResponseAge,
+      completionReaction: this.traversalOpened ? "ridge_release_wave_connective_flare_gathering_answer" : "pending",
       enteredTerritory: this.enteredTerritory,
       entrySequence: this.entrySequence,
       distance: Number.isFinite(metrics.playerDistance) ? metrics.playerDistance : null,

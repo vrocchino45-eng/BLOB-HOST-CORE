@@ -16,6 +16,8 @@ export class MembraneRidgeGameplaySystem {
     this.traceDistance = 0;
     this.completed = false;
     this.response = 0;
+    this.completionBurst = 0;
+    this.completionSequence = 0;
     this.bands = [];
     this.requiredTraceDistance = 3.4;
   }
@@ -75,6 +77,8 @@ export class MembraneRidgeGameplaySystem {
     this.traceDistance = 0;
     this.completed = false;
     this.response = 0;
+    this.completionBurst = 0;
+    this.completionSequence = 0;
     this.hasPreviousPosition = false;
     for (const band of this.bands) {
       band.progress = 0;
@@ -162,21 +166,32 @@ export class MembraneRidgeGameplaySystem {
         if (this.traceIndex >= this.bands.length) {
           this.completed = true;
           this.response = 0.001;
+          this.completionBurst = 1;
+          this.completionSequence += 1;
         }
       }
     }
 
-    if (this.completed) this.response = Math.min(1, this.response + dt * 0.48);
+    if (this.completed) this.response = Math.min(1, this.response + dt * 0.72);
+    this.completionBurst = Math.max(0, this.completionBurst - dt * 0.46);
 
     const time = frameState.runtimeSeconds ?? 0;
     this.bands.forEach((band, index) => {
       const isActive = !this.completed && index === this.traceIndex;
       const isRead = band.read || this.completed;
-      const pulse = 1 + Math.sin(time * (isActive ? 2.1 : 0.72) - index * 0.7) * (isActive ? 0.08 : 0.025);
-      band.group.scale.setScalar(pulse);
-      band.arc.material.opacity = isRead ? 0.20 : isActive ? 0.58 : 0.28;
-      band.receptive.material.opacity = isRead ? 0.24 : isActive ? 0.82 : 0.30;
-      band.receptive.material.emissiveIntensity = isActive ? 0.62 : isRead ? 0.18 : 0.24;
+      const completionPulse = this.completed ? this.completionBurst : 0;
+      const pulse = 1 + Math.sin(time * (isActive ? 2.1 : this.completed ? 2.8 : 0.72) - index * 0.7)
+        * (isActive ? 0.08 : this.completed ? 0.045 + completionPulse * 0.08 : 0.025);
+      band.group.scale.setScalar(pulse * (1 + completionPulse * 0.08));
+      band.arc.material.opacity = this.completed
+        ? 0.34 + completionPulse * 0.42
+        : isRead ? 0.20 : isActive ? 0.58 : 0.28;
+      band.receptive.material.opacity = this.completed
+        ? 0.42 + completionPulse * 0.46
+        : isRead ? 0.24 : isActive ? 0.82 : 0.30;
+      band.receptive.material.emissiveIntensity = this.completed
+        ? 0.42 + completionPulse * 1.05
+        : isActive ? 0.62 : isRead ? 0.18 : 0.24;
     });
 
     frameState.membraneRidgeGameplay = {
@@ -193,12 +208,14 @@ export class MembraneRidgeGameplaySystem {
       tracing,
       completed: this.completed,
       localResponse: this.response,
+      completionBurst01: this.completionBurst,
+      completionSequence: this.completionSequence,
       mutatesGlobalProgression: false,
-      currentPlayableEndpoint: this.completed,
-      nextGameplayImplemented: false,
-      gatheringGroundRole: this.completed ? "distant_ecology_landmark_only" : "not_yet_revealed",
+      currentPlayableEndpoint: false,
+      nextGameplayImplemented: true,
+      gatheringGroundRole: this.completed ? "adjacent_open_territory_continuation" : "not_yet_revealed",
       nextAction: this.completed
-        ? "current_slice_complete_observe_gathering_ground_landmark"
+        ? "follow_the_released_connective_anatomy_toward_gathering_ground"
         : tracing
           ? "keep_moving_through_the_living_contour"
           : "enter_the_bright_edge_and_move_along_it"

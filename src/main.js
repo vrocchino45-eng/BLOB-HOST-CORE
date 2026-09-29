@@ -1,9 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T2 repairs Aperture world-origin drift exposed by the Shift+8 focused test.
-// Aperture Fields owns one canonical world anchor; Signal Plain, Membrane Ridge, and
-// Gathering Ground all derive from it even when a debug setup repositions the player.
-// Existing movement, targeting, crossing, and encounter rules stay authoritative.
+// HC031T3 makes Membrane Ridge completion read as a world release rather than a silent state flip.
+// The third contour now produces a visible Ridge release wave, a strong connective-tissue flare,
+// a Gathering Ground answer, and explicit continuation language. Progression rules stay unchanged.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T2",
-  buildLabel: "Canonical Aperture World Anchor Repair"
+  buildId: "HC-031T3",
+  buildLabel: "Membrane Ridge World Release Readability"
 });
 
 runtime.start().catch((error) => {

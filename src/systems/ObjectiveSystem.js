@@ -452,6 +452,7 @@ export class ObjectiveSystem {
         adjacent_territory_remotely_observed: (adjacent.observationCount ?? 0) > 0,
         adjacent_territory_relationship_established: Boolean(adjacent.relationshipEstablished),
         adjacent_territory_continuous_traversal_open: Boolean(adjacent.traversalOpen),
+        adjacent_territory_world_release_readable: Boolean(adjacent.worldReleaseReadable),
         adjacent_territory_entered_without_cell_change: Boolean(adjacent.enteredTerritory)
       },
       completionSource: signalPlainComplete
@@ -468,6 +469,12 @@ export class ObjectiveSystem {
       continuationOwner: membraneRidgeComplete
         ? "ApertureAdjacentTerritorySystem"
         : signalPlainComplete ? "MembraneRidgeGameplaySystem" : "SignalPlainEcologySystem",
+      continuationState: membraneRidgeComplete
+        ? (adjacent.enteredTerritory ? "neighbor_local" : adjacent.traversalOpen ? "world_release_open" : "ridge_complete_waiting_for_release")
+        : signalPlainComplete ? "membrane_ridge_active" : "signal_plain_active",
+      continuationInstruction: membraneRidgeComplete
+        ? (adjacent.nextAction ?? "follow_the_opened_living_connection")
+        : (membraneRidge.nextAction ?? signalPlain.nextAction ?? arrival.nextAction ?? "continue_aperture"),
       newAbilityUnlocks: 0
     };
   }

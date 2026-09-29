@@ -729,9 +729,11 @@ export class GuidePromptSystem {
       guideLine: ridge.completed
         ? (frameState.adjacentHostTerritory?.enteredTerritory
             ? "The distant body is no longer background. The Aperture now lies behind you as part of the same Host."
-            : frameState.adjacentHostTerritory?.relationshipEstablished
-              ? "The larger body is answering before you reach it. The ridge now connects into that response."
-              : "The ridge has yielded its pressure reading. Something larger is gathering beyond it.")
+            : frameState.adjacentHostTerritory?.traversalOpen
+              ? "The membrane releases. The living connection ahead is now open—follow it into the larger body."
+              : frameState.adjacentHostTerritory?.relationshipEstablished
+                ? "The larger body is answering before you reach it. The ridge now connects into that response."
+                : "The ridge has yielded its pressure reading. Something larger is gathering beyond it.")
         : ridge.tracing
           ? "The membrane answers motion, not force."
           : "The ridge is carrying a living pressure contour.",
@@ -741,7 +743,9 @@ export class GuidePromptSystem {
           ? "Keep moving through the bright contour."
           : "Enter the bright contour and move along it.",
       debugFallback: `ridge ${ridge.contourIndex ?? 1}/${ridge.contourCount ?? 3} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)} | neighbor ${frameState.adjacentHostTerritory?.stage ?? "distant"}`,
-      tone: ridge.completed ? "membrane_ridge_read" : ridge.tracing ? "membrane_ridge_motion" : "membrane_ridge_approach",
+      tone: ridge.completed
+        ? (frameState.adjacentHostTerritory?.traversalOpen ? "membrane_ridge_world_release" : "membrane_ridge_read")
+        : ridge.tracing ? "membrane_ridge_motion" : "membrane_ridge_approach",
       contentOwner: "MembraneRidgeGameplaySystem",
       source: "activeRegionState"
     };
