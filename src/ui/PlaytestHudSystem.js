@@ -357,7 +357,7 @@ export class PlaytestHudSystem {
       ? `TEST ${testPlatform.slot ?? "?"}/8 · ${testPlatform.label ?? "platform"} · ~${testPlatform.suggestedSeconds ?? 60}s · next ${testPlatform.nextShortcut ?? "Shift+1"} · `
       : "";
     const gatheringDebug = inApertureFields && adjacentHostTerritory.active
-      ? ` · GG d${Number.isFinite(adjacentHostTerritory.distance) ? adjacentHostTerritory.distance.toFixed(1) : "?"} aim${Number.isFinite(adjacentHostTerritory.aimDot) ? adjacentHostTerritory.aimDot.toFixed(2) : "?"}${adjacentHostTerritory.aimed ? " VIEW" : ""}${adjacentHostTerritory.attentionOwned ? " ATTN" : ""} OBS${adjacentHostTerritory.observationCount ?? 0} REL${adjacentHostTerritory.relationshipEstablished ? "Y" : "N"} ${adjacentHostTerritory.traversalOpen ? "OPEN" : "CLOSED"}`
+      ? ` · RIDGE ${membraneRidgeGameplay.readCount ?? 0}/${membraneRidgeGameplay.contourCount ?? 3}${membraneRidgeGameplay.completed ? " COMPLETE" : ""} · GG d${Number.isFinite(adjacentHostTerritory.distance) ? adjacentHostTerritory.distance.toFixed(1) : "?"} aim${Number.isFinite(adjacentHostTerritory.aimDot) ? adjacentHostTerritory.aimDot.toFixed(2) : "?"}${adjacentHostTerritory.aimed ? " VIEW" : ""}${adjacentHostTerritory.attentionOwned ? " ATTN" : ""} OBS${adjacentHostTerritory.observationCount ?? 0} REL${adjacentHostTerritory.relationshipEstablished ? "Y" : "N"} ${adjacentHostTerritory.traversalOpen ? "OPEN" : "CLOSED"}`
       : "";
 
     return {

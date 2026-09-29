@@ -2403,7 +2403,8 @@ export class GameRuntime {
       scene: this.scene,
       camera: this.camera,
       playerRoot: this.playerCore,
-      frameState: this.frameState
+      frameState: this.frameState,
+      apertureFieldsArrivalSystem: this.apertureFieldsArrivalSystem
     });
     this.localCellBoundaryMorphSystem = new LocalCellBoundaryMorphSystem({
       frameState: this.frameState,

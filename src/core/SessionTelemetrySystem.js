@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.45";
+    this.schemaVersion = "blob.session.telemetry.v1.46";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -109,6 +109,8 @@ export class SessionTelemetrySystem {
     this.lastSiltPressureReadSequence = frameState.siltPressureRoute?.pressureReadSequence ?? 0;
     this.lastSiltAppetiteDrawSequence = frameState.siltPressureRoute?.appetiteDrawSequence ?? 0;
     this.lastSiltCurrentizedComplete = Boolean(frameState.siltPressureRoute?.completed);
+    this.lastMembraneRidgeReadSequence = frameState.membraneRidgeGameplay?.readSequence ?? 0;
+    this.lastMembraneRidgeCompletionSequence = frameState.membraneRidgeGameplay?.completionSequence ?? 0;
     this.lastAdjacentTerritoryObservationSequence = frameState.adjacentHostTerritory?.observationSequence ?? 0;
     this.lastAdjacentTerritoryRelationshipSequence = frameState.adjacentHostTerritory?.relationshipSequence ?? 0;
     this.lastAdjacentTerritoryTraversalSequence = frameState.adjacentHostTerritory?.traversalSequence ?? 0;
@@ -187,6 +189,7 @@ export class SessionTelemetrySystem {
     this.observeRouteResolution(frameState);
     this.observeVascularCurrentization(frameState);
     this.observeSiltCurrentization(frameState);
+    this.observeMembraneRidge(frameState);
     this.observeAdjacentTerritory(frameState);
     this.observeHubDestinationCommitment(frameState);
     this.observeHubReturnRecomposition(frameState);
@@ -663,6 +666,53 @@ export class SessionTelemetrySystem {
         }
       });
     }
+  }
+
+
+  observeMembraneRidge(frameState) {
+    const ridge = frameState.membraneRidgeGameplay ?? {};
+    const readSequence = Number.isFinite(ridge.readSequence) ? ridge.readSequence : 0;
+    if (readSequence > this.lastMembraneRidgeReadSequence) {
+      this.record("world.membrane_ridge.contour_read", "perceptual", {
+        percept: {
+          contour: ridge.lastReadContourIndex ?? 0,
+          readCount: ridge.readCount ?? 0,
+          contourCount: ridge.contourCount ?? 3,
+          action: "physical_trace"
+        },
+        developer: {
+          sequence: readSequence,
+          frameRateIndependent: true,
+          contourOrderPolicy: ridge.contourOrderPolicy ?? "any_order_all_three_required",
+          requiredTraceDistance: round(ridge.requiredTraceDistance ?? 0),
+          gameplayAuthority: false
+        }
+      });
+      this.noteInformationGain("membrane_ridge_contour_read", 0.45, {
+        contour: ridge.lastReadContourIndex ?? 0,
+        readCount: ridge.readCount ?? 0
+      });
+    }
+    this.lastMembraneRidgeReadSequence = Math.max(this.lastMembraneRidgeReadSequence, readSequence);
+
+    const completionSequence = Number.isFinite(ridge.completionSequence) ? ridge.completionSequence : 0;
+    if (completionSequence > this.lastMembraneRidgeCompletionSequence) {
+      this.record("world.membrane_ridge.completed", "perceptual", {
+        percept: {
+          readCount: ridge.readCount ?? 0,
+          contourCount: ridge.contourCount ?? 3,
+          result: "ridge_pressure_read"
+        },
+        developer: {
+          sequence: completionSequence,
+          opensAdjacentTerritory: true,
+          activeCellChangeRequired: false,
+          teleportRequired: false
+        }
+      });
+      this.noteInformationGain("membrane_ridge_completed", 0.8, { readCount: ridge.readCount ?? 0 });
+    }
+    this.lastMembraneRidgeCompletionSequence = Math.max(this.lastMembraneRidgeCompletionSequence, completionSequence);
   }
 
   observeAdjacentTerritory(frameState) {
@@ -2695,6 +2745,24 @@ export class SessionTelemetrySystem {
         pressure: round(frameState.playerKinematics?.movementBoundary?.pressure ?? 0),
         proximity: round(frameState.playerKinematics?.movementBoundary?.proximity ?? 0)
       },
+      ridgeState: {
+        active: Boolean(frameState.membraneRidgeGameplay?.active),
+        readCount: frameState.membraneRidgeGameplay?.readCount ?? 0,
+        contourCount: frameState.membraneRidgeGameplay?.contourCount ?? 3,
+        activeContourIndex: frameState.membraneRidgeGameplay?.contourIndex ?? 0,
+        activeContourProgress: round(frameState.membraneRidgeGameplay?.activeContourProgress ?? 0),
+        tracing: Boolean(frameState.membraneRidgeGameplay?.tracing),
+        completed: Boolean(frameState.membraneRidgeGameplay?.completed),
+        completionSequence: frameState.membraneRidgeGameplay?.completionSequence ?? 0
+      },
+      adjacentTerritoryState: {
+        observationCount: frameState.adjacentHostTerritory?.observationCount ?? 0,
+        relationshipEstablished: Boolean(frameState.adjacentHostTerritory?.relationshipEstablished),
+        traversalOpen: Boolean(frameState.adjacentHostTerritory?.traversalOpen),
+        enteredTerritory: Boolean(frameState.adjacentHostTerritory?.enteredTerritory),
+        attentionOwned: Boolean(frameState.adjacentHostTerritory?.attentionOwned),
+        distance: round(frameState.adjacentHostTerritory?.distance ?? 0)
+      },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),
         siltResolved: Boolean(frameState.siltPressureRoute?.completed),
@@ -3023,6 +3091,8 @@ export class SessionTelemetrySystem {
       siltPressureRelationshipReads: count("silt.pressure_relationship_read"),
       siltSelectiveDrawCompletions: count("silt.selective_draw.completed"),
       siltRelationshipRouteCompletions: count("silt.relationship_route.completed"),
+      membraneRidgeContourReads: count("world.membrane_ridge.contour_read"),
+      membraneRidgeCompletions: count("world.membrane_ridge.completed"),
       adjacentTerritoryObservations: count("world.adjacent_territory.observed"),
       adjacentTerritoryRelationships: count("world.adjacent_territory.relationship_established"),
       adjacentTerritoryTraversalOpenings: count("world.adjacent_territory.traversal_opened"),

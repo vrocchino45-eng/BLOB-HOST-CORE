@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T4 hands the released Ridge directly into world-scale attention.
-// Gathering Ground now participates in the canonical aim-owned noun grammar as a Host territory,
-// so looking at the visible body creates attention before Pulse/Stabilize modify the relationship.
+// HC031T5 locks the Aperture handoff to physical truth.
+// Ridge contours accumulate deliberate path length in any order, independent of frame rate,
+// and the original visible Gathering Ground landmark is the single canonical attention noun.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T4",
-  buildLabel: "Gathering Ground Attention Handoff"
+  buildId: "HC-031T5",
+  buildLabel: "Ridge Trace + Canonical Gathering Ground Lock"
 });
 
 runtime.start().catch((error) => {

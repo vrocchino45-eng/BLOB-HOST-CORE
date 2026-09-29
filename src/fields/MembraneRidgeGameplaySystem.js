@@ -12,20 +12,23 @@ export class MembraneRidgeGameplaySystem {
     this.entryAnchor = new THREE.Vector3();
     this.previousPlayerPosition = new THREE.Vector3();
     this.hasPreviousPosition = false;
-    this.traceIndex = 0;
-    this.traceDistance = 0;
     this.completed = false;
     this.response = 0;
     this.completionBurst = 0;
     this.completionSequence = 0;
+    this.readSequence = 0;
+    this.lastReadContourIndex = 0;
     this.bands = [];
     this.requiredTraceDistance = 3.4;
+    this.contourRadius = 4.15;
+    this.maxFrameTravel = 1.4;
+    this.minimumMoveIntent = 0.08;
   }
 
   init() {
     if (this.root) return;
     this.root = new THREE.Group();
-    this.root.name = "membrane_ridge_movement_gameplay_HC015N";
+    this.root.name = "membrane_ridge_movement_gameplay_HC031T5";
     this.root.visible = false;
     this.scene.add(this.root);
 
@@ -39,7 +42,8 @@ export class MembraneRidgeGameplaySystem {
     });
 
     // Three broad living contours wrap the existing Membrane Ridge landmark.
-    // They are not waypoint rings: the player must MOVE while inside a contour.
+    // HC031T5: they are independent readable contours, not a hidden ordered sequence.
+    // Any contour can be traced first; the Ridge completes when all three are read.
     const specs = [
       { p: [13.7, 0.3, -40.4], r: [1.18, 0.18, 0.42], s: [1.25, 1.0, 1.0] },
       { p: [18.0, 1.3, -44.0], r: [1.46, -0.08, -0.18], s: [1.45, 1.0, 1.0] },
@@ -68,21 +72,33 @@ export class MembraneRidgeGameplaySystem {
       group.add(receptive);
 
       this.root.add(group);
-      this.bands.push({ group, arc, receptive, localPosition: new THREE.Vector3(...spec.p), progress: 0, read: false });
+      this.bands.push({
+        group,
+        arc,
+        receptive,
+        localPosition: new THREE.Vector3(...spec.p),
+        baseScale: new THREE.Vector3(...spec.s),
+        traceDistance: 0,
+        progress: 0,
+        read: false,
+        distance: Infinity
+      });
     });
   }
 
   resetEncounter() {
-    this.traceIndex = 0;
-    this.traceDistance = 0;
     this.completed = false;
     this.response = 0;
     this.completionBurst = 0;
     this.completionSequence = 0;
+    this.readSequence = 0;
+    this.lastReadContourIndex = 0;
     this.hasPreviousPosition = false;
     for (const band of this.bands) {
+      band.traceDistance = 0;
       band.progress = 0;
       band.read = false;
+      band.distance = Infinity;
     }
   }
 
@@ -101,8 +117,8 @@ export class MembraneRidgeGameplaySystem {
     this.root.visible = false;
     this.resetEncounter();
     frameState.membraneRidgeGameplay = {
-      pass: "HC-016P", active: false, stage: "awaiting_signal_plain", contourIndex: 0,
-      contourCount: this.bands.length, completed: false
+      pass: "HC-031T5", active: false, stage: "awaiting_signal_plain", contourIndex: 0,
+      contourCount: this.bands.length, readCount: 0, readSequence: 0, completed: false
     };
   }
 
@@ -117,7 +133,7 @@ export class MembraneRidgeGameplaySystem {
 
   onRuntimePrepare(frameState) {
     this.init();
-    frameState.membraneRidgeGameplayPreparation = { pass: "HC-016P", status: "prepared_hidden", mutatesProgression: false };
+    frameState.membraneRidgeGameplayPreparation = { pass: "HC-031T5", status: "prepared_hidden", mutatesProgression: false };
   }
 
   update(dt, frameState) {
@@ -128,8 +144,8 @@ export class MembraneRidgeGameplaySystem {
     this.root.visible = unlocked;
     if (!unlocked) {
       frameState.membraneRidgeGameplay = {
-        pass: "HC-016P", active: false, stage: "awaiting_signal_plain",
-        contourIndex: 0, contourCount: this.bands.length, completed: false
+        pass: "HC-031T5", active: false, stage: "awaiting_signal_plain",
+        contourIndex: 0, contourCount: this.bands.length, readCount: 0, readSequence: this.readSequence, completed: false
       };
       return;
     }
@@ -140,36 +156,62 @@ export class MembraneRidgeGameplaySystem {
     this.previousPlayerPosition.copy(player);
     this.hasPreviousPosition = true;
 
-    const activeBand = this.bands[this.traceIndex] ?? null;
-    let activeDistance = Infinity;
+    const moveIntent = Math.hypot(
+      frameState.input?.moveX ?? 0,
+      frameState.input?.moveY ?? 0,
+      frameState.input?.moveZ ?? 0
+    );
+    const deliberatePhysicalTravel = moved > 0.00001 && moved <= this.maxFrameTravel && moveIntent >= this.minimumMoveIntent;
+
+    let nearestUnreadBand = null;
+    let nearestUnreadIndex = -1;
+    let nearestUnreadDistance = Infinity;
+    this.bands.forEach((band, index) => {
+      const worldCenter = this.entryAnchor.clone().add(band.localPosition);
+      band.distance = player.distanceTo(worldCenter);
+      if (!band.read && band.distance < nearestUnreadDistance) {
+        nearestUnreadBand = band;
+        nearestUnreadIndex = index;
+        nearestUnreadDistance = band.distance;
+      }
+    });
+
+    // HC031T5: count real path length inside whichever unread contour the player is
+    // actually occupying. There is no per-frame minimum displacement and no hidden
+    // contour order, so the same physical trace resolves identically across frame rates.
+    let tracingBand = null;
+    let tracingIndex = -1;
+    let tracingDistance = Infinity;
+    for (let index = 0; index < this.bands.length; index += 1) {
+      const band = this.bands[index];
+      if (band.read || band.distance > this.contourRadius) continue;
+      if (band.distance < tracingDistance) {
+        tracingBand = band;
+        tracingIndex = index;
+        tracingDistance = band.distance;
+      }
+    }
+
     let tracing = false;
+    if (!this.completed && tracingBand && deliberatePhysicalTravel) {
+      tracingBand.traceDistance += moved;
+      tracingBand.progress = THREE.MathUtils.clamp(tracingBand.traceDistance / this.requiredTraceDistance, 0, 1);
+      tracing = true;
 
-    if (activeBand && !this.completed) {
-      const worldCenter = this.entryAnchor.clone().add(activeBand.localPosition);
-      activeDistance = player.distanceTo(worldCenter);
-      const insideContour = activeDistance <= 4.15;
-      const meaningfulMovement = moved >= 0.012 && moved <= 1.4;
-
-      // Progress is earned by physically tracing through the living contour.
-      // Standing still, camera motion, or firing a verb cannot complete it.
-      if (insideContour && meaningfulMovement) {
-        this.traceDistance += moved;
-        tracing = true;
+      if (tracingBand.traceDistance >= this.requiredTraceDistance) {
+        tracingBand.read = true;
+        tracingBand.progress = 1;
+        this.readSequence += 1;
+        this.lastReadContourIndex = tracingIndex + 1;
       }
+    }
 
-      activeBand.progress = THREE.MathUtils.clamp(this.traceDistance / this.requiredTraceDistance, 0, 1);
-      if (this.traceDistance >= this.requiredTraceDistance) {
-        activeBand.read = true;
-        activeBand.progress = 1;
-        this.traceIndex += 1;
-        this.traceDistance = 0;
-        if (this.traceIndex >= this.bands.length) {
-          this.completed = true;
-          this.response = 0.001;
-          this.completionBurst = 1;
-          this.completionSequence += 1;
-        }
-      }
+    const readCount = this.bands.filter((band) => band.read).length;
+    if (!this.completed && readCount >= this.bands.length) {
+      this.completed = true;
+      this.response = 0.001;
+      this.completionBurst = 1;
+      this.completionSequence += 1;
     }
 
     if (this.completed) this.response = Math.min(1, this.response + dt * 0.72);
@@ -177,39 +219,61 @@ export class MembraneRidgeGameplaySystem {
 
     const time = frameState.runtimeSeconds ?? 0;
     this.bands.forEach((band, index) => {
-      const isActive = !this.completed && index === this.traceIndex;
+      const isTracing = !this.completed && index === tracingIndex;
+      const isNearestUnread = !this.completed && index === nearestUnreadIndex;
       const isRead = band.read || this.completed;
       const completionPulse = this.completed ? this.completionBurst : 0;
-      const pulse = 1 + Math.sin(time * (isActive ? 2.1 : this.completed ? 2.8 : 0.72) - index * 0.7)
-        * (isActive ? 0.08 : this.completed ? 0.045 + completionPulse * 0.08 : 0.025);
-      band.group.scale.setScalar(pulse * (1 + completionPulse * 0.08));
+      const pulse = 1 + Math.sin(time * (isTracing ? 2.1 : this.completed ? 2.8 : 0.72) - index * 0.7)
+        * (isTracing ? 0.08 : this.completed ? 0.045 + completionPulse * 0.08 : 0.025);
+      const scaleLift = pulse * (1 + completionPulse * 0.08);
+      band.group.scale.set(
+        band.baseScale.x * scaleLift,
+        band.baseScale.y * scaleLift,
+        band.baseScale.z * scaleLift
+      );
       band.arc.material.opacity = this.completed
         ? 0.34 + completionPulse * 0.42
-        : isRead ? 0.20 : isActive ? 0.58 : 0.28;
+        : isRead ? 0.22 : isTracing ? 0.62 : isNearestUnread ? 0.46 : 0.30;
       band.receptive.material.opacity = this.completed
         ? 0.42 + completionPulse * 0.46
-        : isRead ? 0.24 : isActive ? 0.82 : 0.30;
+        : isRead ? 0.28 : isTracing ? 0.88 : isNearestUnread ? 0.66 : 0.34;
       band.receptive.material.emissiveIntensity = this.completed
         ? 0.42 + completionPulse * 1.05
-        : isActive ? 0.62 : isRead ? 0.18 : 0.24;
+        : isTracing ? 0.72 : isNearestUnread ? 0.46 : isRead ? 0.22 : 0.26;
     });
 
+    const activeIndex = tracingIndex >= 0 ? tracingIndex : nearestUnreadIndex;
+    const activeBand = activeIndex >= 0 ? this.bands[activeIndex] : null;
+
     frameState.membraneRidgeGameplay = {
-      pass: "HC-016P",
+      pass: "HC-031T5",
       active: true,
-      stage: this.completed ? "ridge_pressure_read" : tracing ? "tracing_contour" : "approach_active_contour",
-      mechanic: "movement_traces_living_pressure_contour",
-      contourIndex: Math.min(this.traceIndex + 1, this.bands.length),
+      stage: this.completed ? "ridge_pressure_read" : tracing ? "tracing_contour" : "approach_unread_contour",
+      mechanic: "frame_rate_independent_physical_path_trace",
+      contourOrderPolicy: "any_order_all_three_required",
+      contourIndex: activeIndex >= 0 ? activeIndex + 1 : this.bands.length,
       contourCount: this.bands.length,
-      activeContourDistance: Number.isFinite(activeDistance) ? activeDistance : null,
+      readCount,
+      readSequence: this.readSequence,
+      lastReadContourIndex: this.lastReadContourIndex,
+      activeContourDistance: Number.isFinite(activeBand?.distance) ? activeBand.distance : null,
       activeContourProgress: this.completed ? 1 : (activeBand?.progress ?? 0),
-      traceDistance: this.traceDistance,
+      traceDistance: activeBand?.traceDistance ?? 0,
       requiredTraceDistance: this.requiredTraceDistance,
       tracing,
+      moveIntent,
+      frameTravelDistance: moved,
       completed: this.completed,
+      completionSequence: this.completionSequence,
       localResponse: this.response,
       completionBurst01: this.completionBurst,
-      completionSequence: this.completionSequence,
+      contours: this.bands.map((band, index) => ({
+        index: index + 1,
+        read: band.read,
+        progress: band.progress,
+        traceDistance: band.traceDistance,
+        distance: Number.isFinite(band.distance) ? band.distance : null
+      })),
       mutatesGlobalProgression: false,
       currentPlayableEndpoint: false,
       nextGameplayImplemented: true,
@@ -217,8 +281,8 @@ export class MembraneRidgeGameplaySystem {
       nextAction: this.completed
         ? "follow_the_released_connective_anatomy_toward_gathering_ground"
         : tracing
-          ? "keep_moving_through_the_living_contour"
-          : "enter_the_bright_edge_and_move_along_it"
+          ? "keep_moving_through_this_living_contour"
+          : "enter_any_unread_bright_contour_and_move_through_it"
     };
   }
 }

@@ -727,7 +727,7 @@ export class GuidePromptSystem {
     const observationCount = adjacent.observationCount ?? 0;
 
     return {
-      id: "GUIDE_PROMPT_MEMBRANE_RIDGE_HC031T4",
+      id: "GUIDE_PROMPT_MEMBRANE_RIDGE_HC031T5",
       beat: ridge.completed
         ? adjacent.enteredTerritory
           ? "gathering_ground_local"
@@ -753,8 +753,8 @@ export class GuidePromptSystem {
                 ? "Your attention has found Gathering Ground. Pulse the large body itself; the whole territory is the target."
                 : "The ridge has released. Look toward the large living body beyond it until your attention settles there."
         : ridge.tracing
-          ? "The membrane answers motion, not force."
-          : "The ridge is carrying a living pressure contour.",
+          ? `The membrane is reading your path. ${ridge.readCount ?? 0}/${ridge.contourCount ?? 3} contours have answered.`
+          : `The ridge is carrying three living pressure contours. ${ridge.readCount ?? 0}/${ridge.contourCount ?? 3} have answered.`,
       objectiveLine: ridge.completed
         ? adjacent.enteredTerritory
           ? "Explore Gathering Ground and look back across the continuous Aperture space."
@@ -766,9 +766,9 @@ export class GuidePromptSystem {
                 ? "Pulse Gathering Ground while it owns your attention."
                 : "Look toward Gathering Ground; no hidden point is required."
         : ridge.tracing
-          ? "Keep moving through the bright contour."
-          : "Enter the bright contour and move along it.",
-      debugFallback: `ridge ${ridge.contourIndex ?? 1}/${ridge.contourCount ?? 3} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)} | GG attention ${attentionOwned ? "YES" : "no"} | OBS ${observationCount} | REL ${adjacent.relationshipEstablished ? "Y" : "N"} | ${adjacent.traversalOpen ? "OPEN" : "CLOSED"}`,
+          ? "Keep moving through this bright contour until it settles."
+          : "Enter any unread bright contour and move through it; order does not matter.",
+      debugFallback: `ridge reads ${ridge.readCount ?? 0}/${ridge.contourCount ?? 3} | active ${ridge.contourIndex ?? 1} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)} | GG attention ${attentionOwned ? "YES" : "no"} | OBS ${observationCount} | REL ${adjacent.relationshipEstablished ? "Y" : "N"} | ${adjacent.traversalOpen ? "OPEN" : "CLOSED"}`,
       tone: ridge.completed
         ? attentionOwned
           ? "gathering_ground_attention_owned"

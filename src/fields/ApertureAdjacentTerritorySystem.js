@@ -6,7 +6,7 @@ const TERRITORY_ID = "gathering_ground_cluster";
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
 /**
- * HC031T4 — Gathering Ground attention handoff pass.
+ * HC031T5 — Ridge trace + canonical Gathering Ground lock.
  *
  * Converts the existing Gathering Ground background landmark into a three-ring
  * world-space relationship without creating a new level or teleport:
@@ -20,18 +20,20 @@ const clamp01 = (value) => Math.max(0, Math.min(1, value));
  * route-history, targeting, chemistry, or crossing truth is mutated here.
  */
 export class ApertureAdjacentTerritorySystem {
-  constructor({ scene, camera, playerRoot, frameState }) {
-    if (!scene || !camera || !playerRoot || !frameState) {
-      throw new Error("[ApertureAdjacentTerritorySystem] scene, camera, playerRoot and frameState are required.");
+  constructor({ scene, camera, playerRoot, frameState, apertureFieldsArrivalSystem }) {
+    if (!scene || !camera || !playerRoot || !frameState || !apertureFieldsArrivalSystem) {
+      throw new Error("[ApertureAdjacentTerritorySystem] scene, camera, playerRoot, frameState and apertureFieldsArrivalSystem are required.");
     }
     this.scene = scene;
     this.camera = camera;
     this.playerRoot = playerRoot;
     this.frameState = frameState;
+    this.apertureFieldsArrivalSystem = apertureFieldsArrivalSystem;
 
     this.root = null;
     this.entryAnchor = new THREE.Vector3();
-    this.territoryLocal = new THREE.Vector3(3.5, 8.5, -62.0);
+    // HC031T5: one visible noun = one gameplay noun. This is the original Aperture landmark.
+    this.territoryLocal = new THREE.Vector3(3.5, 8.5, -56.0);
     this.territoryWorld = new THREE.Vector3();
     this.cameraWorld = new THREE.Vector3();
     this.cameraDirection = new THREE.Vector3();
@@ -40,7 +42,10 @@ export class ApertureAdjacentTerritorySystem {
     this.aimVector = new THREE.Vector3();
     this.acquisitionBodies = [];
 
-    this.ghostBody = null;
+    this.canonicalLandmark = null;
+    this.canonicalLandmarkBaseScale = new THREE.Vector3(3.8, 3.8, 3.8);
+    this.canonicalLandmarkBaseOpacity = 0.58;
+    this.canonicalLandmarkBaseEmissive = 0.12;
     this.detailBodies = [];
     this.connectiveBodies = [];
     this.responseHalos = [];
@@ -66,30 +71,13 @@ export class ApertureAdjacentTerritorySystem {
     if (this.root) return;
 
     this.root = new THREE.Group();
-    this.root.name = "aperture_adjacent_gathering_territory_HC031T4";
+    this.root.name = "aperture_adjacent_gathering_territory_HC031T5";
     this.root.visible = false;
     this.scene.add(this.root);
 
-    const ghostMat = new THREE.MeshStandardMaterial({
-      color: 0x314653,
-      emissive: 0x0c1820,
-      emissiveIntensity: 0.08,
-      roughness: 0.95,
-      transparent: true,
-      opacity: 0.13,
-      depthWrite: false
-    });
-    this.ghostBody = new THREE.Mesh(new THREE.IcosahedronGeometry(5.2, 2), ghostMat);
-    this.ghostBody.position.copy(this.territoryLocal);
-    this.ghostBody.scale.set(1.45, 0.82, 1.85);
-    this.ghostBody.rotation.set(0.28, -0.22, 0.16);
-    this.ghostBody.name = "gathering_ground_adjacent_ghost_body";
-    this.ghostBody.userData.objectId = TERRITORY_ID;
-    this.ghostBody.userData.label = "Gathering Ground";
-    this.ghostBody.userData.worldAttentionKind = "host_territory";
-    this.root.add(this.ghostBody);
-    this.acquisitionBodies.push(this.ghostBody);
-
+    // HC031T5 deletes the second Gathering Ground ghost body. The canonical visible
+    // landmark is owned by ApertureFieldsArrivalSystem and is resolved on mount.
+    // This system adds only local detail/response anatomy around that same noun.
     const membraneMat = new THREE.MeshStandardMaterial({
       color: 0x597a72,
       emissive: 0x17362f,
@@ -226,6 +214,22 @@ export class ApertureAdjacentTerritorySystem {
 
   onRuntimeMount(frameState) {
     this.init();
+    this.canonicalLandmark = this.apertureFieldsArrivalSystem.getLandmarkMesh(TERRITORY_ID);
+    if (!this.canonicalLandmark) {
+      throw new Error("[ApertureAdjacentTerritorySystem] canonical Gathering Ground landmark is missing.");
+    }
+    this.canonicalLandmark.userData.objectId = TERRITORY_ID;
+    this.canonicalLandmark.userData.label = "Gathering Ground";
+    this.canonicalLandmark.userData.worldAttentionKind = "host_territory";
+    this.canonicalLandmark.userData.canonicalGatheringGround = true;
+    this.canonicalLandmarkBaseScale.copy(this.canonicalLandmark.userData.baseScale ?? this.canonicalLandmark.scale);
+    this.canonicalLandmarkBaseOpacity = Number.isFinite(this.canonicalLandmark.userData.baseOpacity)
+      ? this.canonicalLandmark.userData.baseOpacity
+      : (Number.isFinite(this.canonicalLandmark.material?.opacity) ? this.canonicalLandmark.material.opacity : 0.58);
+    this.canonicalLandmarkBaseEmissive = Number.isFinite(this.canonicalLandmark.userData.baseEmissiveIntensity)
+      ? this.canonicalLandmark.userData.baseEmissiveIntensity
+      : (Number.isFinite(this.canonicalLandmark.material?.emissiveIntensity) ? this.canonicalLandmark.material.emissiveIntensity : 0.12);
+    this.acquisitionBodies = [this.canonicalLandmark, ...this.detailBodies, ...this.responseHalos].filter(Boolean);
     // HC031T2: ApertureFieldsArrivalSystem owns the region's canonical world anchor.
     // Debug staging may reposition the player during this same mount frame, so later
     // systems must never derive authored world geometry from the player's live position.
@@ -243,9 +247,16 @@ export class ApertureAdjacentTerritorySystem {
 
   onRuntimeUnmount(frameState) {
     if (this.root) this.root.visible = false;
+    if (this.canonicalLandmark?.material) {
+      this.canonicalLandmark.scale.copy(this.canonicalLandmarkBaseScale);
+      this.canonicalLandmark.material.opacity = this.canonicalLandmarkBaseOpacity;
+      if (Number.isFinite(this.canonicalLandmark.material.emissiveIntensity)) {
+        this.canonicalLandmark.material.emissiveIntensity = this.canonicalLandmarkBaseEmissive;
+      }
+    }
     if (frameState.worldAttentionCandidates?.provider === "ApertureAdjacentTerritorySystem") {
       frameState.worldAttentionCandidates = {
-        pass: "HC-031T4",
+        pass: "HC-031T5",
         provider: "ApertureAdjacentTerritorySystem",
         active: false,
         items: []
@@ -261,7 +272,7 @@ export class ApertureAdjacentTerritorySystem {
   onRuntimePrepare(frameState) {
     this.init();
     frameState.adjacentHostTerritoryPreparation = {
-      pass: "HC-031T4",
+      pass: "HC-031T5",
       status: "prepared_hidden",
       mutatesProgression: false,
       mutatesActiveCell: false
@@ -286,7 +297,8 @@ export class ApertureAdjacentTerritorySystem {
     let aimSource = "none";
     for (const body of this.acquisitionBodies) {
       if (!body) continue;
-      this.aimPointWorld.copy(this.entryAnchor).add(body.position);
+      if (body.getWorldPosition) body.getWorldPosition(this.aimPointWorld);
+      else this.aimPointWorld.copy(this.entryAnchor).add(body.position);
       this.aimVector.copy(this.aimPointWorld).sub(this.cameraWorld);
       const distance = Math.max(0.001, this.aimVector.length());
       const dot = this.aimVector.multiplyScalar(1 / distance).dot(this.cameraDirection);
@@ -367,12 +379,20 @@ export class ApertureAdjacentTerritorySystem {
         ? clamp01((30.0 - playerDistance) / 20.0)
         : 0;
 
-    if (this.ghostBody?.material) {
+    if (this.canonicalLandmark?.material) {
       const breath = 1 + Math.sin(time * (0.32 + relationship01 * 0.55)) * (0.018 + relationship01 * 0.035);
       const releaseLift = this.openResponse * 0.16;
-      this.ghostBody.scale.set(1.45 * breath * (1 + releaseLift), 0.82 * (1 + relationship01 * 0.025 + releaseLift * 0.55), 1.85 * breath * (1 + releaseLift));
-      this.ghostBody.material.opacity = 0.11 + observation01 * 0.16 + local01 * 0.16 + this.openResponse * 0.22;
-      this.ghostBody.material.emissiveIntensity = 0.06 + observation01 * 0.16 + relationship01 * 0.24 + this.pulseResponse * 0.22 + this.openResponse * 0.95;
+      this.canonicalLandmark.scale.set(
+        this.canonicalLandmarkBaseScale.x * breath * (1 + releaseLift),
+        this.canonicalLandmarkBaseScale.y * (1 + relationship01 * 0.025 + releaseLift * 0.55),
+        this.canonicalLandmarkBaseScale.z * breath * (1 + releaseLift)
+      );
+      this.canonicalLandmark.material.opacity = Math.min(0.94,
+        this.canonicalLandmarkBaseOpacity + observation01 * 0.10 + local01 * 0.10 + this.openResponse * 0.18);
+      if (Number.isFinite(this.canonicalLandmark.material.emissiveIntensity)) {
+        this.canonicalLandmark.material.emissiveIntensity = this.canonicalLandmarkBaseEmissive
+          + observation01 * 0.16 + relationship01 * 0.24 + this.pulseResponse * 0.22 + this.openResponse * 0.95;
+      }
     }
 
     this.detailBodies.forEach((body, index) => {
@@ -455,7 +475,7 @@ export class ApertureAdjacentTerritorySystem {
       && (ridge.active || ridge.completed || signalPlain.completed)
     );
     frameState.worldAttentionCandidates = {
-      pass: "HC-031T4",
+      pass: "HC-031T5",
       provider: "ApertureAdjacentTerritorySystem",
       active: attentionEligible,
       items: attentionEligible
@@ -464,7 +484,7 @@ export class ApertureAdjacentTerritorySystem {
             label: "Gathering Ground",
             cellId: CELL_ID,
             targetKind: "host_territory",
-            root: this.ghostBody,
+            root: this.canonicalLandmark,
             focusRoots: this.acquisitionBodies.filter(Boolean),
             domains: ["host", "territory", "membrane"],
             externalPriority: ridge.completed ? 2.2 : 1.2,
@@ -487,9 +507,12 @@ export class ApertureAdjacentTerritorySystem {
         : "ring_c_distant";
 
     frameState.adjacentHostTerritory = {
-      pass: "HC-031T4",
+      pass: "HC-031T5",
       active: true,
       territoryId: TERRITORY_ID,
+      canonicalVisualId: TERRITORY_ID,
+      canonicalVisualSource: "ApertureFieldsArrivalSystem",
+      canonicalLocalPosition: { x: this.territoryLocal.x, y: this.territoryLocal.y, z: this.territoryLocal.z },
       regionId: "aperture_fields",
       runtimeCellId: CELL_ID,
       stage,

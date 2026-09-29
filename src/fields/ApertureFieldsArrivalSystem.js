@@ -83,7 +83,14 @@ export class ApertureFieldsArrivalSystem {
       this.root.add(mesh);
       mesh.userData.apertureLandmarkId = spec.id;
       mesh.userData.baseScale = mesh.scale.clone();
+      mesh.userData.baseOpacity = Number.isFinite(mesh.material?.opacity) ? mesh.material.opacity : 1;
       mesh.userData.baseEmissiveIntensity = Number.isFinite(mesh.material?.emissiveIntensity) ? mesh.material.emissiveIntensity : 0;
+      if (spec.id === "gathering_ground_cluster") {
+        mesh.userData.objectId = "gathering_ground_cluster";
+        mesh.userData.label = "Gathering Ground";
+        mesh.userData.worldAttentionKind = "host_territory";
+        mesh.userData.canonicalGatheringGround = true;
+      }
       this.landmarks.push({ id: spec.id, mesh });
 
       if (spec.id === "signal_plain_beacon") {
@@ -221,6 +228,10 @@ export class ApertureFieldsArrivalSystem {
       fold.rotation.set(Math.PI / 2, 0, Math.PI * 0.25 * i);
       this.root.add(fold);
     }
+  }
+
+  getLandmarkMesh(id) {
+    return this.landmarks.find((entry) => entry.id === id)?.mesh ?? null;
   }
 
   onRuntimeMount(frameState) {
