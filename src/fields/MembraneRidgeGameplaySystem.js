@@ -84,7 +84,15 @@ export class MembraneRidgeGameplaySystem {
 
   onRuntimeMount(frameState) {
     this.init();
-    this.entryAnchor.copy(this.playerRoot.position);
+    // HC031T2: ApertureFieldsArrivalSystem owns the region's canonical world anchor.
+    // Debug staging may reposition the player during this same mount frame, so later
+    // systems must never derive authored world geometry from the player's live position.
+    const canonicalAnchor = frameState.apertureFieldsArrival?.entryAnchor;
+    if (Number.isFinite(canonicalAnchor?.x) && Number.isFinite(canonicalAnchor?.y) && Number.isFinite(canonicalAnchor?.z)) {
+      this.entryAnchor.set(canonicalAnchor.x, canonicalAnchor.y, canonicalAnchor.z);
+    } else {
+      this.entryAnchor.copy(this.playerRoot.position);
+    }
     this.root.position.copy(this.entryAnchor);
     this.root.visible = false;
     this.resetEncounter();

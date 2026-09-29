@@ -1,9 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T1 repairs the first adjacent Host territory access proof without widening scope.
-// Membrane Ridge now has real maneuvering clearance, boundary-only tendril contact is
-// suppressed, and Gathering Ground exposes a broader macro-body acquisition read.
-// Existing movement/crossing owners stay authoritative.
+// HC031T2 repairs Aperture world-origin drift exposed by the Shift+8 focused test.
+// Aperture Fields owns one canonical world anchor; Signal Plain, Membrane Ridge, and
+// Gathering Ground all derive from it even when a debug setup repositions the player.
+// Existing movement, targeting, crossing, and encounter rules stay authoritative.
 
 const appRoot = document.querySelector("#app");
 
@@ -13,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T1",
-  buildLabel: "Adjacent Territory Access + Detachment Truth"
+  buildId: "HC-031T2",
+  buildLabel: "Canonical Aperture World Anchor Repair"
 });
 
 runtime.start().catch((error) => {

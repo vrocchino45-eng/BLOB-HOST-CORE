@@ -1,0 +1,39 @@
+{
+  "pass": "HC-031T2",
+  "parent": "HC-031T1",
+  "packageVersion": "0.31.43",
+  "telemetrySchema": "blob.session.telemetry.v1.45",
+  "mode": "focused coordinate-ownership repair",
+  "purpose": "Eliminate same-frame Aperture world-anchor drift exposed by Shift+8, where Signal Plain debug staging moved the player before later Aperture systems mounted and caused Membrane Ridge / Gathering Ground authored geometry to be offset from the visible field.",
+  "playerEvidence": {
+    "source": "HC031T1 telemetry b3cbf938-9cbd-4492-9897-a492c3f1d547",
+    "observed": "player still felt locked and could not reach the intended rings",
+    "telemetry": "33 movement.boundary_clamped events; 21 occurred after Signal Plain opened the larger observation ellipsoid; adjacent territory observation/relationship/traversal/entry all remained zero"
+  },
+  "rootCause": {
+    "law": "ApertureFieldsArrivalSystem must own one canonical region-space entry anchor; debug player staging is not world-authoring truth.",
+    "mountOrdering": "SignalPlainEcologySystem can reposition the player during its first update before MembraneRidgeGameplaySystem and ApertureAdjacentTerritorySystem mount later in registry order.",
+    "effect": "later systems captured the staged player position as their own entryAnchor, shifting Ridge contours and Gathering Ground away from the visible Aperture landmarks."
+  },
+  "repair": {
+    "canonicalOwner": "ApertureFieldsArrivalSystem",
+    "consumers": [
+      "SignalPlainEcologySystem",
+      "MembraneRidgeGameplaySystem",
+      "ApertureAdjacentTerritorySystem"
+    ],
+    "movementVolumeRetuned": false,
+    "targetingChanged": false,
+    "ridgeRuleChanged": false,
+    "signalPlainRuleChanged": false,
+    "debugShortcutChanged": false
+  },
+  "acceptance": [
+    "Shift+8 may stage the player without moving authored Aperture world geometry",
+    "all four Aperture systems resolve the same canonical entry anchor",
+    "all three Membrane Ridge contours remain inside the HC031T1 pre-open observation ellipsoid",
+    "Gathering Ground remains outside the pre-open volume until traversal opens",
+    "remote Gathering Ground acquisition aligns with the visible body/rings",
+    "no active-cell swap, teleport progression, global movement tuning, or targeting rewrite"
+  ]
+}

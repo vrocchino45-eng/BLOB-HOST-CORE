@@ -231,7 +231,11 @@ export class ApertureFieldsArrivalSystem {
     this.root.position.copy(this.entryAnchor);
     this.root.visible = true;
     this.reveal = 0;
-    frameState.apertureFieldsArrival = { active: true, pass: "HC-015N", stage: "arrival_decompression" };
+    frameState.apertureFieldsArrival = {
+      active: true, pass: "HC-015N", stage: "arrival_decompression",
+      entryAnchor: { x: this.entryAnchor.x, y: this.entryAnchor.y, z: this.entryAnchor.z },
+      worldAnchorOwner: "ApertureFieldsArrivalSystem"
+    };
   }
 
   onRuntimeUnmount(frameState) {
@@ -438,6 +442,8 @@ export class ApertureFieldsArrivalSystem {
     frameState.apertureFieldsArrival = {
       pass: "HC-015N",
       active: true,
+      entryAnchor: { x: this.entryAnchor.x, y: this.entryAnchor.y, z: this.entryAnchor.z },
+      worldAnchorOwner: "ApertureFieldsArrivalSystem",
       regionId: "aperture_fields",
       stage: signalPlainCompleted ? "deeper_aperture_field_open" : this.reveal >= 0.78 ? "field_horizon_readable" : this.reveal >= 0.34 ? "shelf_expanding" : "arrival_decompression",
       reveal: this.reveal,
