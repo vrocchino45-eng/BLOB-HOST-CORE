@@ -6,7 +6,7 @@ const TERRITORY_ID = "gathering_ground_cluster";
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
 /**
- * HC031T3 — Ridge completion world-release readability pass.
+ * HC031T4 — Gathering Ground attention handoff pass.
  *
  * Converts the existing Gathering Ground background landmark into a three-ring
  * world-space relationship without creating a new level or teleport:
@@ -66,7 +66,7 @@ export class ApertureAdjacentTerritorySystem {
     if (this.root) return;
 
     this.root = new THREE.Group();
-    this.root.name = "aperture_adjacent_gathering_territory_HC031T3";
+    this.root.name = "aperture_adjacent_gathering_territory_HC031T4";
     this.root.visible = false;
     this.scene.add(this.root);
 
@@ -84,6 +84,9 @@ export class ApertureAdjacentTerritorySystem {
     this.ghostBody.scale.set(1.45, 0.82, 1.85);
     this.ghostBody.rotation.set(0.28, -0.22, 0.16);
     this.ghostBody.name = "gathering_ground_adjacent_ghost_body";
+    this.ghostBody.userData.objectId = TERRITORY_ID;
+    this.ghostBody.userData.label = "Gathering Ground";
+    this.ghostBody.userData.worldAttentionKind = "host_territory";
     this.root.add(this.ghostBody);
     this.acquisitionBodies.push(this.ghostBody);
 
@@ -111,6 +114,9 @@ export class ApertureAdjacentTerritorySystem {
       body.scale.set(1.15 + i * 0.08, 0.16 + (i % 2) * 0.08, 2.0 - i * 0.12);
       body.rotation.set(Math.PI * 0.46, a * 0.36, a * 0.72);
       body.name = `gathering_ground_neighbor_membrane_${i + 1}`;
+      body.userData.objectId = TERRITORY_ID;
+      body.userData.label = "Gathering Ground";
+      body.userData.worldAttentionKind = "host_territory";
       body.userData.baseScale = body.scale.clone();
       body.userData.baseOpacity = body.material.opacity;
       this.root.add(body);
@@ -133,6 +139,9 @@ export class ApertureAdjacentTerritorySystem {
       halo.position.y += -1.1 + i * 1.25;
       halo.rotation.set(Math.PI / 2.1, 0.18 * i, 0.28 * i);
       halo.name = `gathering_ground_remote_response_halo_${i + 1}`;
+      halo.userData.objectId = TERRITORY_ID;
+      halo.userData.label = "Gathering Ground";
+      halo.userData.worldAttentionKind = "host_territory";
       this.root.add(halo);
       this.responseHalos.push(halo);
       this.acquisitionBodies.push(halo);
@@ -234,6 +243,14 @@ export class ApertureAdjacentTerritorySystem {
 
   onRuntimeUnmount(frameState) {
     if (this.root) this.root.visible = false;
+    if (frameState.worldAttentionCandidates?.provider === "ApertureAdjacentTerritorySystem") {
+      frameState.worldAttentionCandidates = {
+        pass: "HC-031T4",
+        provider: "ApertureAdjacentTerritorySystem",
+        active: false,
+        items: []
+      };
+    }
     frameState.adjacentHostTerritory = {
       ...(frameState.adjacentHostTerritory ?? {}),
       active: false,
@@ -244,7 +261,7 @@ export class ApertureAdjacentTerritorySystem {
   onRuntimePrepare(frameState) {
     this.init();
     frameState.adjacentHostTerritoryPreparation = {
-      pass: "HC-031T3",
+      pass: "HC-031T4",
       status: "prepared_hidden",
       mutatesProgression: false,
       mutatesActiveCell: false
@@ -281,6 +298,10 @@ export class ApertureAdjacentTerritorySystem {
     }
     const aimThreshold = 0.62;
     const aimed = aimDot >= aimThreshold;
+    const targeting = frameState.targeting ?? {};
+    const attentionOwned = targeting.attentionTargetId === TERRITORY_ID;
+    const relationshipOwned = targeting.relationshipTargetId === TERRITORY_ID;
+    const interactionAimed = Boolean(aimed || attentionOwned || relationshipOwned);
 
     const input = frameState.input ?? {};
     const pulseEventId = Number.isFinite(input.pulseEventId)
@@ -291,7 +312,7 @@ export class ApertureAdjacentTerritorySystem {
 
     // Pulse can interrogate the large neighboring body before it is reachable.
     // Distance affects response strength, but not by turning this into a hidden gate.
-    if (freshPulse && aimed && playerDistance <= 86.0) {
+    if (freshPulse && interactionAimed && playerDistance <= 86.0) {
       this.observationCount = Math.min(3, this.observationCount + 1);
       this.observationSequence += 1;
       this.pulseResponse = 1;
@@ -299,7 +320,7 @@ export class ApertureAdjacentTerritorySystem {
     this.pulseResponse = Math.max(0, this.pulseResponse - dt * 0.72);
 
     const stabilizeHeld = Boolean(input.stabilizeHeld || input.resonanceHeld);
-    if (stabilizeHeld && aimed && this.observationCount > 0 && playerDistance <= 82.0) {
+    if (stabilizeHeld && interactionAimed && this.observationCount > 0 && playerDistance <= 82.0) {
       this.relationshipSeconds = Math.min(2.0, this.relationshipSeconds + dt);
       if (!this.relationshipEstablished && this.relationshipSeconds >= 0.72) {
         this.relationshipEstablished = true;
@@ -312,7 +333,7 @@ export class ApertureAdjacentTerritorySystem {
     // Absorb does not pull a massive territory across the map. It receives a weak
     // inward answer once the remote relationship exists, preserving verb meaning.
     const absorbHeld = Boolean(input.absorbHeld);
-    const absorbAnswering = Boolean(absorbHeld && aimed && this.relationshipEstablished && playerDistance <= 78.0);
+    const absorbAnswering = Boolean(absorbHeld && interactionAimed && this.relationshipEstablished && playerDistance <= 78.0);
     this.absorbEcho += ((absorbAnswering ? 1 : 0) - this.absorbEcho) * Math.min(1, dt * 3.4);
 
     const ridgeComplete = Boolean(frameState.membraneRidgeGameplay?.completed);
@@ -415,6 +436,9 @@ export class ApertureAdjacentTerritorySystem {
       aimThreshold,
       playerDistance,
       cameraDistance,
+      attentionOwned,
+      relationshipOwned,
+      interactionAimed,
       absorbAnswering,
       entryRadius,
       openingResponse01: this.openResponse,
@@ -423,6 +447,32 @@ export class ApertureAdjacentTerritorySystem {
   }
 
   publish(frameState, stage, metrics = {}) {
+    const ridge = frameState.membraneRidgeGameplay ?? {};
+    const signalPlain = frameState.signalPlainEcology ?? {};
+    const attentionEligible = Boolean(
+      frameState.activeCellId === CELL_ID
+      && this.root?.visible
+      && (ridge.active || ridge.completed || signalPlain.completed)
+    );
+    frameState.worldAttentionCandidates = {
+      pass: "HC-031T4",
+      provider: "ApertureAdjacentTerritorySystem",
+      active: attentionEligible,
+      items: attentionEligible
+        ? [{
+            id: TERRITORY_ID,
+            label: "Gathering Ground",
+            cellId: CELL_ID,
+            targetKind: "host_territory",
+            root: this.ghostBody,
+            focusRoots: this.acquisitionBodies.filter(Boolean),
+            domains: ["host", "territory", "membrane"],
+            externalPriority: ridge.completed ? 2.2 : 1.2,
+            source: "ApertureAdjacentTerritorySystem"
+          }]
+        : []
+    };
+
     const observationStage = this.observationCount <= 0
       ? "silhouette"
       : this.observationCount === 1
@@ -437,7 +487,7 @@ export class ApertureAdjacentTerritorySystem {
         : "ring_c_distant";
 
     frameState.adjacentHostTerritory = {
-      pass: "HC-031T3",
+      pass: "HC-031T4",
       active: true,
       territoryId: TERRITORY_ID,
       regionId: "aperture_fields",
@@ -464,9 +514,14 @@ export class ApertureAdjacentTerritorySystem {
       cameraDistance: Number.isFinite(metrics.cameraDistance) ? metrics.cameraDistance : null,
       aimDot: Number.isFinite(metrics.aimDot) ? metrics.aimDot : -1,
       aimed: Boolean(metrics.aimed),
+      attentionOwned: Boolean(metrics.attentionOwned),
+      relationshipOwned: Boolean(metrics.relationshipOwned),
+      interactionAimed: Boolean(metrics.interactionAimed || metrics.aimed),
+      attentionTargetId: frameState.targeting?.attentionTargetId ?? "none",
+      relationshipTargetId: frameState.targeting?.relationshipTargetId ?? "none",
       aimSource: metrics.aimSource ?? "none",
       aimThreshold: Number.isFinite(metrics.aimThreshold) ? metrics.aimThreshold : 0.62,
-      observationReady: Boolean(metrics.aimed && Number.isFinite(metrics.playerDistance) && metrics.playerDistance <= 86.0),
+      observationReady: Boolean((metrics.interactionAimed || metrics.aimed) && Number.isFinite(metrics.playerDistance) && metrics.playerDistance <= 86.0),
       entryRadius: metrics.entryRadius ?? 13.5,
       macroInteraction: {
         pulse: "remote_contour_and_function_read",
@@ -477,18 +532,24 @@ export class ApertureAdjacentTerritorySystem {
       movementBoundsExpansionRequested: this.traversalOpened,
       activeCellChangesRequired: false,
       teleportRequired: false,
-      targetingAuthorityChanged: false,
+      targetingAuthorityChanged: "world_attention_candidate_only",
       movementAuthority: "PlayerMovementController",
       movementBoundsOwner: "ApertureFieldsArrivalSystem",
       nextAction: this.enteredTerritory
         ? "explore_the_now_local_gathering_territory_and_look_back_across_aperture"
-        : this.traversalOpened
-          ? "follow_the_living_connective_anatomy_into_the_neighboring_territory"
-          : this.relationshipEstablished
-            ? "finish_reading_membrane_ridge_to_make_the_physical_connection_traversable"
-            : this.observationCount > 0
-              ? "hold_stabilize_toward_the_answering_large_body"
-              : "aim_at_the_distant_gathering_body_and_pulse"
+        : this.traversalOpened && !metrics.attentionOwned && this.observationCount <= 0
+          ? "look_toward_the_large_gathering_body_beyond_the_released_ridge"
+          : this.traversalOpened && this.observationCount <= 0
+            ? "pulse_the_attention_owned_gathering_body"
+            : this.traversalOpened
+              ? "follow_the_living_connective_anatomy_into_the_neighboring_territory"
+              : this.relationshipEstablished
+                ? "finish_reading_membrane_ridge_to_make_the_physical_connection_traversable"
+                : this.observationCount > 0
+                  ? "hold_stabilize_toward_the_answering_large_body"
+                  : metrics.attentionOwned
+                    ? "pulse_the_attention_owned_gathering_body"
+                    : "look_toward_the_distant_gathering_body_then_pulse"
     };
   }
 }

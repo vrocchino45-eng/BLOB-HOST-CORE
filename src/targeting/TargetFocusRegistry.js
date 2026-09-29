@@ -104,6 +104,7 @@ export class TargetFocusRegistry {
     this.addGenericNurserySeedFocus(focus, frameState);
     this.addGravePostSeamOverride(focus, frameState);
     this.addRuptureHarvestOverride(focus, frameState);
+    this.addAdjacentHostTerritoryFocus(focus, frameState);
 
     frameState.targetFocus = focus;
   }
@@ -280,6 +281,28 @@ export class TargetFocusRegistry {
       if (focus.preferredTargetId === "none") {
         this.markPreferred(focus, "dormant_seed_nutrient_001", "unabsorbed_seed_tutorial_focus");
       }
+    }
+  }
+
+
+  addAdjacentHostTerritoryFocus(focus, frameState) {
+    const adjacent = frameState.adjacentHostTerritory ?? {};
+    const ridge = frameState.membraneRidgeGameplay ?? {};
+    const activeInAperture = frameState.activeCellId === "CELL_APERTURE_FIELDS_ARRIVAL_001";
+    const territoryId = adjacent.territoryId ?? "gathering_ground_cluster";
+
+    if (!activeInAperture || !adjacent.active || !(ridge.active || ridge.completed)) return;
+
+    focus.targetKinds[territoryId] = "host_territory";
+    this.addObjectBoost(
+      focus,
+      territoryId,
+      ridge.completed ? 9.0 : 5.0,
+      ridge.completed ? "aperture_ridge_released_adjacent_territory" : "aperture_remote_adjacent_territory"
+    );
+
+    if (ridge.completed && focus.preferredTargetId === "none") {
+      this.markPreferred(focus, territoryId, "aperture_ridge_release_attention_handoff");
     }
   }
 

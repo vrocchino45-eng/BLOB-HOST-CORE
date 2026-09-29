@@ -450,6 +450,28 @@ export class TargetingSystem {
       if (!best || snapshot.aimOwnershipScore > best.aimOwnershipScore) best = snapshot;
     }
 
+    // HC031T4: world-scale Host bodies can participate in the same aim-owned
+    // attention grammar without pretending to be ChemObjects. Providers publish
+    // read-only candidates with one semantic ID and multiple visible focus roots.
+    for (const external of this.getWorldAttentionCandidates()) {
+      const externalId = external?.id ?? "none";
+      if (externalId === "none" || excludedObjectIds.has(externalId)) continue;
+      if (allowedCells.size > 0 && external.cellId && !allowedCells.has(external.cellId)) continue;
+
+      const candidate = this.normalizeWorldAttentionCandidate(external);
+      if (!candidate) continue;
+      const snapshot = this.scoreCandidate(candidate, focus);
+      this.candidateSnapshotsById.set(externalId, snapshot);
+      this.availableTargetCount += 1;
+      if (!this.availableBest || snapshot.score > this.availableBest.score) {
+        this.availableBest = snapshot;
+      }
+
+      if ((snapshot.aimDot ?? -1) < this.candidateAimThreshold) continue;
+      if (externalId === incumbentId) incumbentSnapshot = snapshot;
+      if (!best || snapshot.aimOwnershipScore > best.aimOwnershipScore) best = snapshot;
+    }
+
     if (
       best
       && incumbentSnapshot
@@ -460,6 +482,54 @@ export class TargetingSystem {
     }
 
     return best;
+  }
+
+  getWorldAttentionCandidates() {
+    const provider = this.frameState.worldAttentionCandidates ?? {};
+    return provider.active && Array.isArray(provider.items) ? provider.items : [];
+  }
+
+  normalizeWorldAttentionCandidate(external) {
+    const id = external?.id ?? "none";
+    if (id === "none") return null;
+
+    const roots = Array.isArray(external.focusRoots) && external.focusRoots.length > 0
+      ? external.focusRoots.filter((root) => root?.visible !== false)
+      : [external.root].filter(Boolean);
+    if (roots.length === 0) return null;
+
+    let bestRoot = roots[0];
+    let bestAimDot = -Infinity;
+    for (const root of roots) {
+      this.getWorldPosition(root, this.tmpTargetPosition);
+      this.tmpToTarget.copy(this.tmpTargetPosition).sub(this.tmpCameraPosition);
+      const distance = this.tmpToTarget.length();
+      const dot = distance > 0.0001
+        ? this.tmpToTarget.multiplyScalar(1 / distance).dot(this.tmpCameraDirection)
+        : 1;
+      if (dot > bestAimDot) {
+        bestAimDot = dot;
+        bestRoot = root;
+      }
+    }
+
+    return {
+      root: bestRoot,
+      cellId: external.cellId ?? "none",
+      externalAttention: true,
+      externalPriority: Number.isFinite(external.externalPriority) ? external.externalPriority : 0,
+      worldAttentionSource: external.source ?? "world_attention_provider",
+      recipe: {
+        id,
+        label: external.label ?? id,
+        chemistry: {
+          domains: Array.isArray(external.domains) ? external.domains : ["host", "territory"],
+          bondTypes: [],
+          instabilityRisk: 0.12
+        },
+        behavior: {}
+      }
+    };
   }
 
   scoreCandidate(item, focus) {
@@ -477,6 +547,7 @@ export class TargetingSystem {
     if (bondTypes.includes("soft_bond")) priority += targetingTuning.softBondBoost ?? 2.5;
     if (isSignal) priority += 1.2;
     if (isScar) priority -= 0.4;
+    if (Number.isFinite(item.externalPriority)) priority += item.externalPriority;
     if (item.cellId && focus.cellBoosts?.[item.cellId]) priority += focus.cellBoosts[item.cellId];
     if (focus.objectBoosts?.[item.recipe.id]) priority += focus.objectBoosts[item.recipe.id];
     if (focus.preferredTargetId === item.recipe.id) priority += targetingTuning.preferredTargetBoost ?? 3.5;
@@ -560,6 +631,9 @@ export class TargetingSystem {
       targetId: recipe.id,
       targetKind,
       targetCellId: effective.cellId ?? effective.root?.userData?.cellId ?? "none",
+      targetLabel: recipe.label ?? recipe.id,
+      targetScope: effective.externalAttention ? "macro_world" : "local_object",
+      worldAttentionSource: effective.worldAttentionSource ?? "none",
       domains,
       distance: effective.distance,
       lockStrength,
@@ -576,6 +650,7 @@ export class TargetingSystem {
       focusScore: effective.score ?? 0,
       candidateId: candidate?.recipe?.id ?? "none",
       candidateKind,
+      candidateScope: candidate?.externalAttention ? "macro_world" : (candidate ? "local_object" : "none"),
       candidateDistance: candidate?.distance ?? 0,
       candidateAimDot: candidate?.aimDot ?? -1,
       candidateScore: candidate?.aimOwnershipScore ?? 0,
@@ -619,6 +694,7 @@ export class TargetingSystem {
     const mappedKind = frameState.targetFocus?.targetKinds?.[id];
     if (mappedKind) return mappedKind;
 
+    if (target.externalAttention) return "host_territory";
     if (target.isAbsorbable) return "absorbable";
     if (target.isScar) return "scar_resists";
     if (target.isSignal) return "signal_listen";
@@ -853,6 +929,7 @@ export class TargetingSystem {
     if (kind === "harmonic_wave") return 0xc9b8ff;
     if (kind === "seed_signal_bridge") return 0xffe3a3;
     if (kind === "signal_chorus_hook") return 0xaeefff;
+    if (kind === "host_territory") return 0xb9e7d2;
     if (kind === "bloom_growth_path") return 0xff9bd4;
     if (kind === "residue_memory_path") return 0xd2b08a;
     if (kind === "seed_choice_braid") return 0xffe7a8;

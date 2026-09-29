@@ -199,6 +199,16 @@ export class RecipeDebugOverlay {
     const sensory = this.frameState.coreSensoryResponse ?? {};
     const signal = this.frameState.signalPlainEcology ?? {};
     const relationship = signal.consequenceNextQuestion?.primary ?? null;
+    const adjacent = this.frameState.adjacentHostTerritory ?? {};
+    const macroHostLink = adjacent.relationshipEstablished
+      ? "Gathering Ground · relationship"
+      : adjacent.relationshipOwned
+        ? "Gathering Ground · verb relationship"
+        : adjacent.attentionOwned
+          ? "Gathering Ground · attention"
+          : adjacent.aimed
+            ? "Gathering Ground · in view"
+            : null;
     const composition = this.frameState.interactionComposition ?? {};
     const rhythmLock = composition.rhythmLock ?? {};
     const errors = this.frameState.nonFatalSystemErrors ?? [];
@@ -214,7 +224,7 @@ export class RecipeDebugOverlay {
       `Drive: ${this.shorten(perf.personality ?? "triadic balance", 25)} · reserve ${Math.round(perf.endurance?.reservePercent ?? 100)}%`,
       `Sonar: ${sensory.pulseMode ?? "idle"} · answers ${sensory.activeReturnCount ?? sensory.echoCount ?? 0} · res ${sensory.resolutionLanguage?.nearestResolutionStage ?? 0}/3 ${this.shorten(sensory.resolutionLanguage?.nearestInterpretation ?? "none", 25)}`,
       `Target: ${this.shorten(target.targetId ?? "none", 30)}`,
-      `Host link: ${relationship ? `${relationship.sourceNodeNumber}→${relationship.targetNodeNumber} ${relationship.relation}` : "none"}`,
+      `Host link: ${macroHostLink ?? (relationship ? `${relationship.sourceNodeNumber}→${relationship.targetNodeNumber} ${relationship.relation}` : "none")}`,
       `Rhythm: ${composition.rhythm?.beat ?? "observe"} · gap ${this.formatValue(rhythmLock.meaningfulChangeAge)}s · reorient ${this.formatValue(rhythmLock.reorientationDurationSeconds)}s · ${rhythmLock.deadTimeRisk ? "REVIEW" : rhythmLock.softSpatialSupportActive ? "spatial support" : "steady"}`,
       `World: ${worldComposition.active ? `${worldComposition.keyId} · ${worldComposition.meterLabel} · ${this.formatValue(worldComposition.tempoBpm)} bpm · beat ${worldComposition.beatNumber}/${worldComposition.beatsPerBar} ${worldComposition.currentFunction} · ${worldComposition.octaveLabel}` : "legacy Host breath"}`,
       `Semantic: ${this.formatValue(rhythmLock.semanticChangeAge)}s · repeats ${rhythmLock.semanticRepeatCount ?? 0} · ${rhythmLock.semanticStagnationRisk ? "STAGNANT" : "changing"}`,

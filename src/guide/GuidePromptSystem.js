@@ -719,34 +719,62 @@ export class GuidePromptSystem {
   membraneRidgeGameplayPrompt(frameState) {
     if (frameState.activeCellId !== "CELL_APERTURE_FIELDS_ARRIVAL_001") return null;
     const ridge = frameState.membraneRidgeGameplay ?? {};
-    const signal = frameState.signalPlainEcology ?? {};
-    if (!signal.completed || !ridge.active) return null;
+    if (!ridge.active && !ridge.completed) return null;
+
+    const adjacent = frameState.adjacentHostTerritory ?? {};
+    const attentionOwned = Boolean(adjacent.attentionOwned || frameState.targeting?.attentionTargetId === "gathering_ground_cluster");
+    const relationshipOwned = Boolean(adjacent.relationshipOwned || frameState.targeting?.relationshipTargetId === "gathering_ground_cluster");
+    const observationCount = adjacent.observationCount ?? 0;
 
     return {
-      id: "GUIDE_PROMPT_MEMBRANE_RIDGE_HC015N_HOTFIX2",
-      beat: ridge.stage ?? "membrane_ridge_active",
-      priority: 780,
+      id: "GUIDE_PROMPT_MEMBRANE_RIDGE_HC031T4",
+      beat: ridge.completed
+        ? adjacent.enteredTerritory
+          ? "gathering_ground_local"
+          : adjacent.relationshipEstablished
+            ? "gathering_ground_relationship"
+            : observationCount > 0
+              ? "gathering_ground_observed"
+              : attentionOwned
+                ? "gathering_ground_attention_owned"
+                : "gathering_ground_attention_handoff"
+        : ridge.tracing
+          ? "membrane_ridge_trace"
+          : "membrane_ridge_read",
+      priority: 805,
       guideLine: ridge.completed
-        ? (frameState.adjacentHostTerritory?.enteredTerritory
-            ? "The distant body is no longer background. The Aperture now lies behind you as part of the same Host."
-            : frameState.adjacentHostTerritory?.traversalOpen
-              ? "The membrane releases. The living connection ahead is now open—follow it into the larger body."
-              : frameState.adjacentHostTerritory?.relationshipEstablished
-                ? "The larger body is answering before you reach it. The ridge now connects into that response."
-                : "The ridge has yielded its pressure reading. Something larger is gathering beyond it.")
+        ? adjacent.enteredTerritory
+          ? "You are inside the larger Host body now. The released ridge remains behind you as part of the same space."
+          : adjacent.relationshipEstablished
+            ? "The larger body is answering before you reach it. The living connection now has a readable relationship."
+            : observationCount > 0
+              ? "Gathering Ground has answered your Pulse. Hold Stabilize toward the same body to establish the relationship."
+              : attentionOwned
+                ? "Your attention has found Gathering Ground. Pulse the large body itself; the whole territory is the target."
+                : "The ridge has released. Look toward the large living body beyond it until your attention settles there."
         : ridge.tracing
           ? "The membrane answers motion, not force."
           : "The ridge is carrying a living pressure contour.",
       objectiveLine: ridge.completed
-        ? (frameState.adjacentHostTerritory?.nextAction ?? "Read what gathers beyond the ridge.")
+        ? adjacent.enteredTerritory
+          ? "Explore Gathering Ground and look back across the continuous Aperture space."
+          : adjacent.traversalOpen && observationCount > 0
+            ? "Follow the bright living connection into Gathering Ground."
+            : relationshipOwned || adjacent.relationshipEstablished
+              ? "Keep the larger body in view, then follow the opened living connection."
+              : attentionOwned
+                ? "Pulse Gathering Ground while it owns your attention."
+                : "Look toward Gathering Ground; no hidden point is required."
         : ridge.tracing
           ? "Keep moving through the bright contour."
           : "Enter the bright contour and move along it.",
-      debugFallback: `ridge ${ridge.contourIndex ?? 1}/${ridge.contourCount ?? 3} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)} | neighbor ${frameState.adjacentHostTerritory?.stage ?? "distant"}`,
+      debugFallback: `ridge ${ridge.contourIndex ?? 1}/${ridge.contourCount ?? 3} | progress ${Math.round((ridge.activeContourProgress ?? 0) * 100)}% | tracing ${Boolean(ridge.tracing)} | complete ${Boolean(ridge.completed)} | GG attention ${attentionOwned ? "YES" : "no"} | OBS ${observationCount} | REL ${adjacent.relationshipEstablished ? "Y" : "N"} | ${adjacent.traversalOpen ? "OPEN" : "CLOSED"}`,
       tone: ridge.completed
-        ? (frameState.adjacentHostTerritory?.traversalOpen ? "membrane_ridge_world_release" : "membrane_ridge_read")
+        ? attentionOwned
+          ? "gathering_ground_attention_owned"
+          : "gathering_ground_attention_handoff"
         : ridge.tracing ? "membrane_ridge_motion" : "membrane_ridge_approach",
-      contentOwner: "MembraneRidgeGameplaySystem",
+      contentOwner: "MembraneRidgeGameplaySystem + ApertureAdjacentTerritorySystem",
       source: "activeRegionState"
     };
   }

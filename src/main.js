@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T3 makes Membrane Ridge completion read as a world release rather than a silent state flip.
-// The third contour now produces a visible Ridge release wave, a strong connective-tissue flare,
-// a Gathering Ground answer, and explicit continuation language. Progression rules stay unchanged.
+// HC031T4 hands the released Ridge directly into world-scale attention.
+// Gathering Ground now participates in the canonical aim-owned noun grammar as a Host territory,
+// so looking at the visible body creates attention before Pulse/Stabilize modify the relationship.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T3",
-  buildLabel: "Membrane Ridge World Release Readability"
+  buildId: "HC-031T4",
+  buildLabel: "Gathering Ground Attention Handoff"
 });
 
 runtime.start().catch((error) => {
