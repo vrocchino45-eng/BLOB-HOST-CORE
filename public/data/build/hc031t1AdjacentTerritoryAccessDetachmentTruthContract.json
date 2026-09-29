@@ -1,0 +1,95 @@
+{
+  "pass": "HC-031T1",
+  "parent": "HC-031T",
+  "packageVersion": "0.31.42",
+  "telemetrySchema": "blob.session.telemetry.v1.44",
+  "mode": "focused convergence repair",
+  "purpose": "Repair the HC031T acceptance failure where the pre-open Aperture ellipsoid constrained the player at Membrane Ridge / Ring-B approach and boundary-only visual contact could leave a tendril apparently planted even while movement attachment was free.",
+  "playerEvidence": {
+    "source": "HC031T focused playtest + telemetry be26db6d-7d10-4066-8515-c29d2b6fca92",
+    "observed": "player could not get farther through to the rings; one tendril appeared to remain holding something",
+    "telemetry": "Silt currentization completed; adjacent territory observation/relationship/traversal/entry all remained zero; movement attachment reported free during the blocked-feeling Aperture segment"
+  },
+  "repairs": {
+    "preOpenApertureVolume": {
+      "centerLocal": [
+        5.0,
+        1.0,
+        -24.0
+      ],
+      "radii": [
+        32.0,
+        12.0,
+        43.0
+      ],
+      "mode": "signal_plain_membrane_ridge_observation_ellipsoid",
+      "law": "give the third Membrane Ridge contour and a remote observation stand-off real maneuvering clearance while keeping Gathering Ground center outside the pre-open volume"
+    },
+    "macroAcquisition": {
+      "law": "Gathering Ground is acquired from the best-aligned visible macro body element rather than a single hidden center point",
+      "aimThreshold": 0.62,
+      "changesGlobalTargeting": false
+    },
+    "tendrilTruth": {
+      "law": "movement boundary alone cannot authorize sealed suction tendrils",
+      "authoredSurfaceBootstrapPreserved": true,
+      "physicalAttachmentContinuityPreserved": true
+    },
+    "telemetry": {
+      "adds": "movement.boundary_clamped",
+      "movementSamplesInclude": [
+        "boundary mode",
+        "region",
+        "normalized distance",
+        "pressure",
+        "proximity"
+      ],
+      "adjacentObservationIncludes": [
+        "aim source",
+        "aim threshold",
+        "observation ready"
+      ]
+    }
+  },
+  "allowedFiles": [
+    "src/fields/ApertureFieldsArrivalSystem.js",
+    "src/fields/ApertureAdjacentTerritorySystem.js",
+    "src/player/CoreTendrilSurfaceContactSystem.js",
+    "src/core/SessionTelemetrySystem.js",
+    "src/ui/PlaytestHudSystem.js",
+    "src/main.js",
+    "package.json",
+    "package-lock.json",
+    "public/data/build/hc031t1AdjacentTerritoryAccessDetachmentTruthContract.json",
+    "public/data/build/hc031t1LockedHashes.json",
+    "scripts/validateHC031T1AdjacentTerritoryAccessDetachmentTruth.mjs",
+    "HC031T1_BUILD_REPORT.md",
+    "HC031T1_FOCUSED_PLAYTEST.md",
+    "HC031T1_PATCH_APPLY.md",
+    "HC031T1_DELTA_MANIFEST.txt"
+  ],
+  "forbiddenScope": [
+    "global movement tuning",
+    "TargetingSystem changes",
+    "controller mapping changes",
+    "MembraneRidge gameplay rule changes",
+    "Signal Plain gameplay rule changes",
+    "new encounters",
+    "chemistry changes",
+    "entity AI changes",
+    "new active cell",
+    "teleportation",
+    "route/crossing ownership changes"
+  ],
+  "acceptance": [
+    "third Membrane Ridge contour has authored clearance inside pre-open volume",
+    "Gathering Ground center remains outside pre-open volume until traversal opens",
+    "boundary-only contact cannot leave sealed tendrils",
+    "authored visible surface can still bootstrap tendril contact",
+    "remote Pulse can observe Gathering Ground before traversal opens",
+    "Stabilize can establish the remote relationship",
+    "Membrane Ridge completion opens traversal",
+    "physical entry occurs without active-cell change or teleport",
+    "boundary clamp telemetry can expose future invisible-volume stalls"
+  ]
+}

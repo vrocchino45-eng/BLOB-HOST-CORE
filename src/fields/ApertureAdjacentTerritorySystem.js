@@ -6,7 +6,7 @@ const TERRITORY_ID = "gathering_ground_cluster";
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
 /**
- * HC031T — first adjacent-territory proof.
+ * HC031T1 — adjacent-territory access + detachment-truth repair.
  *
  * Converts the existing Gathering Ground background landmark into a three-ring
  * world-space relationship without creating a new level or teleport:
@@ -36,6 +36,9 @@ export class ApertureAdjacentTerritorySystem {
     this.cameraWorld = new THREE.Vector3();
     this.cameraDirection = new THREE.Vector3();
     this.toTerritory = new THREE.Vector3();
+    this.aimPointWorld = new THREE.Vector3();
+    this.aimVector = new THREE.Vector3();
+    this.acquisitionBodies = [];
 
     this.ghostBody = null;
     this.detailBodies = [];
@@ -60,7 +63,7 @@ export class ApertureAdjacentTerritorySystem {
     if (this.root) return;
 
     this.root = new THREE.Group();
-    this.root.name = "aperture_adjacent_gathering_territory_HC031T";
+    this.root.name = "aperture_adjacent_gathering_territory_HC031T1";
     this.root.visible = false;
     this.scene.add(this.root);
 
@@ -79,6 +82,7 @@ export class ApertureAdjacentTerritorySystem {
     this.ghostBody.rotation.set(0.28, -0.22, 0.16);
     this.ghostBody.name = "gathering_ground_adjacent_ghost_body";
     this.root.add(this.ghostBody);
+    this.acquisitionBodies.push(this.ghostBody);
 
     const membraneMat = new THREE.MeshStandardMaterial({
       color: 0x597a72,
@@ -108,6 +112,7 @@ export class ApertureAdjacentTerritorySystem {
       body.userData.baseOpacity = body.material.opacity;
       this.root.add(body);
       this.detailBodies.push(body);
+      this.acquisitionBodies.push(body);
     }
 
     const haloMat = new THREE.MeshBasicMaterial({
@@ -127,6 +132,7 @@ export class ApertureAdjacentTerritorySystem {
       halo.name = `gathering_ground_remote_response_halo_${i + 1}`;
       this.root.add(halo);
       this.responseHalos.push(halo);
+      this.acquisitionBodies.push(halo);
     }
 
     // Low-cost connective anatomy from the already-playable Membrane Ridge toward
@@ -195,7 +201,7 @@ export class ApertureAdjacentTerritorySystem {
   onRuntimePrepare(frameState) {
     this.init();
     frameState.adjacentHostTerritoryPreparation = {
-      pass: "HC-031T",
+      pass: "HC-031T1",
       status: "prepared_hidden",
       mutatesProgression: false,
       mutatesActiveCell: false
@@ -210,11 +216,28 @@ export class ApertureAdjacentTerritorySystem {
     this.territoryWorld.copy(this.entryAnchor).add(this.territoryLocal);
     this.camera.getWorldPosition(this.cameraWorld);
     this.camera.getWorldDirection(this.cameraDirection).normalize();
-    this.toTerritory.copy(this.territoryWorld).sub(this.cameraWorld);
-    const cameraDistance = Math.max(0.001, this.toTerritory.length());
-    const aimDot = this.toTerritory.multiplyScalar(1 / cameraDistance).dot(this.cameraDirection);
     const playerDistance = this.playerRoot.position.distanceTo(this.territoryWorld);
-    const aimed = aimDot >= 0.72;
+
+    // HC031T1: Gathering Ground is a macro body, not a point target. Acquire against
+    // the visible ghost body, membranes, and response rings, then keep the best
+    // camera alignment. This does not replace TargetingSystem or create a new noun owner.
+    let aimDot = -1;
+    let cameraDistance = Infinity;
+    let aimSource = "none";
+    for (const body of this.acquisitionBodies) {
+      if (!body) continue;
+      this.aimPointWorld.copy(this.entryAnchor).add(body.position);
+      this.aimVector.copy(this.aimPointWorld).sub(this.cameraWorld);
+      const distance = Math.max(0.001, this.aimVector.length());
+      const dot = this.aimVector.multiplyScalar(1 / distance).dot(this.cameraDirection);
+      if (dot > aimDot) {
+        aimDot = dot;
+        cameraDistance = distance;
+        aimSource = body.name || "gathering_ground_macro_body";
+      }
+    }
+    const aimThreshold = 0.62;
+    const aimed = aimDot >= aimThreshold;
 
     const input = frameState.input ?? {};
     const pulseEventId = Number.isFinite(input.pulseEventId)
@@ -318,6 +341,8 @@ export class ApertureAdjacentTerritorySystem {
     this.publish(frameState, stage, {
       aimDot,
       aimed,
+      aimSource,
+      aimThreshold,
       playerDistance,
       cameraDistance,
       absorbAnswering,
@@ -340,7 +365,7 @@ export class ApertureAdjacentTerritorySystem {
         : "ring_c_distant";
 
     frameState.adjacentHostTerritory = {
-      pass: "HC-031T",
+      pass: "HC-031T1",
       active: true,
       territoryId: TERRITORY_ID,
       regionId: "aperture_fields",
@@ -363,6 +388,9 @@ export class ApertureAdjacentTerritorySystem {
       cameraDistance: Number.isFinite(metrics.cameraDistance) ? metrics.cameraDistance : null,
       aimDot: Number.isFinite(metrics.aimDot) ? metrics.aimDot : -1,
       aimed: Boolean(metrics.aimed),
+      aimSource: metrics.aimSource ?? "none",
+      aimThreshold: Number.isFinite(metrics.aimThreshold) ? metrics.aimThreshold : 0.62,
+      observationReady: Boolean(metrics.aimed && Number.isFinite(metrics.playerDistance) && metrics.playerDistance <= 86.0),
       entryRadius: metrics.entryRadius ?? 13.5,
       macroInteraction: {
         pulse: "remote_contour_and_function_read",

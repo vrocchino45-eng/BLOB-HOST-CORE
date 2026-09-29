@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.43";
+    this.schemaVersion = "blob.session.telemetry.v1.44";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -116,6 +116,9 @@ export class SessionTelemetrySystem {
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
+    this.boundaryClampCandidateSince = null;
+    this.boundaryClampEventActive = false;
+    this.boundaryClampPeakPressure = 0;
     this.summaryCache = null;
     this.summaryDirty = true;
     // HC030A: 15–20 minute interaction tests were overflowing the old 5k ring
@@ -681,6 +684,9 @@ export class SessionTelemetrySystem {
           runtimeCellId: territory.runtimeCellId ?? "CELL_APERTURE_FIELDS_ARRIVAL_001",
           detailTier: territory.detailTier ?? "ring_b_neighbor",
           aimDot: round(territory.aimDot ?? -1),
+          aimSource: territory.aimSource ?? "none",
+          aimThreshold: round(territory.aimThreshold ?? 0.62),
+          observationReady: Boolean(territory.observationReady),
           targetingAuthorityChanged: false,
           gameplayAuthority: false
         }
@@ -2682,6 +2688,13 @@ export class SessionTelemetrySystem {
         hostContactResidueYield01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueYield01 ?? 0),
         hostContactResidueCohesion01: round(frameState.hostContactEcologyContinuation?.localImprint?.residueCohesion01 ?? 0)
       },
+      movementBoundary: {
+        mode: frameState.playerKinematics?.movementBoundary?.mode ?? "unknown",
+        regionId: frameState.playerKinematics?.movementBoundary?.regionId ?? "unknown",
+        normalizedDistance: round(frameState.playerKinematics?.movementBoundary?.normalizedDistance ?? 0),
+        pressure: round(frameState.playerKinematics?.movementBoundary?.pressure ?? 0),
+        proximity: round(frameState.playerKinematics?.movementBoundary?.proximity ?? 0)
+      },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),
         siltResolved: Boolean(frameState.siltPressureRoute?.completed),
@@ -2709,6 +2722,7 @@ export class SessionTelemetrySystem {
     this.movementSamples.push(sample);
     if (this.movementSamples.length > this.maxMovementSamples) this.movementSamples.shift();
     this.observeMovementProgressBlock(frameState, sample);
+    this.observeMovementBoundaryClamp(frameState, sample);
     this.summaryDirty = true;
   }
 
@@ -2770,6 +2784,46 @@ export class SessionTelemetrySystem {
         }
       });
     }
+  }
+
+  observeMovementBoundaryClamp(frameState, sample) {
+    const boundary = frameState.playerKinematics?.movementBoundary ?? {};
+    const pressure = Number(boundary.pressure ?? 0);
+    const inputMagnitude = Number(frameState.playerKinematics?.inputMagnitude ?? 0);
+    const activeClamp = Number.isFinite(pressure) && pressure > 0.004 && inputMagnitude >= 0.45;
+
+    if (!activeClamp) {
+      this.boundaryClampCandidateSince = null;
+      this.boundaryClampEventActive = false;
+      this.boundaryClampPeakPressure = 0;
+      return;
+    }
+
+    const now = sample.wallT;
+    if (this.boundaryClampCandidateSince == null) this.boundaryClampCandidateSince = now;
+    this.boundaryClampPeakPressure = Math.max(this.boundaryClampPeakPressure, pressure);
+    const clampedFor = now - this.boundaryClampCandidateSince;
+    if (clampedFor < 0.35 || this.boundaryClampEventActive) return;
+
+    this.boundaryClampEventActive = true;
+    this.record("movement.boundary_clamped", "analysis", {
+      percept: {
+        region: boundary.regionId ?? "active_region",
+        boundaryMode: boundary.mode ?? "unknown",
+        blockedSeconds: round(clampedFor),
+        pressure: round(this.boundaryClampPeakPressure),
+        attachmentActive: Boolean(frameState.playerAttachment?.active)
+      },
+      developer: {
+        normalizedDistance: round(boundary.normalizedDistance ?? 0),
+        proximity: round(boundary.proximity ?? 0),
+        position: this.roundVector(frameState.playerKinematics?.position),
+        desiredMoveVector: this.roundVector(frameState.playerKinematics?.desiredMoveVector),
+        tendrilContactState: frameState.coreTendrilContact?.contactState ?? "unknown",
+        tendrilSealedCount: frameState.coreTendrilContact?.sealedCount ?? 0,
+        gameplayAuthority: false
+      }
+    });
   }
 
   captureCoreSnapshot(reason = "interval", frameState = this.frameState) {
@@ -2974,6 +3028,7 @@ export class SessionTelemetrySystem {
       adjacentTerritoryTraversalOpenings: count("world.adjacent_territory.traversal_opened"),
       adjacentTerritoryEntries: count("world.adjacent_territory.entered"),
       movementProgressBlockedEvents: count("movement.progress_blocked"),
+      movementBoundaryClampEvents: count("movement.boundary_clamped"),
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),
       relationshipTargetChanges: count("attention.target.changed"),

@@ -1,0 +1,26 @@
+BLOB: HOST CORE — HC031T1 Adjacent Territory Access + Detachment Truth
+Parent: HC031S + HC031T combined checkpoint / runtime HC-031T / package 0.31.41
+Package: 0.31.42
+Telemetry: blob.session.telemetry.v1.44
+
+CHANGED
+package.json
+package-lock.json
+src/main.js
+src/core/SessionTelemetrySystem.js
+src/fields/ApertureAdjacentTerritorySystem.js
+src/fields/ApertureFieldsArrivalSystem.js
+src/player/CoreTendrilSurfaceContactSystem.js
+src/ui/PlaytestHudSystem.js
+
+NEW
+public/data/build/hc031t1AdjacentTerritoryAccessDetachmentTruthContract.json
+public/data/build/hc031t1LockedHashes.json
+scripts/validateHC031T1AdjacentTerritoryAccessDetachmentTruth.mjs
+HC031T1_BUILD_REPORT.md
+HC031T1_FOCUSED_PLAYTEST.md
+HC031T1_PATCH_APPLY.md
+HC031T1_DELTA_MANIFEST.txt
+
+DELETIONS
+none

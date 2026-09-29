@@ -295,11 +295,28 @@ export class CoreTendrilSurfaceContactSystem {
     const boundary = kinematics.movementBoundary ?? {};
     const contact = frameState.coreContactLanguage ?? {};
     const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
-    const contactState = inspection.coreWorkActive ? "suspended" : (contact.state ?? "suspended");
+    const physicalAttachment = frameState.playerAttachment ?? {};
+    const surfaceTruth = frameState.coreSurfaceTruth ?? {};
+    const visibleAuthoredSurface = Boolean(surfaceTruth.valid && surfaceTruth.mechanicalEligible !== false);
+    const requestedContactState = inspection.coreWorkActive ? "suspended" : (contact.state ?? "suspended");
+    // HC031T1: the movement ellipsoid is a safety volume, not a sucker target.
+    // Boundary-only visual contact may deform the Core, but tendrils may seal only
+    // when an authored surface is actually visible/eligible or movement still owns
+    // a physical attachment/release relationship. This preserves bootstrap on real
+    // surfaces while preventing an invisible boundary from leaving a "stuck leg."
+    const contactState = inspection.coreWorkActive
+      ? "suspended"
+      : physicalAttachment.state === "releasing"
+        ? "releasing"
+        : requestedContactState === "attached" && (physicalAttachment.active === true || visibleAuthoredSurface)
+          ? "attached"
+          : requestedContactState === "brushing" && visibleAuthoredSurface
+            ? "brushing"
+            : "suspended";
 
     this.playerRoot.getWorldPosition(this.playerPosition);
     this.readBoundary(boundary);
-    this.readSurfaceTruth(frameState.coreSurfaceTruth);
+    this.readSurfaceTruth(surfaceTruth);
     this.readTangentBasis(kinematics);
 
     if (contactState !== this.previousContactState) {
@@ -798,9 +815,15 @@ export class CoreTendrilSurfaceContactSystem {
     }));
 
     this.frameState.coreTendrilContact = {
-      pass: "HC-031H2",
+      pass: "HC-031T1",
       active: contactRequested || sealedCount > 0 || reachingCount > 0 || peelingCount > 0,
       contactState,
+      requestedContactState: this.frameState.coreContactLanguage?.state ?? "suspended",
+      boundaryOnlyContactSuppressed: Boolean(
+        (this.frameState.coreContactLanguage?.state === "attached" || this.frameState.coreContactLanguage?.state === "brushing")
+        && !(this.frameState.playerAttachment?.active === true)
+        && !(this.frameState.coreSurfaceTruth?.valid && this.frameState.coreSurfaceTruth?.mechanicalEligible !== false)
+      ),
       tendrilCount: 3,
       sealedCount,
       reachingCount,

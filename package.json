@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.41",
+  "version": "0.31.42",
   "private": true,
-  "description": "BLOB: HOST CORE \u2014 HC-031T Open Territory / Adjacent Host Proof",
+  "description": "BLOB: HOST CORE \u2014 HC-031T1 Adjacent Territory Access + Detachment Truth",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031t && npm run audit:undefined-methods && npm run validate:recipe-data && node --check src/main.js && node --check src/core/GameRuntime.js && node --check src/fields/ApertureAdjacentTerritorySystem.js && node --check src/fields/ApertureFieldsArrivalSystem.js && node --check src/core/SessionTelemetrySystem.js",
+    "validate:current": "npm run validate:hc031t1 && npm run audit:undefined-methods && npm run validate:recipe-data && node --check src/main.js && node --check src/fields/ApertureAdjacentTerritorySystem.js && node --check src/fields/ApertureFieldsArrivalSystem.js && node --check src/player/CoreTendrilSurfaceContactSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/ui/PlaytestHudSystem.js",
     "validate:hc031p": "node scripts/validateHC031PFirstHostDestinationCommitment.mjs",
     "validate:hc031p-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
@@ -283,7 +283,8 @@
     "validate:hc031r-syntax": "node --check src/routes/VascularRhythmRouteSystem.js && node --check src/systems/ObjectiveSystem.js && node --check src/ui/PlaytestHudSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031s": "node scripts/validateHC031SSiltPressureRelationshipCurrentization.mjs",
     "validate:hc031s-syntax": "node --check src/routes/SiltPressureRouteSystem.js && node --check src/systems/ObjectiveSystem.js && node --check src/ui/PlaytestHudSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
-    "validate:hc031t": "node scripts/validateHC031TOpenTerritoryAdjacentHostProof.mjs"
+    "validate:hc031t": "node scripts/validateHC031TOpenTerritoryAdjacentHostProof.mjs",
+    "validate:hc031t1": "node scripts/validateHC031T1AdjacentTerritoryAccessDetachmentTruth.mjs"
   },
   "dependencies": {
     "three": "^0.179.1",

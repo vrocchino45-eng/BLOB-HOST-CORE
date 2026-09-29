@@ -1,10 +1,9 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T opens the first adjacent Host territory without adding a map UI or
-// teleport. The existing Gathering Ground background body in Aperture Fields can
-// be remotely read, can answer a held relationship, and becomes continuously
-// reachable after Membrane Ridge is read. Existing movement/crossing owners stay
-// authoritative.
+// HC031T1 repairs the first adjacent Host territory access proof without widening scope.
+// Membrane Ridge now has real maneuvering clearance, boundary-only tendril contact is
+// suppressed, and Gathering Ground exposes a broader macro-body acquisition read.
+// Existing movement/crossing owners stay authoritative.
 
 const appRoot = document.querySelector("#app");
 
@@ -14,8 +13,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T",
-  buildLabel: "Open Territory / Adjacent Host Proof"
+  buildId: "HC-031T1",
+  buildLabel: "Adjacent Territory Access + Detachment Truth"
 });
 
 runtime.start().catch((error) => {

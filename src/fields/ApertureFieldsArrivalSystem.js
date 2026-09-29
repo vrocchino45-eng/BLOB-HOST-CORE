@@ -403,7 +403,10 @@ export class ApertureFieldsArrivalSystem {
     }
 
     frameState.physicalFeel = frameState.physicalFeel ?? {};
-    const expandedBoundsCenter = this.entryAnchor.clone().add(new THREE.Vector3(3.5, 0.8, -20.5));
+    // HC031T1: the HC031T playtest proved the last Membrane Ridge contour was effectively
+    // tangent to the pre-open ellipsoid. Give the player enough authored air around the
+    // ridge and a Ring-B stand-off position without making Gathering Ground itself local.
+    const expandedBoundsCenter = this.entryAnchor.clone().add(new THREE.Vector3(5.0, 1.0, -24.0));
     // HC031T: after Membrane Ridge has actually been read, the existing distant
     // Gathering Ground stops behaving like a ghost endpoint. Keep movement ownership
     // here, but expand the same field volume far enough for continuous approach.
@@ -417,13 +420,13 @@ export class ApertureFieldsArrivalSystem {
     const activeBoundsRadii = adjacentTerritoryOpen
       ? { x: 32.0, y: 15.0, z: 52.0 }
       : signalPlainCompleted
-        ? { x: 27.0, y: 10.0, z: 37.0 }
+        ? { x: 32.0, y: 12.0, z: 43.0 }
         : { x: 20.0, y: 8.0, z: 28.0 };
     frameState.physicalFeel.movementBounds = {
       mode: adjacentTerritoryOpen
         ? "adjacent_gathering_territory_open_ellipsoid"
         : signalPlainCompleted
-          ? "signal_plain_opened_deeper_field_ellipsoid"
+          ? "signal_plain_membrane_ridge_observation_ellipsoid"
           : "entry_anchored_ellipsoid",
       owner: "PlayerMovementController",
       tuningOwner: "ApertureFieldsArrivalSystem",
@@ -448,6 +451,9 @@ export class ApertureFieldsArrivalSystem {
       returnFoldReady: returnDistance <= 1.65,
       movementBoundsCenter: { x: activeBoundsCenter.x, y: activeBoundsCenter.y, z: activeBoundsCenter.z },
       movementBoundsRadii: activeBoundsRadii,
+      movementBoundsTuningPass: "HC-031T1",
+      ringBObservationAccess: signalPlainCompleted && !adjacentTerritoryOpen,
+      membraneRidgeTraversalMargin: signalPlainCompleted ? "authored_maneuvering_clearance" : "not_open",
       landmarkCount: landmarkStates.length,
       landmarks: landmarkStates,
       scaleLock: "field_volume_not_chamber_strip",
