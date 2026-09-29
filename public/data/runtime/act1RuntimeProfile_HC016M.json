@@ -189,21 +189,24 @@
     "aperture_fields": {
       "modeId": "aperture_fields_arrival_mode",
       "modeOwner": "ApertureFieldsArrivalMode",
-      "gameplayOwner": "ApertureFieldsArrivalSystem + SignalPlainEcologySystem + MembraneRidgeGameplaySystem",
-      "presentationOwner": "ApertureFieldsArrivalSystem + SignalPlainEcologySystem + MembraneRidgeGameplaySystem",
+      "gameplayOwner": "ApertureFieldsArrivalSystem + SignalPlainEcologySystem + MembraneRidgeGameplaySystem + ApertureAdjacentTerritorySystem",
+      "presentationOwner": "ApertureFieldsArrivalSystem + SignalPlainEcologySystem + MembraneRidgeGameplaySystem + ApertureAdjacentTerritorySystem",
       "cameraOwner": "GameRuntimeCameraRig[camera_aperture_fields_arrival]",
       "systemIds": [
         "apertureFieldsArrivalSystem",
         "signalPlainEcologySystem",
-        "membraneRidgeGameplaySystem"
+        "membraneRidgeGameplaySystem",
+        "apertureAdjacentTerritorySystem"
       ],
-      "activeUpdateBudget": 9,
+      "activeUpdateBudget": 10,
       "transitionOwner": "GateSystem",
       "destinationRegionId": "comb_threshold",
       "gameplayReady": true,
       "fullEcologyMounted": false,
       "ecologyGameplayReady": true,
-      "ecologyScope": "signal_plain_first_local_loop_only"
+      "ecologyScope": "signal_plain_first_local_loop_plus_membrane_ridge_and_adjacent_territory_proof",
+      "adjacentTerritoryMounted": true,
+      "adjacentTerritoryRuntimeOwner": "ApertureAdjacentTerritorySystem"
     }
   },
   "transitionPreparation": {

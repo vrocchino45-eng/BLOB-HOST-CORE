@@ -1,3 +1,11 @@
+# HC031T6 — Adjacent Territory Runtime Mount Lock
+
+- Added `apertureAdjacentTerritorySystem` to the canonical Aperture active-region runtime profile.
+- Raised Aperture active update budget from 9 to 10 (6 shared + 4 local systems).
+- Updated Aperture gameplay/presentation ownership metadata to include the adjacent-territory owner.
+- Added a regression that exercises `ModeController -> firstSliceRuntimeMount.activeSystemIds -> SystemRegistry` and proves the adjacent-territory owner mounts/executes instead of being skipped.
+- Preserved HC031T5 Ridge trace semantics, canonical Gathering Ground identity, PlayerMovementController, TargetingSystem, and telemetry schema v1.46.
+
 # HC031J1 — Surface Detachment and Free-Movement Handoff
 
 - Corrected the authored surface-normal sign used to interpret deliberate away input.

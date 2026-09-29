@@ -15,9 +15,9 @@ const hud = read('src/ui/PlaytestHudSystem.js');
 const main = read('src/main.js');
 const pkg = JSON.parse(read('package.json'));
 
-assert(main.includes('buildId: "HC-031T5"'), 'main build ID must be HC-031T5');
-assert(main.includes('buildLabel: "Ridge Trace + Canonical Gathering Ground Lock"'), 'main label must identify the T5 lock');
-assert(pkg.version === '0.31.46', 'package version must be 0.31.46');
+assert(main.includes('buildId: "HC-031T5"') || main.includes('buildId: "HC-031T6"'), 'main build ID must be HC-031T5 or a T6 successor');
+assert(main.includes('buildLabel: "Ridge Trace + Canonical Gathering Ground Lock"') || main.includes('buildLabel: "Adjacent Territory Runtime Mount Lock"'), 'main label must identify T5 or its T6 successor');
+assert(['0.31.46', '0.31.47'].includes(pkg.version), 'package version must be T5 or T6 successor');
 assert(telemetry.includes('blob.session.telemetry.v1.46'), 'telemetry schema must be v1.46');
 
 // Ridge correctness: independent reads, physical path length, no frame-rate minimum step.

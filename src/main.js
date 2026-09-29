@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T5 locks the Aperture handoff to physical truth.
-// Ridge contours accumulate deliberate path length in any order, independent of frame rate,
-// and the original visible Gathering Ground landmark is the single canonical attention noun.
+// HC031T6 locks adjacent-territory runtime ownership.
+// Aperture mounts Gathering Ground through the same active-region profile as Arrival, Signal Plain,
+// and Membrane Ridge so the canonical visible noun can actually publish attention/relationship state.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T5",
-  buildLabel: "Ridge Trace + Canonical Gathering Ground Lock"
+  buildId: "HC-031T6",
+  buildLabel: "Adjacent Territory Runtime Mount Lock"
 });
 
 runtime.start().catch((error) => {
