@@ -20,9 +20,9 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(pkg.version === "0.31.48", `package version should be 0.31.48, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U"'), "main buildId is not HC-031U");
-assert(main.includes('buildLabel: "Gathering Ground Alive Pass 1"'), "main build label missing");
+assert(pkg.version === "0.31.49", `package version should be 0.31.49, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U1"'), "main buildId is not HC-031U1");
+assert(main.includes('buildLabel: "Gathering Ground Alive Pass 1 — Startup Lifecycle Hotfix"'), "main U1 build label missing");
 
 const aperture = runtime.regions?.aperture_fields;
 assert(aperture, "Aperture runtime profile missing");

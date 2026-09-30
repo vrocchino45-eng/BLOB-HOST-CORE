@@ -1,7 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031U turns the accepted Gathering Ground continuity proof into the first living local territory.
-// Traversal stays frozen; local Watcher/relay ecology now supports 3 encounter families x 2 encounters.
+// HC031U1 repairs the startup lifecycle for the HC031U Gathering Ground ecology pass.
+// The six encounters are unchanged; GatheringGroundAliveSystem now constructs only after its Aperture owner exists.
 
 const appRoot = document.querySelector("#app");
 
@@ -11,8 +11,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031U",
-  buildLabel: "Gathering Ground Alive Pass 1"
+  buildId: "HC-031U1",
+  buildLabel: "Gathering Ground Alive Pass 1 — Startup Lifecycle Hotfix"
 });
 
 runtime.start().catch((error) => {

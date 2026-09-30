@@ -2250,13 +2250,6 @@ export class GameRuntime {
       entitySystem: this.entitySystem,
       frameState: this.frameState
     });
-    this.gatheringGroundAliveSystem = new GatheringGroundAliveSystem({
-      scene: this.scene,
-      playerRoot: this.playerCore,
-      frameState: this.frameState,
-      entitySystem: this.entitySystem,
-      apertureFieldsArrivalSystem: this.apertureFieldsArrivalSystem
-    });
   }
 
   createOrbiterSystems() {
@@ -2413,6 +2406,16 @@ export class GameRuntime {
       camera: this.camera,
       playerRoot: this.playerCore,
       frameState: this.frameState,
+      apertureFieldsArrivalSystem: this.apertureFieldsArrivalSystem
+    });
+    // HC031U1 startup lifecycle hotfix: this system depends on both EntitySystem
+    // (created earlier) and ApertureFieldsArrivalSystem (created in this architecture pass).
+    // Construct it only after both owners exist; do not weaken its constructor contract.
+    this.gatheringGroundAliveSystem = new GatheringGroundAliveSystem({
+      scene: this.scene,
+      playerRoot: this.playerCore,
+      frameState: this.frameState,
+      entitySystem: this.entitySystem,
       apertureFieldsArrivalSystem: this.apertureFieldsArrivalSystem
     });
     this.localCellBoundaryMorphSystem = new LocalCellBoundaryMorphSystem({

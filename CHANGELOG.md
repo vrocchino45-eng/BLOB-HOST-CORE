@@ -1,3 +1,10 @@
+# HC031U1 — Gathering Ground Alive Startup Lifecycle Hotfix
+
+- Fixed boot crash caused by constructing `GatheringGroundAliveSystem` during `createEntitySystems()` before `ApertureFieldsArrivalSystem` existed.
+- Moved construction into `createFirstSliceArchitecture()` after Aperture arrival + adjacent-territory owners are created.
+- Kept the strict constructor dependency assertion intact.
+- No encounter, movement, targeting, traversal, chemistry, input, or telemetry-schema changes.
+
 # HC031U — Gathering Ground Alive Pass 1
 
 - Locks HC031T6 same-cell/no-teleport continuity and begins the first local ecology expansion.
