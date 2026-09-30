@@ -101,6 +101,7 @@ import { ApertureFieldsArrivalSystem } from "../fields/ApertureFieldsArrivalSyst
 import { SignalPlainEcologySystem } from "../fields/SignalPlainEcologySystem.js";
 import { MembraneRidgeGameplaySystem } from "../fields/MembraneRidgeGameplaySystem.js";
 import { ApertureAdjacentTerritorySystem } from "../fields/ApertureAdjacentTerritorySystem.js";
+import { GatheringGroundAliveSystem } from "../fields/GatheringGroundAliveSystem.js";
 
 export class GameRuntime {
   constructor({ appRoot, buildId, buildLabel }) {
@@ -201,6 +202,7 @@ export class GameRuntime {
     this.signalPlainEcologySystem = null;
     this.membraneRidgeGameplaySystem = null;
     this.apertureAdjacentTerritorySystem = null;
+    this.gatheringGroundAliveSystem = null;
     this.firstSliceTransitionCoordinator = null;
     this.localCellBoundaryMorphSystem = null;
     this.runtimeStateLedgerSystem = null;
@@ -2248,6 +2250,13 @@ export class GameRuntime {
       entitySystem: this.entitySystem,
       frameState: this.frameState
     });
+    this.gatheringGroundAliveSystem = new GatheringGroundAliveSystem({
+      scene: this.scene,
+      playerRoot: this.playerCore,
+      frameState: this.frameState,
+      entitySystem: this.entitySystem,
+      apertureFieldsArrivalSystem: this.apertureFieldsArrivalSystem
+    });
   }
 
   createOrbiterSystems() {
@@ -2644,6 +2653,10 @@ export class GameRuntime {
     // visibly read it. It publishes one brief local Host-matter reply around the
     // recognizing organism and cannot create residue or recursive propagation.
     this.registry.register("entityEcologicalCrossInfluenceSystem", this.entityEcologicalCrossInfluenceSystem, { allowUpdateError: true });
+    // HC031U consumes the same-frame organism relationship grammar plus the locked
+    // HC031T6 local-territory state. It stages six local ecology encounters only;
+    // EntitySystem retains organism behavior/movement and Aperture retains traversal.
+    this.registry.register("gatheringGroundAliveSystem", this.gatheringGroundAliveSystem, regionScoped);
     // HC028M converts the retained ecological relationship into a bounded local
     // matter field. AmbientMaterialInteractionSystem consumes it on the following
     // frame; this bridge owns no particles, movement, collision, chemistry or routes.

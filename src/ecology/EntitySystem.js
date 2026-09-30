@@ -124,15 +124,29 @@ export class EntitySystem {
       const isNurseryWatcher = isWatcher && entity.instanceId === "membrane_watcher_001";
       const isVascularRelay = entity.recipe.id === "vascular_relay_001";
       const homeHere = entity.homeCellIds?.includes(activeCellId);
+      const gatheringGroundPopulation = String(entity.distributionRole ?? "").startsWith("gathering_ground_");
+
+      // HC031U: Aperture's debug staging can move the player after the canonical
+      // region anchor has been established. Gathering Ground organisms therefore
+      // bind to the Aperture owner anchor, never to the player's live test position.
+      if (entity.coordinateSpace === "aperture_anchor_relative" && homeHere) {
+        const anchor = frameState.apertureFieldsArrival?.entryAnchor;
+        if (Number.isFinite(anchor?.x) && Number.isFinite(anchor?.y) && Number.isFinite(anchor?.z)) {
+          entity.basePosition.set(anchor.x, anchor.y, anchor.z).add(entity.spawnOffset);
+          entity.anchoredCellId = activeCellId;
+        }
+      }
 
       // Preserve the locked Nursery ownership rules for Tender/Watcher. Regional
       // organisms use their authored home-cell placement instead of piggybacking
-      // on the nursery visibility special cases.
+      // on the nursery visibility special cases. Gathering Ground population stays
+      // hidden until HC031T6 has physically made the neighboring territory local.
+      const gatheringGroundLocal = Boolean(frameState.adjacentHostTerritory?.enteredTerritory);
       entity.root.visible = isTender
         ? (inNursery || this.tenderBonded)
         : isNurseryWatcher
           ? inNursery
-          : Boolean(homeHere);
+          : Boolean(homeHere && (!gatheringGroundPopulation || gatheringGroundLocal));
       if (!entity.root.visible) continue;
 
       const distance = this.playerRoot.position.distanceTo(entity.root.position);
@@ -487,36 +501,9 @@ export class EntitySystem {
     entity.root.position.copy(entity.basePosition);
     entity.root.position.y += Math.sin(t * 0.55) * 0.04;
 
-    // HC031O1: when the Host has revealed its existing continuation, the Watcher
-    // must physically tell the same truth as its semantic state. Route direction
-    // temporarily outranks player-facing attention, but does not gain route authority.
-    const routeCueRequested = Boolean(circuit.foldInvitation && !circuit.packetActive);
-    let routeCueTargetId = "player_core";
     this.tempVector.copy(this.playerRoot.position).sub(entity.root.position);
-    let angle = Math.atan2(this.tempVector.x, this.tempVector.z);
-
-    if (routeCueRequested) {
-      const fold = this.visualComposer.scene?.getObjectByName?.("surface_wake_listening_fold_001") ?? null;
-      if (fold?.visible) {
-        fold.getWorldPosition(this.followTarget);
-        this.tempVector.copy(this.followTarget).sub(entity.root.position);
-        if (this.tempVector.lengthSq() > 0.0001) {
-          angle = Math.atan2(this.tempVector.x, this.tempVector.z);
-          routeCueTargetId = fold.name;
-        }
-      }
-    }
-
-    const routeCueActive = routeCueTargetId === "surface_wake_listening_fold_001";
-    if (routeCueActive) {
-      const livingScan = Math.sin(t * 1.1) * 0.045 * (0.35 + reciprocalStrength * 0.65);
-      const targetYaw = angle + livingScan;
-      entity.root.rotation.y = this.approachAngle(
-        entity.root.rotation.y,
-        targetYaw,
-        1 - Math.exp(-Math.max(0, dt) * 3.4)
-      );
-    } else if (reciprocalMode === "baseline") {
+    const angle = Math.atan2(this.tempVector.x, this.tempVector.z);
+    if (reciprocalMode === "baseline") {
       entity.root.rotation.y = angle;
     } else {
       const scanOffset = reciprocalMode === "counter_scan"
@@ -534,11 +521,6 @@ export class EntitySystem {
             : 2.0;
       entity.root.rotation.y = this.approachAngle(entity.root.rotation.y, targetYaw, 1 - Math.exp(-Math.max(0, dt) * trackRate));
     }
-
-    entity.root.userData.routeCueActive = routeCueActive;
-    entity.root.userData.routeCueTargetId = routeCueActive ? routeCueTargetId : "none";
-    entity.root.userData.routeCueMode = routeCueActive ? "body_orients_to_listening_fold" : "none";
-    entity.root.userData.routeAuthority = false;
     entity.root.rotation.x = Math.sin(t * 0.6) * 0.035 + pulseT * 0.04
       + (reciprocalMode === "hold_sample" ? Math.sin(t * 0.9) * 0.018 * reciprocalStrength : 0);
 

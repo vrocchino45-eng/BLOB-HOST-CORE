@@ -984,6 +984,44 @@
       "entities": [],
       "orbiters": [
         "guide_orbiter_folded_lantern_001"
+      ],
+      "entityPlacements": [
+        {
+          "instanceId": "gathering_ground_watcher_001",
+          "recipeId": "membrane_watcher_001",
+          "position": [
+            7.4,
+            9.4,
+            -54.2
+          ],
+          "scale": 0.78,
+          "coordinateSpace": "aperture_anchor_relative",
+          "distributionRole": "gathering_ground_perimeter_witness"
+        },
+        {
+          "instanceId": "gathering_ground_relay_a_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            0.4,
+            7.2,
+            -58.4
+          ],
+          "scale": 0.72,
+          "coordinateSpace": "aperture_anchor_relative",
+          "distributionRole": "gathering_ground_exchange_relay_a"
+        },
+        {
+          "instanceId": "gathering_ground_relay_b_001",
+          "recipeId": "vascular_relay_001",
+          "position": [
+            -3.8,
+            10.2,
+            -53.8
+          ],
+          "scale": 0.68,
+          "coordinateSpace": "aperture_anchor_relative",
+          "distributionRole": "gathering_ground_exchange_relay_b"
+        }
       ]
     },
     "visuals": {
@@ -994,12 +1032,17 @@
     "runtime": {
       "modeId": "aperture_fields_arrival_mode",
       "systemIds": [
-        "apertureFieldsArrivalSystem"
+        "apertureFieldsArrivalSystem",
+        "signalPlainEcologySystem",
+        "membraneRidgeGameplaySystem",
+        "apertureAdjacentTerritorySystem",
+        "gatheringGroundAliveSystem"
       ],
       "entryGateId": "comb_threshold_to_aperture_fields",
       "returnGateId": "aperture_fields_to_comb_threshold",
-      "fullEcologyMounted": false,
-      "ecologyGameplayReady": false
+      "fullEcologyMounted": true,
+      "ecologyGameplayReady": true,
+      "ecologyScope": "gathering_ground_alive_pass_1"
     }
   }
 ]

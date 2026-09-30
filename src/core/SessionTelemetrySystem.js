@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.46";
+    this.schemaVersion = "blob.session.telemetry.v1.47";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -115,6 +115,7 @@ export class SessionTelemetrySystem {
     this.lastAdjacentTerritoryRelationshipSequence = frameState.adjacentHostTerritory?.relationshipSequence ?? 0;
     this.lastAdjacentTerritoryTraversalSequence = frameState.adjacentHostTerritory?.traversalSequence ?? 0;
     this.lastAdjacentTerritoryEntrySequence = frameState.adjacentHostTerritory?.entrySequence ?? 0;
+    this.lastGatheringGroundEncounterEventSequence = frameState.gatheringGroundAlive?.eventSequence ?? 0;
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -191,6 +192,7 @@ export class SessionTelemetrySystem {
     this.observeSiltCurrentization(frameState);
     this.observeMembraneRidge(frameState);
     this.observeAdjacentTerritory(frameState);
+    this.observeGatheringGroundAlive(frameState);
     this.observeHubDestinationCommitment(frameState);
     this.observeHubReturnRecomposition(frameState);
     this.observeTarget(frameState);
@@ -807,6 +809,52 @@ export class SessionTelemetrySystem {
       this.noteInformationGain("adjacent_territory_became_local", 1.0, { territory: territoryId });
     }
     this.lastAdjacentTerritoryEntrySequence = Math.max(this.lastAdjacentTerritoryEntrySequence, entrySequence);
+  }
+
+  observeGatheringGroundAlive(frameState) {
+    const ecology = frameState.gatheringGroundAlive ?? {};
+    const recent = Array.isArray(ecology.recentEvents) ? ecology.recentEvents : [];
+    const unseen = recent
+      .filter((event) => Number(event?.sequence ?? 0) > this.lastGatheringGroundEncounterEventSequence)
+      .sort((a, b) => Number(a.sequence ?? 0) - Number(b.sequence ?? 0));
+
+    for (const event of unseen) {
+      const kind = event.kind ?? "changed";
+      this.record(`ecology.gathering_ground.encounter.${kind}`, kind === "completed" || kind === "discovered" ? "perceptual" : "analysis", {
+        percept: {
+          encounter: event.label ?? event.encounterId ?? "unknown",
+          family: event.family ?? "unknown",
+          state: event.state ?? "unknown",
+          territoryAge: round(event.territoryAge ?? 0),
+          playerDistanceToCenter: round(event.playerDistanceToCenter ?? 0)
+        },
+        developer: {
+          sequence: event.sequence ?? 0,
+          encounterId: event.encounterId ?? "unknown",
+          trigger: event.detail?.trigger ?? "unknown",
+          detail: event.detail ?? {},
+          progressionAuthority: false,
+          targetingAuthority: false,
+          movementAuthority: false,
+          owner: "GatheringGroundAliveSystem"
+        }
+      });
+      if (kind === "discovered") {
+        this.noteInformationGain("gathering_ground_encounter_discovered", 0.25, {
+          encounter: event.label ?? event.encounterId ?? "unknown",
+          family: event.family ?? "unknown"
+        });
+      } else if (kind === "completed") {
+        this.noteInformationGain("gathering_ground_encounter_completed", 0.55, {
+          encounter: event.label ?? event.encounterId ?? "unknown",
+          family: event.family ?? "unknown"
+        });
+      }
+      this.lastGatheringGroundEncounterEventSequence = Math.max(
+        this.lastGatheringGroundEncounterEventSequence,
+        Number(event.sequence ?? 0)
+      );
+    }
   }
 
   observeHubReturnRecomposition(frameState) {
@@ -2763,6 +2811,15 @@ export class SessionTelemetrySystem {
         attentionOwned: Boolean(frameState.adjacentHostTerritory?.attentionOwned),
         distance: round(frameState.adjacentHostTerritory?.distance ?? 0)
       },
+      gatheringGroundAliveState: {
+        active: Boolean(frameState.gatheringGroundAlive?.active),
+        completedCount: frameState.gatheringGroundAlive?.completedCount ?? 0,
+        encounterCount: frameState.gatheringGroundAlive?.encounterCount ?? 6,
+        eventSequence: frameState.gatheringGroundAlive?.eventSequence ?? 0,
+        ambientCompleted: frameState.gatheringGroundAlive?.family?.ambient?.completed ?? 0,
+        reactiveCompleted: frameState.gatheringGroundAlive?.family?.reactive?.completed ?? 0,
+        crossTerritoryCompleted: frameState.gatheringGroundAlive?.family?.cross_territory?.completed ?? 0
+      },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),
         siltResolved: Boolean(frameState.siltPressureRoute?.completed),
@@ -3097,6 +3154,15 @@ export class SessionTelemetrySystem {
       adjacentTerritoryRelationships: count("world.adjacent_territory.relationship_established"),
       adjacentTerritoryTraversalOpenings: count("world.adjacent_territory.traversal_opened"),
       adjacentTerritoryEntries: count("world.adjacent_territory.entered"),
+      gatheringGroundEncounterDiscoveries: count("ecology.gathering_ground.encounter.discovered"),
+      gatheringGroundEncounterStarts: count("ecology.gathering_ground.encounter.started"),
+      gatheringGroundEncounterCompletions: count("ecology.gathering_ground.encounter.completed"),
+      gatheringGroundEncounterIgnored: count("ecology.gathering_ground.encounter.ignored"),
+      gatheringGroundEncounterInterruptions: count("ecology.gathering_ground.encounter.interrupted"),
+      gatheringGroundUniqueEncounterCompletions: new Set(this.events
+        .filter((event) => event.type === "ecology.gathering_ground.encounter.completed")
+        .map((event) => event.developer?.encounterId)
+        .filter(Boolean)).size,
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       movementBoundaryClampEvents: count("movement.boundary_clamped"),
       attentionOwnerChanges: count("attention.owner.changed"),

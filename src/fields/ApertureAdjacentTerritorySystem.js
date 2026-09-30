@@ -325,8 +325,11 @@ export class ApertureAdjacentTerritorySystem {
     // Pulse can interrogate the large neighboring body before it is reachable.
     // Distance affects response strength, but not by turning this into a hidden gate.
     if (freshPulse && interactionAimed && playerDistance <= 86.0) {
+      const previousObservationCount = this.observationCount;
       this.observationCount = Math.min(3, this.observationCount + 1);
-      this.observationSequence += 1;
+      // HC031U: telemetry should represent observation-stage gain, not every
+      // redundant Pulse after OBS3. The visible Pulse answer still occurs.
+      if (this.observationCount > previousObservationCount) this.observationSequence += 1;
       this.pulseResponse = 1;
     }
     this.pulseResponse = Math.max(0, this.pulseResponse - dt * 0.72);

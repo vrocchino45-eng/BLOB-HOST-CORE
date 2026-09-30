@@ -1,8 +1,7 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031T6 locks adjacent-territory runtime ownership.
-// Aperture mounts Gathering Ground through the same active-region profile as Arrival, Signal Plain,
-// and Membrane Ridge so the canonical visible noun can actually publish attention/relationship state.
+// HC031U turns the accepted Gathering Ground continuity proof into the first living local territory.
+// Traversal stays frozen; local Watcher/relay ecology now supports 3 encounter families x 2 encounters.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +11,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031T6",
-  buildLabel: "Adjacent Territory Runtime Mount Lock"
+  buildId: "HC-031U",
+  buildLabel: "Gathering Ground Alive Pass 1"
 });
 
 runtime.start().catch((error) => {

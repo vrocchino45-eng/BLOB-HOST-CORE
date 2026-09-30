@@ -1,3 +1,11 @@
+# HC031U — Gathering Ground Alive Pass 1
+
+- Locks HC031T6 same-cell/no-teleport continuity and begins the first local ecology expansion.
+- Adds one Gathering Ground Watcher and two exchange relays on the canonical Aperture anchor.
+- Adds 3 encounter families x 2 encounters: ambient, reactive verb-chord, and cross-territory.
+- Adds encounter telemetry and LIFE debug readout.
+- Deduplicates Gathering Ground observation telemetry after OBS3 without changing Pulse presentation.
+
 # HC031T6 — Adjacent Territory Runtime Mount Lock
 
 - Added `apertureAdjacentTerritorySystem` to the canonical Aperture active-region runtime profile.

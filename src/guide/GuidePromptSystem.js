@@ -722,6 +722,7 @@ export class GuidePromptSystem {
     if (!ridge.active && !ridge.completed) return null;
 
     const adjacent = frameState.adjacentHostTerritory ?? {};
+    const alive = frameState.gatheringGroundAlive ?? {};
     const attentionOwned = Boolean(adjacent.attentionOwned || frameState.targeting?.attentionTargetId === "gathering_ground_cluster");
     const relationshipOwned = Boolean(adjacent.relationshipOwned || frameState.targeting?.relationshipTargetId === "gathering_ground_cluster");
     const observationCount = adjacent.observationCount ?? 0;
@@ -744,7 +745,11 @@ export class GuidePromptSystem {
       priority: 805,
       guideLine: ridge.completed
         ? adjacent.enteredTerritory
-          ? "You are inside the larger Host body now. The released ridge remains behind you as part of the same space."
+          ? alive.active
+            ? (alive.completedCount ?? 0) >= (alive.encounterCount ?? 6)
+              ? "Gathering Ground is answering as a local ecology now. Watcher, relay, matter, and ridge response are all carrying the same living space."
+              : "Gathering Ground is not a destination object anymore. Watch what the local organisms and Host matter do before deciding how to answer."
+            : "You are inside the larger Host body now. The released ridge remains behind you as part of the same space."
           : adjacent.relationshipEstablished
             ? "The larger body is answering before you reach it. The living connection now has a readable relationship."
             : observationCount > 0
@@ -757,7 +762,15 @@ export class GuidePromptSystem {
           : `The ridge is carrying three living pressure contours. ${ridge.readCount ?? 0}/${ridge.contourCount ?? 3} have answered.`,
       objectiveLine: ridge.completed
         ? adjacent.enteredTerritory
-          ? "Explore Gathering Ground and look back across the continuous Aperture space."
+          ? alive.active
+            ? (alive.family?.ambient?.completed ?? 0) < 2
+              ? "Watch the perimeter Watcher and the relay exchange long enough to read their ambient behavior."
+              : (alive.family?.reactive?.completed ?? 0) < 2
+                ? "Try Stabilize + Pulse near the Watcher, then Stabilize + Absorb near a relay."
+                : (alive.family?.cross_territory?.completed ?? 0) < 2
+                  ? "Watch the local answers travel back toward Membrane Ridge."
+                  : "Wander Gathering Ground, then return across the Ridge and confirm the ecology remains continuous."
+            : "Explore Gathering Ground and look back across the continuous Aperture space."
           : adjacent.traversalOpen && observationCount > 0
             ? "Follow the bright living connection into Gathering Ground."
             : relationshipOwned || adjacent.relationshipEstablished

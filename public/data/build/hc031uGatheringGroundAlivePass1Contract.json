@@ -1,0 +1,66 @@
+{
+  "id": "HC031U_GATHERING_GROUND_ALIVE_PASS_1",
+  "parent": "HC031T6_ADJACENT_TERRITORY_RUNTIME_MOUNT_LOCK",
+  "mode": "vertical_ecology_convergence",
+  "purpose": "Turn accepted Gathering Ground continuity into the first local living-space proof without creating another gate or level transition.",
+  "encounterGrammar": {
+    "families": 3,
+    "encountersPerFamily": 2,
+    "total": 6,
+    "ambient": [
+      "ambient_watcher_sweep",
+      "ambient_relay_exchange"
+    ],
+    "reactive": [
+      "reactive_watcher_stable_interrogation",
+      "reactive_relay_held_intake"
+    ],
+    "crossTerritory": [
+      "cross_ridge_echo_return",
+      "cross_matter_spill_return"
+    ]
+  },
+  "verbGrammar": {
+    "watcher": "Stabilize + Pulse -> stable_interrogation",
+    "relay": "Stabilize + Absorb -> held_intake"
+  },
+  "population": {
+    "watcher": "gathering_ground_watcher_001",
+    "relays": [
+      "gathering_ground_relay_a_001",
+      "gathering_ground_relay_b_001"
+    ],
+    "behaviorOwner": "EntitySystem",
+    "coordinateOwner": "ApertureFieldsArrivalSystem canonical entry anchor"
+  },
+  "locks": [
+    "HC031T6 same-cell/no-teleport continuity",
+    "Membrane Ridge 3/3 opening law",
+    "PlayerMovementController",
+    "TargetingSystem",
+    "Signal Plain",
+    "controller mapping",
+    "chemistry authority",
+    "route progression"
+  ],
+  "telemetry": {
+    "schema": "blob.session.telemetry.v1.47",
+    "encounterTransitions": [
+      "discovered",
+      "started",
+      "completed",
+      "ignored",
+      "interrupted"
+    ],
+    "obs3Dedupe": "adjacent observation sequence increments only when observation stage increases"
+  },
+  "acceptance": [
+    "T6 traversal still reaches Gathering Ground without cell change or teleport",
+    "Watcher and two relays appear only after territory becomes local",
+    "2 ambient encounters can complete without verbs",
+    "Stabilize+Pulse completes Watcher reactive encounter",
+    "Stabilize+Absorb completes relay reactive encounter",
+    "both reactive encounters propagate visible consequences back toward Ridge",
+    "telemetry reports 6 unique encounter completions in a deterministic smoke run"
+  ]
+}

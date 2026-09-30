@@ -190,6 +190,7 @@ export class PlaytestHudSystem {
     const combThresholdPlayable = frameState.combThresholdPlayable ?? {};
     const apertureFieldsArrival = frameState.apertureFieldsArrival ?? {};
     const adjacentHostTerritory = frameState.adjacentHostTerritory ?? {};
+    const gatheringGroundAlive = frameState.gatheringGroundAlive ?? {};
     const signalPlainEcology = frameState.signalPlainEcology ?? {};
     const membraneRidgeGameplay = frameState.membraneRidgeGameplay ?? {};
     const graveRouteLock = frameState.graveRouteLock ?? {};
@@ -359,6 +360,9 @@ export class PlaytestHudSystem {
     const gatheringDebug = inApertureFields && adjacentHostTerritory.active
       ? ` · RIDGE ${membraneRidgeGameplay.readCount ?? 0}/${membraneRidgeGameplay.contourCount ?? 3}${membraneRidgeGameplay.completed ? " COMPLETE" : ""} · GG d${Number.isFinite(adjacentHostTerritory.distance) ? adjacentHostTerritory.distance.toFixed(1) : "?"} aim${Number.isFinite(adjacentHostTerritory.aimDot) ? adjacentHostTerritory.aimDot.toFixed(2) : "?"}${adjacentHostTerritory.aimed ? " VIEW" : ""}${adjacentHostTerritory.attentionOwned ? " ATTN" : ""} OBS${adjacentHostTerritory.observationCount ?? 0} REL${adjacentHostTerritory.relationshipEstablished ? "Y" : "N"} ${adjacentHostTerritory.traversalOpen ? "OPEN" : "CLOSED"}`
       : "";
+    const gatheringLifeDebug = inApertureFields && gatheringGroundAlive.active
+      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2`
+      : "";
 
     return {
       active: visible,
@@ -384,6 +388,8 @@ export class PlaytestHudSystem {
         ? "BLOB // HOST CORE // SILT PRESSURE"
         : inCombThreshold
         ? "BLOB // HOST CORE // COMB THRESHOLD"
+        : inApertureFields && gatheringGroundAlive.active
+        ? "BLOB // HOST CORE // GATHERING GROUND"
         : inApertureFields && signalPlainEcology.active
         ? "BLOB // HOST CORE // SIGNAL PLAIN"
         : inApertureFields
@@ -400,7 +406,7 @@ export class PlaytestHudSystem {
       objective,
       actionHint,
       primaryInstruction,
-      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%` : ""}${gatheringDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
+      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
       controlLine: testPlatformToast ? `${this.controlLine(frameState)} · Shift+1..8 test platforms` : this.controlLine(frameState),
       technicalIdsPlayerFacing: false,
       onePrimaryInstruction: true,
