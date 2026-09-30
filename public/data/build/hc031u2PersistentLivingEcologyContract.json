@@ -1,0 +1,37 @@
+{
+  "pass": "HC-031U2",
+  "label": "Gathering Ground Persistent Living Ecology + Encounter Pacing",
+  "parent": "HC-031U1",
+  "version": "0.31.50",
+  "telemetrySchema": "blob.session.telemetry.v1.48",
+  "encounterIdentityCount": 6,
+  "families": {
+    "ambient": 2,
+    "reactive": 2,
+    "cross_territory": 2
+  },
+  "pacing": {
+    "watcherAmbientReadSeconds": 4.0,
+    "relayAmbientReadSeconds": 7.5,
+    "watcherReactiveResponseSeconds": 2.4,
+    "relayReactiveResponseSeconds": 2.8,
+    "responseBreakGraceSeconds": 0.28,
+    "retryBackoffSeconds": 1.2,
+    "watcherRecurrenceCooldownSeconds": 8.0,
+    "relayRecurrenceCooldownSeconds": 10.0
+  },
+  "memoryModes": [
+    "quiet_observer",
+    "coherent",
+    "guarded"
+  ],
+  "rules": [
+    "first 6 encounter identities remain the first-read LIFE count",
+    "reactive encounters require sustained existing verb chords",
+    "broken response may interrupt and retry without free completion",
+    "completed reactive relationships rearm only after release plus cooldown",
+    "recurrent relationships may generate fresh cross-territory answer cycles",
+    "ongoing response cycles do not create new encounter IDs or progression gates",
+    "movement targeting cell chemistry and route authority remain false"
+  ]
+}

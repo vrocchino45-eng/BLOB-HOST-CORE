@@ -361,7 +361,7 @@ export class PlaytestHudSystem {
       ? ` · RIDGE ${membraneRidgeGameplay.readCount ?? 0}/${membraneRidgeGameplay.contourCount ?? 3}${membraneRidgeGameplay.completed ? " COMPLETE" : ""} · GG d${Number.isFinite(adjacentHostTerritory.distance) ? adjacentHostTerritory.distance.toFixed(1) : "?"} aim${Number.isFinite(adjacentHostTerritory.aimDot) ? adjacentHostTerritory.aimDot.toFixed(2) : "?"}${adjacentHostTerritory.aimed ? " VIEW" : ""}${adjacentHostTerritory.attentionOwned ? " ATTN" : ""} OBS${adjacentHostTerritory.observationCount ?? 0} REL${adjacentHostTerritory.relationshipEstablished ? "Y" : "N"} ${adjacentHostTerritory.traversalOpen ? "OPEN" : "CLOSED"}`
       : "";
     const gatheringLifeDebug = inApertureFields && gatheringGroundAlive.active
-      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2`
+      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2 · LOOP ${gatheringGroundAlive.ongoingResponseCycles ?? 0} · MEM ${gatheringGroundAlive.memory?.mode ?? "quiet_observer"}`
       : "";
 
     return {

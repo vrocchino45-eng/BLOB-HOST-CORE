@@ -10,10 +10,9 @@ const runtime = read("src/core/GameRuntime.js");
 const alive = read("src/fields/GatheringGroundAliveSystem.js");
 const telemetry = read("src/core/SessionTelemetrySystem.js");
 
-assert(pkg.version === "0.31.49", `package version should be 0.31.49, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U1"'), "main buildId must identify the startup hotfix");
-assert(main.includes('buildLabel: "Gathering Ground Alive Pass 1 — Startup Lifecycle Hotfix"'), "U1 build label missing");
-assert(telemetry.includes('blob.session.telemetry.v1.47'), "telemetry schema must remain v1.47 for lifecycle-only hotfix");
+assert(/^0\.31\.(49|50)$/.test(pkg.version), `U1 lifecycle contract expected U1/U2 lineage, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U'), "main buildId must remain in the HC031U lineage");
+assert(telemetry.includes('blob.session.telemetry.v1.'), "telemetry schema declaration missing");
 
 const entityStart = runtime.indexOf("  createEntitySystems() {");
 const entityEnd = runtime.indexOf("\n  createOrbiterSystems() {", entityStart);

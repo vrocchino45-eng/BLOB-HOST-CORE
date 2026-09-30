@@ -22,11 +22,31 @@ const ENCOUNTER_DEFS = [
   { id: "cross_matter_spill_return", family: "cross_territory", label: "Matter Spill Return" }
 ];
 
+const U2_TIMING = Object.freeze({
+  watcherDiscoverSeconds: 2.0,
+  watcherStartSeconds: 3.0,
+  watcherReadSeconds: 4.0,
+  relayDiscoverSeconds: 4.0,
+  relayStartSeconds: 6.0,
+  relayReadSeconds: 7.5,
+  watcherResponseSeconds: 2.4,
+  relayResponseSeconds: 2.8,
+  responseBreakGraceSeconds: 0.28,
+  responseRetryBackoffSeconds: 1.2,
+  watcherRecurrenceCooldownSeconds: 8.0,
+  relayRecurrenceCooldownSeconds: 10.0,
+  ridgeEchoSeconds: 5.4,
+  matterSpillSeconds: 6.2,
+  localResponseRadius: 22.5
+});
+
 /**
- * HC031U — Gathering Ground Alive Pass 1.
+ * HC031U2 — Gathering Ground Persistent Living Ecology + Encounter Pacing.
  *
- * First local-living-space proof after HC031T6 continuity lock:
- *   3 encounter families x 2 encounters each.
+ * The HC031U 3-family x 2-encounter identity set is retained, but the six
+ * first reads are no longer the end-state of the territory. Ambient behavior
+ * takes time to read, reactive answers require sustained chords, interruptions
+ * matter, and completed relationships can recur after release + cooldown.
  *
  * Ownership remains narrow:
  * - EntitySystem owns Watcher/relay visibility, movement and body state.
@@ -74,6 +94,15 @@ export class GatheringGroundAliveSystem {
     this.relayAnswerAge = 99;
     this.echoAge = 0;
     this.spillAge = 0;
+    this.ongoingResponseCycles = 0;
+    this.interactionMemory = {
+      mode: "quiet_observer",
+      observerSeconds: 0,
+      coherentSeconds: 0,
+      pressureSeconds: 0,
+      interruptionWeight: 0,
+      lastChangeAge: 0
+    };
     this.active = false;
     this.resetState();
   }
@@ -82,7 +111,7 @@ export class GatheringGroundAliveSystem {
     if (this.root) return;
 
     this.root = new THREE.Group();
-    this.root.name = "gathering_ground_alive_HC031U";
+    this.root.name = "gathering_ground_alive_HC031U2";
     this.root.visible = false;
     this.scene.add(this.root);
 
@@ -164,9 +193,17 @@ export class GatheringGroundAliveSystem {
         discoveryCount: 0,
         startCount: 0,
         completionCount: 0,
+        recurrenceCount: 0,
         ignoredCount: 0,
         interruptionCount: 0,
-        ignoredEmitted: false
+        ignoredEmitted: false,
+        availableSinceAge: null,
+        activeSeconds: 0,
+        responseBreakSeconds: 0,
+        retryBackoff: 0,
+        lastCompletionAge: -999,
+        releaseSeenSinceCompletion: false,
+        sourceCompletionCount: 0
       });
     }
     this.eventSequence = 0;
@@ -178,6 +215,15 @@ export class GatheringGroundAliveSystem {
     this.relayAnswerAge = 99;
     this.echoAge = 0;
     this.spillAge = 0;
+    this.ongoingResponseCycles = 0;
+    this.interactionMemory = {
+      mode: "quiet_observer",
+      observerSeconds: 0,
+      coherentSeconds: 0,
+      pressureSeconds: 0,
+      interruptionWeight: 0,
+      lastChangeAge: 0
+    };
     this.active = false;
   }
 
@@ -217,6 +263,11 @@ export class GatheringGroundAliveSystem {
     this.watcherAnswerAge += safeDt;
     this.relayAnswerAge += safeDt;
 
+    for (const id of ["reactive_watcher_stable_interrogation", "reactive_relay_held_intake"]) {
+      const encounter = this.encounters.get(id);
+      encounter.retryBackoff = Math.max(0, encounter.retryBackoff - safeDt);
+    }
+
     const watcher = this.entity(WATCHER_ID);
     const relayA = this.entity(RELAY_A_ID);
     const relayB = this.entity(RELAY_B_ID);
@@ -227,8 +278,9 @@ export class GatheringGroundAliveSystem {
 
     this.updateRelayPresentation(relayA, relayB, safeDt);
     this.updateWatcherAmbient(watcher, safeDt);
-    this.updateReactiveEncounters(frameState, watcher, relayA, relayB);
+    this.updateReactiveEncounters(frameState, watcher, relayA, relayB, safeDt);
     this.updateCrossTerritoryEncounters(safeDt, watcher, relayA);
+    this.updateInteractionMemory(frameState, safeDt);
     this.updateIgnoredEncounters();
     this.publish(frameState);
   }
@@ -242,11 +294,19 @@ export class GatheringGroundAliveSystem {
     if (!watcher?.root?.visible) return;
 
     const distance = this.playerRoot.position.distanceTo(watcher.root.position);
-    if (encounter.state === "dormant" && distance <= 11.5) {
+    if (
+      encounter.state === "dormant"
+      && this.territoryAge >= U2_TIMING.watcherDiscoverSeconds
+      && distance <= 11.5
+    ) {
       this.transition(encounter.id, "available", { trigger: "watcher_entered_peripheral_awareness", distance });
     }
 
-    if (encounter.state === "available" && distance <= 8.5) {
+    if (
+      encounter.state === "available"
+      && this.territoryAge >= U2_TIMING.watcherStartSeconds
+      && distance <= 8.5
+    ) {
       this.transition(encounter.id, "active", { trigger: "player_lingered_inside_watcher_sweep", distance });
       this.watcherPresenceSeconds = 0;
     }
@@ -254,27 +314,31 @@ export class GatheringGroundAliveSystem {
     if (encounter.state === "active") {
       if (distance <= 9.6) {
         this.watcherPresenceSeconds += dt;
-        encounter.progress01 = clamp01(this.watcherPresenceSeconds / 1.25);
+        encounter.activeSeconds = this.watcherPresenceSeconds;
+        encounter.progress01 = clamp01(this.watcherPresenceSeconds / U2_TIMING.watcherReadSeconds);
         if (encounter.progress01 >= 1) {
           this.transition(encounter.id, "completed", { trigger: "watcher_completed_nonverbal_sweep", distance });
           this.watcherAnswerAge = 0;
         }
       } else {
-        encounter.interruptionCount += 1;
-        encounter.progress01 = 0;
+        this.interruptEncounter(encounter, "player_left_sweep_before_read", { distance }, 0.75);
         this.watcherPresenceSeconds = 0;
-        encounter.state = "available";
-        this.emit("interrupted", encounter, { trigger: "player_left_sweep_before_read", distance });
       }
     }
 
-    const ambientPulse = encounter.state === "active" ? encounter.progress01 : encounter.state === "completed" ? 0.18 : 0;
-    const answerPulse = this.watcherAnswerAge < 2.0 ? 1 - this.watcherAnswerAge / 2.0 : 0;
+    const ambientPulse = encounter.state === "active"
+      ? encounter.progress01
+      : encounter.completionCount > 0 ? 0.18 : 0;
+    const answerPulse = this.watcherAnswerAge < 2.4 ? 1 - this.watcherAnswerAge / 2.4 : 0;
+    const memoryBoost = this.interactionMemory.mode === "guarded"
+      ? 0.18
+      : this.interactionMemory.mode === "coherent" ? 0.1 : 0;
+
     this.watcherScan.position.copy(watcher.root.position);
     this.watcherScan.position.y += 0.05;
-    this.watcherScan.rotation.z += dt * (0.22 + ambientPulse * 0.55 + answerPulse * 0.8);
-    this.watcherScan.scale.setScalar(0.85 + ambientPulse * 0.35 + answerPulse * 0.65);
-    this.watcherScan.material.opacity = 0.04 + ambientPulse * 0.20 + answerPulse * 0.58;
+    this.watcherScan.rotation.z += dt * (0.22 + ambientPulse * 0.55 + answerPulse * 0.8 + memoryBoost);
+    this.watcherScan.scale.setScalar(0.85 + ambientPulse * 0.35 + answerPulse * 0.65 + memoryBoost * 0.25);
+    this.watcherScan.material.opacity = 0.04 + ambientPulse * 0.20 + answerPulse * 0.58 + memoryBoost * 0.18;
   }
 
   updateRelayPresentation(relayA, relayB, dt) {
@@ -295,81 +359,157 @@ export class GatheringGroundAliveSystem {
     this.relayLinePositions[5] = relayB.root.position.z;
     this.relayThread.geometry.attributes.position.needsUpdate = true;
 
-    if (encounter.state === "dormant" && this.territoryAge >= 1.0) {
+    if (encounter.state === "dormant" && this.territoryAge >= U2_TIMING.relayDiscoverSeconds) {
       this.transition(encounter.id, "available", { trigger: "two_relays_visible_in_same_local_body" });
     }
-    if (encounter.state === "available" && this.territoryAge >= 1.35) {
+    if (encounter.state === "available" && this.territoryAge >= U2_TIMING.relayStartSeconds) {
       this.transition(encounter.id, "active", { trigger: "host_matter_exchange_started" });
-      this.exchangeAge = 0;
     }
 
     this.exchangeAge += dt;
     const loopSeconds = 4.4;
     let phase = (this.exchangeAge % loopSeconds) / loopSeconds;
-    if (this.relayAnswerAge < 1.5) phase = 1 - phase;
+    if (this.relayAnswerAge < 1.8) phase = 1 - phase;
     const travel = smooth01(phase);
     this.transferPacket.position.lerpVectors(relayA.root.position, relayB.root.position, travel);
     this.transferPacket.position.y += Math.sin(phase * Math.PI) * 0.55;
-    this.transferPacket.scale.setScalar(0.82 + Math.sin(phase * Math.PI) * 0.38 + (this.relayAnswerAge < 1.5 ? 0.22 : 0));
+    this.transferPacket.scale.setScalar(0.82 + Math.sin(phase * Math.PI) * 0.38 + (this.relayAnswerAge < 1.8 ? 0.22 : 0));
     this.transferPacket.material.opacity = 0.58 + Math.sin(phase * Math.PI) * 0.28;
-    this.relayThread.material.opacity = 0.10 + Math.sin(phase * Math.PI) * 0.10 + (this.relayAnswerAge < 1.5 ? 0.16 : 0);
+    this.relayThread.material.opacity = 0.10 + Math.sin(phase * Math.PI) * 0.10 + (this.relayAnswerAge < 1.8 ? 0.16 : 0);
 
     if (encounter.state === "active") {
-      encounter.progress01 = clamp01(this.exchangeAge / loopSeconds);
-      if (this.exchangeAge >= loopSeconds) {
+      encounter.activeSeconds += dt;
+      encounter.progress01 = clamp01(encounter.activeSeconds / U2_TIMING.relayReadSeconds);
+      if (encounter.progress01 >= 1) {
         this.transition(encounter.id, "completed", { trigger: "matter_packet_reached_second_relay" });
       }
     }
   }
 
-  updateReactiveEncounters(frameState, watcher, relayA, relayB) {
+  updateReactiveEncounters(frameState, watcher, relayA, relayB, dt) {
     const watcherAmbient = this.encounters.get("ambient_watcher_sweep");
     const relayAmbient = this.encounters.get("ambient_relay_exchange");
     const watcherReactive = this.encounters.get("reactive_watcher_stable_interrogation");
     const relayReactive = this.encounters.get("reactive_relay_held_intake");
     const grammar = frameState.entityRelationshipGrammar?.byEntityId ?? {};
 
-    if (watcherAmbient.state === "completed" && watcherReactive.state === "dormant") {
+    if (watcherAmbient.completionCount > 0 && watcherReactive.state === "dormant") {
       this.transition(watcherReactive.id, "available", { trigger: "watcher_has_completed_ambient_read" });
     }
-    if (relayAmbient.state === "completed" && relayReactive.state === "dormant") {
+    if (relayAmbient.completionCount > 0 && relayReactive.state === "dormant") {
       this.transition(relayReactive.id, "available", { trigger: "relay_exchange_is_visible_and_understood" });
     }
 
     const watcherRead = grammar[WATCHER_ID];
-    if (
-      watcherReactive.state === "available"
-      && watcher?.root?.visible
+    const watcherChord = Boolean(
+      watcher?.root?.visible
       && watcherRead?.interpretation === "stable_interrogation"
       && Number(watcherRead?.engagement01 ?? 0) >= 0.08
-    ) {
-      this.transition(watcherReactive.id, "active", {
-        trigger: "stabilize_plus_pulse_watcher_chord",
-        engagement01: watcherRead.engagement01,
-        distance: watcherRead.distance
-      });
-      watcherReactive.progress01 = 1;
-      this.transition(watcherReactive.id, "completed", {
-        trigger: "watcher_answered_stable_interrogation",
-        engagement01: watcherRead.engagement01
-      });
-      this.watcherAnswerAge = 0;
-    }
+    );
 
     const relayReads = [grammar[RELAY_A_ID], grammar[RELAY_B_ID]].filter(Boolean);
-    const heldIntake = relayReads.find((read) => read.interpretation === "held_intake" && Number(read.engagement01 ?? 0) >= 0.08);
-    if (relayReactive.state === "available" && heldIntake && (relayA?.root?.visible || relayB?.root?.visible)) {
-      this.transition(relayReactive.id, "active", {
-        trigger: "stabilize_plus_absorb_relay_chord",
-        engagement01: heldIntake.engagement01,
-        distance: heldIntake.distance
+    const heldIntake = relayReads.find((read) => (
+      read.interpretation === "held_intake"
+      && Number(read.engagement01 ?? 0) >= 0.08
+    ));
+    const relayChord = Boolean(
+      heldIntake
+      && (relayA?.root?.visible || relayB?.root?.visible)
+    );
+
+    this.updateReactiveEncounter({
+      encounter: watcherReactive,
+      chordActive: watcherChord,
+      dt,
+      duration: U2_TIMING.watcherResponseSeconds,
+      cooldown: U2_TIMING.watcherRecurrenceCooldownSeconds,
+      startTrigger: "stabilize_plus_pulse_watcher_chord",
+      completeTrigger: "watcher_answered_stable_interrogation",
+      detail: {
+        engagement01: Number(watcherRead?.engagement01 ?? 0),
+        distance: watcherRead?.distance
+      },
+      onComplete: () => { this.watcherAnswerAge = 0; }
+    });
+
+    this.updateReactiveEncounter({
+      encounter: relayReactive,
+      chordActive: relayChord,
+      dt,
+      duration: U2_TIMING.relayResponseSeconds,
+      cooldown: U2_TIMING.relayRecurrenceCooldownSeconds,
+      startTrigger: "stabilize_plus_absorb_relay_chord",
+      completeTrigger: "relay_held_intake_redirected_local_exchange",
+      detail: {
+        engagement01: Number(heldIntake?.engagement01 ?? 0),
+        distance: heldIntake?.distance
+      },
+      onComplete: () => { this.relayAnswerAge = 0; }
+    });
+  }
+
+  updateReactiveEncounter({
+    encounter,
+    chordActive,
+    dt,
+    duration,
+    cooldown,
+    startTrigger,
+    completeTrigger,
+    detail,
+    onComplete
+  }) {
+    if (!encounter) return;
+    const localDistance = this.playerRoot.position.distanceTo(this.center);
+    const locallyPresent = localDistance <= U2_TIMING.localResponseRadius;
+
+    if (encounter.state === "completed") {
+      if (!chordActive) encounter.releaseSeenSinceCompletion = true;
+      const cooled = this.territoryAge - encounter.lastCompletionAge >= cooldown;
+      if (encounter.releaseSeenSinceCompletion && cooled && locallyPresent) {
+        this.rearmEncounter(encounter, "release_plus_cooldown_rearmed_relationship");
+      }
+      return;
+    }
+
+    if (
+      encounter.state === "available"
+      && encounter.retryBackoff <= 0
+      && chordActive
+      && locallyPresent
+    ) {
+      this.transition(encounter.id, "active", {
+        trigger: startTrigger,
+        ...detail,
+        recurrence: encounter.completionCount > 0
       });
-      relayReactive.progress01 = 1;
-      this.transition(relayReactive.id, "completed", {
-        trigger: "relay_held_intake_redirected_local_exchange",
-        engagement01: heldIntake.engagement01
+    }
+
+    if (encounter.state !== "active") return;
+
+    if (chordActive && locallyPresent) {
+      encounter.responseBreakSeconds = 0;
+      encounter.activeSeconds += dt;
+      encounter.progress01 = clamp01(encounter.activeSeconds / duration);
+      if (encounter.progress01 >= 1) {
+        const recurrence = encounter.completionCount > 0;
+        this.transition(encounter.id, "completed", {
+          trigger: completeTrigger,
+          ...detail,
+          recurrence
+        });
+        onComplete?.();
+      }
+      return;
+    }
+
+    encounter.responseBreakSeconds += dt;
+    if (encounter.responseBreakSeconds >= U2_TIMING.responseBreakGraceSeconds) {
+      const trigger = locallyPresent ? "relationship_chord_broke_before_answer" : "player_left_local_body_during_answer";
+      this.interruptEncounter(encounter, trigger, {
+        localDistance: round(localDistance),
+        chordActive
       });
-      this.relayAnswerAge = 0;
     }
   }
 
@@ -379,34 +519,72 @@ export class GatheringGroundAliveSystem {
     const echo = this.encounters.get("cross_ridge_echo_return");
     const spill = this.encounters.get("cross_matter_spill_return");
 
-    if (watcherReactive.state === "completed" && echo.state === "dormant") {
-      this.transition(echo.id, "available", { trigger: "watcher_answer_has_remote_consequence" });
-      this.transition(echo.id, "active", { trigger: "watcher_answer_propagates_back_to_ridge" });
-      this.echoAge = 0;
-    }
-    if (relayReactive.state === "completed" && spill.state === "dormant") {
-      this.transition(spill.id, "available", { trigger: "relay_intake_releases_surplus_matter" });
-      this.transition(spill.id, "active", { trigger: "surplus_matter_leaves_gathering_ground" });
-      this.spillAge = 0;
-    }
+    this.startCrossTerritoryCycle({
+      source: watcherReactive,
+      encounter: echo,
+      availableTrigger: "watcher_answer_has_remote_consequence",
+      startTrigger: "watcher_answer_propagates_back_to_ridge",
+      reset: () => { this.echoAge = 0; }
+    });
+    this.startCrossTerritoryCycle({
+      source: relayReactive,
+      encounter: spill,
+      availableTrigger: "relay_intake_releases_surplus_matter",
+      startTrigger: "surplus_matter_leaves_gathering_ground",
+      reset: () => { this.spillAge = 0; }
+    });
 
     if (echo.state === "active") {
       this.echoAge += dt;
-      echo.progress01 = clamp01(this.echoAge / 3.2);
+      echo.activeSeconds += dt;
+      echo.progress01 = clamp01(this.echoAge / U2_TIMING.ridgeEchoSeconds);
       if (echo.progress01 >= 1) {
-        this.transition(echo.id, "completed", { trigger: "echo_reached_membrane_ridge" });
+        this.transition(echo.id, "completed", {
+          trigger: "echo_reached_membrane_ridge",
+          sourceCompletionCount: echo.sourceCompletionCount
+        });
       }
     }
     this.updateEchoVisual(echo, watcher);
 
     if (spill.state === "active") {
       this.spillAge += dt;
-      spill.progress01 = clamp01(this.spillAge / 4.2);
+      spill.activeSeconds += dt;
+      spill.progress01 = clamp01(this.spillAge / U2_TIMING.matterSpillSeconds);
       if (spill.progress01 >= 1) {
-        this.transition(spill.id, "completed", { trigger: "matter_spill_settled_at_ridge" });
+        this.transition(spill.id, "completed", {
+          trigger: "matter_spill_settled_at_ridge",
+          sourceCompletionCount: spill.sourceCompletionCount
+        });
       }
     }
     this.updateSpillVisual(spill, relayA);
+  }
+
+  startCrossTerritoryCycle({ source, encounter, availableTrigger, startTrigger, reset }) {
+    if (!source || !encounter) return;
+    if (source.completionCount <= encounter.sourceCompletionCount) return;
+    if (encounter.state === "active") return;
+
+    const firstRead = encounter.discoveryCount === 0;
+    if (firstRead) {
+      this.transition(encounter.id, "available", {
+        trigger: availableTrigger,
+        sourceCompletionCount: source.completionCount
+      });
+    } else {
+      this.rearmEncounter(encounter, "source_relationship_answered_again", {
+        sourceCompletionCount: source.completionCount
+      });
+    }
+
+    encounter.sourceCompletionCount = source.completionCount;
+    this.transition(encounter.id, "active", {
+      trigger: startTrigger,
+      sourceCompletionCount: source.completionCount,
+      recurrence: encounter.completionCount > 0
+    });
+    reset?.();
   }
 
   updateEchoVisual(encounter, watcher) {
@@ -450,14 +628,96 @@ export class GatheringGroundAliveSystem {
     }
   }
 
+  updateInteractionMemory(frameState, dt) {
+    const chord = frameState.coreVerbEngineCoupling?.chord ?? "idle";
+    const reactive = [
+      this.encounters.get("reactive_watcher_stable_interrogation"),
+      this.encounters.get("reactive_relay_held_intake")
+    ];
+    const interruptionCount = reactive.reduce((sum, item) => sum + (item?.interruptionCount ?? 0), 0);
+
+    if (chord === "idle") {
+      this.interactionMemory.observerSeconds += dt;
+    } else if (chord === "cohere_project" || chord === "cohere_draw") {
+      this.interactionMemory.coherentSeconds += dt;
+    } else {
+      this.interactionMemory.pressureSeconds += dt;
+    }
+    this.interactionMemory.interruptionWeight = interruptionCount * 0.75;
+
+    const guardedScore = this.interactionMemory.pressureSeconds + this.interactionMemory.interruptionWeight;
+    const coherentScore = this.interactionMemory.coherentSeconds
+      + reactive.reduce((sum, item) => sum + (item?.completionCount ?? 0) * 0.9, 0);
+
+    let mode = "quiet_observer";
+    if (guardedScore >= 2.8 && guardedScore > coherentScore * 0.9) mode = "guarded";
+    else if (coherentScore >= 1.4) mode = "coherent";
+
+    if (mode !== this.interactionMemory.mode) {
+      const previous = this.interactionMemory.mode;
+      this.interactionMemory.mode = mode;
+      this.interactionMemory.lastChangeAge = this.territoryAge;
+      this.eventSequence += 1;
+      this.recentEvents.push({
+        sequence: this.eventSequence,
+        kind: "memory_changed",
+        encounterId: "gathering_ground_memory",
+        family: "ecology_memory",
+        label: "Gathering Ground Interaction Memory",
+        state: mode,
+        territoryAge: round(this.territoryAge, 2),
+        playerDistanceToCenter: round(this.playerRoot.position.distanceTo(this.center)),
+        detail: { trigger: "player_pressure_profile_changed", from: previous, to: mode }
+      });
+      if (this.recentEvents.length > 48) this.recentEvents.splice(0, this.recentEvents.length - 48);
+    }
+  }
+
+  interruptEncounter(encounter, trigger, detail = {}, backoff = U2_TIMING.responseRetryBackoffSeconds) {
+    if (!encounter || encounter.state !== "active") return;
+    encounter.interruptionCount += 1;
+    encounter.progress01 = 0;
+    encounter.activeSeconds = 0;
+    encounter.responseBreakSeconds = 0;
+    encounter.retryBackoff = Math.max(encounter.retryBackoff, backoff);
+    encounter.state = "available";
+    encounter.availableSinceAge = this.territoryAge;
+    this.emit("interrupted", encounter, { trigger, retryBackoffSeconds: round(encounter.retryBackoff), ...detail });
+  }
+
+  rearmEncounter(encounter, trigger, detail = {}) {
+    if (!encounter || encounter.state === "active") return;
+    encounter.state = "available";
+    encounter.progress01 = 0;
+    encounter.activeSeconds = 0;
+    encounter.responseBreakSeconds = 0;
+    encounter.retryBackoff = 0;
+    encounter.releaseSeenSinceCompletion = false;
+    encounter.availableSinceAge = this.territoryAge;
+    this.emit("rearmed", encounter, {
+      trigger,
+      completionCount: encounter.completionCount,
+      ...detail
+    });
+  }
+
   updateIgnoredEncounters() {
-    if (this.territoryAge < 45) return;
     for (const id of ["reactive_watcher_stable_interrogation", "reactive_relay_held_intake"]) {
       const encounter = this.encounters.get(id);
-      if (encounter.state !== "available" || encounter.ignoredEmitted) continue;
+      if (
+        encounter.state !== "available"
+        || encounter.ignoredEmitted
+        || encounter.discoveryCount === 0
+        || encounter.completionCount > 0
+      ) continue;
+      const availableAge = this.territoryAge - Number(encounter.availableSinceAge ?? this.territoryAge);
+      if (availableAge < 45) continue;
       encounter.ignoredEmitted = true;
       encounter.ignoredCount += 1;
-      this.emit("ignored", encounter, { trigger: "available_for_45_seconds_without_player_engagement" });
+      this.emit("ignored", encounter, {
+        trigger: "available_for_45_seconds_without_player_engagement",
+        availableSeconds: round(availableAge)
+      });
     }
   }
 
@@ -475,16 +735,46 @@ export class GatheringGroundAliveSystem {
     const encounter = this.encounters.get(id);
     if (!encounter || encounter.state === state) return;
     encounter.state = state;
+
     if (state === "available") {
-      encounter.discoveryCount += 1;
-      this.emit("discovered", encounter, detail);
-    } else if (state === "active") {
+      if (encounter.discoveryCount === 0) {
+        encounter.discoveryCount += 1;
+        encounter.availableSinceAge = this.territoryAge;
+        this.emit("discovered", encounter, detail);
+      } else {
+        encounter.availableSinceAge = this.territoryAge;
+      }
+      return;
+    }
+
+    if (state === "active") {
       encounter.startCount += 1;
+      encounter.activeSeconds = 0;
+      encounter.responseBreakSeconds = 0;
+      encounter.progress01 = 0;
       this.emit("started", encounter, detail);
-    } else if (state === "completed") {
+      return;
+    }
+
+    if (state === "completed") {
+      const recurrence = encounter.completionCount > 0;
       encounter.completionCount += 1;
       encounter.progress01 = 1;
-      this.emit("completed", encounter, detail);
+      encounter.lastCompletionAge = this.territoryAge;
+      encounter.releaseSeenSinceCompletion = false;
+      this.emit("completed", encounter, {
+        firstRead: !recurrence,
+        recurrenceCycle: recurrence ? encounter.completionCount - 1 : 0,
+        ...detail
+      });
+      if (recurrence) {
+        encounter.recurrenceCount += 1;
+        this.ongoingResponseCycles += 1;
+        this.emit("recurred", encounter, {
+          trigger: "understood_relationship_answered_again",
+          recurrenceCycle: encounter.recurrenceCount
+        });
+      }
     }
   }
 
@@ -501,7 +791,7 @@ export class GatheringGroundAliveSystem {
       playerDistanceToCenter: round(this.playerRoot.position.distanceTo(this.center)),
       detail
     });
-    if (this.recentEvents.length > 32) this.recentEvents.splice(0, this.recentEvents.length - 32);
+    if (this.recentEvents.length > 48) this.recentEvents.splice(0, this.recentEvents.length - 48);
   }
 
   publish(frameState) {
@@ -512,37 +802,52 @@ export class GatheringGroundAliveSystem {
       cross_territory: { completed: 0, total: 2 }
     };
     let completedCount = 0;
+    let activeResponseCount = 0;
+
     for (const [id, encounter] of this.encounters.entries()) {
+      const firstCompleted = encounter.completionCount > 0;
       encounterStates[id] = {
         family: encounter.family,
         label: encounter.label,
         state: encounter.state,
         progress01: round(encounter.progress01),
+        firstCompleted,
+        completionCount: encounter.completionCount,
+        recurrenceCount: encounter.recurrenceCount,
         ignoredCount: encounter.ignoredCount,
-        interruptionCount: encounter.interruptionCount
+        interruptionCount: encounter.interruptionCount,
+        retryBackoff: round(encounter.retryBackoff)
       };
-      if (encounter.state === "completed") {
+      if (firstCompleted) {
         completedCount += 1;
         family[encounter.family].completed += 1;
       }
+      if (encounter.state === "active") activeResponseCount += 1;
     }
+
+    const watcherReactive = this.encounters.get("reactive_watcher_stable_interrogation");
+    const relayReactive = this.encounters.get("reactive_relay_held_intake");
 
     const nextAction = !this.active
       ? "enter_gathering_ground"
-      : this.encounters.get("ambient_watcher_sweep").state !== "completed"
+      : this.encounters.get("ambient_watcher_sweep").completionCount === 0
         ? "linger_near_the_perimeter_watcher_and_watch_its_sweep"
-        : this.encounters.get("ambient_relay_exchange").state !== "completed"
+        : this.encounters.get("ambient_relay_exchange").completionCount === 0
           ? "watch_the_two_relays_pass_host_matter_between_them"
-          : this.encounters.get("reactive_watcher_stable_interrogation").state !== "completed"
-            ? "hold_stabilize_and_pulse_near_the_watcher"
-            : this.encounters.get("reactive_relay_held_intake").state !== "completed"
-              ? "hold_stabilize_and_absorb_near_a_relay"
+          : watcherReactive.completionCount === 0
+            ? "hold_stabilize_and_pulse_near_the_watcher_until_the_answer_develops"
+            : relayReactive.completionCount === 0
+              ? "hold_stabilize_and_absorb_near_a_relay_until_the_exchange_redirects"
               : completedCount < 6
                 ? "watch_the_answers_travel_back_toward_membrane_ridge"
-                : "wander_the_living_territory_or_return_across_the_ridge";
+                : activeResponseCount > 0
+                  ? "hold_the_current_relationship_or_release_it_cleanly"
+                  : this.ongoingResponseCycles > 0
+                    ? "wander_and_revisit_the_watcher_or_relays_to_read_how_the_ecology_remembers_you"
+                    : "release_move_away_and_return_later_to_see_the_understood_ecology_answer_again";
 
     frameState.gatheringGroundAlive = {
-      pass: "HC-031U",
+      pass: "HC-031U2",
       active: this.active,
       territoryId: TERRITORY_ID,
       encounterCount: ENCOUNTER_DEFS.length,
@@ -552,6 +857,16 @@ export class GatheringGroundAliveSystem {
       eventSequence: this.eventSequence,
       recentEvents: this.recentEvents.slice(),
       territoryAge: round(this.territoryAge, 2),
+      ongoingResponseCycles: this.ongoingResponseCycles,
+      activeResponseCount,
+      memory: {
+        mode: this.interactionMemory.mode,
+        observerSeconds: round(this.interactionMemory.observerSeconds),
+        coherentSeconds: round(this.interactionMemory.coherentSeconds),
+        pressureSeconds: round(this.interactionMemory.pressureSeconds),
+        interruptionWeight: round(this.interactionMemory.interruptionWeight),
+        lastChangeAge: round(this.interactionMemory.lastChangeAge)
+      },
       nextAction,
       population: {
         watcherId: WATCHER_ID,
@@ -565,6 +880,14 @@ export class GatheringGroundAliveSystem {
         newParticles: 0,
         newLights: 0
       },
+      pacing: {
+        watcherAmbientReadSeconds: U2_TIMING.watcherReadSeconds,
+        relayAmbientReadSeconds: U2_TIMING.relayReadSeconds,
+        watcherReactiveResponseSeconds: U2_TIMING.watcherResponseSeconds,
+        relayReactiveResponseSeconds: U2_TIMING.relayResponseSeconds,
+        watcherRecurrenceCooldownSeconds: U2_TIMING.watcherRecurrenceCooldownSeconds,
+        relayRecurrenceCooldownSeconds: U2_TIMING.relayRecurrenceCooldownSeconds
+      },
       progressionAuthority: false,
       targetingAuthority: false,
       movementAuthority: false,
@@ -573,7 +896,7 @@ export class GatheringGroundAliveSystem {
       cellAuthority: false,
       routeAuthority: false,
       saveStateAuthority: false,
-      rule: "local_ecology_may_answer_observation_and_existing_verb_chords_without_becoming_a_new_gate"
+      rule: "local_ecology_may_recur_and_remember_existing_relationships_without_becoming_a_new_gate"
     };
   }
 }

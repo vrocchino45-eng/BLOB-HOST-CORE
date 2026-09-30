@@ -747,7 +747,9 @@ export class GuidePromptSystem {
         ? adjacent.enteredTerritory
           ? alive.active
             ? (alive.completedCount ?? 0) >= (alive.encounterCount ?? 6)
-              ? "Gathering Ground is answering as a local ecology now. Watcher, relay, matter, and ridge response are all carrying the same living space."
+              ? (alive.ongoingResponseCycles ?? 0) > 0
+                ? `Gathering Ground remembers the pressure you bring. Its current read is ${alive.memory?.mode ?? "quiet_observer"}, and understood relationships are answering again.`
+                : "Gathering Ground is still alive after the first six reads. Release, move, and return to the Watcher or relays; understood relationships can answer again."
               : "Gathering Ground is not a destination object anymore. Watch what the local organisms and Host matter do before deciding how to answer."
             : "You are inside the larger Host body now. The released ridge remains behind you as part of the same space."
           : adjacent.relationshipEstablished
@@ -769,7 +771,9 @@ export class GuidePromptSystem {
                 ? "Try Stabilize + Pulse near the Watcher, then Stabilize + Absorb near a relay."
                 : (alive.family?.cross_territory?.completed ?? 0) < 2
                   ? "Watch the local answers travel back toward Membrane Ridge."
-                  : "Wander Gathering Ground, then return across the Ridge and confirm the ecology remains continuous."
+                  : (alive.ongoingResponseCycles ?? 0) > 0
+                    ? "Keep wandering and revisit the Watcher or relays; compare how the same relationships answer under the ecology's retained memory."
+                    : "Release the relationship, move away, and return later to see whether the understood ecology answers again."
             : "Explore Gathering Ground and look back across the continuous Aperture space."
           : adjacent.traversalOpen && observationCount > 0
             ? "Follow the bright living connection into Gathering Ground."

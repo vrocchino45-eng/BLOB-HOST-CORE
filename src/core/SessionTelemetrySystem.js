@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.47";
+    this.schemaVersion = "blob.session.telemetry.v1.48";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -116,6 +116,7 @@ export class SessionTelemetrySystem {
     this.lastAdjacentTerritoryTraversalSequence = frameState.adjacentHostTerritory?.traversalSequence ?? 0;
     this.lastAdjacentTerritoryEntrySequence = frameState.adjacentHostTerritory?.entrySequence ?? 0;
     this.lastGatheringGroundEncounterEventSequence = frameState.gatheringGroundAlive?.eventSequence ?? 0;
+    this.lastGatheringGroundMemoryMode = frameState.gatheringGroundAlive?.memory?.mode ?? "quiet_observer";
     this.progressBlockCandidateSince = null;
     this.progressBlockLastDistance = null;
     this.progressBlockEventActive = false;
@@ -820,14 +821,25 @@ export class SessionTelemetrySystem {
 
     for (const event of unseen) {
       const kind = event.kind ?? "changed";
-      this.record(`ecology.gathering_ground.encounter.${kind}`, kind === "completed" || kind === "discovered" ? "perceptual" : "analysis", {
-        percept: {
-          encounter: event.label ?? event.encounterId ?? "unknown",
-          family: event.family ?? "unknown",
-          state: event.state ?? "unknown",
-          territoryAge: round(event.territoryAge ?? 0),
-          playerDistanceToCenter: round(event.playerDistanceToCenter ?? 0)
-        },
+      const isMemory = kind === "memory_changed";
+      const eventType = isMemory
+        ? "ecology.gathering_ground.memory.changed"
+        : `ecology.gathering_ground.encounter.${kind}`;
+      const channel = kind === "completed" || kind === "discovered" || isMemory ? "perceptual" : "analysis";
+      this.record(eventType, channel, {
+        percept: isMemory
+          ? {
+              from: event.detail?.from ?? "unknown",
+              to: event.detail?.to ?? event.state ?? "unknown",
+              territoryAge: round(event.territoryAge ?? 0)
+            }
+          : {
+              encounter: event.label ?? event.encounterId ?? "unknown",
+              family: event.family ?? "unknown",
+              state: event.state ?? "unknown",
+              territoryAge: round(event.territoryAge ?? 0),
+              playerDistanceToCenter: round(event.playerDistanceToCenter ?? 0)
+            },
         developer: {
           sequence: event.sequence ?? 0,
           encounterId: event.encounterId ?? "unknown",
@@ -844,7 +856,7 @@ export class SessionTelemetrySystem {
           encounter: event.label ?? event.encounterId ?? "unknown",
           family: event.family ?? "unknown"
         });
-      } else if (kind === "completed") {
+      } else if (kind === "completed" && event.detail?.firstRead !== false) {
         this.noteInformationGain("gathering_ground_encounter_completed", 0.55, {
           encounter: event.label ?? event.encounterId ?? "unknown",
           family: event.family ?? "unknown"
@@ -855,6 +867,8 @@ export class SessionTelemetrySystem {
         Number(event.sequence ?? 0)
       );
     }
+
+    this.lastGatheringGroundMemoryMode = ecology.memory?.mode ?? this.lastGatheringGroundMemoryMode;
   }
 
   observeHubReturnRecomposition(frameState) {
@@ -2818,7 +2832,10 @@ export class SessionTelemetrySystem {
         eventSequence: frameState.gatheringGroundAlive?.eventSequence ?? 0,
         ambientCompleted: frameState.gatheringGroundAlive?.family?.ambient?.completed ?? 0,
         reactiveCompleted: frameState.gatheringGroundAlive?.family?.reactive?.completed ?? 0,
-        crossTerritoryCompleted: frameState.gatheringGroundAlive?.family?.cross_territory?.completed ?? 0
+        crossTerritoryCompleted: frameState.gatheringGroundAlive?.family?.cross_territory?.completed ?? 0,
+        ongoingResponseCycles: frameState.gatheringGroundAlive?.ongoingResponseCycles ?? 0,
+        activeResponseCount: frameState.gatheringGroundAlive?.activeResponseCount ?? 0,
+        memoryMode: frameState.gatheringGroundAlive?.memory?.mode ?? "quiet_observer"
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),
@@ -3159,10 +3176,14 @@ export class SessionTelemetrySystem {
       gatheringGroundEncounterCompletions: count("ecology.gathering_ground.encounter.completed"),
       gatheringGroundEncounterIgnored: count("ecology.gathering_ground.encounter.ignored"),
       gatheringGroundEncounterInterruptions: count("ecology.gathering_ground.encounter.interrupted"),
+      gatheringGroundEncounterRearms: count("ecology.gathering_ground.encounter.rearmed"),
+      gatheringGroundEncounterRecurrences: count("ecology.gathering_ground.encounter.recurred"),
+      gatheringGroundMemoryChanges: count("ecology.gathering_ground.memory.changed"),
+      gatheringGroundOngoingResponseCycles: count("ecology.gathering_ground.encounter.recurred"),
       gatheringGroundUniqueEncounterCompletions: new Set(this.events
         .filter((event) => event.type === "ecology.gathering_ground.encounter.completed")
         .map((event) => event.developer?.encounterId)
-        .filter(Boolean)).size,
+        .filter((id) => id && id !== "gathering_ground_memory")).size,
       movementProgressBlockedEvents: count("movement.progress_blocked"),
       movementBoundaryClampEvents: count("movement.boundary_clamped"),
       attentionOwnerChanges: count("attention.owner.changed"),

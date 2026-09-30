@@ -20,9 +20,8 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(pkg.version === "0.31.49", `package version should be 0.31.49, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U1"'), "main buildId is not HC-031U1");
-assert(main.includes('buildLabel: "Gathering Ground Alive Pass 1 — Startup Lifecycle Hotfix"'), "main U1 build label missing");
+assert(/^0\.31\.(49|50)$/.test(pkg.version), `HC031U family version expected 0.31.49/50, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U'), "main buildId left HC031U family");
 
 const aperture = runtime.regions?.aperture_fields;
 assert(aperture, "Aperture runtime profile missing");
@@ -100,7 +99,7 @@ assert(adjacent.includes("activeCellChangesRequired: false"), "same-cell continu
 assert(adjacent.includes("teleportRequired: false"), "no-teleport law changed");
 assert(adjacent.includes("previousObservationCount"), "OBS3 telemetry dedupe missing");
 
-assert(telemetry.includes('blob.session.telemetry.v1.47'), "telemetry schema should be v1.47");
+assert(telemetry.includes('blob.session.telemetry.v1.4'), "HC031U-family telemetry schema missing");
 assert(telemetry.includes("observeGatheringGroundAlive(frameState)"), "Gathering Ground encounter telemetry observer missing");
 assert(telemetry.includes("gatheringGroundUniqueEncounterCompletions"), "encounter completion summary missing");
 assert(telemetry.includes("gatheringGroundAliveState"), "movement sample encounter snapshot missing");

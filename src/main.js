@@ -1,7 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031U1 repairs the startup lifecycle for the HC031U Gathering Ground ecology pass.
-// The six encounters are unchanged; GatheringGroundAliveSystem now constructs only after its Aperture owner exists.
+// HC031U2 keeps the accepted T6/U1 traversal and six encounter identities locked.
+// Gathering Ground now paces those reads as persistent ecology with sustained answers,
+// interruption/retry truth, recurrence after release + cooldown, and interaction memory.
 
 const appRoot = document.querySelector("#app");
 
@@ -11,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031U1",
-  buildLabel: "Gathering Ground Alive Pass 1 — Startup Lifecycle Hotfix"
+  buildId: "HC-031U2",
+  buildLabel: "Gathering Ground Persistent Living Ecology + Encounter Pacing"
 });
 
 runtime.start().catch((error) => {

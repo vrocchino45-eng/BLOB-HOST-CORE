@@ -1,3 +1,16 @@
+# HC031U2 — Persistent Living Ecology + Encounter Pacing
+
+- Kept the accepted HC031T6/U1 Aperture → Gathering Ground same-cell continuity locked.
+- Retained the original six Gathering Ground encounter identities.
+- Slowed ambient Watcher/relay reads so first arrival can be observed before the space resolves.
+- Replaced same-frame reactive completion with sustained Watcher (2.4 s) and relay (2.8 s) answer phases.
+- Added interruption + retry backoff when the chord breaks or the player leaves the local response body.
+- Added release + cooldown rearming so understood relationships can answer again without becoming new encounter IDs.
+- Recurrent reactive answers can propagate fresh Ridge Echo Return / Matter Spill Return cycles.
+- Added persistent interaction-memory readout (`quiet_observer`, `coherent`, `guarded`).
+- Added `LOOP`/`MEM` HUD truth and telemetry v1.48 recurrence/memory fields.
+- Added deterministic six-profile bot convergence and U2 behavior smoke tests.
+
 # HC031U1 — Gathering Ground Alive Startup Lifecycle Hotfix
 
 - Fixed boot crash caused by constructing `GatheringGroundAliveSystem` during `createEntitySystems()` before `ApertureFieldsArrivalSystem` existed.
