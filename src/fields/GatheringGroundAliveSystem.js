@@ -42,14 +42,34 @@ const U21_TIMING = Object.freeze({
   localResponseRadius: 22.5
 });
 
+const RESPONSE_CODES = Object.freeze({
+  ambient_watcher_sweep: "AW",
+  ambient_relay_exchange: "AR",
+  reactive_watcher_stable_interrogation: "W",
+  reactive_relay_held_intake: "R",
+  cross_ridge_echo_return: "E",
+  cross_matter_spill_return: "S"
+});
+
+const RESPONSE_SIGNATURES = Object.freeze({
+  ambient_watcher_sweep: ["sweep", "sweep", "sweep"],
+  ambient_relay_exchange: ["exchange", "exchange", "exchange"],
+  reactive_watcher_stable_interrogation: ["tight", "reverse", "wide"],
+  reactive_relay_held_intake: ["forward", "return", "held"],
+  cross_ridge_echo_return: ["single", "split", "stagger"],
+  cross_matter_spill_return: ["settle", "pulse", "bloom"]
+});
+
 /**
- * HC031U2.1 — Gathering Ground Relationship Intent Latch.
+ * HC031V — Gathering Ground Living Response Readability.
  *
  * The HC031U 3-family x 2-encounter identity set is retained, but the six
  * first reads are no longer the end-state of the territory. Ambient behavior still takes time to read, but reactive answers now separate
  * initiation from sustain: the exact chord asks the question, then a compatible
  * stabilized relationship can hold while the Host answers. Meaningful departure,
- * retargeting, or sustained incompatible intent still interrupts.
+ * retargeting, or sustained incompatible intent still interrupts. HC031V leaves
+ * those mechanics frozen and only makes first reads versus known recurring answers
+ * visibly distinguishable while publishing a compact response-read state.
  *
  * Ownership remains narrow:
  * - EntitySystem owns Watcher/relay visibility, movement and body state.
@@ -98,6 +118,17 @@ export class GatheringGroundAliveSystem {
     this.echoAge = 0;
     this.spillAge = 0;
     this.ongoingResponseCycles = 0;
+    this.lastResponseRead = {
+      sequence: 0,
+      encounterId: "none",
+      code: "--",
+      label: "none",
+      family: "none",
+      responseKind: "none",
+      cycle: 0,
+      signature: "quiet",
+      territoryAge: -999
+    };
     this.interactionMemory = {
       mode: "quiet_observer",
       observerSeconds: 0,
@@ -224,6 +255,17 @@ export class GatheringGroundAliveSystem {
     this.echoAge = 0;
     this.spillAge = 0;
     this.ongoingResponseCycles = 0;
+    this.lastResponseRead = {
+      sequence: 0,
+      encounterId: "none",
+      code: "--",
+      label: "none",
+      family: "none",
+      responseKind: "none",
+      cycle: 0,
+      signature: "quiet",
+      territoryAge: -999
+    };
     this.interactionMemory = {
       mode: "quiet_observer",
       observerSeconds: 0,
@@ -341,12 +383,20 @@ export class GatheringGroundAliveSystem {
     const memoryBoost = this.interactionMemory.mode === "guarded"
       ? 0.18
       : this.interactionMemory.mode === "coherent" ? 0.1 : 0;
+    const watcherReactive = this.encounters.get("reactive_watcher_stable_interrogation");
+    const responseVariant = Math.max(0, ((watcherReactive?.completionCount ?? 1) - 1) % 3);
+    const responseDirection = responseVariant === 1 ? -1 : 1;
+    const responseWave = answerPulse > 0
+      ? Math.max(0, Math.sin((1 - answerPulse) * Math.PI * (responseVariant + 1)))
+      : 0;
+    const watcherColors = [0xb9efff, 0xcaf6d6, 0xd9c8ff];
 
     this.watcherScan.position.copy(watcher.root.position);
     this.watcherScan.position.y += 0.05;
-    this.watcherScan.rotation.z += dt * (0.22 + ambientPulse * 0.55 + answerPulse * 0.8 + memoryBoost);
-    this.watcherScan.scale.setScalar(0.85 + ambientPulse * 0.35 + answerPulse * 0.65 + memoryBoost * 0.25);
-    this.watcherScan.material.opacity = 0.04 + ambientPulse * 0.20 + answerPulse * 0.58 + memoryBoost * 0.18;
+    this.watcherScan.material.color.setHex(watcherColors[responseVariant]);
+    this.watcherScan.rotation.z += dt * responseDirection * (0.22 + ambientPulse * 0.55 + answerPulse * (0.8 + responseVariant * 0.16) + memoryBoost);
+    this.watcherScan.scale.setScalar(0.85 + ambientPulse * 0.35 + answerPulse * (0.52 + responseVariant * 0.11) + responseWave * 0.24 + memoryBoost * 0.25);
+    this.watcherScan.material.opacity = 0.04 + ambientPulse * 0.20 + answerPulse * 0.46 + responseWave * 0.22 + memoryBoost * 0.18;
   }
 
   updateRelayPresentation(relayA, relayB, dt) {
@@ -375,15 +425,25 @@ export class GatheringGroundAliveSystem {
     }
 
     this.exchangeAge += dt;
-    const loopSeconds = 4.4;
+    const relayReactive = this.encounters.get("reactive_relay_held_intake");
+    const responseVariant = Math.max(0, ((relayReactive?.completionCount ?? 1) - 1) % 3);
+    const loopSeconds = [4.4, 3.7, 5.1][responseVariant];
     let phase = (this.exchangeAge % loopSeconds) / loopSeconds;
+    if (responseVariant === 1) phase = 1 - phase;
     if (this.relayAnswerAge < 1.8) phase = 1 - phase;
     const travel = smooth01(phase);
+    const answerWave = this.relayAnswerAge < 1.8
+      ? Math.max(0, Math.sin((this.relayAnswerAge / 1.8) * Math.PI * (responseVariant + 1)))
+      : 0;
+    const relayPacketColors = [0xffda91, 0xaee8ff, 0xe9c4ff];
+    const relayThreadColors = [0x80d7c8, 0x90c7ef, 0xc5a9df];
+    this.transferPacket.material.color.setHex(relayPacketColors[responseVariant]);
+    this.relayThread.material.color.setHex(relayThreadColors[responseVariant]);
     this.transferPacket.position.lerpVectors(relayA.root.position, relayB.root.position, travel);
-    this.transferPacket.position.y += Math.sin(phase * Math.PI) * 0.55;
-    this.transferPacket.scale.setScalar(0.82 + Math.sin(phase * Math.PI) * 0.38 + (this.relayAnswerAge < 1.8 ? 0.22 : 0));
-    this.transferPacket.material.opacity = 0.58 + Math.sin(phase * Math.PI) * 0.28;
-    this.relayThread.material.opacity = 0.10 + Math.sin(phase * Math.PI) * 0.10 + (this.relayAnswerAge < 1.8 ? 0.16 : 0);
+    this.transferPacket.position.y += Math.sin(phase * Math.PI) * (0.55 + responseVariant * 0.08);
+    this.transferPacket.scale.setScalar(0.82 + Math.sin(phase * Math.PI) * 0.38 + (this.relayAnswerAge < 1.8 ? 0.16 + responseVariant * 0.08 : 0) + answerWave * 0.12);
+    this.transferPacket.material.opacity = 0.58 + Math.sin(phase * Math.PI) * 0.24 + answerWave * 0.16;
+    this.relayThread.material.opacity = 0.10 + Math.sin(phase * Math.PI) * 0.10 + (this.relayAnswerAge < 1.8 ? 0.12 : 0) + answerWave * 0.12;
 
     if (encounter.state === "active") {
       encounter.activeSeconds += dt;
@@ -671,14 +731,16 @@ export class GatheringGroundAliveSystem {
     const activeOrComplete = encounter.state === "active" || encounter.state === "completed";
     const start = watcher?.root?.visible ? watcher.root.position : this.center;
     const baseProgress = encounter.state === "completed" ? 1 : encounter.progress01;
+    const responseVariant = Math.max(0, (encounter.completionCount - 1) % 3);
+    const spacing = [0.075, 0.105, 0.055][responseVariant];
 
     for (let i = 0; i < 7; i += 1) {
-      const offset = i * 0.075;
-      const p = activeOrComplete ? clamp01(baseProgress * 1.28 - offset) : 0;
+      const offset = i * spacing;
+      const p = activeOrComplete ? clamp01(baseProgress * (1.28 + responseVariant * 0.05) - offset) : 0;
       this.quadratic(start, this.center, this.ridge, smooth01(p), this.tempB);
       this.echoDummy.position.copy(this.tempB);
       const visible = activeOrComplete && p > 0.002 && p < 0.998;
-      const scale = visible ? 0.7 + Math.sin(p * Math.PI) * 0.75 : 0.001;
+      const scale = visible ? 0.62 + Math.sin(p * Math.PI * (1 + responseVariant * 0.5)) * 0.42 + responseVariant * 0.14 : 0.001;
       this.echoDummy.scale.setScalar(scale);
       this.echoDummy.updateMatrix();
       this.echoInstances.setMatrixAt(i, this.echoDummy.matrix);
@@ -701,9 +763,12 @@ export class GatheringGroundAliveSystem {
       this.spillPacket.material.opacity = 0.35 + Math.sin(encounter.progress01 * Math.PI) * 0.55;
     }
     if (completed) {
+      const responseVariant = Math.max(0, (encounter.completionCount - 1) % 3);
+      const residueColors = [0xa98a68, 0xc2a36f, 0xb98ac0];
       this.spillResidue.position.copy(this.ridge).add(this.tempA.set(-0.9, 0.45, -0.3));
-      this.spillResidue.material.opacity = 0.28;
-      this.spillResidue.scale.setScalar(0.9 + Math.sin(this.territoryAge * 0.6) * 0.05);
+      this.spillResidue.material.color.setHex(residueColors[responseVariant]);
+      this.spillResidue.material.opacity = 0.24 + responseVariant * 0.05;
+      this.spillResidue.scale.setScalar(0.86 + responseVariant * 0.08 + Math.sin(this.territoryAge * (0.6 + responseVariant * 0.22)) * (0.05 + responseVariant * 0.02));
     }
   }
 
@@ -849,17 +914,33 @@ export class GatheringGroundAliveSystem {
       encounter.lastCompletionAge = this.territoryAge;
       encounter.intentLatched = false;
       encounter.releaseSeenSinceCompletion = false;
+      const recurrenceCycle = recurrence ? encounter.completionCount - 1 : 0;
       this.emit("completed", encounter, {
         firstRead: !recurrence,
-        recurrenceCycle: recurrence ? encounter.completionCount - 1 : 0,
+        recurrenceCycle,
         ...detail
       });
+      const responseVariant = Math.max(0, (encounter.completionCount - 1) % 3);
+      this.lastResponseRead = {
+        sequence: this.eventSequence,
+        encounterId: encounter.id,
+        code: RESPONSE_CODES[encounter.id] ?? "?",
+        label: encounter.label,
+        family: encounter.family,
+        responseKind: recurrence ? "known_response" : "first_read",
+        cycle: recurrenceCycle,
+        signature: RESPONSE_SIGNATURES[encounter.id]?.[responseVariant] ?? "answer",
+        territoryAge: this.territoryAge
+      };
       if (recurrence) {
         encounter.recurrenceCount += 1;
         this.ongoingResponseCycles += 1;
         this.emit("recurred", encounter, {
           trigger: "understood_relationship_answered_again",
-          recurrenceCycle: encounter.recurrenceCount
+          recurrenceCycle: encounter.recurrenceCount,
+          responseSignature: this.lastResponseRead.signature,
+          responseCode: this.lastResponseRead.code,
+          responseSequence: this.lastResponseRead.sequence
         });
       }
     }
@@ -901,6 +982,8 @@ export class GatheringGroundAliveSystem {
         firstCompleted,
         completionCount: encounter.completionCount,
         recurrenceCount: encounter.recurrenceCount,
+        responseVariant: Math.max(0, (encounter.completionCount - 1) % 3),
+        responseSignature: RESPONSE_SIGNATURES[id]?.[Math.max(0, (encounter.completionCount - 1) % 3)] ?? "answer",
         ignoredCount: encounter.ignoredCount,
         interruptionCount: encounter.interruptionCount,
         retryBackoff: round(encounter.retryBackoff),
@@ -940,7 +1023,7 @@ export class GatheringGroundAliveSystem {
                     : "release_move_away_and_return_later_to_see_the_understood_ecology_answer_again";
 
     frameState.gatheringGroundAlive = {
-      pass: "HC-031U2.1",
+      pass: "HC-031V",
       active: this.active,
       territoryId: TERRITORY_ID,
       encounterCount: ENCOUNTER_DEFS.length,
@@ -952,6 +1035,14 @@ export class GatheringGroundAliveSystem {
       territoryAge: round(this.territoryAge, 2),
       ongoingResponseCycles: this.ongoingResponseCycles,
       activeResponseCount,
+      responseRead: {
+        ...this.lastResponseRead,
+        ageSeconds: this.lastResponseRead.sequence > 0
+          ? round(Math.max(0, this.territoryAge - this.lastResponseRead.territoryAge))
+          : null,
+        meaningful: this.lastResponseRead.responseKind === "known_response",
+        readable: this.lastResponseRead.sequence > 0 && (this.territoryAge - this.lastResponseRead.territoryAge) <= 8
+      },
       memory: {
         mode: this.interactionMemory.mode,
         observerSeconds: round(this.interactionMemory.observerSeconds),
@@ -992,7 +1083,8 @@ export class GatheringGroundAliveSystem {
       cellAuthority: false,
       routeAuthority: false,
       saveStateAuthority: false,
-      rule: "exact_chord_initiates_relationship_intent_then_compatible_stabilized_relationship_sustains_the_host_answer"
+      rule: "exact_chord_initiates_relationship_intent_then_compatible_stabilized_relationship_sustains_the_host_answer",
+      readabilityRule: "first_read_and_known_recurring_answers_reuse_existing_bodies_but_present_distinct_response_signatures"
     };
   }
 }

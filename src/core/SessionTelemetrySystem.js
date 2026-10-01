@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.49";
+    this.schemaVersion = "blob.session.telemetry.v1.50";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -83,6 +83,9 @@ export class SessionTelemetrySystem {
     this.informationGainScore = 0;
     this.lastInformationGainWallT = 0;
     this.lastInformationGainSimT = 0;
+    this.meaningfulResponseCount = 0;
+    this.lastMeaningfulResponseWallT = 0;
+    this.lastMeaningfulResponseSimT = 0;
     this.recentEffort = [];
     this.semanticChurnActive = false;
     this.semanticChurnEntryCount = 0;
@@ -860,6 +863,14 @@ export class SessionTelemetrySystem {
         this.noteInformationGain("gathering_ground_encounter_completed", 0.55, {
           encounter: event.label ?? event.encounterId ?? "unknown",
           family: event.family ?? "unknown"
+        });
+      } else if (kind === "completed" && event.detail?.firstRead === false) {
+        this.noteMeaningfulResponse("gathering_ground_known_response", {
+          encounter: event.label ?? event.encounterId ?? "unknown",
+          encounterId: event.encounterId ?? "unknown",
+          family: event.family ?? "unknown",
+          recurrenceCycle: event.detail?.recurrenceCycle ?? 0,
+          trigger: event.detail?.trigger ?? "known_relationship_answered_again"
         });
       }
       this.lastGatheringGroundEncounterEventSequence = Math.max(
@@ -1982,6 +1993,26 @@ export class SessionTelemetrySystem {
     return event;
   }
 
+  noteMeaningfulResponse(reason, detail = {}) {
+    const wallT = this.wallTime();
+    const simT = this.simTime();
+    this.meaningfulResponseCount += 1;
+    this.lastMeaningfulResponseWallT = wallT;
+    this.lastMeaningfulResponseSimT = simT;
+    return this.record("semantic.meaningful_response", "analysis", {
+      percept: {
+        reason,
+        responseIndex: this.meaningfulResponseCount,
+        detail
+      },
+      developer: {
+        addsInformationGain: false,
+        knownWorldAnswer: true,
+        semanticChurnSuppressor: true
+      }
+    });
+  }
+
   noteEffort(kind, weight = 1, detail = {}) {
     const item = { wallT: this.wallTime(), kind, weight, detail };
     this.recentEffort.push(item);
@@ -1995,15 +2026,19 @@ export class SessionTelemetrySystem {
   }
 
   queueAttempt(kind, detail = {}) {
+    const gatheringGroundActive = Boolean(this.frameState.gatheringGroundAlive?.active);
+    const resolveDelaySeconds = gatheringGroundActive && ["pulse", "absorb", "stabilize"].includes(kind) ? 3.4 : 1.8;
     const attempt = {
       id: `attempt_${++this.attemptSequence}`,
       kind,
       target: this.aliasSource(this.frameState.targeting?.targetId ?? "none"),
       wallStarted: this.wallTime(),
       simStarted: this.simTime(),
-      resolveAtWall: this.wallTime() + 1.8,
+      resolveAtWall: this.wallTime() + resolveDelaySeconds,
+      resolveDelaySeconds,
       gainCountAtStart: this.informationGainCount,
       gainScoreAtStart: this.informationGainScore,
+      meaningfulResponseCountAtStart: this.meaningfulResponseCount,
       detail
     };
     this.pendingAttempts.push(attempt);
@@ -2020,7 +2055,10 @@ export class SessionTelemetrySystem {
       }
       const gainDelta = this.informationGainCount - attempt.gainCountAtStart;
       const gainScoreDelta = this.informationGainScore - attempt.gainScoreAtStart;
-      const outcome = gainDelta > 0 ? "information_gain" : "no_gain";
+      const meaningfulResponseDelta = this.meaningfulResponseCount - (attempt.meaningfulResponseCountAtStart ?? 0);
+      const outcome = gainDelta > 0
+        ? "information_gain"
+        : meaningfulResponseDelta > 0 ? "meaningful_response" : "no_gain";
       if (outcome === "no_gain") this.noGainAttempts += 1;
       this.record("analysis.attempt.outcome", "analysis", {
         percept: {
@@ -2030,9 +2068,14 @@ export class SessionTelemetrySystem {
           outcome,
           elapsedSeconds: round(wallNow - attempt.wallStarted),
           informationGainDelta: gainDelta,
-          informationGainScoreDelta: round(gainScoreDelta)
+          informationGainScoreDelta: round(gainScoreDelta),
+          meaningfulResponseDelta
         },
-        developer: { detail: attempt.detail, simStarted: round(attempt.simStarted) }
+        developer: {
+          detail: attempt.detail,
+          simStarted: round(attempt.simStarted),
+          resolveDelaySeconds: attempt.resolveDelaySeconds ?? 1.8
+        }
       });
     }
     this.pendingAttempts = remaining;
@@ -2047,17 +2090,23 @@ export class SessionTelemetrySystem {
       counts[item.kind] = (counts[item.kind] ?? 0) + 1;
     }
     const informationGainAge = Math.max(0, wallNow - this.lastInformationGainWallT);
+    const meaningfulResponseAge = this.meaningfulResponseCount > 0
+      ? Math.max(0, wallNow - this.lastMeaningfulResponseWallT)
+      : Number.POSITIVE_INFINITY;
+    const semanticAnswerAge = Math.min(informationGainAge, meaningfulResponseAge);
     const attemptCount = (counts.pulse ?? 0) + (counts.absorb ?? 0) + (counts.stabilize ?? 0);
     const distinctVerbCount = [counts.pulse, counts.absorb, counts.stabilize].filter((value) => (value ?? 0) > 0).length;
     const redundantCount = counts.redundant_max_sonar ?? 0;
     const targetSwitches = counts.target_switch ?? 0;
     const evidencePattern = redundantCount >= 3 || attemptCount >= 6 || (attemptCount >= 3 && targetSwitches >= 3 && distinctVerbCount >= 2);
-    const active = informationGainAge >= 6 && score >= 6.5 && evidencePattern;
+    const active = semanticAnswerAge >= 6 && score >= 6.5 && evidencePattern;
 
     this.lastSemanticChurnScore = score;
     this.lastSemanticChurnContext = {
       windowSeconds: 12,
       informationGainAge: round(informationGainAge),
+      meaningfulResponseAge: Number.isFinite(meaningfulResponseAge) ? round(meaningfulResponseAge) : null,
+      semanticAnswerAge: round(semanticAnswerAge),
       effortScore: round(score),
       attempts: attemptCount,
       pulseAttempts: counts.pulse ?? 0,
@@ -2085,6 +2134,16 @@ export class SessionTelemetrySystem {
     return Math.max(0, this.wallTime() - this.lastInformationGainWallT);
   }
 
+  meaningfulResponseAge() {
+    if (this.meaningfulResponseCount <= 0) return null;
+    return Math.max(0, this.wallTime() - this.lastMeaningfulResponseWallT);
+  }
+
+  semanticAnswerAge() {
+    const responseAge = this.meaningfulResponseAge();
+    return responseAge == null ? this.informationGainAge() : Math.min(this.informationGainAge(), responseAge);
+  }
+
   recentContext(windowSeconds = 12) {
     const now = this.wallTime();
     const recentEvents = this.events.filter((event) => (event.wallT ?? event.t ?? 0) >= now - windowSeconds);
@@ -2098,6 +2157,8 @@ export class SessionTelemetrySystem {
     return {
       windowSeconds,
       informationGainAge: round(this.informationGainAge()),
+      meaningfulResponseAge: this.meaningfulResponseAge() == null ? null : round(this.meaningfulResponseAge()),
+      semanticAnswerAge: round(this.semanticAnswerAge()),
       semanticChurnActive: this.semanticChurnActive,
       semanticChurnScore: round(this.lastSemanticChurnScore),
       churn: this.lastSemanticChurnContext,
@@ -2843,7 +2904,12 @@ export class SessionTelemetrySystem {
         relayIntentLatched: Boolean(frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.intentLatched),
         relayIntentProgress01: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.progress01 ?? 0,
         relayIntentBreakSeconds: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.intentBreakSeconds ?? 0,
-        relayIntentBreakReason: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.lastIntentBreakReason ?? "none"
+        relayIntentBreakReason: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.lastIntentBreakReason ?? "none",
+        responseReadKind: frameState.gatheringGroundAlive?.responseRead?.responseKind ?? "none",
+        responseReadCode: frameState.gatheringGroundAlive?.responseRead?.code ?? "--",
+        responseReadCycle: frameState.gatheringGroundAlive?.responseRead?.cycle ?? 0,
+        responseReadSignature: frameState.gatheringGroundAlive?.responseRead?.signature ?? "quiet",
+        responseReadAgeSeconds: frameState.gatheringGroundAlive?.responseRead?.ageSeconds ?? null
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),
@@ -3154,9 +3220,11 @@ export class SessionTelemetrySystem {
       semanticStagnationEntries: count("rhythm.semantic_stagnation.entered"),
       semanticChurnEntries: count("rhythm.semantic_churn.entered"),
       informationGainEvents: count("semantic.information_gain"),
+      meaningfulResponseEvents: count("semantic.meaningful_response"),
       informationGainScore: round(this.informationGainScore),
       redundantMaxResolutionReturns: count("sonar.redundant_max_resolution"),
       attemptOutcomes: count("analysis.attempt.outcome"),
+      meaningfulResponseAttempts: this.events.filter((event) => event.type === "analysis.attempt.outcome" && event.percept?.outcome === "meaningful_response").length,
       noGainAttempts: this.events.filter((event) => event.type === "analysis.attempt.outcome" && event.percept?.outcome === "no_gain").length,
       cellChanges: count("world.cell.changed"),
       manualMarkers: count("playtest.marker"),
@@ -3286,7 +3354,10 @@ export class SessionTelemetrySystem {
       simDurationSeconds: round(this.simTime()),
       wallMinusSimSeconds: round(this.wallTime() - this.simTime()),
       informationGainAge: round(this.informationGainAge()),
+      meaningfulResponseAge: this.meaningfulResponseAge() == null ? null : round(this.meaningfulResponseAge()),
+      semanticAnswerAge: round(this.semanticAnswerAge()),
       informationGainCount: this.informationGainCount,
+      meaningfulResponseCount: this.meaningfulResponseCount,
       informationGainScore: round(this.informationGainScore),
       semanticChurnActive: this.semanticChurnActive,
       semanticChurnScore: round(this.lastSemanticChurnScore),

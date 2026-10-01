@@ -191,6 +191,7 @@ export class PlaytestHudSystem {
     const apertureFieldsArrival = frameState.apertureFieldsArrival ?? {};
     const adjacentHostTerritory = frameState.adjacentHostTerritory ?? {};
     const gatheringGroundAlive = frameState.gatheringGroundAlive ?? {};
+    const gatheringResponseRead = gatheringGroundAlive.responseRead ?? {};
     const signalPlainEcology = frameState.signalPlainEcology ?? {};
     const membraneRidgeGameplay = frameState.membraneRidgeGameplay ?? {};
     const graveRouteLock = frameState.graveRouteLock ?? {};
@@ -367,8 +368,11 @@ export class PlaytestHudSystem {
       : entry.lastIntentBreakReason && entry.lastIntentBreakReason !== "none"
         ? "BRK"
         : "--";
+    const responseRead = gatheringResponseRead.readable
+      ? `${gatheringResponseRead.responseKind === "known_response" ? "KNOWN" : "NEW"} ${gatheringResponseRead.code ?? "?"}${gatheringResponseRead.cycle > 0 ? gatheringResponseRead.cycle : ""}/${gatheringResponseRead.signature ?? "answer"}`
+      : "--";
     const gatheringLifeDebug = inApertureFields && gatheringGroundAlive.active
-      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2 · INT W${intentRead(watcherIntent)} R${intentRead(relayIntent)} · LOOP ${gatheringGroundAlive.ongoingResponseCycles ?? 0} · MEM ${gatheringGroundAlive.memory?.mode ?? "quiet_observer"}`
+      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2 · INT W${intentRead(watcherIntent)} R${intentRead(relayIntent)} · LOOP ${gatheringGroundAlive.ongoingResponseCycles ?? 0} · RESP ${responseRead} · MEM ${gatheringGroundAlive.memory?.mode ?? "quiet_observer"}`
       : "";
 
     return {

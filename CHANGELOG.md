@@ -1,4 +1,13 @@
 # Changelog
+## HC-031V — Living Response Readability / Telemetry Truth
+- Locked accepted HC031U2.1 encounter timing, latch, interruption, rearm, recurrence, traversal, targeting, and movement mechanics.
+- Added cycle-legible response signatures using the existing Watcher ring, relay packet/thread, Ridge Echo beads, and Matter Spill residue only; no new particles, lights, geometry families, or gameplay authority.
+- Added `responseRead` publication and HUD `RESP` readout distinguishing first reads from known recurring answers.
+- Added telemetry event `semantic.meaningful_response` so repeated understood ecology answers no longer masquerade as new information or `no_gain`.
+- Added `meaningful_response` as a third attempt outcome and extended Gathering Ground attempt observation to 3.4 seconds so the accepted 2.4–2.8 second latched answers can be causally credited.
+- Semantic churn now uses the most recent new-information or meaningful-known-response age while preserving information-gain accounting as a separate metric.
+- Telemetry schema advanced to `blob.session.telemetry.v1.50`; package advanced to `0.31.52`.
+
 ## HC-031U2.1 — Gathering Ground Relationship Intent Latch
 - Split reactive ecology into initiation intent vs sustained relationship state.
 - Stabilize + Pulse now latches Watcher interrogation intent; anchored Stabilize can sustain the answer after Pulse releases.

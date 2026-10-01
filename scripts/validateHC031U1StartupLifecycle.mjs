@@ -10,8 +10,8 @@ const runtime = read("src/core/GameRuntime.js");
 const alive = read("src/fields/GatheringGroundAliveSystem.js");
 const telemetry = read("src/core/SessionTelemetrySystem.js");
 
-assert(/^0\.31\.(49|50|51)$/.test(pkg.version), `U1 lifecycle contract expected U1/U2/U2.1 lineage, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U'), "main buildId must remain in the HC031U lineage");
+assert(/^0\.31\.(49|50|51|52)$/.test(pkg.version), `U1 lifecycle contract expected U1/U2/U2.1/V lineage, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U') || main.includes('buildId: "HC-031V"'), "main buildId must remain in the HC031U/V lineage");
 assert(telemetry.includes('blob.session.telemetry.v1.'), "telemetry schema declaration missing");
 
 const entityStart = runtime.indexOf("  createEntitySystems() {");

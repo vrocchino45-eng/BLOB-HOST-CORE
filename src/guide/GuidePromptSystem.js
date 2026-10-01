@@ -748,7 +748,7 @@ export class GuidePromptSystem {
           ? alive.active
             ? (alive.completedCount ?? 0) >= (alive.encounterCount ?? 6)
               ? (alive.ongoingResponseCycles ?? 0) > 0
-                ? `Gathering Ground remembers the pressure you bring. Its current read is ${alive.memory?.mode ?? "quiet_observer"}, and understood relationships are answering again.`
+                ? `Gathering Ground remembers the pressure you bring. Its current read is ${alive.memory?.mode ?? "quiet_observer"}; understood relationships are answering again with a changed visible signature.`
                 : "Gathering Ground is still alive after the first six reads. Release, move, and return to the Watcher or relays; understood relationships can answer again."
               : "Gathering Ground is not a destination object anymore. Watch what the local organisms and Host matter do before deciding how to answer."
             : "You are inside the larger Host body now. The released ridge remains behind you as part of the same space."

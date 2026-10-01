@@ -15,11 +15,11 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(/^0\.31\.(50|51)$/.test(pkg.version), `U2 persistence lineage expected 0.31.50/51, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U2'), "main buildId left HC031U2 lineage");
-assert(main.includes('Gathering Ground'), "Gathering Ground build label missing");
+assert(/^0\.31\.(50|51|52)$/.test(pkg.version), `U2 persistence lineage expected 0.31.50/51/52, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U2') || main.includes('buildId: "HC-031V"'), "main buildId left U2/V lineage");
+assert(main.includes('Gathering Ground') || main.includes('Living Response Readability / Telemetry Truth'), "Gathering Ground/V build label missing");
 assert(contract.telemetrySchema === "blob.session.telemetry.v1.48", "contract telemetry schema mismatch");
-assert(/blob\.session\.telemetry\.v1\.(48|49)/.test(telemetry), "U2 persistence telemetry lineage missing");
+assert(/blob\.session\.telemetry\.v1\.(48|49|50)/.test(telemetry), "U2 persistence telemetry lineage missing");
 
 for (const id of [
   "ambient_watcher_sweep",

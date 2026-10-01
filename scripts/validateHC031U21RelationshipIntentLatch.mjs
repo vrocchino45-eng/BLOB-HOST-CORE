@@ -8,10 +8,10 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(pkg.version === "0.31.51", `expected package 0.31.51, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U2.1"'), "build identity missing");
-assert(main.includes('buildLabel: "Gathering Ground Relationship Intent Latch"'), "build label missing");
-assert(telemetry.includes('blob.session.telemetry.v1.49'), "telemetry schema v1.49 missing");
+assert(/^0\.31\.(51|52)$/.test(pkg.version), `U2.1/V lineage expected 0.31.51/52, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U2.1"') || main.includes('buildId: "HC-031V"'), "U2.1/V build identity missing");
+assert(main.includes("Gathering Ground Relationship Intent Latch") || main.includes("Living Response Readability / Telemetry Truth"), "U2.1/V build label missing");
+assert(/blob\.session\.telemetry\.v1\.(49|50)/.test(telemetry), "telemetry schema v1.49/1.50 lineage missing");
 assert(alive.includes('responseBreakGraceSeconds: 0.72'), "relationship intent grace missing");
 assert(alive.includes('["stable_interrogation", "anchored_observation"]'), "Watcher initiation/sustain split missing");
 assert(alive.includes('["held_intake", "flow_alignment"]'), "Relay initiation/sustain split missing");

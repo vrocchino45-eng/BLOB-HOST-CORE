@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031U2.1 keeps U2 pacing/memory/recurrence and the accepted T6 traversal locked.
-// Exact verb chords now initiate relationship intent; compatible stabilized relationship
-// states sustain the Host answer through normal Pulse/Absorb release transitions.
+// HC031V keeps U2.1 relationship intent, recurrence, and the accepted T6 traversal locked.
+// V changes presentation/read-only telemetry only: repeated answers become cycle-legible
+// without becoming new information or gaining gameplay authority.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031U2.1",
-  buildLabel: "Gathering Ground Relationship Intent Latch"
+  buildId: "HC-031V",
+  buildLabel: "Living Response Readability / Telemetry Truth"
 });
 
 runtime.start().catch((error) => {

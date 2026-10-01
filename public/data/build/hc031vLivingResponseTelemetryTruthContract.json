@@ -1,0 +1,48 @@
+{
+  "buildId": "HC-031V",
+  "parentBuildId": "HC-031U2.1",
+  "packageVersion": "0.31.52",
+  "telemetrySchema": "blob.session.telemetry.v1.50",
+  "scope": "presentation_and_read_only_telemetry_only",
+  "lockedMechanicsHashes": {
+    "U21_TIMING": "ad80b1615115dcfcde1c9c6914e87c4aaabd74d817f27203e86bcfe63a4ff1ed",
+    "updateReactiveEncounters": "865a2d73e3138b2d01dbb2aa935ce0041d3571aad5f6c17f2daaa148c0ba7a48",
+    "updateReactiveEncounter": "bbb53c34762b2a543171cd95231dabfae55321a803ea6bc1289ebce3d1cbbb0c",
+    "updateCrossTerritoryEncounters": "9769404d0d6912c5c6789d7dd1cdae8aca9d3904034baceeabf661189e43658f",
+    "startCrossTerritoryCycle": "1491dae47819629ad1f2574171183f7c1d5911f3a4dd7e47c9ef01573a51f009",
+    "interruptEncounter": "5dfd3e8514a9dcd46c347c4f69365a499c3b7a489a1cbe7177e1f30a1d9aee9f",
+    "rearmEncounter": "6ab7e63cb0fc4eeec1faea8877e7021f6417fb51a6019d7173a55f022fcd32c2"
+  },
+  "responseSignatures": {
+    "watcher": [
+      "tight",
+      "reverse",
+      "wide"
+    ],
+    "relay": [
+      "forward",
+      "return",
+      "held"
+    ],
+    "ridgeEcho": [
+      "single",
+      "split",
+      "stagger"
+    ],
+    "matterSpill": [
+      "settle",
+      "pulse",
+      "bloom"
+    ]
+  },
+  "telemetryTruth": {
+    "newInformationEvent": "semantic.information_gain",
+    "knownResponseEvent": "semantic.meaningful_response",
+    "attemptOutcomes": [
+      "information_gain",
+      "meaningful_response",
+      "no_gain"
+    ],
+    "knownResponseAwardsInformationGain": false
+  }
+}
