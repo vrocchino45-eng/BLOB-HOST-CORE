@@ -768,7 +768,7 @@ export class GuidePromptSystem {
             ? (alive.family?.ambient?.completed ?? 0) < 2
               ? "Watch the perimeter Watcher and the relay exchange long enough to read their ambient behavior."
               : (alive.family?.reactive?.completed ?? 0) < 2
-                ? "Try Stabilize + Pulse near the Watcher, then Stabilize + Absorb near a relay."
+                ? "Near the Watcher, use Stabilize + Pulse to ask, then keep the stabilized relationship while its answer develops. At a relay, use Stabilize + Absorb to initiate intake, then keep Stabilize while the relay answers."
                 : (alive.family?.cross_territory?.completed ?? 0) < 2
                   ? "Watch the local answers travel back toward Membrane Ridge."
                   : (alive.ongoingResponseCycles ?? 0) > 0

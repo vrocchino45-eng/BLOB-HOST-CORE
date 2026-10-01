@@ -360,8 +360,15 @@ export class PlaytestHudSystem {
     const gatheringDebug = inApertureFields && adjacentHostTerritory.active
       ? ` · RIDGE ${membraneRidgeGameplay.readCount ?? 0}/${membraneRidgeGameplay.contourCount ?? 3}${membraneRidgeGameplay.completed ? " COMPLETE" : ""} · GG d${Number.isFinite(adjacentHostTerritory.distance) ? adjacentHostTerritory.distance.toFixed(1) : "?"} aim${Number.isFinite(adjacentHostTerritory.aimDot) ? adjacentHostTerritory.aimDot.toFixed(2) : "?"}${adjacentHostTerritory.aimed ? " VIEW" : ""}${adjacentHostTerritory.attentionOwned ? " ATTN" : ""} OBS${adjacentHostTerritory.observationCount ?? 0} REL${adjacentHostTerritory.relationshipEstablished ? "Y" : "N"} ${adjacentHostTerritory.traversalOpen ? "OPEN" : "CLOSED"}`
       : "";
+    const watcherIntent = gatheringGroundAlive.encounters?.reactive_watcher_stable_interrogation ?? {};
+    const relayIntent = gatheringGroundAlive.encounters?.reactive_relay_held_intake ?? {};
+    const intentRead = (entry) => entry.intentLatched
+      ? `${Math.round((entry.progress01 ?? 0) * 100)}%`
+      : entry.lastIntentBreakReason && entry.lastIntentBreakReason !== "none"
+        ? "BRK"
+        : "--";
     const gatheringLifeDebug = inApertureFields && gatheringGroundAlive.active
-      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2 · LOOP ${gatheringGroundAlive.ongoingResponseCycles ?? 0} · MEM ${gatheringGroundAlive.memory?.mode ?? "quiet_observer"}`
+      ? ` · LIFE ${gatheringGroundAlive.completedCount ?? 0}/${gatheringGroundAlive.encounterCount ?? 6} A${gatheringGroundAlive.family?.ambient?.completed ?? 0}/2 R${gatheringGroundAlive.family?.reactive?.completed ?? 0}/2 X${gatheringGroundAlive.family?.cross_territory?.completed ?? 0}/2 · INT W${intentRead(watcherIntent)} R${intentRead(relayIntent)} · LOOP ${gatheringGroundAlive.ongoingResponseCycles ?? 0} · MEM ${gatheringGroundAlive.memory?.mode ?? "quiet_observer"}`
       : "";
 
     return {

@@ -20,7 +20,7 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(/^0\.31\.(49|50)$/.test(pkg.version), `HC031U family version expected 0.31.49/50, got ${pkg.version}`);
+assert(/^0\.31\.(49|50|51)$/.test(pkg.version), `HC031U family version expected 0.31.49/50/51, got ${pkg.version}`);
 assert(main.includes('buildId: "HC-031U'), "main buildId left HC031U family");
 
 const aperture = runtime.regions?.aperture_fields;
@@ -104,7 +104,7 @@ assert(telemetry.includes("observeGatheringGroundAlive(frameState)"), "Gathering
 assert(telemetry.includes("gatheringGroundUniqueEncounterCompletions"), "encounter completion summary missing");
 assert(telemetry.includes("gatheringGroundAliveState"), "movement sample encounter snapshot missing");
 assert(hud.includes("LIFE ${gatheringGroundAlive.completedCount"), "HUD LIFE readout missing");
-assert(guide.includes("Try Stabilize + Pulse near the Watcher"), "Guide reactive grammar prompt missing");
+assert(guide.includes("Stabilize + Pulse") && guide.includes("Stabilize + Absorb"), "Guide reactive grammar prompt missing");
 
 const locked = json("public/data/build/hc031uLockedParentHashes.json");
 for (const [path, expected] of Object.entries(locked.files ?? {})) {

@@ -1,0 +1,34 @@
+{
+  "pass": "HC-031U2.1",
+  "parent": "HC-031U2",
+  "packageVersion": "0.31.51",
+  "telemetrySchema": "blob.session.telemetry.v1.49",
+  "purpose": "Preserve U2 pacing while latching reactive relationship intent across normal Pulse/Absorb release transitions.",
+  "locks": [
+    "HC031T6 continuous Aperture-to-Gathering-Ground traversal",
+    "HC031U2 six encounter identities",
+    "HC031U2 ambient pacing",
+    "HC031U2 recurrence and memory architecture",
+    "PlayerMovementController",
+    "TargetingSystem",
+    "MembraneRidgeGameplaySystem",
+    "ApertureFieldsArrivalSystem",
+    "ApertureAdjacentTerritorySystem",
+    "SignalPlainEcologySystem",
+    "VascularRhythmRouteSystem",
+    "SiltPressureRouteSystem"
+  ],
+  "reactiveLaw": {
+    "watcher": "Stabilize+Pulse initiates; anchored Stabilize sustains the answer.",
+    "relay": "Stabilize+Absorb initiates; flow-aligned Stabilize sustains the answer.",
+    "normalBreakGraceSeconds": 0.72,
+    "departureBreakGraceSeconds": 0.45,
+    "targetHandoffGraceSeconds": 0.5
+  },
+  "acceptance": {
+    "initialEncounterCompletion": "6/6",
+    "ongoingResponseCycles": ">=1 after release/cooldown/revisit",
+    "normalExplorerFalseInterruptions": 0,
+    "meaningfulAbandonmentStillInterrupts": true
+  }
+}

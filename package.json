@@ -1,8 +1,8 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.50",
+  "version": "0.31.51",
   "private": true,
-  "description": "BLOB: HOST CORE — HC-031U2 Gathering Ground Persistent Living Ecology + Encounter Pacing",
+  "description": "BLOB: HOST CORE \u2014 HC-031U2.1 Gathering Ground Relationship Intent Latch",
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031u2 && npm run smoke:hc031u2 && npm run bot:hc031u2 && npm run validate:hc031u1 && npm run validate:hc031u && npm run validate:hc031t5-smoke && npm run audit:undefined-methods && npm run validate:recipe-data && node --check src/main.js && node --check src/core/GameRuntime.js && node --check src/ecology/EntitySystem.js && node --check src/fields/GatheringGroundAliveSystem.js && node --check src/core/SessionTelemetrySystem.js",
+    "validate:current": "npm run validate:hc031u21 && npm run smoke:hc031u21 && npm run bot:hc031u21 && npm run validate:hc031u2 && npm run validate:hc031u1 && npm run validate:hc031u && npm run validate:hc031t5-smoke && npm run audit:undefined-methods && npm run validate:recipe-data && node --check src/main.js && node --check src/core/GameRuntime.js && node --check src/ecology/EntitySystem.js && node --check src/fields/GatheringGroundAliveSystem.js && node --check src/core/SessionTelemetrySystem.js",
     "validate:hc031p": "node scripts/validateHC031PFirstHostDestinationCommitment.mjs",
     "validate:hc031p-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
@@ -296,7 +296,10 @@
     "validate:hc031u1": "node scripts/validateHC031U1StartupLifecycle.mjs",
     "validate:hc031u2": "node scripts/validateHC031U2PersistentLivingEcology.mjs",
     "smoke:hc031u2": "node scripts/smokeHC031U2PersistentEcology.mjs",
-    "bot:hc031u2": "node scripts/botHC031U2GatheringGroundConvergence.mjs"
+    "bot:hc031u2": "node scripts/botHC031U2GatheringGroundConvergence.mjs",
+    "validate:hc031u21": "node scripts/validateHC031U21RelationshipIntentLatch.mjs",
+    "smoke:hc031u21": "node scripts/smokeHC031U21RelationshipIntentLatch.mjs",
+    "bot:hc031u21": "node scripts/botHC031U21RelationshipIntentConvergence.mjs"
   },
   "dependencies": {
     "three": "^0.179.1",

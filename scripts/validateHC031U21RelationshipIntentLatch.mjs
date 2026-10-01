@@ -1,0 +1,25 @@
+import fs from "node:fs";
+const assert = (condition, message) => { if (!condition) throw new Error(`[HC031U2.1 validate] ${message}`); };
+const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+const pkg = JSON.parse(read("package.json"));
+const main = read("src/main.js");
+const alive = read("src/fields/GatheringGroundAliveSystem.js");
+const telemetry = read("src/core/SessionTelemetrySystem.js");
+const hud = read("src/ui/PlaytestHudSystem.js");
+const guide = read("src/guide/GuidePromptSystem.js");
+
+assert(pkg.version === "0.31.51", `expected package 0.31.51, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U2.1"'), "build identity missing");
+assert(main.includes('buildLabel: "Gathering Ground Relationship Intent Latch"'), "build label missing");
+assert(telemetry.includes('blob.session.telemetry.v1.49'), "telemetry schema v1.49 missing");
+assert(alive.includes('responseBreakGraceSeconds: 0.72'), "relationship intent grace missing");
+assert(alive.includes('["stable_interrogation", "anchored_observation"]'), "Watcher initiation/sustain split missing");
+assert(alive.includes('["held_intake", "flow_alignment"]'), "Relay initiation/sustain split missing");
+assert(alive.includes('attention_changed_away_from_gathering_ground'), "attention-change interruption truth missing");
+assert(alive.includes('["cohere", "cohere_project", "cohere_draw"].includes(chord)'), "Stabilize-only memory coherence classification missing");
+assert(alive.includes('intentLatched: Boolean(encounter.intentLatched)'), "intent latch frame-state publication missing");
+assert(telemetry.includes('watcherIntentLatched') && telemetry.includes('relayIntentLatched'), "intent latch telemetry sampling missing");
+assert(hud.includes('INT W${intentRead(watcherIntent)} R${intentRead(relayIntent)}'), "intent latch HUD diagnostics missing");
+assert(guide.includes('keep the stabilized relationship while its answer develops'), "relationship intent guide wording missing");
+assert(!alive.includes('relationship_chord_broke_before_answer'), "obsolete raw-chord break trigger still present");
+console.log("HC031U2.1 relationship intent latch validator PASS");

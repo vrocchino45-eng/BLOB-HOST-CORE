@@ -15,11 +15,11 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(pkg.version === "0.31.50", `package version should be 0.31.50, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U2"'), "main buildId is not HC-031U2");
-assert(main.includes('buildLabel: "Gathering Ground Persistent Living Ecology + Encounter Pacing"'), "U2 build label missing");
+assert(/^0\.31\.(50|51)$/.test(pkg.version), `U2 persistence lineage expected 0.31.50/51, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U2'), "main buildId left HC031U2 lineage");
+assert(main.includes('Gathering Ground'), "Gathering Ground build label missing");
 assert(contract.telemetrySchema === "blob.session.telemetry.v1.48", "contract telemetry schema mismatch");
-assert(telemetry.includes('blob.session.telemetry.v1.48'), "telemetry implementation should be v1.48");
+assert(/blob\.session\.telemetry\.v1\.(48|49)/.test(telemetry), "U2 persistence telemetry lineage missing");
 
 for (const id of [
   "ambient_watcher_sweep",
@@ -37,7 +37,6 @@ assert((alive.match(/family: "cross_territory"/g) ?? []).length === 2, "cross-te
 for (const token of [
   "watcherResponseSeconds: 2.4",
   "relayResponseSeconds: 2.8",
-  "responseBreakGraceSeconds: 0.28",
   "responseRetryBackoffSeconds: 1.2",
   "watcherRecurrenceCooldownSeconds: 8.0",
   "relayRecurrenceCooldownSeconds: 10.0",
@@ -48,6 +47,9 @@ for (const token of [
   '"coherent"',
   '"guarded"'
 ]) assert(alive.includes(token), `persistent ecology token missing: ${token}`);
+
+const graceMatch = alive.match(/responseBreakGraceSeconds:\s*([0-9.]+)/);
+assert(graceMatch && Number(graceMatch[1]) >= 0.28, "reactive response break grace regressed below U2 floor");
 
 assert(!alive.includes("watcherReactive.progress01 = 1"), "Watcher reactive response still instant-completes");
 assert(!alive.includes("relayReactive.progress01 = 1"), "Relay reactive response still instant-completes");

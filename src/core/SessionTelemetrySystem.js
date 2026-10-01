@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.48";
+    this.schemaVersion = "blob.session.telemetry.v1.49";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -2835,7 +2835,15 @@ export class SessionTelemetrySystem {
         crossTerritoryCompleted: frameState.gatheringGroundAlive?.family?.cross_territory?.completed ?? 0,
         ongoingResponseCycles: frameState.gatheringGroundAlive?.ongoingResponseCycles ?? 0,
         activeResponseCount: frameState.gatheringGroundAlive?.activeResponseCount ?? 0,
-        memoryMode: frameState.gatheringGroundAlive?.memory?.mode ?? "quiet_observer"
+        memoryMode: frameState.gatheringGroundAlive?.memory?.mode ?? "quiet_observer",
+        watcherIntentLatched: Boolean(frameState.gatheringGroundAlive?.encounters?.reactive_watcher_stable_interrogation?.intentLatched),
+        watcherIntentProgress01: frameState.gatheringGroundAlive?.encounters?.reactive_watcher_stable_interrogation?.progress01 ?? 0,
+        watcherIntentBreakSeconds: frameState.gatheringGroundAlive?.encounters?.reactive_watcher_stable_interrogation?.intentBreakSeconds ?? 0,
+        watcherIntentBreakReason: frameState.gatheringGroundAlive?.encounters?.reactive_watcher_stable_interrogation?.lastIntentBreakReason ?? "none",
+        relayIntentLatched: Boolean(frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.intentLatched),
+        relayIntentProgress01: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.progress01 ?? 0,
+        relayIntentBreakSeconds: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.intentBreakSeconds ?? 0,
+        relayIntentBreakReason: frameState.gatheringGroundAlive?.encounters?.reactive_relay_held_intake?.lastIntentBreakReason ?? "none"
       },
       routeState: {
         vascularResolved: Boolean(frameState.vascularRhythmRoute?.completed),

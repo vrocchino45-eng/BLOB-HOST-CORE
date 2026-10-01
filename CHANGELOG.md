@@ -1,3 +1,13 @@
+# Changelog
+## HC-031U2.1 — Gathering Ground Relationship Intent Latch
+- Split reactive ecology into initiation intent vs sustained relationship state.
+- Stabilize + Pulse now latches Watcher interrogation intent; anchored Stabilize can sustain the answer after Pulse releases.
+- Stabilize + Absorb now latches Relay intake intent; flow-aligned Stabilize can sustain the answer after Absorb releases.
+- Increased normal transition grace to 0.72s while retaining shorter departure/retarget interruption truth.
+- Added intent-latch diagnostics to HUD and telemetry movement samples.
+- Counted `cohere` as coherent ecology memory rather than pressure.
+- Preserved U2 ambient pacing, six encounter identities, memory/recurrence architecture, and all T6 traversal/targeting owners.
+
 # HC031U2 — Persistent Living Ecology + Encounter Pacing
 
 - Kept the accepted HC031T6/U1 Aperture → Gathering Ground same-cell continuity locked.
