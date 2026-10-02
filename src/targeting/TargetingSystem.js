@@ -173,6 +173,7 @@ export class TargetingSystem {
   }
 
   createEmptyTargetingState(frameState, message = "no_target") {
+    const intent = this.resolveRelationshipIntent(frameState?.input);
     return {
       pass: "HC-031M",
       active: false,

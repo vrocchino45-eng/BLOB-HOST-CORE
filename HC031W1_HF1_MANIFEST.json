@@ -1,0 +1,19 @@
+{
+  "hotfixId": "HC031W1-HF1",
+  "parentBuildId": "HC-031W1",
+  "parentPackageVersion": "0.31.54",
+  "purpose": "Fix runtime ReferenceError in TargetingSystem.createEmptyTargetingState during ownership change.",
+  "overlayOnly": true,
+  "deletions": [],
+  "parentTargetingSystemSha256": "f30f411db943d33233c990a6f76d48d245dda15894de6f1efc3a118294fffada",
+  "fixedTargetingSystemSha256": "ac0285245f0e699449c2bb02a6d4cea8823ae62084def7a31fc6e7d5f69000e1",
+  "runtimeFiles": [
+    "src/targeting/TargetingSystem.js"
+  ],
+  "testCommand": "node scripts/validateHC031W1HF1TargetClear.mjs",
+  "files": {
+    "HC031W1_HF1_PATCH_APPLY.md": "5c116f94bb41f7d5e82a50a65741f7824b2692d829b5b325f740a1bfd6335eb7",
+    "scripts/validateHC031W1HF1TargetClear.mjs": "46b9c8d95ced74942d0b3c77ebe9b365902de5590e8291c87fb9544eca93e21f",
+    "src/targeting/TargetingSystem.js": "ac0285245f0e699449c2bb02a6d4cea8823ae62084def7a31fc6e7d5f69000e1"
+  }
+}
