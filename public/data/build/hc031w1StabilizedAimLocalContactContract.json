@@ -1,0 +1,53 @@
+{
+  "buildId": "HC-031W1",
+  "buildLabel": "Stabilized Aim + Local Contact Proof",
+  "parentBuildId": "HC-031W",
+  "packageVersion": "0.31.54",
+  "telemetrySchema": "blob.session.telemetry.v1.52",
+  "scope": "stabilized_aim_local_relationship_handoff_plus_three_surface_proof",
+  "allowedBehaviorChanges": [
+    "publish Gathering Ground Watcher/Relay bodies as local camera-aim nouns after physical entry",
+    "permit LT plus deliberate right-stick motion to redirect Stabilize attention/relationship to a centered local noun after short dwell",
+    "suppress far macro Gathering Ground Stabilize relationships only after the territory is physically local",
+    "author exactly three targeting-suppressed Gathering Ground crawlable surfaces using existing surface profiles"
+  ],
+  "preservedLaws": [
+    "pre-entry remote Gathering Ground observation and Stabilize relationship remain available for T traversal",
+    "U2.1 reactive timing, intent latch, interruption, rearm and recurrence mechanics remain byte-stable",
+    "Target scoring formula and verb-intent grammar remain byte-stable",
+    "InputSystem and PlayerMovementController remain unchanged",
+    "CrawlableSurfaceRegistry profiles and CoreSurfaceTruth authority remain unchanged"
+  ],
+  "surfaceProof": {
+    "count": 3,
+    "ids": [
+      "GATHERING_GROUND_WATCHER_MEMBRANE",
+      "GATHERING_GROUND_RELAY_SCAR_BRACE",
+      "GATHERING_GROUND_RIDGE_RETURN_RESIDUE"
+    ],
+    "profiles": [
+      "membrane_stable",
+      "scar_brace",
+      "residue_weak"
+    ]
+  },
+  "lockedBehaviorMethodHashes": {
+    "GatheringGroundAliveSystem.updateReactiveEncounters": "b85b0cd8e1e8570428338d322bf0d99f5ab23d110fbc7c0d3813dc58d9b8dde7",
+    "GatheringGroundAliveSystem.updateReactiveEncounter": "89294939a3ea16d59fceef95ee498cec58f6e9ed3f96f397ff0c5a02bb4d6ef7",
+    "GatheringGroundAliveSystem.updateCrossTerritoryEncounters": "5062bd83cad579c8b862450bcc612cbf470a5a2c5223812e1d0788985c015cac",
+    "GatheringGroundAliveSystem.startCrossTerritoryCycle": "b83fb17767138a0ae38aa6e79996764a948af3faa27c3041f03ca1f857b356cc",
+    "GatheringGroundAliveSystem.interruptEncounter": "2fb37cca1acc10e1992e14a5c74215b74d5cff87d45258bdb296c24513aa9246",
+    "GatheringGroundAliveSystem.rearmEncounter": "f72c144996510fc9de4de8cc114a54e0ad8f932589fc9d1a59e507240e1ba752",
+    "TargetingSystem.resolveRelationshipIntent": "1feacfa14fad5af1d1a855e535ddb1cfa88f30f50ad263f29f1a79ada4495436",
+    "TargetingSystem.scoreCandidate": "731cf308531882f12cd70c8273d2901cae4af27d24614746b9626e9030b946d3"
+  },
+  "lockedFileHashes": {
+    "src/input/InputSystem.js": "5117dc831d6dcc5be0fd9f38fc58c6a8eb125dd6f30a34c910d6ea07e669c0f1",
+    "src/player/PlayerMovementController.js": "9c0542b4606fdfa3e9ef35e4bb8b6eafb4b1c86845a3ed594caed629fc913f4b",
+    "src/ecology/EntityRelationshipGrammarSystem.js": "efcd83d901f182c216752e064b1576506dfde2bee084a7f17c3c22073d85fcf8",
+    "src/fields/ApertureAdjacentTerritorySystem.js": "8ba910c5d5a7a971187699fc9986b13850ad3df3e5e3d850e8d38510d09bcc93",
+    "src/fields/MembraneRidgeGameplaySystem.js": "1b163d0348aff2d0fb20cbee723c8b00ba610dedce308e6447ffadbb771183d6",
+    "src/world/CrawlableSurfaceRegistry.js": "094e43d5709e0cef8ab9452c3fbc7f322ae6c607eb9df8e72073cfc627ba72c0",
+    "src/player/CoreSurfaceTruthSystem.js": "f8c7d860f6b8b352cbcea09ce43a6d8ec1ea68345100ba1d2084cf911f1a2dc9"
+  }
+}

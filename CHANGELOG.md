@@ -1,4 +1,14 @@
 # Changelog
+## HC-031W1 — Stabilized Aim + Local Contact Proof
+- Promoted Gathering Ground Watcher/Relay bodies into the camera-owned targeting vocabulary after physical territory entry.
+- Added deliberate LT + Right Stick local relationship steering with a short 0.09 s aim dwell; Stabilize follows the centered local noun instead of protecting a stale owner indefinitely.
+- Preserved the pre-entry long-range Gathering Ground Stabilize relationship used by the T4/T6 traversal sequence.
+- Suppressed far macro `gathering_ground_cluster` Stabilize relationships only after the territory is physically local; observation remains available.
+- Authored three targeting-suppressed Gathering Ground contact surfaces through the existing crawlable-surface registry: Watcher membrane, Relay scar brace, and Ridge-return residue.
+- Kept InputSystem, PlayerMovementController, CoreSurfaceTruth authority, surface profiles, T6 traversal owners, and U2.1 encounter/latch/rearm timing locked.
+- Added W1 redirect/suppression telemetry and updated the W HUD controller line; telemetry schema advanced to `blob.session.telemetry.v1.52`.
+- Package advanced to `0.31.54`.
+
 ## HC-031W — Controller / Targeting / Surface Interaction Audit
 - Froze HC031V/U2.1 gameplay behavior and added read-only diagnostics for the controller → candidate → attention → relationship chain.
 - Added LT analog value, right-stick magnitude, target scope/distance, and explicit detection of cases where Stabilize protects an older attention owner while deliberate RS aim exposes a different candidate.

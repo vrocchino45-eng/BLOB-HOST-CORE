@@ -168,7 +168,53 @@ export class EntitySystem {
     }
 
     this.updateTenderCare(frameState, dt, inNursery);
+    this.publishLocalAttentionCandidates(frameState, activeCellId);
     this.updateDebugState(nearest, frameState);
+  }
+
+  publishLocalAttentionCandidates(frameState, activeCellId) {
+    const gatheringGroundLocal = Boolean(
+      activeCellId === "CELL_APERTURE_FIELDS_ARRIVAL_001"
+      && frameState.adjacentHostTerritory?.enteredTerritory
+    );
+    const items = gatheringGroundLocal
+      ? this.entities
+          .filter((entity) => (
+            entity.root?.visible
+            && String(entity.distributionRole ?? "").startsWith("gathering_ground_")
+            && entity.homeCellIds?.includes(activeCellId)
+          ))
+          .map((entity) => {
+            const recipeId = entity.recipe?.id ?? entity.recipeId ?? "unknown_entity";
+            const relationshipRange = Number(entity.recipe?.ecologyGrammar?.relationshipRange);
+            const defaultRange = recipeId === "membrane_watcher_001" ? 4.6 : 4.9;
+            const workingRange = Number.isFinite(relationshipRange) ? relationshipRange : defaultRange;
+            const isWatcher = recipeId === "membrane_watcher_001";
+            return {
+              id: entity.instanceId ?? recipeId,
+              label: entity.recipe?.label ?? (isWatcher ? "Perimeter Watcher" : "Vascular Relay"),
+              cellId: activeCellId,
+              targetKind: isWatcher ? "living_watcher" : "living_relay",
+              root: entity.root,
+              focusRoots: [entity.root],
+              domains: entity.recipe?.chemistry?.domains ?? ["host", "organism"],
+              externalPriority: isWatcher ? 3.8 : 3.5,
+              attentionScope: "local_entity",
+              relationshipRange: workingRange,
+              maxRelationshipDistance: workingRange,
+              source: "EntitySystem:HC031W1_local_relationship_nouns"
+            };
+          })
+      : [];
+
+    frameState.entityAttentionCandidates = {
+      pass: "HC-031W1",
+      provider: "EntitySystem",
+      active: items.length > 0,
+      items,
+      rule: "nearby_gathering_ground_organisms_share_the_camera_aim_target_vocabulary",
+      targetingAuthority: false
+    };
   }
 
 
@@ -184,6 +230,12 @@ export class EntitySystem {
       const isTender = entity.recipe.id === "nursery_membrane_tender_001";
       entity.root.visible = isTender && this.tenderBonded;
     }
+    frameState.entityAttentionCandidates = {
+      pass: "HC-031W1",
+      provider: "EntitySystem",
+      active: false,
+      items: []
+    };
     frameState.entityState = {
       ...(frameState.entityState ?? {}),
       active: this.tenderBonded,

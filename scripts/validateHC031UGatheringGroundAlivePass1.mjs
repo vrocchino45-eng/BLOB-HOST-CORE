@@ -20,8 +20,8 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(/^0\.31\.(49|50|51|52|53)$/.test(pkg.version), `HC031U/V/W family version expected 0.31.49/50/51/52/53, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U') || main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"'), "main buildId left HC031U/V/W family");
+assert(/^0\.31\.(49|50|51|52|53|54)$/.test(pkg.version), `HC031U/V/W family version expected 0.31.49/50/51/52/53/54, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U') || main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"') || main.includes('buildId: "HC-031W1"'), "main buildId left HC031U/V/W family");
 
 const aperture = runtime.regions?.aperture_fields;
 assert(aperture, "Aperture runtime profile missing");
@@ -99,7 +99,7 @@ assert(adjacent.includes("activeCellChangesRequired: false"), "same-cell continu
 assert(adjacent.includes("teleportRequired: false"), "no-teleport law changed");
 assert(adjacent.includes("previousObservationCount"), "OBS3 telemetry dedupe missing");
 
-assert(/blob\.session\.telemetry\.v1\.(47|48|49|50|51)/.test(telemetry), "HC031U/V/W telemetry schema lineage missing");
+assert(/blob\.session\.telemetry\.v1\.(47|48|49|50|51|52)/.test(telemetry), "HC031U/V/W telemetry schema lineage missing");
 assert(telemetry.includes("observeGatheringGroundAlive(frameState)"), "Gathering Ground encounter telemetry observer missing");
 assert(telemetry.includes("gatheringGroundUniqueEncounterCompletions"), "encounter completion summary missing");
 assert(telemetry.includes("gatheringGroundAliveState"), "movement sample encounter snapshot missing");
@@ -107,7 +107,7 @@ assert(hud.includes("LIFE ${gatheringGroundAlive.completedCount"), "HUD LIFE rea
 assert(guide.includes("Stabilize + Pulse") && guide.includes("Stabilize + Absorb"), "Guide reactive grammar prompt missing");
 
 const locked = json("public/data/build/hc031uLockedParentHashes.json");
-const hc031wAuditSuccessor = main.includes('buildId: "HC-031W"');
+const hc031wAuditSuccessor = main.includes('buildId: "HC-031W"') || main.includes('buildId: "HC-031W1"');
 for (const [path, expected] of Object.entries(locked.files ?? {})) {
   if (hc031wAuditSuccessor && path === "src/targeting/TargetingSystem.js") continue; // W adds read-only publication only; behavior methods are hash-locked by validate:hc031w.
   assert(fs.existsSync(path), `locked file missing: ${path}`);

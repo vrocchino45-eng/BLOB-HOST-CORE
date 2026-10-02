@@ -52,6 +52,18 @@ export class TargetingSystem {
     this.candidateSwitchMargin = 0.62;
     this.candidateSnapshotsById = new Map();
 
+    // HC031W1: Stabilize becomes an explicit relationship modifier instead of a
+    // sticky auto-target. Deliberate right-stick motion may redirect a held
+    // relationship toward a centered local noun after a short dwell.
+    this.stabilizeSteerStickThreshold = 0.18;
+    this.stabilizeSteerAimThreshold = 0.70;
+    this.stabilizeSteerAimAdvantage = 0.10;
+    this.stabilizeSteerDwellSeconds = 0.09;
+    this.stabilizeSteerDwellId = "none";
+    this.stabilizeSteerDwellAge = 0;
+    this.stabilizeRedirectSequence = 0;
+    this.stabilizeMacroSuppressionSequence = 0;
+
     this.reticle = null;
     this.pointerLine = null;
     this.selectedHalo = null;
@@ -146,6 +158,8 @@ export class TargetingSystem {
     this.relationshipTargetId = "none";
     this.relationshipAge = 0;
     this.relationshipReleaseGraceRemaining = 0;
+    this.stabilizeSteerDwellId = "none";
+    this.stabilizeSteerDwellAge = 0;
     this.candidateSnapshotsById.clear();
     this.clearVisualArtifacts();
     this.regionClearSequence += 1;
@@ -188,8 +202,8 @@ export class TargetingSystem {
       attentionReason: this.attentionReason,
       attentionAimDot: -1,
       attentionLossGraceRemaining: 0,
-      aimOwnershipPolicy: "aim_selects_attention_verbs_modify_relationship",
-      verbRetargetingAllowed: false,
+      aimOwnershipPolicy: "aim_selects_attention_stabilize_rs_can_redirect_local_relationship",
+      verbRetargetingAllowed: Boolean(intent.verbs.includes("stabilize")),
       relationshipActive: false,
       relationshipPhase: "none",
       relationshipTargetId: "none",
@@ -197,7 +211,7 @@ export class TargetingSystem {
       relationshipVerbs: [],
       relationshipSequence: this.relationshipSequence,
       relationshipAge: 0,
-      handoffPolicy: "release_then_reacquire_by_aim",
+      handoffPolicy: "stabilize_rs_redirect_or_release_then_reacquire",
       regionClearSequence: this.regionClearSequence,
       lastRegionClearReason: this.lastRegionClearReason,
       visualArtifactsCleared: true
@@ -290,9 +304,15 @@ export class TargetingSystem {
       this.attentionReason = "aim_hold_confirmed";
     }
 
-    // An active verb may never choose a different noun. It simply protects the
-    // already aim-owned target from brief camera motion while the action resolves.
+    // HC031W1: ordinary verb activity still protects the aim-owned noun, but
+    // Stabilize + deliberate right-stick steering is allowed to redirect that
+    // relationship toward a clearly centered LOCAL noun. Macro Host bodies stay
+    // observable but no longer steal working intent once the territory is local.
     if (intent.active) {
+      if (this.handleStabilizeSteeringRedirect(dt, frameState, intent)) {
+        this.attentionLossGraceRemaining = this.attentionReleaseGraceSeconds;
+        return;
+      }
       this.attentionLossGraceRemaining = this.attentionReleaseGraceSeconds;
       return;
     }
@@ -327,6 +347,101 @@ export class TargetingSystem {
     if (this.attentionTarget?.root?.userData) {
       frameState.selectedObject = this.attentionTarget.root.userData;
     }
+  }
+
+  getTargetScope(target) {
+    if (!target) return "none";
+    if (target.attentionScope) return target.attentionScope;
+    if (target.localEntityAttention) return "local_entity";
+    if (target.externalAttention) return "macro_world";
+    return "local_object";
+  }
+
+  getControllerSteeringIntent(frameState) {
+    const input = frameState.input ?? {};
+    const source = frameState.inputSource ?? {};
+    const magnitude = Number.isFinite(source.rightStickMagnitude)
+      ? source.rightStickMagnitude
+      : Math.hypot(input.cameraLookX ?? 0, input.cameraLookY ?? 0);
+    return {
+      magnitude,
+      active: magnitude >= this.stabilizeSteerStickThreshold
+    };
+  }
+
+  isLocalRelationshipContext(frameState) {
+    return Boolean(
+      frameState.activeCellId === "CELL_APERTURE_FIELDS_ARRIVAL_001"
+      && frameState.adjacentHostTerritory?.enteredTerritory
+    );
+  }
+
+  isRelationshipEligibleForStabilize(target, frameState) {
+    if (!target) return false;
+    if (!this.isLocalRelationshipContext(frameState)) return true;
+
+    const scope = this.getTargetScope(target);
+    const targetingTuning = frameState.controllerOnboarding?.tuning?.targeting ?? {};
+    const fallbackRange = Number(targetingTuning.assistStateDistance ?? 5.2);
+    const authoredRangeValue = target.relationshipRange ?? target.maxRelationshipDistance;
+    const authoredRange = Number.isFinite(authoredRangeValue) ? Number(authoredRangeValue) : NaN;
+    const workingRange = Number.isFinite(authoredRange) ? Math.max(2.4, authoredRange) : Math.max(5.2, fallbackRange);
+    const distance = Number(target.distance ?? Infinity);
+
+    if (scope === "macro_world") return distance <= workingRange;
+    if (scope === "local_entity" || scope === "local_object") return distance <= workingRange;
+    return false;
+  }
+
+  handleStabilizeSteeringRedirect(dt, frameState, intent) {
+    const stabilizeHeld = intent.verbs.includes("stabilize");
+    const steering = this.getControllerSteeringIntent(frameState);
+    const candidate = this.candidate;
+    const candidateId = candidate?.recipe?.id ?? "none";
+    const attentionId = this.attentionTargetId ?? "none";
+
+    if (!stabilizeHeld || !steering.active || !candidate || candidateId === "none" || candidateId === attentionId) {
+      this.stabilizeSteerDwellId = "none";
+      this.stabilizeSteerDwellAge = 0;
+      return false;
+    }
+
+    const candidateScope = this.getTargetScope(candidate);
+    // Once Gathering Ground is local, LT+RS is a working-noun steering gesture.
+    // Do not redirect from a local organism back onto the whole macro territory.
+    if (this.isLocalRelationshipContext(frameState) && candidateScope === "macro_world") {
+      this.stabilizeSteerDwellId = "none";
+      this.stabilizeSteerDwellAge = 0;
+      return false;
+    }
+
+    const candidateAim = Number.isFinite(candidate.aimDot) ? candidate.aimDot : -1;
+    const currentAim = Number.isFinite(this.attentionTarget?.aimDot) ? this.attentionTarget.aimDot : -1;
+    const locallyEligible = this.isRelationshipEligibleForStabilize(candidate, frameState);
+    const deliberate = locallyEligible
+      && candidateAim >= this.stabilizeSteerAimThreshold
+      && (candidateScope === "local_entity" || candidateAim - currentAim >= this.stabilizeSteerAimAdvantage);
+
+    if (!deliberate) {
+      this.stabilizeSteerDwellId = "none";
+      this.stabilizeSteerDwellAge = 0;
+      return false;
+    }
+
+    if (this.stabilizeSteerDwellId !== candidateId) {
+      this.stabilizeSteerDwellId = candidateId;
+      this.stabilizeSteerDwellAge = 0;
+      return true;
+    }
+
+    this.stabilizeSteerDwellAge += Math.max(0, dt ?? 0);
+    if (this.stabilizeSteerDwellAge < this.stabilizeSteerDwellSeconds) return true;
+
+    this.setAttentionTarget(candidate, "stabilize_rs_redirect");
+    this.stabilizeRedirectSequence += 1;
+    this.stabilizeSteerDwellId = "none";
+    this.stabilizeSteerDwellAge = 0;
+    return true;
   }
 
   setAttentionTarget(target, reason) {
@@ -371,14 +486,25 @@ export class TargetingSystem {
 
     if (intent.active && this.attentionTarget) {
       this.relationshipReleaseGraceRemaining = this.relationshipReleaseGraceSeconds;
+      const stabilizeHeld = intent.verbs.includes("stabilize");
+      const stabilizeEligible = !stabilizeHeld || this.isRelationshipEligibleForStabilize(this.attentionTarget, frameState);
 
-      if (!this.relationshipTarget || this.relationshipTargetId !== this.attentionTargetId) {
-        this.setRelationshipTarget(this.attentionTarget, "verb_modified_aim_owned_target");
+      if (!stabilizeEligible) {
+        if (this.relationshipTarget) {
+          this.releaseRelationship("stabilize_macro_relationship_suppressed_local_context");
+          this.stabilizeMacroSuppressionSequence += 1;
+        }
       } else {
-        this.relationshipTarget = this.attentionTarget;
+        if (!this.relationshipTarget || this.relationshipTargetId !== this.attentionTargetId) {
+          const reason = this.attentionReason === "stabilize_rs_redirect"
+            ? "stabilize_rs_redirected_aim_owned_target"
+            : "verb_modified_aim_owned_target";
+          this.setRelationshipTarget(this.attentionTarget, reason);
+        } else {
+          this.relationshipTarget = this.attentionTarget;
+        }
+        this.relationshipAge += dt;
       }
-
-      this.relationshipAge += dt;
     } else if (this.relationshipTarget) {
       this.relationshipReleaseGraceRemaining = Math.max(0, this.relationshipReleaseGraceRemaining - dt);
       this.relationshipAge += dt;
@@ -453,7 +579,7 @@ export class TargetingSystem {
     // HC031T4: world-scale Host bodies can participate in the same aim-owned
     // attention grammar without pretending to be ChemObjects. Providers publish
     // read-only candidates with one semantic ID and multiple visible focus roots.
-    for (const external of this.getWorldAttentionCandidates()) {
+    for (const external of this.getExternalAttentionCandidates()) {
       const externalId = external?.id ?? "none";
       if (externalId === "none" || excludedObjectIds.has(externalId)) continue;
       if (allowedCells.size > 0 && external.cellId && !allowedCells.has(external.cellId)) continue;
@@ -484,9 +610,17 @@ export class TargetingSystem {
     return best;
   }
 
+  getExternalAttentionCandidates() {
+    const worldProvider = this.frameState.worldAttentionCandidates ?? {};
+    const entityProvider = this.frameState.entityAttentionCandidates ?? {};
+    const world = worldProvider.active && Array.isArray(worldProvider.items) ? worldProvider.items : [];
+    const entities = entityProvider.active && Array.isArray(entityProvider.items) ? entityProvider.items : [];
+    return [...world, ...entities];
+  }
+
   getWorldAttentionCandidates() {
-    const provider = this.frameState.worldAttentionCandidates ?? {};
-    return provider.active && Array.isArray(provider.items) ? provider.items : [];
+    // Compatibility alias retained for older validators/tools.
+    return this.getExternalAttentionCandidates();
   }
 
   normalizeWorldAttentionCandidate(external) {
@@ -517,6 +651,11 @@ export class TargetingSystem {
       root: bestRoot,
       cellId: external.cellId ?? "none",
       externalAttention: true,
+      localEntityAttention: external.attentionScope === "local_entity",
+      attentionScope: external.attentionScope ?? "macro_world",
+      maxRelationshipDistance: Number.isFinite(external.maxRelationshipDistance) ? external.maxRelationshipDistance : null,
+      relationshipRange: Number.isFinite(external.relationshipRange) ? external.relationshipRange : null,
+      targetKind: external.targetKind ?? (external.attentionScope === "local_entity" ? "living_entity" : "host_territory"),
       externalPriority: Number.isFinite(external.externalPriority) ? external.externalPriority : 0,
       worldAttentionSource: external.source ?? "world_attention_provider",
       recipe: {
@@ -628,15 +767,17 @@ export class TargetingSystem {
     const stabilizeBlocksRedirectEvidence = Boolean(stabilizeProtectsAttention && steeringIntentActive && redirectEvidencePresent);
 
     let findingCode = "observe_only";
-    if (stabilizeBlocksRedirectEvidence) findingCode = "stabilize_protects_old_attention_during_rs_redirect";
+    if (this.attentionReason === "stabilize_rs_redirect") findingCode = "stabilize_rs_redirected_local_relationship";
+    else if (stabilizeHeld && this.isLocalRelationshipContext(frameState) && attentionTarget && !this.isRelationshipEligibleForStabilize(attentionTarget, frameState)) findingCode = "stabilize_macro_relationship_suppressed_local_context";
+    else if (stabilizeBlocksRedirectEvidence) findingCode = "stabilize_redirect_pending_dwell";
     else if (stabilizeHeld && relationshipBeyondAssistRange) findingCode = "stabilize_relationship_beyond_assist_range";
     else if (stabilizeHeld && relationshipTarget) findingCode = "stabilize_relationship_held";
     else if (steeringIntentActive && candidateDiffersFromAttention) findingCode = "rs_redirect_candidate_visible";
 
     return {
-      pass: "HC-031W",
-      authority: "read_only_controller_targeting_audit",
-      behaviorChanged: false,
+      pass: "HC-031W1",
+      authority: "controller_targeting_relationship_truth",
+      behaviorChanged: true,
       stabilizeHeld,
       stabilizeTriggerValue: Number(stabilizeTriggerValue.toFixed(3)),
       rightStickMagnitude: Number(rightStickMagnitude.toFixed(3)),
@@ -646,16 +787,16 @@ export class TargetingSystem {
       steeringIntentActive,
       verbIntentActive: Boolean(intent.active),
       candidateId,
-      candidateScope: candidate?.externalAttention ? "macro_world" : (candidate ? "local_object" : "none"),
+      candidateScope: this.getTargetScope(candidate),
       candidateDistance: Number(candidateDistance.toFixed(3)),
       candidateAimDot: Number(candidateAim.toFixed(3)),
       attentionTargetId: attentionId,
-      attentionScope: attentionTarget?.externalAttention ? "macro_world" : (attentionTarget ? "local_object" : "none"),
+      attentionScope: this.getTargetScope(attentionTarget),
       attentionDistance: Number(attentionDistance.toFixed(3)),
       attentionAimDot: Number(attentionAim.toFixed(3)),
       attentionPhase: this.attentionPhase,
       relationshipTargetId: relationshipId,
-      relationshipScope: relationshipTarget?.externalAttention ? "macro_world" : (relationshipTarget ? "local_object" : "none"),
+      relationshipScope: this.getTargetScope(relationshipTarget),
       relationshipDistance: Number(relationshipDistance.toFixed(3)),
       relationshipPhase: relationshipTarget ? (intent.active ? "engaged" : "releasing") : "none",
       candidateDiffersFromAttention,
@@ -668,8 +809,12 @@ export class TargetingSystem {
       candidateRelationshipDistanceDelta: relationshipTarget && candidate
         ? Number((relationshipDistance - candidateDistance).toFixed(3))
         : 0,
-      currentPolicy: "aim_selects_attention_active_verb_protects_owner",
-      proposedAuditQuestion: "should_deliberate_rs_motion_while_stabilizing_be_allowed_to_redirect_relationship",
+      currentPolicy: "aim_selects_attention_stabilize_plus_rs_redirects_local_relationship",
+      stabilizeRedirectSequence: this.stabilizeRedirectSequence,
+      stabilizeMacroSuppressionSequence: this.stabilizeMacroSuppressionSequence,
+      stabilizeSteerDwellId: this.stabilizeSteerDwellId,
+      stabilizeSteerDwellAge: Number(this.stabilizeSteerDwellAge.toFixed(3)),
+      proposedAuditQuestion: "does_stabilize_plus_rs_now_follow_deliberate_local_aim_without_macro_target_theft",
       findingCode
     };
   }
@@ -718,7 +863,7 @@ export class TargetingSystem {
       targetKind,
       targetCellId: effective.cellId ?? effective.root?.userData?.cellId ?? "none",
       targetLabel: recipe.label ?? recipe.id,
-      targetScope: effective.externalAttention ? "macro_world" : "local_object",
+      targetScope: this.getTargetScope(effective),
       worldAttentionSource: effective.worldAttentionSource ?? "none",
       domains,
       distance: effective.distance,
@@ -736,7 +881,7 @@ export class TargetingSystem {
       focusScore: effective.score ?? 0,
       candidateId: candidate?.recipe?.id ?? "none",
       candidateKind,
-      candidateScope: candidate?.externalAttention ? "macro_world" : (candidate ? "local_object" : "none"),
+      candidateScope: this.getTargetScope(candidate),
       candidateDistance: candidate?.distance ?? 0,
       candidateAimDot: candidate?.aimDot ?? -1,
       candidateScore: candidate?.aimOwnershipScore ?? 0,
@@ -750,7 +895,7 @@ export class TargetingSystem {
       attentionReason: this.attentionReason,
       attentionAimDot,
       attentionLossGraceRemaining: this.attentionLossGraceRemaining,
-      aimOwnershipPolicy: "aim_selects_attention_verbs_modify_relationship",
+      aimOwnershipPolicy: "aim_selects_attention_stabilize_rs_can_redirect_local_relationship",
       verbRetargetingAllowed: false,
       relationshipActive,
       relationshipPhase,
@@ -761,7 +906,7 @@ export class TargetingSystem {
       relationshipAge: this.relationshipAge,
       relationshipReason: this.lastRelationshipReason ?? "none",
       releaseGraceRemaining: this.relationshipReleaseGraceRemaining,
-      handoffPolicy: "release_then_reacquire_by_aim",
+      handoffPolicy: "stabilize_rs_redirect_or_release_then_reacquire",
       visualPolicy: relationshipActive
         ? "diegetic_relationship_glyph"
         : this.attentionPhase === "engaged"
@@ -774,9 +919,9 @@ export class TargetingSystem {
       lastRegionClearReason: this.lastRegionClearReason,
       visualArtifactsCleared: !relationshipActive,
       attentionDistance: attentionTarget?.distance ?? 0,
-      attentionScope: attentionTarget?.externalAttention ? "macro_world" : (attentionTarget ? "local_object" : "none"),
+      attentionScope: this.getTargetScope(attentionTarget),
       relationshipDistance: this.relationshipTarget?.distance ?? 0,
-      relationshipScope: this.relationshipTarget?.externalAttention ? "macro_world" : (this.relationshipTarget ? "local_object" : "none")
+      relationshipScope: this.getTargetScope(this.relationshipTarget)
     };
     frameState.controllerTargetingAudit = this.buildControllerTargetingAudit(frameState, intent, { candidate, attentionTarget, relationshipTarget: this.relationshipTarget });
   }
@@ -785,7 +930,8 @@ export class TargetingSystem {
     const mappedKind = frameState.targetFocus?.targetKinds?.[id];
     if (mappedKind) return mappedKind;
 
-    if (target.externalAttention) return "host_territory";
+    if (target.localEntityAttention || target.attentionScope === "local_entity") return target.targetKind ?? "living_entity";
+    if (target.externalAttention) return target.targetKind ?? "host_territory";
     if (target.isAbsorbable) return "absorbable";
     if (target.isScar) return "scar_resists";
     if (target.isSignal) return "signal_listen";

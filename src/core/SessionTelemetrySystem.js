@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.51";
+    this.schemaVersion = "blob.session.telemetry.v1.52";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -1007,7 +1007,7 @@ export class SessionTelemetrySystem {
 
   observeControllerTargetingAudit(frameState) {
     const audit = frameState.controllerTargetingAudit ?? {};
-    if (audit.pass !== "HC-031W") return;
+    if (!["HC-031W", "HC-031W1"].includes(audit.pass)) return;
     const key = [
       audit.findingCode ?? "none",
       audit.stabilizeHeld ? 1 : 0,
@@ -1033,7 +1033,7 @@ export class SessionTelemetrySystem {
         relationshipDistance: round(audit.relationshipDistance ?? 0)
       },
       developer: {
-        pass: "HC-031W",
+        pass: audit.pass ?? "HC-031W1",
         fromFinding: this.lastControllerTargetingAuditFinding,
         candidateId: audit.candidateId ?? "none",
         candidateScope: audit.candidateScope ?? "none",
@@ -1056,6 +1056,10 @@ export class SessionTelemetrySystem {
         assistRange: round(audit.assistRange ?? 0),
         candidateRelationshipDistanceDelta: round(audit.candidateRelationshipDistanceDelta ?? 0),
         currentPolicy: audit.currentPolicy ?? "unknown",
+        stabilizeRedirectSequence: audit.stabilizeRedirectSequence ?? 0,
+        stabilizeMacroSuppressionSequence: audit.stabilizeMacroSuppressionSequence ?? 0,
+        stabilizeSteerDwellId: audit.stabilizeSteerDwellId ?? "none",
+        stabilizeSteerDwellAge: round(audit.stabilizeSteerDwellAge ?? 0),
         gameplayAuthority: false,
         targetingAuthorityChanged: false,
         controllerMappingAuthorityChanged: false
@@ -2867,7 +2871,7 @@ export class SessionTelemetrySystem {
       attentionAimDot: round(frameState.targeting?.attentionAimDot ?? -1),
       attentionLossGraceRemaining: round(frameState.targeting?.attentionLossGraceRemaining ?? 0),
       relationshipTarget: this.aliasSource(frameState.targeting?.relationshipTargetId ?? "none"),
-      controllerTargetingAuditState: frameState.controllerTargetingAudit?.pass === "HC-031W" ? {
+      controllerTargetingAuditState: ["HC-031W", "HC-031W1"].includes(frameState.controllerTargetingAudit?.pass) ? {
         finding: frameState.controllerTargetingAudit.findingCode ?? "none",
         stabilizeHeld: Boolean(frameState.controllerTargetingAudit.stabilizeHeld),
         stabilizeTriggerValue: round(frameState.controllerTargetingAudit.stabilizeTriggerValue ?? 0),
@@ -2881,7 +2885,9 @@ export class SessionTelemetrySystem {
         relationshipDistance: round(frameState.controllerTargetingAudit.relationshipDistance ?? 0),
         redirectEvidencePresent: Boolean(frameState.controllerTargetingAudit.redirectEvidencePresent),
         stabilizeBlocksRedirectEvidence: Boolean(frameState.controllerTargetingAudit.stabilizeBlocksRedirectEvidence),
-        relationshipBeyondAssistRange: Boolean(frameState.controllerTargetingAudit.relationshipBeyondAssistRange)
+        relationshipBeyondAssistRange: Boolean(frameState.controllerTargetingAudit.relationshipBeyondAssistRange),
+        stabilizeRedirectSequence: frameState.controllerTargetingAudit.stabilizeRedirectSequence ?? 0,
+        stabilizeMacroSuppressionSequence: frameState.controllerTargetingAudit.stabilizeMacroSuppressionSequence ?? 0
       } : null,
       surfaceCapabilityAuditState: frameState.surfaceCapabilityAudit?.pass === "HC-031W" ? {
         authoredSurfaceCount: frameState.surfaceCapabilityAudit.authoredSurfaceCount ?? 0,
@@ -3398,6 +3404,14 @@ export class SessionTelemetrySystem {
       controllerTargetingStabilizeRedirectBlocks: this.events.filter((event) => (
         event.type === "control.targeting_audit.changed"
         && event.developer?.stabilizeBlocksRedirectEvidence === true
+      )).length,
+      controllerTargetingStabilizeSteerRedirects: this.events.filter((event) => (
+        event.type === "control.targeting_audit.changed"
+        && event.percept?.finding === "stabilize_rs_redirected_local_relationship"
+      )).length,
+      controllerTargetingMacroRelationshipSuppressions: this.events.filter((event) => (
+        event.type === "control.targeting_audit.changed"
+        && event.percept?.finding === "stabilize_macro_relationship_suppressed_local_context"
       )).length,
       controllerTargetingFarRelationshipStates: this.events.filter((event) => (
         event.type === "control.targeting_audit.changed"

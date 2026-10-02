@@ -30,10 +30,10 @@ const extractTiming = (source) => {
   return `${source.slice(start, end + 3)}\n`;
 };
 
-assert(/^0\.31\.(52|53)$/.test(pkg.version), `V/W lineage expected package 0.31.52/53, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"'), "HC031V/W build ID missing");
-assert(main.includes('buildLabel: "Living Response Readability / Telemetry Truth"') || main.includes('buildLabel: "Controller / Targeting / Surface Interaction Audit"'), "HC031V/W build label missing");
-assert(/blob\.session\.telemetry\.v1\.(50|51)/.test(telemetry), "telemetry v1.50/1.51 lineage missing");
+assert(/^0\.31\.(52|53|54)$/.test(pkg.version), `V/W/W1 lineage expected package 0.31.52/53/54, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"') || main.includes('buildId: "HC-031W1"'), "HC031V/W/W1 build ID missing");
+assert(main.includes('buildLabel: "Living Response Readability / Telemetry Truth"') || main.includes('buildLabel: "Controller / Targeting / Surface Interaction Audit"') || main.includes('buildLabel: "Stabilized Aim + Local Contact Proof"'), "HC031V/W/W1 build label missing");
+assert(/blob\.session\.telemetry\.v1\.(50|51|52)/.test(telemetry), "telemetry v1.50/1.51/1.52 lineage missing");
 assert(contract.parentBuildId === "HC-031U2.1", "contract parent must remain accepted U2.1");
 assert(contract.scope === "presentation_and_read_only_telemetry_only", "V scope drifted from readability/telemetry-only");
 
@@ -65,7 +65,8 @@ for (const signature of Object.values(contract.responseSignatures ?? {}).flat())
 }
 assert(alive.includes("responseRead:"), "response readability frame-state publication missing");
 assert(alive.includes("first_read_and_known_recurring_answers_reuse_existing_bodies_but_present_distinct_response_signatures"), "presentation-only response rule missing");
-assert(alive.includes("newDrawCallIntent: 5"), "visual budget changed; V should reuse existing draw calls");
+const hc031w1Successor = main.includes('buildId: "HC-031W1"');
+assert(alive.includes(hc031w1Successor ? "newDrawCallIntent: 8" : "newDrawCallIntent: 5"), hc031w1Successor ? "W1 three-surface visual budget missing" : "visual budget changed; V should reuse existing draw calls");
 assert(hud.includes("RESP ${responseRead}"), "HUD latest-answer readout missing");
 assert(guide.includes("changed visible signature"), "Guide recurrence-readability wording missing");
 

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { applyCrawlableSurfaceMetadata } from "../world/CrawlableSurfaceRegistry.js";
 
 const CELL_ID = "CELL_APERTURE_FIELDS_ARRIVAL_001";
 const TERRITORY_ID = "gathering_ground_cluster";
@@ -98,6 +99,10 @@ export class GatheringGroundAliveSystem {
     this.echoInstances = null;
     this.echoDummy = new THREE.Object3D();
     this.relayLinePositions = null;
+    this.contactSurfaces = [];
+    this.watcherMembraneSurface = null;
+    this.relayBraceSurface = null;
+    this.ridgeResidueSurface = null;
 
     this.center = new THREE.Vector3();
     this.ridge = new THREE.Vector3();
@@ -215,6 +220,80 @@ export class GatheringGroundAliveSystem {
     this.echoInstances.name = "gathering_ground_ridge_echo_train";
     this.echoInstances.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.root.add(this.echoInstances);
+
+    this.createContactSurfaces();
+  }
+
+  createContactSurfaces() {
+    const membraneMaterial = new THREE.MeshStandardMaterial({
+      color: 0x397d78,
+      emissive: 0x173e3d,
+      emissiveIntensity: 0.12,
+      roughness: 0.88,
+      transparent: true,
+      opacity: 0.36
+    });
+    const watcherPad = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 14), membraneMaterial);
+    watcherPad.name = "gathering_ground_watcher_membrane_work_surface";
+    watcherPad.scale.set(2.2, 0.28, 1.28);
+    applyCrawlableSurfaceMetadata(watcherPad, {
+      surfaceId: "GATHERING_GROUND_WATCHER_MEMBRANE",
+      profileId: "membrane_stable",
+      cellId: CELL_ID,
+      contactPriority: 0.12,
+      regionalRole: "watcher_relationship_work_surface"
+    });
+    watcherPad.userData.gatheringGroundSurfaceRole = "watcher_membrane_work_surface";
+    this.root.add(watcherPad);
+    this.contactSurfaces.push(watcherPad);
+    this.watcherMembraneSurface = watcherPad;
+
+    const braceMaterial = new THREE.MeshStandardMaterial({
+      color: 0x784342,
+      emissive: 0x34191a,
+      emissiveIntensity: 0.13,
+      roughness: 0.95,
+      transparent: true,
+      opacity: 0.76
+    });
+    const relayBrace = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 1.85, 8, 16), braceMaterial);
+    relayBrace.name = "gathering_ground_relay_scar_brace_surface";
+    relayBrace.rotation.z = Math.PI * 0.40;
+    relayBrace.rotation.x = -Math.PI * 0.10;
+    applyCrawlableSurfaceMetadata(relayBrace, {
+      surfaceId: "GATHERING_GROUND_RELAY_SCAR_BRACE",
+      profileId: "scar_brace",
+      cellId: CELL_ID,
+      contactPriority: 0.18,
+      regionalRole: "relay_relationship_brace_surface"
+    });
+    relayBrace.userData.gatheringGroundSurfaceRole = "relay_scar_brace_surface";
+    this.root.add(relayBrace);
+    this.contactSurfaces.push(relayBrace);
+    this.relayBraceSurface = relayBrace;
+
+    const residueMaterial = new THREE.MeshStandardMaterial({
+      color: 0x90785a,
+      emissive: 0x3d3023,
+      emissiveIntensity: 0.09,
+      roughness: 1.0,
+      transparent: true,
+      opacity: 0.54
+    });
+    const residuePad = new THREE.Mesh(new THREE.SphereGeometry(0.86, 20, 12), residueMaterial);
+    residuePad.name = "gathering_ground_ridge_return_residue_surface";
+    residuePad.scale.set(1.7, 0.24, 1.05);
+    applyCrawlableSurfaceMetadata(residuePad, {
+      surfaceId: "GATHERING_GROUND_RIDGE_RETURN_RESIDUE",
+      profileId: "residue_weak",
+      cellId: CELL_ID,
+      contactPriority: 0.10,
+      regionalRole: "cross_territory_return_contact_surface"
+    });
+    residuePad.userData.gatheringGroundSurfaceRole = "ridge_return_residue_surface";
+    this.root.add(residuePad);
+    this.contactSurfaces.push(residuePad);
+    this.ridgeResidueSurface = residuePad;
   }
 
   resetState() {
@@ -326,6 +405,7 @@ export class GatheringGroundAliveSystem {
     this.center.copy(anchor).add(this.tempA.set(3.5, 8.5, -56.0));
     this.ridge.copy(anchor).add(this.tempA.set(20.0, 1.7, -46.0));
 
+    this.updateContactSurfaces(watcher, relayA, relayB);
     this.updateRelayPresentation(relayA, relayB, safeDt);
     this.updateWatcherAmbient(watcher, safeDt);
     this.updateReactiveEncounters(frameState, watcher, relayA, relayB, safeDt);
@@ -333,6 +413,29 @@ export class GatheringGroundAliveSystem {
     this.updateInteractionMemory(frameState, safeDt);
     this.updateIgnoredEncounters();
     this.publish(frameState);
+  }
+
+  updateContactSurfaces(_watcher, _relayA, _relayB) {
+    // Contact anatomy is anchored to the canonical Aperture world anchor rather
+    // than following animated entity roots. Organisms may breathe/hover above the
+    // anatomy, but planted suction points remain stable in world space.
+    const anchor = this.apertureFieldsArrivalSystem.entryAnchor;
+
+    if (this.watcherMembraneSurface) {
+      this.watcherMembraneSurface.position.copy(anchor).add(this.tempB.set(7.4, 8.68, -54.1));
+    }
+
+    if (this.relayBraceSurface) {
+      this.relayBraceSurface.position.copy(anchor).add(this.tempB.set(-1.7, 8.18, -56.1));
+      this.relayBraceSurface.rotation.z = 4.092;
+      this.relayBraceSurface.rotation.x = -Math.PI * 0.10;
+    }
+
+    if (this.ridgeResidueSurface) {
+      this.ridgeResidueSurface.position.copy(this.ridge);
+      this.ridgeResidueSurface.position.y -= 0.38;
+      this.ridgeResidueSurface.position.z += 0.18;
+    }
   }
 
   entity(id) {
@@ -1023,7 +1126,7 @@ export class GatheringGroundAliveSystem {
                     : "release_move_away_and_return_later_to_see_the_understood_ecology_answer_again";
 
     frameState.gatheringGroundAlive = {
-      pass: "HC-031V",
+      pass: "HC-031W1",
       active: this.active,
       territoryId: TERRITORY_ID,
       encounterCount: ENCOUNTER_DEFS.length,
@@ -1058,8 +1161,16 @@ export class GatheringGroundAliveSystem {
         entityBehaviorOwner: "EntitySystem",
         relationshipInterpretationOwner: "EntityRelationshipGrammarSystem"
       },
+      contactSurfaceProof: {
+        authoredSurfaceCount: this.contactSurfaces.length,
+        surfaceIds: this.contactSurfaces.map((surface) => surface.userData.crawlableSurfaceId ?? surface.name),
+        profileIds: this.contactSurfaces.map((surface) => surface.userData.crawlableSurfaceProfileId ?? "none"),
+        targetingSuppressed: this.contactSurfaces.every((surface) => surface.userData.targetingSuppressed === true),
+        contactAuthority: "CoreSurfaceTruthSystem",
+        movementAuthority: "PlayerMovementController"
+      },
       visualBudget: {
-        newDrawCallIntent: 5,
+        newDrawCallIntent: 8,
         instancedEchoBeads: 7,
         newParticles: 0,
         newLights: 0
@@ -1084,7 +1195,8 @@ export class GatheringGroundAliveSystem {
       routeAuthority: false,
       saveStateAuthority: false,
       rule: "exact_chord_initiates_relationship_intent_then_compatible_stabilized_relationship_sustains_the_host_answer",
-      readabilityRule: "first_read_and_known_recurring_answers_reuse_existing_bodies_but_present_distinct_response_signatures"
+      readabilityRule: "first_read_and_known_recurring_answers_reuse_existing_bodies_but_present_distinct_response_signatures",
+      contactRule: "three_authored_targeting_suppressed_surfaces_add_physical_working_context_without_new_progression"
     };
   }
 }

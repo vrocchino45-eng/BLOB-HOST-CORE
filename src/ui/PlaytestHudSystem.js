@@ -218,8 +218,8 @@ export class PlaytestHudSystem {
         ? "-"
         : this.shorten(id.replace(/^gathering_ground_/, "gg_").replace(/_001$/, ""), 14);
     const auditDistance = (value) => Number.isFinite(value) && value > 0 ? value.toFixed(1) : "-";
-    const targetingAuditLine = inApertureFields && controllerTargetingAudit.pass === "HC-031W"
-      ? `W CTL LT${Number(controllerTargetingAudit.stabilizeTriggerValue ?? 0).toFixed(2)} RS${Number(controllerTargetingAudit.rightStickMagnitude ?? 0).toFixed(2)} · C ${auditId(controllerTargetingAudit.candidateId)}@${auditDistance(controllerTargetingAudit.candidateDistance)} · A ${auditId(controllerTargetingAudit.attentionTargetId)}@${auditDistance(controllerTargetingAudit.attentionDistance)} · R ${auditId(controllerTargetingAudit.relationshipTargetId)}@${auditDistance(controllerTargetingAudit.relationshipDistance)} · ${controllerTargetingAudit.findingCode ?? "observe_only"}`
+    const targetingAuditLine = inApertureFields && ["HC-031W", "HC-031W1"].includes(controllerTargetingAudit.pass)
+      ? `W1 CTL LT${Number(controllerTargetingAudit.stabilizeTriggerValue ?? 0).toFixed(2)} RS${Number(controllerTargetingAudit.rightStickMagnitude ?? 0).toFixed(2)} · C ${auditId(controllerTargetingAudit.candidateId)}@${auditDistance(controllerTargetingAudit.candidateDistance)} · A ${auditId(controllerTargetingAudit.attentionTargetId)}@${auditDistance(controllerTargetingAudit.attentionDistance)} · R ${auditId(controllerTargetingAudit.relationshipTargetId)}@${auditDistance(controllerTargetingAudit.relationshipDistance)} · ${controllerTargetingAudit.findingCode ?? "observe_only"}`
       : "";
     const surfaceAuditLine = inApertureFields && surfaceCapabilityAudit.pass === "HC-031W"
       ? `SURF ${surfaceCapabilityAudit.authoredSurfaceCount ?? 0} · ${surfaceCapabilityAudit.nearestValid ? `${surfaceCapabilityAudit.nearestProfileId ?? "unknown"}@${auditDistance(surfaceCapabilityAudit.nearestDistance)}` : "NONE"} · ${surfaceCapabilityAudit.findingCode ?? "audit_pending"}`
