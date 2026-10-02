@@ -1,0 +1,48 @@
+{
+  "buildId": "HC-031W",
+  "buildLabel": "Controller / Targeting / Surface Interaction Audit",
+  "parentBuildId": "HC-031V",
+  "packageVersion": "0.31.53",
+  "telemetrySchema": "blob.session.telemetry.v1.51",
+  "mode": "audit_only",
+  "scope": "controller_targeting_and_surface_capability_observability_only",
+  "behaviorChangesAllowed": false,
+  "questions": [
+    "When Stabilize is held, does deliberate right-stick camera steering expose a different candidate while the old attention/relationship remains protected?",
+    "How often is a Stabilize relationship beyond the existing assist-range reference?",
+    "How many explicitly authored crawlable surfaces exist in the active Aperture/Gathering Ground cell?"
+  ],
+  "auditThresholds": {
+    "rightStickSteeringIntent": 0.18,
+    "attentionRedirectAimAdvantage": 0.22,
+    "surfaceProbeRange": 1.28,
+    "assistRangeSource": "controllerOnboarding.tuning.targeting.assistStateDistance"
+  },
+  "expectedCurrentFinding": {
+    "activeVerbAttentionPolicy": "aim_selects_attention_active_verb_protects_owner",
+    "gatheringGroundSurfaceAuthoring": "none_added_by_U_or_V"
+  },
+  "lockedBehaviorMethodHashes": {
+    "TargetingSystem.updateAttention": "da89e27f7765f1becd457a8194a249d1eb33f95afddd252f28e764cc3560f882",
+    "TargetingSystem.updateRelationship": "82082d289e325b7eaddcd220a54441b5a40e67ec7c2ca941667ab9f2ccb80fae",
+    "TargetingSystem.pickTarget": "75dc76f04710bf69ce5567d25f87eb7428740b1b52f79a59e9e051179f296dbe",
+    "TargetingSystem.scoreCandidate": "731cf308531882f12cd70c8273d2901cae4af27d24614746b9626e9030b946d3",
+    "CoreSurfaceTruthSystem.refreshCandidates": "6a943329b0eb02a47b90248405fde88a96436e3e81252f845ce7fb43f37c1358",
+    "CoreSurfaceTruthSystem.sampleNearestSurface": "93c6130c7506bb37acc73b8d3cfccc2c109750ddbdde54f9a834f57f75e5ffd1"
+  },
+  "lockedFileHashes": {
+    "src/input/InputSystem.js": "5117dc831d6dcc5be0fd9f38fc58c6a8eb125dd6f30a34c910d6ea07e669c0f1",
+    "src/player/PlayerMovementController.js": "9c0542b4606fdfa3e9ef35e4bb8b6eafb4b1c86845a3ed594caed629fc913f4b",
+    "src/fields/GatheringGroundAliveSystem.js": "c30db39fe4ffdbbb143b73b5942f7081ab7d4475be44e9d8121d2fda20b06437",
+    "src/world/CrawlableSurfaceRegistry.js": "094e43d5709e0cef8ab9452c3fbc7f322ae6c607eb9df8e72073cfc627ba72c0"
+  },
+  "telemetryEvents": [
+    "control.targeting_audit.changed",
+    "world.surface_capability.audit_changed"
+  ],
+  "humanAcceptance": {
+    "controller": "Produce at least one deliberate LT+RS case where candidate differs from attention/relationship and inspect whether stabilize_protects_old_attention_during_rs_redirect appears.",
+    "surfaces": "Inside Gathering Ground, confirm SURF reports the current authored surface count before W1 adds any surface capability.",
+    "export": "Shift+T"
+  }
+}

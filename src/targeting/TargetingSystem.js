@@ -589,12 +589,98 @@ export class TargetingSystem {
     return target.set(0, 0, 0);
   }
 
+  buildControllerTargetingAudit(frameState, intent, {
+    candidate = this.candidate,
+    attentionTarget = this.attentionTarget,
+    relationshipTarget = this.relationshipTarget
+  } = {}) {
+    const input = frameState.input ?? {};
+    const source = frameState.inputSource ?? {};
+    const targetingTuning = frameState.controllerOnboarding?.tuning?.targeting ?? {};
+    const rightStickMagnitude = Number.isFinite(source.rightStickMagnitude)
+      ? source.rightStickMagnitude
+      : Math.hypot(input.cameraLookX ?? 0, input.cameraLookY ?? 0);
+    const stabilizeHeld = Boolean(input.stabilizeHeld || input.resonanceHeld);
+    const stabilizeTriggerValue = Number.isFinite(source.stabilizeTriggerValue)
+      ? source.stabilizeTriggerValue
+      : (stabilizeHeld ? 1 : 0);
+    const steeringIntentThreshold = 0.18;
+    const steeringIntentActive = rightStickMagnitude >= steeringIntentThreshold;
+
+    const candidateId = candidate?.recipe?.id ?? "none";
+    const attentionId = attentionTarget?.recipe?.id ?? "none";
+    const relationshipId = relationshipTarget?.recipe?.id ?? "none";
+    const candidateAim = Number.isFinite(candidate?.aimDot) ? candidate.aimDot : -1;
+    const attentionAim = Number.isFinite(attentionTarget?.aimDot) ? attentionTarget.aimDot : -1;
+    const candidateDistance = Number.isFinite(candidate?.distance) ? candidate.distance : 0;
+    const attentionDistance = Number.isFinite(attentionTarget?.distance) ? attentionTarget.distance : 0;
+    const relationshipDistance = Number.isFinite(relationshipTarget?.distance) ? relationshipTarget.distance : 0;
+    const candidateDiffersFromAttention = candidateId !== "none" && attentionId !== "none" && candidateId !== attentionId;
+    const candidateDiffersFromRelationship = candidateId !== "none" && relationshipId !== "none" && candidateId !== relationshipId;
+    const redirectEvidencePresent = Boolean(
+      candidateDiffersFromAttention
+      && candidateAim >= this.attentionEngageAimThreshold
+      && candidateAim - attentionAim >= 0.22
+    );
+    const assistRange = targetingTuning.assistStateDistance ?? 5.2;
+    const relationshipBeyondAssistRange = Boolean(relationshipTarget && relationshipDistance > assistRange);
+    const stabilizeProtectsAttention = Boolean(stabilizeHeld && attentionTarget);
+    const stabilizeBlocksRedirectEvidence = Boolean(stabilizeProtectsAttention && steeringIntentActive && redirectEvidencePresent);
+
+    let findingCode = "observe_only";
+    if (stabilizeBlocksRedirectEvidence) findingCode = "stabilize_protects_old_attention_during_rs_redirect";
+    else if (stabilizeHeld && relationshipBeyondAssistRange) findingCode = "stabilize_relationship_beyond_assist_range";
+    else if (stabilizeHeld && relationshipTarget) findingCode = "stabilize_relationship_held";
+    else if (steeringIntentActive && candidateDiffersFromAttention) findingCode = "rs_redirect_candidate_visible";
+
+    return {
+      pass: "HC-031W",
+      authority: "read_only_controller_targeting_audit",
+      behaviorChanged: false,
+      stabilizeHeld,
+      stabilizeTriggerValue: Number(stabilizeTriggerValue.toFixed(3)),
+      rightStickMagnitude: Number(rightStickMagnitude.toFixed(3)),
+      cameraLookX: Number((input.cameraLookX ?? 0).toFixed?.(3) ?? (input.cameraLookX ?? 0)),
+      cameraLookY: Number((input.cameraLookY ?? 0).toFixed?.(3) ?? (input.cameraLookY ?? 0)),
+      steeringIntentThreshold,
+      steeringIntentActive,
+      verbIntentActive: Boolean(intent.active),
+      candidateId,
+      candidateScope: candidate?.externalAttention ? "macro_world" : (candidate ? "local_object" : "none"),
+      candidateDistance: Number(candidateDistance.toFixed(3)),
+      candidateAimDot: Number(candidateAim.toFixed(3)),
+      attentionTargetId: attentionId,
+      attentionScope: attentionTarget?.externalAttention ? "macro_world" : (attentionTarget ? "local_object" : "none"),
+      attentionDistance: Number(attentionDistance.toFixed(3)),
+      attentionAimDot: Number(attentionAim.toFixed(3)),
+      attentionPhase: this.attentionPhase,
+      relationshipTargetId: relationshipId,
+      relationshipScope: relationshipTarget?.externalAttention ? "macro_world" : (relationshipTarget ? "local_object" : "none"),
+      relationshipDistance: Number(relationshipDistance.toFixed(3)),
+      relationshipPhase: relationshipTarget ? (intent.active ? "engaged" : "releasing") : "none",
+      candidateDiffersFromAttention,
+      candidateDiffersFromRelationship,
+      redirectEvidencePresent,
+      stabilizeProtectsAttention,
+      stabilizeBlocksRedirectEvidence,
+      relationshipBeyondAssistRange,
+      assistRange,
+      candidateRelationshipDistanceDelta: relationshipTarget && candidate
+        ? Number((relationshipDistance - candidateDistance).toFixed(3))
+        : 0,
+      currentPolicy: "aim_selects_attention_active_verb_protects_owner",
+      proposedAuditQuestion: "should_deliberate_rs_motion_while_stabilizing_be_allowed_to_redirect_relationship",
+      findingCode
+    };
+  }
+
   updateFrameState(frameState, intent = this.resolveRelationshipIntent(frameState.input)) {
     const candidate = this.candidate;
     const attentionTarget = this.attentionTarget;
     const effective = this.relationshipTarget ?? attentionTarget ?? candidate;
     if (!effective) {
       frameState.targeting = this.createEmptyTargetingState(frameState);
+      frameState.controllerTargetingAudit = this.buildControllerTargetingAudit(frameState, intent, { candidate, attentionTarget, relationshipTarget: this.relationshipTarget });
       return;
     }
 
@@ -686,8 +772,13 @@ export class TargetingSystem {
       idlePointerSuppressed: !relationshipActive,
       regionClearSequence: this.regionClearSequence,
       lastRegionClearReason: this.lastRegionClearReason,
-      visualArtifactsCleared: !relationshipActive
+      visualArtifactsCleared: !relationshipActive,
+      attentionDistance: attentionTarget?.distance ?? 0,
+      attentionScope: attentionTarget?.externalAttention ? "macro_world" : (attentionTarget ? "local_object" : "none"),
+      relationshipDistance: this.relationshipTarget?.distance ?? 0,
+      relationshipScope: this.relationshipTarget?.externalAttention ? "macro_world" : (this.relationshipTarget ? "local_object" : "none")
     };
+    frameState.controllerTargetingAudit = this.buildControllerTargetingAudit(frameState, intent, { candidate, attentionTarget, relationshipTarget: this.relationshipTarget });
   }
 
   getTargetKind(id, target, frameState) {

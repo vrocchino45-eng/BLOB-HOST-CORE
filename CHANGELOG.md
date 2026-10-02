@@ -1,4 +1,12 @@
 # Changelog
+## HC-031W — Controller / Targeting / Surface Interaction Audit
+- Froze HC031V/U2.1 gameplay behavior and added read-only diagnostics for the controller → candidate → attention → relationship chain.
+- Added LT analog value, right-stick magnitude, target scope/distance, and explicit detection of cases where Stabilize protects an older attention owner while deliberate RS aim exposes a different candidate.
+- Added active-cell crawlable-surface coverage diagnostics sourced from `CoreSurfaceTruthSystem` / `CrawlableSurfaceRegistry`; no new surfaces are authored in W.
+- Added an Aperture/Gathering Ground HUD audit line (`W CTL` + `SURF`) and telemetry events/samples for controller-targeting mismatch and surface capability.
+- Locked targeting selection/relationship methods, InputSystem, movement, Gathering Ground ecology, and surface profiles against the accepted HC031V parent.
+- Telemetry schema advanced to `blob.session.telemetry.v1.51`; package advanced to `0.31.53`.
+
 ## HC-031V — Living Response Readability / Telemetry Truth
 - Locked accepted HC031U2.1 encounter timing, latch, interruption, rearm, recurrence, traversal, targeting, and movement mechanics.
 - Added cycle-legible response signatures using the existing Watcher ring, relay packet/thread, Ridge Echo beads, and Matter Spill residue only; no new particles, lights, geometry families, or gameplay authority.

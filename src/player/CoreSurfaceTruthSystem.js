@@ -182,6 +182,48 @@ export class CoreSurfaceTruthSystem {
     return best;
   }
 
+  buildCapabilityCoverage() {
+    const profileCounts = {};
+    const surfaceIds = [];
+    for (const candidate of this.candidates) {
+      const metadata = candidate?.metadata ?? {};
+      const profileId = metadata.profileId ?? "unknown_profile";
+      profileCounts[profileId] = (profileCounts[profileId] ?? 0) + 1;
+      const surfaceId = metadata.surfaceId ?? candidate?.object?.name ?? "unknown_surface";
+      if (surfaceIds.length < 24) surfaceIds.push(surfaceId);
+    }
+    return { profileCounts, surfaceIds };
+  }
+
+  publishCapabilityAudit({ valid = false, mechanicalEligible = false, metadata = null, distance = null } = {}) {
+    const coverage = this.buildCapabilityCoverage();
+    const authoredSurfaceCount = this.candidates.length;
+    const activeCellId = this.frameState.activeCellId ?? "none";
+    const nearestProfileId = valid ? (metadata?.profileId ?? "unknown_profile") : "none";
+    const nearestSurfaceId = valid ? (metadata?.surfaceId ?? "unknown_surface") : "none";
+    this.frameState.surfaceCapabilityAudit = {
+      pass: "HC-031W",
+      authority: "read_only_surface_capability_audit",
+      behaviorChanged: false,
+      activeCellId,
+      authoredSurfaceCount,
+      hasAuthoredSurfaces: authoredSurfaceCount > 0,
+      profileCounts: coverage.profileCounts,
+      surfaceIds: coverage.surfaceIds,
+      nearestValid: Boolean(valid),
+      nearestMechanicalEligible: Boolean(mechanicalEligible),
+      nearestSurfaceId,
+      nearestProfileId,
+      nearestDistance: Number.isFinite(distance) ? Number(distance.toFixed(3)) : null,
+      contactProbeRange: Number(this.raycaster.far.toFixed(3)),
+      findingCode: authoredSurfaceCount <= 0
+        ? "no_authored_crawlable_surfaces_in_active_cell"
+        : valid
+          ? (mechanicalEligible ? "authored_surface_mechanically_reachable" : "authored_surface_detected_outside_mechanical_range")
+          : "authored_surfaces_exist_but_none_within_probe"
+    };
+  }
+
   publishSurface(hit) {
     const object = hit.object;
     const metadata = hit.metadata ?? this.lastMetadata ?? {};
@@ -232,6 +274,12 @@ export class CoreSurfaceTruthSystem {
       progressionAuthority: false,
       verbStrengthAuthority: false
     };
+    this.publishCapabilityAudit({
+      valid: true,
+      mechanicalEligible,
+      metadata,
+      distance: hit.distance
+    });
   }
 
   publishInvalid(reason) {
@@ -252,5 +300,6 @@ export class CoreSurfaceTruthSystem {
       progressionAuthority: false,
       verbStrengthAuthority: false
     };
+    this.publishCapabilityAudit({ valid: false, mechanicalEligible: false, metadata: null, distance: null });
   }
 }

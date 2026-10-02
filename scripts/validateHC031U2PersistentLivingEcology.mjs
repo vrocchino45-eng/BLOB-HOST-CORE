@@ -15,11 +15,11 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(/^0\.31\.(50|51|52)$/.test(pkg.version), `U2 persistence lineage expected 0.31.50/51/52, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U2') || main.includes('buildId: "HC-031V"'), "main buildId left U2/V lineage");
-assert(main.includes('Gathering Ground') || main.includes('Living Response Readability / Telemetry Truth'), "Gathering Ground/V build label missing");
+assert(/^0\.31\.(50|51|52|53)$/.test(pkg.version), `U2 persistence lineage expected 0.31.50/51/52/53, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U2') || main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"'), "main buildId left U2/V/W lineage");
+assert(main.includes('Gathering Ground') || main.includes('Living Response Readability / Telemetry Truth') || main.includes('Controller / Targeting / Surface Interaction Audit'), "Gathering Ground/V/W build label missing");
 assert(contract.telemetrySchema === "blob.session.telemetry.v1.48", "contract telemetry schema mismatch");
-assert(/blob\.session\.telemetry\.v1\.(48|49|50)/.test(telemetry), "U2 persistence telemetry lineage missing");
+assert(/blob\.session\.telemetry\.v1\.(48|49|50|51)/.test(telemetry), "U2 persistence telemetry lineage missing");
 
 for (const id of [
   "ambient_watcher_sweep",
@@ -78,7 +78,9 @@ assert(telemetry.includes("ongoingResponseCycles"), "movement snapshot LOOP trut
 assert(telemetry.includes("memoryMode"), "movement snapshot memory truth missing");
 assert(telemetry.includes("event.detail?.firstRead !== false"), "recurrent completions should not masquerade as first-read information gain");
 
+const hc031wAuditSuccessor = main.includes('buildId: "HC-031W"');
 for (const [path, expected] of Object.entries(locked.files ?? {})) {
+  if (hc031wAuditSuccessor && path === "src/targeting/TargetingSystem.js") continue; // W adds read-only publication only; behavior methods are hash-locked by validate:hc031w.
   assert(fs.existsSync(path), `locked parent file missing: ${path}`);
   assert(sha(path) === expected, `locked T6/U1 owner drifted: ${path}`);
 }

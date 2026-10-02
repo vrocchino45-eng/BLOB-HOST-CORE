@@ -8,10 +8,10 @@ const telemetry = read("src/core/SessionTelemetrySystem.js");
 const hud = read("src/ui/PlaytestHudSystem.js");
 const guide = read("src/guide/GuidePromptSystem.js");
 
-assert(/^0\.31\.(51|52)$/.test(pkg.version), `U2.1/V lineage expected 0.31.51/52, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031U2.1"') || main.includes('buildId: "HC-031V"'), "U2.1/V build identity missing");
-assert(main.includes("Gathering Ground Relationship Intent Latch") || main.includes("Living Response Readability / Telemetry Truth"), "U2.1/V build label missing");
-assert(/blob\.session\.telemetry\.v1\.(49|50)/.test(telemetry), "telemetry schema v1.49/1.50 lineage missing");
+assert(/^0\.31\.(51|52|53)$/.test(pkg.version), `U2.1/V/W lineage expected 0.31.51/52/53, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031U2.1"') || main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"'), "U2.1/V/W build identity missing");
+assert(main.includes("Gathering Ground Relationship Intent Latch") || main.includes("Living Response Readability / Telemetry Truth") || main.includes("Controller / Targeting / Surface Interaction Audit"), "U2.1/V/W build label missing");
+assert(/blob\.session\.telemetry\.v1\.(49|50|51)/.test(telemetry), "telemetry schema v1.49/1.50/1.51 lineage missing");
 assert(alive.includes('responseBreakGraceSeconds: 0.72'), "relationship intent grace missing");
 assert(alive.includes('["stable_interrogation", "anchored_observation"]'), "Watcher initiation/sustain split missing");
 assert(alive.includes('["held_intake", "flow_alignment"]'), "Relay initiation/sustain split missing");

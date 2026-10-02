@@ -1,6 +1,6 @@
 {
   "name": "blob-host-core-rebuild",
-  "version": "0.31.52",
+  "version": "0.31.53",
   "private": true,
   "description": "BLOB: HOST CORE \u2014 HC-031V Living Response Readability / Telemetry Truth",
   "type": "module",
@@ -50,7 +50,7 @@
     "validate:signal-chorus-next-route-pressure": "node scripts/validateSignalChorusNextRoutePressureHC005D.mjs",
     "validate:signal-chorus-visual-identity": "node scripts/validateSignalChorusVisualIdentityHC006A.mjs",
     "validate:signal-chorus-layered-interaction": "node scripts/validateSignalChorusLayeredInteractionHC006B.mjs",
-    "validate:current": "npm run validate:hc031v && npm run smoke:hc031v && npm run validate:hc031u21 && npm run smoke:hc031u21 && npm run bot:hc031u21 && npm run validate:hc031u2 && npm run validate:hc031u1 && npm run validate:hc031u && npm run validate:hc031t5-smoke && npm run audit:undefined-methods && npm run validate:recipe-data && node --check src/main.js && node --check src/core/GameRuntime.js && node --check src/ecology/EntitySystem.js && node --check src/fields/GatheringGroundAliveSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/ui/PlaytestHudSystem.js",
+    "validate:current": "npm run validate:hc031w && npm run smoke:hc031w && npm run validate:hc031v && npm run smoke:hc031v && npm run validate:hc031u21 && npm run smoke:hc031u21 && npm run bot:hc031u21 && npm run validate:hc031u2 && npm run validate:hc031u1 && npm run validate:hc031u && npm run validate:hc031t5-smoke && npm run audit:undefined-methods && npm run validate:recipe-data && node --check src/main.js && node --check src/core/GameRuntime.js && node --check src/ecology/EntitySystem.js && node --check src/fields/GatheringGroundAliveSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/ui/PlaytestHudSystem.js",
     "validate:hc031p": "node scripts/validateHC031PFirstHostDestinationCommitment.mjs",
     "validate:hc031p-syntax": "node --check src/hub/HubChamberFoundationSystem.js && node --check src/core/SessionTelemetrySystem.js && node --check src/main.js",
     "validate:hc031n": "node scripts/validateHC031NFirstPhysicalLanguageValidation.mjs",
@@ -301,7 +301,9 @@
     "smoke:hc031u21": "node scripts/smokeHC031U21RelationshipIntentLatch.mjs",
     "bot:hc031u21": "node scripts/botHC031U21RelationshipIntentConvergence.mjs",
     "validate:hc031v": "node scripts/validateHC031VLivingResponseTelemetryTruth.mjs",
-    "smoke:hc031v": "node scripts/smokeHC031VTelemetryTruth.mjs"
+    "smoke:hc031v": "node scripts/smokeHC031VTelemetryTruth.mjs",
+    "validate:hc031w": "node scripts/validateHC031WControllerTargetingSurfaceAudit.mjs",
+    "smoke:hc031w": "node scripts/smokeHC031WControllerTargetingSurfaceAudit.mjs"
   },
   "dependencies": {
     "three": "^0.179.1",

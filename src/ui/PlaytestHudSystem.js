@@ -11,6 +11,7 @@ export class PlaytestHudSystem {
     this.objectiveEl = null;
     this.actionEl = null;
     this.statusEl = null;
+    this.auditEl = null;
     this.controlsEl = null;
     this.audioGateEl = null;
   }
@@ -83,6 +84,16 @@ export class PlaytestHudSystem {
       marginBottom: "6px"
     });
 
+    this.auditEl = document.createElement("div");
+    Object.assign(this.auditEl.style, {
+      color: "#ffe0a8",
+      fontSize: "10px",
+      lineHeight: "1.32",
+      opacity: "0.86",
+      marginBottom: "5px",
+      whiteSpace: "pre-wrap"
+    });
+
     this.controlsEl = document.createElement("div");
     Object.assign(this.controlsEl.style, {
       color: "#b8d6df",
@@ -90,7 +101,7 @@ export class PlaytestHudSystem {
       opacity: "0.70"
     });
 
-    this.el.append(this.titleEl, this.objectiveEl, this.actionEl, this.statusEl, this.controlsEl);
+    this.el.append(this.titleEl, this.objectiveEl, this.actionEl, this.statusEl, this.auditEl, this.controlsEl);
     document.body.appendChild(this.el);
 
     this.audioGateEl = document.createElement("div");
@@ -192,6 +203,8 @@ export class PlaytestHudSystem {
     const adjacentHostTerritory = frameState.adjacentHostTerritory ?? {};
     const gatheringGroundAlive = frameState.gatheringGroundAlive ?? {};
     const gatheringResponseRead = gatheringGroundAlive.responseRead ?? {};
+    const controllerTargetingAudit = frameState.controllerTargetingAudit ?? {};
+    const surfaceCapabilityAudit = frameState.surfaceCapabilityAudit ?? {};
     const signalPlainEcology = frameState.signalPlainEcology ?? {};
     const membraneRidgeGameplay = frameState.membraneRidgeGameplay ?? {};
     const graveRouteLock = frameState.graveRouteLock ?? {};
@@ -199,6 +212,19 @@ export class PlaytestHudSystem {
     const graveRouteActive = activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001" || Boolean(frameState.graveRouteMorph?.completed);
     const graveRouteMorphing = Boolean((frameState.graveRouteMorph?.progress ?? 0) > 0 && !frameState.graveRouteMorph?.completed);
     const optionalForkComplete = optionalForkActive && this.isBloomForkStable(frameState);
+    const auditId = (id = "none") => id === "gathering_ground_cluster"
+      ? "GG"
+      : id === "none"
+        ? "-"
+        : this.shorten(id.replace(/^gathering_ground_/, "gg_").replace(/_001$/, ""), 14);
+    const auditDistance = (value) => Number.isFinite(value) && value > 0 ? value.toFixed(1) : "-";
+    const targetingAuditLine = inApertureFields && controllerTargetingAudit.pass === "HC-031W"
+      ? `W CTL LT${Number(controllerTargetingAudit.stabilizeTriggerValue ?? 0).toFixed(2)} RS${Number(controllerTargetingAudit.rightStickMagnitude ?? 0).toFixed(2)} · C ${auditId(controllerTargetingAudit.candidateId)}@${auditDistance(controllerTargetingAudit.candidateDistance)} · A ${auditId(controllerTargetingAudit.attentionTargetId)}@${auditDistance(controllerTargetingAudit.attentionDistance)} · R ${auditId(controllerTargetingAudit.relationshipTargetId)}@${auditDistance(controllerTargetingAudit.relationshipDistance)} · ${controllerTargetingAudit.findingCode ?? "observe_only"}`
+      : "";
+    const surfaceAuditLine = inApertureFields && surfaceCapabilityAudit.pass === "HC-031W"
+      ? `SURF ${surfaceCapabilityAudit.authoredSurfaceCount ?? 0} · ${surfaceCapabilityAudit.nearestValid ? `${surfaceCapabilityAudit.nearestProfileId ?? "unknown"}@${auditDistance(surfaceCapabilityAudit.nearestDistance)}` : "NONE"} · ${surfaceCapabilityAudit.findingCode ?? "audit_pending"}`
+      : "";
+    const auditLine = [targetingAuditLine, surfaceAuditLine].filter(Boolean).join("\n");
 
     const selectedChemistry = coreWorkManipulation.selectedChemistry ?? spatialCoreChemistry.selectedPlacement ?? null;
     const topology = coreWorkManipulation.topology ?? spatialCoreChemistry.topology ?? null;
@@ -418,6 +444,7 @@ export class PlaytestHudSystem {
       actionHint,
       primaryInstruction,
       statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
+      auditLine,
       controlLine: testPlatformToast ? `${this.controlLine(frameState)} · Shift+1..8 test platforms` : this.controlLine(frameState),
       technicalIdsPlayerFacing: false,
       onePrimaryInstruction: true,
@@ -583,6 +610,8 @@ export class PlaytestHudSystem {
     this.actionEl.textContent = "";
     this.actionEl.style.display = "none";
     this.statusEl.textContent = state.statusLine;
+    this.auditEl.textContent = state.auditLine ?? "";
+    this.auditEl.style.display = state.auditLine ? "block" : "none";
     this.controlsEl.textContent = state.controlLine;
     this.statusEl.style.opacity = state.worldLedBeat ? "0.68" : "1";
     this.controlsEl.style.opacity = state.worldLedBeat ? "0.42" : "0.78";

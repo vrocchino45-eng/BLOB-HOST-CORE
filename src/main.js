@@ -1,8 +1,8 @@
 import { GameRuntime } from "./core/GameRuntime.js";
 
-// HC031V keeps U2.1 relationship intent, recurrence, and the accepted T6 traversal locked.
-// V changes presentation/read-only telemetry only: repeated answers become cycle-legible
-// without becoming new information or gaining gameplay authority.
+// HC031W audits the accepted V controller/targeting/surface handoff without changing gameplay.
+// Target selection, relationship ownership, movement, ecology, and crawlable-surface authority remain locked;
+// W adds read-only evidence for LT/RS intent mismatch and active-cell surface capability.
 
 const appRoot = document.querySelector("#app");
 
@@ -12,8 +12,8 @@ if (!appRoot) {
 
 const runtime = new GameRuntime({
   appRoot,
-  buildId: "HC-031V",
-  buildLabel: "Living Response Readability / Telemetry Truth"
+  buildId: "HC-031W",
+  buildLabel: "Controller / Targeting / Surface Interaction Audit"
 });
 
 runtime.start().catch((error) => {

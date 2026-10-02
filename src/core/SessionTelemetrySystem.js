@@ -16,7 +16,7 @@ export class SessionTelemetrySystem {
     if (!frameState) throw new Error("[SessionTelemetrySystem] frameState is required.");
     this.frameState = frameState;
     this.baselineId = baselineId;
-    this.schemaVersion = "blob.session.telemetry.v1.50";
+    this.schemaVersion = "blob.session.telemetry.v1.51";
     this.sessionId = this.makeSessionId();
     this.startedAtEpochMs = Date.now();
     this.startedAtIso = new Date(this.startedAtEpochMs).toISOString();
@@ -42,6 +42,9 @@ export class SessionTelemetrySystem {
     this.lastAttentionTargetId = frameState.targeting?.attentionTargetId ?? "none";
     this.lastAttentionPhase = frameState.targeting?.attentionPhase ?? "none";
     this.lastRelationshipTargetId = frameState.targeting?.relationshipTargetId ?? "none";
+    this.lastControllerTargetingAuditKey = "none";
+    this.lastControllerTargetingAuditFinding = "none";
+    this.lastSurfaceCapabilityAuditKey = "none";
     // Compatibility alias: attention.target.changed remains verb-relationship scoped.
     // HC031M adds aim-owned attention.owner/phase events alongside it.
     this.lastTargetId = this.lastRelationshipTargetId;
@@ -200,6 +203,8 @@ export class SessionTelemetrySystem {
     this.observeHubDestinationCommitment(frameState);
     this.observeHubReturnRecomposition(frameState);
     this.observeTarget(frameState);
+    this.observeControllerTargetingAudit(frameState);
+    this.observeSurfaceCapabilityAudit(frameState);
     this.observeInput(frameState, wallNow);
     this.observeSonar(frameState);
     this.observeConsequence(frameState);
@@ -998,6 +1003,105 @@ export class SessionTelemetrySystem {
     }
     this.lastRelationshipTargetId = targetId;
     this.lastTargetId = targetId;
+  }
+
+  observeControllerTargetingAudit(frameState) {
+    const audit = frameState.controllerTargetingAudit ?? {};
+    if (audit.pass !== "HC-031W") return;
+    const key = [
+      audit.findingCode ?? "none",
+      audit.stabilizeHeld ? 1 : 0,
+      audit.steeringIntentActive ? 1 : 0,
+      audit.candidateId ?? "none",
+      audit.attentionTargetId ?? "none",
+      audit.relationshipTargetId ?? "none",
+      audit.relationshipBeyondAssistRange ? 1 : 0,
+      audit.stabilizeBlocksRedirectEvidence ? 1 : 0
+    ].join("|");
+    if (key === this.lastControllerTargetingAuditKey) return;
+
+    this.record("control.targeting_audit.changed", "analysis", {
+      percept: {
+        finding: audit.findingCode ?? "none",
+        stabilizeHeld: Boolean(audit.stabilizeHeld),
+        steeringIntentActive: Boolean(audit.steeringIntentActive),
+        candidate: this.aliasSource(audit.candidateId ?? "none"),
+        attention: this.aliasSource(audit.attentionTargetId ?? "none"),
+        relationship: this.aliasSource(audit.relationshipTargetId ?? "none"),
+        candidateDistance: round(audit.candidateDistance ?? 0),
+        attentionDistance: round(audit.attentionDistance ?? 0),
+        relationshipDistance: round(audit.relationshipDistance ?? 0)
+      },
+      developer: {
+        pass: "HC-031W",
+        fromFinding: this.lastControllerTargetingAuditFinding,
+        candidateId: audit.candidateId ?? "none",
+        candidateScope: audit.candidateScope ?? "none",
+        candidateAimDot: round(audit.candidateAimDot ?? -1),
+        attentionTargetId: audit.attentionTargetId ?? "none",
+        attentionScope: audit.attentionScope ?? "none",
+        attentionAimDot: round(audit.attentionAimDot ?? -1),
+        attentionPhase: audit.attentionPhase ?? "none",
+        relationshipTargetId: audit.relationshipTargetId ?? "none",
+        relationshipScope: audit.relationshipScope ?? "none",
+        relationshipPhase: audit.relationshipPhase ?? "none",
+        stabilizeTriggerValue: round(audit.stabilizeTriggerValue ?? 0),
+        rightStickMagnitude: round(audit.rightStickMagnitude ?? 0),
+        cameraLookX: round(audit.cameraLookX ?? 0),
+        cameraLookY: round(audit.cameraLookY ?? 0),
+        redirectEvidencePresent: Boolean(audit.redirectEvidencePresent),
+        stabilizeProtectsAttention: Boolean(audit.stabilizeProtectsAttention),
+        stabilizeBlocksRedirectEvidence: Boolean(audit.stabilizeBlocksRedirectEvidence),
+        relationshipBeyondAssistRange: Boolean(audit.relationshipBeyondAssistRange),
+        assistRange: round(audit.assistRange ?? 0),
+        candidateRelationshipDistanceDelta: round(audit.candidateRelationshipDistanceDelta ?? 0),
+        currentPolicy: audit.currentPolicy ?? "unknown",
+        gameplayAuthority: false,
+        targetingAuthorityChanged: false,
+        controllerMappingAuthorityChanged: false
+      }
+    });
+    this.lastControllerTargetingAuditKey = key;
+    this.lastControllerTargetingAuditFinding = audit.findingCode ?? "none";
+  }
+
+  observeSurfaceCapabilityAudit(frameState) {
+    const audit = frameState.surfaceCapabilityAudit ?? {};
+    if (audit.pass !== "HC-031W") return;
+    const profileKey = Object.entries(audit.profileCounts ?? {}).sort(([a], [b]) => a.localeCompare(b)).map(([id, count]) => `${id}:${count}`).join(",");
+    const key = [
+      audit.activeCellId ?? "none",
+      audit.authoredSurfaceCount ?? 0,
+      profileKey,
+      audit.nearestValid ? 1 : 0,
+      audit.nearestMechanicalEligible ? 1 : 0,
+      audit.nearestProfileId ?? "none",
+      audit.findingCode ?? "none"
+    ].join("|");
+    if (key === this.lastSurfaceCapabilityAuditKey) return;
+
+    this.record("world.surface_capability.audit_changed", "analysis", {
+      percept: {
+        authoredSurfaceCount: audit.authoredSurfaceCount ?? 0,
+        hasAuthoredSurfaces: Boolean(audit.hasAuthoredSurfaces),
+        nearestValid: Boolean(audit.nearestValid),
+        nearestMechanicalEligible: Boolean(audit.nearestMechanicalEligible),
+        nearestProfile: audit.nearestProfileId ?? "none",
+        nearestDistance: Number.isFinite(audit.nearestDistance) ? round(audit.nearestDistance) : null,
+        finding: audit.findingCode ?? "none"
+      },
+      developer: {
+        pass: "HC-031W",
+        activeCellId: audit.activeCellId ?? frameState.activeCellId ?? "none",
+        profileCounts: { ...(audit.profileCounts ?? {}) },
+        surfaceIds: [...(audit.surfaceIds ?? [])],
+        contactProbeRange: round(audit.contactProbeRange ?? 0),
+        gameplayAuthority: false,
+        movementAuthorityChanged: false,
+        contactAuthorityChanged: false
+      }
+    });
+    this.lastSurfaceCapabilityAuditKey = key;
   }
 
   observeInput(frameState, now) {
@@ -2763,6 +2867,31 @@ export class SessionTelemetrySystem {
       attentionAimDot: round(frameState.targeting?.attentionAimDot ?? -1),
       attentionLossGraceRemaining: round(frameState.targeting?.attentionLossGraceRemaining ?? 0),
       relationshipTarget: this.aliasSource(frameState.targeting?.relationshipTargetId ?? "none"),
+      controllerTargetingAuditState: frameState.controllerTargetingAudit?.pass === "HC-031W" ? {
+        finding: frameState.controllerTargetingAudit.findingCode ?? "none",
+        stabilizeHeld: Boolean(frameState.controllerTargetingAudit.stabilizeHeld),
+        stabilizeTriggerValue: round(frameState.controllerTargetingAudit.stabilizeTriggerValue ?? 0),
+        rightStickMagnitude: round(frameState.controllerTargetingAudit.rightStickMagnitude ?? 0),
+        steeringIntentActive: Boolean(frameState.controllerTargetingAudit.steeringIntentActive),
+        candidate: this.aliasSource(frameState.controllerTargetingAudit.candidateId ?? "none"),
+        candidateDistance: round(frameState.controllerTargetingAudit.candidateDistance ?? 0),
+        attention: this.aliasSource(frameState.controllerTargetingAudit.attentionTargetId ?? "none"),
+        attentionDistance: round(frameState.controllerTargetingAudit.attentionDistance ?? 0),
+        relationship: this.aliasSource(frameState.controllerTargetingAudit.relationshipTargetId ?? "none"),
+        relationshipDistance: round(frameState.controllerTargetingAudit.relationshipDistance ?? 0),
+        redirectEvidencePresent: Boolean(frameState.controllerTargetingAudit.redirectEvidencePresent),
+        stabilizeBlocksRedirectEvidence: Boolean(frameState.controllerTargetingAudit.stabilizeBlocksRedirectEvidence),
+        relationshipBeyondAssistRange: Boolean(frameState.controllerTargetingAudit.relationshipBeyondAssistRange)
+      } : null,
+      surfaceCapabilityAuditState: frameState.surfaceCapabilityAudit?.pass === "HC-031W" ? {
+        authoredSurfaceCount: frameState.surfaceCapabilityAudit.authoredSurfaceCount ?? 0,
+        hasAuthoredSurfaces: Boolean(frameState.surfaceCapabilityAudit.hasAuthoredSurfaces),
+        nearestValid: Boolean(frameState.surfaceCapabilityAudit.nearestValid),
+        nearestMechanicalEligible: Boolean(frameState.surfaceCapabilityAudit.nearestMechanicalEligible),
+        nearestProfileId: frameState.surfaceCapabilityAudit.nearestProfileId ?? "none",
+        nearestDistance: Number.isFinite(frameState.surfaceCapabilityAudit.nearestDistance) ? round(frameState.surfaceCapabilityAudit.nearestDistance) : null,
+        finding: frameState.surfaceCapabilityAudit.findingCode ?? "none"
+      } : null,
       physicalLanguageValidationStage: this.physicalLanguageValidation?.activeChain?.stage ?? "idle",
       physicalLanguageValidationStageIndex: this.physicalLanguageValidation?.activeChain?.stageIndex ?? 0,
       physicalLanguageValidationChain: this.physicalLanguageValidation?.activeChain?.id ?? "none",
@@ -3265,6 +3394,20 @@ export class SessionTelemetrySystem {
       attentionOwnerChanges: count("attention.owner.changed"),
       attentionPhaseChanges: count("attention.phase.changed"),
       relationshipTargetChanges: count("attention.target.changed"),
+      controllerTargetingAuditChanges: count("control.targeting_audit.changed"),
+      controllerTargetingStabilizeRedirectBlocks: this.events.filter((event) => (
+        event.type === "control.targeting_audit.changed"
+        && event.developer?.stabilizeBlocksRedirectEvidence === true
+      )).length,
+      controllerTargetingFarRelationshipStates: this.events.filter((event) => (
+        event.type === "control.targeting_audit.changed"
+        && event.developer?.relationshipBeyondAssistRange === true
+      )).length,
+      surfaceCapabilityAuditChanges: count("world.surface_capability.audit_changed"),
+      surfaceCapabilityNoSurfaceStates: this.events.filter((event) => (
+        event.type === "world.surface_capability.audit_changed"
+        && event.percept?.hasAuthoredSurfaces === false
+      )).length,
       physicalLanguageChainsStarted: count("validation.physical_language.chain_started"),
       physicalLanguageChainsCompleted: count("validation.physical_language.chain_completed"),
       physicalLanguageChainsAbandoned: count("validation.physical_language.chain_abandoned"),

@@ -30,10 +30,10 @@ const extractTiming = (source) => {
   return `${source.slice(start, end + 3)}\n`;
 };
 
-assert(pkg.version === "0.31.52", `expected package 0.31.52, got ${pkg.version}`);
-assert(main.includes('buildId: "HC-031V"'), "HC031V build ID missing");
-assert(main.includes('buildLabel: "Living Response Readability / Telemetry Truth"'), "HC031V build label missing");
-assert(telemetry.includes('blob.session.telemetry.v1.50'), "telemetry v1.50 missing");
+assert(/^0\.31\.(52|53)$/.test(pkg.version), `V/W lineage expected package 0.31.52/53, got ${pkg.version}`);
+assert(main.includes('buildId: "HC-031V"') || main.includes('buildId: "HC-031W"'), "HC031V/W build ID missing");
+assert(main.includes('buildLabel: "Living Response Readability / Telemetry Truth"') || main.includes('buildLabel: "Controller / Targeting / Surface Interaction Audit"'), "HC031V/W build label missing");
+assert(/blob\.session\.telemetry\.v1\.(50|51)/.test(telemetry), "telemetry v1.50/1.51 lineage missing");
 assert(contract.parentBuildId === "HC-031U2.1", "contract parent must remain accepted U2.1");
 assert(contract.scope === "presentation_and_read_only_telemetry_only", "V scope drifted from readability/telemetry-only");
 
