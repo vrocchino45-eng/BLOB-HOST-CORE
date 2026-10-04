@@ -1,0 +1,109 @@
+{
+  "schema": "blob.w2a.browser_frame_truth.v1",
+  "profilerVersion": "HC-031W2A-browser-rAF-v1.0",
+  "label": "synthetic_test",
+  "manualConditions": {
+    "recording": false,
+    "route": "synthetic",
+    "notes": ""
+  },
+  "startedAtIso": "2026-10-03T05:07:52.463Z",
+  "endedAtIso": "2026-10-03T05:07:52.466Z",
+  "stopReason": "auto-duration-complete",
+  "durationWallSeconds": 20,
+  "visibleSeconds": 19.2,
+  "hiddenSeconds": 0.8,
+  "blurredSeconds": 0.7,
+  "browser": {
+    "userAgent": "synthetic-smoke-test",
+    "devicePixelRatio": 1,
+    "innerWidth": 1440,
+    "innerHeight": 900,
+    "screenWidth": 1440,
+    "screenHeight": 900,
+    "visibilityAtEnd": "visible",
+    "canvasSurfaces": []
+  },
+  "browserRafOnly": {
+    "callbackCount": 524,
+    "callbacksPerVisibleSecond": 27.29,
+    "eligibleIntervalCount": 472,
+    "p50Ms": 16,
+    "p95Ms": 150,
+    "p99Ms": 150,
+    "maxMs": 150,
+    "over100Ms": 86,
+    "over250Ms": 0,
+    "over1000Ms": 0,
+    "excludedHiddenIntervals": 51,
+    "crossVisibilityGaps": 2
+  },
+  "longTaskObserverAvailable": false,
+  "longTaskCount": 0,
+  "longTasksFirst100": [],
+  "lifecycleEvents": [
+    {
+      "wallSecond": 1,
+      "event": "visibilitychange",
+      "hidden": true,
+      "blurred": false
+    },
+    {
+      "wallSecond": 1.8,
+      "event": "visibilitychange",
+      "hidden": false,
+      "blurred": false
+    },
+    {
+      "wallSecond": 2,
+      "event": "blur",
+      "hidden": false,
+      "blurred": true
+    },
+    {
+      "wallSecond": 2.7,
+      "event": "focus",
+      "hidden": false,
+      "blurred": false
+    }
+  ],
+  "tenSecondWindows": [
+    {
+      "startSecond": 0,
+      "endSecond": 10,
+      "observedRafCallbacks": 457,
+      "eligibleVisibleFrameIntervals": 405,
+      "visibleIntervalP50Ms": 16,
+      "visibleIntervalP95Ms": 16,
+      "visibleIntervalP99Ms": 150,
+      "visibleMaxGapMs": 150,
+      "over50": 19,
+      "over100": 19,
+      "over250": 0,
+      "over1000": 0,
+      "longTaskCount": 0,
+      "longTaskTotalMs": 0
+    },
+    {
+      "startSecond": 10,
+      "endSecond": 20,
+      "observedRafCallbacks": 67,
+      "eligibleVisibleFrameIntervals": 67,
+      "visibleIntervalP50Ms": 150,
+      "visibleIntervalP95Ms": 150,
+      "visibleIntervalP99Ms": 150,
+      "visibleMaxGapMs": 150,
+      "over50": 67,
+      "over100": 67,
+      "over250": 0,
+      "over1000": 0,
+      "longTaskCount": 0,
+      "longTaskTotalMs": 0
+    }
+  ],
+  "importantLimits": [
+    "Independent observer of browser requestAnimationFrame opportunities; NOT game update count, game draw count, simulation delta, or FPS of encoded video.",
+    "Browser focus/visibility time is measured separately; blur alone does not establish throttling.",
+    "Console opening/closing may affect head and tail. Compare same route and foreground state."
+  ]
+}
