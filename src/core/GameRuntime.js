@@ -2722,7 +2722,8 @@ export class GameRuntime {
     this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
     this.updateCamera(dt);
     const renderBudget = this.renderBudgetSystem?.prepare({
-      runtimeSeconds: this.frameState.runtimeSeconds
+      runtimeSeconds: this.frameState.runtimeSeconds,
+      frameState: this.frameState
     }) ?? null;
     const renderStart = performance.now();
     let renderEnd = renderStart;
@@ -2750,6 +2751,13 @@ export class GameRuntime {
         contactFlashes: this.frameState.verbPhysicalization?.contactFlashes ?? 0,
         transparentZeroCulled: renderBudget?.transparentZeroCulled ?? 0,
         transparentRenderCandidates: renderBudget?.transparentCandidates ?? 0,
+        residencyMode: renderBudget?.residencyMode ?? "none",
+        residencyRootsCulled: renderBudget?.residencyRootsCulled ?? 0,
+        hubFoundationActive: Boolean(this.frameState.hubFoundationPerformance?.active),
+        hubSceneGraphRefreshIntervalSeconds: this.frameState.hubFoundationPerformance?.sceneGraphRefreshIntervalSeconds ?? 0,
+        hubSpatialReadabilityRefreshIntervalSeconds: this.frameState.hubFoundationPerformance?.spatialReadabilityRefreshIntervalSeconds ?? 0,
+        hubCachedSceneRoots: this.frameState.hubFoundationPerformance?.cachedSceneRootCount ?? 0,
+        hubFullSceneMatrixUpdateAvoided: Boolean(this.frameState.hubFoundationPerformance?.fullSceneMatrixUpdateAvoided),
         surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
         surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,

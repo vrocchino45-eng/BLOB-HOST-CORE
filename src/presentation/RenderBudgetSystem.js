@@ -63,8 +63,34 @@ const topSceneOwner = (object, scene) => {
   return owner?.name || owner?.type || "unnamed_scene_root";
 };
 
+const SURFACE_WAKE_LOCAL_DETAIL_ROOTS = [
+  "surface_wake_visual_embodiment_HC008C",
+  "surface_wake_layered_interaction_HC006E",
+  "surface_wake_living_nursery_circuit_HC009C",
+  "host_contact_shelf_HC031I4",
+  "membrane_pocket_surface_001",
+  "nursery_soft_pressure_fog_001",
+  "nursery_membrane_tender_001",
+  "membrane_watcher_001"
+];
+
+const SCAR_FLOW_LOCAL_DETAIL_ROOTS = [
+  "scar_flow_fold_surface_001",
+  "scar_pressure_haze_001",
+  "guide_threshold_gameplay_fill_HC007B",
+  "guide_threshold_layered_interaction_HC006F",
+  "scar_flow_arrival_active_cell_ring",
+  "scar_flow_arrival_focus_line",
+  "scar_flow_hook_nearest_ring",
+  "scar_flow_hook_relation_line",
+  "scar_flow_interaction_stage_ring",
+  "scar_flow_interaction_stage_line",
+  "second_morph_signal_readiness_ring",
+  "second_morph_signal_progress_ring"
+];
+
 /**
- * HC-031W2A2 — render-only budget helper.
+ * HC-031W2A3 — render-only budget + local-cell residency helper.
  *
  * It has no gameplay authority. It only suppresses leaf renderables whose entire
  * material set is fully transparent AND depth-write-disabled for the duration of
@@ -79,24 +105,36 @@ export class RenderBudgetSystem {
     this.zeroAlphaThreshold = zeroAlphaThreshold;
     this.candidateObjects = [];
     this.restoreVisible = [];
+    this.restoreResidencyRoots = [];
+    this.residencyRootCache = new Map();
     this.lastScanRuntimeSeconds = -Infinity;
     this.lastCensus = null;
     this.lastPrepare = {
-      pass: "HC-031W2A2",
+      pass: "HC-031W2A3",
       transparentZeroCulled: 0,
       transparentCandidates: 0,
+      residencyMode: "none",
+      residencyRootsCulled: 0,
+      residencyRootNames: [],
       censusRefreshed: false
     };
   }
 
-  prepare({ runtimeSeconds = 0 } = {}) {
+  prepare({ runtimeSeconds = 0, frameState = null } = {}) {
+    this.restoreVisible.length = 0;
+    this.restoreResidencyRoots.length = 0;
+
+    // W2A3: continuity remains authored in gameplay state, but previous-cell local
+    // detail is not submitted to the GPU once the transition envelope has settled.
+    // Root visibility is restored immediately after renderer.render().
+    const residency = this.applyResidencyCull(frameState);
+
     const censusRefreshed = !Number.isFinite(this.lastScanRuntimeSeconds)
       || runtimeSeconds - this.lastScanRuntimeSeconds >= this.censusIntervalSeconds;
     if (censusRefreshed) {
       this.refreshCandidatesAndCensus(runtimeSeconds);
     }
 
-    this.restoreVisible.length = 0;
     let transparentZeroCulled = 0;
     for (const object of this.candidateObjects) {
       if (!object?.parent || object.children?.length || !isEffectivelyVisible(object)) continue;
@@ -108,9 +146,12 @@ export class RenderBudgetSystem {
     }
 
     this.lastPrepare = {
-      pass: "HC-031W2A2",
+      pass: "HC-031W2A3",
       transparentZeroCulled,
       transparentCandidates: this.candidateObjects.length,
+      residencyMode: residency.mode,
+      residencyRootsCulled: residency.rootNames.length,
+      residencyRootNames: residency.rootNames,
       censusRefreshed,
       ownerCensus: this.lastCensus
     };
@@ -122,6 +163,53 @@ export class RenderBudgetSystem {
       if (object) object.visible = true;
     }
     this.restoreVisible.length = 0;
+
+    for (const entry of this.restoreResidencyRoots) {
+      if (entry?.object) entry.object.visible = entry.visible;
+    }
+    this.restoreResidencyRoots.length = 0;
+  }
+
+  applyResidencyCull(frameState) {
+    const policy = this.resolveResidencyPolicy(frameState);
+    const rootNames = [];
+    for (const name of policy.rootNames) {
+      const root = this.getResidencyRoot(name);
+      if (!root || root.visible === false) continue;
+      this.restoreResidencyRoots.push({ object: root, visible: root.visible });
+      root.visible = false;
+      rootNames.push(name);
+    }
+    return { mode: policy.mode, rootNames };
+  }
+
+  resolveResidencyPolicy(frameState) {
+    const activeCellId = frameState?.activeCellId ?? "none";
+    if (activeCellId === "CELL_SCAR_FLOW_FOLD_001") {
+      const arrival = frameState?.scarFlowArrival ?? {};
+      const settled = Boolean((arrival.nurseryFade ?? 0) >= 0.95 || (arrival.arrivalAge ?? 0) >= 2.4);
+      return {
+        mode: settled ? "scar_flow_after_surface_transition_envelope" : "scar_flow_transition_envelope",
+        rootNames: settled ? SURFACE_WAKE_LOCAL_DETAIL_ROOTS : []
+      };
+    }
+
+    if (activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001") {
+      return {
+        mode: "signal_chorus_hub_local_detail_only",
+        rootNames: [...SURFACE_WAKE_LOCAL_DETAIL_ROOTS, ...SCAR_FLOW_LOCAL_DETAIL_ROOTS]
+      };
+    }
+
+    return { mode: "none", rootNames: [] };
+  }
+
+  getResidencyRoot(name) {
+    const cached = this.residencyRootCache.get(name);
+    if (cached?.parent) return cached;
+    const object = this.scene.getObjectByName(name);
+    if (object) this.residencyRootCache.set(name, object);
+    return object ?? null;
   }
 
   isSafelyInvisible(materials) {
@@ -193,7 +281,7 @@ export class RenderBudgetSystem {
 
     this.candidateObjects = candidates;
     this.lastCensus = {
-      pass: "HC-031W2A2",
+      pass: "HC-031W2A3",
       sampledAtRuntimeSeconds: round(runtimeSeconds),
       visibleRenderables,
       estimatedDrawCalls,
@@ -207,9 +295,12 @@ export class RenderBudgetSystem {
 
   snapshot() {
     return {
-      pass: "HC-031W2A2",
+      pass: "HC-031W2A3",
       transparentZeroCulled: this.lastPrepare.transparentZeroCulled ?? 0,
       transparentCandidates: this.candidateObjects.length,
+      residencyMode: this.lastPrepare.residencyMode ?? "none",
+      residencyRootsCulled: this.lastPrepare.residencyRootsCulled ?? 0,
+      residencyRootNames: [...(this.lastPrepare.residencyRootNames ?? [])],
       ownerCensus: this.lastCensus
     };
   }

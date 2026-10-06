@@ -13,7 +13,7 @@ const composerSource = read("../src/visual/composers/ChemObjectVisualComposer.js
 const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
 
 // W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A2"/);
+assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[23]"/);
 assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
 assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
 assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
@@ -111,7 +111,7 @@ observer.endFrame({
   renderOwnerCensus: prep.ownerCensus
 });
 const snapshot = observer.snapshot();
-assert.equal(snapshot.optimizationPass, "HC-031W2A2");
+assert.ok(["HC-031W2A2", "HC-031W2A3"].includes(snapshot.optimizationPass));
 assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
 
 console.log("HC031W2A2 transient render budget + owner census PASS");

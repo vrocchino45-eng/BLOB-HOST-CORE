@@ -155,6 +155,17 @@ export class HubChamberFoundationSystem {
     this.screenTruthStableFrames = 0;
     this.consequenceLayoutTruth = this.createEmptyConsequenceLayoutTruth();
 
+    // HC-031W2A3: expensive scene-graph enforcement and spatial proof are cached.
+    // Hub animation/state still update every frame; these read-only verification passes
+    // refresh on a short cadence and on every Hub entry.
+    this.sceneObjectCache = new Map();
+    this.sceneGraphRefreshAge = Number.POSITIVE_INFINITY;
+    this.sceneGraphRefreshIntervalSeconds = 0.25;
+    this.spatialReadabilityRefreshAge = Number.POSITIVE_INFINITY;
+    this.spatialReadabilityRefreshIntervalSeconds = 0.12;
+    this.lastSceneGraphRefreshFrame = 0;
+    this.lastSpatialReadabilityRefreshFrame = 0;
+
     // HC026A1 micro→macro spatial mirror readability refinement. Hub route topology
     // remains fixed; retained consequence anatomy now exaggerates radial zone depth
     // at environmental scale while exact XYZ telemetry becomes a secondary bend.
@@ -184,13 +195,14 @@ export class HubChamberFoundationSystem {
     const active = frameState.activeCellId === (this.recipe.sourceCellId ?? HUB_CELL_ID);
 
     if (!active) {
+      const wasActive = this.active;
       this.active = false;
       this.reveal = 0;
       this.routeIdentityReveal = 0;
       this.screenTruthLatched = false;
       this.screenTruthStableFrames = 0;
       this.setVisible(false);
-      this.restoreNonHubVisuals(frameState);
+      if (wasActive || this.suppressedVisibility.size > 0) this.restoreNonHubVisuals(frameState);
       if (frameState.interactionInspectionFocus?.providerId === "HubChamberFoundationSystem") {
         frameState.interactionInspectionFocus = this.createInspectionFocus(false);
       }
@@ -199,6 +211,12 @@ export class HubChamberFoundationSystem {
       this.coreSpatialMirror = this.createEmptyCoreSpatialMirrorState();
       frameState.hubCoreSpatialMirror = this.coreSpatialMirror;
       frameState.hubRenderTruth = this.createRenderTruthState(false);
+      frameState.hubFoundationPerformance = {
+        pass: "HC-031W2A3", active: false,
+        sceneGraphRefreshIntervalSeconds: this.sceneGraphRefreshIntervalSeconds,
+        spatialReadabilityRefreshIntervalSeconds: this.spatialReadabilityRefreshIntervalSeconds,
+        cachedSceneRootCount: this.sceneObjectCache.size
+      };
       frameState.hubChamberFoundation = this.createState(false);
       this.lastActiveCell = frameState.activeCellId ?? "none";
       return;
@@ -210,6 +228,8 @@ export class HubChamberFoundationSystem {
       this.routeIdentityReveal = 0;
       this.screenTruthLatched = false;
       this.screenTruthStableFrames = 0;
+      this.sceneGraphRefreshAge = Number.POSITIVE_INFINITY;
+      this.spatialReadabilityRefreshAge = Number.POSITIVE_INFINITY;
     }
 
     const revealSeconds = Math.max(0.6, this.recipe.activation?.revealSeconds ?? 2.2);
@@ -223,11 +243,43 @@ export class HubChamberFoundationSystem {
     this.routeIdentityReveal = THREE.MathUtils.damp(this.routeIdentityReveal, identityTarget, 3.2, dt);
 
     this.setVisible(true);
-    this.enforceHubSceneGraph(frameState);
+
+    this.sceneGraphRefreshAge += Math.max(0, dt);
+    const sceneGraphRefreshDue = !Number.isFinite(this.sceneGraphRefreshAge)
+      || this.sceneGraphRefreshAge >= this.sceneGraphRefreshIntervalSeconds;
+    if (sceneGraphRefreshDue) {
+      this.enforceHubSceneGraph(frameState);
+      this.sceneGraphRefreshAge = 0;
+      this.lastSceneGraphRefreshFrame = frameState.frame ?? 0;
+    } else {
+      this.publishHubTargetLifecycle(frameState);
+    }
+
     this.updateInheritedLivingState(frameState);
     this.animate(dt, frameState.runtimeSeconds ?? 0, routeIdentityReady, frameState);
     this.updateCoreSpatialMirror(frameState, dt, frameState.runtimeSeconds ?? 0);
-    this.spatialTruth = this.evaluateSpatialReadability(frameState);
+
+    this.spatialReadabilityRefreshAge += Math.max(0, dt);
+    const spatialReadabilityRefreshDue = !Number.isFinite(this.spatialReadabilityRefreshAge)
+      || this.spatialReadabilityRefreshAge >= this.spatialReadabilityRefreshIntervalSeconds;
+    if (spatialReadabilityRefreshDue) {
+      this.spatialTruth = this.evaluateSpatialReadability(frameState);
+      this.spatialReadabilityRefreshAge = 0;
+      this.lastSpatialReadabilityRefreshFrame = frameState.frame ?? 0;
+    }
+
+    frameState.hubFoundationPerformance = {
+      pass: "HC-031W2A3",
+      active: true,
+      sceneGraphRefreshedThisFrame: sceneGraphRefreshDue,
+      spatialReadabilityRefreshedThisFrame: spatialReadabilityRefreshDue,
+      sceneGraphRefreshIntervalSeconds: this.sceneGraphRefreshIntervalSeconds,
+      spatialReadabilityRefreshIntervalSeconds: this.spatialReadabilityRefreshIntervalSeconds,
+      lastSceneGraphRefreshFrame: this.lastSceneGraphRefreshFrame,
+      lastSpatialReadabilityRefreshFrame: this.lastSpatialReadabilityRefreshFrame,
+      cachedSceneRootCount: this.sceneObjectCache.size,
+      fullSceneMatrixUpdateAvoided: true
+    };
     frameState.hubRenderTruth = this.createRenderTruthState(true);
     this.applyHubPresentationAuthority(frameState, routeIdentityReady);
 
@@ -1692,14 +1744,17 @@ export class HubChamberFoundationSystem {
       this.consequenceLayoutTruth = this.createEmptyConsequenceLayoutTruth();
       return;
     }
-    this.scene.updateMatrixWorld(true);
+    // W2A3: only Hub ancestry/descendants are required for route readability.
+    // Updating the entire scene here duplicated renderer work across hundreds of roots.
+    if (this.root?.updateWorldMatrix) this.root.updateWorldMatrix(true, true);
+    else this.root?.updateMatrixWorld?.(true);
     this.camera?.updateMatrixWorld?.(true);
     const player = new THREE.Vector3();
     const echo = new THREE.Vector3();
     const guide = new THREE.Vector3();
     this.playerRoot.getWorldPosition(player);
     this.graveMemoryEchoRoot.getWorldPosition(echo);
-    const guideRoot = this.scene.getObjectByName("guide_orbiter_folded_lantern_001");
+    const guideRoot = this.getSceneObject("guide_orbiter_folded_lantern_001");
     if (guideRoot) guideRoot.getWorldPosition(guide);
     const playerEchoSeparation = player.distanceTo(echo);
     const guideEchoSeparation = guideRoot ? guide.distanceTo(echo) : 0;
@@ -1885,7 +1940,7 @@ export class HubChamberFoundationSystem {
     this.suppressedRootNames = [];
 
     for (const name of [...NON_HUB_ENVIRONMENT_ROOTS, ...TRANSITION_VISUAL_ARTIFACTS]) {
-      const object = this.scene.getObjectByName(name);
+      const object = this.getSceneObject(name);
       if (!object) continue;
       if (!this.suppressedVisibility.has(name)) {
         this.suppressedVisibility.set(name, object.visible);
@@ -1895,7 +1950,7 @@ export class HubChamberFoundationSystem {
       this.suppressedRootNames.push(name);
     }
 
-    this.distantHostRoot = this.scene.getObjectByName("host_alpha_distant_silhouette_001");
+    this.distantHostRoot = this.getSceneObject("host_alpha_distant_silhouette_001");
     if (this.distantHostRoot) {
       this.distantHostRoot.visible = true;
       this.distantHostRoot.userData.hubWorldMeaningOnly = true;
@@ -1908,10 +1963,14 @@ export class HubChamberFoundationSystem {
 
     const enforcedNames = [...NON_HUB_ENVIRONMENT_ROOTS, ...TRANSITION_VISUAL_ARTIFACTS, ...LEGACY_HUB_VISUALS];
     this.visibleLeakNames = enforcedNames.filter((name) => {
-      const object = this.scene.getObjectByName(name);
+      const object = this.getSceneObject(name);
       return Boolean(object && object.visible && this.isEffectivelyVisible(object));
     });
 
+    this.publishHubTargetLifecycle(frameState);
+  }
+
+  publishHubTargetLifecycle(frameState) {
     if (frameState.targeting?.targetId && frameState.targeting.targetId !== "none") {
       frameState.hubTargetLifecycle = {
         pass: "HC-009G",
@@ -1933,7 +1992,7 @@ export class HubChamberFoundationSystem {
 
   restoreNonHubVisuals(frameState) {
     for (const name of [...NON_HUB_ENVIRONMENT_ROOTS, ...TRANSITION_VISUAL_ARTIFACTS]) {
-      const object = this.scene.getObjectByName(name);
+      const object = this.getSceneObject(name);
       if (!object) continue;
       if (this.suppressedVisibility.has(name)) {
         object.visible = this.suppressedVisibility.get(name);
@@ -1948,7 +2007,7 @@ export class HubChamberFoundationSystem {
       this.distantHostMode = "default_world_meaning";
     }
 
-    const identityRoot = this.scene.getObjectByName("signal_chorus_living_tissue_identity_HC006A");
+    const identityRoot = this.getSceneObject("signal_chorus_living_tissue_identity_HC006A");
     if (identityRoot) {
       identityRoot.traverse((child) => {
         if (child.name?.includes("signal_chorus_conduction_mote")) child.visible = true;
@@ -1967,7 +2026,9 @@ export class HubChamberFoundationSystem {
       return this.createEmptySpatialTruth();
     }
 
-    this.scene.updateMatrixWorld(true);
+    // W2A3: route readability needs Hub transforms, not a whole-scene matrix walk.
+    if (this.root?.updateWorldMatrix) this.root.updateWorldMatrix(true, true);
+    else this.root?.updateMatrixWorld?.(true);
     this.camera?.updateMatrixWorld?.(true);
 
     const center = new THREE.Vector3();
@@ -2305,13 +2366,21 @@ export class HubChamberFoundationSystem {
     return true;
   }
 
-  setSceneObjectVisible(name, visible) {
+  getSceneObject(name) {
+    const cached = this.sceneObjectCache.get(name);
+    if (cached?.parent) return cached;
     const object = this.scene.getObjectByName(name);
+    if (object) this.sceneObjectCache.set(name, object);
+    return object ?? null;
+  }
+
+  setSceneObjectVisible(name, visible) {
+    const object = this.getSceneObject(name);
     if (object) object.visible = Boolean(visible);
   }
 
   setSceneObjectOpacity(name, opacity) {
-    const object = this.scene.getObjectByName(name);
+    const object = this.getSceneObject(name);
     if (!object) return;
     object.traverse((child) => {
       if (!child.material) return;

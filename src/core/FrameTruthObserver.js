@@ -133,7 +133,7 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A2",
+      optimizationPass: "HC-031W2A3",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "actual simulation delta is capped by the unchanged GameRuntime.tick() at 50ms per callback",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",

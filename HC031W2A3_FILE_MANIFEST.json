@@ -1,0 +1,61 @@
+{
+  "patchId": "HC-031W2A3",
+  "title": "Residency + Foundation",
+  "applyAfter": "HC-031W2A2 \u2014 Transient Render Budget",
+  "visibleGameplayBuildRemains": "HC-031W1 \u2014 Stabilized Aim + Local Contact Proof",
+  "telemetryOptimizationPass": "HC-031W2A3",
+  "parentPatchArchiveSha256": "285d15d31147db4cd80282e523cf51344d7c2aa464abd88f49ca3f8fdf8379bd",
+  "noDeleteTargets": true,
+  "gameplayTimeRuleChanged": false,
+  "simulationDeltaCapStillSeconds": 0.05,
+  "files": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "operation": "modify",
+      "overlaySha256": "e40535880f0cc2f7158b54f3c40894e438bdc08165515cd4beea6df8492844e8",
+      "sizeBytes": 133861,
+      "expectedParentSha256": "827ae58f10e293cb2f2ee93a23becbb4f46e956ea9d5b25f7d84245aaee1d66b"
+    },
+    {
+      "path": "src/core/FrameTruthObserver.js",
+      "operation": "modify",
+      "overlaySha256": "7064e4d1e0df79363ed2db8745683424049498dfb5b700e9840570ba2ec1932d",
+      "sizeBytes": 7260,
+      "expectedParentSha256": "37740292d1ec448002d0a95bd7904c04a0e39931ce646e7356ed451a9fa9e913"
+    },
+    {
+      "path": "src/presentation/RenderBudgetSystem.js",
+      "operation": "modify",
+      "overlaySha256": "6799b5730333ab5c5e55fde6996f37a6a31f95ea5f5374911d802857a5b61add",
+      "sizeBytes": 10707,
+      "expectedParentSha256": "d131b9cd3ee6ac91dba087a147071a3955f3821d996aea004a53bbdc071b1c20"
+    },
+    {
+      "path": "src/hub/HubChamberFoundationSystem.js",
+      "operation": "modify",
+      "overlaySha256": "8fae2565edea070a223ea94363d1ae073f6f66c009715e2cbd11472c92a20192",
+      "sizeBytes": 144039,
+      "expectedParentSha256": "c14627cf529f8de7baf0fb3cbff88a2ec6d0edcd1504709bff092f5c591477be"
+    },
+    {
+      "path": "scripts/validateHC031W2A1CostReduction.mjs",
+      "operation": "modify",
+      "overlaySha256": "48611f7e3624b07585ff3e692bd394a5decceab9e690e371e71d94044ee867a4",
+      "sizeBytes": 5533,
+      "expectedParentSha256": "65a7e5d8c1b2173a0751176c8dfbe6fbf9d4a0e8528d90f562d66d9f9d3cea65"
+    },
+    {
+      "path": "scripts/validateHC031W2A2TransientRenderBudget.mjs",
+      "operation": "modify",
+      "overlaySha256": "841bedacc1a5c75eef8b2ff1eff42471ae5b988ac6f41b88ada6fa82b7d7d20c",
+      "sizeBytes": 5785,
+      "expectedParentSha256": "ab6871cdfdaf81f09acff6e3f15de8450bbe6a0b828843bb5cabd3d4fe9b0af1"
+    },
+    {
+      "path": "scripts/validateHC031W2A3ResidencyFoundation.mjs",
+      "operation": "add",
+      "overlaySha256": "ebc910441dd662e37c4fd0940fa6ab64e1b6d44f09c1c7c6b1959a6fbff2af6a",
+      "sizeBytes": 5422
+    }
+  ]
+}
