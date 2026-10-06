@@ -20,6 +20,12 @@ export class CoreVerbPhysicalizationSystem {
     this.lastPulseEventId = 0;
     this.pulseFronts = [];
     this.pulseContours = [];
+    // HC-031W2A1: keep pulse contour language, but cap transient line cost.
+    // Reduced contour geometry is cached by source geometry and reused between pulses.
+    this.pulseContourGeometryCache = new WeakMap();
+    this.maxPulseContours = 3;
+    this.maxPulseContourMeshes = 4;
+    this.maxPulseContourSegmentsPerMesh = 180;
     this.contactFlashes = [];
     this.pulseReturnMotes = [];
     this.absorbMotes = [];
@@ -200,6 +206,12 @@ export class CoreVerbPhysicalizationSystem {
       pass: "HC-028G",
       pulseFronts: this.pulseFronts.length,
       pulseContours: this.pulseContours.length,
+      pulseContourSegments: this.pulseContours.reduce((sum, contour) => sum + (contour.segmentCount ?? 0), 0),
+      pulseContourBudget: {
+        maxConcurrent: this.maxPulseContours,
+        maxMeshesPerContour: this.maxPulseContourMeshes,
+        maxSegmentsPerMesh: this.maxPulseContourSegmentsPerMesh
+      },
       pulseReturnMotes: this.pulseReturnMotes.length,
       absorbMotes: this.absorbMotes.length,
       absorbFilaments: this.absorbFilaments?.children?.length ?? 0,
@@ -421,9 +433,60 @@ export class CoreVerbPhysicalizationSystem {
     });
   }
 
+  getReducedPulseContourGeometry(sourceGeometry) {
+    if (!sourceGeometry?.attributes?.position) return null;
+    const cached = this.pulseContourGeometryCache.get(sourceGeometry);
+    if (cached) return cached;
+
+    const wireGeometry = new THREE.WireframeGeometry(sourceGeometry);
+    const positions = wireGeometry.attributes?.position;
+    const totalSegments = Math.floor((positions?.count ?? 0) / 2);
+    if (totalSegments <= 0) {
+      wireGeometry.dispose();
+      return null;
+    }
+
+    if (totalSegments <= this.maxPulseContourSegmentsPerMesh) {
+      wireGeometry.userData.hc031w2a1SharedPulseContourGeometry = true;
+      this.pulseContourGeometryCache.set(sourceGeometry, wireGeometry);
+      return wireGeometry;
+    }
+
+    const keptSegments = this.maxPulseContourSegmentsPerMesh;
+    const sampled = new Float32Array(keptSegments * 6);
+    const stride = totalSegments / keptSegments;
+    for (let index = 0; index < keptSegments; index += 1) {
+      const segmentIndex = Math.min(totalSegments - 1, Math.floor(index * stride));
+      const sourceOffset = segmentIndex * 2;
+      const targetOffset = index * 6;
+      sampled[targetOffset] = positions.getX(sourceOffset);
+      sampled[targetOffset + 1] = positions.getY(sourceOffset);
+      sampled[targetOffset + 2] = positions.getZ(sourceOffset);
+      sampled[targetOffset + 3] = positions.getX(sourceOffset + 1);
+      sampled[targetOffset + 4] = positions.getY(sourceOffset + 1);
+      sampled[targetOffset + 5] = positions.getZ(sourceOffset + 1);
+    }
+    wireGeometry.dispose();
+
+    const reducedGeometry = new THREE.BufferGeometry();
+    reducedGeometry.setAttribute("position", new THREE.BufferAttribute(sampled, 3));
+    reducedGeometry.computeBoundingSphere();
+    reducedGeometry.userData.hc031w2a1SharedPulseContourGeometry = true;
+    this.pulseContourGeometryCache.set(sourceGeometry, reducedGeometry);
+    return reducedGeometry;
+  }
+
   spawnPulseContour(contact, color, frameState = this.frameState) {
     const target = this.findObject(contact?.id);
     if (!target?.root?.visible) return;
+
+    // Repeated sonar on the same noun refreshes its contour instead of stacking
+    // duplicate cages over identical geometry.
+    for (let index = this.pulseContours.length - 1; index >= 0; index -= 1) {
+      if (this.pulseContours[index]?.targetId !== contact?.id) continue;
+      const duplicate = this.pulseContours.splice(index, 1)[0];
+      this.disposeContour(duplicate);
+    }
 
     target.root.updateWorldMatrix?.(true, true);
     const box = new THREE.Box3().setFromObject(target.root);
@@ -436,25 +499,25 @@ export class CoreVerbPhysicalizationSystem {
     contourRoot.userData.targetingSuppressed = true;
     const materials = [];
     let meshCount = 0;
+    let segmentCount = 0;
 
     target.root.traverse((child) => {
-      if (meshCount >= 7 || !child?.isMesh || !child.geometry?.attributes?.position) return;
+      if (meshCount >= this.maxPulseContourMeshes || !child?.isMesh || !child.geometry?.attributes?.position) return;
       const vertexCount = child.geometry.attributes.position.count ?? 0;
       if (vertexCount <= 0 || vertexCount > 1800) return;
-      const wireGeometry = new THREE.WireframeGeometry(child.geometry);
-      const wireCount = wireGeometry.attributes?.position?.count ?? 0;
-      if (wireCount <= 0 || wireCount > 7200) {
-        wireGeometry.dispose();
-        return;
-      }
+      const contourGeometry = this.getReducedPulseContourGeometry(child.geometry);
+      const wireCount = contourGeometry?.attributes?.position?.count ?? 0;
+      if (wireCount <= 0) return;
+
       const material = new THREE.LineBasicMaterial({
         color,
         transparent: true,
         opacity: 0,
         depthWrite: false
       });
-      const wire = new THREE.LineSegments(wireGeometry, material);
+      const wire = new THREE.LineSegments(contourGeometry, material);
       wire.userData.targetingSuppressed = true;
+      wire.userData.hc031w2a1SharedPulseContourGeometry = true;
       const relativeMatrix = new THREE.Matrix4()
         .makeTranslation(-center.x, -center.y, -center.z)
         .multiply(child.matrixWorld);
@@ -462,6 +525,7 @@ export class CoreVerbPhysicalizationSystem {
       wire.matrix.copy(relativeMatrix);
       contourRoot.add(wire);
       materials.push(material);
+      segmentCount += Math.floor(wireCount / 2);
       meshCount += 1;
     });
 
@@ -469,8 +533,10 @@ export class CoreVerbPhysicalizationSystem {
     this.group.add(contourRoot);
     const pulseCharacter = frameState.coreTopologyVerbCharacter?.pulse ?? {};
     this.pulseContours.push({
+      targetId: contact?.id ?? "material",
       root: contourRoot,
       materials,
+      segmentCount,
       age: 0,
       life: (contact?.reachClass === "deep_structural" ? 0.92 : 0.66) * (pulseCharacter.contourPersistenceScale ?? 1),
       baseOpacity: contact?.reachClass === "deep_structural" ? 0.26 : 0.38,
@@ -478,7 +544,7 @@ export class CoreVerbPhysicalizationSystem {
       resolutionStage: Math.max(1, Math.min(3, contact?.resolutionStage ?? 1))
     });
 
-    while (this.pulseContours.length > 8) {
+    while (this.pulseContours.length > this.maxPulseContours) {
       const oldest = this.pulseContours.shift();
       this.disposeContour(oldest);
     }
@@ -508,7 +574,7 @@ export class CoreVerbPhysicalizationSystem {
     if (!contour?.root) return;
     this.group.remove(contour.root);
     contour.root.traverse((child) => {
-      child.geometry?.dispose?.();
+      if (!child.userData?.hc031w2a1SharedPulseContourGeometry) child.geometry?.dispose?.();
       child.material?.dispose?.();
     });
   }

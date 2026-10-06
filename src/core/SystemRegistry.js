@@ -10,7 +10,11 @@ export class SystemRegistry {
     this.updateTiming = new Map();
     this.timingSampleEveryFrames = 60;
     this.slowSystemThresholdMs = 2.0;
-    this.hitchSampleThresholdMs = 45.0;
+    // HC-031W2A1: avoid turning every already-slow frame into an instrumented
+    // frame. Periodic samples remain, while exceptional hitches are rate-limited.
+    this.hitchSampleThresholdMs = 120.0;
+    this.hitchSampleCooldownFrames = 30;
+    this.lastHitchTimingSampleFrame = -999999;
     this.worstSampledUpdateMs = 0;
     this.worstSampledFrame = -1;
     this.worstSampleSnapshot = null;
@@ -114,9 +118,13 @@ export class SystemRegistry {
     };
     if (frameState) frameState.runtimeExecution = execution;
     const rawFrameDeltaMs = frameState?.runtimeFrameRawDeltaMs ?? frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
+    const frameNumber = frameState?.frame ?? 0;
     const periodicTimingSample =
-      ((frameState?.frame ?? 0) % this.timingSampleEveryFrames) === 0;
-    const hitchTimingSample = rawFrameDeltaMs >= this.hitchSampleThresholdMs;
+      (frameNumber % this.timingSampleEveryFrames) === 0;
+    const hitchTimingSample =
+      rawFrameDeltaMs >= this.hitchSampleThresholdMs
+      && frameNumber - this.lastHitchTimingSampleFrame >= this.hitchSampleCooldownFrames;
+    if (hitchTimingSample) this.lastHitchTimingSampleFrame = frameNumber;
     const sampleTiming = periodicTimingSample || hitchTimingSample;
     let sampledUpdateMs = 0;
 

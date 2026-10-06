@@ -34,6 +34,8 @@ export class CoreSurfaceTruthSystem {
     this.boundaryNormal = new THREE.Vector3(0, 1, 0);
     this.tempNormal = new THREE.Vector3();
     this.tempToPlayer = new THREE.Vector3();
+    this.tempWorldBoundCenter = new THREE.Vector3();
+    this.tempWorldScale = new THREE.Vector3();
     this.normalMatrix = new THREE.Matrix3();
     this.candidates = [];
     this.candidateRefreshAge = 999;
@@ -44,6 +46,8 @@ export class CoreSurfaceTruthSystem {
     this.lastMetadata = null;
     this.lastValidAge = 999;
     this.lastActiveCellId = "none";
+    this.lastProbeCandidateCount = 0;
+    this.probeCandidates = [];
 
     this.directions = [
       new THREE.Vector3(), new THREE.Vector3(),
@@ -124,7 +128,9 @@ export class CoreSurfaceTruthSystem {
       if (metadata.cellId !== "shared" && metadata.cellId !== activeCellId) return;
       const material = Array.isArray(object.material) ? object.material[0] : object.material;
       if (!material || material.visible === false) return;
-      next.push({ object, metadata });
+      if (!object.geometry.boundingSphere) object.geometry.computeBoundingSphere?.();
+      const localBoundingSphere = object.geometry.boundingSphere?.clone?.() ?? null;
+      next.push({ object, metadata, localBoundingSphere });
     });
     this.candidates = next;
   }
@@ -147,12 +153,39 @@ export class CoreSurfaceTruthSystem {
     return false;
   }
 
+  candidateWithinProbe(candidate) {
+    const sphere = candidate?.localBoundingSphere;
+    const object = candidate?.object;
+    if (!sphere || !object?.matrixWorld) return true;
+
+    this.tempWorldBoundCenter.copy(sphere.center).applyMatrix4(object.matrixWorld);
+    this.tempWorldScale.setFromMatrixScale(object.matrixWorld);
+    const worldRadius = sphere.radius * Math.max(
+      Math.abs(this.tempWorldScale.x),
+      Math.abs(this.tempWorldScale.y),
+      Math.abs(this.tempWorldScale.z)
+    );
+    const nearestPossibleDistance = Math.max(
+      0,
+      this.playerPosition.distanceTo(this.tempWorldBoundCenter) - worldRadius
+    );
+    // The sphere encloses the complete mesh, so rejecting only when even the
+    // sphere cannot enter the probe cannot hide a valid raycast contact.
+    return nearestPossibleDistance <= this.raycaster.far + 0.02;
+  }
+
   sampleNearestSurface() {
     let best = null;
+    this.probeCandidates.length = 0;
+    for (const candidate of this.candidates) {
+      if (this.candidateWithinProbe(candidate)) this.probeCandidates.push(candidate);
+    }
+    this.lastProbeCandidateCount = this.probeCandidates.length;
+    const probeCandidates = this.probeCandidates;
     for (const direction of this.directions) {
       if (direction.lengthSq() < 0.0001) continue;
       this.raycaster.set(this.playerPosition, direction);
-      for (const candidate of this.candidates) {
+      for (const candidate of probeCandidates) {
         const hits = this.raycaster.intersectObject(candidate.object, false);
         for (const hit of hits) {
           if (!hit?.face || hit.distance > this.raycaster.far) continue;
@@ -264,6 +297,8 @@ export class CoreSurfaceTruthSystem {
         stabilize: Number(THREE.MathUtils.clamp(metadata.verbTransmission?.stabilize ?? 0.5, 0, 1).toFixed(3))
       },
       candidateCount: this.candidates.length,
+      broadPhaseCandidateCount: this.lastProbeCandidateCount,
+      broadPhase: "bounding_sphere_reject_before_raycast",
       probeCount: this.directions.length,
       retainedAcrossEdgeGrace: Boolean(hit.retained),
       mechanicalEligible,
@@ -291,6 +326,8 @@ export class CoreSurfaceTruthSystem {
       authority: "explicit_ecological_surface_metadata",
       reason,
       candidateCount: this.candidates.length,
+      broadPhaseCandidateCount: this.lastProbeCandidateCount,
+      broadPhase: "bounding_sphere_reject_before_raycast",
       probeCount: this.directions.length,
       mechanicalEligible: false,
       authoredEcologicalSurface: false,

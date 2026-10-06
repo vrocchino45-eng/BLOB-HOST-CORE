@@ -164,6 +164,11 @@ export class SessionTelemetrySystem {
     this.movementSampleIntervalSeconds = 0.5;
     this.coreSnapshotIntervalSeconds = 10;
     this.persistIntervalSeconds = 8;
+    // HC-031W2A1: the live status page does not need a full O(events) summary
+    // rebuild every frame. Exports still force the exact current summary.
+    this.summaryPublishIntervalSeconds = 0.75;
+    this.lastSummaryPublishAt = -Infinity;
+    this.publishedSummary = null;
     this.boundPageHide = () => this.persist(true);
     this.boundKeyDown = (event) => this.onKeyDown(event);
   }
@@ -3498,6 +3503,14 @@ export class SessionTelemetrySystem {
   }
 
   publish(frameState) {
+    const wallNow = this.wallTime();
+    if (
+      !this.publishedSummary
+      || wallNow - this.lastSummaryPublishAt >= this.summaryPublishIntervalSeconds
+    ) {
+      this.publishedSummary = this.buildSummary();
+      this.lastSummaryPublishAt = wallNow;
+    }
     frameState.sessionTelemetry = {
       pass: "HC-028D1",
       active: true,
@@ -3509,9 +3522,9 @@ export class SessionTelemetrySystem {
       coreSnapshotCount: this.coreSnapshots.length,
       lastEventType: this.lastEvent?.type ?? "session.started",
       lastEventAt: this.lastEvent?.wallT ?? this.lastEvent?.t ?? 0,
-      wallDurationSeconds: round(this.wallTime()),
+      wallDurationSeconds: round(wallNow),
       simDurationSeconds: round(this.simTime()),
-      wallMinusSimSeconds: round(this.wallTime() - this.simTime()),
+      wallMinusSimSeconds: round(wallNow - this.simTime()),
       informationGainAge: round(this.informationGainAge()),
       meaningfulResponseAge: this.meaningfulResponseAge() == null ? null : round(this.meaningfulResponseAge()),
       semanticAnswerAge: round(this.semanticAnswerAge()),
@@ -3542,7 +3555,7 @@ export class SessionTelemetrySystem {
         bestStageIndex: this.physicalLanguageValidation?.bestStageIndex ?? 0,
         rule: "observe_locked_language_post_verb_causality_no_gameplay_feedback"
       },
-      summary: this.buildSummary()
+      summary: this.publishedSummary
     };
   }
 

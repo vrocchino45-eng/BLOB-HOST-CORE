@@ -1,0 +1,69 @@
+{
+  "pass": "HC-031W2A1",
+  "base": "HC-031W1 + HC-031W2A Frame Truth",
+  "packageType": "changed-files-only overlay",
+  "gameplayAuthorityChanged": false,
+  "simulationDeltaCapChanged": false,
+  "files": [
+    {
+      "path": "HC031W2A1_BUILD_REPORT.md",
+      "sizeBytes": 2724,
+      "sha256": "452eb3006b59048396dfd9b9e5eabe298c1966cb67ece328f94f53c79607fb83",
+      "expectedBaseSha256": null
+    },
+    {
+      "path": "HC031W2A1_CHANGED_LINES.diff",
+      "sizeBytes": 16509,
+      "sha256": "a6729000cbf708d75867f998673ebc6a10a44b6dc6a55ecd5a71bac7011bcd0c",
+      "expectedBaseSha256": null
+    },
+    {
+      "path": "HC031W2A1_PATCH_APPLY.md",
+      "sizeBytes": 2409,
+      "sha256": "6ad8028b340856c885bcd69c59e6af490e4ff884ce44173a4690238c1737aeeb",
+      "expectedBaseSha256": null
+    },
+    {
+      "path": "scripts/validateHC031W2A1CostReduction.mjs",
+      "sizeBytes": 5529,
+      "sha256": "31c0572d3e03063a54bf05403c86be3e0fc3aa8e79165fd9e34dc708e47d7912",
+      "expectedBaseSha256": null
+    },
+    {
+      "path": "src/core/FrameTruthObserver.js",
+      "sizeBytes": 7079,
+      "sha256": "960826d6a82ad54c7f5d89011ea8b8c820768c9f37565357057e16e8f4ffdf39",
+      "expectedBaseSha256": "0ba32417a13082520f9f3c99a221784fa116db2654d1f6b0133ebd881242a136"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "sizeBytes": 132141,
+      "sha256": "8ad9b19b65ed23f30aa93683f72859dcdf22cd5d33e2921b3c380941b1b44826",
+      "expectedBaseSha256": "3a852b6d638417878c7efce8b75bbac18d7ce0d709668ae5258b987417743af9"
+    },
+    {
+      "path": "src/core/SessionTelemetrySystem.js",
+      "sizeBytes": 179520,
+      "sha256": "b6d1c03f3544ae47da045f9554ace4b3c11459b9d481952a1d957d5f890f5de4",
+      "expectedBaseSha256": "e6fb3fe064a1b633b3d812bde790fc4493acbda957cda7ee191c275b8348c70e"
+    },
+    {
+      "path": "src/core/SystemRegistry.js",
+      "sizeBytes": 12378,
+      "sha256": "86842141af18cc9d88f63bf125f92f0cdbefd9570ff77d5b74cb67b656d058d5",
+      "expectedBaseSha256": "cdae8d0e85ea024768900f25467b30859dda9e3e7dfb8905927e65ff10856506"
+    },
+    {
+      "path": "src/player/CoreSurfaceTruthSystem.js",
+      "sizeBytes": 13720,
+      "sha256": "4dfdcd3c15f330718419debf60e104003ce018037a7fbaacd5a9819950a57976",
+      "expectedBaseSha256": "f8c7d860f6b8b352cbcea09ce43a6d8ec1ea68345100ba1d2084cf911f1a2dc9"
+    },
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "sizeBytes": 41979,
+      "sha256": "b2909a86305f13daf242f1ae7dee73b07f6305f3fa6e07f43c342e4be499ff7c",
+      "expectedBaseSha256": "83ebe369ab9f49529eb0f7637f3f84b2302ddfab3d988b26dea3412b4f6f8bcd"
+    }
+  ]
+}

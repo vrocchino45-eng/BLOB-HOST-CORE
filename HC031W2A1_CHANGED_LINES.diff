@@ -1,0 +1,368 @@
+# HC031W2A1 changed-lines reference
+
+## CoreSurfaceTruthSystem.diff
+--- /mnt/data/w1_src/BLOB-HOST-CORE/src/player/CoreSurfaceTruthSystem.js	2026-10-01 04:03:36.000000000 +0000
++++ /mnt/data/hc031w2a1_work/src/player/CoreSurfaceTruthSystem.js	2026-10-06 00:44:08.298672236 +0000
+@@ -34,6 +34,8 @@
+     this.boundaryNormal = new THREE.Vector3(0, 1, 0);
+     this.tempNormal = new THREE.Vector3();
+     this.tempToPlayer = new THREE.Vector3();
++    this.tempWorldBoundCenter = new THREE.Vector3();
++    this.tempWorldScale = new THREE.Vector3();
+     this.normalMatrix = new THREE.Matrix3();
+     this.candidates = [];
+     this.candidateRefreshAge = 999;
+@@ -44,6 +46,8 @@
+     this.lastMetadata = null;
+     this.lastValidAge = 999;
+     this.lastActiveCellId = "none";
++    this.lastProbeCandidateCount = 0;
++    this.probeCandidates = [];
+ 
+     this.directions = [
+       new THREE.Vector3(), new THREE.Vector3(),
+@@ -124,7 +128,9 @@
+       if (metadata.cellId !== "shared" && metadata.cellId !== activeCellId) return;
+       const material = Array.isArray(object.material) ? object.material[0] : object.material;
+       if (!material || material.visible === false) return;
+-      next.push({ object, metadata });
++      if (!object.geometry.boundingSphere) object.geometry.computeBoundingSphere?.();
++      const localBoundingSphere = object.geometry.boundingSphere?.clone?.() ?? null;
++      next.push({ object, metadata, localBoundingSphere });
+     });
+     this.candidates = next;
+   }
+@@ -147,12 +153,39 @@
+     return false;
+   }
+ 
++  candidateWithinProbe(candidate) {
++    const sphere = candidate?.localBoundingSphere;
++    const object = candidate?.object;
++    if (!sphere || !object?.matrixWorld) return true;
++
++    this.tempWorldBoundCenter.copy(sphere.center).applyMatrix4(object.matrixWorld);
++    this.tempWorldScale.setFromMatrixScale(object.matrixWorld);
++    const worldRadius = sphere.radius * Math.max(
++      Math.abs(this.tempWorldScale.x),
++      Math.abs(this.tempWorldScale.y),
++      Math.abs(this.tempWorldScale.z)
++    );
++    const nearestPossibleDistance = Math.max(
++      0,
++      this.playerPosition.distanceTo(this.tempWorldBoundCenter) - worldRadius
++    );
++    // The sphere encloses the complete mesh, so rejecting only when even the
++    // sphere cannot enter the probe cannot hide a valid raycast contact.
++    return nearestPossibleDistance <= this.raycaster.far + 0.02;
++  }
++
+   sampleNearestSurface() {
+     let best = null;
++    this.probeCandidates.length = 0;
++    for (const candidate of this.candidates) {
++      if (this.candidateWithinProbe(candidate)) this.probeCandidates.push(candidate);
++    }
++    this.lastProbeCandidateCount = this.probeCandidates.length;
++    const probeCandidates = this.probeCandidates;
+     for (const direction of this.directions) {
+       if (direction.lengthSq() < 0.0001) continue;
+       this.raycaster.set(this.playerPosition, direction);
+-      for (const candidate of this.candidates) {
++      for (const candidate of probeCandidates) {
+         const hits = this.raycaster.intersectObject(candidate.object, false);
+         for (const hit of hits) {
+           if (!hit?.face || hit.distance > this.raycaster.far) continue;
+@@ -264,6 +297,8 @@
+         stabilize: Number(THREE.MathUtils.clamp(metadata.verbTransmission?.stabilize ?? 0.5, 0, 1).toFixed(3))
+       },
+       candidateCount: this.candidates.length,
++      broadPhaseCandidateCount: this.lastProbeCandidateCount,
++      broadPhase: "bounding_sphere_reject_before_raycast",
+       probeCount: this.directions.length,
+       retainedAcrossEdgeGrace: Boolean(hit.retained),
+       mechanicalEligible,
+@@ -291,6 +326,8 @@
+       authority: "explicit_ecological_surface_metadata",
+       reason,
+       candidateCount: this.candidates.length,
++      broadPhaseCandidateCount: this.lastProbeCandidateCount,
++      broadPhase: "bounding_sphere_reject_before_raycast",
+       probeCount: this.directions.length,
+       mechanicalEligible: false,
+       authoredEcologicalSurface: false,
+
+## CoreVerbPhysicalizationSystem.diff
+--- /mnt/data/w1_src/BLOB-HOST-CORE/src/player/CoreVerbPhysicalizationSystem.js	2026-09-20 13:17:06.000000000 +0000
++++ /mnt/data/hc031w2a1_work/src/player/CoreVerbPhysicalizationSystem.js	2026-10-06 00:43:10.223372117 +0000
+@@ -20,6 +20,12 @@
+     this.lastPulseEventId = 0;
+     this.pulseFronts = [];
+     this.pulseContours = [];
++    // HC-031W2A1: keep pulse contour language, but cap transient line cost.
++    // Reduced contour geometry is cached by source geometry and reused between pulses.
++    this.pulseContourGeometryCache = new WeakMap();
++    this.maxPulseContours = 3;
++    this.maxPulseContourMeshes = 4;
++    this.maxPulseContourSegmentsPerMesh = 180;
+     this.contactFlashes = [];
+     this.pulseReturnMotes = [];
+     this.absorbMotes = [];
+@@ -200,6 +206,12 @@
+       pass: "HC-028G",
+       pulseFronts: this.pulseFronts.length,
+       pulseContours: this.pulseContours.length,
++      pulseContourSegments: this.pulseContours.reduce((sum, contour) => sum + (contour.segmentCount ?? 0), 0),
++      pulseContourBudget: {
++        maxConcurrent: this.maxPulseContours,
++        maxMeshesPerContour: this.maxPulseContourMeshes,
++        maxSegmentsPerMesh: this.maxPulseContourSegmentsPerMesh
++      },
+       pulseReturnMotes: this.pulseReturnMotes.length,
+       absorbMotes: this.absorbMotes.length,
+       absorbFilaments: this.absorbFilaments?.children?.length ?? 0,
+@@ -421,10 +433,61 @@
+     });
+   }
+ 
++  getReducedPulseContourGeometry(sourceGeometry) {
++    if (!sourceGeometry?.attributes?.position) return null;
++    const cached = this.pulseContourGeometryCache.get(sourceGeometry);
++    if (cached) return cached;
++
++    const wireGeometry = new THREE.WireframeGeometry(sourceGeometry);
++    const positions = wireGeometry.attributes?.position;
++    const totalSegments = Math.floor((positions?.count ?? 0) / 2);
++    if (totalSegments <= 0) {
++      wireGeometry.dispose();
++      return null;
++    }
++
++    if (totalSegments <= this.maxPulseContourSegmentsPerMesh) {
++      wireGeometry.userData.hc031w2a1SharedPulseContourGeometry = true;
++      this.pulseContourGeometryCache.set(sourceGeometry, wireGeometry);
++      return wireGeometry;
++    }
++
++    const keptSegments = this.maxPulseContourSegmentsPerMesh;
++    const sampled = new Float32Array(keptSegments * 6);
++    const stride = totalSegments / keptSegments;
++    for (let index = 0; index < keptSegments; index += 1) {
++      const segmentIndex = Math.min(totalSegments - 1, Math.floor(index * stride));
++      const sourceOffset = segmentIndex * 2;
++      const targetOffset = index * 6;
++      sampled[targetOffset] = positions.getX(sourceOffset);
++      sampled[targetOffset + 1] = positions.getY(sourceOffset);
++      sampled[targetOffset + 2] = positions.getZ(sourceOffset);
++      sampled[targetOffset + 3] = positions.getX(sourceOffset + 1);
++      sampled[targetOffset + 4] = positions.getY(sourceOffset + 1);
++      sampled[targetOffset + 5] = positions.getZ(sourceOffset + 1);
++    }
++    wireGeometry.dispose();
++
++    const reducedGeometry = new THREE.BufferGeometry();
++    reducedGeometry.setAttribute("position", new THREE.BufferAttribute(sampled, 3));
++    reducedGeometry.computeBoundingSphere();
++    reducedGeometry.userData.hc031w2a1SharedPulseContourGeometry = true;
++    this.pulseContourGeometryCache.set(sourceGeometry, reducedGeometry);
++    return reducedGeometry;
++  }
++
+   spawnPulseContour(contact, color, frameState = this.frameState) {
+     const target = this.findObject(contact?.id);
+     if (!target?.root?.visible) return;
+ 
++    // Repeated sonar on the same noun refreshes its contour instead of stacking
++    // duplicate cages over identical geometry.
++    for (let index = this.pulseContours.length - 1; index >= 0; index -= 1) {
++      if (this.pulseContours[index]?.targetId !== contact?.id) continue;
++      const duplicate = this.pulseContours.splice(index, 1)[0];
++      this.disposeContour(duplicate);
++    }
++
+     target.root.updateWorldMatrix?.(true, true);
+     const box = new THREE.Box3().setFromObject(target.root);
+     if (box.isEmpty()) return;
+@@ -436,25 +499,25 @@
+     contourRoot.userData.targetingSuppressed = true;
+     const materials = [];
+     let meshCount = 0;
++    let segmentCount = 0;
+ 
+     target.root.traverse((child) => {
+-      if (meshCount >= 7 || !child?.isMesh || !child.geometry?.attributes?.position) return;
++      if (meshCount >= this.maxPulseContourMeshes || !child?.isMesh || !child.geometry?.attributes?.position) return;
+       const vertexCount = child.geometry.attributes.position.count ?? 0;
+       if (vertexCount <= 0 || vertexCount > 1800) return;
+-      const wireGeometry = new THREE.WireframeGeometry(child.geometry);
+-      const wireCount = wireGeometry.attributes?.position?.count ?? 0;
+-      if (wireCount <= 0 || wireCount > 7200) {
+-        wireGeometry.dispose();
+-        return;
+-      }
++      const contourGeometry = this.getReducedPulseContourGeometry(child.geometry);
++      const wireCount = contourGeometry?.attributes?.position?.count ?? 0;
++      if (wireCount <= 0) return;
++
+       const material = new THREE.LineBasicMaterial({
+         color,
+         transparent: true,
+         opacity: 0,
+         depthWrite: false
+       });
+-      const wire = new THREE.LineSegments(wireGeometry, material);
++      const wire = new THREE.LineSegments(contourGeometry, material);
+       wire.userData.targetingSuppressed = true;
++      wire.userData.hc031w2a1SharedPulseContourGeometry = true;
+       const relativeMatrix = new THREE.Matrix4()
+         .makeTranslation(-center.x, -center.y, -center.z)
+         .multiply(child.matrixWorld);
+@@ -462,6 +525,7 @@
+       wire.matrix.copy(relativeMatrix);
+       contourRoot.add(wire);
+       materials.push(material);
++      segmentCount += Math.floor(wireCount / 2);
+       meshCount += 1;
+     });
+ 
+@@ -469,8 +533,10 @@
+     this.group.add(contourRoot);
+     const pulseCharacter = frameState.coreTopologyVerbCharacter?.pulse ?? {};
+     this.pulseContours.push({
++      targetId: contact?.id ?? "material",
+       root: contourRoot,
+       materials,
++      segmentCount,
+       age: 0,
+       life: (contact?.reachClass === "deep_structural" ? 0.92 : 0.66) * (pulseCharacter.contourPersistenceScale ?? 1),
+       baseOpacity: contact?.reachClass === "deep_structural" ? 0.26 : 0.38,
+@@ -478,7 +544,7 @@
+       resolutionStage: Math.max(1, Math.min(3, contact?.resolutionStage ?? 1))
+     });
+ 
+-    while (this.pulseContours.length > 8) {
++    while (this.pulseContours.length > this.maxPulseContours) {
+       const oldest = this.pulseContours.shift();
+       this.disposeContour(oldest);
+     }
+@@ -508,7 +574,7 @@
+     if (!contour?.root) return;
+     this.group.remove(contour.root);
+     contour.root.traverse((child) => {
+-      child.geometry?.dispose?.();
++      if (!child.userData?.hc031w2a1SharedPulseContourGeometry) child.geometry?.dispose?.();
+       child.material?.dispose?.();
+     });
+   }
+
+## GameRuntime.js.diff
+--- /mnt/data/w2a_patch_inspect/src/core/GameRuntime.js	2026-10-03 05:41:04.000000000 +0000
++++ /mnt/data/hc031w2a1_work/src/core/GameRuntime.js	2026-10-06 00:44:08.299514210 +0000
+@@ -2730,6 +2730,10 @@
+       registrySample: this.frameState.runtimeExecution,
+       rendererInfo: info ? {
+         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
++        pulseContours: this.frameState.verbPhysicalization?.pulseContours ?? 0,
++        pulseContourSegments: this.frameState.verbPhysicalization?.pulseContourSegments ?? 0,
++        surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
++        surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
+         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+         devicePixelRatio: this.renderer.getPixelRatio()
+       } : null
+
+## SessionTelemetrySystem.js.diff
+--- /mnt/data/w2a_patch_inspect/src/core/SessionTelemetrySystem.js	2026-10-03 05:41:04.000000000 +0000
++++ /mnt/data/hc031w2a1_work/src/core/SessionTelemetrySystem.js	2026-10-06 00:43:10.225307519 +0000
+@@ -164,6 +164,11 @@
+     this.movementSampleIntervalSeconds = 0.5;
+     this.coreSnapshotIntervalSeconds = 10;
+     this.persistIntervalSeconds = 8;
++    // HC-031W2A1: the live status page does not need a full O(events) summary
++    // rebuild every frame. Exports still force the exact current summary.
++    this.summaryPublishIntervalSeconds = 0.75;
++    this.lastSummaryPublishAt = -Infinity;
++    this.publishedSummary = null;
+     this.boundPageHide = () => this.persist(true);
+     this.boundKeyDown = (event) => this.onKeyDown(event);
+   }
+@@ -3498,6 +3503,14 @@
+   }
+ 
+   publish(frameState) {
++    const wallNow = this.wallTime();
++    if (
++      !this.publishedSummary
++      || wallNow - this.lastSummaryPublishAt >= this.summaryPublishIntervalSeconds
++    ) {
++      this.publishedSummary = this.buildSummary();
++      this.lastSummaryPublishAt = wallNow;
++    }
+     frameState.sessionTelemetry = {
+       pass: "HC-028D1",
+       active: true,
+@@ -3509,9 +3522,9 @@
+       coreSnapshotCount: this.coreSnapshots.length,
+       lastEventType: this.lastEvent?.type ?? "session.started",
+       lastEventAt: this.lastEvent?.wallT ?? this.lastEvent?.t ?? 0,
+-      wallDurationSeconds: round(this.wallTime()),
++      wallDurationSeconds: round(wallNow),
+       simDurationSeconds: round(this.simTime()),
+-      wallMinusSimSeconds: round(this.wallTime() - this.simTime()),
++      wallMinusSimSeconds: round(wallNow - this.simTime()),
+       informationGainAge: round(this.informationGainAge()),
+       meaningfulResponseAge: this.meaningfulResponseAge() == null ? null : round(this.meaningfulResponseAge()),
+       semanticAnswerAge: round(this.semanticAnswerAge()),
+@@ -3542,7 +3555,7 @@
+         bestStageIndex: this.physicalLanguageValidation?.bestStageIndex ?? 0,
+         rule: "observe_locked_language_post_verb_causality_no_gameplay_feedback"
+       },
+-      summary: this.buildSummary()
++      summary: this.publishedSummary
+     };
+   }
+ 
+
+## SystemRegistry.js.diff
+--- /mnt/data/w2a_patch_inspect/src/core/SystemRegistry.js	2026-10-03 05:41:04.000000000 +0000
++++ /mnt/data/hc031w2a1_work/src/core/SystemRegistry.js	2026-10-06 00:43:10.225612980 +0000
+@@ -10,7 +10,11 @@
+     this.updateTiming = new Map();
+     this.timingSampleEveryFrames = 60;
+     this.slowSystemThresholdMs = 2.0;
+-    this.hitchSampleThresholdMs = 45.0;
++    // HC-031W2A1: avoid turning every already-slow frame into an instrumented
++    // frame. Periodic samples remain, while exceptional hitches are rate-limited.
++    this.hitchSampleThresholdMs = 120.0;
++    this.hitchSampleCooldownFrames = 30;
++    this.lastHitchTimingSampleFrame = -999999;
+     this.worstSampledUpdateMs = 0;
+     this.worstSampledFrame = -1;
+     this.worstSampleSnapshot = null;
+@@ -114,9 +118,13 @@
+     };
+     if (frameState) frameState.runtimeExecution = execution;
+     const rawFrameDeltaMs = frameState?.runtimeFrameRawDeltaMs ?? frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
++    const frameNumber = frameState?.frame ?? 0;
+     const periodicTimingSample =
+-      ((frameState?.frame ?? 0) % this.timingSampleEveryFrames) === 0;
+-    const hitchTimingSample = rawFrameDeltaMs >= this.hitchSampleThresholdMs;
++      (frameNumber % this.timingSampleEveryFrames) === 0;
++    const hitchTimingSample =
++      rawFrameDeltaMs >= this.hitchSampleThresholdMs
++      && frameNumber - this.lastHitchTimingSampleFrame >= this.hitchSampleCooldownFrames;
++    if (hitchTimingSample) this.lastHitchTimingSampleFrame = frameNumber;
+     const sampleTiming = periodicTimingSample || hitchTimingSample;
+     let sampledUpdateMs = 0;
+ 
+
+## FrameTruthObserver.js.diff
+--- /mnt/data/w2a_patch_inspect/src/core/FrameTruthObserver.js	2026-10-03 05:41:04.000000000 +0000
++++ /mnt/data/hc031w2a1_work/src/core/FrameTruthObserver.js	2026-10-06 00:45:25.823503168 +0000
+@@ -131,6 +131,7 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
++      optimizationPass: "HC-031W2A1",
+       authority: "read_only_observer", gameplayAuthority: false,
+       timingRule: "actual simulation delta is capped by the unchanged GameRuntime.tick() at 50ms per callback",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",

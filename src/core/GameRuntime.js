@@ -2730,6 +2730,10 @@ export class GameRuntime {
       registrySample: this.frameState.runtimeExecution,
       rendererInfo: info ? {
         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
+        pulseContours: this.frameState.verbPhysicalization?.pulseContours ?? 0,
+        pulseContourSegments: this.frameState.verbPhysicalization?.pulseContourSegments ?? 0,
+        surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
+        surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
         devicePixelRatio: this.renderer.getPixelRatio()
       } : null
