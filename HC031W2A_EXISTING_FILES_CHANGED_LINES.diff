@@ -1,0 +1,110 @@
+diff --git a/src/core/GameRuntime.js b/src/core/GameRuntime.js
+index f612317..6a33957 100644
+--- a/src/core/GameRuntime.js
++++ b/src/core/GameRuntime.js
+@@ -2,8 +2,9 @@ import * as THREE from "three";
+ import { SystemRegistry } from "./SystemRegistry.js";
+ import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinator.js";
+ import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
+ import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
++import { FrameTruthObserver } from "./FrameTruthObserver.js";
+ import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
+ import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
+ import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
+ import { DebugAreaJumpSystem } from "../debug/DebugAreaJumpSystem.js";
+@@ -206,8 +207,9 @@ export class GameRuntime {
+     this.firstSliceTransitionCoordinator = null;
+     this.localCellBoundaryMorphSystem = null;
+     this.runtimeStateLedgerSystem = null;
+     this.sessionTelemetrySystem = null;
++    this.frameTruthObserver = new FrameTruthObserver();
+ 
+     this.clock = new THREE.Clock();
+     this.frame = 0;
+     this.isRunning = false;
+@@ -2502,8 +2504,10 @@ export class GameRuntime {
+     this.sessionTelemetrySystem = new SessionTelemetrySystem({
+       frameState: this.frameState,
+       baselineId: "HC027L1_GOLDEN_INQUIRY_BASELINE_01"
+     });
++    // Diagnostic is exported with the existing Shift+T session; no extra hotkey.
++    this.sessionTelemetrySystem.frameTruthProvider = () => this.frameTruthObserver.snapshot();
+   }
+ 
+   registerRuntimeSystems() {
+     const regionScoped = {
+@@ -2695,21 +2699,42 @@ export class GameRuntime {
+   tick() {
+     if (!this.isRunning) return;
+ 
+     const rawDt = this.clock.getDelta();
+-    const dt = Math.min(rawDt, 0.05);
++    const dt = Math.min(rawDt, 0.05); // W2A: leave gameplay timing unchanged while measuring loss.
+ 
+     this.frame += 1;
+     this.frameState.frame = this.frame;
+     this.frameState.runtimeSeconds += dt;
++    // Current-frame truth, not the previous frame's transition-coordinator publication.
++    this.frameState.runtimeFrameRawDeltaMs = rawDt * 1000;
++    this.frameTruthObserver.beginFrame({
++      frame: this.frame, rawDt, dt, cellId: this.frameState.activeCellId
++    });
+ 
++    const registryStart = performance.now();
+     this.registry.update(dt, this.frameState);
++    const registryEnd = performance.now();
+     this.firstSliceTransitionCoordinator?.update(dt, this.frameState, rawDt);
+     this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
+     this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
+     this.updateCamera(dt);
+-
++    const renderStart = performance.now();
+     this.renderer.render(this.scene, this.camera);
++    const renderEnd = performance.now();
++    const info = this.renderer.info?.render;
++    this.frameTruthObserver.endFrame({
++      registryMs: registryEnd - registryStart,
++      remainingUpdateMs: renderStart - registryEnd,
++      renderMs: renderEnd - renderStart,
++      cellId: this.frameState.activeCellId,
++      registrySample: this.frameState.runtimeExecution,
++      rendererInfo: info ? {
++        calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
++        canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
++        devicePixelRatio: this.renderer.getPixelRatio()
++      } : null
++    });
+   }
+ 
+   updateCamera(dt) {
+     if (!this.playerCore || !this.camera) return;
+diff --git a/src/core/SessionTelemetrySystem.js b/src/core/SessionTelemetrySystem.js
+index 7ce0f5f..e95d3ca 100644
+--- a/src/core/SessionTelemetrySystem.js
++++ b/src/core/SessionTelemetrySystem.js
+@@ -3319,8 +3319,10 @@ export class SessionTelemetrySystem {
+       developerTruth: {
+         sourceAliasMap: Object.fromEntries(this.sourceInternalByAlias.entries()),
+         semanticAliasMap: Object.fromEntries(this.semanticInternalByAlias.entries()),
+         implementationPass: this.physicalLanguageValidation?.pass ?? this.frameState.buildId ?? "unknown",
++        // HC-031W2A: opt-in additive developer-only diagnostic, no v1.52 perceptual schema change.
++        frameTruth: this.frameTruthProvider?.() ?? null,
+         note: "Later AI perceptual-firewall consumers must not receive developerTruth."
+       }
+     };
+   }
+diff --git a/src/core/SystemRegistry.js b/src/core/SystemRegistry.js
+index 3beeda2..7e807ee 100644
+--- a/src/core/SystemRegistry.js
++++ b/src/core/SystemRegistry.js
+@@ -112,9 +112,9 @@ export class SystemRegistry {
+       unmountedSystemIds: [],
+       nonFatalErrorSystemIds: []
+     };
+     if (frameState) frameState.runtimeExecution = execution;
+-    const rawFrameDeltaMs = frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
++    const rawFrameDeltaMs = frameState?.runtimeFrameRawDeltaMs ?? frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
+     const periodicTimingSample =
+       ((frameState?.frame ?? 0) % this.timingSampleEveryFrames) === 0;
+     const hitchTimingSample = rawFrameDeltaMs >= this.hitchSampleThresholdMs;
+     const sampleTiming = periodicTimingSample || hitchTimingSample;

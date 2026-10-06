@@ -3320,6 +3320,8 @@ export class SessionTelemetrySystem {
         sourceAliasMap: Object.fromEntries(this.sourceInternalByAlias.entries()),
         semanticAliasMap: Object.fromEntries(this.semanticInternalByAlias.entries()),
         implementationPass: this.physicalLanguageValidation?.pass ?? this.frameState.buildId ?? "unknown",
+        // HC-031W2A: opt-in additive developer-only diagnostic, no v1.52 perceptual schema change.
+        frameTruth: this.frameTruthProvider?.() ?? null,
         note: "Later AI perceptual-firewall consumers must not receive developerTruth."
       }
     };

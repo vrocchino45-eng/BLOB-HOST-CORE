@@ -113,7 +113,7 @@ export class SystemRegistry {
       nonFatalErrorSystemIds: []
     };
     if (frameState) frameState.runtimeExecution = execution;
-    const rawFrameDeltaMs = frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
+    const rawFrameDeltaMs = frameState?.runtimeFrameRawDeltaMs ?? frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
     const periodicTimingSample =
       ((frameState?.frame ?? 0) % this.timingSampleEveryFrames) === 0;
     const hitchTimingSample = rawFrameDeltaMs >= this.hitchSampleThresholdMs;

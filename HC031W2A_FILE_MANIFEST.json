@@ -1,0 +1,40 @@
+{
+  "parent_zip_name": "BLOB-HOST-CORE.zip",
+  "parent_zip_sha256": "3e628d8a2e54f2950f48a6d33a35daa8d26e562519bd28ee5ac4bf98286bca68",
+  "base_build_id": "HC-031W1",
+  "instrumentation_pass": "HC-031W2A",
+  "files": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "action": "modify",
+      "parent_sha256": "4981956c0ad05001703a5d2dd26127d96487123d9a6485fd4c99da5af99e7a5f",
+      "overlay_sha256": "3a852b6d638417878c7efce8b75bbac18d7ce0d709668ae5258b987417743af9"
+    },
+    {
+      "path": "src/core/SessionTelemetrySystem.js",
+      "action": "modify",
+      "parent_sha256": "4e297567e0dff69ae52ac5ef3dde7596f2bf606101e8b95a2e1cc33e5c8cbd0f",
+      "overlay_sha256": "e6fb3fe064a1b633b3d812bde790fc4493acbda957cda7ee191c275b8348c70e"
+    },
+    {
+      "path": "src/core/SystemRegistry.js",
+      "action": "modify",
+      "parent_sha256": "250d049e157bca3bfeaabe76403543ab1a3f2fc6d5f3980e2c431d6d6e529769",
+      "overlay_sha256": "cdae8d0e85ea024768900f25467b30859dda9e3e7dfb8905927e65ff10856506"
+    },
+    {
+      "path": "src/core/FrameTruthObserver.js",
+      "action": "add",
+      "parent_sha256": null,
+      "overlay_sha256": "0ba32417a13082520f9f3c99a221784fa116db2654d1f6b0133ebd881242a136"
+    },
+    {
+      "path": "scripts/validateHC031W2AFrameTruth.mjs",
+      "action": "add",
+      "parent_sha256": null,
+      "overlay_sha256": "59ce01e6e990c32184bf4f3925c7f48ca10eec1a3eba4a1c5505774ac4bf843c"
+    }
+  ],
+  "replace_node_modules": false,
+  "delete_targets": []
+}

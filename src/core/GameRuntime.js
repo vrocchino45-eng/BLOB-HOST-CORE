@@ -3,6 +3,7 @@ import { SystemRegistry } from "./SystemRegistry.js";
 import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinator.js";
 import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
 import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
+import { FrameTruthObserver } from "./FrameTruthObserver.js";
 import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
 import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
 import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
@@ -207,6 +208,7 @@ export class GameRuntime {
     this.localCellBoundaryMorphSystem = null;
     this.runtimeStateLedgerSystem = null;
     this.sessionTelemetrySystem = null;
+    this.frameTruthObserver = new FrameTruthObserver();
 
     this.clock = new THREE.Clock();
     this.frame = 0;
@@ -2503,6 +2505,8 @@ export class GameRuntime {
       frameState: this.frameState,
       baselineId: "HC027L1_GOLDEN_INQUIRY_BASELINE_01"
     });
+    // Diagnostic is exported with the existing Shift+T session; no extra hotkey.
+    this.sessionTelemetrySystem.frameTruthProvider = () => this.frameTruthObserver.snapshot();
   }
 
   registerRuntimeSystems() {
@@ -2696,19 +2700,40 @@ export class GameRuntime {
     if (!this.isRunning) return;
 
     const rawDt = this.clock.getDelta();
-    const dt = Math.min(rawDt, 0.05);
+    const dt = Math.min(rawDt, 0.05); // W2A: leave gameplay timing unchanged while measuring loss.
 
     this.frame += 1;
     this.frameState.frame = this.frame;
     this.frameState.runtimeSeconds += dt;
+    // Current-frame truth, not the previous frame's transition-coordinator publication.
+    this.frameState.runtimeFrameRawDeltaMs = rawDt * 1000;
+    this.frameTruthObserver.beginFrame({
+      frame: this.frame, rawDt, dt, cellId: this.frameState.activeCellId
+    });
 
+    const registryStart = performance.now();
     this.registry.update(dt, this.frameState);
+    const registryEnd = performance.now();
     this.firstSliceTransitionCoordinator?.update(dt, this.frameState, rawDt);
     this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
     this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
     this.updateCamera(dt);
-
+    const renderStart = performance.now();
     this.renderer.render(this.scene, this.camera);
+    const renderEnd = performance.now();
+    const info = this.renderer.info?.render;
+    this.frameTruthObserver.endFrame({
+      registryMs: registryEnd - registryStart,
+      remainingUpdateMs: renderStart - registryEnd,
+      renderMs: renderEnd - renderStart,
+      cellId: this.frameState.activeCellId,
+      registrySample: this.frameState.runtimeExecution,
+      rendererInfo: info ? {
+        calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
+        canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+        devicePixelRatio: this.renderer.getPixelRatio()
+      } : null
+    });
   }
 
   updateCamera(dt) {
