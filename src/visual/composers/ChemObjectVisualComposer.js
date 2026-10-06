@@ -338,7 +338,7 @@ export class ChemObjectVisualComposer {
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
-    const pulseWave = new THREE.Mesh(new THREE.SphereGeometry(1.08, 18, 12), pulseMaterial);
+    const pulseWave = new THREE.Mesh(new THREE.SphereGeometry(1.08, 12, 8), pulseMaterial);
     pulseWave.name = "core_pulse_wave";
     pulseWave.visible = false;
     root.add(pulseWave);

@@ -1,0 +1,65 @@
+{
+  "pass": "HC-031W2A2",
+  "baseRequired": "HC-031W2A1",
+  "packageType": "changed-files-only overlay",
+  "gameplayClockChanged": false,
+  "modifiedPreimageSha256": {
+    "src/core/GameRuntime.js": "8ad9b19b65ed23f30aa93683f72859dcdf22cd5d33e2921b3c380941b1b44826",
+    "src/core/FrameTruthObserver.js": "960826d6a82ad54c7f5d89011ea8b8c820768c9f37565357057e16e8f4ffdf39",
+    "src/player/CoreVerbPhysicalizationSystem.js": "b2909a86305f13daf242f1ae7dee73b07f6305f3fa6e07f43c342e4be499ff7c",
+    "src/visual/composers/ChemObjectVisualComposer.js": "04d58047d25dc03fb3cbc50128eedecb00c1d76c7dc74a73ce910cc096f6d84b",
+    "scripts/validateHC031W2A1CostReduction.mjs": "31c0572d3e03063a54bf05403c86be3e0fc3aa8e79165fd9e34dc708e47d7912"
+  },
+  "files": [
+    {
+      "path": "HC031W2A2_BUILD_REPORT.md",
+      "bytes": 4564,
+      "sha256": "c9dadf26623fac63e15314ed6f6612a916398ec1bea73d3d6726660b4bf8376c"
+    },
+    {
+      "path": "HC031W2A2_CHANGED_LINES.diff",
+      "bytes": 26539,
+      "sha256": "57837a06e8a02eb7ef612a14d198adf50e98c74f6c63483fed655114db23ced2"
+    },
+    {
+      "path": "HC031W2A2_PATCH_APPLY.md",
+      "bytes": 2141,
+      "sha256": "6f64b3bb20911e1f94b7623cb5c0cb248a7a34f3fef8c7d166492db918bee7d2"
+    },
+    {
+      "path": "scripts/validateHC031W2A1CostReduction.mjs",
+      "bytes": 5532,
+      "sha256": "65a7e5d8c1b2173a0751176c8dfbe6fbf9d4a0e8528d90f562d66d9f9d3cea65"
+    },
+    {
+      "path": "scripts/validateHC031W2A2TransientRenderBudget.mjs",
+      "bytes": 5760,
+      "sha256": "ab6871cdfdaf81f09acff6e3f15de8450bbe6a0b828843bb5cabd3d4fe9b0af1"
+    },
+    {
+      "path": "src/core/FrameTruthObserver.js",
+      "bytes": 7260,
+      "sha256": "37740292d1ec448002d0a95bd7904c04a0e39931ce646e7356ed451a9fa9e913"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "bytes": 133117,
+      "sha256": "827ae58f10e293cb2f2ee93a23becbb4f46e956ea9d5b25f7d84245aaee1d66b"
+    },
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "bytes": 44270,
+      "sha256": "99b52c189bd2d301681e0cf1adde6d893c5a13d2d7c8eff1b5600306cffb714e"
+    },
+    {
+      "path": "src/presentation/RenderBudgetSystem.js",
+      "bytes": 7289,
+      "sha256": "d131b9cd3ee6ac91dba087a147071a3955f3821d996aea004a53bbdc071b1c20"
+    },
+    {
+      "path": "src/visual/composers/ChemObjectVisualComposer.js",
+      "bytes": 58673,
+      "sha256": "9027dd97df0c39431117f8f49ec87fc6f781185a2d92167277247be8c20f12b5"
+    }
+  ]
+}

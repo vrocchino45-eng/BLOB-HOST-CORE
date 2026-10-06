@@ -39,6 +39,7 @@ import { CoreWorldResonanceSystem } from "../world/CoreWorldResonanceSystem.js";
 import { EventAnchoredHostAudioSystem } from "../audio/EventAnchoredHostAudioSystem.js";
 import { InteractionCompositionSystem } from "../presentation/InteractionCompositionSystem.js";
 import { VisualHierarchyCompressionSystem } from "../presentation/VisualHierarchyCompressionSystem.js";
+import { RenderBudgetSystem } from "../presentation/RenderBudgetSystem.js";
 import { CoreGrowthSystem } from "../player/CoreGrowthSystem.js";
 import { PlaceholderValidator } from "../visual/PlaceholderValidator.js";
 import { VisualRecipeRegistry } from "../visual/VisualRecipeRegistry.js";
@@ -209,6 +210,7 @@ export class GameRuntime {
     this.runtimeStateLedgerSystem = null;
     this.sessionTelemetrySystem = null;
     this.frameTruthObserver = new FrameTruthObserver();
+    this.renderBudgetSystem = null;
 
     this.clock = new THREE.Clock();
     this.frame = 0;
@@ -1469,6 +1471,7 @@ export class GameRuntime {
 
     this.createRenderer();
     this.createScene();
+    this.renderBudgetSystem = new RenderBudgetSystem({ scene: this.scene });
     this.createVisualSystems();
     this.createHostChemistryVisualSlice();
     this.createGameplaySystems();
@@ -2718,9 +2721,17 @@ export class GameRuntime {
     this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
     this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
     this.updateCamera(dt);
+    const renderBudget = this.renderBudgetSystem?.prepare({
+      runtimeSeconds: this.frameState.runtimeSeconds
+    }) ?? null;
     const renderStart = performance.now();
-    this.renderer.render(this.scene, this.camera);
-    const renderEnd = performance.now();
+    let renderEnd = renderStart;
+    try {
+      this.renderer.render(this.scene, this.camera);
+    } finally {
+      renderEnd = performance.now();
+      this.renderBudgetSystem?.restoreAfterRender();
+    }
     const info = this.renderer.info?.render;
     this.frameTruthObserver.endFrame({
       registryMs: registryEnd - registryStart,
@@ -2728,10 +2739,17 @@ export class GameRuntime {
       renderMs: renderEnd - renderStart,
       cellId: this.frameState.activeCellId,
       registrySample: this.frameState.runtimeExecution,
+      renderOwnerCensus: renderBudget?.ownerCensus ?? null,
       rendererInfo: info ? {
         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
+        pulseFronts: this.frameState.verbPhysicalization?.pulseFronts ?? 0,
+        pulseFrontBudget: this.frameState.verbPhysicalization?.pulseFrontBudget ?? 0,
         pulseContours: this.frameState.verbPhysicalization?.pulseContours ?? 0,
         pulseContourSegments: this.frameState.verbPhysicalization?.pulseContourSegments ?? 0,
+        pulseReturnMotes: this.frameState.verbPhysicalization?.pulseReturnMotes ?? 0,
+        contactFlashes: this.frameState.verbPhysicalization?.contactFlashes ?? 0,
+        transparentZeroCulled: renderBudget?.transparentZeroCulled ?? 0,
+        transparentRenderCandidates: renderBudget?.transparentCandidates ?? 0,
         surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
         surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,

@@ -1,0 +1,604 @@
+--- /mnt/data/hc031w2a2_base/src/core/GameRuntime.js	2026-10-06 01:13:17.735968145 +0000
++++ /mnt/data/hc031w2a1_work/src/core/GameRuntime.js	2026-10-06 01:14:26.762490957 +0000
+@@ -39,6 +39,7 @@
+ import { EventAnchoredHostAudioSystem } from "../audio/EventAnchoredHostAudioSystem.js";
+ import { InteractionCompositionSystem } from "../presentation/InteractionCompositionSystem.js";
+ import { VisualHierarchyCompressionSystem } from "../presentation/VisualHierarchyCompressionSystem.js";
++import { RenderBudgetSystem } from "../presentation/RenderBudgetSystem.js";
+ import { CoreGrowthSystem } from "../player/CoreGrowthSystem.js";
+ import { PlaceholderValidator } from "../visual/PlaceholderValidator.js";
+ import { VisualRecipeRegistry } from "../visual/VisualRecipeRegistry.js";
+@@ -209,6 +210,7 @@
+     this.runtimeStateLedgerSystem = null;
+     this.sessionTelemetrySystem = null;
+     this.frameTruthObserver = new FrameTruthObserver();
++    this.renderBudgetSystem = null;
+ 
+     this.clock = new THREE.Clock();
+     this.frame = 0;
+@@ -1469,6 +1471,7 @@
+ 
+     this.createRenderer();
+     this.createScene();
++    this.renderBudgetSystem = new RenderBudgetSystem({ scene: this.scene });
+     this.createVisualSystems();
+     this.createHostChemistryVisualSlice();
+     this.createGameplaySystems();
+@@ -2718,9 +2721,17 @@
+     this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
+     this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
+     this.updateCamera(dt);
++    const renderBudget = this.renderBudgetSystem?.prepare({
++      runtimeSeconds: this.frameState.runtimeSeconds
++    }) ?? null;
+     const renderStart = performance.now();
+-    this.renderer.render(this.scene, this.camera);
+-    const renderEnd = performance.now();
++    let renderEnd = renderStart;
++    try {
++      this.renderer.render(this.scene, this.camera);
++    } finally {
++      renderEnd = performance.now();
++      this.renderBudgetSystem?.restoreAfterRender();
++    }
+     const info = this.renderer.info?.render;
+     this.frameTruthObserver.endFrame({
+       registryMs: registryEnd - registryStart,
+@@ -2728,10 +2739,17 @@
+       renderMs: renderEnd - renderStart,
+       cellId: this.frameState.activeCellId,
+       registrySample: this.frameState.runtimeExecution,
++      renderOwnerCensus: renderBudget?.ownerCensus ?? null,
+       rendererInfo: info ? {
+         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
++        pulseFronts: this.frameState.verbPhysicalization?.pulseFronts ?? 0,
++        pulseFrontBudget: this.frameState.verbPhysicalization?.pulseFrontBudget ?? 0,
+         pulseContours: this.frameState.verbPhysicalization?.pulseContours ?? 0,
+         pulseContourSegments: this.frameState.verbPhysicalization?.pulseContourSegments ?? 0,
++        pulseReturnMotes: this.frameState.verbPhysicalization?.pulseReturnMotes ?? 0,
++        contactFlashes: this.frameState.verbPhysicalization?.contactFlashes ?? 0,
++        transparentZeroCulled: renderBudget?.transparentZeroCulled ?? 0,
++        transparentRenderCandidates: renderBudget?.transparentCandidates ?? 0,
+         surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
+         surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
+         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+--- /mnt/data/hc031w2a2_base/src/core/FrameTruthObserver.js	2026-10-06 01:13:17.737050119 +0000
++++ /mnt/data/hc031w2a1_work/src/core/FrameTruthObserver.js	2026-10-06 01:14:26.761797492 +0000
+@@ -31,7 +31,7 @@
+       over100ms: 0, over250ms: 0, over1000ms: 0,
+       hiddenFrames: 0, unfocusedFrames: 0, visibilityTransitionsObserved: 0,
+       maxGapMs: 0, cellId: "none", firstFrame: null, lastFrame: null,
+-      rendererInfo: null, slowestSampledSystems: []
++      rendererInfo: null, renderOwnerCensus: null, slowestSampledSystems: []
+     };
+   }
+ 
+@@ -74,11 +74,12 @@
+   }
+ 
+   endFrame({ registryMs = 0, remainingUpdateMs = 0, renderMs = 0,
+-    cellId = "none", rendererInfo = null, registrySample = null } = {}) {
++    cellId = "none", rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
+     if (!this.pending) return;
+     for (const bucket of [this.current, this.total]) {
+       bucket.cellId = cellId;
+       bucket.rendererInfo = rendererInfo;
++      if (renderOwnerCensus) bucket.renderOwnerCensus = renderOwnerCensus;
+     }
+     this.current.registryMs.push(Math.max(0, registryMs));
+     this.current.remainingUpdateMs.push(Math.max(0, remainingUpdateMs));
+@@ -122,6 +123,7 @@
+         render: { p50: percentile(render, 0.5), p95: percentile(render, 0.95) }
+       },
+       lastRendererInfo: bucket.rendererInfo,
++      lastRenderOwnerCensus: bucket.renderOwnerCensus,
+       lastSlowestSampledSystems: bucket.slowestSampledSystems
+     };
+   }
+@@ -131,7 +133,7 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
+-      optimizationPass: "HC-031W2A1",
++      optimizationPass: "HC-031W2A2",
+       authority: "read_only_observer", gameplayAuthority: false,
+       timingRule: "actual simulation delta is capped by the unchanged GameRuntime.tick() at 50ms per callback",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
+--- /mnt/data/hc031w2a2_base/src/player/CoreVerbPhysicalizationSystem.js	2026-10-06 01:13:17.737969062 +0000
++++ /mnt/data/hc031w2a1_work/src/player/CoreVerbPhysicalizationSystem.js	2026-10-06 01:14:08.186386272 +0000
+@@ -26,6 +26,29 @@
+     this.maxPulseContours = 3;
+     this.maxPulseContourMeshes = 4;
+     this.maxPulseContourSegmentsPerMesh = 180;
++    // HC-031W2A2: bound repeated transient renderables and share their geometry so
++    // rapid Pulse input cannot continuously allocate/upload new wireframe buffers.
++    this.maxPulseFronts = 3;
++    this.maxContactFlashes = 12;
++    this.maxPulseReturnMotes = 10;
++    this.sharedPulseFrontQuickGeometry = this.makeSharedTransientGeometry(
++      new THREE.SphereGeometry(0.30, 10, 6), "pulse_front_quick"
++    );
++    this.sharedPulseFrontFocusedGeometry = this.makeSharedTransientGeometry(
++      new THREE.SphereGeometry(0.30, 14, 8), "pulse_front_focused"
++    );
++    this.sharedPulseFrontChargedGeometry = this.makeSharedTransientGeometry(
++      new THREE.SphereGeometry(0.38, 14, 8), "pulse_front_charged"
++    );
++    this.sharedPulseReturnLocalGeometry = this.makeSharedTransientGeometry(
++      new THREE.IcosahedronGeometry(0.045, 1), "pulse_return_local"
++    );
++    this.sharedPulseReturnDeepGeometry = this.makeSharedTransientGeometry(
++      new THREE.IcosahedronGeometry(0.075, 1), "pulse_return_deep"
++    );
++    this.sharedContactFlashGeometry = this.makeSharedTransientGeometry(
++      new THREE.TorusGeometry(0.11, 0.012, 6, 20), "pulse_contact_flash"
++    );
+     this.contactFlashes = [];
+     this.pulseReturnMotes = [];
+     this.absorbMotes = [];
+@@ -49,11 +72,17 @@
+   }
+ 
+ 
++  makeSharedTransientGeometry(geometry, owner) {
++    geometry.userData.hc031w2a2SharedTransientGeometry = true;
++    geometry.userData.hc031w2a2RenderOwner = owner;
++    return geometry;
++  }
++
+   makePulseChargeShell() {
+     const material = new THREE.MeshBasicMaterial({
+       color: 0xa9f2ff, transparent: true, opacity: 0, wireframe: true, depthWrite: false
+     });
+-    const shell = new THREE.Mesh(new THREE.SphereGeometry(0.48, 18, 10), material);
++    const shell = new THREE.Mesh(new THREE.SphereGeometry(0.48, 12, 8), material);
+     shell.name = "pulse_commitment_charge_shell";
+     shell.visible = false;
+     shell.userData.targetingSuppressed = true;
+@@ -205,6 +234,7 @@
+     frameState.verbPhysicalization = {
+       pass: "HC-028G",
+       pulseFronts: this.pulseFronts.length,
++      pulseFrontBudget: this.maxPulseFronts,
+       pulseContours: this.pulseContours.length,
+       pulseContourSegments: this.pulseContours.reduce((sum, contour) => sum + (contour.segmentCount ?? 0), 0),
+       pulseContourBudget: {
+@@ -213,6 +243,10 @@
+         maxSegmentsPerMesh: this.maxPulseContourSegmentsPerMesh
+       },
+       pulseReturnMotes: this.pulseReturnMotes.length,
++      pulseReturnMoteBudget: this.maxPulseReturnMotes,
++      contactFlashes: this.contactFlashes.length,
++      contactFlashBudget: this.maxContactFlashes,
++      sharedTransientGeometryPolicy: "shared_geometry_bounded_instances_hc031w2a2",
+       absorbMotes: this.absorbMotes.length,
+       absorbFilaments: this.absorbFilaments?.children?.length ?? 0,
+       stabilizeProgress: this.stabilizeProgress,
+@@ -399,7 +433,16 @@
+       depthWrite: false
+     });
+     const baseRadius = charged ? 0.38 : 0.30;
+-    const root = new THREE.Mesh(new THREE.SphereGeometry(baseRadius, charged || focused ? 22 : 14, charged || focused ? 12 : 8), material);
++    const frontGeometry = charged
++      ? this.sharedPulseFrontChargedGeometry
++      : focused
++        ? this.sharedPulseFrontFocusedGeometry
++        : this.sharedPulseFrontQuickGeometry;
++    while (this.pulseFronts.length >= this.maxPulseFronts) {
++      const oldest = this.pulseFronts.shift();
++      this.disposeMesh(oldest?.root);
++    }
++    const root = new THREE.Mesh(frontGeometry, material);
+     root.name = focused
+       ? "pulse_stabilized_projection_front"
+       : charged ? "pulse_sonar_committed_front" : "pulse_sonar_outgoing_front";
+@@ -580,13 +623,19 @@
+   }
+ 
+   spawnPulseReturnMote(contact, color, frameState = this.frameState) {
+-    if (this.pulseReturnMotes.length >= 10) return;
++    while (this.pulseReturnMotes.length >= this.maxPulseReturnMotes) {
++      const oldest = this.pulseReturnMotes.shift();
++      this.disposeMesh(oldest?.root);
++    }
+     const start = new THREE.Vector3(contact.position?.x ?? 0, contact.position?.y ?? 0, contact.position?.z ?? 0);
+     const deep = contact.reachClass === "deep_structural";
+     const material = new THREE.MeshBasicMaterial({
+       color, transparent: true, opacity: deep ? 0.42 : 0.82, depthWrite: false
+     });
+-    const root = new THREE.Mesh(new THREE.IcosahedronGeometry(deep ? 0.075 : 0.045, 1), material);
++    const root = new THREE.Mesh(
++      deep ? this.sharedPulseReturnDeepGeometry : this.sharedPulseReturnLocalGeometry,
++      material
++    );
+     root.name = `pulse_sonar_return_${contact.responseClass ?? "material"}`;
+     root.position.copy(start);
+     root.userData.targetingSuppressed = true;
+@@ -613,10 +662,14 @@
+   }
+ 
+   spawnContactFlash(position, color, baseScale = 0.34, growth = 1.0, life = 0.30, opacity = 0.48) {
++    while (this.contactFlashes.length >= this.maxContactFlashes) {
++      const oldest = this.contactFlashes.shift();
++      this.disposeMesh(oldest?.root);
++    }
+     const material = new THREE.MeshBasicMaterial({
+       color, transparent: true, opacity, depthWrite: false
+     });
+-    const root = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.012, 6, 20), material);
++    const root = new THREE.Mesh(this.sharedContactFlashGeometry, material);
+     root.name = "verb_material_contact_flash";
+     root.position.copy(position);
+     root.rotation.x = Math.PI / 2;
+@@ -905,8 +958,9 @@
+   }
+ 
+   disposeMesh(root) {
++    if (!root) return;
+     this.group.remove(root);
+-    root.geometry?.dispose?.();
++    if (!root.geometry?.userData?.hc031w2a2SharedTransientGeometry) root.geometry?.dispose?.();
+     root.material?.dispose?.();
+   }
+ }
+--- /dev/null	2026-10-06 00:12:16.106627752 +0000
++++ /mnt/data/hc031w2a1_work/src/presentation/RenderBudgetSystem.js	2026-10-06 01:14:07.741300023 +0000
+@@ -0,0 +1,216 @@
++const round = (value, places = 3) => Number((Number.isFinite(value) ? value : 0).toFixed(places));
++
++const materialsOf = (object) => {
++  if (!object?.material) return [];
++  return Array.isArray(object.material) ? object.material.filter(Boolean) : [object.material];
++};
++
++const isRenderable = (object) => Boolean(
++  object?.isMesh || object?.isLine || object?.isLineSegments || object?.isLineLoop || object?.isPoints || object?.isSprite
++);
++
++const isEffectivelyVisible = (object) => {
++  let current = object;
++  while (current) {
++    if (current.visible === false) return false;
++    current = current.parent;
++  }
++  return true;
++};
++
++const drawCallEstimate = (object) => {
++  const materials = materialsOf(object);
++  if (!materials.length) return 0;
++  if (Array.isArray(object.material) && object.geometry?.groups?.length) {
++    return object.geometry.groups.length;
++  }
++  return 1;
++};
++
++const geometryElementCount = (object) => {
++  const geometry = object?.geometry;
++  if (!geometry) return 0;
++  return geometry.index?.count ?? geometry.attributes?.position?.count ?? 0;
++};
++
++const estimateLineSegments = (object) => {
++  const count = geometryElementCount(object);
++  if (!count) return 0;
++  if (object.isLineSegments) return Math.floor(count / 2);
++  if (object.isLineLoop) return count;
++  if (object.isLine) return Math.max(0, count - 1);
++  if (object.isMesh) {
++    const wireframe = materialsOf(object).some((material) => material?.wireframe === true);
++    if (wireframe) return Math.max(0, Math.floor(count / 3) * 3);
++  }
++  return 0;
++};
++
++const estimateTriangles = (object) => {
++  if (!object?.isMesh) return 0;
++  if (materialsOf(object).some((material) => material?.wireframe === true)) return 0;
++  return Math.floor(geometryElementCount(object) / 3);
++};
++
++const topSceneOwner = (object, scene) => {
++  let current = object;
++  let owner = object;
++  while (current?.parent && current.parent !== scene) {
++    owner = current.parent;
++    current = current.parent;
++  }
++  if (current?.parent === scene) owner = current;
++  return owner?.name || owner?.type || "unnamed_scene_root";
++};
++
++/**
++ * HC-031W2A2 — render-only budget helper.
++ *
++ * It has no gameplay authority. It only suppresses leaf renderables whose entire
++ * material set is fully transparent AND depth-write-disabled for the duration of
++ * renderer.render(), then restores their authored visibility immediately after.
++ * A low-frequency scene census identifies render roots without changing them.
++ */
++export class RenderBudgetSystem {
++  constructor({ scene, censusIntervalSeconds = 2.0, zeroAlphaThreshold = 0.001 } = {}) {
++    if (!scene) throw new Error("[RenderBudgetSystem] scene is required.");
++    this.scene = scene;
++    this.censusIntervalSeconds = censusIntervalSeconds;
++    this.zeroAlphaThreshold = zeroAlphaThreshold;
++    this.candidateObjects = [];
++    this.restoreVisible = [];
++    this.lastScanRuntimeSeconds = -Infinity;
++    this.lastCensus = null;
++    this.lastPrepare = {
++      pass: "HC-031W2A2",
++      transparentZeroCulled: 0,
++      transparentCandidates: 0,
++      censusRefreshed: false
++    };
++  }
++
++  prepare({ runtimeSeconds = 0 } = {}) {
++    const censusRefreshed = !Number.isFinite(this.lastScanRuntimeSeconds)
++      || runtimeSeconds - this.lastScanRuntimeSeconds >= this.censusIntervalSeconds;
++    if (censusRefreshed) {
++      this.refreshCandidatesAndCensus(runtimeSeconds);
++    }
++
++    this.restoreVisible.length = 0;
++    let transparentZeroCulled = 0;
++    for (const object of this.candidateObjects) {
++      if (!object?.parent || object.children?.length || !isEffectivelyVisible(object)) continue;
++      const materials = materialsOf(object);
++      if (!materials.length || !this.isSafelyInvisible(materials)) continue;
++      object.visible = false;
++      this.restoreVisible.push(object);
++      transparentZeroCulled += 1;
++    }
++
++    this.lastPrepare = {
++      pass: "HC-031W2A2",
++      transparentZeroCulled,
++      transparentCandidates: this.candidateObjects.length,
++      censusRefreshed,
++      ownerCensus: this.lastCensus
++    };
++    return this.lastPrepare;
++  }
++
++  restoreAfterRender() {
++    for (const object of this.restoreVisible) {
++      if (object) object.visible = true;
++    }
++    this.restoreVisible.length = 0;
++  }
++
++  isSafelyInvisible(materials) {
++    return materials.every((material) => (
++      material?.visible !== false
++      && material?.transparent === true
++      && (material.opacity ?? 1) <= this.zeroAlphaThreshold
++      && material?.depthWrite === false
++    ));
++  }
++
++  refreshCandidatesAndCensus(runtimeSeconds) {
++    this.lastScanRuntimeSeconds = runtimeSeconds;
++    const candidates = [];
++    const owners = new Map();
++    let visibleRenderables = 0;
++    let estimatedDrawCalls = 0;
++    let estimatedTriangles = 0;
++    let estimatedLineSegments = 0;
++    let wireframeRenderables = 0;
++    let transparentZeroRenderables = 0;
++
++    this.scene.traverse((object) => {
++      if (!isRenderable(object)) return;
++      const materials = materialsOf(object);
++      if (materials.some((material) => material?.transparent === true && material?.depthWrite === false)) {
++        candidates.push(object);
++      }
++      if (!isEffectivelyVisible(object) || !materials.length || materials.every((material) => material?.visible === false)) return;
++
++      const calls = drawCallEstimate(object);
++      const triangles = estimateTriangles(object);
++      const lines = estimateLineSegments(object);
++      const wireframe = object.isMesh && materials.some((material) => material?.wireframe === true);
++      const zeroAlpha = this.isSafelyInvisible(materials);
++      const ownerName = topSceneOwner(object, this.scene);
++      const owner = owners.get(ownerName) ?? {
++        owner: ownerName,
++        renderables: 0,
++        estimatedDrawCalls: 0,
++        estimatedTriangles: 0,
++        estimatedLineSegments: 0,
++        wireframeRenderables: 0,
++        transparentZeroRenderables: 0
++      };
++      owner.renderables += 1;
++      owner.estimatedDrawCalls += calls;
++      owner.estimatedTriangles += triangles;
++      owner.estimatedLineSegments += lines;
++      owner.wireframeRenderables += Number(wireframe);
++      owner.transparentZeroRenderables += Number(zeroAlpha);
++      owners.set(ownerName, owner);
++
++      visibleRenderables += 1;
++      estimatedDrawCalls += calls;
++      estimatedTriangles += triangles;
++      estimatedLineSegments += lines;
++      wireframeRenderables += Number(wireframe);
++      transparentZeroRenderables += Number(zeroAlpha);
++    });
++
++    const topOwners = [...owners.values()]
++      .sort((a, b) => (
++        b.estimatedDrawCalls - a.estimatedDrawCalls
++        || b.estimatedLineSegments - a.estimatedLineSegments
++        || b.estimatedTriangles - a.estimatedTriangles
++      ))
++      .slice(0, 12);
++
++    this.candidateObjects = candidates;
++    this.lastCensus = {
++      pass: "HC-031W2A2",
++      sampledAtRuntimeSeconds: round(runtimeSeconds),
++      visibleRenderables,
++      estimatedDrawCalls,
++      estimatedTriangles,
++      estimatedLineSegments,
++      wireframeRenderables,
++      transparentZeroRenderables,
++      topOwners
++    };
++  }
++
++  snapshot() {
++    return {
++      pass: "HC-031W2A2",
++      transparentZeroCulled: this.lastPrepare.transparentZeroCulled ?? 0,
++      transparentCandidates: this.candidateObjects.length,
++      ownerCensus: this.lastCensus
++    };
++  }
++}
+--- /mnt/data/hc031w2a2_base/src/visual/composers/ChemObjectVisualComposer.js	2026-10-06 01:13:17.738967502 +0000
++++ /mnt/data/hc031w2a1_work/src/visual/composers/ChemObjectVisualComposer.js	2026-10-06 01:14:08.186606057 +0000
+@@ -338,7 +338,7 @@
+       depthWrite: false,
+       blending: THREE.AdditiveBlending
+     });
+-    const pulseWave = new THREE.Mesh(new THREE.SphereGeometry(1.08, 18, 12), pulseMaterial);
++    const pulseWave = new THREE.Mesh(new THREE.SphereGeometry(1.08, 12, 8), pulseMaterial);
+     pulseWave.name = "core_pulse_wave";
+     pulseWave.visible = false;
+     root.add(pulseWave);
+--- /mnt/data/BLOB_HC-031W2A1_COST_REDUCTION_PATCH/scripts/validateHC031W2A1CostReduction.mjs	2026-10-06 00:46:17.773407751 +0000
++++ /mnt/data/hc031w2a1_work/scripts/validateHC031W2A1CostReduction.mjs	2026-10-06 01:15:13.583040830 +0000
+@@ -13,7 +13,7 @@
+ const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
+ 
+ // Gameplay clock and authority stay unchanged in A1.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A1"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[12]"/);
+ assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
+ assert.match(runtimeSource, /pulseContourSegments:/);
+ assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);
+--- /dev/null	2026-10-06 00:12:16.106627752 +0000
++++ /mnt/data/hc031w2a1_work/scripts/validateHC031W2A2TransientRenderBudget.mjs	2026-10-06 01:15:03.789516657 +0000
+@@ -0,0 +1,117 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import * as THREE from "three";
++import { CoreVerbPhysicalizationSystem } from "../src/player/CoreVerbPhysicalizationSystem.js";
++import { RenderBudgetSystem } from "../src/presentation/RenderBudgetSystem.js";
++import { FrameTruthObserver } from "../src/core/FrameTruthObserver.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const runtimeSource = read("../src/core/GameRuntime.js");
++const frameTruthSource = read("../src/core/FrameTruthObserver.js");
++const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
++const composerSource = read("../src/visual/composers/ChemObjectVisualComposer.js");
++const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
++
++// W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A2"/);
++assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
++assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
++assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
++assert.match(runtimeSource, /renderBudgetSystem\?\.restoreAfterRender/);
++assert.match(runtimeSource, /renderOwnerCensus:/);
++assert.match(frameTruthSource, /lastRenderOwnerCensus:/);
++
++// Rapid Pulse rendering is bounded and uses shared geometry rather than creating
++// new sphere/torus buffers for every release/contact/return.
++assert.match(verbSource, /this\.maxPulseFronts = 3/);
++assert.match(verbSource, /this\.maxContactFlashes = 12/);
++assert.match(verbSource, /this\.maxPulseReturnMotes = 10/);
++assert.match(verbSource, /hc031w2a2SharedTransientGeometry/);
++assert.doesNotMatch(verbSource, /new THREE\.Mesh\(new THREE\.SphereGeometry\(baseRadius/);
++assert.doesNotMatch(verbSource, /new THREE\.Mesh\(new THREE\.TorusGeometry\(0\.11, 0\.012, 6, 20\), material\)/);
++assert.match(composerSource, /new THREE\.SphereGeometry\(1\.08, 12, 8\)/);
++
++const scene = new THREE.Scene();
++const playerRoot = new THREE.Group();
++scene.add(playerRoot);
++const state = {
++  stabilizedProjection: { active: false },
++  playerKinematics: { cameraRelativeForward: { x: 0, y: 0, z: -1 } },
++  coreTopologyVerbCharacter: { pulse: {} }
++};
++const verbSystem = new CoreVerbPhysicalizationSystem({
++  scene,
++  playerRoot,
++  chemObjectSystem: { objects: [] },
++  frameState: state
++});
++for (let i = 0; i < 8; i += 1) {
++  verbSystem.spawnPulseFront({ pulseMode: "quick", waveSpeed: 6.6, maxRange: 4.25 }, state);
++}
++assert.equal(verbSystem.pulseFronts.length, 3, "pulse front budget must cap rapid release overlap");
++assert.ok(verbSystem.pulseFronts.every((front) => front.root.geometry === verbSystem.sharedPulseFrontQuickGeometry));
++
++for (let i = 0; i < 20; i += 1) {
++  verbSystem.spawnContactFlash(new THREE.Vector3(i * 0.01, 0, 0), 0xffffff);
++}
++assert.equal(verbSystem.contactFlashes.length, 12, "contact flash budget must remain bounded");
++assert.ok(verbSystem.contactFlashes.every((flash) => flash.root.geometry === verbSystem.sharedContactFlashGeometry));
++
++for (let i = 0; i < 14; i += 1) {
++  verbSystem.spawnPulseReturnMote({
++    position: { x: i * 0.01, y: 0, z: -1 },
++    reachClass: "local_actionable",
++    returnTravelSeconds: 0.25,
++    resolutionStage: 1,
++    responseClass: "host_membrane"
++  }, 0xffffff, state);
++}
++assert.equal(verbSystem.pulseReturnMotes.length, 10, "return mote budget must remain bounded");
++assert.ok(verbSystem.pulseReturnMotes.every((mote) => mote.root.geometry === verbSystem.sharedPulseReturnLocalGeometry));
++
++// Render culling is intentionally narrow: only leaf renderables that are fully
++// transparent and depth-write-disabled are hidden, then restored immediately.
++const budgetScene = new THREE.Scene();
++const owner = new THREE.Group();
++owner.name = "owner_test_root";
++budgetScene.add(owner);
++const geometry = new THREE.BoxGeometry(1, 1, 1);
++const invisible = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
++const faint = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.02, depthWrite: false }));
++const depthWriter = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: true }));
++owner.add(invisible, faint, depthWriter);
++const renderBudget = new RenderBudgetSystem({ scene: budgetScene, censusIntervalSeconds: 2 });
++const prep = renderBudget.prepare({ runtimeSeconds: 0 });
++assert.equal(prep.transparentZeroCulled, 1);
++assert.equal(invisible.visible, false);
++assert.equal(faint.visible, true);
++assert.equal(depthWriter.visible, true);
++assert.equal(prep.ownerCensus.topOwners[0].owner, "owner_test_root");
++assert.equal(prep.ownerCensus.transparentZeroRenderables, 1);
++renderBudget.restoreAfterRender();
++assert.equal(invisible.visible, true, "render-only cull must restore authored visibility immediately");
++assert.match(renderBudgetSource, /depthWrite === false/);
++assert.match(renderBudgetSource, /object\.children\?\.length/);
++
++// Frame Truth carries the low-frequency owner census into exports.
++let now = 0;
++const observer = new FrameTruthObserver({
++  now: () => now,
++  documentRef: { hidden: false, hasFocus: () => true },
++  windowMs: 1
++});
++now = 16;
++observer.beginFrame({ frame: 1, rawDt: 0.016, dt: 0.016, cellId: "TEST" });
++observer.endFrame({
++  registryMs: 2,
++  remainingUpdateMs: 1,
++  renderMs: 5,
++  cellId: "TEST",
++  rendererInfo: { calls: 4 },
++  renderOwnerCensus: prep.ownerCensus
++});
++const snapshot = observer.snapshot();
++assert.equal(snapshot.optimizationPass, "HC-031W2A2");
++assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
++
++console.log("HC031W2A2 transient render budget + owner census PASS");

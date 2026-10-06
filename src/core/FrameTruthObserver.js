@@ -31,7 +31,7 @@ export class FrameTruthObserver {
       over100ms: 0, over250ms: 0, over1000ms: 0,
       hiddenFrames: 0, unfocusedFrames: 0, visibilityTransitionsObserved: 0,
       maxGapMs: 0, cellId: "none", firstFrame: null, lastFrame: null,
-      rendererInfo: null, slowestSampledSystems: []
+      rendererInfo: null, renderOwnerCensus: null, slowestSampledSystems: []
     };
   }
 
@@ -74,11 +74,12 @@ export class FrameTruthObserver {
   }
 
   endFrame({ registryMs = 0, remainingUpdateMs = 0, renderMs = 0,
-    cellId = "none", rendererInfo = null, registrySample = null } = {}) {
+    cellId = "none", rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
     if (!this.pending) return;
     for (const bucket of [this.current, this.total]) {
       bucket.cellId = cellId;
       bucket.rendererInfo = rendererInfo;
+      if (renderOwnerCensus) bucket.renderOwnerCensus = renderOwnerCensus;
     }
     this.current.registryMs.push(Math.max(0, registryMs));
     this.current.remainingUpdateMs.push(Math.max(0, remainingUpdateMs));
@@ -122,6 +123,7 @@ export class FrameTruthObserver {
         render: { p50: percentile(render, 0.5), p95: percentile(render, 0.95) }
       },
       lastRendererInfo: bucket.rendererInfo,
+      lastRenderOwnerCensus: bucket.renderOwnerCensus,
       lastSlowestSampledSystems: bucket.slowestSampledSystems
     };
   }
@@ -131,7 +133,7 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A1",
+      optimizationPass: "HC-031W2A2",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "actual simulation delta is capped by the unchanged GameRuntime.tick() at 50ms per callback",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",

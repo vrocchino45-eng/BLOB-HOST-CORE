@@ -26,6 +26,29 @@ export class CoreVerbPhysicalizationSystem {
     this.maxPulseContours = 3;
     this.maxPulseContourMeshes = 4;
     this.maxPulseContourSegmentsPerMesh = 180;
+    // HC-031W2A2: bound repeated transient renderables and share their geometry so
+    // rapid Pulse input cannot continuously allocate/upload new wireframe buffers.
+    this.maxPulseFronts = 3;
+    this.maxContactFlashes = 12;
+    this.maxPulseReturnMotes = 10;
+    this.sharedPulseFrontQuickGeometry = this.makeSharedTransientGeometry(
+      new THREE.SphereGeometry(0.30, 10, 6), "pulse_front_quick"
+    );
+    this.sharedPulseFrontFocusedGeometry = this.makeSharedTransientGeometry(
+      new THREE.SphereGeometry(0.30, 14, 8), "pulse_front_focused"
+    );
+    this.sharedPulseFrontChargedGeometry = this.makeSharedTransientGeometry(
+      new THREE.SphereGeometry(0.38, 14, 8), "pulse_front_charged"
+    );
+    this.sharedPulseReturnLocalGeometry = this.makeSharedTransientGeometry(
+      new THREE.IcosahedronGeometry(0.045, 1), "pulse_return_local"
+    );
+    this.sharedPulseReturnDeepGeometry = this.makeSharedTransientGeometry(
+      new THREE.IcosahedronGeometry(0.075, 1), "pulse_return_deep"
+    );
+    this.sharedContactFlashGeometry = this.makeSharedTransientGeometry(
+      new THREE.TorusGeometry(0.11, 0.012, 6, 20), "pulse_contact_flash"
+    );
     this.contactFlashes = [];
     this.pulseReturnMotes = [];
     this.absorbMotes = [];
@@ -49,11 +72,17 @@ export class CoreVerbPhysicalizationSystem {
   }
 
 
+  makeSharedTransientGeometry(geometry, owner) {
+    geometry.userData.hc031w2a2SharedTransientGeometry = true;
+    geometry.userData.hc031w2a2RenderOwner = owner;
+    return geometry;
+  }
+
   makePulseChargeShell() {
     const material = new THREE.MeshBasicMaterial({
       color: 0xa9f2ff, transparent: true, opacity: 0, wireframe: true, depthWrite: false
     });
-    const shell = new THREE.Mesh(new THREE.SphereGeometry(0.48, 18, 10), material);
+    const shell = new THREE.Mesh(new THREE.SphereGeometry(0.48, 12, 8), material);
     shell.name = "pulse_commitment_charge_shell";
     shell.visible = false;
     shell.userData.targetingSuppressed = true;
@@ -205,6 +234,7 @@ export class CoreVerbPhysicalizationSystem {
     frameState.verbPhysicalization = {
       pass: "HC-028G",
       pulseFronts: this.pulseFronts.length,
+      pulseFrontBudget: this.maxPulseFronts,
       pulseContours: this.pulseContours.length,
       pulseContourSegments: this.pulseContours.reduce((sum, contour) => sum + (contour.segmentCount ?? 0), 0),
       pulseContourBudget: {
@@ -213,6 +243,10 @@ export class CoreVerbPhysicalizationSystem {
         maxSegmentsPerMesh: this.maxPulseContourSegmentsPerMesh
       },
       pulseReturnMotes: this.pulseReturnMotes.length,
+      pulseReturnMoteBudget: this.maxPulseReturnMotes,
+      contactFlashes: this.contactFlashes.length,
+      contactFlashBudget: this.maxContactFlashes,
+      sharedTransientGeometryPolicy: "shared_geometry_bounded_instances_hc031w2a2",
       absorbMotes: this.absorbMotes.length,
       absorbFilaments: this.absorbFilaments?.children?.length ?? 0,
       stabilizeProgress: this.stabilizeProgress,
@@ -399,7 +433,16 @@ export class CoreVerbPhysicalizationSystem {
       depthWrite: false
     });
     const baseRadius = charged ? 0.38 : 0.30;
-    const root = new THREE.Mesh(new THREE.SphereGeometry(baseRadius, charged || focused ? 22 : 14, charged || focused ? 12 : 8), material);
+    const frontGeometry = charged
+      ? this.sharedPulseFrontChargedGeometry
+      : focused
+        ? this.sharedPulseFrontFocusedGeometry
+        : this.sharedPulseFrontQuickGeometry;
+    while (this.pulseFronts.length >= this.maxPulseFronts) {
+      const oldest = this.pulseFronts.shift();
+      this.disposeMesh(oldest?.root);
+    }
+    const root = new THREE.Mesh(frontGeometry, material);
     root.name = focused
       ? "pulse_stabilized_projection_front"
       : charged ? "pulse_sonar_committed_front" : "pulse_sonar_outgoing_front";
@@ -580,13 +623,19 @@ export class CoreVerbPhysicalizationSystem {
   }
 
   spawnPulseReturnMote(contact, color, frameState = this.frameState) {
-    if (this.pulseReturnMotes.length >= 10) return;
+    while (this.pulseReturnMotes.length >= this.maxPulseReturnMotes) {
+      const oldest = this.pulseReturnMotes.shift();
+      this.disposeMesh(oldest?.root);
+    }
     const start = new THREE.Vector3(contact.position?.x ?? 0, contact.position?.y ?? 0, contact.position?.z ?? 0);
     const deep = contact.reachClass === "deep_structural";
     const material = new THREE.MeshBasicMaterial({
       color, transparent: true, opacity: deep ? 0.42 : 0.82, depthWrite: false
     });
-    const root = new THREE.Mesh(new THREE.IcosahedronGeometry(deep ? 0.075 : 0.045, 1), material);
+    const root = new THREE.Mesh(
+      deep ? this.sharedPulseReturnDeepGeometry : this.sharedPulseReturnLocalGeometry,
+      material
+    );
     root.name = `pulse_sonar_return_${contact.responseClass ?? "material"}`;
     root.position.copy(start);
     root.userData.targetingSuppressed = true;
@@ -613,10 +662,14 @@ export class CoreVerbPhysicalizationSystem {
   }
 
   spawnContactFlash(position, color, baseScale = 0.34, growth = 1.0, life = 0.30, opacity = 0.48) {
+    while (this.contactFlashes.length >= this.maxContactFlashes) {
+      const oldest = this.contactFlashes.shift();
+      this.disposeMesh(oldest?.root);
+    }
     const material = new THREE.MeshBasicMaterial({
       color, transparent: true, opacity, depthWrite: false
     });
-    const root = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.012, 6, 20), material);
+    const root = new THREE.Mesh(this.sharedContactFlashGeometry, material);
     root.name = "verb_material_contact_flash";
     root.position.copy(position);
     root.rotation.x = Math.PI / 2;
@@ -905,8 +958,9 @@ export class CoreVerbPhysicalizationSystem {
   }
 
   disposeMesh(root) {
+    if (!root) return;
     this.group.remove(root);
-    root.geometry?.dispose?.();
+    if (!root.geometry?.userData?.hc031w2a2SharedTransientGeometry) root.geometry?.dispose?.();
     root.material?.dispose?.();
   }
 }
