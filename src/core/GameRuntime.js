@@ -2735,7 +2735,7 @@ export class GameRuntime {
     });
 
     let registryMs = 0;
-    let remainingUpdateMs = 0;
+    let registrySample = null;
     for (let substepIndex = 0; substepIndex < catchUp.steps.length; substepIndex += 1) {
       const dt = catchUp.steps[substepIndex];
       this.frameState.runtimeSimulationSubstepIndex = substepIndex;
@@ -2746,24 +2746,41 @@ export class GameRuntime {
       this.registry.update(dt, this.frameState);
       const registryEnd = performance.now();
       registryMs += registryEnd - registryStart;
-
-      const remainingStart = registryEnd;
-      this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
-      this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
-      this.updateCamera(dt);
-      remainingUpdateMs += performance.now() - remainingStart;
+      if (this.frameState.runtimeExecution?.timingSampled) {
+        registrySample = this.frameState.runtimeExecution;
+      }
     }
-    // Transition preparation/continuity observes the renderer callback once, not
-    // once per catch-up substep. rawDt remains the real callback gap for diagnostics.
-    const transitionStart = performance.now();
+
+    // HC-031W2A4.1: simulation-critical registry work owns the bounded substeps.
+    // Presentation and camera work are evaluated once for the one image this
+    // animation callback can actually submit, using the total bounded simulation
+    // delta so their visible state still follows recovered simulation time.
+    this.frameState.runtimeSimulationSubstepIndex = Math.max(0, catchUp.substepCount - 1);
+    this.frameState.runtimePresentationDeltaSeconds = catchUp.simulatedSeconds;
+    this.frameState.runtimePresentationUpdatesThisCallback = 1;
+    this.frameState.runtimeCameraUpdatesThisCallback = 1;
+
+    const presentationStart = performance.now();
+    this.coreVerbPhysicalizationSystem?.update(catchUp.simulatedSeconds, this.frameState);
+    this.visualHierarchyCompressionSystem?.update(catchUp.simulatedSeconds, this.frameState);
+    const presentationEnd = performance.now();
+    const presentationUpdateMs = presentationEnd - presentationStart;
+
+    const cameraStart = presentationEnd;
+    this.updateCamera(catchUp.simulatedSeconds);
+    const cameraEnd = performance.now();
+    const cameraUpdateMs = cameraEnd - cameraStart;
+
+    // Transition preparation/continuity already observes the renderer callback once,
+    // not once per catch-up substep. rawDt remains the real callback gap for diagnostics.
+    const transitionStart = cameraEnd;
     this.firstSliceTransitionCoordinator?.update(
       catchUp.simulatedSeconds,
       this.frameState,
       rawDt
     );
-    remainingUpdateMs += performance.now() - transitionStart;
-
-    this.frameState.runtimeSimulationSubstepIndex = Math.max(0, catchUp.substepCount - 1);
+    const transitionUpdateMs = performance.now() - transitionStart;
+    const remainingUpdateMs = presentationUpdateMs + cameraUpdateMs + transitionUpdateMs;
     const renderBudget = this.renderBudgetSystem?.prepare({
       runtimeSeconds: this.frameState.runtimeSeconds,
       frameState: this.frameState
@@ -2780,9 +2797,12 @@ export class GameRuntime {
     this.frameTruthObserver.endFrame({
       registryMs,
       remainingUpdateMs,
+      presentationUpdateMs,
+      cameraUpdateMs,
+      transitionUpdateMs,
       renderMs: renderEnd - renderStart,
       cellId: this.frameState.activeCellId,
-      registrySample: this.frameState.runtimeExecution,
+      registrySample: registrySample ?? this.frameState.runtimeExecution,
       renderOwnerCensus: renderBudget?.ownerCensus ?? null,
       rendererInfo: info ? {
         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
@@ -2806,6 +2826,10 @@ export class GameRuntime {
         simulationSubsteps: catchUp.substepCount,
         simulationRecoveredBeyondLegacyCapMs: catchUp.recoveredBeyondLegacyCapSeconds * 1000,
         simulationDroppedMs: catchUp.droppedSeconds * 1000,
+        simulationRegistryMs: registryMs,
+        presentationUpdateMs,
+        cameraUpdateMs,
+        transitionUpdateMs,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
         devicePixelRatio: this.renderer.getPixelRatio()
       } : null

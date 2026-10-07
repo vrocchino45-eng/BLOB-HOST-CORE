@@ -27,7 +27,8 @@ export class FrameTruthObserver {
   newWindow() {
     return {
       frameCount: 0, wallMs: 0, simMs: 0, discardedMs: 0,
-      frameIntervalsMs: [], registryMs: [], remainingUpdateMs: [], renderMs: [],
+      frameIntervalsMs: [], registryMs: [], remainingUpdateMs: [],
+      presentationUpdateMs: [], cameraUpdateMs: [], transitionUpdateMs: [], renderMs: [],
       over100ms: 0, over250ms: 0, over1000ms: 0,
       hiddenFrames: 0, unfocusedFrames: 0, visibilityTransitionsObserved: 0,
       maxGapMs: 0, cellId: "none", firstFrame: null, lastFrame: null,
@@ -81,16 +82,25 @@ export class FrameTruthObserver {
     this.pending = { frame };
   }
 
-  endFrame({ registryMs = 0, remainingUpdateMs = 0, renderMs = 0,
-    cellId = "none", rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
+  endFrame({ registryMs = 0, remainingUpdateMs = null, presentationUpdateMs = 0,
+    cameraUpdateMs = 0, transitionUpdateMs = 0, renderMs = 0, cellId = "none",
+    rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
     if (!this.pending) return;
     for (const bucket of [this.current, this.total]) {
       bucket.cellId = cellId;
       bucket.rendererInfo = rendererInfo;
       if (renderOwnerCensus) bucket.renderOwnerCensus = renderOwnerCensus;
     }
+    const partitionedRemainingMs = Math.max(0, presentationUpdateMs)
+      + Math.max(0, cameraUpdateMs) + Math.max(0, transitionUpdateMs);
+    const effectiveRemainingUpdateMs = Number.isFinite(remainingUpdateMs)
+      ? Math.max(0, remainingUpdateMs)
+      : partitionedRemainingMs;
     this.current.registryMs.push(Math.max(0, registryMs));
-    this.current.remainingUpdateMs.push(Math.max(0, remainingUpdateMs));
+    this.current.remainingUpdateMs.push(effectiveRemainingUpdateMs);
+    this.current.presentationUpdateMs.push(Math.max(0, presentationUpdateMs));
+    this.current.cameraUpdateMs.push(Math.max(0, cameraUpdateMs));
+    this.current.transitionUpdateMs.push(Math.max(0, transitionUpdateMs));
     this.current.renderMs.push(Math.max(0, renderMs));
     if (registrySample?.timingSampled) {
       this.current.slowestSampledSystems = registrySample.slowestSampledSystems
@@ -98,7 +108,12 @@ export class FrameTruthObserver {
     }
     this.pending = null;
     this.lastCompletedStageMs = {
-      registry: round(registryMs), otherUpdateAndCamera: round(remainingUpdateMs),
+      registry: round(registryMs),
+      simulationRegistry: round(registryMs),
+      otherUpdateAndCamera: round(effectiveRemainingUpdateMs),
+      presentationUpdate: round(presentationUpdateMs),
+      cameraUpdate: round(cameraUpdateMs),
+      transitionUpdate: round(transitionUpdateMs),
       render: round(renderMs)
     };
     if (this.current.wallMs >= this.windowMs) {
@@ -113,6 +128,9 @@ export class FrameTruthObserver {
     const render = [...bucket.renderMs].sort((a, b) => a - b);
     const registry = [...bucket.registryMs].sort((a, b) => a - b);
     const other = [...bucket.remainingUpdateMs].sort((a, b) => a - b);
+    const presentation = [...bucket.presentationUpdateMs].sort((a, b) => a - b);
+    const camera = [...bucket.cameraUpdateMs].sort((a, b) => a - b);
+    const transition = [...bucket.transitionUpdateMs].sort((a, b) => a - b);
     const substeps = [...bucket.substepCounts].sort((a, b) => a - b);
     return {
       firstFrame: bucket.firstFrame, lastFrame: bucket.lastFrame, cellId: bucket.cellId,
@@ -133,8 +151,13 @@ export class FrameTruthObserver {
         transitionsObserved: bucket.visibilityTransitionsObserved
       },
       stageMs: {
+        // Legacy names stay additive for comparison with W2A-W2A4 exports.
         registry: { p50: percentile(registry, 0.5), p95: percentile(registry, 0.95) },
         otherUpdateAndCamera: { p50: percentile(other, 0.5), p95: percentile(other, 0.95) },
+        simulationRegistry: { p50: percentile(registry, 0.5), p95: percentile(registry, 0.95) },
+        presentationUpdate: { p50: percentile(presentation, 0.5), p95: percentile(presentation, 0.95) },
+        cameraUpdate: { p50: percentile(camera, 0.5), p95: percentile(camera, 0.95) },
+        transitionUpdate: { p50: percentile(transition, 0.5), p95: percentile(transition, 0.95) },
         render: { p50: percentile(render, 0.5), p95: percentile(render, 0.95) }
       },
       lastRendererInfo: bucket.rendererInfo,
@@ -148,9 +171,9 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A4",
+      optimizationPass: "HC-031W2A4.1",
       authority: "read_only_observer", gameplayAuthority: false,
-      timingRule: "elapsed callback time is split into <=50ms simulation substeps with a 150ms/callback catch-up ceiling; excess is dropped",
+      timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),

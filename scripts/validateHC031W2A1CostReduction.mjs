@@ -13,7 +13,7 @@ const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
 const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
 
 // Gameplay clock and authority stay unchanged in A1.
-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[1234]"/);
+assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[123]|4(?:\.1)?)"/);
 assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
 assert.match(runtimeSource, /pulseContourSegments:/);
 assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);

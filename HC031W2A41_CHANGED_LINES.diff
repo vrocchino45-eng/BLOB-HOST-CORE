@@ -1,0 +1,348 @@
+--- a/src/core/GameRuntime.js
++++ b/src/core/GameRuntime.js
+@@ -2735,7 +2735,7 @@
+     });
+ 
+     let registryMs = 0;
+-    let remainingUpdateMs = 0;
++    let registrySample = null;
+     for (let substepIndex = 0; substepIndex < catchUp.steps.length; substepIndex += 1) {
+       const dt = catchUp.steps[substepIndex];
+       this.frameState.runtimeSimulationSubstepIndex = substepIndex;
+@@ -2746,24 +2746,41 @@
+       this.registry.update(dt, this.frameState);
+       const registryEnd = performance.now();
+       registryMs += registryEnd - registryStart;
+-
+-      const remainingStart = registryEnd;
+-      this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
+-      this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
+-      this.updateCamera(dt);
+-      remainingUpdateMs += performance.now() - remainingStart;
++      if (this.frameState.runtimeExecution?.timingSampled) {
++        registrySample = this.frameState.runtimeExecution;
++      }
+     }
+-    // Transition preparation/continuity observes the renderer callback once, not
+-    // once per catch-up substep. rawDt remains the real callback gap for diagnostics.
+-    const transitionStart = performance.now();
++
++    // HC-031W2A4.1: simulation-critical registry work owns the bounded substeps.
++    // Presentation and camera work are evaluated once for the one image this
++    // animation callback can actually submit, using the total bounded simulation
++    // delta so their visible state still follows recovered simulation time.
++    this.frameState.runtimeSimulationSubstepIndex = Math.max(0, catchUp.substepCount - 1);
++    this.frameState.runtimePresentationDeltaSeconds = catchUp.simulatedSeconds;
++    this.frameState.runtimePresentationUpdatesThisCallback = 1;
++    this.frameState.runtimeCameraUpdatesThisCallback = 1;
++
++    const presentationStart = performance.now();
++    this.coreVerbPhysicalizationSystem?.update(catchUp.simulatedSeconds, this.frameState);
++    this.visualHierarchyCompressionSystem?.update(catchUp.simulatedSeconds, this.frameState);
++    const presentationEnd = performance.now();
++    const presentationUpdateMs = presentationEnd - presentationStart;
++
++    const cameraStart = presentationEnd;
++    this.updateCamera(catchUp.simulatedSeconds);
++    const cameraEnd = performance.now();
++    const cameraUpdateMs = cameraEnd - cameraStart;
++
++    // Transition preparation/continuity already observes the renderer callback once,
++    // not once per catch-up substep. rawDt remains the real callback gap for diagnostics.
++    const transitionStart = cameraEnd;
+     this.firstSliceTransitionCoordinator?.update(
+       catchUp.simulatedSeconds,
+       this.frameState,
+       rawDt
+     );
+-    remainingUpdateMs += performance.now() - transitionStart;
+-
+-    this.frameState.runtimeSimulationSubstepIndex = Math.max(0, catchUp.substepCount - 1);
++    const transitionUpdateMs = performance.now() - transitionStart;
++    const remainingUpdateMs = presentationUpdateMs + cameraUpdateMs + transitionUpdateMs;
+     const renderBudget = this.renderBudgetSystem?.prepare({
+       runtimeSeconds: this.frameState.runtimeSeconds,
+       frameState: this.frameState
+@@ -2780,9 +2797,12 @@
+     this.frameTruthObserver.endFrame({
+       registryMs,
+       remainingUpdateMs,
++      presentationUpdateMs,
++      cameraUpdateMs,
++      transitionUpdateMs,
+       renderMs: renderEnd - renderStart,
+       cellId: this.frameState.activeCellId,
+-      registrySample: this.frameState.runtimeExecution,
++      registrySample: registrySample ?? this.frameState.runtimeExecution,
+       renderOwnerCensus: renderBudget?.ownerCensus ?? null,
+       rendererInfo: info ? {
+         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
+@@ -2806,6 +2826,10 @@
+         simulationSubsteps: catchUp.substepCount,
+         simulationRecoveredBeyondLegacyCapMs: catchUp.recoveredBeyondLegacyCapSeconds * 1000,
+         simulationDroppedMs: catchUp.droppedSeconds * 1000,
++        simulationRegistryMs: registryMs,
++        presentationUpdateMs,
++        cameraUpdateMs,
++        transitionUpdateMs,
+         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+         devicePixelRatio: this.renderer.getPixelRatio()
+       } : null
+--- a/src/core/FrameTruthObserver.js
++++ b/src/core/FrameTruthObserver.js
+@@ -27,7 +27,8 @@
+   newWindow() {
+     return {
+       frameCount: 0, wallMs: 0, simMs: 0, discardedMs: 0,
+-      frameIntervalsMs: [], registryMs: [], remainingUpdateMs: [], renderMs: [],
++      frameIntervalsMs: [], registryMs: [], remainingUpdateMs: [],
++      presentationUpdateMs: [], cameraUpdateMs: [], transitionUpdateMs: [], renderMs: [],
+       over100ms: 0, over250ms: 0, over1000ms: 0,
+       hiddenFrames: 0, unfocusedFrames: 0, visibilityTransitionsObserved: 0,
+       maxGapMs: 0, cellId: "none", firstFrame: null, lastFrame: null,
+@@ -81,16 +82,25 @@
+     this.pending = { frame };
+   }
+ 
+-  endFrame({ registryMs = 0, remainingUpdateMs = 0, renderMs = 0,
+-    cellId = "none", rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
++  endFrame({ registryMs = 0, remainingUpdateMs = null, presentationUpdateMs = 0,
++    cameraUpdateMs = 0, transitionUpdateMs = 0, renderMs = 0, cellId = "none",
++    rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
+     if (!this.pending) return;
+     for (const bucket of [this.current, this.total]) {
+       bucket.cellId = cellId;
+       bucket.rendererInfo = rendererInfo;
+       if (renderOwnerCensus) bucket.renderOwnerCensus = renderOwnerCensus;
+     }
++    const partitionedRemainingMs = Math.max(0, presentationUpdateMs)
++      + Math.max(0, cameraUpdateMs) + Math.max(0, transitionUpdateMs);
++    const effectiveRemainingUpdateMs = Number.isFinite(remainingUpdateMs)
++      ? Math.max(0, remainingUpdateMs)
++      : partitionedRemainingMs;
+     this.current.registryMs.push(Math.max(0, registryMs));
+-    this.current.remainingUpdateMs.push(Math.max(0, remainingUpdateMs));
++    this.current.remainingUpdateMs.push(effectiveRemainingUpdateMs);
++    this.current.presentationUpdateMs.push(Math.max(0, presentationUpdateMs));
++    this.current.cameraUpdateMs.push(Math.max(0, cameraUpdateMs));
++    this.current.transitionUpdateMs.push(Math.max(0, transitionUpdateMs));
+     this.current.renderMs.push(Math.max(0, renderMs));
+     if (registrySample?.timingSampled) {
+       this.current.slowestSampledSystems = registrySample.slowestSampledSystems
+@@ -98,7 +108,12 @@
+     }
+     this.pending = null;
+     this.lastCompletedStageMs = {
+-      registry: round(registryMs), otherUpdateAndCamera: round(remainingUpdateMs),
++      registry: round(registryMs),
++      simulationRegistry: round(registryMs),
++      otherUpdateAndCamera: round(effectiveRemainingUpdateMs),
++      presentationUpdate: round(presentationUpdateMs),
++      cameraUpdate: round(cameraUpdateMs),
++      transitionUpdate: round(transitionUpdateMs),
+       render: round(renderMs)
+     };
+     if (this.current.wallMs >= this.windowMs) {
+@@ -113,6 +128,9 @@
+     const render = [...bucket.renderMs].sort((a, b) => a - b);
+     const registry = [...bucket.registryMs].sort((a, b) => a - b);
+     const other = [...bucket.remainingUpdateMs].sort((a, b) => a - b);
++    const presentation = [...bucket.presentationUpdateMs].sort((a, b) => a - b);
++    const camera = [...bucket.cameraUpdateMs].sort((a, b) => a - b);
++    const transition = [...bucket.transitionUpdateMs].sort((a, b) => a - b);
+     const substeps = [...bucket.substepCounts].sort((a, b) => a - b);
+     return {
+       firstFrame: bucket.firstFrame, lastFrame: bucket.lastFrame, cellId: bucket.cellId,
+@@ -133,8 +151,13 @@
+         transitionsObserved: bucket.visibilityTransitionsObserved
+       },
+       stageMs: {
++        // Legacy names stay additive for comparison with W2A-W2A4 exports.
+         registry: { p50: percentile(registry, 0.5), p95: percentile(registry, 0.95) },
+         otherUpdateAndCamera: { p50: percentile(other, 0.5), p95: percentile(other, 0.95) },
++        simulationRegistry: { p50: percentile(registry, 0.5), p95: percentile(registry, 0.95) },
++        presentationUpdate: { p50: percentile(presentation, 0.5), p95: percentile(presentation, 0.95) },
++        cameraUpdate: { p50: percentile(camera, 0.5), p95: percentile(camera, 0.95) },
++        transitionUpdate: { p50: percentile(transition, 0.5), p95: percentile(transition, 0.95) },
+         render: { p50: percentile(render, 0.5), p95: percentile(render, 0.95) }
+       },
+       lastRendererInfo: bucket.rendererInfo,
+@@ -148,9 +171,9 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
+-      optimizationPass: "HC-031W2A4",
++      optimizationPass: "HC-031W2A4.1",
+       authority: "read_only_observer", gameplayAuthority: false,
+-      timingRule: "elapsed callback time is split into <=50ms simulation substeps with a 150ms/callback catch-up ceiling; excess is dropped",
++      timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
+       total: {
+         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
+--- a/scripts/validateHC031W2A1CostReduction.mjs
++++ b/scripts/validateHC031W2A1CostReduction.mjs
+@@ -13,7 +13,7 @@
+ const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
+ 
+ // Gameplay clock and authority stay unchanged in A1.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[1234]"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[123]|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /pulseContourSegments:/);
+ assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);
+--- a/scripts/validateHC031W2A2TransientRenderBudget.mjs
++++ b/scripts/validateHC031W2A2TransientRenderBudget.mjs
+@@ -13,7 +13,7 @@
+ const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
+ 
+ // W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[234]"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[23]|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
+ assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
+@@ -111,7 +111,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
+ 
+ console.log("HC031W2A2 transient render budget + owner census PASS");
+--- a/scripts/validateHC031W2A3ResidencyFoundation.mjs
++++ b/scripts/validateHC031W2A3ResidencyFoundation.mjs
+@@ -12,7 +12,7 @@
+ const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
+ 
+ // W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[34]"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /frameState: this\.frameState/);
+ assert.match(runtimeSource, /residencyRootsCulled:/);
+@@ -113,7 +113,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A3", "HC-031W2A4"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
+ 
+ console.log("HC031W2A3 residency + Hub foundation cadence PASS");
+--- a/scripts/validateHC031W2A4BoundedCatchUp.mjs
++++ b/scripts/validateHC031W2A4BoundedCatchUp.mjs
+@@ -79,7 +79,7 @@
+ });
+ observer.endFrame({ registryMs: 3, remainingUpdateMs: 1, renderMs: 5, cellId: "TEST" });
+ let snapshot = observer.snapshot();
+-assert.equal(snapshot.optimizationPass, "HC-031W2A4");
++assert.ok(["HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.total.discardedSeconds, 0);
+ assert.equal(snapshot.total.simulationCatchUp.multiSubstepFrames, 1);
+--- /dev/null	2026-10-07 01:42:43.263157206 +0000
++++ /mnt/data/hc031w2a41_work/BLOB-HOST-CORE/scripts/validateHC031W2A41CatchUpWorkPartition.mjs	2026-10-07 02:23:27.661408428 +0000
+@@ -0,0 +1,102 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import { FrameTruthObserver } from "../src/core/FrameTruthObserver.js";
++import {
++  buildBoundedSimulationSteps,
++  HC031W2A4_MAX_STEP_SECONDS,
++  HC031W2A4_MAX_CATCH_UP_SECONDS,
++  HC031W2A4_MAX_SUBSTEPS
++} from "../src/core/BoundedSimulationCatchUp.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const runtimeSource = read("../src/core/GameRuntime.js");
++const observerSource = read("../src/core/FrameTruthObserver.js");
++const tickSource = runtimeSource.slice(runtimeSource.indexOf("  tick() {"), runtimeSource.indexOf("\n  updateCamera(dt) {"));
++
++// A4 clock contract remains unchanged.
++assert.equal(HC031W2A4_MAX_STEP_SECONDS, 0.05);
++assert.equal(HC031W2A4_MAX_CATCH_UP_SECONDS, 0.15);
++assert.equal(HC031W2A4_MAX_SUBSTEPS, 3);
++const catchUp = buildBoundedSimulationSteps(0.15);
++assert.equal(catchUp.substepCount, 3);
++assert.ok(catchUp.steps.every((dt) => dt <= 0.05 + 1e-12));
++assert.ok(Math.abs(catchUp.simulatedSeconds - 0.15) < 1e-9);
++
++// Only simulation-critical registry work is allowed inside the substep loop.
++const loopStart = tickSource.indexOf("for (let substepIndex = 0; substepIndex < catchUp.steps.length; substepIndex += 1)");
++const partitionStart = tickSource.indexOf("// HC-031W2A4.1: simulation-critical registry work owns the bounded substeps.");
++assert.ok(loopStart >= 0 && partitionStart > loopStart, "A4.1 partition marker must follow the bounded substep loop");
++const substepLoopSource = tickSource.slice(loopStart, partitionStart);
++const oncePerCallbackSource = tickSource.slice(partitionStart);
++assert.match(substepLoopSource, /this\.registry\.update\(dt, this\.frameState\)/);
++assert.doesNotMatch(substepLoopSource, /coreVerbPhysicalizationSystem\?\.update/);
++assert.doesNotMatch(substepLoopSource, /visualHierarchyCompressionSystem\?\.update/);
++assert.doesNotMatch(substepLoopSource, /this\.updateCamera\(/);
++assert.doesNotMatch(substepLoopSource, /firstSliceTransitionCoordinator\?\.update\(/);
++
++assert.equal((oncePerCallbackSource.match(/coreVerbPhysicalizationSystem\?\.update\(/g) ?? []).length, 1);
++assert.equal((oncePerCallbackSource.match(/visualHierarchyCompressionSystem\?\.update\(/g) ?? []).length, 1);
++assert.equal((oncePerCallbackSource.match(/this\.updateCamera\(/g) ?? []).length, 1);
++assert.equal((oncePerCallbackSource.match(/firstSliceTransitionCoordinator\?\.update\(/g) ?? []).length, 1);
++assert.equal((tickSource.match(/this\.renderer\.render\(/g) ?? []).length, 1);
++assert.match(oncePerCallbackSource, /runtimePresentationDeltaSeconds = catchUp\.simulatedSeconds/);
++assert.match(oncePerCallbackSource, /runtimePresentationUpdatesThisCallback = 1/);
++assert.match(oncePerCallbackSource, /runtimeCameraUpdatesThisCallback = 1/);
++
++// First-substep profiler evidence must survive later uninstrumented substeps.
++assert.match(substepLoopSource, /if \(this\.frameState\.runtimeExecution\?\.timingSampled\)/);
++assert.match(tickSource, /registrySample: registrySample \?\? this\.frameState\.runtimeExecution/);
++
++// Frame Truth must expose the partition while retaining the legacy aggregate keys.
++let now = 0;
++const observer = new FrameTruthObserver({
++  now: () => now,
++  documentRef: { hidden: false, hasFocus: () => true },
++  windowMs: 1
++});
++now = 100;
++observer.beginFrame({
++  frame: 1,
++  rawDt: 0.1,
++  dt: 0.1,
++  cellId: "TEST",
++  substepCount: 2,
++  recoveredBeyondLegacyCapSeconds: 0.05
++});
++observer.endFrame({
++  registryMs: 20,
++  presentationUpdateMs: 4,
++  cameraUpdateMs: 3,
++  transitionUpdateMs: 2,
++  renderMs: 10,
++  cellId: "TEST",
++  registrySample: { timingSampled: true, slowestSampledSystems: [{ id: "testSystem", lastMs: 7.25 }] }
++});
++let snapshot = observer.snapshot();
++assert.equal(snapshot.optimizationPass, "HC-031W2A4.1");
++assert.equal(snapshot.total.simToWallRatio, 1);
++assert.equal(snapshot.windows[0].stageMs.simulationRegistry.p50, 20);
++assert.equal(snapshot.windows[0].stageMs.presentationUpdate.p50, 4);
++assert.equal(snapshot.windows[0].stageMs.cameraUpdate.p50, 3);
++assert.equal(snapshot.windows[0].stageMs.transitionUpdate.p50, 2);
++assert.equal(snapshot.windows[0].stageMs.otherUpdateAndCamera.p50, 9);
++assert.equal(snapshot.windows[0].lastSlowestSampledSystems[0].id, "testSystem");
++assert.match(observerSource, /presentation, camera, transition, and render each run once per callback/);
++
++// Legacy callers that only provide remainingUpdateMs still remain readable.
++now = 500;
++observer.beginFrame({
++  frame: 2,
++  rawDt: 0.4,
++  dt: 0.15,
++  cellId: "TEST",
++  substepCount: 3,
++  recoveredBeyondLegacyCapSeconds: 0.1
++});
++observer.endFrame({ registryMs: 30, remainingUpdateMs: 11, renderMs: 12, cellId: "TEST" });
++snapshot = observer.snapshot();
++assert.ok(snapshot.last40LongGaps.some((gap) => gap.previousCallbackWorkMs?.presentationUpdate === 4));
++assert.ok(snapshot.last40LongGaps.some((gap) => gap.previousCallbackWorkMs?.cameraUpdate === 3));
++assert.ok(snapshot.last40LongGaps.some((gap) => gap.previousCallbackWorkMs?.transitionUpdate === 2));
++
++console.log("HC031W2A4.1 catch-up work partition PASS");
