@@ -48,9 +48,9 @@ assert.equal(exported.session.buildId, "HC-031W1");
 
 const runtime = readFileSync(new URL("../src/core/GameRuntime.js", import.meta.url), "utf8");
 const registry = readFileSync(new URL("../src/core/SystemRegistry.js", import.meta.url), "utf8");
-assert.match(runtime, /const dt = Math\.min\(rawDt, 0\.05\)/, "Gameplay dt cap must remain unchanged");
+assert.match(runtime, /buildBoundedSimulationSteps\(rawDt\)/, "Runtime must use bounded <=50ms substeps rather than a single uncapped dt");
 assert.match(runtime, /frameTruthObserver\.beginFrame\(/);
 assert.match(runtime, /frameTruthObserver\.endFrame\(/);
 assert.match(registry, /frameState\?\.runtimeFrameRawDeltaMs/, "Registry must sample CURRENT frame raw delta");
-assert.doesNotMatch(runtime, /dt\s*=\s*rawDt\s*;/, "Do not uncap runtime dt");
+assert.doesNotMatch(runtime, /registry\.update\(rawDt,/, "Do not pass raw renderer gaps directly into gameplay systems");
 console.log("HC031W2A Frame Truth: 25 observer/export/ownership assertions PASS");

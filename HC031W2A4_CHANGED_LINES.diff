@@ -1,0 +1,493 @@
+diff -ruN /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A1CostReduction.mjs /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A1CostReduction.mjs
+--- /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A1CostReduction.mjs	2026-10-07 01:49:25.675554817 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A1CostReduction.mjs	2026-10-07 01:49:25.693163941 +0000
+@@ -13,8 +13,8 @@
+ const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
+ 
+ // Gameplay clock and authority stay unchanged in A1.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[123]"/);
+-assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[1234]"/);
++assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /pulseContourSegments:/);
+ assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);
+ 
+diff -ruN /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A2TransientRenderBudget.mjs /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A2TransientRenderBudget.mjs
+--- /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A2TransientRenderBudget.mjs	2026-10-07 01:49:25.675554817 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A2TransientRenderBudget.mjs	2026-10-07 01:49:25.695599408 +0000
+@@ -13,8 +13,8 @@
+ const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
+ 
+ // W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[23]"/);
+-assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[234]"/);
++assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
+ assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
+ assert.match(runtimeSource, /renderBudgetSystem\?\.restoreAfterRender/);
+@@ -111,7 +111,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A2", "HC-031W2A3"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
+ 
+ console.log("HC031W2A2 transient render budget + owner census PASS");
+diff -ruN /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A3ResidencyFoundation.mjs /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A3ResidencyFoundation.mjs
+--- /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A3ResidencyFoundation.mjs	2026-10-07 01:49:25.675554817 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A3ResidencyFoundation.mjs	2026-10-07 01:49:25.698139674 +0000
+@@ -11,9 +11,9 @@
+ const hubSource = read("../src/hub/HubChamberFoundationSystem.js");
+ const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
+ 
+-// W2A3 remains performance-only. Gameplay time authority and W2A2 transient budgets stay locked.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A3"/);
+-assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
++// W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[34]"/);
++assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /frameState: this\.frameState/);
+ assert.match(runtimeSource, /residencyRootsCulled:/);
+ assert.match(verbSource, /this\.maxPulseFronts = 3/);
+@@ -113,7 +113,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.equal(snapshot.optimizationPass, "HC-031W2A3");
++assert.ok(["HC-031W2A3", "HC-031W2A4"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
+ 
+ console.log("HC031W2A3 residency + Hub foundation cadence PASS");
+diff -ruN /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A4BoundedCatchUp.mjs /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A4BoundedCatchUp.mjs
+--- /mnt/data/hc031w2a4_parent/scripts/validateHC031W2A4BoundedCatchUp.mjs	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2A4BoundedCatchUp.mjs	2026-10-07 01:49:25.700403158 +0000
+@@ -0,0 +1,143 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import {
++  buildBoundedSimulationSteps,
++  HC031W2A4_MAX_STEP_SECONDS,
++  HC031W2A4_MAX_CATCH_UP_SECONDS,
++  HC031W2A4_MAX_SUBSTEPS
++} from "../src/core/BoundedSimulationCatchUp.js";
++import { FrameTruthObserver } from "../src/core/FrameTruthObserver.js";
++import { SystemRegistry } from "../src/core/SystemRegistry.js";
++import { InputSystem } from "../src/input/InputSystem.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const runtimeSource = read("../src/core/GameRuntime.js");
++const frameTruthSource = read("../src/core/FrameTruthObserver.js");
++
++assert.equal(HC031W2A4_MAX_STEP_SECONDS, 0.05);
++assert.equal(HC031W2A4_MAX_CATCH_UP_SECONDS, 0.15);
++assert.equal(HC031W2A4_MAX_SUBSTEPS, 3);
++
++let plan = buildBoundedSimulationSteps(0.016);
++assert.equal(plan.substepCount, 1);
++assert.ok(Math.abs(plan.simulatedSeconds - 0.016) < 1e-9);
++assert.equal(plan.droppedSeconds, 0);
++assert.ok(plan.steps.every((dt) => dt <= 0.05));
++
++plan = buildBoundedSimulationSteps(0.1);
++assert.equal(plan.substepCount, 2);
++assert.ok(plan.steps.every((dt) => dt <= 0.05 + 1e-12));
++assert.ok(Math.abs(plan.simulatedSeconds - 0.1) < 1e-9);
++assert.ok(Math.abs(plan.recoveredBeyondLegacyCapSeconds - 0.05) < 1e-9);
++assert.equal(plan.droppedSeconds, 0);
++
++plan = buildBoundedSimulationSteps(0.149);
++assert.equal(plan.substepCount, 3);
++assert.ok(plan.steps.every((dt) => dt <= 0.05 + 1e-12));
++assert.ok(Math.abs(plan.simulatedSeconds - 0.149) < 1e-9);
++
++plan = buildBoundedSimulationSteps(0.4);
++assert.equal(plan.substepCount, 3);
++assert.ok(Math.abs(plan.simulatedSeconds - 0.15) < 1e-9);
++assert.ok(Math.abs(plan.droppedSeconds - 0.25) < 1e-9);
++assert.ok(Math.abs(plan.recoveredBeyondLegacyCapSeconds - 0.10) < 1e-9);
++assert.equal(plan.catastrophicGap, true);
++assert.ok(plan.steps.every((dt) => dt <= 0.05 + 1e-12));
++
++plan = buildBoundedSimulationSteps(Number.NaN);
++assert.equal(plan.substepCount, 1);
++assert.equal(plan.simulatedSeconds, 0);
++assert.equal(plan.droppedSeconds, 0);
++
++// Runtime integration: all simulation work is inside the bounded substep loop,
++// while transition coordination and renderer submission remain once per callback.
++assert.match(runtimeSource, /const catchUp = buildBoundedSimulationSteps\(rawDt\)/);
++assert.match(runtimeSource, /for \(let substepIndex = 0; substepIndex < catchUp\.steps\.length; substepIndex \+= 1\)/);
++assert.match(runtimeSource, /runtimeFrameSimulatedDeltaMs = catchUp\.simulatedSeconds \* 1000/);
++assert.match(runtimeSource, /runtimeFrameDroppedDeltaMs = catchUp\.droppedSeconds \* 1000/);
++assert.match(runtimeSource, /runtimeSimulationSubstepCount = catchUp\.substepCount/);
++const tickSource = runtimeSource.slice(runtimeSource.indexOf("  tick() {"), runtimeSource.indexOf("\n  updateCamera(dt) {"));
++assert.equal((tickSource.match(/this\.renderer\.render\(/g) ?? []).length, 1, "renderer must submit exactly once per callback");
++assert.equal((tickSource.match(/firstSliceTransitionCoordinator\?\.update\(/g) ?? []).length, 1, "transition coordinator must observe once per callback");
++
++// Frame Truth must count recovered ordinary frame time and only mark time above
++// the 150ms ceiling as discarded.
++let now = 0;
++const observer = new FrameTruthObserver({
++  now: () => now,
++  documentRef: { hidden: false, hasFocus: () => true },
++  windowMs: 1
++});
++now = 100;
++observer.beginFrame({
++  frame: 1,
++  rawDt: 0.1,
++  dt: 0.1,
++  cellId: "TEST",
++  substepCount: 2,
++  recoveredBeyondLegacyCapSeconds: 0.05
++});
++observer.endFrame({ registryMs: 3, remainingUpdateMs: 1, renderMs: 5, cellId: "TEST" });
++let snapshot = observer.snapshot();
++assert.equal(snapshot.optimizationPass, "HC-031W2A4");
++assert.equal(snapshot.total.simToWallRatio, 1);
++assert.equal(snapshot.total.discardedSeconds, 0);
++assert.equal(snapshot.total.simulationCatchUp.multiSubstepFrames, 1);
++assert.equal(snapshot.total.simulationCatchUp.recoveredBeyondLegacyCapSeconds, 0.05);
++assert.equal(snapshot.windows[0].simulationCatchUp.maxSubsteps, 2);
++
++now = 500;
++observer.beginFrame({
++  frame: 2,
++  rawDt: 0.4,
++  dt: 0.15,
++  cellId: "TEST",
++  substepCount: 3,
++  recoveredBeyondLegacyCapSeconds: 0.1
++});
++observer.endFrame({ registryMs: 4, remainingUpdateMs: 1, renderMs: 6, cellId: "TEST" });
++snapshot = observer.snapshot();
++assert.ok(snapshot.total.discardedSeconds >= 0.25);
++assert.ok(snapshot.last40LongGaps.some((gap) => gap.substepCount === 3 && gap.recoveredBeyondLegacyCapMs === 100));
++assert.match(frameTruthSource, /150ms\/callback catch-up ceiling/);
++
++// Repeated catch-up substeps must not repeat profiler instrumentation inside one callback.
++const registry = new SystemRegistry();
++registry.register("noop", { update() {} });
++const state = {
++  frame: 60,
++  runtimeFrameRawDeltaMs: 100,
++  runtimeSimulationSubstepIndex: 0,
++  firstSliceRuntimeMount: {},
++  transitionContinuity: {}
++};
++registry.update(0.05, state);
++assert.equal(state.runtimeExecution.timingSampled, true);
++state.runtimeSimulationSubstepIndex = 1;
++registry.update(0.05, state);
++assert.equal(state.runtimeExecution.timingSampled, false);
++
++// Input edge ownership remains one-shot across multiple simulation substeps while held
++// input time advances through each substep.
++const button = (down = false, value = down ? 1 : 0) => ({ pressed: down, touched: down, value });
++const buttons = Array.from({ length: 16 }, () => button(false, 0));
++buttons[0] = button(true, 1); // A / Commit edge
++buttons[2] = button(true, 1); // X / held Pulse
++const pad = { index: 0, id: "A4 test pad", mapping: "standard", axes: [0, 0, 0, 0], buttons };
++const priorNavigator = globalThis.navigator;
++Object.defineProperty(globalThis, "navigator", { configurable: true, value: { getGamepads: () => [pad] } });
++const input = new InputSystem();
++const inputState = { frame: 1, runtimeSeconds: 0, controllerOnboarding: {} };
++input.update(0.05, inputState);
++assert.equal(inputState.input.interactPressed, true);
++assert.equal(inputState.input.interactEventId, 1);
++assert.ok(inputState.input.pulseHeld);
++assert.ok(Math.abs(inputState.input.pulseHoldSeconds - 0.05) < 1e-9);
++input.update(0.05, inputState);
++assert.equal(inputState.input.interactPressed, false, "held A must not refire on catch-up substep 2");
++assert.equal(inputState.input.interactEventId, 1);
++assert.ok(Math.abs(inputState.input.pulseHoldSeconds - 0.1) < 1e-9, "held Pulse duration must advance across substeps");
++if (priorNavigator === undefined) delete globalThis.navigator;
++else Object.defineProperty(globalThis, "navigator", { configurable: true, value: priorNavigator });
++
++console.log("HC031W2A4 bounded simulation catch-up PASS");
+diff -ruN /mnt/data/hc031w2a4_parent/scripts/validateHC031W2AFrameTruth.mjs /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2AFrameTruth.mjs
+--- /mnt/data/hc031w2a4_parent/scripts/validateHC031W2AFrameTruth.mjs	2026-10-07 01:49:25.673464126 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/scripts/validateHC031W2AFrameTruth.mjs	2026-10-07 01:49:25.690780196 +0000
+@@ -48,9 +48,9 @@
+ 
+ const runtime = readFileSync(new URL("../src/core/GameRuntime.js", import.meta.url), "utf8");
+ const registry = readFileSync(new URL("../src/core/SystemRegistry.js", import.meta.url), "utf8");
+-assert.match(runtime, /const dt = Math\.min\(rawDt, 0\.05\)/, "Gameplay dt cap must remain unchanged");
++assert.match(runtime, /buildBoundedSimulationSteps\(rawDt\)/, "Runtime must use bounded <=50ms substeps rather than a single uncapped dt");
+ assert.match(runtime, /frameTruthObserver\.beginFrame\(/);
+ assert.match(runtime, /frameTruthObserver\.endFrame\(/);
+ assert.match(registry, /frameState\?\.runtimeFrameRawDeltaMs/, "Registry must sample CURRENT frame raw delta");
+-assert.doesNotMatch(runtime, /dt\s*=\s*rawDt\s*;/, "Do not uncap runtime dt");
++assert.doesNotMatch(runtime, /registry\.update\(rawDt,/, "Do not pass raw renderer gaps directly into gameplay systems");
+ console.log("HC031W2A Frame Truth: 25 observer/export/ownership assertions PASS");
+diff -ruN /mnt/data/hc031w2a4_parent/src/core/BoundedSimulationCatchUp.js /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/BoundedSimulationCatchUp.js
+--- /mnt/data/hc031w2a4_parent/src/core/BoundedSimulationCatchUp.js	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/BoundedSimulationCatchUp.js	2026-10-07 01:49:25.680697534 +0000
+@@ -0,0 +1,45 @@
++// HC-031W2A4 — bounded simulation catch-up planner.
++// Splits one renderer callback's elapsed wall time into safe simulation steps
++// without allowing a long renderer/event-loop stall to create an unbounded backlog.
++
++export const HC031W2A4_MAX_STEP_SECONDS = 0.05;
++export const HC031W2A4_MAX_CATCH_UP_SECONDS = 0.15;
++export const HC031W2A4_MAX_SUBSTEPS = 3;
++
++const finiteNonNegative = (value) => Number.isFinite(value) ? Math.max(0, value) : 0;
++
++export function buildBoundedSimulationSteps(rawDt, {
++  maxStepSeconds = HC031W2A4_MAX_STEP_SECONDS,
++  maxCatchUpSeconds = HC031W2A4_MAX_CATCH_UP_SECONDS,
++  maxSubsteps = HC031W2A4_MAX_SUBSTEPS
++} = {}) {
++  const elapsedSeconds = finiteNonNegative(rawDt);
++  const safeMaxStep = Math.max(0.001, finiteNonNegative(maxStepSeconds) || HC031W2A4_MAX_STEP_SECONDS);
++  const safeMaxSubsteps = Math.max(1, Math.floor(finiteNonNegative(maxSubsteps) || HC031W2A4_MAX_SUBSTEPS));
++  const safeCatchUpCeiling = Math.min(
++    Math.max(safeMaxStep, finiteNonNegative(maxCatchUpSeconds) || HC031W2A4_MAX_CATCH_UP_SECONDS),
++    safeMaxStep * safeMaxSubsteps
++  );
++
++  const simulatedSeconds = Math.min(elapsedSeconds, safeCatchUpCeiling);
++  const substepCount = simulatedSeconds > 0
++    ? Math.min(safeMaxSubsteps, Math.max(1, Math.ceil(simulatedSeconds / safeMaxStep)))
++    : 1;
++  // Equal slices avoid a tiny remainder step while keeping every step <= maxStep.
++  const substepSeconds = substepCount > 0 ? simulatedSeconds / substepCount : 0;
++  const steps = Array.from({ length: substepCount }, () => substepSeconds);
++  const legacySingleStepSeconds = Math.min(elapsedSeconds, safeMaxStep);
++
++  return {
++    elapsedSeconds,
++    steps,
++    substepCount,
++    simulatedSeconds,
++    droppedSeconds: Math.max(0, elapsedSeconds - simulatedSeconds),
++    recoveredBeyondLegacyCapSeconds: Math.max(0, simulatedSeconds - legacySingleStepSeconds),
++    legacySingleStepSeconds,
++    maxStepSeconds: safeMaxStep,
++    maxCatchUpSeconds: safeCatchUpCeiling,
++    catastrophicGap: elapsedSeconds > safeCatchUpCeiling
++  };
++}
+diff -ruN /mnt/data/hc031w2a4_parent/src/core/FrameTruthObserver.js /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/FrameTruthObserver.js
+--- /mnt/data/hc031w2a4_parent/src/core/FrameTruthObserver.js	2026-10-07 01:49:25.672416505 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/FrameTruthObserver.js	2026-10-07 01:49:25.685599956 +0000
+@@ -31,11 +31,12 @@
+       over100ms: 0, over250ms: 0, over1000ms: 0,
+       hiddenFrames: 0, unfocusedFrames: 0, visibilityTransitionsObserved: 0,
+       maxGapMs: 0, cellId: "none", firstFrame: null, lastFrame: null,
+-      rendererInfo: null, renderOwnerCensus: null, slowestSampledSystems: []
++      rendererInfo: null, renderOwnerCensus: null, slowestSampledSystems: [],
++      substepCounts: [], multiSubstepFrames: 0, recoveredBeyondLegacyCapMs: 0
+     };
+   }
+ 
+-  beginFrame({ frame, rawDt, dt, cellId = "none" }) {
++  beginFrame({ frame, rawDt, dt, cellId = "none", substepCount = 1, recoveredBeyondLegacyCapSeconds = 0 }) {
+     const rawMs = Math.max(0, Number.isFinite(rawDt) ? rawDt * 1000 : 0);
+     const simMs = Math.max(0, Number.isFinite(dt) ? dt * 1000 : 0);
+     const hidden = Boolean(this.documentRef?.hidden);
+@@ -58,14 +59,21 @@
+       bucket.cellId = cellId;
+       bucket.firstFrame ??= frame;
+       bucket.lastFrame = frame;
++      bucket.multiSubstepFrames += Number(substepCount > 1);
++      bucket.recoveredBeyondLegacyCapMs += Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
++        ? recoveredBeyondLegacyCapSeconds * 1000 : 0);
+     }
+     this.current.frameIntervalsMs.push(rawMs);
++    this.current.substepCounts.push(Math.max(1, Math.floor(Number.isFinite(substepCount) ? substepCount : 1)));
+     // Retain only exceptional gaps, never an unbounded per-frame event log.
+     if (rawMs > 250) {
+       this.longGaps.push({
+         wallAtSeconds: round((this.nowMs() - this.startedAtMs) / 1000),
+         frame, cellId, rawMs: round(rawMs), simMs: round(simMs),
+         discardedMs: round(Math.max(0, rawMs - simMs)), hidden, focused,
++        substepCount: Math.max(1, Math.floor(Number.isFinite(substepCount) ? substepCount : 1)),
++        recoveredBeyondLegacyCapMs: round(Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
++          ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
+         previousCallbackWorkMs: this.lastCompletedStageMs
+       });
+       if (this.longGaps.length > 40) this.longGaps.shift();
+@@ -105,6 +113,7 @@
+     const render = [...bucket.renderMs].sort((a, b) => a - b);
+     const registry = [...bucket.registryMs].sort((a, b) => a - b);
+     const other = [...bucket.remainingUpdateMs].sort((a, b) => a - b);
++    const substeps = [...bucket.substepCounts].sort((a, b) => a - b);
+     return {
+       firstFrame: bucket.firstFrame, lastFrame: bucket.lastFrame, cellId: bucket.cellId,
+       frames: bucket.frameCount, wallSeconds: round(bucket.wallMs / 1000),
+@@ -113,6 +122,12 @@
+       callbackRateHz: bucket.wallMs ? round(bucket.frameCount * 1000 / bucket.wallMs) : null,
+       frameIntervalMs: { p50: percentile(frames, 0.5), p95: percentile(frames, 0.95), max: round(bucket.maxGapMs) },
+       gapCounts: { over100ms: bucket.over100ms, over250ms: bucket.over250ms, over1000ms: bucket.over1000ms },
++      simulationCatchUp: {
++        p50Substeps: percentile(substeps, 0.5), p95Substeps: percentile(substeps, 0.95),
++        maxSubsteps: substeps.length ? Math.max(...substeps) : 1,
++        multiSubstepFrames: bucket.multiSubstepFrames,
++        recoveredBeyondLegacyCapSeconds: round(bucket.recoveredBeyondLegacyCapMs / 1000)
++      },
+       visibility: {
+         hiddenFrames: bucket.hiddenFrames, unfocusedFrames: bucket.unfocusedFrames,
+         transitionsObserved: bucket.visibilityTransitionsObserved
+@@ -133,9 +148,9 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
+-      optimizationPass: "HC-031W2A3",
++      optimizationPass: "HC-031W2A4",
+       authority: "read_only_observer", gameplayAuthority: false,
+-      timingRule: "actual simulation delta is capped by the unchanged GameRuntime.tick() at 50ms per callback",
++      timingRule: "elapsed callback time is split into <=50ms simulation substeps with a 150ms/callback catch-up ceiling; excess is dropped",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
+       total: {
+         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
+@@ -144,6 +159,13 @@
+         callbackRateHz: total.wallMs ? round(total.frameCount * 1000 / total.wallMs) : null,
+         maxGapMs: round(total.maxGapMs),
+         gapCounts: { over100ms: total.over100ms, over250ms: total.over250ms, over1000ms: total.over1000ms },
++        simulationCatchUp: {
++          multiSubstepFrames: total.multiSubstepFrames,
++          recoveredBeyondLegacyCapSeconds: round(total.recoveredBeyondLegacyCapMs / 1000),
++          maxStepSeconds: 0.05,
++          maxCatchUpSeconds: 0.15,
++          maxSubsteps: 3
++        },
+         visibility: { hiddenFrames: total.hiddenFrames, unfocusedFrames: total.unfocusedFrames,
+           transitionsObserved: total.visibilityTransitionsObserved }
+       },
+diff -ruN /mnt/data/hc031w2a4_parent/src/core/GameRuntime.js /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/GameRuntime.js
+--- /mnt/data/hc031w2a4_parent/src/core/GameRuntime.js	2026-10-07 01:49:25.671218754 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/GameRuntime.js	2026-10-07 01:49:25.683163612 +0000
+@@ -4,6 +4,7 @@
+ import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
+ import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
+ import { FrameTruthObserver } from "./FrameTruthObserver.js";
++import { buildBoundedSimulationSteps } from "./BoundedSimulationCatchUp.js";
+ import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
+ import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
+ import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
+@@ -2703,24 +2704,66 @@
+     if (!this.isRunning) return;
+ 
+     const rawDt = this.clock.getDelta();
+-    const dt = Math.min(rawDt, 0.05); // W2A: leave gameplay timing unchanged while measuring loss.
++    const catchUp = buildBoundedSimulationSteps(rawDt);
+ 
+     this.frame += 1;
+     this.frameState.frame = this.frame;
+-    this.frameState.runtimeSeconds += dt;
+-    // Current-frame truth, not the previous frame's transition-coordinator publication.
++    // Current-callback timing truth. Gameplay systems still receive only <=50ms
++    // substeps; no individual update sees the entire renderer/event-loop gap.
+     this.frameState.runtimeFrameRawDeltaMs = rawDt * 1000;
++    this.frameState.runtimeFrameSimulatedDeltaMs = catchUp.simulatedSeconds * 1000;
++    this.frameState.runtimeFrameDroppedDeltaMs = catchUp.droppedSeconds * 1000;
++    this.frameState.runtimeSimulationSubstepCount = catchUp.substepCount;
++    this.frameState.runtimeSimulationRecoveredBeyondLegacyCapMs = catchUp.recoveredBeyondLegacyCapSeconds * 1000;
++    this.frameState.runtimeSimulationCatchUp = {
++      pass: "HC-031W2A4",
++      maxStepSeconds: catchUp.maxStepSeconds,
++      maxCatchUpSeconds: catchUp.maxCatchUpSeconds,
++      substepCount: catchUp.substepCount,
++      simulatedSeconds: catchUp.simulatedSeconds,
++      droppedSeconds: catchUp.droppedSeconds,
++      recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds,
++      catastrophicGap: catchUp.catastrophicGap
++    };
+     this.frameTruthObserver.beginFrame({
+-      frame: this.frame, rawDt, dt, cellId: this.frameState.activeCellId
++      frame: this.frame,
++      rawDt,
++      dt: catchUp.simulatedSeconds,
++      cellId: this.frameState.activeCellId,
++      substepCount: catchUp.substepCount,
++      recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds
+     });
+ 
+-    const registryStart = performance.now();
+-    this.registry.update(dt, this.frameState);
+-    const registryEnd = performance.now();
+-    this.firstSliceTransitionCoordinator?.update(dt, this.frameState, rawDt);
+-    this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
+-    this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
+-    this.updateCamera(dt);
++    let registryMs = 0;
++    let remainingUpdateMs = 0;
++    for (let substepIndex = 0; substepIndex < catchUp.steps.length; substepIndex += 1) {
++      const dt = catchUp.steps[substepIndex];
++      this.frameState.runtimeSimulationSubstepIndex = substepIndex;
++      this.frameState.runtimeSimulationSubstepSeconds = dt;
++      this.frameState.runtimeSeconds += dt;
++
++      const registryStart = performance.now();
++      this.registry.update(dt, this.frameState);
++      const registryEnd = performance.now();
++      registryMs += registryEnd - registryStart;
++
++      const remainingStart = registryEnd;
++      this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
++      this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
++      this.updateCamera(dt);
++      remainingUpdateMs += performance.now() - remainingStart;
++    }
++    // Transition preparation/continuity observes the renderer callback once, not
++    // once per catch-up substep. rawDt remains the real callback gap for diagnostics.
++    const transitionStart = performance.now();
++    this.firstSliceTransitionCoordinator?.update(
++      catchUp.simulatedSeconds,
++      this.frameState,
++      rawDt
++    );
++    remainingUpdateMs += performance.now() - transitionStart;
++
++    this.frameState.runtimeSimulationSubstepIndex = Math.max(0, catchUp.substepCount - 1);
+     const renderBudget = this.renderBudgetSystem?.prepare({
+       runtimeSeconds: this.frameState.runtimeSeconds,
+       frameState: this.frameState
+@@ -2735,8 +2778,8 @@
+     }
+     const info = this.renderer.info?.render;
+     this.frameTruthObserver.endFrame({
+-      registryMs: registryEnd - registryStart,
+-      remainingUpdateMs: renderStart - registryEnd,
++      registryMs,
++      remainingUpdateMs,
+       renderMs: renderEnd - renderStart,
+       cellId: this.frameState.activeCellId,
+       registrySample: this.frameState.runtimeExecution,
+@@ -2760,6 +2803,9 @@
+         hubFullSceneMatrixUpdateAvoided: Boolean(this.frameState.hubFoundationPerformance?.fullSceneMatrixUpdateAvoided),
+         surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
+         surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
++        simulationSubsteps: catchUp.substepCount,
++        simulationRecoveredBeyondLegacyCapMs: catchUp.recoveredBeyondLegacyCapSeconds * 1000,
++        simulationDroppedMs: catchUp.droppedSeconds * 1000,
+         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+         devicePixelRatio: this.renderer.getPixelRatio()
+       } : null
+diff -ruN /mnt/data/hc031w2a4_parent/src/core/SystemRegistry.js /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/SystemRegistry.js
+--- /mnt/data/hc031w2a4_parent/src/core/SystemRegistry.js	2026-10-07 01:49:25.673464126 +0000
++++ /mnt/data/BLOB_HC-031W2A4_BOUNDED_SIM_CATCHUP_PATCH/src/core/SystemRegistry.js	2026-10-07 01:49:25.688244994 +0000
+@@ -119,10 +119,15 @@
+     if (frameState) frameState.runtimeExecution = execution;
+     const rawFrameDeltaMs = frameState?.runtimeFrameRawDeltaMs ?? frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
+     const frameNumber = frameState?.frame ?? 0;
+-    const periodicTimingSample =
+-      (frameNumber % this.timingSampleEveryFrames) === 0;
+-    const hitchTimingSample =
+-      rawFrameDeltaMs >= this.hitchSampleThresholdMs
++    const runtimeSubstepIndex = frameState?.runtimeSimulationSubstepIndex ?? 0;
++    // HC-031W2A4: one animation callback may now contain up to three simulation
++    // substeps. Sample profiler timing only on the first so catch-up does not
++    // multiply diagnostic overhead on the very callbacks we are trying to recover.
++    const firstRuntimeSubstep = runtimeSubstepIndex === 0;
++    const periodicTimingSample = firstRuntimeSubstep
++      && (frameNumber % this.timingSampleEveryFrames) === 0;
++    const hitchTimingSample = firstRuntimeSubstep
++      && rawFrameDeltaMs >= this.hitchSampleThresholdMs
+       && frameNumber - this.lastHitchTimingSampleFrame >= this.hitchSampleCooldownFrames;
+     if (hitchTimingSample) this.lastHitchTimingSampleFrame = frameNumber;
+     const sampleTiming = periodicTimingSample || hitchTimingSample;

@@ -31,11 +31,12 @@ export class FrameTruthObserver {
       over100ms: 0, over250ms: 0, over1000ms: 0,
       hiddenFrames: 0, unfocusedFrames: 0, visibilityTransitionsObserved: 0,
       maxGapMs: 0, cellId: "none", firstFrame: null, lastFrame: null,
-      rendererInfo: null, renderOwnerCensus: null, slowestSampledSystems: []
+      rendererInfo: null, renderOwnerCensus: null, slowestSampledSystems: [],
+      substepCounts: [], multiSubstepFrames: 0, recoveredBeyondLegacyCapMs: 0
     };
   }
 
-  beginFrame({ frame, rawDt, dt, cellId = "none" }) {
+  beginFrame({ frame, rawDt, dt, cellId = "none", substepCount = 1, recoveredBeyondLegacyCapSeconds = 0 }) {
     const rawMs = Math.max(0, Number.isFinite(rawDt) ? rawDt * 1000 : 0);
     const simMs = Math.max(0, Number.isFinite(dt) ? dt * 1000 : 0);
     const hidden = Boolean(this.documentRef?.hidden);
@@ -58,14 +59,21 @@ export class FrameTruthObserver {
       bucket.cellId = cellId;
       bucket.firstFrame ??= frame;
       bucket.lastFrame = frame;
+      bucket.multiSubstepFrames += Number(substepCount > 1);
+      bucket.recoveredBeyondLegacyCapMs += Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
+        ? recoveredBeyondLegacyCapSeconds * 1000 : 0);
     }
     this.current.frameIntervalsMs.push(rawMs);
+    this.current.substepCounts.push(Math.max(1, Math.floor(Number.isFinite(substepCount) ? substepCount : 1)));
     // Retain only exceptional gaps, never an unbounded per-frame event log.
     if (rawMs > 250) {
       this.longGaps.push({
         wallAtSeconds: round((this.nowMs() - this.startedAtMs) / 1000),
         frame, cellId, rawMs: round(rawMs), simMs: round(simMs),
         discardedMs: round(Math.max(0, rawMs - simMs)), hidden, focused,
+        substepCount: Math.max(1, Math.floor(Number.isFinite(substepCount) ? substepCount : 1)),
+        recoveredBeyondLegacyCapMs: round(Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
+          ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
         previousCallbackWorkMs: this.lastCompletedStageMs
       });
       if (this.longGaps.length > 40) this.longGaps.shift();
@@ -105,6 +113,7 @@ export class FrameTruthObserver {
     const render = [...bucket.renderMs].sort((a, b) => a - b);
     const registry = [...bucket.registryMs].sort((a, b) => a - b);
     const other = [...bucket.remainingUpdateMs].sort((a, b) => a - b);
+    const substeps = [...bucket.substepCounts].sort((a, b) => a - b);
     return {
       firstFrame: bucket.firstFrame, lastFrame: bucket.lastFrame, cellId: bucket.cellId,
       frames: bucket.frameCount, wallSeconds: round(bucket.wallMs / 1000),
@@ -113,6 +122,12 @@ export class FrameTruthObserver {
       callbackRateHz: bucket.wallMs ? round(bucket.frameCount * 1000 / bucket.wallMs) : null,
       frameIntervalMs: { p50: percentile(frames, 0.5), p95: percentile(frames, 0.95), max: round(bucket.maxGapMs) },
       gapCounts: { over100ms: bucket.over100ms, over250ms: bucket.over250ms, over1000ms: bucket.over1000ms },
+      simulationCatchUp: {
+        p50Substeps: percentile(substeps, 0.5), p95Substeps: percentile(substeps, 0.95),
+        maxSubsteps: substeps.length ? Math.max(...substeps) : 1,
+        multiSubstepFrames: bucket.multiSubstepFrames,
+        recoveredBeyondLegacyCapSeconds: round(bucket.recoveredBeyondLegacyCapMs / 1000)
+      },
       visibility: {
         hiddenFrames: bucket.hiddenFrames, unfocusedFrames: bucket.unfocusedFrames,
         transitionsObserved: bucket.visibilityTransitionsObserved
@@ -133,9 +148,9 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A3",
+      optimizationPass: "HC-031W2A4",
       authority: "read_only_observer", gameplayAuthority: false,
-      timingRule: "actual simulation delta is capped by the unchanged GameRuntime.tick() at 50ms per callback",
+      timingRule: "elapsed callback time is split into <=50ms simulation substeps with a 150ms/callback catch-up ceiling; excess is dropped",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
@@ -144,6 +159,13 @@ export class FrameTruthObserver {
         callbackRateHz: total.wallMs ? round(total.frameCount * 1000 / total.wallMs) : null,
         maxGapMs: round(total.maxGapMs),
         gapCounts: { over100ms: total.over100ms, over250ms: total.over250ms, over1000ms: total.over1000ms },
+        simulationCatchUp: {
+          multiSubstepFrames: total.multiSubstepFrames,
+          recoveredBeyondLegacyCapSeconds: round(total.recoveredBeyondLegacyCapMs / 1000),
+          maxStepSeconds: 0.05,
+          maxCatchUpSeconds: 0.15,
+          maxSubsteps: 3
+        },
         visibility: { hiddenFrames: total.hiddenFrames, unfocusedFrames: total.unfocusedFrames,
           transitionsObserved: total.visibilityTransitionsObserved }
       },

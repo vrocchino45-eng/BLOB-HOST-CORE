@@ -119,10 +119,15 @@ export class SystemRegistry {
     if (frameState) frameState.runtimeExecution = execution;
     const rawFrameDeltaMs = frameState?.runtimeFrameRawDeltaMs ?? frameState?.transitionContinuity?.lastRawDeltaMs ?? 0;
     const frameNumber = frameState?.frame ?? 0;
-    const periodicTimingSample =
-      (frameNumber % this.timingSampleEveryFrames) === 0;
-    const hitchTimingSample =
-      rawFrameDeltaMs >= this.hitchSampleThresholdMs
+    const runtimeSubstepIndex = frameState?.runtimeSimulationSubstepIndex ?? 0;
+    // HC-031W2A4: one animation callback may now contain up to three simulation
+    // substeps. Sample profiler timing only on the first so catch-up does not
+    // multiply diagnostic overhead on the very callbacks we are trying to recover.
+    const firstRuntimeSubstep = runtimeSubstepIndex === 0;
+    const periodicTimingSample = firstRuntimeSubstep
+      && (frameNumber % this.timingSampleEveryFrames) === 0;
+    const hitchTimingSample = firstRuntimeSubstep
+      && rawFrameDeltaMs >= this.hitchSampleThresholdMs
       && frameNumber - this.lastHitchTimingSampleFrame >= this.hitchSampleCooldownFrames;
     if (hitchTimingSample) this.lastHitchTimingSampleFrame = frameNumber;
     const sampleTiming = periodicTimingSample || hitchTimingSample;

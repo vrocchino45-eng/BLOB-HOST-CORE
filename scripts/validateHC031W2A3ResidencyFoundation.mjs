@@ -11,9 +11,9 @@ const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
 const hubSource = read("../src/hub/HubChamberFoundationSystem.js");
 const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
 
-// W2A3 remains performance-only. Gameplay time authority and W2A2 transient budgets stay locked.
-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A3"/);
-assert.match(runtimeSource, /const dt = Math\.min\(rawDt, 0\.05\)/);
+// W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
+assert.match(frameTruthSource, /optimizationPass: "HC-031W2A[34]"/);
+assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
 assert.match(runtimeSource, /frameState: this\.frameState/);
 assert.match(runtimeSource, /residencyRootsCulled:/);
 assert.match(verbSource, /this\.maxPulseFronts = 3/);
@@ -113,7 +113,7 @@ observer.endFrame({
   renderOwnerCensus: prep.ownerCensus
 });
 const snapshot = observer.snapshot();
-assert.equal(snapshot.optimizationPass, "HC-031W2A3");
+assert.ok(["HC-031W2A3", "HC-031W2A4"].includes(snapshot.optimizationPass));
 assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
 
 console.log("HC031W2A3 residency + Hub foundation cadence PASS");

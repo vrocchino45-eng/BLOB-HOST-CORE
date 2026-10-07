@@ -4,6 +4,7 @@ import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinat
 import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
 import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
 import { FrameTruthObserver } from "./FrameTruthObserver.js";
+import { buildBoundedSimulationSteps } from "./BoundedSimulationCatchUp.js";
 import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
 import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
 import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
@@ -2703,24 +2704,66 @@ export class GameRuntime {
     if (!this.isRunning) return;
 
     const rawDt = this.clock.getDelta();
-    const dt = Math.min(rawDt, 0.05); // W2A: leave gameplay timing unchanged while measuring loss.
+    const catchUp = buildBoundedSimulationSteps(rawDt);
 
     this.frame += 1;
     this.frameState.frame = this.frame;
-    this.frameState.runtimeSeconds += dt;
-    // Current-frame truth, not the previous frame's transition-coordinator publication.
+    // Current-callback timing truth. Gameplay systems still receive only <=50ms
+    // substeps; no individual update sees the entire renderer/event-loop gap.
     this.frameState.runtimeFrameRawDeltaMs = rawDt * 1000;
+    this.frameState.runtimeFrameSimulatedDeltaMs = catchUp.simulatedSeconds * 1000;
+    this.frameState.runtimeFrameDroppedDeltaMs = catchUp.droppedSeconds * 1000;
+    this.frameState.runtimeSimulationSubstepCount = catchUp.substepCount;
+    this.frameState.runtimeSimulationRecoveredBeyondLegacyCapMs = catchUp.recoveredBeyondLegacyCapSeconds * 1000;
+    this.frameState.runtimeSimulationCatchUp = {
+      pass: "HC-031W2A4",
+      maxStepSeconds: catchUp.maxStepSeconds,
+      maxCatchUpSeconds: catchUp.maxCatchUpSeconds,
+      substepCount: catchUp.substepCount,
+      simulatedSeconds: catchUp.simulatedSeconds,
+      droppedSeconds: catchUp.droppedSeconds,
+      recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds,
+      catastrophicGap: catchUp.catastrophicGap
+    };
     this.frameTruthObserver.beginFrame({
-      frame: this.frame, rawDt, dt, cellId: this.frameState.activeCellId
+      frame: this.frame,
+      rawDt,
+      dt: catchUp.simulatedSeconds,
+      cellId: this.frameState.activeCellId,
+      substepCount: catchUp.substepCount,
+      recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds
     });
 
-    const registryStart = performance.now();
-    this.registry.update(dt, this.frameState);
-    const registryEnd = performance.now();
-    this.firstSliceTransitionCoordinator?.update(dt, this.frameState, rawDt);
-    this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
-    this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
-    this.updateCamera(dt);
+    let registryMs = 0;
+    let remainingUpdateMs = 0;
+    for (let substepIndex = 0; substepIndex < catchUp.steps.length; substepIndex += 1) {
+      const dt = catchUp.steps[substepIndex];
+      this.frameState.runtimeSimulationSubstepIndex = substepIndex;
+      this.frameState.runtimeSimulationSubstepSeconds = dt;
+      this.frameState.runtimeSeconds += dt;
+
+      const registryStart = performance.now();
+      this.registry.update(dt, this.frameState);
+      const registryEnd = performance.now();
+      registryMs += registryEnd - registryStart;
+
+      const remainingStart = registryEnd;
+      this.coreVerbPhysicalizationSystem?.update(dt, this.frameState);
+      this.visualHierarchyCompressionSystem?.update(dt, this.frameState);
+      this.updateCamera(dt);
+      remainingUpdateMs += performance.now() - remainingStart;
+    }
+    // Transition preparation/continuity observes the renderer callback once, not
+    // once per catch-up substep. rawDt remains the real callback gap for diagnostics.
+    const transitionStart = performance.now();
+    this.firstSliceTransitionCoordinator?.update(
+      catchUp.simulatedSeconds,
+      this.frameState,
+      rawDt
+    );
+    remainingUpdateMs += performance.now() - transitionStart;
+
+    this.frameState.runtimeSimulationSubstepIndex = Math.max(0, catchUp.substepCount - 1);
     const renderBudget = this.renderBudgetSystem?.prepare({
       runtimeSeconds: this.frameState.runtimeSeconds,
       frameState: this.frameState
@@ -2735,8 +2778,8 @@ export class GameRuntime {
     }
     const info = this.renderer.info?.render;
     this.frameTruthObserver.endFrame({
-      registryMs: registryEnd - registryStart,
-      remainingUpdateMs: renderStart - registryEnd,
+      registryMs,
+      remainingUpdateMs,
       renderMs: renderEnd - renderStart,
       cellId: this.frameState.activeCellId,
       registrySample: this.frameState.runtimeExecution,
@@ -2760,6 +2803,9 @@ export class GameRuntime {
         hubFullSceneMatrixUpdateAvoided: Boolean(this.frameState.hubFoundationPerformance?.fullSceneMatrixUpdateAvoided),
         surfaceCandidates: this.frameState.coreSurfaceTruth?.candidateCount ?? 0,
         surfaceBroadPhaseCandidates: this.frameState.coreSurfaceTruth?.broadPhaseCandidateCount ?? 0,
+        simulationSubsteps: catchUp.substepCount,
+        simulationRecoveredBeyondLegacyCapMs: catchUp.recoveredBeyondLegacyCapSeconds * 1000,
+        simulationDroppedMs: catchUp.droppedSeconds * 1000,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
         devicePixelRatio: this.renderer.getPixelRatio()
       } : null

@@ -1,0 +1,86 @@
+{
+  "pass": "HC-031W2A4",
+  "title": "Bounded Simulation Catch-Up",
+  "parentRequired": "HC-031W2A3 \u2014 Residency + Foundation",
+  "parentPatchSha256": "b31d6ba9a6c48a7ed1fd1abac8fa4dc2cb1ae8ba3df63d054ef25b6e13a5cb71",
+  "originalSourceZipSha256": "3e628d8a2e54f2950f48a6d33a35daa8d26e562519bd28ee5ac4bf98286bca68",
+  "visibleBuildId": "HC-031W1",
+  "packageVersion": "0.31.54",
+  "maxSimulationStepSeconds": 0.05,
+  "maxCatchUpSecondsPerCallback": 0.15,
+  "maxSubstepsPerCallback": 3,
+  "files": [
+    {
+      "path": "HC031W2A4_BUILD_REPORT.md",
+      "bytes": 5494,
+      "sha256": "fd7a71c36f56ed309cb285006ac5c8237306154ad1d0c60c8147733f2d3620d6",
+      "status": "documentation"
+    },
+    {
+      "path": "HC031W2A4_CHANGED_LINES.diff",
+      "bytes": 27875,
+      "sha256": "1e392c7b27d52d9e3da4414973c15ce19e9260120909de10679487ba313e8dd0",
+      "status": "documentation"
+    },
+    {
+      "path": "HC031W2A4_PATCH_APPLY.md",
+      "bytes": 3168,
+      "sha256": "64444822a8b1ebf3fff84140abc85851ed6863abff987e8a684b403f7c29c3ff",
+      "status": "documentation"
+    },
+    {
+      "path": "scripts/validateHC031W2A1CostReduction.mjs",
+      "bytes": 5534,
+      "sha256": "e77c4a7be52842ee5f3644deee068f51e666a43cefe14bb03bf5a8ae41eb50b0",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validateHC031W2A2TransientRenderBudget.mjs",
+      "bytes": 5800,
+      "sha256": "08845b1282ffe16dd976fff13c3e8e89b48a83c10f3b94ac51d5ef1631a82b5c",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validateHC031W2A3ResidencyFoundation.mjs",
+      "bytes": 5438,
+      "sha256": "7feb3ed0d763eb73c1e5e0158bc81f60098b2c76ad98e8e328bb46856f77eebd",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validateHC031W2A4BoundedCatchUp.mjs",
+      "bytes": 6610,
+      "sha256": "4e73fad9616079d89f630409f16dac5f5ba03231a44aa13de16acb329f6b7703",
+      "status": "new"
+    },
+    {
+      "path": "scripts/validateHC031W2AFrameTruth.mjs",
+      "bytes": 3202,
+      "sha256": "f80cdd434e3978fe50aace180a712c2cddc178211c5dc283a5611b95cb17afe0",
+      "status": "modified"
+    },
+    {
+      "path": "src/core/BoundedSimulationCatchUp.js",
+      "bytes": 2035,
+      "sha256": "f870f1967ea2de8ada03361b43a2e8ee79dd8683ebacdd36e6de92e8bd5bec74",
+      "status": "new"
+    },
+    {
+      "path": "src/core/FrameTruthObserver.js",
+      "bytes": 8698,
+      "sha256": "839fd1c948b1ea41f31528f1be837ac3366ad969b93a4f0961f6dc582cc524c7",
+      "status": "modified"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "bytes": 135986,
+      "sha256": "5e1d4a61131a67ce3a8b9e2309f55aa2cab8f989dd1b9f41f0ec5be14509f633",
+      "status": "modified"
+    },
+    {
+      "path": "src/core/SystemRegistry.js",
+      "bytes": 12807,
+      "sha256": "0c983cdc9374e996d7cd59a17b3e8f8872522740e1756f4cd2ebc17fc72e1207",
+      "status": "modified"
+    }
+  ]
+}
