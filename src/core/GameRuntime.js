@@ -2779,6 +2779,11 @@ export class GameRuntime {
       this.frameState,
       rawDt
     );
+    // HC-031W2A5.1: mechanics/morph state may request all prepared roots at once,
+    // but first-draw submission is render-only staged. At most one newly requested
+    // transition root is admitted per callback when the previous render was in budget.
+    const activationStagingBeforeRender = this.firstSliceTransitionCoordinator
+      ?.prepareRenderActivationStaging(this.frameState) ?? null;
     const transitionUpdateMs = performance.now() - transitionStart;
     const remainingUpdateMs = presentationUpdateMs + cameraUpdateMs + transitionUpdateMs;
     const renderBudget = this.renderBudgetSystem?.prepare({
@@ -2792,7 +2797,14 @@ export class GameRuntime {
     } finally {
       renderEnd = performance.now();
       this.renderBudgetSystem?.restoreAfterRender();
+      this.firstSliceTransitionCoordinator?.restoreRenderActivationStaging();
     }
+    const renderMs = renderEnd - renderStart;
+    const activationStaging = this.firstSliceTransitionCoordinator?.notifyRenderComplete({
+      renderMs,
+      frame: this.frame,
+      cellId: this.frameState.activeCellId
+    }) ?? activationStagingBeforeRender;
     const info = this.renderer.info?.render;
     this.frameTruthObserver.endFrame({
       registryMs,
@@ -2800,7 +2812,7 @@ export class GameRuntime {
       presentationUpdateMs,
       cameraUpdateMs,
       transitionUpdateMs,
-      renderMs: renderEnd - renderStart,
+      renderMs,
       cellId: this.frameState.activeCellId,
       registrySample: registrySample ?? this.frameState.runtimeExecution,
       renderOwnerCensus: renderBudget?.ownerCensus ?? null,
@@ -2842,6 +2854,25 @@ export class GameRuntime {
         transitionWarmupLastRootName: this.frameState.transitionContinuity?.shaderWarmupLastRootName ?? "none",
         transitionWarmupLastStatus: this.frameState.transitionContinuity?.shaderWarmupLastStatus ?? "not_started",
         transitionWarmupLastDurationMs: this.frameState.transitionContinuity?.shaderWarmupLastDurationMs ?? 0,
+        transitionActivationPass: activationStaging?.pass ?? "none",
+        transitionActivationPolicy: activationStaging?.policy ?? "none",
+        transitionActivationBoundary: activationStaging?.activeBoundary ?? "none",
+        transitionActivationRenderBudgetMs: activationStaging?.renderBudgetMs ?? 0,
+        transitionActivationPreparedRoots: this.firstSliceTransitionCoordinator?.activationRecords?.size ?? 0,
+        transitionActivationActivatedRoots: activationStaging?.activatedRootCount ?? 0,
+        transitionActivationPendingRequestedRoots: activationStaging?.pendingRequestedRootCount ?? 0,
+        transitionActivationDeferredByBudgetCount: activationStaging?.deferredByBudgetCount ?? 0,
+        transitionActivationActivatedThisCallback: Boolean(activationStaging?.activatedThisCallback),
+        transitionActivationRootName: activationStaging?.activatedThisCallback
+          ? activationStaging?.lastActivatedRootName ?? "none"
+          : "none",
+        transitionActivationLastRootName: activationStaging?.lastActivatedRootName ?? "none",
+        transitionActivationSequence: activationStaging?.lastActivationSequence ?? 0,
+        transitionActivationLastRenderMs: activationStaging?.lastRenderMs ?? 0,
+        transitionActivationLastActivationRenderMs: activationStaging?.lastActivationRenderMs ?? 0,
+        transitionActivationPeakRenderMs: activationStaging?.peakActivationRenderMs ?? 0,
+        transitionActivationPeakRootName: activationStaging?.peakActivationRootName ?? "none",
+        transitionActivationHiddenThisRender: activationStaging?.hiddenThisRenderCount ?? 0,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
         devicePixelRatio: this.renderer.getPixelRatio()
       } : null

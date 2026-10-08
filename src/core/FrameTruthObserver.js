@@ -20,6 +20,7 @@ export class FrameTruthObserver {
     this.pending = null;
     this.visibilityLast = null;
     this.lastCompletedStageMs = null;
+    this.lastCompletedTransitionActivation = null;
   }
 
   nowMs() { return this.nowProvider.call(null); }
@@ -75,7 +76,8 @@ export class FrameTruthObserver {
         substepCount: Math.max(1, Math.floor(Number.isFinite(substepCount) ? substepCount : 1)),
         recoveredBeyondLegacyCapMs: round(Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
           ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
-        previousCallbackWorkMs: this.lastCompletedStageMs
+        previousCallbackWorkMs: this.lastCompletedStageMs,
+        previousTransitionActivation: this.lastCompletedTransitionActivation
       });
       if (this.longGaps.length > 40) this.longGaps.shift();
     }
@@ -116,6 +118,19 @@ export class FrameTruthObserver {
       transitionUpdate: round(transitionUpdateMs),
       render: round(renderMs)
     };
+    this.lastCompletedTransitionActivation = rendererInfo ? {
+      pass: rendererInfo.transitionActivationPass ?? "none",
+      boundary: rendererInfo.transitionActivationBoundary ?? "none",
+      activatedThisCallback: Boolean(rendererInfo.transitionActivationActivatedThisCallback),
+      rootName: rendererInfo.transitionActivationRootName ?? "none",
+      lastRootName: rendererInfo.transitionActivationLastRootName ?? "none",
+      sequence: rendererInfo.transitionActivationSequence ?? 0,
+      pendingRequestedRoots: rendererInfo.transitionActivationPendingRequestedRoots ?? 0,
+      deferredByBudgetCount: rendererInfo.transitionActivationDeferredByBudgetCount ?? 0,
+      renderMs: round(rendererInfo.transitionActivationLastRenderMs ?? renderMs),
+      peakRenderMs: round(rendererInfo.transitionActivationPeakRenderMs ?? 0),
+      peakRootName: rendererInfo.transitionActivationPeakRootName ?? "none"
+    } : null;
     if (this.current.wallMs >= this.windowMs) {
       this.windows.push(this.summarize(this.current));
       if (this.windows.length > this.maxWindows) this.windows.shift();
@@ -171,10 +186,11 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A5",
+      optimizationPass: "HC-031W2A5.1",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
       transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
+      transitionFirstDrawStagingRule: "prepared transition roots retain full gameplay/morph state, but renderer visibility admits at most one newly requested root per callback when the previous render is <=65ms; suppressed visibility is restored immediately after render",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),

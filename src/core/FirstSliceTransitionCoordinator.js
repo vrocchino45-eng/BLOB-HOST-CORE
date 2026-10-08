@@ -3,6 +3,9 @@ const GUIDE_CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
 const COMB_CELL_ID = "CELL_COMB_THRESHOLD_FILTER_001";
 
+const ACTIVATION_STAGING_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
+const ACTIVATION_RENDER_BUDGET_MS = 65;
+
 const GUIDE_PREP_SYSTEM_IDS = [
   "morphCompletionSystem",
   "scarFlowArrivalSystem",
@@ -87,6 +90,33 @@ export class FirstSliceTransitionCoordinator {
       lastRootName: "none",
       lastStatus: "not_started",
       lastDurationMs: 0
+    };
+    // HC-031W2A5.1: preparation may make many destination roots renderable in
+    // one callback. Keep gameplay state untouched, but admit requested-visible
+    // prepared roots to renderer.render() one at a time while the previous render
+    // stayed within budget. Visibility suppression is render-only and restored
+    // immediately after the draw.
+    this.activationRecords = new Map();
+    this.activationRestore = [];
+    this.activationPrepareSequence = 0;
+    this.activationStaging = {
+      pass: "HC-031W2A5.1",
+      policy: "render_only_one_requested_root_per_callback_under_previous_render_budget",
+      renderBudgetMs: ACTIVATION_RENDER_BUDGET_MS,
+      activeBoundary: "none",
+      lastRenderMs: null,
+      activatedRootCount: 0,
+      deferredByBudgetCount: 0,
+      lastActivatedRootName: "none",
+      lastActivatedBoundary: "none",
+      lastActivatedFrame: -1,
+      lastActivationSequence: 0,
+      activatedThisCallback: false,
+      pendingRequestedRootCount: 0,
+      hiddenThisRenderCount: 0,
+      lastActivationRenderMs: 0,
+      peakActivationRenderMs: 0,
+      peakActivationRootName: "none"
     };
     this.jobs = this.createJobs();
     this.publish(frameState, 0);
@@ -261,7 +291,7 @@ export class FirstSliceTransitionCoordinator {
         if (!root?.isObject3D) continue;
         root.visible = false;
         root.userData.transitionPrepared = true;
-        this.preparedRoots.add(root);
+        this.registerPreparedRoot(root, job.boundary);
       }
 
       job.status = "complete";
@@ -271,7 +301,7 @@ export class FirstSliceTransitionCoordinator {
       for (const root of this.scene.children.filter((item) => !sceneChildrenBefore.has(item))) {
         root.visible = false;
         root.userData.transitionPrepared = true;
-        this.preparedRoots.add(root);
+        this.registerPreparedRoot(root, job.boundary);
       }
       job.status = "failed";
       job.error = error?.message ?? String(error);
@@ -293,6 +323,141 @@ export class FirstSliceTransitionCoordinator {
       if (result) results.push(result);
     }
     return results;
+  }
+
+  registerPreparedRoot(root, boundary = "none") {
+    if (!root?.isObject3D) return null;
+    this.preparedRoots.add(root);
+    root.userData ??= {};
+    root.userData.transitionPreparedBoundary ??= boundary;
+
+    let record = this.activationRecords.get(root);
+    if (!record) {
+      this.activationPrepareSequence += 1;
+      record = {
+        root,
+        boundary,
+        prepareSequence: this.activationPrepareSequence,
+        priority: this.activationPriority(root),
+        activated: false,
+        requestedVisible: false,
+        lastRequestedFrame: -1,
+        activatedAtFrame: -1,
+        activationSequence: 0
+      };
+      this.activationRecords.set(root, record);
+    } else if (record.boundary === "none" && boundary !== "none") {
+      record.boundary = boundary;
+    }
+    return record;
+  }
+
+  activationPriority(root) {
+    const name = root?.name ?? "";
+    const morphRole = root?.userData?.morphRole ?? "";
+    if (name === "scar_flow_fold_surface_001" || name === "signal_chorus_nerve_surface_001") return 0;
+    if (name === "scar_pressure_haze_001" || name === "signal_chorus_soft_haze_001") return 1;
+    if (morphRole === "destination_environment" || morphRole === "second_destination_environment") return 1;
+    if (morphRole === "destination_chem_object" || morphRole === "second_destination_chem_object") return 2;
+    if (name.includes("arrival") || name.includes("gameplay_fill") || name.includes("layered_interaction")) return 3;
+    return 4;
+  }
+
+  resolveActivationBoundary(frameState) {
+    const transition = this.currentTransition(frameState);
+    if (ACTIVATION_STAGING_BOUNDARIES.has(transition.id)) return transition.id;
+
+    const activeCellId = frameState?.activeCellId ?? SURFACE_CELL_ID;
+    if (activeCellId === GUIDE_CELL_ID && this.hasUnactivatedBoundaryRoots("surface_to_guide")) {
+      return "surface_to_guide";
+    }
+    if (activeCellId === HUB_CELL_ID && this.hasUnactivatedBoundaryRoots("guide_to_hub")) {
+      return "guide_to_hub";
+    }
+    return "none";
+  }
+
+  hasUnactivatedBoundaryRoots(boundary) {
+    return [...this.activationRecords.values()].some((record) => record.boundary === boundary && !record.activated);
+  }
+
+  prepareRenderActivationStaging(frameState = this.frameState) {
+    this.activationRestore.length = 0;
+    this.activationStaging.activatedThisCallback = false;
+    this.activationStaging.hiddenThisRenderCount = 0;
+    this.activationStaging.pendingRequestedRootCount = 0;
+
+    const boundary = this.resolveActivationBoundary(frameState);
+    this.activationStaging.activeBoundary = boundary;
+    if (!ACTIVATION_STAGING_BOUNDARIES.has(boundary)) return this.activationSnapshot();
+
+    const frame = frameState?.frame ?? 0;
+    const records = [...this.activationRecords.values()]
+      .filter((record) => record.boundary === boundary && record.root?.parent)
+      .sort((a, b) => a.priority - b.priority || a.prepareSequence - b.prepareSequence);
+
+    const requested = [];
+    for (const record of records) {
+      if (record.activated) continue;
+      if (record.root.visible === true) {
+        record.requestedVisible = true;
+        record.lastRequestedFrame = frame;
+        requested.push(record);
+      }
+    }
+
+    this.activationStaging.pendingRequestedRootCount = requested.length;
+    const previousRenderMs = this.activationStaging.lastRenderMs;
+    const underBudget = !Number.isFinite(previousRenderMs) || previousRenderMs <= ACTIVATION_RENDER_BUDGET_MS;
+    const candidate = underBudget ? requested[0] ?? null : null;
+
+    if (candidate) {
+      candidate.activated = true;
+      candidate.activatedAtFrame = frame;
+      this.activationStaging.lastActivationSequence += 1;
+      candidate.activationSequence = this.activationStaging.lastActivationSequence;
+      this.activationStaging.activatedRootCount += 1;
+      this.activationStaging.lastActivatedRootName = candidate.root.name || candidate.root.type || "unnamed_prepared_root";
+      this.activationStaging.lastActivatedBoundary = boundary;
+      this.activationStaging.lastActivatedFrame = frame;
+      this.activationStaging.activatedThisCallback = true;
+      this.activationStaging.pendingRequestedRootCount = Math.max(0, requested.length - 1);
+    } else if (requested.length > 0 && !underBudget) {
+      this.activationStaging.deferredByBudgetCount += 1;
+    }
+
+    for (const record of records) {
+      if (record.activated || record.root.visible !== true) continue;
+      this.activationRestore.push({ object: record.root, visible: true });
+      record.root.visible = false;
+      this.activationStaging.hiddenThisRenderCount += 1;
+    }
+
+    return this.activationSnapshot();
+  }
+
+  restoreRenderActivationStaging() {
+    for (const entry of this.activationRestore) {
+      if (entry?.object) entry.object.visible = entry.visible;
+    }
+    this.activationRestore.length = 0;
+  }
+
+  notifyRenderComplete({ renderMs = 0 } = {}) {
+    const safeRenderMs = Math.max(0, Number.isFinite(renderMs) ? renderMs : 0);
+    this.activationStaging.lastRenderMs = safeRenderMs;
+    if (this.activationStaging.activatedThisCallback) {
+      this.activationStaging.lastActivationRenderMs = safeRenderMs;
+      if (safeRenderMs > this.activationStaging.peakActivationRenderMs) {
+        this.activationStaging.peakActivationRenderMs = safeRenderMs;
+        this.activationStaging.peakActivationRootName = this.activationStaging.lastActivatedRootName;
+      }
+    }
+    return this.activationSnapshot();
+  }
+
+  activationSnapshot() {
+    return { ...this.activationStaging };
   }
 
   async warmPreparedShaders() {
@@ -526,6 +691,24 @@ export class FirstSliceTransitionCoordinator {
       shaderWarmupLastRootName: this.shaderWarmup.lastRootName,
       shaderWarmupLastStatus: this.shaderWarmup.lastStatus,
       shaderWarmupLastDurationMs: this.shaderWarmup.lastDurationMs,
+      activationStagingPass: this.activationStaging.pass,
+      activationStagingPolicy: this.activationStaging.policy,
+      activationStagingRenderBudgetMs: this.activationStaging.renderBudgetMs,
+      activationStagingActiveBoundary: this.activationStaging.activeBoundary,
+      activationStagingPreparedRootCount: this.activationRecords.size,
+      activationStagingActivatedRootCount: this.activationStaging.activatedRootCount,
+      activationStagingPendingRequestedRootCount: this.activationStaging.pendingRequestedRootCount,
+      activationStagingDeferredByBudgetCount: this.activationStaging.deferredByBudgetCount,
+      activationStagingLastActivatedRootName: this.activationStaging.lastActivatedRootName,
+      activationStagingLastActivatedBoundary: this.activationStaging.lastActivatedBoundary,
+      activationStagingLastActivatedFrame: this.activationStaging.lastActivatedFrame,
+      activationStagingLastActivationSequence: this.activationStaging.lastActivationSequence,
+      activationStagingActivatedThisCallback: this.activationStaging.activatedThisCallback,
+      activationStagingHiddenThisRenderCount: this.activationStaging.hiddenThisRenderCount,
+      activationStagingLastRenderMs: this.activationStaging.lastRenderMs ?? 0,
+      activationStagingLastActivationRenderMs: this.activationStaging.lastActivationRenderMs,
+      activationStagingPeakActivationRenderMs: this.activationStaging.peakActivationRenderMs,
+      activationStagingPeakActivationRootName: this.activationStaging.peakActivationRootName,
       preparedSystemIds: [...this.registry.prepared.keys()],
       jobs: this.jobs.map(({ id, boundary, status, resultStatus, durationMs, completedAtFrame, error }) => ({
         id,

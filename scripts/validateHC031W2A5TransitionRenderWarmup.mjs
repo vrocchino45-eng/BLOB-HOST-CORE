@@ -13,7 +13,7 @@ const assert = (condition, message) => {
   if (!condition) throw new Error(`[HC031W2A5] ${message}`);
 };
 
-assert(observerSource.includes('optimizationPass: "HC-031W2A5"'), "Frame Truth must expose the A5 marker.");
+assert(/optimizationPass: \"HC-031W2A5(?:\.1)?\"/.test(observerSource), "Frame Truth must expose the A5/A5.1 marker.");
 assert(observerSource.includes("transitionRenderWarmupRule"), "Frame Truth must describe the transition warmup rule.");
 assert(runtimeSource.includes("transitionWarmupTargetSceneCompiles"), "Runtime telemetry must expose target-scene compile count.");
 assert(runtimeSource.includes("transitionWarmupPendingRoots"), "Runtime telemetry must expose pending warmup roots.");

@@ -73,7 +73,7 @@ observer.endFrame({
   registrySample: { timingSampled: true, slowestSampledSystems: [{ id: "testSystem", lastMs: 7.25 }] }
 });
 let snapshot = observer.snapshot();
-assert.ok(["HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
+assert.ok(["HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1"].includes(snapshot.optimizationPass));
 assert.equal(snapshot.total.simToWallRatio, 1);
 assert.equal(snapshot.windows[0].stageMs.simulationRegistry.p50, 20);
 assert.equal(snapshot.windows[0].stageMs.presentationUpdate.p50, 4);

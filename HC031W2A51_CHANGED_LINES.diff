@@ -1,0 +1,563 @@
+--- A5/src/core/FirstSliceTransitionCoordinator.js
++++ A5.1/src/core/FirstSliceTransitionCoordinator.js
+@@ -3,6 +3,9 @@
+ const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
+ const COMB_CELL_ID = "CELL_COMB_THRESHOLD_FILTER_001";
+ 
++const ACTIVATION_STAGING_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
++const ACTIVATION_RENDER_BUDGET_MS = 65;
++
+ const GUIDE_PREP_SYSTEM_IDS = [
+   "morphCompletionSystem",
+   "scarFlowArrivalSystem",
+@@ -88,6 +91,33 @@
+       lastStatus: "not_started",
+       lastDurationMs: 0
+     };
++    // HC-031W2A5.1: preparation may make many destination roots renderable in
++    // one callback. Keep gameplay state untouched, but admit requested-visible
++    // prepared roots to renderer.render() one at a time while the previous render
++    // stayed within budget. Visibility suppression is render-only and restored
++    // immediately after the draw.
++    this.activationRecords = new Map();
++    this.activationRestore = [];
++    this.activationPrepareSequence = 0;
++    this.activationStaging = {
++      pass: "HC-031W2A5.1",
++      policy: "render_only_one_requested_root_per_callback_under_previous_render_budget",
++      renderBudgetMs: ACTIVATION_RENDER_BUDGET_MS,
++      activeBoundary: "none",
++      lastRenderMs: null,
++      activatedRootCount: 0,
++      deferredByBudgetCount: 0,
++      lastActivatedRootName: "none",
++      lastActivatedBoundary: "none",
++      lastActivatedFrame: -1,
++      lastActivationSequence: 0,
++      activatedThisCallback: false,
++      pendingRequestedRootCount: 0,
++      hiddenThisRenderCount: 0,
++      lastActivationRenderMs: 0,
++      peakActivationRenderMs: 0,
++      peakActivationRootName: "none"
++    };
+     this.jobs = this.createJobs();
+     this.publish(frameState, 0);
+   }
+@@ -261,7 +291,7 @@
+         if (!root?.isObject3D) continue;
+         root.visible = false;
+         root.userData.transitionPrepared = true;
+-        this.preparedRoots.add(root);
++        this.registerPreparedRoot(root, job.boundary);
+       }
+ 
+       job.status = "complete";
+@@ -271,7 +301,7 @@
+       for (const root of this.scene.children.filter((item) => !sceneChildrenBefore.has(item))) {
+         root.visible = false;
+         root.userData.transitionPrepared = true;
+-        this.preparedRoots.add(root);
++        this.registerPreparedRoot(root, job.boundary);
+       }
+       job.status = "failed";
+       job.error = error?.message ?? String(error);
+@@ -295,6 +325,141 @@
+     return results;
+   }
+ 
++  registerPreparedRoot(root, boundary = "none") {
++    if (!root?.isObject3D) return null;
++    this.preparedRoots.add(root);
++    root.userData ??= {};
++    root.userData.transitionPreparedBoundary ??= boundary;
++
++    let record = this.activationRecords.get(root);
++    if (!record) {
++      this.activationPrepareSequence += 1;
++      record = {
++        root,
++        boundary,
++        prepareSequence: this.activationPrepareSequence,
++        priority: this.activationPriority(root),
++        activated: false,
++        requestedVisible: false,
++        lastRequestedFrame: -1,
++        activatedAtFrame: -1,
++        activationSequence: 0
++      };
++      this.activationRecords.set(root, record);
++    } else if (record.boundary === "none" && boundary !== "none") {
++      record.boundary = boundary;
++    }
++    return record;
++  }
++
++  activationPriority(root) {
++    const name = root?.name ?? "";
++    const morphRole = root?.userData?.morphRole ?? "";
++    if (name === "scar_flow_fold_surface_001" || name === "signal_chorus_nerve_surface_001") return 0;
++    if (name === "scar_pressure_haze_001" || name === "signal_chorus_soft_haze_001") return 1;
++    if (morphRole === "destination_environment" || morphRole === "second_destination_environment") return 1;
++    if (morphRole === "destination_chem_object" || morphRole === "second_destination_chem_object") return 2;
++    if (name.includes("arrival") || name.includes("gameplay_fill") || name.includes("layered_interaction")) return 3;
++    return 4;
++  }
++
++  resolveActivationBoundary(frameState) {
++    const transition = this.currentTransition(frameState);
++    if (ACTIVATION_STAGING_BOUNDARIES.has(transition.id)) return transition.id;
++
++    const activeCellId = frameState?.activeCellId ?? SURFACE_CELL_ID;
++    if (activeCellId === GUIDE_CELL_ID && this.hasUnactivatedBoundaryRoots("surface_to_guide")) {
++      return "surface_to_guide";
++    }
++    if (activeCellId === HUB_CELL_ID && this.hasUnactivatedBoundaryRoots("guide_to_hub")) {
++      return "guide_to_hub";
++    }
++    return "none";
++  }
++
++  hasUnactivatedBoundaryRoots(boundary) {
++    return [...this.activationRecords.values()].some((record) => record.boundary === boundary && !record.activated);
++  }
++
++  prepareRenderActivationStaging(frameState = this.frameState) {
++    this.activationRestore.length = 0;
++    this.activationStaging.activatedThisCallback = false;
++    this.activationStaging.hiddenThisRenderCount = 0;
++    this.activationStaging.pendingRequestedRootCount = 0;
++
++    const boundary = this.resolveActivationBoundary(frameState);
++    this.activationStaging.activeBoundary = boundary;
++    if (!ACTIVATION_STAGING_BOUNDARIES.has(boundary)) return this.activationSnapshot();
++
++    const frame = frameState?.frame ?? 0;
++    const records = [...this.activationRecords.values()]
++      .filter((record) => record.boundary === boundary && record.root?.parent)
++      .sort((a, b) => a.priority - b.priority || a.prepareSequence - b.prepareSequence);
++
++    const requested = [];
++    for (const record of records) {
++      if (record.activated) continue;
++      if (record.root.visible === true) {
++        record.requestedVisible = true;
++        record.lastRequestedFrame = frame;
++        requested.push(record);
++      }
++    }
++
++    this.activationStaging.pendingRequestedRootCount = requested.length;
++    const previousRenderMs = this.activationStaging.lastRenderMs;
++    const underBudget = !Number.isFinite(previousRenderMs) || previousRenderMs <= ACTIVATION_RENDER_BUDGET_MS;
++    const candidate = underBudget ? requested[0] ?? null : null;
++
++    if (candidate) {
++      candidate.activated = true;
++      candidate.activatedAtFrame = frame;
++      this.activationStaging.lastActivationSequence += 1;
++      candidate.activationSequence = this.activationStaging.lastActivationSequence;
++      this.activationStaging.activatedRootCount += 1;
++      this.activationStaging.lastActivatedRootName = candidate.root.name || candidate.root.type || "unnamed_prepared_root";
++      this.activationStaging.lastActivatedBoundary = boundary;
++      this.activationStaging.lastActivatedFrame = frame;
++      this.activationStaging.activatedThisCallback = true;
++      this.activationStaging.pendingRequestedRootCount = Math.max(0, requested.length - 1);
++    } else if (requested.length > 0 && !underBudget) {
++      this.activationStaging.deferredByBudgetCount += 1;
++    }
++
++    for (const record of records) {
++      if (record.activated || record.root.visible !== true) continue;
++      this.activationRestore.push({ object: record.root, visible: true });
++      record.root.visible = false;
++      this.activationStaging.hiddenThisRenderCount += 1;
++    }
++
++    return this.activationSnapshot();
++  }
++
++  restoreRenderActivationStaging() {
++    for (const entry of this.activationRestore) {
++      if (entry?.object) entry.object.visible = entry.visible;
++    }
++    this.activationRestore.length = 0;
++  }
++
++  notifyRenderComplete({ renderMs = 0 } = {}) {
++    const safeRenderMs = Math.max(0, Number.isFinite(renderMs) ? renderMs : 0);
++    this.activationStaging.lastRenderMs = safeRenderMs;
++    if (this.activationStaging.activatedThisCallback) {
++      this.activationStaging.lastActivationRenderMs = safeRenderMs;
++      if (safeRenderMs > this.activationStaging.peakActivationRenderMs) {
++        this.activationStaging.peakActivationRenderMs = safeRenderMs;
++        this.activationStaging.peakActivationRootName = this.activationStaging.lastActivatedRootName;
++      }
++    }
++    return this.activationSnapshot();
++  }
++
++  activationSnapshot() {
++    return { ...this.activationStaging };
++  }
++
+   async warmPreparedShaders() {
+     const roots = [...this.preparedRoots].filter((root) => !this.compiledRoots.has(root));
+     if (!this.renderer || !this.camera || roots.length === 0) {
+@@ -526,6 +691,24 @@
+       shaderWarmupLastRootName: this.shaderWarmup.lastRootName,
+       shaderWarmupLastStatus: this.shaderWarmup.lastStatus,
+       shaderWarmupLastDurationMs: this.shaderWarmup.lastDurationMs,
++      activationStagingPass: this.activationStaging.pass,
++      activationStagingPolicy: this.activationStaging.policy,
++      activationStagingRenderBudgetMs: this.activationStaging.renderBudgetMs,
++      activationStagingActiveBoundary: this.activationStaging.activeBoundary,
++      activationStagingPreparedRootCount: this.activationRecords.size,
++      activationStagingActivatedRootCount: this.activationStaging.activatedRootCount,
++      activationStagingPendingRequestedRootCount: this.activationStaging.pendingRequestedRootCount,
++      activationStagingDeferredByBudgetCount: this.activationStaging.deferredByBudgetCount,
++      activationStagingLastActivatedRootName: this.activationStaging.lastActivatedRootName,
++      activationStagingLastActivatedBoundary: this.activationStaging.lastActivatedBoundary,
++      activationStagingLastActivatedFrame: this.activationStaging.lastActivatedFrame,
++      activationStagingLastActivationSequence: this.activationStaging.lastActivationSequence,
++      activationStagingActivatedThisCallback: this.activationStaging.activatedThisCallback,
++      activationStagingHiddenThisRenderCount: this.activationStaging.hiddenThisRenderCount,
++      activationStagingLastRenderMs: this.activationStaging.lastRenderMs ?? 0,
++      activationStagingLastActivationRenderMs: this.activationStaging.lastActivationRenderMs,
++      activationStagingPeakActivationRenderMs: this.activationStaging.peakActivationRenderMs,
++      activationStagingPeakActivationRootName: this.activationStaging.peakActivationRootName,
+       preparedSystemIds: [...this.registry.prepared.keys()],
+       jobs: this.jobs.map(({ id, boundary, status, resultStatus, durationMs, completedAtFrame, error }) => ({
+         id,
+--- A5/src/core/GameRuntime.js
++++ A5.1/src/core/GameRuntime.js
+@@ -2779,6 +2779,11 @@
+       this.frameState,
+       rawDt
+     );
++    // HC-031W2A5.1: mechanics/morph state may request all prepared roots at once,
++    // but first-draw submission is render-only staged. At most one newly requested
++    // transition root is admitted per callback when the previous render was in budget.
++    const activationStagingBeforeRender = this.firstSliceTransitionCoordinator
++      ?.prepareRenderActivationStaging(this.frameState) ?? null;
+     const transitionUpdateMs = performance.now() - transitionStart;
+     const remainingUpdateMs = presentationUpdateMs + cameraUpdateMs + transitionUpdateMs;
+     const renderBudget = this.renderBudgetSystem?.prepare({
+@@ -2792,7 +2797,14 @@
+     } finally {
+       renderEnd = performance.now();
+       this.renderBudgetSystem?.restoreAfterRender();
++      this.firstSliceTransitionCoordinator?.restoreRenderActivationStaging();
+     }
++    const renderMs = renderEnd - renderStart;
++    const activationStaging = this.firstSliceTransitionCoordinator?.notifyRenderComplete({
++      renderMs,
++      frame: this.frame,
++      cellId: this.frameState.activeCellId
++    }) ?? activationStagingBeforeRender;
+     const info = this.renderer.info?.render;
+     this.frameTruthObserver.endFrame({
+       registryMs,
+@@ -2800,7 +2812,7 @@
+       presentationUpdateMs,
+       cameraUpdateMs,
+       transitionUpdateMs,
+-      renderMs: renderEnd - renderStart,
++      renderMs,
+       cellId: this.frameState.activeCellId,
+       registrySample: registrySample ?? this.frameState.runtimeExecution,
+       renderOwnerCensus: renderBudget?.ownerCensus ?? null,
+@@ -2842,6 +2854,25 @@
+         transitionWarmupLastRootName: this.frameState.transitionContinuity?.shaderWarmupLastRootName ?? "none",
+         transitionWarmupLastStatus: this.frameState.transitionContinuity?.shaderWarmupLastStatus ?? "not_started",
+         transitionWarmupLastDurationMs: this.frameState.transitionContinuity?.shaderWarmupLastDurationMs ?? 0,
++        transitionActivationPass: activationStaging?.pass ?? "none",
++        transitionActivationPolicy: activationStaging?.policy ?? "none",
++        transitionActivationBoundary: activationStaging?.activeBoundary ?? "none",
++        transitionActivationRenderBudgetMs: activationStaging?.renderBudgetMs ?? 0,
++        transitionActivationPreparedRoots: this.firstSliceTransitionCoordinator?.activationRecords?.size ?? 0,
++        transitionActivationActivatedRoots: activationStaging?.activatedRootCount ?? 0,
++        transitionActivationPendingRequestedRoots: activationStaging?.pendingRequestedRootCount ?? 0,
++        transitionActivationDeferredByBudgetCount: activationStaging?.deferredByBudgetCount ?? 0,
++        transitionActivationActivatedThisCallback: Boolean(activationStaging?.activatedThisCallback),
++        transitionActivationRootName: activationStaging?.activatedThisCallback
++          ? activationStaging?.lastActivatedRootName ?? "none"
++          : "none",
++        transitionActivationLastRootName: activationStaging?.lastActivatedRootName ?? "none",
++        transitionActivationSequence: activationStaging?.lastActivationSequence ?? 0,
++        transitionActivationLastRenderMs: activationStaging?.lastRenderMs ?? 0,
++        transitionActivationLastActivationRenderMs: activationStaging?.lastActivationRenderMs ?? 0,
++        transitionActivationPeakRenderMs: activationStaging?.peakActivationRenderMs ?? 0,
++        transitionActivationPeakRootName: activationStaging?.peakActivationRootName ?? "none",
++        transitionActivationHiddenThisRender: activationStaging?.hiddenThisRenderCount ?? 0,
+         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+         devicePixelRatio: this.renderer.getPixelRatio()
+       } : null
+--- A5/src/core/FrameTruthObserver.js
++++ A5.1/src/core/FrameTruthObserver.js
+@@ -20,6 +20,7 @@
+     this.pending = null;
+     this.visibilityLast = null;
+     this.lastCompletedStageMs = null;
++    this.lastCompletedTransitionActivation = null;
+   }
+ 
+   nowMs() { return this.nowProvider.call(null); }
+@@ -75,7 +76,8 @@
+         substepCount: Math.max(1, Math.floor(Number.isFinite(substepCount) ? substepCount : 1)),
+         recoveredBeyondLegacyCapMs: round(Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
+           ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
+-        previousCallbackWorkMs: this.lastCompletedStageMs
++        previousCallbackWorkMs: this.lastCompletedStageMs,
++        previousTransitionActivation: this.lastCompletedTransitionActivation
+       });
+       if (this.longGaps.length > 40) this.longGaps.shift();
+     }
+@@ -116,6 +118,19 @@
+       transitionUpdate: round(transitionUpdateMs),
+       render: round(renderMs)
+     };
++    this.lastCompletedTransitionActivation = rendererInfo ? {
++      pass: rendererInfo.transitionActivationPass ?? "none",
++      boundary: rendererInfo.transitionActivationBoundary ?? "none",
++      activatedThisCallback: Boolean(rendererInfo.transitionActivationActivatedThisCallback),
++      rootName: rendererInfo.transitionActivationRootName ?? "none",
++      lastRootName: rendererInfo.transitionActivationLastRootName ?? "none",
++      sequence: rendererInfo.transitionActivationSequence ?? 0,
++      pendingRequestedRoots: rendererInfo.transitionActivationPendingRequestedRoots ?? 0,
++      deferredByBudgetCount: rendererInfo.transitionActivationDeferredByBudgetCount ?? 0,
++      renderMs: round(rendererInfo.transitionActivationLastRenderMs ?? renderMs),
++      peakRenderMs: round(rendererInfo.transitionActivationPeakRenderMs ?? 0),
++      peakRootName: rendererInfo.transitionActivationPeakRootName ?? "none"
++    } : null;
+     if (this.current.wallMs >= this.windowMs) {
+       this.windows.push(this.summarize(this.current));
+       if (this.windows.length > this.maxWindows) this.windows.shift();
+@@ -171,10 +186,11 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
+-      optimizationPass: "HC-031W2A5",
++      optimizationPass: "HC-031W2A5.1",
+       authority: "read_only_observer", gameplayAuthority: false,
+       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
+       transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
++      transitionFirstDrawStagingRule: "prepared transition roots retain full gameplay/morph state, but renderer visibility admits at most one newly requested root per callback when the previous render is <=65ms; suppressed visibility is restored immediately after render",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
+       total: {
+         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
+--- A5/scripts/validateHC031W2A1CostReduction.mjs
++++ A5.1/scripts/validateHC031W2A1CostReduction.mjs
+@@ -13,7 +13,7 @@
+ const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
+ 
+ // Gameplay clock and authority stay unchanged in A1.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[1235]|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[1235](?:\.1)?|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /pulseContourSegments:/);
+ assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);
+--- A5/scripts/validateHC031W2A2TransientRenderBudget.mjs
++++ A5.1/scripts/validateHC031W2A2TransientRenderBudget.mjs
+@@ -13,7 +13,7 @@
+ const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
+ 
+ // W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[235]|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[235](?:\.1)?|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
+ assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
+@@ -111,7 +111,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
+ 
+ console.log("HC031W2A2 transient render budget + owner census PASS");
+--- A5/scripts/validateHC031W2A3ResidencyFoundation.mjs
++++ A5.1/scripts/validateHC031W2A3ResidencyFoundation.mjs
+@@ -12,7 +12,7 @@
+ const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
+ 
+ // W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|5|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|5(?:\.1)?|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /frameState: this\.frameState/);
+ assert.match(runtimeSource, /residencyRootsCulled:/);
+@@ -113,7 +113,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
+ 
+ console.log("HC031W2A3 residency + Hub foundation cadence PASS");
+--- A5/scripts/validateHC031W2A4BoundedCatchUp.mjs
++++ A5.1/scripts/validateHC031W2A4BoundedCatchUp.mjs
+@@ -79,7 +79,7 @@
+ });
+ observer.endFrame({ registryMs: 3, remainingUpdateMs: 1, renderMs: 5, cellId: "TEST" });
+ let snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.total.discardedSeconds, 0);
+ assert.equal(snapshot.total.simulationCatchUp.multiSubstepFrames, 1);
+--- A5/scripts/validateHC031W2A41CatchUpWorkPartition.mjs
++++ A5.1/scripts/validateHC031W2A41CatchUpWorkPartition.mjs
+@@ -73,7 +73,7 @@
+   registrySample: { timingSampled: true, slowestSampledSystems: [{ id: "testSystem", lastMs: 7.25 }] }
+ });
+ let snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.windows[0].stageMs.simulationRegistry.p50, 20);
+ assert.equal(snapshot.windows[0].stageMs.presentationUpdate.p50, 4);
+--- A5/scripts/validateHC031W2A5TransitionRenderWarmup.mjs
++++ A5.1/scripts/validateHC031W2A5TransitionRenderWarmup.mjs
+@@ -13,7 +13,7 @@
+   if (!condition) throw new Error(`[HC031W2A5] ${message}`);
+ };
+ 
+-assert(observerSource.includes('optimizationPass: "HC-031W2A5"'), "Frame Truth must expose the A5 marker.");
++assert(/optimizationPass: \"HC-031W2A5(?:\.1)?\"/.test(observerSource), "Frame Truth must expose the A5/A5.1 marker.");
+ assert(observerSource.includes("transitionRenderWarmupRule"), "Frame Truth must describe the transition warmup rule.");
+ assert(runtimeSource.includes("transitionWarmupTargetSceneCompiles"), "Runtime telemetry must expose target-scene compile count.");
+ assert(runtimeSource.includes("transitionWarmupPendingRoots"), "Runtime telemetry must expose pending warmup roots.");
+--- /dev/null
++++ A5.1/scripts/validateHC031W2A51FirstDrawActivationStaging.mjs
+@@ -0,0 +1,128 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import { FirstSliceTransitionCoordinator } from "../src/core/FirstSliceTransitionCoordinator.js";
++import { FrameTruthObserver } from "../src/core/FrameTruthObserver.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const runtimeSource = read("../src/core/GameRuntime.js");
++const observerSource = read("../src/core/FrameTruthObserver.js");
++const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
++
++assert.match(observerSource, /optimizationPass: "HC-031W2A5\.1"/);
++assert.match(observerSource, /transitionFirstDrawStagingRule/);
++assert.match(runtimeSource, /prepareRenderActivationStaging/);
++assert.match(runtimeSource, /restoreRenderActivationStaging/);
++assert.match(runtimeSource, /notifyRenderComplete/);
++assert.match(runtimeSource, /transitionActivationRootName/);
++assert.match(coordinatorSource, /ACTIVATION_RENDER_BUDGET_MS = 65/);
++assert.match(coordinatorSource, /render_only_one_requested_root_per_callback_under_previous_render_budget/);
++
++const scene = { children: [], name: "test_scene" };
++const registry = { prepared: new Map(), prepareSystem() { return { status: "prepared" }; } };
++const frameState = {
++  frame: 10,
++  runtimeSeconds: 5,
++  activeCellId: "CELL_MEMBRANE_NURSERY_001",
++  localCellMorph: { phase: "morphing_continuous_control", completed: false, progress: 0.05 },
++  secondLocalCellMorph: {},
++  firstSliceRuntimeMount: {}
++};
++const morphStub = { prepareTransitionResources() { return []; }, destinationPrepared: true };
++const coordinator = new FirstSliceTransitionCoordinator({
++  registry,
++  scene,
++  camera: {},
++  renderer: {},
++  localCellMorphSystem: morphStub,
++  secondLocalCellMorphSystem: morphStub,
++  frameState,
++  autoSchedule: false
++});
++
++const makeRoot = (name, morphRole) => ({
++  name,
++  type: "Group",
++  isObject3D: true,
++  visible: true,
++  parent: scene,
++  userData: { morphRole }
++});
++const surface = makeRoot("scar_flow_fold_surface_001", "destination_environment");
++const haze = makeRoot("scar_pressure_haze_001", "destination_environment");
++const detail = makeRoot("guide_threshold_gameplay_fill_HC007B", "support_detail");
++scene.children.push(surface, haze, detail);
++coordinator.registerPreparedRoot(surface, "surface_to_guide");
++coordinator.registerPreparedRoot(haze, "surface_to_guide");
++coordinator.registerPreparedRoot(detail, "surface_to_guide");
++
++// Previous render is healthy: exactly one requested-visible root may enter the draw.
++coordinator.activationStaging.lastRenderMs = 40;
++let staging = coordinator.prepareRenderActivationStaging(frameState);
++assert.equal(staging.activatedThisCallback, true);
++assert.equal(staging.lastActivatedRootName, "scar_flow_fold_surface_001");
++assert.equal(staging.activatedRootCount, 1);
++assert.equal(staging.pendingRequestedRootCount, 2);
++assert.equal(surface.visible, true);
++assert.equal(haze.visible, false);
++assert.equal(detail.visible, false);
++coordinator.restoreRenderActivationStaging();
++assert.equal(haze.visible, true, "suppressed render visibility must restore immediately after the draw");
++assert.equal(detail.visible, true, "render-only staging must not mutate gameplay/presentation state between callbacks");
++
++// A slow first draw must prevent another new root from entering on the next callback.
++coordinator.notifyRenderComplete({ renderMs: 80 });
++frameState.frame = 11;
++staging = coordinator.prepareRenderActivationStaging(frameState);
++assert.equal(staging.activatedThisCallback, false);
++assert.equal(staging.activatedRootCount, 1);
++assert.equal(staging.deferredByBudgetCount, 1);
++assert.equal(haze.visible, false);
++assert.equal(detail.visible, false);
++coordinator.restoreRenderActivationStaging();
++
++// Once the previous render is healthy again, the next priority root may enter.
++coordinator.notifyRenderComplete({ renderMs: 40 });
++frameState.frame = 12;
++staging = coordinator.prepareRenderActivationStaging(frameState);
++assert.equal(staging.activatedThisCallback, true);
++assert.equal(staging.lastActivatedRootName, "scar_pressure_haze_001");
++assert.equal(staging.activatedRootCount, 2);
++assert.equal(detail.visible, false);
++coordinator.restoreRenderActivationStaging();
++
++// Long-gap diagnostics must retain the exact transition root activated by the
++// callback immediately preceding the gap.
++let now = 0;
++const observer = new FrameTruthObserver({
++  now: () => now,
++  documentRef: { hidden: false, hasFocus: () => true },
++  windowMs: 10000
++});
++now = 100;
++observer.beginFrame({ frame: 1, rawDt: 0.04, dt: 0.04, cellId: "CELL_SCAR_FLOW_FOLD_001" });
++observer.endFrame({
++  registryMs: 10,
++  renderMs: 900,
++  cellId: "CELL_SCAR_FLOW_FOLD_001",
++  rendererInfo: {
++    transitionActivationPass: "HC-031W2A5.1",
++    transitionActivationBoundary: "surface_to_guide",
++    transitionActivationActivatedThisCallback: true,
++    transitionActivationRootName: "scar_pressure_haze_001",
++    transitionActivationLastRootName: "scar_pressure_haze_001",
++    transitionActivationSequence: 2,
++    transitionActivationPendingRequestedRoots: 1,
++    transitionActivationDeferredByBudgetCount: 1,
++    transitionActivationLastRenderMs: 900,
++    transitionActivationPeakRenderMs: 900,
++    transitionActivationPeakRootName: "scar_pressure_haze_001"
++  }
++});
++now = 1100;
++observer.beginFrame({ frame: 2, rawDt: 1.0, dt: 0.15, cellId: "CELL_SCAR_FLOW_FOLD_001", substepCount: 3 });
++const gap = observer.snapshot().last40LongGaps.at(-1);
++assert.equal(gap.previousTransitionActivation.rootName, "scar_pressure_haze_001");
++assert.equal(gap.previousTransitionActivation.activatedThisCallback, true);
++assert.equal(gap.previousTransitionActivation.renderMs, 900);
++
++console.log("HC031W2A5.1 first-draw activation staging + long-gap root attribution PASS");
