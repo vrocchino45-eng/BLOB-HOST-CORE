@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 const SURFACE_CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const GUIDE_CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -77,6 +75,19 @@ export class FirstSliceTransitionCoordinator {
     this.lastProgress = 0;
     this.lastProgressAt = 0;
     this.lastError = "none";
+    // HC-031W2A5: transition render warmup must compile the actual prepared
+    // materials against the live Host scene, one prepared root per idle slot.
+    this.shaderWarmup = {
+      pass: "HC-031W2A5",
+      policy: "actual_scene_target_incremental_per_root",
+      targetSceneCompiles: 0,
+      geometryBoundsPrepared: 0,
+      yieldedIdleSlots: 0,
+      failedRootCount: 0,
+      lastRootName: "none",
+      lastStatus: "not_started",
+      lastDurationMs: 0
+    };
     this.jobs = this.createJobs();
     this.publish(frameState, 0);
   }
@@ -287,41 +298,93 @@ export class FirstSliceTransitionCoordinator {
   async warmPreparedShaders() {
     const roots = [...this.preparedRoots].filter((root) => !this.compiledRoots.has(root));
     if (!this.renderer || !this.camera || roots.length === 0) {
-      return { status: "skipped_no_renderer_or_roots" };
+      this.shaderWarmup.lastStatus = "skipped_no_renderer_or_roots";
+      return { status: "skipped_no_renderer_or_roots", rootCount: roots.length };
     }
 
-    const warmScene = new THREE.Scene();
-    warmScene.add(new THREE.AmbientLight(0xffffff, 1));
+    const startedAt = this.now();
+    let compiledCount = 0;
+    let preparedBounds = 0;
+    let failedCount = 0;
 
-    for (const root of roots) {
-      const clone = root.clone(true);
-      clone.traverse((child) => {
-        child.visible = true;
-      });
-      warmScene.add(clone);
-    }
+    // HC-031W2A5: the previous warmup cloned roots into a temporary scene with
+    // a synthetic AmbientLight. That can compile a different shader program
+    // signature from the actual Host scene. Compile each real prepared root
+    // against this.scene instead, as recommended by WebGLRenderer.compile().
+    // One root per idle slot prevents the warmup itself becoming a transition hitch.
+    for (let index = 0; index < roots.length; index += 1) {
+      const root = roots[index];
+      this.shaderWarmup.lastRootName = root?.name || root?.type || `prepared_root_${index + 1}`;
+      preparedBounds += this.prepareGeometryBounds(root);
 
-    try {
-      if (typeof this.renderer.compileAsync === "function") {
-        await this.renderer.compileAsync(warmScene, this.camera);
-      } else if (typeof this.renderer.compile === "function") {
-        this.renderer.compile(warmScene, this.camera);
+      try {
+        if (typeof this.renderer.compileAsync === "function") {
+          await this.renderer.compileAsync(root, this.camera, this.scene);
+        } else if (typeof this.renderer.compile === "function") {
+          this.renderer.compile(root, this.camera, this.scene);
+        } else {
+          this.shaderWarmup.lastStatus = "skipped_renderer_compile_unavailable";
+          return {
+            status: "skipped_renderer_compile_unavailable",
+            rootCount: roots.length,
+            compiledCount,
+            geometryBoundsPrepared: preparedBounds
+          };
+        }
+        this.compiledRoots.add(root);
+        this.shaderWarmup.targetSceneCompiles += 1;
+        compiledCount += 1;
+      } catch (error) {
+        // Do not stall transition ownership on a diagnostic/performance warmup.
+        // Leave the root uncompiled so a later warmup job may retry it.
+        failedCount += 1;
+        this.shaderWarmup.failedRootCount += 1;
+        this.shaderWarmup.lastStatus = "compile_failed";
+        this.lastError = `shader_warmup:${this.shaderWarmup.lastRootName}: ${error?.message ?? String(error)}`;
       }
-    } catch (error) {
-      warmScene.clear();
-      for (const root of roots) this.compiledRoots.add(root);
-      return {
-        status: "renderer_compile_fallback",
-        rootCount: roots.length,
-        error: error?.message ?? String(error)
-      };
+
+      if (index < roots.length - 1) await this.yieldWarmupIdleSlot();
     }
 
-    warmScene.clear();
-    for (const root of roots) this.compiledRoots.add(root);
-    return { status: "compiled", rootCount: roots.length };
+    this.shaderWarmup.geometryBoundsPrepared += preparedBounds;
+    this.shaderWarmup.lastDurationMs = Math.max(0, this.now() - startedAt);
+    this.shaderWarmup.lastStatus = failedCount > 0 ? "compiled_with_failures" : "compiled_target_scene_staged";
+    return {
+      status: this.shaderWarmup.lastStatus,
+      rootCount: roots.length,
+      compiledCount,
+      failedCount,
+      geometryBoundsPrepared: preparedBounds,
+      targetScene: true,
+      incrementalPerRoot: true
+    };
   }
 
+  prepareGeometryBounds(root) {
+    let prepared = 0;
+    root?.traverse?.((object) => {
+      const geometry = object?.geometry;
+      if (!geometry?.attributes?.position || geometry.boundingSphere) return;
+      try {
+        geometry.computeBoundingSphere?.();
+        if (geometry.boundingSphere) prepared += 1;
+      } catch (_error) {
+        // Bounds are only warmup metadata; renderer ownership remains unchanged.
+      }
+    });
+    return prepared;
+  }
+
+  yieldWarmupIdleSlot() {
+    this.shaderWarmup.yieldedIdleSlots += 1;
+    return new Promise((resolve) => {
+      if (typeof globalThis.requestIdleCallback === "function") {
+        globalThis.requestIdleCallback(() => resolve(), { timeout: Math.min(this.idleTimeoutMs, 240) });
+        return;
+      }
+      globalThis.setTimeout(resolve, 16);
+    });
+  }
 
   nextEligibleJob() {
     const boundaries = this.eligibleBoundaries(this.frameState);
@@ -451,6 +514,18 @@ export class FirstSliceTransitionCoordinator {
       combToApertureArrivalReady: this.boundaryReady("comb_to_aperture"),
       localDestinationPrepared: Boolean(this.localCellMorphSystem?.destinationPrepared),
       guideDestinationPrepared: Boolean(this.secondLocalCellMorphSystem?.destinationPrepared),
+      shaderWarmupPass: this.shaderWarmup.pass,
+      shaderWarmupPolicy: this.shaderWarmup.policy,
+      shaderWarmupPreparedRootCount: this.preparedRoots.size,
+      shaderWarmupCompiledRootCount: this.compiledRoots.size,
+      shaderWarmupPendingRootCount: Math.max(0, this.preparedRoots.size - this.compiledRoots.size),
+      shaderWarmupTargetSceneCompiles: this.shaderWarmup.targetSceneCompiles,
+      shaderWarmupGeometryBoundsPrepared: this.shaderWarmup.geometryBoundsPrepared,
+      shaderWarmupYieldedIdleSlots: this.shaderWarmup.yieldedIdleSlots,
+      shaderWarmupFailedRootCount: this.shaderWarmup.failedRootCount,
+      shaderWarmupLastRootName: this.shaderWarmup.lastRootName,
+      shaderWarmupLastStatus: this.shaderWarmup.lastStatus,
+      shaderWarmupLastDurationMs: this.shaderWarmup.lastDurationMs,
       preparedSystemIds: [...this.registry.prepared.keys()],
       jobs: this.jobs.map(({ id, boundary, status, resultStatus, durationMs, completedAtFrame, error }) => ({
         id,

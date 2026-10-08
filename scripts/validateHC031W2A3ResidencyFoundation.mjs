@@ -12,7 +12,7 @@ const hubSource = read("../src/hub/HubChamberFoundationSystem.js");
 const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
 
 // W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|4(?:\.1)?)"/);
+assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|5|4(?:\.1)?)"/);
 assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
 assert.match(runtimeSource, /frameState: this\.frameState/);
 assert.match(runtimeSource, /residencyRootsCulled:/);
@@ -113,7 +113,7 @@ observer.endFrame({
   renderOwnerCensus: prep.ownerCensus
 });
 const snapshot = observer.snapshot();
-assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
+assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
 assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
 
 console.log("HC031W2A3 residency + Hub foundation cadence PASS");

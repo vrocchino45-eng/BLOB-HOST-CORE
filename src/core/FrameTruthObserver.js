@@ -171,9 +171,10 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A4.1",
+      optimizationPass: "HC-031W2A5",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
+      transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),

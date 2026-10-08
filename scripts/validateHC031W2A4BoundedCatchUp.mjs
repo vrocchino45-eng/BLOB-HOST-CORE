@@ -79,7 +79,7 @@ observer.beginFrame({
 });
 observer.endFrame({ registryMs: 3, remainingUpdateMs: 1, renderMs: 5, cellId: "TEST" });
 let snapshot = observer.snapshot();
-assert.ok(["HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
+assert.ok(["HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
 assert.equal(snapshot.total.simToWallRatio, 1);
 assert.equal(snapshot.total.discardedSeconds, 0);
 assert.equal(snapshot.total.simulationCatchUp.multiSubstepFrames, 1);

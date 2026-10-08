@@ -1,0 +1,381 @@
+--- a/src/core/FirstSliceTransitionCoordinator.js
++++ b/src/core/FirstSliceTransitionCoordinator.js
+@@ -1,5 +1,3 @@
+-import * as THREE from "three";
+-
+ const SURFACE_CELL_ID = "CELL_MEMBRANE_NURSERY_001";
+ const GUIDE_CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
+ const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
+@@ -77,6 +75,19 @@
+     this.lastProgress = 0;
+     this.lastProgressAt = 0;
+     this.lastError = "none";
++    // HC-031W2A5: transition render warmup must compile the actual prepared
++    // materials against the live Host scene, one prepared root per idle slot.
++    this.shaderWarmup = {
++      pass: "HC-031W2A5",
++      policy: "actual_scene_target_incremental_per_root",
++      targetSceneCompiles: 0,
++      geometryBoundsPrepared: 0,
++      yieldedIdleSlots: 0,
++      failedRootCount: 0,
++      lastRootName: "none",
++      lastStatus: "not_started",
++      lastDurationMs: 0
++    };
+     this.jobs = this.createJobs();
+     this.publish(frameState, 0);
+   }
+@@ -287,41 +298,93 @@
+   async warmPreparedShaders() {
+     const roots = [...this.preparedRoots].filter((root) => !this.compiledRoots.has(root));
+     if (!this.renderer || !this.camera || roots.length === 0) {
+-      return { status: "skipped_no_renderer_or_roots" };
++      this.shaderWarmup.lastStatus = "skipped_no_renderer_or_roots";
++      return { status: "skipped_no_renderer_or_roots", rootCount: roots.length };
+     }
+ 
+-    const warmScene = new THREE.Scene();
+-    warmScene.add(new THREE.AmbientLight(0xffffff, 1));
++    const startedAt = this.now();
++    let compiledCount = 0;
++    let preparedBounds = 0;
++    let failedCount = 0;
++
++    // HC-031W2A5: the previous warmup cloned roots into a temporary scene with
++    // a synthetic AmbientLight. That can compile a different shader program
++    // signature from the actual Host scene. Compile each real prepared root
++    // against this.scene instead, as recommended by WebGLRenderer.compile().
++    // One root per idle slot prevents the warmup itself becoming a transition hitch.
++    for (let index = 0; index < roots.length; index += 1) {
++      const root = roots[index];
++      this.shaderWarmup.lastRootName = root?.name || root?.type || `prepared_root_${index + 1}`;
++      preparedBounds += this.prepareGeometryBounds(root);
++
++      try {
++        if (typeof this.renderer.compileAsync === "function") {
++          await this.renderer.compileAsync(root, this.camera, this.scene);
++        } else if (typeof this.renderer.compile === "function") {
++          this.renderer.compile(root, this.camera, this.scene);
++        } else {
++          this.shaderWarmup.lastStatus = "skipped_renderer_compile_unavailable";
++          return {
++            status: "skipped_renderer_compile_unavailable",
++            rootCount: roots.length,
++            compiledCount,
++            geometryBoundsPrepared: preparedBounds
++          };
++        }
++        this.compiledRoots.add(root);
++        this.shaderWarmup.targetSceneCompiles += 1;
++        compiledCount += 1;
++      } catch (error) {
++        // Do not stall transition ownership on a diagnostic/performance warmup.
++        // Leave the root uncompiled so a later warmup job may retry it.
++        failedCount += 1;
++        this.shaderWarmup.failedRootCount += 1;
++        this.shaderWarmup.lastStatus = "compile_failed";
++        this.lastError = `shader_warmup:${this.shaderWarmup.lastRootName}: ${error?.message ?? String(error)}`;
++      }
+ 
+-    for (const root of roots) {
+-      const clone = root.clone(true);
+-      clone.traverse((child) => {
+-        child.visible = true;
+-      });
+-      warmScene.add(clone);
++      if (index < roots.length - 1) await this.yieldWarmupIdleSlot();
+     }
+ 
+-    try {
+-      if (typeof this.renderer.compileAsync === "function") {
+-        await this.renderer.compileAsync(warmScene, this.camera);
+-      } else if (typeof this.renderer.compile === "function") {
+-        this.renderer.compile(warmScene, this.camera);
+-      }
+-    } catch (error) {
+-      warmScene.clear();
+-      for (const root of roots) this.compiledRoots.add(root);
+-      return {
+-        status: "renderer_compile_fallback",
+-        rootCount: roots.length,
+-        error: error?.message ?? String(error)
+-      };
+-    }
++    this.shaderWarmup.geometryBoundsPrepared += preparedBounds;
++    this.shaderWarmup.lastDurationMs = Math.max(0, this.now() - startedAt);
++    this.shaderWarmup.lastStatus = failedCount > 0 ? "compiled_with_failures" : "compiled_target_scene_staged";
++    return {
++      status: this.shaderWarmup.lastStatus,
++      rootCount: roots.length,
++      compiledCount,
++      failedCount,
++      geometryBoundsPrepared: preparedBounds,
++      targetScene: true,
++      incrementalPerRoot: true
++    };
++  }
+ 
+-    warmScene.clear();
+-    for (const root of roots) this.compiledRoots.add(root);
+-    return { status: "compiled", rootCount: roots.length };
++  prepareGeometryBounds(root) {
++    let prepared = 0;
++    root?.traverse?.((object) => {
++      const geometry = object?.geometry;
++      if (!geometry?.attributes?.position || geometry.boundingSphere) return;
++      try {
++        geometry.computeBoundingSphere?.();
++        if (geometry.boundingSphere) prepared += 1;
++      } catch (_error) {
++        // Bounds are only warmup metadata; renderer ownership remains unchanged.
++      }
++    });
++    return prepared;
+   }
+ 
++  yieldWarmupIdleSlot() {
++    this.shaderWarmup.yieldedIdleSlots += 1;
++    return new Promise((resolve) => {
++      if (typeof globalThis.requestIdleCallback === "function") {
++        globalThis.requestIdleCallback(() => resolve(), { timeout: Math.min(this.idleTimeoutMs, 240) });
++        return;
++      }
++      globalThis.setTimeout(resolve, 16);
++    });
++  }
+ 
+   nextEligibleJob() {
+     const boundaries = this.eligibleBoundaries(this.frameState);
+@@ -451,6 +514,18 @@
+       combToApertureArrivalReady: this.boundaryReady("comb_to_aperture"),
+       localDestinationPrepared: Boolean(this.localCellMorphSystem?.destinationPrepared),
+       guideDestinationPrepared: Boolean(this.secondLocalCellMorphSystem?.destinationPrepared),
++      shaderWarmupPass: this.shaderWarmup.pass,
++      shaderWarmupPolicy: this.shaderWarmup.policy,
++      shaderWarmupPreparedRootCount: this.preparedRoots.size,
++      shaderWarmupCompiledRootCount: this.compiledRoots.size,
++      shaderWarmupPendingRootCount: Math.max(0, this.preparedRoots.size - this.compiledRoots.size),
++      shaderWarmupTargetSceneCompiles: this.shaderWarmup.targetSceneCompiles,
++      shaderWarmupGeometryBoundsPrepared: this.shaderWarmup.geometryBoundsPrepared,
++      shaderWarmupYieldedIdleSlots: this.shaderWarmup.yieldedIdleSlots,
++      shaderWarmupFailedRootCount: this.shaderWarmup.failedRootCount,
++      shaderWarmupLastRootName: this.shaderWarmup.lastRootName,
++      shaderWarmupLastStatus: this.shaderWarmup.lastStatus,
++      shaderWarmupLastDurationMs: this.shaderWarmup.lastDurationMs,
+       preparedSystemIds: [...this.registry.prepared.keys()],
+       jobs: this.jobs.map(({ id, boundary, status, resultStatus, durationMs, completedAtFrame, error }) => ({
+         id,
+--- a/src/core/GameRuntime.js
++++ b/src/core/GameRuntime.js
+@@ -2830,6 +2830,18 @@
+         presentationUpdateMs,
+         cameraUpdateMs,
+         transitionUpdateMs,
++        transitionWarmupPass: this.frameState.transitionContinuity?.shaderWarmupPass ?? "none",
++        transitionWarmupPolicy: this.frameState.transitionContinuity?.shaderWarmupPolicy ?? "none",
++        transitionWarmupPreparedRoots: this.frameState.transitionContinuity?.shaderWarmupPreparedRootCount ?? 0,
++        transitionWarmupCompiledRoots: this.frameState.transitionContinuity?.shaderWarmupCompiledRootCount ?? 0,
++        transitionWarmupPendingRoots: this.frameState.transitionContinuity?.shaderWarmupPendingRootCount ?? 0,
++        transitionWarmupTargetSceneCompiles: this.frameState.transitionContinuity?.shaderWarmupTargetSceneCompiles ?? 0,
++        transitionWarmupGeometryBoundsPrepared: this.frameState.transitionContinuity?.shaderWarmupGeometryBoundsPrepared ?? 0,
++        transitionWarmupYieldedIdleSlots: this.frameState.transitionContinuity?.shaderWarmupYieldedIdleSlots ?? 0,
++        transitionWarmupFailedRoots: this.frameState.transitionContinuity?.shaderWarmupFailedRootCount ?? 0,
++        transitionWarmupLastRootName: this.frameState.transitionContinuity?.shaderWarmupLastRootName ?? "none",
++        transitionWarmupLastStatus: this.frameState.transitionContinuity?.shaderWarmupLastStatus ?? "not_started",
++        transitionWarmupLastDurationMs: this.frameState.transitionContinuity?.shaderWarmupLastDurationMs ?? 0,
+         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
+         devicePixelRatio: this.renderer.getPixelRatio()
+       } : null
+--- a/src/core/FrameTruthObserver.js
++++ b/src/core/FrameTruthObserver.js
+@@ -171,9 +171,10 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
+-      optimizationPass: "HC-031W2A4.1",
++      optimizationPass: "HC-031W2A5",
+       authority: "read_only_observer", gameplayAuthority: false,
+       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
++      transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
+       total: {
+         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
+--- a/scripts/validateHC031W2A1CostReduction.mjs
++++ b/scripts/validateHC031W2A1CostReduction.mjs
+@@ -13,7 +13,7 @@
+ const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
+ 
+ // Gameplay clock and authority stay unchanged in A1.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[123]|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[1235]|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /pulseContourSegments:/);
+ assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);
+--- a/scripts/validateHC031W2A2TransientRenderBudget.mjs
++++ b/scripts/validateHC031W2A2TransientRenderBudget.mjs
+@@ -13,7 +13,7 @@
+ const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
+ 
+ // W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[23]|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[235]|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
+ assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
+@@ -111,7 +111,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
+ 
+ console.log("HC031W2A2 transient render budget + owner census PASS");
+--- a/scripts/validateHC031W2A3ResidencyFoundation.mjs
++++ b/scripts/validateHC031W2A3ResidencyFoundation.mjs
+@@ -12,7 +12,7 @@
+ const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
+ 
+ // W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|5|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /frameState: this\.frameState/);
+ assert.match(runtimeSource, /residencyRootsCulled:/);
+@@ -113,7 +113,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
+ 
+ console.log("HC031W2A3 residency + Hub foundation cadence PASS");
+--- a/scripts/validateHC031W2A4BoundedCatchUp.mjs
++++ b/scripts/validateHC031W2A4BoundedCatchUp.mjs
+@@ -79,7 +79,7 @@
+ });
+ observer.endFrame({ registryMs: 3, remainingUpdateMs: 1, renderMs: 5, cellId: "TEST" });
+ let snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A4", "HC-031W2A4.1"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.total.discardedSeconds, 0);
+ assert.equal(snapshot.total.simulationCatchUp.multiSubstepFrames, 1);
+--- a/scripts/validateHC031W2A41CatchUpWorkPartition.mjs
++++ b/scripts/validateHC031W2A41CatchUpWorkPartition.mjs
+@@ -73,7 +73,7 @@
+   registrySample: { timingSampled: true, slowestSampledSystems: [{ id: "testSystem", lastMs: 7.25 }] }
+ });
+ let snapshot = observer.snapshot();
+-assert.equal(snapshot.optimizationPass, "HC-031W2A4.1");
++assert.ok(["HC-031W2A4.1", "HC-031W2A5"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.windows[0].stageMs.simulationRegistry.p50, 20);
+ assert.equal(snapshot.windows[0].stageMs.presentationUpdate.p50, 4);
+--- /dev/null
++++ b/scripts/validateHC031W2A5TransitionRenderWarmup.mjs
+@@ -0,0 +1,102 @@
++import fs from "node:fs";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import { FirstSliceTransitionCoordinator } from "../src/core/FirstSliceTransitionCoordinator.js";
++
++const here = path.dirname(fileURLToPath(import.meta.url));
++const root = path.resolve(here, "..");
++const runtimeSource = fs.readFileSync(path.join(root, "src/core/GameRuntime.js"), "utf8");
++const observerSource = fs.readFileSync(path.join(root, "src/core/FrameTruthObserver.js"), "utf8");
++const coordinatorSource = fs.readFileSync(path.join(root, "src/core/FirstSliceTransitionCoordinator.js"), "utf8");
++
++const assert = (condition, message) => {
++  if (!condition) throw new Error(`[HC031W2A5] ${message}`);
++};
++
++assert(observerSource.includes('optimizationPass: "HC-031W2A5"'), "Frame Truth must expose the A5 marker.");
++assert(observerSource.includes("transitionRenderWarmupRule"), "Frame Truth must describe the transition warmup rule.");
++assert(runtimeSource.includes("transitionWarmupTargetSceneCompiles"), "Runtime telemetry must expose target-scene compile count.");
++assert(runtimeSource.includes("transitionWarmupPendingRoots"), "Runtime telemetry must expose pending warmup roots.");
++assert(coordinatorSource.includes("compileAsync(root, this.camera, this.scene)"), "Warmup must compile the actual prepared root against the live Host scene.");
++assert(!coordinatorSource.includes("new THREE.AmbientLight"), "A5 must not compile against a synthetic AmbientLight scene.");
++assert(coordinatorSource.includes("yieldWarmupIdleSlot"), "Warmup must yield between prepared roots.");
++assert(coordinatorSource.includes("prepareGeometryBounds(root)"), "Warmup must precompute geometry bounds before first visibility.");
++
++const makeGeometry = () => ({
++  attributes: { position: { count: 3 } },
++  boundingSphere: null,
++  computeBoundingSphere() { this.boundingSphere = { radius: 1 }; }
++});
++const makeRoot = (name) => {
++  const child = { geometry: makeGeometry() };
++  return {
++    name,
++    type: "Group",
++    isObject3D: true,
++    userData: { transitionPrepared: true },
++    traverse(callback) { callback(this); callback(child); }
++  };
++};
++
++const compileCalls = [];
++const scene = { children: [], traverseVisible() {}, name: "actual_host_scene" };
++const camera = { name: "camera" };
++const renderer = {
++  async compileAsync(rootObject, cameraArg, targetSceneArg) {
++    compileCalls.push([rootObject, cameraArg, targetSceneArg]);
++  }
++};
++const registry = {
++  prepared: new Map(),
++  prepareSystem() { return { status: "already_initialized" }; }
++};
++const frameState = {
++  frame: 10,
++  runtimeSeconds: 5,
++  activeCellId: "CELL_MEMBRANE_NURSERY_001",
++  firstSliceRuntimeMount: {}
++};
++const morphStub = { prepareTransitionResources() { return []; }, destinationPrepared: true };
++const coordinator = new FirstSliceTransitionCoordinator({
++  registry,
++  scene,
++  camera,
++  renderer,
++  localCellMorphSystem: morphStub,
++  secondLocalCellMorphSystem: morphStub,
++  frameState,
++  autoSchedule: false
++});
++
++const rootA = makeRoot("warm_a");
++const rootB = makeRoot("warm_b");
++coordinator.preparedRoots.add(rootA);
++coordinator.preparedRoots.add(rootB);
++
++const previousIdle = globalThis.requestIdleCallback;
++globalThis.requestIdleCallback = (callback) => {
++  callback({ didTimeout: false, timeRemaining: () => 50 });
++  return 1;
++};
++try {
++  const result = await coordinator.warmPreparedShaders();
++  assert(result.status === "compiled_target_scene_staged", "Warmup should complete using the target-scene staged path.");
++  assert(result.compiledCount === 2, "Both prepared roots should compile.");
++  assert(compileCalls.length === 2, "Prepared roots must compile individually, not as one aggregate scene.");
++  assert(compileCalls[0][0] === rootA && compileCalls[1][0] === rootB, "Warmup must compile the real prepared root objects.");
++  assert(compileCalls.every(([, cameraArg, target]) => cameraArg === camera && target === scene), "Every compile must use the actual camera and Host target scene.");
++  assert(rootA.traverse && rootA.userData.transitionPrepared, "Warmup must not replace or activate prepared roots.");
++  assert(coordinator.compiledRoots.has(rootA) && coordinator.compiledRoots.has(rootB), "Compiled root tracking must advance.");
++  assert(coordinator.shaderWarmup.geometryBoundsPrepared === 2, "Geometry bounding spheres should be prepared once per root geometry.");
++  assert(coordinator.shaderWarmup.yieldedIdleSlots === 1, "Two roots should yield exactly once between compile calls.");
++  coordinator.publish(frameState, 16);
++  assert(frameState.transitionContinuity.shaderWarmupPolicy === "actual_scene_target_incremental_per_root", "Published telemetry must identify A5 policy.");
++  assert(frameState.transitionContinuity.shaderWarmupCompiledRootCount === 2, "Published telemetry must expose compiled roots.");
++  assert(frameState.transitionContinuity.shaderWarmupPendingRootCount === 0, "Published telemetry must expose zero pending roots after completion.");
++  assert(frameState.transitionContinuity.progressionMutation === false, "Warmup remains non-authoritative for progression.");
++} finally {
++  if (previousIdle === undefined) delete globalThis.requestIdleCallback;
++  else globalThis.requestIdleCallback = previousIdle;
++}
++
++console.log("HC031W2A5 transition render warmup: target-scene compile, incremental idle staging, geometry bounds, telemetry PASS");

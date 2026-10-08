@@ -2830,6 +2830,18 @@ export class GameRuntime {
         presentationUpdateMs,
         cameraUpdateMs,
         transitionUpdateMs,
+        transitionWarmupPass: this.frameState.transitionContinuity?.shaderWarmupPass ?? "none",
+        transitionWarmupPolicy: this.frameState.transitionContinuity?.shaderWarmupPolicy ?? "none",
+        transitionWarmupPreparedRoots: this.frameState.transitionContinuity?.shaderWarmupPreparedRootCount ?? 0,
+        transitionWarmupCompiledRoots: this.frameState.transitionContinuity?.shaderWarmupCompiledRootCount ?? 0,
+        transitionWarmupPendingRoots: this.frameState.transitionContinuity?.shaderWarmupPendingRootCount ?? 0,
+        transitionWarmupTargetSceneCompiles: this.frameState.transitionContinuity?.shaderWarmupTargetSceneCompiles ?? 0,
+        transitionWarmupGeometryBoundsPrepared: this.frameState.transitionContinuity?.shaderWarmupGeometryBoundsPrepared ?? 0,
+        transitionWarmupYieldedIdleSlots: this.frameState.transitionContinuity?.shaderWarmupYieldedIdleSlots ?? 0,
+        transitionWarmupFailedRoots: this.frameState.transitionContinuity?.shaderWarmupFailedRootCount ?? 0,
+        transitionWarmupLastRootName: this.frameState.transitionContinuity?.shaderWarmupLastRootName ?? "none",
+        transitionWarmupLastStatus: this.frameState.transitionContinuity?.shaderWarmupLastStatus ?? "not_started",
+        transitionWarmupLastDurationMs: this.frameState.transitionContinuity?.shaderWarmupLastDurationMs ?? 0,
         canvasWidth: this.renderer.domElement.width, canvasHeight: this.renderer.domElement.height,
         devicePixelRatio: this.renderer.getPixelRatio()
       } : null

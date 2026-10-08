@@ -1,0 +1,61 @@
+{
+  "patchId": "HC-031W2A5",
+  "name": "Transition Render Warmup",
+  "applyOver": "HC-031W2A4.1",
+  "visibleBuildIdRemains": "HC-031W1",
+  "optimizationMarker": "HC-031W2A5",
+  "replacementFiles": [
+    {
+      "path": "src/core/FirstSliceTransitionCoordinator.js",
+      "expectedA41Sha256": "41631389ad2de60cc41a28ed8af4b1c5d86b999d7d204a6e0d91760686d29cc4",
+      "a5Sha256": "5d091a2a008dccc7d8609af491f233a7b62790c2f024552a79cc151e1ceeae9b"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "expectedA41Sha256": "d1743d96d901424a66def6abb4ffe4bbfc6cfea1b35cefee5aa747e3d44e41d3",
+      "a5Sha256": "c908e1c7c2635cf848127cad15ed76237b75a11e6aea78171410ce36405d5b03"
+    },
+    {
+      "path": "src/core/FrameTruthObserver.js",
+      "expectedA41Sha256": "e2d80a2b6d3bd0bc38915ba29f3028517b713f1bf24096bbd46c3942cee2b330",
+      "a5Sha256": "987c7bddaff9d02edb88eb874b7f7e4d8891f2910fa03d53ed9e1b8368217b6a"
+    },
+    {
+      "path": "scripts/validateHC031W2A1CostReduction.mjs",
+      "expectedA41Sha256": "abaa9084541bf28c52ff1e99f0fbbc42b0f07e82aad12bc56d48446100ad0b84",
+      "a5Sha256": "817cea458f493187354c48fec326ff45d329bcebfa066e007f1aa2dc0a58cca5"
+    },
+    {
+      "path": "scripts/validateHC031W2A2TransientRenderBudget.mjs",
+      "expectedA41Sha256": "59cfeea81faf157db600d6cac643eb1e2fa8a9d2f0f8009d6bc46d4c30f0daf0",
+      "a5Sha256": "68cffb90a1353fe6f3ae6ee0d2796f3b0fd8a112e7992c15bc834ae52d57aef9"
+    },
+    {
+      "path": "scripts/validateHC031W2A3ResidencyFoundation.mjs",
+      "expectedA41Sha256": "3cf375def261c7b22058a4769b88a04c4a771a0728fd730c449dd8f156ee6805",
+      "a5Sha256": "947b1e807620c2965c29492cea518e47f27219978b1a4e4f62e3534f4d9245d4"
+    },
+    {
+      "path": "scripts/validateHC031W2A4BoundedCatchUp.mjs",
+      "expectedA41Sha256": "7ed12cc1957978c7d48bf19b1224eeb54382731eab7420c4c462e615d8d7ac32",
+      "a5Sha256": "9670aca280464c16904e5bff35faf83319048e1735b04dfaeaff387935d860b8"
+    },
+    {
+      "path": "scripts/validateHC031W2A41CatchUpWorkPartition.mjs",
+      "expectedA41Sha256": "78ea4459c6a37876d5f2e6dbe0225d6b27b542d750304d474ad3218f7b97978f",
+      "a5Sha256": "e320b201008b2ad0428af1ce016dbcd3e3a6a839d69077d88435529adac2a0b6"
+    }
+  ],
+  "newFiles": [
+    {
+      "path": "scripts/validateHC031W2A5TransitionRenderWarmup.mjs",
+      "a5Sha256": "0661edfc9527125a449646a8aa82ccdb7c8b6ae81dee6fde300027df7794292f"
+    }
+  ],
+  "supportFiles": [
+    "HC031W2A5_PATCH_APPLY.md",
+    "HC031W2A5_BUILD_REPORT.md",
+    "HC031W2A5_CHANGED_LINES.diff",
+    "HC031W2A5_FILE_MANIFEST.json"
+  ]
+}
