@@ -8,7 +8,7 @@ const runtimeSource = read("../src/core/GameRuntime.js");
 const observerSource = read("../src/core/FrameTruthObserver.js");
 const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
 
-assert.match(observerSource, /optimizationPass: "HC-031W2A5\.[12]"/);
+assert.match(observerSource, /optimizationPass: "HC-031W2A5\.[123]"/);
 assert.match(observerSource, /transitionFirstDrawStagingRule/);
 assert.match(runtimeSource, /transitionActivationRootName/);
 assert.match(coordinatorSource, /root_level_first_draw_staging_retired_gpu_priming_prepares_renderables_offscreen/);

@@ -8,6 +8,7 @@ const COMB_CELL_ID = "CELL_COMB_THRESHOLD_FILTER_001";
 const ACTIVATION_STAGING_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
 const GPU_PRIME_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
 const GPU_PRIME_TARGET_SIZE = 1;
+const LIVE_DRAW_ATTRIBUTION_MAX_ITEMS = 16;
 const GPU_PRIME_PRIORITY_ROOTS = new Map([
   ["guide_threshold_layered_interaction_HC006F", -20],
   ["hub_chamber_spatial_authority_HC008G", -20],
@@ -134,8 +135,8 @@ export class FirstSliceTransitionCoordinator {
     this.gpuPrimeCamera = null;
     this.gpuPrimeTarget = null;
     this.gpuPriming = {
-      pass: "HC-031W2A5.2",
-      policy: "one_shared_renderable_per_idle_slot_offscreen_1x1_draw",
+      pass: "HC-031W2A5.3",
+      policy: "early_offscreen_draw_before_shader_warmup_one_shared_renderable_per_idle_slot",
       targetSize: GPU_PRIME_TARGET_SIZE,
       rootLevelStagingRetired: true,
       activeBoundary: "none",
@@ -153,6 +154,22 @@ export class FirstSliceTransitionCoordinator {
       peakRenderableName: "none",
       peakRootName: "none"
     };
+    // HC-031W2A5.3: passive attribution only. It never mutates live visibility.
+    // Record children that cross from not-renderable to renderable immediately
+    // before the real scene draw so the next long-gap sample can name them.
+    this.liveDrawableState = new WeakMap();
+    this.liveDrawAttribution = {
+      pass: "HC-031W2A5.3",
+      policy: "passive_pre_render_newly_drawable_child_attribution_no_visibility_mutation",
+      sequence: 0,
+      frame: -1,
+      cellId: "none",
+      boundary: "none",
+      newlyDrawableCount: 0,
+      unprimedNewlyDrawableCount: 0,
+      overflowCount: 0,
+      items: []
+    };
     this.jobs = this.createJobs();
     this.publish(frameState, 0);
   }
@@ -169,17 +186,19 @@ export class FirstSliceTransitionCoordinator {
         boundary: "surface_to_guide",
         execute: () => this.registry.prepareSystem(id, this.frameState)
       })),
-      {
-        id: "surface_to_guide_shader_programs",
-        boundary: "surface_to_guide",
-        maySpanFrames: true,
-        execute: () => this.warmPreparedShaders()
-      },
+      // HC-031W2A5.3: real offscreen draws run before the older shader-only
+      // warmup. A5.2 proved the draw path is cheap but was starting too late.
       {
         id: "surface_to_guide_gpu_renderables",
         boundary: "surface_to_guide",
         maySpanFrames: true,
         execute: () => this.primePreparedRenderables("surface_to_guide")
+      },
+      {
+        id: "surface_to_guide_shader_programs",
+        boundary: "surface_to_guide",
+        maySpanFrames: true,
+        execute: () => this.warmPreparedShaders()
       },
       {
         id: "guide_to_hub_destination",
@@ -192,16 +211,16 @@ export class FirstSliceTransitionCoordinator {
         execute: () => this.registry.prepareSystem(id, this.frameState)
       })),
       {
-        id: "guide_to_hub_shader_programs",
-        boundary: "guide_to_hub",
-        maySpanFrames: true,
-        execute: () => this.warmPreparedShaders()
-      },
-      {
         id: "guide_to_hub_gpu_renderables",
         boundary: "guide_to_hub",
         maySpanFrames: true,
         execute: () => this.primePreparedRenderables("guide_to_hub")
+      },
+      {
+        id: "guide_to_hub_shader_programs",
+        boundary: "guide_to_hub",
+        maySpanFrames: true,
+        execute: () => this.warmPreparedShaders()
       },
       ...GRAVE_PREP_SYSTEM_IDS.map((id) => ({
         id: `grave_system:${id}`,
@@ -603,6 +622,66 @@ export class FirstSliceTransitionCoordinator {
     return { ...this.gpuPriming };
   }
 
+  isRenderableVisibleWithinRoot(object, root) {
+    if (!this.isGpuPrimeRenderable(object) || !root?.isObject3D) return false;
+    let cursor = object;
+    while (cursor) {
+      if (cursor.visible === false) return false;
+      if (cursor === root) break;
+      cursor = cursor.parent;
+    }
+    if (cursor !== root) return false;
+    const materials = Array.isArray(object.material) ? object.material : [object.material];
+    return materials.some((material) => material && material.visible !== false);
+  }
+
+  captureLiveDrawAttribution(frameState = this.frameState) {
+    const items = [];
+    let newlyDrawableCount = 0;
+    let unprimedNewlyDrawableCount = 0;
+
+    for (const record of this.activationRecords.values()) {
+      const root = record.root;
+      if (!root?.isObject3D || !GPU_PRIME_BOUNDARIES.has(record.boundary)) continue;
+      root.traverse?.((object) => {
+        if (!this.isGpuPrimeRenderable(object)) return;
+        const drawable = this.isRenderableVisibleWithinRoot(object, root);
+        const wasDrawable = this.liveDrawableState.get(object) === true;
+        this.liveDrawableState.set(object, drawable);
+        if (!drawable || wasDrawable) return;
+
+        newlyDrawableCount += 1;
+        const primed = this.gpuPrimedRenderables.has(object);
+        if (!primed) unprimedNewlyDrawableCount += 1;
+        if (items.length < LIVE_DRAW_ATTRIBUTION_MAX_ITEMS) {
+          items.push({
+            boundary: record.boundary,
+            rootName: root.name || root.type || "unnamed_prepared_root",
+            renderableName: object.name || object.type || "unnamed_renderable",
+            primed
+          });
+        }
+      });
+    }
+
+    if (newlyDrawableCount > 0) this.liveDrawAttribution.sequence += 1;
+    this.liveDrawAttribution.frame = frameState?.frame ?? -1;
+    this.liveDrawAttribution.cellId = frameState?.activeCellId ?? "none";
+    this.liveDrawAttribution.boundary = this.currentTransition(frameState).id;
+    this.liveDrawAttribution.newlyDrawableCount = newlyDrawableCount;
+    this.liveDrawAttribution.unprimedNewlyDrawableCount = unprimedNewlyDrawableCount;
+    this.liveDrawAttribution.overflowCount = Math.max(0, newlyDrawableCount - items.length);
+    this.liveDrawAttribution.items = items;
+    return this.liveDrawAttributionSnapshot();
+  }
+
+  liveDrawAttributionSnapshot() {
+    return {
+      ...this.liveDrawAttribution,
+      items: this.liveDrawAttribution.items.map((item) => ({ ...item }))
+    };
+  }
+
   async warmPreparedShaders() {
     const roots = [...this.preparedRoots].filter((root) => !this.compiledRoots.has(root));
     if (!this.renderer || !this.camera || roots.length === 0) {
@@ -862,6 +941,12 @@ export class FirstSliceTransitionCoordinator {
       gpuPrimingPeakDurationMs: this.gpuPriming.peakDurationMs,
       gpuPrimingPeakRenderableName: this.gpuPriming.peakRenderableName,
       gpuPrimingPeakRootName: this.gpuPriming.peakRootName,
+      liveDrawAttributionPass: this.liveDrawAttribution.pass,
+      liveDrawAttributionPolicy: this.liveDrawAttribution.policy,
+      liveDrawAttributionSequence: this.liveDrawAttribution.sequence,
+      liveDrawAttributionNewlyDrawableCount: this.liveDrawAttribution.newlyDrawableCount,
+      liveDrawAttributionUnprimedCount: this.liveDrawAttribution.unprimedNewlyDrawableCount,
+      liveDrawAttributionOverflowCount: this.liveDrawAttribution.overflowCount,
       activationStagingPass: this.activationStaging.pass,
       activationStagingPolicy: this.activationStaging.policy,
       activationStagingRenderBudgetMs: this.activationStaging.renderBudgetMs,

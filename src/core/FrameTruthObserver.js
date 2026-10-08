@@ -21,6 +21,7 @@ export class FrameTruthObserver {
     this.visibilityLast = null;
     this.lastCompletedStageMs = null;
     this.lastCompletedTransitionActivation = null;
+    this.lastCompletedLiveDrawAttribution = null;
     this.lastSeenGpuPrimeSequence = 0;
   }
 
@@ -102,6 +103,7 @@ export class FrameTruthObserver {
           ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
         previousCallbackWorkMs: this.lastCompletedStageMs,
         previousTransitionActivation: this.lastCompletedTransitionActivation,
+        previousLiveDrawAttribution: this.lastCompletedLiveDrawAttribution,
         precedingTransitionGpuPrime
       });
       if (this.longGaps.length > 40) this.longGaps.shift();
@@ -111,7 +113,8 @@ export class FrameTruthObserver {
 
   endFrame({ registryMs = 0, remainingUpdateMs = null, presentationUpdateMs = 0,
     cameraUpdateMs = 0, transitionUpdateMs = 0, renderMs = 0, cellId = "none",
-    rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
+    rendererInfo = null, renderOwnerCensus = null, registrySample = null,
+    transitionLiveDrawAttribution = null } = {}) {
     if (!this.pending) return;
     for (const bucket of [this.current, this.total]) {
       bucket.cellId = cellId;
@@ -155,6 +158,18 @@ export class FrameTruthObserver {
       renderMs: round(rendererInfo.transitionActivationLastRenderMs ?? renderMs),
       peakRenderMs: round(rendererInfo.transitionActivationPeakRenderMs ?? 0),
       peakRootName: rendererInfo.transitionActivationPeakRootName ?? "none"
+    } : null;
+    this.lastCompletedLiveDrawAttribution = transitionLiveDrawAttribution?.newlyDrawableCount > 0 ? {
+      pass: transitionLiveDrawAttribution.pass ?? "none",
+      policy: transitionLiveDrawAttribution.policy ?? "none",
+      sequence: transitionLiveDrawAttribution.sequence ?? 0,
+      frame: transitionLiveDrawAttribution.frame ?? this.pending?.frame ?? -1,
+      cellId: transitionLiveDrawAttribution.cellId ?? cellId,
+      boundary: transitionLiveDrawAttribution.boundary ?? "none",
+      newlyDrawableCount: transitionLiveDrawAttribution.newlyDrawableCount ?? 0,
+      unprimedNewlyDrawableCount: transitionLiveDrawAttribution.unprimedNewlyDrawableCount ?? 0,
+      overflowCount: transitionLiveDrawAttribution.overflowCount ?? 0,
+      items: (transitionLiveDrawAttribution.items ?? []).slice(0, 16).map((item) => ({ ...item }))
     } : null;
     if (this.current.wallMs >= this.windowMs) {
       this.windows.push(this.summarize(this.current));
@@ -211,12 +226,13 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A5.2",
+      optimizationPass: "HC-031W2A5.3",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
       transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
       transitionFirstDrawStagingRule: "A5.1 whole-root live-scene first-draw staging is retired; authored root visibility is no longer serialized",
-      transitionGpuPrimingRule: "prepared renderable children traverse a 1x1 offscreen real draw path one shared geometry/material object per idle slot before authored transition visibility",
+      transitionGpuPrimingRule: "prepared renderable children traverse the 1x1 offscreen real draw path before shader-only warmup so GPU residency work starts earlier for each boundary",
+      transitionLiveDrawAttributionRule: "prepared child renderables are passively observed immediately before live render; newly drawable children and priming status are attached to the next long-gap record without changing visibility",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),

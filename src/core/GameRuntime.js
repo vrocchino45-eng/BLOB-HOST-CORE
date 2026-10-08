@@ -2793,6 +2793,10 @@ export class GameRuntime {
       runtimeSeconds: this.frameState.runtimeSeconds,
       frameState: this.frameState
     }) ?? null;
+    // HC-031W2A5.3: observe prepared children that have just become drawable
+    // after render-budget visibility decisions, without changing visibility.
+    const liveDrawAttribution = this.firstSliceTransitionCoordinator
+      ?.captureLiveDrawAttribution?.(this.frameState) ?? null;
     const renderStart = performance.now();
     let renderEnd = renderStart;
     try {
@@ -2818,6 +2822,7 @@ export class GameRuntime {
       cellId: this.frameState.activeCellId,
       registrySample: registrySample ?? this.frameState.runtimeExecution,
       renderOwnerCensus: renderBudget?.ownerCensus ?? null,
+      transitionLiveDrawAttribution: liveDrawAttribution,
       rendererInfo: info ? {
         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
         pulseFronts: this.frameState.verbPhysicalization?.pulseFronts ?? 0,
@@ -2873,6 +2878,14 @@ export class GameRuntime {
         transitionGpuPrimingPeakDurationMs: this.frameState.transitionContinuity?.gpuPrimingPeakDurationMs ?? 0,
         transitionGpuPrimingPeakRenderableName: this.frameState.transitionContinuity?.gpuPrimingPeakRenderableName ?? "none",
         transitionGpuPrimingPeakRootName: this.frameState.transitionContinuity?.gpuPrimingPeakRootName ?? "none",
+        transitionLiveDrawPass: liveDrawAttribution?.pass ?? "none",
+        transitionLiveDrawPolicy: liveDrawAttribution?.policy ?? "none",
+        transitionLiveDrawSequence: liveDrawAttribution?.sequence ?? 0,
+        transitionLiveDrawBoundary: liveDrawAttribution?.boundary ?? "none",
+        transitionLiveDrawNewlyDrawableCount: liveDrawAttribution?.newlyDrawableCount ?? 0,
+        transitionLiveDrawUnprimedCount: liveDrawAttribution?.unprimedNewlyDrawableCount ?? 0,
+        transitionLiveDrawOverflowCount: liveDrawAttribution?.overflowCount ?? 0,
+        transitionLiveDrawItems: liveDrawAttribution?.items ?? [],
         transitionActivationPass: activationStaging?.pass ?? "none",
         transitionActivationPolicy: activationStaging?.policy ?? "none",
         transitionActivationBoundary: activationStaging?.activeBoundary ?? "none",

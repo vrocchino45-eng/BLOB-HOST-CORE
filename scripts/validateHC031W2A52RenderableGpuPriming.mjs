@@ -9,9 +9,9 @@ const runtimeSource = read("../src/core/GameRuntime.js");
 const observerSource = read("../src/core/FrameTruthObserver.js");
 const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
 
-assert.match(observerSource, /optimizationPass: "HC-031W2A5\.2"/);
+assert.match(observerSource, /optimizationPass: "HC-031W2A5\.(?:2|3)"/);
 assert.match(observerSource, /transitionGpuPrimingRule/);
-assert.match(coordinatorSource, /one_shared_renderable_per_idle_slot_offscreen_1x1_draw/);
+assert.match(coordinatorSource, /(?:one_shared_renderable_per_idle_slot_offscreen_1x1_draw|early_offscreen_draw_before_shader_warmup_one_shared_renderable_per_idle_slot)/);
 assert.match(coordinatorSource, /new THREE\.WebGLRenderTarget\(GPU_PRIME_TARGET_SIZE, GPU_PRIME_TARGET_SIZE/);
 assert.match(coordinatorSource, /guide_threshold_layered_interaction_HC006F/);
 assert.match(coordinatorSource, /hub_chamber_spatial_authority_HC008G/);
@@ -125,8 +125,8 @@ try {
     "already primed children must not be submitted again");
 
   coordinator.publish(frameState, 16);
-  assert.equal(frameState.transitionContinuity.gpuPrimingPass, "HC-031W2A5.2");
-  assert.equal(frameState.transitionContinuity.gpuPrimingPolicy, "one_shared_renderable_per_idle_slot_offscreen_1x1_draw");
+  assert.match(frameState.transitionContinuity.gpuPrimingPass, /^HC-031W2A5\.(?:2|3)$/);
+  assert.match(frameState.transitionContinuity.gpuPrimingPolicy, /offscreen.*draw|draw.*offscreen/);
   assert.equal(frameState.transitionContinuity.gpuPrimingRootLevelStagingRetired, true);
   assert.equal(frameState.transitionContinuity.gpuPrimingPrimedRenderableCount, 3);
 
@@ -163,7 +163,7 @@ try {
   assert.equal(gap.precedingTransitionGpuPrime.renderableName, "guide_threshold_current_strand_01");
   assert.equal(gap.precedingTransitionGpuPrime.durationMs, 420);
   assert.equal(gap.precedingTransitionGpuPrime.operationsSincePreviousCallback, 4);
-  assert.equal(observer.snapshot().optimizationPass, "HC-031W2A5.2");
+  assert.match(observer.snapshot().optimizationPass, /^HC-031W2A5\.(?:2|3)$/);
 } finally {
   if (previousIdle === undefined) delete globalThis.requestIdleCallback;
   else globalThis.requestIdleCallback = previousIdle;

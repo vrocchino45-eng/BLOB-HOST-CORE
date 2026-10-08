@@ -1,0 +1,523 @@
+--- A5.2/src/core/FirstSliceTransitionCoordinator.js
++++ A5.3/src/core/FirstSliceTransitionCoordinator.js
+@@ -8,6 +8,7 @@
+ const ACTIVATION_STAGING_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
+ const GPU_PRIME_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
+ const GPU_PRIME_TARGET_SIZE = 1;
++const LIVE_DRAW_ATTRIBUTION_MAX_ITEMS = 16;
+ const GPU_PRIME_PRIORITY_ROOTS = new Map([
+   ["guide_threshold_layered_interaction_HC006F", -20],
+   ["hub_chamber_spatial_authority_HC008G", -20],
+@@ -134,8 +135,8 @@
+     this.gpuPrimeCamera = null;
+     this.gpuPrimeTarget = null;
+     this.gpuPriming = {
+-      pass: "HC-031W2A5.2",
+-      policy: "one_shared_renderable_per_idle_slot_offscreen_1x1_draw",
++      pass: "HC-031W2A5.3",
++      policy: "early_offscreen_draw_before_shader_warmup_one_shared_renderable_per_idle_slot",
+       targetSize: GPU_PRIME_TARGET_SIZE,
+       rootLevelStagingRetired: true,
+       activeBoundary: "none",
+@@ -153,6 +154,22 @@
+       peakRenderableName: "none",
+       peakRootName: "none"
+     };
++    // HC-031W2A5.3: passive attribution only. It never mutates live visibility.
++    // Record children that cross from not-renderable to renderable immediately
++    // before the real scene draw so the next long-gap sample can name them.
++    this.liveDrawableState = new WeakMap();
++    this.liveDrawAttribution = {
++      pass: "HC-031W2A5.3",
++      policy: "passive_pre_render_newly_drawable_child_attribution_no_visibility_mutation",
++      sequence: 0,
++      frame: -1,
++      cellId: "none",
++      boundary: "none",
++      newlyDrawableCount: 0,
++      unprimedNewlyDrawableCount: 0,
++      overflowCount: 0,
++      items: []
++    };
+     this.jobs = this.createJobs();
+     this.publish(frameState, 0);
+   }
+@@ -169,17 +186,19 @@
+         boundary: "surface_to_guide",
+         execute: () => this.registry.prepareSystem(id, this.frameState)
+       })),
++      // HC-031W2A5.3: real offscreen draws run before the older shader-only
++      // warmup. A5.2 proved the draw path is cheap but was starting too late.
+       {
+-        id: "surface_to_guide_shader_programs",
++        id: "surface_to_guide_gpu_renderables",
+         boundary: "surface_to_guide",
+         maySpanFrames: true,
+-        execute: () => this.warmPreparedShaders()
++        execute: () => this.primePreparedRenderables("surface_to_guide")
+       },
+       {
+-        id: "surface_to_guide_gpu_renderables",
++        id: "surface_to_guide_shader_programs",
+         boundary: "surface_to_guide",
+         maySpanFrames: true,
+-        execute: () => this.primePreparedRenderables("surface_to_guide")
++        execute: () => this.warmPreparedShaders()
+       },
+       {
+         id: "guide_to_hub_destination",
+@@ -192,16 +211,16 @@
+         execute: () => this.registry.prepareSystem(id, this.frameState)
+       })),
+       {
+-        id: "guide_to_hub_shader_programs",
++        id: "guide_to_hub_gpu_renderables",
+         boundary: "guide_to_hub",
+         maySpanFrames: true,
+-        execute: () => this.warmPreparedShaders()
++        execute: () => this.primePreparedRenderables("guide_to_hub")
+       },
+       {
+-        id: "guide_to_hub_gpu_renderables",
++        id: "guide_to_hub_shader_programs",
+         boundary: "guide_to_hub",
+         maySpanFrames: true,
+-        execute: () => this.primePreparedRenderables("guide_to_hub")
++        execute: () => this.warmPreparedShaders()
+       },
+       ...GRAVE_PREP_SYSTEM_IDS.map((id) => ({
+         id: `grave_system:${id}`,
+@@ -603,6 +622,66 @@
+     return { ...this.gpuPriming };
+   }
+ 
++  isRenderableVisibleWithinRoot(object, root) {
++    if (!this.isGpuPrimeRenderable(object) || !root?.isObject3D) return false;
++    let cursor = object;
++    while (cursor) {
++      if (cursor.visible === false) return false;
++      if (cursor === root) break;
++      cursor = cursor.parent;
++    }
++    if (cursor !== root) return false;
++    const materials = Array.isArray(object.material) ? object.material : [object.material];
++    return materials.some((material) => material && material.visible !== false);
++  }
++
++  captureLiveDrawAttribution(frameState = this.frameState) {
++    const items = [];
++    let newlyDrawableCount = 0;
++    let unprimedNewlyDrawableCount = 0;
++
++    for (const record of this.activationRecords.values()) {
++      const root = record.root;
++      if (!root?.isObject3D || !GPU_PRIME_BOUNDARIES.has(record.boundary)) continue;
++      root.traverse?.((object) => {
++        if (!this.isGpuPrimeRenderable(object)) return;
++        const drawable = this.isRenderableVisibleWithinRoot(object, root);
++        const wasDrawable = this.liveDrawableState.get(object) === true;
++        this.liveDrawableState.set(object, drawable);
++        if (!drawable || wasDrawable) return;
++
++        newlyDrawableCount += 1;
++        const primed = this.gpuPrimedRenderables.has(object);
++        if (!primed) unprimedNewlyDrawableCount += 1;
++        if (items.length < LIVE_DRAW_ATTRIBUTION_MAX_ITEMS) {
++          items.push({
++            boundary: record.boundary,
++            rootName: root.name || root.type || "unnamed_prepared_root",
++            renderableName: object.name || object.type || "unnamed_renderable",
++            primed
++          });
++        }
++      });
++    }
++
++    if (newlyDrawableCount > 0) this.liveDrawAttribution.sequence += 1;
++    this.liveDrawAttribution.frame = frameState?.frame ?? -1;
++    this.liveDrawAttribution.cellId = frameState?.activeCellId ?? "none";
++    this.liveDrawAttribution.boundary = this.currentTransition(frameState).id;
++    this.liveDrawAttribution.newlyDrawableCount = newlyDrawableCount;
++    this.liveDrawAttribution.unprimedNewlyDrawableCount = unprimedNewlyDrawableCount;
++    this.liveDrawAttribution.overflowCount = Math.max(0, newlyDrawableCount - items.length);
++    this.liveDrawAttribution.items = items;
++    return this.liveDrawAttributionSnapshot();
++  }
++
++  liveDrawAttributionSnapshot() {
++    return {
++      ...this.liveDrawAttribution,
++      items: this.liveDrawAttribution.items.map((item) => ({ ...item }))
++    };
++  }
++
+   async warmPreparedShaders() {
+     const roots = [...this.preparedRoots].filter((root) => !this.compiledRoots.has(root));
+     if (!this.renderer || !this.camera || roots.length === 0) {
+@@ -862,6 +941,12 @@
+       gpuPrimingPeakDurationMs: this.gpuPriming.peakDurationMs,
+       gpuPrimingPeakRenderableName: this.gpuPriming.peakRenderableName,
+       gpuPrimingPeakRootName: this.gpuPriming.peakRootName,
++      liveDrawAttributionPass: this.liveDrawAttribution.pass,
++      liveDrawAttributionPolicy: this.liveDrawAttribution.policy,
++      liveDrawAttributionSequence: this.liveDrawAttribution.sequence,
++      liveDrawAttributionNewlyDrawableCount: this.liveDrawAttribution.newlyDrawableCount,
++      liveDrawAttributionUnprimedCount: this.liveDrawAttribution.unprimedNewlyDrawableCount,
++      liveDrawAttributionOverflowCount: this.liveDrawAttribution.overflowCount,
+       activationStagingPass: this.activationStaging.pass,
+       activationStagingPolicy: this.activationStaging.policy,
+       activationStagingRenderBudgetMs: this.activationStaging.renderBudgetMs,
+--- A5.2/src/core/FrameTruthObserver.js
++++ A5.3/src/core/FrameTruthObserver.js
+@@ -21,6 +21,7 @@
+     this.visibilityLast = null;
+     this.lastCompletedStageMs = null;
+     this.lastCompletedTransitionActivation = null;
++    this.lastCompletedLiveDrawAttribution = null;
+     this.lastSeenGpuPrimeSequence = 0;
+   }
+ 
+@@ -102,6 +103,7 @@
+           ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
+         previousCallbackWorkMs: this.lastCompletedStageMs,
+         previousTransitionActivation: this.lastCompletedTransitionActivation,
++        previousLiveDrawAttribution: this.lastCompletedLiveDrawAttribution,
+         precedingTransitionGpuPrime
+       });
+       if (this.longGaps.length > 40) this.longGaps.shift();
+@@ -111,7 +113,8 @@
+ 
+   endFrame({ registryMs = 0, remainingUpdateMs = null, presentationUpdateMs = 0,
+     cameraUpdateMs = 0, transitionUpdateMs = 0, renderMs = 0, cellId = "none",
+-    rendererInfo = null, renderOwnerCensus = null, registrySample = null } = {}) {
++    rendererInfo = null, renderOwnerCensus = null, registrySample = null,
++    transitionLiveDrawAttribution = null } = {}) {
+     if (!this.pending) return;
+     for (const bucket of [this.current, this.total]) {
+       bucket.cellId = cellId;
+@@ -156,6 +159,18 @@
+       peakRenderMs: round(rendererInfo.transitionActivationPeakRenderMs ?? 0),
+       peakRootName: rendererInfo.transitionActivationPeakRootName ?? "none"
+     } : null;
++    this.lastCompletedLiveDrawAttribution = transitionLiveDrawAttribution?.newlyDrawableCount > 0 ? {
++      pass: transitionLiveDrawAttribution.pass ?? "none",
++      policy: transitionLiveDrawAttribution.policy ?? "none",
++      sequence: transitionLiveDrawAttribution.sequence ?? 0,
++      frame: transitionLiveDrawAttribution.frame ?? this.pending?.frame ?? -1,
++      cellId: transitionLiveDrawAttribution.cellId ?? cellId,
++      boundary: transitionLiveDrawAttribution.boundary ?? "none",
++      newlyDrawableCount: transitionLiveDrawAttribution.newlyDrawableCount ?? 0,
++      unprimedNewlyDrawableCount: transitionLiveDrawAttribution.unprimedNewlyDrawableCount ?? 0,
++      overflowCount: transitionLiveDrawAttribution.overflowCount ?? 0,
++      items: (transitionLiveDrawAttribution.items ?? []).slice(0, 16).map((item) => ({ ...item }))
++    } : null;
+     if (this.current.wallMs >= this.windowMs) {
+       this.windows.push(this.summarize(this.current));
+       if (this.windows.length > this.maxWindows) this.windows.shift();
+@@ -211,12 +226,13 @@
+     const total = this.total;
+     return {
+       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
+-      optimizationPass: "HC-031W2A5.2",
++      optimizationPass: "HC-031W2A5.3",
+       authority: "read_only_observer", gameplayAuthority: false,
+       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
+       transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
+       transitionFirstDrawStagingRule: "A5.1 whole-root live-scene first-draw staging is retired; authored root visibility is no longer serialized",
+-      transitionGpuPrimingRule: "prepared renderable children traverse a 1x1 offscreen real draw path one shared geometry/material object per idle slot before authored transition visibility",
++      transitionGpuPrimingRule: "prepared renderable children traverse the 1x1 offscreen real draw path before shader-only warmup so GPU residency work starts earlier for each boundary",
++      transitionLiveDrawAttributionRule: "prepared child renderables are passively observed immediately before live render; newly drawable children and priming status are attached to the next long-gap record without changing visibility",
+       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
+       total: {
+         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
+--- A5.2/src/core/GameRuntime.js
++++ A5.3/src/core/GameRuntime.js
+@@ -2793,6 +2793,10 @@
+       runtimeSeconds: this.frameState.runtimeSeconds,
+       frameState: this.frameState
+     }) ?? null;
++    // HC-031W2A5.3: observe prepared children that have just become drawable
++    // after render-budget visibility decisions, without changing visibility.
++    const liveDrawAttribution = this.firstSliceTransitionCoordinator
++      ?.captureLiveDrawAttribution?.(this.frameState) ?? null;
+     const renderStart = performance.now();
+     let renderEnd = renderStart;
+     try {
+@@ -2818,6 +2822,7 @@
+       cellId: this.frameState.activeCellId,
+       registrySample: registrySample ?? this.frameState.runtimeExecution,
+       renderOwnerCensus: renderBudget?.ownerCensus ?? null,
++      transitionLiveDrawAttribution: liveDrawAttribution,
+       rendererInfo: info ? {
+         calls: info.calls, triangles: info.triangles, points: info.points, lines: info.lines,
+         pulseFronts: this.frameState.verbPhysicalization?.pulseFronts ?? 0,
+@@ -2873,6 +2878,14 @@
+         transitionGpuPrimingPeakDurationMs: this.frameState.transitionContinuity?.gpuPrimingPeakDurationMs ?? 0,
+         transitionGpuPrimingPeakRenderableName: this.frameState.transitionContinuity?.gpuPrimingPeakRenderableName ?? "none",
+         transitionGpuPrimingPeakRootName: this.frameState.transitionContinuity?.gpuPrimingPeakRootName ?? "none",
++        transitionLiveDrawPass: liveDrawAttribution?.pass ?? "none",
++        transitionLiveDrawPolicy: liveDrawAttribution?.policy ?? "none",
++        transitionLiveDrawSequence: liveDrawAttribution?.sequence ?? 0,
++        transitionLiveDrawBoundary: liveDrawAttribution?.boundary ?? "none",
++        transitionLiveDrawNewlyDrawableCount: liveDrawAttribution?.newlyDrawableCount ?? 0,
++        transitionLiveDrawUnprimedCount: liveDrawAttribution?.unprimedNewlyDrawableCount ?? 0,
++        transitionLiveDrawOverflowCount: liveDrawAttribution?.overflowCount ?? 0,
++        transitionLiveDrawItems: liveDrawAttribution?.items ?? [],
+         transitionActivationPass: activationStaging?.pass ?? "none",
+         transitionActivationPolicy: activationStaging?.policy ?? "none",
+         transitionActivationBoundary: activationStaging?.activeBoundary ?? "none",
+--- A5.2/scripts/validateHC031W2A1CostReduction.mjs
++++ A5.3/scripts/validateHC031W2A1CostReduction.mjs
+@@ -13,7 +13,7 @@
+ const surfaceSource = read("../src/player/CoreSurfaceTruthSystem.js");
+ 
+ // Gameplay clock and authority stay unchanged in A1.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[1235](?:\.[12])?|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[1235](?:\.[123])?|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /pulseContourSegments:/);
+ assert.match(runtimeSource, /surfaceBroadPhaseCandidates:/);
+--- A5.2/scripts/validateHC031W2A2TransientRenderBudget.mjs
++++ A5.3/scripts/validateHC031W2A2TransientRenderBudget.mjs
+@@ -13,7 +13,7 @@
+ const renderBudgetSource = read("../src/presentation/RenderBudgetSystem.js");
+ 
+ // W2A2 remains a performance-only pass. Gameplay time authority is still unchanged.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[235](?:\.[12])?|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:[235](?:\.[123])?|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /new RenderBudgetSystem\(\{ scene: this\.scene \}\)/);
+ assert.match(runtimeSource, /renderBudgetSystem\?\.prepare/);
+@@ -111,7 +111,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A2", "HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2", "HC-031W2A5.3"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRenderOwnerCensus.topOwners[0].owner, "owner_test_root");
+ 
+ console.log("HC031W2A2 transient render budget + owner census PASS");
+--- A5.2/scripts/validateHC031W2A3ResidencyFoundation.mjs
++++ A5.3/scripts/validateHC031W2A3ResidencyFoundation.mjs
+@@ -12,7 +12,7 @@
+ const verbSource = read("../src/player/CoreVerbPhysicalizationSystem.js");
+ 
+ // W2A3 residency/foundation behavior stays locked while W2A4 may own the runtime clock.
+-assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|5(?:\.[12])?|4(?:\.1)?)"/);
++assert.match(frameTruthSource, /optimizationPass: "HC-031W2A(?:3|5(?:\.[123])?|4(?:\.1)?)"/);
+ assert.match(runtimeSource, /buildBoundedSimulationSteps\(rawDt\)/);
+ assert.match(runtimeSource, /frameState: this\.frameState/);
+ assert.match(runtimeSource, /residencyRootsCulled:/);
+@@ -113,7 +113,7 @@
+   renderOwnerCensus: prep.ownerCensus
+ });
+ const snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A3", "HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2", "HC-031W2A5.3"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.windows[0].lastRendererInfo.residencyRootsCulled, 2);
+ 
+ console.log("HC031W2A3 residency + Hub foundation cadence PASS");
+--- A5.2/scripts/validateHC031W2A4BoundedCatchUp.mjs
++++ A5.3/scripts/validateHC031W2A4BoundedCatchUp.mjs
+@@ -79,7 +79,7 @@
+ });
+ observer.endFrame({ registryMs: 3, remainingUpdateMs: 1, renderMs: 5, cellId: "TEST" });
+ let snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A4", "HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2", "HC-031W2A5.3"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.total.discardedSeconds, 0);
+ assert.equal(snapshot.total.simulationCatchUp.multiSubstepFrames, 1);
+--- A5.2/scripts/validateHC031W2A41CatchUpWorkPartition.mjs
++++ A5.3/scripts/validateHC031W2A41CatchUpWorkPartition.mjs
+@@ -73,7 +73,7 @@
+   registrySample: { timingSampled: true, slowestSampledSystems: [{ id: "testSystem", lastMs: 7.25 }] }
+ });
+ let snapshot = observer.snapshot();
+-assert.ok(["HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2"].includes(snapshot.optimizationPass));
++assert.ok(["HC-031W2A4.1", "HC-031W2A5", "HC-031W2A5.1", "HC-031W2A5.2", "HC-031W2A5.3"].includes(snapshot.optimizationPass));
+ assert.equal(snapshot.total.simToWallRatio, 1);
+ assert.equal(snapshot.windows[0].stageMs.simulationRegistry.p50, 20);
+ assert.equal(snapshot.windows[0].stageMs.presentationUpdate.p50, 4);
+--- A5.2/scripts/validateHC031W2A5TransitionRenderWarmup.mjs
++++ A5.3/scripts/validateHC031W2A5TransitionRenderWarmup.mjs
+@@ -13,7 +13,7 @@
+   if (!condition) throw new Error(`[HC031W2A5] ${message}`);
+ };
+ 
+-assert(/optimizationPass: \"HC-031W2A5(?:\.[12])?\"/.test(observerSource), "Frame Truth must expose the A5/A5.1/A5.2 marker.");
++assert(/optimizationPass: \"HC-031W2A5(?:\.[123])?\"/.test(observerSource), "Frame Truth must expose the A5/A5.1/A5.2/A5.3 marker.");
+ assert(observerSource.includes("transitionRenderWarmupRule"), "Frame Truth must describe the transition warmup rule.");
+ assert(runtimeSource.includes("transitionWarmupTargetSceneCompiles"), "Runtime telemetry must expose target-scene compile count.");
+ assert(runtimeSource.includes("transitionWarmupPendingRoots"), "Runtime telemetry must expose pending warmup roots.");
+--- A5.2/scripts/validateHC031W2A51FirstDrawActivationStaging.mjs
++++ A5.3/scripts/validateHC031W2A51FirstDrawActivationStaging.mjs
+@@ -8,7 +8,7 @@
+ const observerSource = read("../src/core/FrameTruthObserver.js");
+ const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
+ 
+-assert.match(observerSource, /optimizationPass: "HC-031W2A5\.[12]"/);
++assert.match(observerSource, /optimizationPass: "HC-031W2A5\.[123]"/);
+ assert.match(observerSource, /transitionFirstDrawStagingRule/);
+ assert.match(runtimeSource, /transitionActivationRootName/);
+ assert.match(coordinatorSource, /root_level_first_draw_staging_retired_gpu_priming_prepares_renderables_offscreen/);
+--- A5.2/scripts/validateHC031W2A52RenderableGpuPriming.mjs
++++ A5.3/scripts/validateHC031W2A52RenderableGpuPriming.mjs
+@@ -9,9 +9,9 @@
+ const observerSource = read("../src/core/FrameTruthObserver.js");
+ const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
+ 
+-assert.match(observerSource, /optimizationPass: "HC-031W2A5\.2"/);
++assert.match(observerSource, /optimizationPass: "HC-031W2A5\.(?:2|3)"/);
+ assert.match(observerSource, /transitionGpuPrimingRule/);
+-assert.match(coordinatorSource, /one_shared_renderable_per_idle_slot_offscreen_1x1_draw/);
++assert.match(coordinatorSource, /(?:one_shared_renderable_per_idle_slot_offscreen_1x1_draw|early_offscreen_draw_before_shader_warmup_one_shared_renderable_per_idle_slot)/);
+ assert.match(coordinatorSource, /new THREE\.WebGLRenderTarget\(GPU_PRIME_TARGET_SIZE, GPU_PRIME_TARGET_SIZE/);
+ assert.match(coordinatorSource, /guide_threshold_layered_interaction_HC006F/);
+ assert.match(coordinatorSource, /hub_chamber_spatial_authority_HC008G/);
+@@ -125,8 +125,8 @@
+     "already primed children must not be submitted again");
+ 
+   coordinator.publish(frameState, 16);
+-  assert.equal(frameState.transitionContinuity.gpuPrimingPass, "HC-031W2A5.2");
+-  assert.equal(frameState.transitionContinuity.gpuPrimingPolicy, "one_shared_renderable_per_idle_slot_offscreen_1x1_draw");
++  assert.match(frameState.transitionContinuity.gpuPrimingPass, /^HC-031W2A5\.(?:2|3)$/);
++  assert.match(frameState.transitionContinuity.gpuPrimingPolicy, /offscreen.*draw|draw.*offscreen/);
+   assert.equal(frameState.transitionContinuity.gpuPrimingRootLevelStagingRetired, true);
+   assert.equal(frameState.transitionContinuity.gpuPrimingPrimedRenderableCount, 3);
+ 
+@@ -163,7 +163,7 @@
+   assert.equal(gap.precedingTransitionGpuPrime.renderableName, "guide_threshold_current_strand_01");
+   assert.equal(gap.precedingTransitionGpuPrime.durationMs, 420);
+   assert.equal(gap.precedingTransitionGpuPrime.operationsSincePreviousCallback, 4);
+-  assert.equal(observer.snapshot().optimizationPass, "HC-031W2A5.2");
++  assert.match(observer.snapshot().optimizationPass, /^HC-031W2A5\.(?:2|3)$/);
+ } finally {
+   if (previousIdle === undefined) delete globalThis.requestIdleCallback;
+   else globalThis.requestIdleCallback = previousIdle;
+--- /dev/null
++++ A5.3/scripts/validateHC031W2A53EarlyPrimingLiveDrawAttribution.mjs
+@@ -0,0 +1,123 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import * as THREE from "three";
++import { FirstSliceTransitionCoordinator } from "../src/core/FirstSliceTransitionCoordinator.js";
++import { FrameTruthObserver } from "../src/core/FrameTruthObserver.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const runtimeSource = read("../src/core/GameRuntime.js");
++const observerSource = read("../src/core/FrameTruthObserver.js");
++const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
++
++assert.match(observerSource, /optimizationPass: "HC-031W2A5\.3"/);
++assert.match(observerSource, /transitionLiveDrawAttributionRule/);
++assert.match(coordinatorSource, /early_offscreen_draw_before_shader_warmup_one_shared_renderable_per_idle_slot/);
++assert.match(coordinatorSource, /passive_pre_render_newly_drawable_child_attribution_no_visibility_mutation/);
++assert.match(runtimeSource, /captureLiveDrawAttribution/);
++assert.match(runtimeSource, /transitionLiveDrawAttribution/);
++assert.doesNotMatch(runtimeSource, /\.prepareRenderActivationStaging\(this\.frameState\)/,
++  "A5.1 live root staging must remain retired");
++
++const surfaceGpuIndex = coordinatorSource.indexOf('id: "surface_to_guide_gpu_renderables"');
++const surfaceShaderIndex = coordinatorSource.indexOf('id: "surface_to_guide_shader_programs"');
++const hubGpuIndex = coordinatorSource.indexOf('id: "guide_to_hub_gpu_renderables"');
++const hubShaderIndex = coordinatorSource.indexOf('id: "guide_to_hub_shader_programs"');
++assert.ok(surfaceGpuIndex >= 0 && surfaceGpuIndex < surfaceShaderIndex,
++  "Surface→Guide real GPU priming must run before shader-only warmup");
++assert.ok(hubGpuIndex >= 0 && hubGpuIndex < hubShaderIndex,
++  "Guide→Hub real GPU priming must run before shader-only warmup");
++
++const scene = new THREE.Scene();
++const registry = { prepared: new Map(), prepareSystem() { return { status: "prepared" }; } };
++const frameState = {
++  frame: 10,
++  runtimeSeconds: 5,
++  activeCellId: "CELL_MEMBRANE_NURSERY_001",
++  localCellMorph: { phase: "waiting", completed: false, progress: 0 },
++  secondLocalCellMorph: {},
++  firstSliceRuntimeMount: {}
++};
++const morphStub = { prepareTransitionResources() { return []; }, destinationPrepared: true };
++let renderTarget = null;
++const renderer = {
++  getRenderTarget() { return renderTarget; },
++  setRenderTarget(target) { renderTarget = target; },
++  clear() {},
++  render() {}
++};
++
++const coordinator = new FirstSliceTransitionCoordinator({
++  registry,
++  scene,
++  camera: new THREE.PerspectiveCamera(60, 1, 0.1, 100),
++  renderer,
++  localCellMorphSystem: morphStub,
++  secondLocalCellMorphSystem: morphStub,
++  frameState,
++  autoSchedule: false
++});
++
++const guideRoot = new THREE.Group();
++guideRoot.name = "guide_threshold_layered_interaction_HC006F";
++guideRoot.visible = false;
++const primedChild = new THREE.Mesh(
++  new THREE.BoxGeometry(0.1, 0.1, 0.1),
++  new THREE.MeshBasicMaterial({ color: 0xffffff })
++);
++primedChild.name = "guide_threshold_live_child_primed";
++const unprimedChild = new THREE.Mesh(
++  new THREE.BoxGeometry(0.1, 0.1, 0.1),
++  new THREE.MeshBasicMaterial({ color: 0xffffff })
++);
++unprimedChild.name = "guide_threshold_live_child_unprimed";
++guideRoot.add(primedChild, unprimedChild);
++scene.add(guideRoot);
++coordinator.registerPreparedRoot(guideRoot, "surface_to_guide");
++coordinator.gpuPrimedRenderables.add(primedChild);
++
++let snapshot = coordinator.captureLiveDrawAttribution(frameState);
++assert.equal(snapshot.newlyDrawableCount, 0, "hidden prepared root must not be attributed as live drawable");
++
++guideRoot.visible = true;
++frameState.frame = 11;
++snapshot = coordinator.captureLiveDrawAttribution(frameState);
++assert.equal(snapshot.pass, "HC-031W2A5.3");
++assert.equal(snapshot.newlyDrawableCount, 2);
++assert.equal(snapshot.unprimedNewlyDrawableCount, 1);
++assert.equal(snapshot.items.length, 2);
++assert.equal(snapshot.items.find((item) => item.renderableName === primedChild.name)?.primed, true);
++assert.equal(snapshot.items.find((item) => item.renderableName === unprimedChild.name)?.primed, false);
++assert.equal(guideRoot.visible, true, "passive attribution must not mutate authored visibility");
++
++const repeated = coordinator.captureLiveDrawAttribution({ ...frameState, frame: 12 });
++assert.equal(repeated.newlyDrawableCount, 0, "already drawable children must not be re-attributed every frame");
++
++let now = 0;
++const observer = new FrameTruthObserver({
++  now: () => now,
++  documentRef: { hidden: false, hasFocus: () => true },
++  windowMs: 10000
++});
++now = 100;
++observer.beginFrame({ frame: 1, rawDt: 0.04, dt: 0.04, cellId: frameState.activeCellId });
++observer.endFrame({
++  registryMs: 5,
++  renderMs: 20,
++  cellId: frameState.activeCellId,
++  transitionLiveDrawAttribution: snapshot
++});
++now = 700;
++observer.beginFrame({
++  frame: 2,
++  rawDt: 0.6,
++  dt: 0.15,
++  cellId: "CELL_SCAR_FLOW_FOLD_001",
++  substepCount: 3
++});
++const gap = observer.snapshot().last40LongGaps.at(-1);
++assert.equal(gap.previousLiveDrawAttribution.newlyDrawableCount, 2);
++assert.equal(gap.previousLiveDrawAttribution.unprimedNewlyDrawableCount, 1);
++assert.equal(gap.previousLiveDrawAttribution.items[0].rootName, "guide_threshold_layered_interaction_HC006F");
++assert.equal(observer.snapshot().optimizationPass, "HC-031W2A5.3");
++
++console.log("HC031W2A5.3 early GPU priming order + passive live-draw child attribution PASS");
