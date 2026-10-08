@@ -1,10 +1,18 @@
+import * as THREE from "three";
+
 const SURFACE_CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const GUIDE_CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
 const COMB_CELL_ID = "CELL_COMB_THRESHOLD_FILTER_001";
 
 const ACTIVATION_STAGING_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
-const ACTIVATION_RENDER_BUDGET_MS = 65;
+const GPU_PRIME_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
+const GPU_PRIME_TARGET_SIZE = 1;
+const GPU_PRIME_PRIORITY_ROOTS = new Map([
+  ["guide_threshold_layered_interaction_HC006F", -20],
+  ["hub_chamber_spatial_authority_HC008G", -20],
+  ["scar_memory_fleck_001", -10]
+]);
 
 const GUIDE_PREP_SYSTEM_IDS = [
   "morphCompletionSystem",
@@ -91,18 +99,15 @@ export class FirstSliceTransitionCoordinator {
       lastStatus: "not_started",
       lastDurationMs: 0
     };
-    // HC-031W2A5.1: preparation may make many destination roots renderable in
-    // one callback. Keep gameplay state untouched, but admit requested-visible
-    // prepared roots to renderer.render() one at a time while the previous render
-    // stayed within budget. Visibility suppression is render-only and restored
-    // immediately after the draw.
+    // HC-031W2A5.1 root-level staging state is retained only so older telemetry
+    // remains readable. HC-031W2A5.2 does not use it to alter live visibility.
     this.activationRecords = new Map();
     this.activationRestore = [];
     this.activationPrepareSequence = 0;
     this.activationStaging = {
-      pass: "HC-031W2A5.1",
-      policy: "render_only_one_requested_root_per_callback_under_previous_render_budget",
-      renderBudgetMs: ACTIVATION_RENDER_BUDGET_MS,
+      pass: "HC-031W2A5.2",
+      policy: "root_level_first_draw_staging_retired_gpu_priming_prepares_renderables_offscreen",
+      renderBudgetMs: 0,
       activeBoundary: "none",
       lastRenderMs: null,
       activatedRootCount: 0,
@@ -117,6 +122,36 @@ export class FirstSliceTransitionCoordinator {
       lastActivationRenderMs: 0,
       peakActivationRenderMs: 0,
       peakActivationRootName: "none"
+    };
+    // HC-031W2A5.2: compile() does not guarantee that every geometry/material
+    // pair has traversed the real draw/upload path. Prime prepared renderables
+    // one child at a time into a 1x1 offscreen target during idle slots. The
+    // shared geometry/material objects are the authored instances, so the live
+    // transition can reuse GPU-resident buffers/textures without root-level
+    // first-draw batching.
+    this.gpuPrimedRenderables = new WeakSet();
+    this.gpuPrimeScene = null;
+    this.gpuPrimeCamera = null;
+    this.gpuPrimeTarget = null;
+    this.gpuPriming = {
+      pass: "HC-031W2A5.2",
+      policy: "one_shared_renderable_per_idle_slot_offscreen_1x1_draw",
+      targetSize: GPU_PRIME_TARGET_SIZE,
+      rootLevelStagingRetired: true,
+      activeBoundary: "none",
+      queuedRenderableCount: 0,
+      primedRenderableCount: 0,
+      failedRenderableCount: 0,
+      yieldedIdleSlots: 0,
+      sequence: 0,
+      lastRenderableName: "none",
+      lastRootName: "none",
+      lastBoundary: "none",
+      lastDurationMs: 0,
+      lastStatus: "not_started",
+      peakDurationMs: 0,
+      peakRenderableName: "none",
+      peakRootName: "none"
     };
     this.jobs = this.createJobs();
     this.publish(frameState, 0);
@@ -141,6 +176,12 @@ export class FirstSliceTransitionCoordinator {
         execute: () => this.warmPreparedShaders()
       },
       {
+        id: "surface_to_guide_gpu_renderables",
+        boundary: "surface_to_guide",
+        maySpanFrames: true,
+        execute: () => this.primePreparedRenderables("surface_to_guide")
+      },
+      {
         id: "guide_to_hub_destination",
         boundary: "guide_to_hub",
         execute: () => this.secondLocalCellMorphSystem.prepareTransitionResources()
@@ -155,6 +196,12 @@ export class FirstSliceTransitionCoordinator {
         boundary: "guide_to_hub",
         maySpanFrames: true,
         execute: () => this.warmPreparedShaders()
+      },
+      {
+        id: "guide_to_hub_gpu_renderables",
+        boundary: "guide_to_hub",
+        maySpanFrames: true,
+        execute: () => this.primePreparedRenderables("guide_to_hub")
       },
       ...GRAVE_PREP_SYSTEM_IDS.map((id) => ({
         id: `grave_system:${id}`,
@@ -381,83 +428,179 @@ export class FirstSliceTransitionCoordinator {
     return [...this.activationRecords.values()].some((record) => record.boundary === boundary && !record.activated);
   }
 
+  // HC-031W2A5.2: A5.1 whole-root visibility staging is intentionally retired.
+  // Keep this API as a no-op compatibility surface for old diagnostics/tests;
+  // it must never hide or serialize authored roots in the live renderer.
   prepareRenderActivationStaging(frameState = this.frameState) {
     this.activationRestore.length = 0;
+    this.activationStaging.activeBoundary = this.resolveActivationBoundary(frameState);
     this.activationStaging.activatedThisCallback = false;
-    this.activationStaging.hiddenThisRenderCount = 0;
     this.activationStaging.pendingRequestedRootCount = 0;
-
-    const boundary = this.resolveActivationBoundary(frameState);
-    this.activationStaging.activeBoundary = boundary;
-    if (!ACTIVATION_STAGING_BOUNDARIES.has(boundary)) return this.activationSnapshot();
-
-    const frame = frameState?.frame ?? 0;
-    const records = [...this.activationRecords.values()]
-      .filter((record) => record.boundary === boundary && record.root?.parent)
-      .sort((a, b) => a.priority - b.priority || a.prepareSequence - b.prepareSequence);
-
-    const requested = [];
-    for (const record of records) {
-      if (record.activated) continue;
-      if (record.root.visible === true) {
-        record.requestedVisible = true;
-        record.lastRequestedFrame = frame;
-        requested.push(record);
-      }
-    }
-
-    this.activationStaging.pendingRequestedRootCount = requested.length;
-    const previousRenderMs = this.activationStaging.lastRenderMs;
-    const underBudget = !Number.isFinite(previousRenderMs) || previousRenderMs <= ACTIVATION_RENDER_BUDGET_MS;
-    const candidate = underBudget ? requested[0] ?? null : null;
-
-    if (candidate) {
-      candidate.activated = true;
-      candidate.activatedAtFrame = frame;
-      this.activationStaging.lastActivationSequence += 1;
-      candidate.activationSequence = this.activationStaging.lastActivationSequence;
-      this.activationStaging.activatedRootCount += 1;
-      this.activationStaging.lastActivatedRootName = candidate.root.name || candidate.root.type || "unnamed_prepared_root";
-      this.activationStaging.lastActivatedBoundary = boundary;
-      this.activationStaging.lastActivatedFrame = frame;
-      this.activationStaging.activatedThisCallback = true;
-      this.activationStaging.pendingRequestedRootCount = Math.max(0, requested.length - 1);
-    } else if (requested.length > 0 && !underBudget) {
-      this.activationStaging.deferredByBudgetCount += 1;
-    }
-
-    for (const record of records) {
-      if (record.activated || record.root.visible !== true) continue;
-      this.activationRestore.push({ object: record.root, visible: true });
-      record.root.visible = false;
-      this.activationStaging.hiddenThisRenderCount += 1;
-    }
-
+    this.activationStaging.hiddenThisRenderCount = 0;
     return this.activationSnapshot();
   }
 
   restoreRenderActivationStaging() {
-    for (const entry of this.activationRestore) {
-      if (entry?.object) entry.object.visible = entry.visible;
-    }
     this.activationRestore.length = 0;
   }
 
   notifyRenderComplete({ renderMs = 0 } = {}) {
-    const safeRenderMs = Math.max(0, Number.isFinite(renderMs) ? renderMs : 0);
-    this.activationStaging.lastRenderMs = safeRenderMs;
-    if (this.activationStaging.activatedThisCallback) {
-      this.activationStaging.lastActivationRenderMs = safeRenderMs;
-      if (safeRenderMs > this.activationStaging.peakActivationRenderMs) {
-        this.activationStaging.peakActivationRenderMs = safeRenderMs;
-        this.activationStaging.peakActivationRootName = this.activationStaging.lastActivatedRootName;
-      }
-    }
+    this.activationStaging.lastRenderMs = Math.max(0, Number.isFinite(renderMs) ? renderMs : 0);
     return this.activationSnapshot();
   }
 
   activationSnapshot() {
     return { ...this.activationStaging };
+  }
+
+  isGpuPrimeRenderable(object) {
+    if (!object?.isObject3D || !object.material) return false;
+    if (!(object.isMesh || object.isLine || object.isLineSegments || object.isLineLoop || object.isPoints || object.isSprite)) return false;
+    return object.isSprite || Boolean(object.geometry);
+  }
+
+  collectGpuPrimeRenderables(boundary) {
+    const records = [...this.activationRecords.values()]
+      .filter((record) => record.boundary === boundary && record.root?.isObject3D)
+      .sort((a, b) => {
+        const aPriority = GPU_PRIME_PRIORITY_ROOTS.get(a.root?.name ?? "") ?? a.priority;
+        const bPriority = GPU_PRIME_PRIORITY_ROOTS.get(b.root?.name ?? "") ?? b.priority;
+        return aPriority - bPriority || a.prepareSequence - b.prepareSequence;
+      });
+
+    const queue = [];
+    for (const record of records) {
+      record.root.traverse?.((object) => {
+        if (!this.isGpuPrimeRenderable(object) || this.gpuPrimedRenderables.has(object)) return;
+        queue.push({
+          object,
+          root: record.root,
+          boundary,
+          rootPriority: GPU_PRIME_PRIORITY_ROOTS.get(record.root?.name ?? "") ?? record.priority
+        });
+      });
+    }
+    return queue;
+  }
+
+  ensureGpuPrimeResources() {
+    if (this.gpuPrimeScene && this.gpuPrimeCamera && this.gpuPrimeTarget) return;
+    this.gpuPrimeScene = new THREE.Scene();
+    this.gpuPrimeScene.name = "transition_gpu_prime_scene_HC031W2A52";
+    this.gpuPrimeCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 10);
+    this.gpuPrimeCamera.position.set(0, 0, 0);
+    this.gpuPrimeCamera.lookAt(0, 0, -1);
+    this.gpuPrimeCamera.updateProjectionMatrix();
+    this.gpuPrimeTarget = new THREE.WebGLRenderTarget(GPU_PRIME_TARGET_SIZE, GPU_PRIME_TARGET_SIZE, {
+      depthBuffer: true,
+      stencilBuffer: false
+    });
+    this.gpuPrimeTarget.texture.name = "transition_gpu_prime_target_HC031W2A52";
+  }
+
+  primeRenderableOffscreen(object) {
+    if (!this.renderer?.render || !this.renderer?.setRenderTarget) {
+      throw new Error("renderer_render_target_unavailable");
+    }
+    this.ensureGpuPrimeResources();
+
+    const clone = object.clone(false);
+    clone.name = `${object.name || object.type || "renderable"}__gpu_prime_clone`;
+    clone.visible = true;
+    clone.frustumCulled = false;
+    clone.castShadow = false;
+    clone.receiveShadow = false;
+    clone.position.set(0, 0, -1);
+    clone.quaternion.identity();
+    clone.scale.set(1, 1, 1);
+    clone.updateMatrix?.();
+    clone.updateMatrixWorld?.(true);
+
+    const previousTarget = this.renderer.getRenderTarget?.() ?? null;
+    this.gpuPrimeScene.add(clone);
+    try {
+      this.renderer.setRenderTarget(this.gpuPrimeTarget);
+      this.renderer.clear?.(true, true, true);
+      this.renderer.render(this.gpuPrimeScene, this.gpuPrimeCamera);
+    } finally {
+      this.gpuPrimeScene.remove(clone);
+      this.renderer.setRenderTarget(previousTarget);
+    }
+  }
+
+  async primePreparedRenderables(boundary) {
+    if (!GPU_PRIME_BOUNDARIES.has(boundary)) {
+      return { status: "skipped_boundary_not_gpu_primed", boundary, primedCount: 0 };
+    }
+    if (!this.renderer?.render || !this.renderer?.setRenderTarget) {
+      this.gpuPriming.lastStatus = "skipped_renderer_render_target_unavailable";
+      return { status: this.gpuPriming.lastStatus, boundary, primedCount: 0 };
+    }
+
+    const queue = this.collectGpuPrimeRenderables(boundary);
+    this.gpuPriming.activeBoundary = boundary;
+    this.gpuPriming.queuedRenderableCount = queue.length;
+    if (queue.length === 0) {
+      this.gpuPriming.lastStatus = "complete_no_pending_renderables";
+      return { status: this.gpuPriming.lastStatus, boundary, primedCount: 0 };
+    }
+
+    let primedCount = 0;
+    let failedCount = 0;
+    for (let index = 0; index < queue.length; index += 1) {
+      const entry = queue[index];
+      const renderableName = entry.object?.name || entry.object?.type || `renderable_${index + 1}`;
+      const rootName = entry.root?.name || entry.root?.type || "unnamed_prepared_root";
+      const startedAt = this.now();
+      this.gpuPriming.lastRenderableName = renderableName;
+      this.gpuPriming.lastRootName = rootName;
+      this.gpuPriming.lastBoundary = boundary;
+
+      try {
+        this.primeRenderableOffscreen(entry.object);
+        this.gpuPrimedRenderables.add(entry.object);
+        primedCount += 1;
+        this.gpuPriming.primedRenderableCount += 1;
+        this.gpuPriming.sequence += 1;
+        this.gpuPriming.lastStatus = "primed_offscreen_draw";
+      } catch (error) {
+        failedCount += 1;
+        this.gpuPriming.failedRenderableCount += 1;
+        this.gpuPriming.sequence += 1;
+        this.gpuPriming.lastStatus = "prime_failed";
+        this.lastError = `gpu_prime:${rootName}:${renderableName}: ${error?.message ?? String(error)}`;
+      }
+
+      const durationMs = Math.max(0, this.now() - startedAt);
+      this.gpuPriming.lastDurationMs = durationMs;
+      if (durationMs > this.gpuPriming.peakDurationMs) {
+        this.gpuPriming.peakDurationMs = durationMs;
+        this.gpuPriming.peakRenderableName = renderableName;
+        this.gpuPriming.peakRootName = rootName;
+      }
+      this.gpuPriming.queuedRenderableCount = Math.max(0, queue.length - index - 1);
+      this.publish(this.frameState, this.frameState.transitionContinuity?.lastRawDeltaMs ?? 0);
+
+      if (index < queue.length - 1) {
+        this.gpuPriming.yieldedIdleSlots += 1;
+        await this.yieldGpuPrimeIdleSlot();
+      }
+    }
+
+    this.gpuPriming.activeBoundary = "none";
+    this.gpuPriming.lastStatus = failedCount > 0 ? "complete_with_failures" : "complete_offscreen_gpu_prime";
+    this.publish(this.frameState, this.frameState.transitionContinuity?.lastRawDeltaMs ?? 0);
+    return {
+      status: this.gpuPriming.lastStatus,
+      boundary,
+      primedCount,
+      failedCount,
+      queuedCount: queue.length
+    };
+  }
+
+  gpuPrimingSnapshot() {
+    return { ...this.gpuPriming };
   }
 
   async warmPreparedShaders() {
@@ -542,6 +685,16 @@ export class FirstSliceTransitionCoordinator {
 
   yieldWarmupIdleSlot() {
     this.shaderWarmup.yieldedIdleSlots += 1;
+    return new Promise((resolve) => {
+      if (typeof globalThis.requestIdleCallback === "function") {
+        globalThis.requestIdleCallback(() => resolve(), { timeout: Math.min(this.idleTimeoutMs, 240) });
+        return;
+      }
+      globalThis.setTimeout(resolve, 16);
+    });
+  }
+
+  yieldGpuPrimeIdleSlot() {
     return new Promise((resolve) => {
       if (typeof globalThis.requestIdleCallback === "function") {
         globalThis.requestIdleCallback(() => resolve(), { timeout: Math.min(this.idleTimeoutMs, 240) });
@@ -691,6 +844,24 @@ export class FirstSliceTransitionCoordinator {
       shaderWarmupLastRootName: this.shaderWarmup.lastRootName,
       shaderWarmupLastStatus: this.shaderWarmup.lastStatus,
       shaderWarmupLastDurationMs: this.shaderWarmup.lastDurationMs,
+      gpuPrimingPass: this.gpuPriming.pass,
+      gpuPrimingPolicy: this.gpuPriming.policy,
+      gpuPrimingTargetSize: this.gpuPriming.targetSize,
+      gpuPrimingRootLevelStagingRetired: this.gpuPriming.rootLevelStagingRetired,
+      gpuPrimingActiveBoundary: this.gpuPriming.activeBoundary,
+      gpuPrimingQueuedRenderableCount: this.gpuPriming.queuedRenderableCount,
+      gpuPrimingPrimedRenderableCount: this.gpuPriming.primedRenderableCount,
+      gpuPrimingFailedRenderableCount: this.gpuPriming.failedRenderableCount,
+      gpuPrimingYieldedIdleSlots: this.gpuPriming.yieldedIdleSlots,
+      gpuPrimingSequence: this.gpuPriming.sequence,
+      gpuPrimingLastRenderableName: this.gpuPriming.lastRenderableName,
+      gpuPrimingLastRootName: this.gpuPriming.lastRootName,
+      gpuPrimingLastBoundary: this.gpuPriming.lastBoundary,
+      gpuPrimingLastDurationMs: this.gpuPriming.lastDurationMs,
+      gpuPrimingLastStatus: this.gpuPriming.lastStatus,
+      gpuPrimingPeakDurationMs: this.gpuPriming.peakDurationMs,
+      gpuPrimingPeakRenderableName: this.gpuPriming.peakRenderableName,
+      gpuPrimingPeakRootName: this.gpuPriming.peakRootName,
       activationStagingPass: this.activationStaging.pass,
       activationStagingPolicy: this.activationStaging.policy,
       activationStagingRenderBudgetMs: this.activationStaging.renderBudgetMs,

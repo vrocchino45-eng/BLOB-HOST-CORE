@@ -2725,13 +2725,16 @@ export class GameRuntime {
       recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds,
       catastrophicGap: catchUp.catastrophicGap
     };
+    const transitionGpuPrimingAtFrameStart = this.firstSliceTransitionCoordinator
+      ?.gpuPrimingSnapshot?.() ?? null;
     this.frameTruthObserver.beginFrame({
       frame: this.frame,
       rawDt,
       dt: catchUp.simulatedSeconds,
       cellId: this.frameState.activeCellId,
       substepCount: catchUp.substepCount,
-      recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds
+      recoveredBeyondLegacyCapSeconds: catchUp.recoveredBeyondLegacyCapSeconds,
+      transitionGpuPriming: transitionGpuPrimingAtFrameStart
     });
 
     let registryMs = 0;
@@ -2779,11 +2782,11 @@ export class GameRuntime {
       this.frameState,
       rawDt
     );
-    // HC-031W2A5.1: mechanics/morph state may request all prepared roots at once,
-    // but first-draw submission is render-only staged. At most one newly requested
-    // transition root is admitted per callback when the previous render was in budget.
+    // HC-031W2A5.2: A5.1 whole-root first-draw staging is retired. Prepared
+    // renderables are primed through 1x1 offscreen draws during idle work instead,
+    // so authored root visibility is never serialized in the live scene.
     const activationStagingBeforeRender = this.firstSliceTransitionCoordinator
-      ?.prepareRenderActivationStaging(this.frameState) ?? null;
+      ?.activationSnapshot() ?? null;
     const transitionUpdateMs = performance.now() - transitionStart;
     const remainingUpdateMs = presentationUpdateMs + cameraUpdateMs + transitionUpdateMs;
     const renderBudget = this.renderBudgetSystem?.prepare({
@@ -2797,7 +2800,6 @@ export class GameRuntime {
     } finally {
       renderEnd = performance.now();
       this.renderBudgetSystem?.restoreAfterRender();
-      this.firstSliceTransitionCoordinator?.restoreRenderActivationStaging();
     }
     const renderMs = renderEnd - renderStart;
     const activationStaging = this.firstSliceTransitionCoordinator?.notifyRenderComplete({
@@ -2854,6 +2856,23 @@ export class GameRuntime {
         transitionWarmupLastRootName: this.frameState.transitionContinuity?.shaderWarmupLastRootName ?? "none",
         transitionWarmupLastStatus: this.frameState.transitionContinuity?.shaderWarmupLastStatus ?? "not_started",
         transitionWarmupLastDurationMs: this.frameState.transitionContinuity?.shaderWarmupLastDurationMs ?? 0,
+        transitionGpuPrimingPass: this.frameState.transitionContinuity?.gpuPrimingPass ?? "none",
+        transitionGpuPrimingPolicy: this.frameState.transitionContinuity?.gpuPrimingPolicy ?? "none",
+        transitionGpuPrimingTargetSize: this.frameState.transitionContinuity?.gpuPrimingTargetSize ?? 0,
+        transitionGpuPrimingRootLevelStagingRetired: Boolean(this.frameState.transitionContinuity?.gpuPrimingRootLevelStagingRetired),
+        transitionGpuPrimingActiveBoundary: this.frameState.transitionContinuity?.gpuPrimingActiveBoundary ?? "none",
+        transitionGpuPrimingQueuedRenderables: this.frameState.transitionContinuity?.gpuPrimingQueuedRenderableCount ?? 0,
+        transitionGpuPrimingPrimedRenderables: this.frameState.transitionContinuity?.gpuPrimingPrimedRenderableCount ?? 0,
+        transitionGpuPrimingFailedRenderables: this.frameState.transitionContinuity?.gpuPrimingFailedRenderableCount ?? 0,
+        transitionGpuPrimingSequence: this.frameState.transitionContinuity?.gpuPrimingSequence ?? 0,
+        transitionGpuPrimingLastRenderableName: this.frameState.transitionContinuity?.gpuPrimingLastRenderableName ?? "none",
+        transitionGpuPrimingLastRootName: this.frameState.transitionContinuity?.gpuPrimingLastRootName ?? "none",
+        transitionGpuPrimingLastBoundary: this.frameState.transitionContinuity?.gpuPrimingLastBoundary ?? "none",
+        transitionGpuPrimingLastDurationMs: this.frameState.transitionContinuity?.gpuPrimingLastDurationMs ?? 0,
+        transitionGpuPrimingLastStatus: this.frameState.transitionContinuity?.gpuPrimingLastStatus ?? "not_started",
+        transitionGpuPrimingPeakDurationMs: this.frameState.transitionContinuity?.gpuPrimingPeakDurationMs ?? 0,
+        transitionGpuPrimingPeakRenderableName: this.frameState.transitionContinuity?.gpuPrimingPeakRenderableName ?? "none",
+        transitionGpuPrimingPeakRootName: this.frameState.transitionContinuity?.gpuPrimingPeakRootName ?? "none",
         transitionActivationPass: activationStaging?.pass ?? "none",
         transitionActivationPolicy: activationStaging?.policy ?? "none",
         transitionActivationBoundary: activationStaging?.activeBoundary ?? "none",

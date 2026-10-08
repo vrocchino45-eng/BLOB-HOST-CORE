@@ -21,6 +21,7 @@ export class FrameTruthObserver {
     this.visibilityLast = null;
     this.lastCompletedStageMs = null;
     this.lastCompletedTransitionActivation = null;
+    this.lastSeenGpuPrimeSequence = 0;
   }
 
   nowMs() { return this.nowProvider.call(null); }
@@ -38,13 +39,36 @@ export class FrameTruthObserver {
     };
   }
 
-  beginFrame({ frame, rawDt, dt, cellId = "none", substepCount = 1, recoveredBeyondLegacyCapSeconds = 0 }) {
+  beginFrame({ frame, rawDt, dt, cellId = "none", substepCount = 1, recoveredBeyondLegacyCapSeconds = 0,
+    transitionGpuPriming = null }) {
     const rawMs = Math.max(0, Number.isFinite(rawDt) ? rawDt * 1000 : 0);
     const simMs = Math.max(0, Number.isFinite(dt) ? dt * 1000 : 0);
     const hidden = Boolean(this.documentRef?.hidden);
     const focused = this.documentRef?.hasFocus?.() ?? true;
     const changed = this.visibilityLast !== null && this.visibilityLast !== hidden;
     this.visibilityLast = hidden;
+
+    // HC-031W2A5.2: GPU priming runs in browser idle slots between renderer
+    // callbacks. Compare its monotonic sequence at the next callback so a long
+    // raw gap can identify the exact child draw that preceded it.
+    const gpuPrimeSequence = Math.max(0, Math.floor(Number.isFinite(transitionGpuPriming?.sequence)
+      ? transitionGpuPriming.sequence : 0));
+    const gpuPrimeOperationsSincePreviousCallback = Math.max(0, gpuPrimeSequence - this.lastSeenGpuPrimeSequence);
+    const precedingTransitionGpuPrime = gpuPrimeOperationsSincePreviousCallback > 0 ? {
+      pass: transitionGpuPriming?.pass ?? "none",
+      policy: transitionGpuPriming?.policy ?? "none",
+      sequence: gpuPrimeSequence,
+      operationsSincePreviousCallback: gpuPrimeOperationsSincePreviousCallback,
+      boundary: transitionGpuPriming?.lastBoundary ?? "none",
+      rootName: transitionGpuPriming?.lastRootName ?? "none",
+      renderableName: transitionGpuPriming?.lastRenderableName ?? "none",
+      durationMs: round(transitionGpuPriming?.lastDurationMs ?? 0),
+      status: transitionGpuPriming?.lastStatus ?? "not_started",
+      peakDurationMs: round(transitionGpuPriming?.peakDurationMs ?? 0),
+      peakRenderableName: transitionGpuPriming?.peakRenderableName ?? "none",
+      peakRootName: transitionGpuPriming?.peakRootName ?? "none"
+    } : null;
+    this.lastSeenGpuPrimeSequence = Math.max(this.lastSeenGpuPrimeSequence, gpuPrimeSequence);
 
     for (const bucket of [this.current, this.total]) {
       bucket.frameCount++;
@@ -77,7 +101,8 @@ export class FrameTruthObserver {
         recoveredBeyondLegacyCapMs: round(Math.max(0, Number.isFinite(recoveredBeyondLegacyCapSeconds)
           ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
         previousCallbackWorkMs: this.lastCompletedStageMs,
-        previousTransitionActivation: this.lastCompletedTransitionActivation
+        previousTransitionActivation: this.lastCompletedTransitionActivation,
+        precedingTransitionGpuPrime
       });
       if (this.longGaps.length > 40) this.longGaps.shift();
     }
@@ -186,11 +211,12 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A5.1",
+      optimizationPass: "HC-031W2A5.2",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
       transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
-      transitionFirstDrawStagingRule: "prepared transition roots retain full gameplay/morph state, but renderer visibility admits at most one newly requested root per callback when the previous render is <=65ms; suppressed visibility is restored immediately after render",
+      transitionFirstDrawStagingRule: "A5.1 whole-root live-scene first-draw staging is retired; authored root visibility is no longer serialized",
+      transitionGpuPrimingRule: "prepared renderable children traverse a 1x1 offscreen real draw path one shared geometry/material object per idle slot before authored transition visibility",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),
