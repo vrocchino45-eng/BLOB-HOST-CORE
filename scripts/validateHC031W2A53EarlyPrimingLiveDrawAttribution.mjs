@@ -9,10 +9,10 @@ const runtimeSource = read("../src/core/GameRuntime.js");
 const observerSource = read("../src/core/FrameTruthObserver.js");
 const coordinatorSource = read("../src/core/FirstSliceTransitionCoordinator.js");
 
-assert.match(observerSource, /optimizationPass: "HC-031W2A5\.3"/);
+assert.match(observerSource, /optimizationPass: "HC-031W2A5\.[34]"/);
 assert.match(observerSource, /transitionLiveDrawAttributionRule/);
 assert.match(coordinatorSource, /early_offscreen_draw_before_shader_warmup_one_shared_renderable_per_idle_slot/);
-assert.match(coordinatorSource, /passive_pre_render_newly_drawable_child_attribution_no_visibility_mutation/);
+assert.match(coordinatorSource, /(passive_pre_render_newly_drawable_child_attribution_no_visibility_mutation|post_admission_pre_render_newly_drawable_child_attribution)/);
 assert.match(runtimeSource, /captureLiveDrawAttribution/);
 assert.match(runtimeSource, /transitionLiveDrawAttribution/);
 assert.doesNotMatch(runtimeSource, /\.prepareRenderActivationStaging\(this\.frameState\)/,
@@ -81,7 +81,7 @@ assert.equal(snapshot.newlyDrawableCount, 0, "hidden prepared root must not be a
 guideRoot.visible = true;
 frameState.frame = 11;
 snapshot = coordinator.captureLiveDrawAttribution(frameState);
-assert.equal(snapshot.pass, "HC-031W2A5.3");
+assert.ok(["HC-031W2A5.3", "HC-031W2A5.4"].includes(snapshot.pass));
 assert.equal(snapshot.newlyDrawableCount, 2);
 assert.equal(snapshot.unprimedNewlyDrawableCount, 1);
 assert.equal(snapshot.items.length, 2);
@@ -118,6 +118,6 @@ const gap = observer.snapshot().last40LongGaps.at(-1);
 assert.equal(gap.previousLiveDrawAttribution.newlyDrawableCount, 2);
 assert.equal(gap.previousLiveDrawAttribution.unprimedNewlyDrawableCount, 1);
 assert.equal(gap.previousLiveDrawAttribution.items[0].rootName, "guide_threshold_layered_interaction_HC006F");
-assert.equal(observer.snapshot().optimizationPass, "HC-031W2A5.3");
+assert.ok(["HC-031W2A5.3", "HC-031W2A5.4"].includes(observer.snapshot().optimizationPass));
 
-console.log("HC031W2A5.3 early GPU priming order + passive live-draw child attribution PASS");
+console.log("HC031W2A5.3 early GPU priming order + live-draw child attribution compatibility PASS");

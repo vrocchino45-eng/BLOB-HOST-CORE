@@ -21,6 +21,7 @@ export class FrameTruthObserver {
     this.visibilityLast = null;
     this.lastCompletedStageMs = null;
     this.lastCompletedTransitionActivation = null;
+    this.lastCompletedLiveAdmission = null;
     this.lastCompletedLiveDrawAttribution = null;
     this.lastSeenGpuPrimeSequence = 0;
   }
@@ -103,6 +104,7 @@ export class FrameTruthObserver {
           ? recoveredBeyondLegacyCapSeconds * 1000 : 0)),
         previousCallbackWorkMs: this.lastCompletedStageMs,
         previousTransitionActivation: this.lastCompletedTransitionActivation,
+        previousLiveAdmission: this.lastCompletedLiveAdmission,
         previousLiveDrawAttribution: this.lastCompletedLiveDrawAttribution,
         precedingTransitionGpuPrime
       });
@@ -158,6 +160,21 @@ export class FrameTruthObserver {
       renderMs: round(rendererInfo.transitionActivationLastRenderMs ?? renderMs),
       peakRenderMs: round(rendererInfo.transitionActivationPeakRenderMs ?? 0),
       peakRootName: rendererInfo.transitionActivationPeakRootName ?? "none"
+    } : null;
+    this.lastCompletedLiveAdmission = rendererInfo ? {
+      pass: rendererInfo.transitionLiveAdmissionPass ?? "none",
+      policy: rendererInfo.transitionLiveAdmissionPolicy ?? "none",
+      boundary: rendererInfo.transitionLiveAdmissionActiveBoundary ?? "none",
+      sequence: rendererInfo.transitionLiveAdmissionSequence ?? 0,
+      admittedThisRender: rendererInfo.transitionLiveAdmissionAdmittedThisRender ?? 0,
+      essentialThisRender: rendererInfo.transitionLiveAdmissionEssentialThisRender ?? 0,
+      hiddenThisRender: rendererInfo.transitionLiveAdmissionHiddenThisRender ?? 0,
+      deferredPrimedThisRender: rendererInfo.transitionLiveAdmissionDeferredPrimedThisRender ?? 0,
+      deferredUnprimedThisRender: rendererInfo.transitionLiveAdmissionDeferredUnprimedThisRender ?? 0,
+      lastAdmittedRenderableName: rendererInfo.transitionLiveAdmissionLastAdmittedRenderableName ?? "none",
+      lastAdmittedRootName: rendererInfo.transitionLiveAdmissionLastAdmittedRootName ?? "none",
+      lastAdmittedBoundary: rendererInfo.transitionLiveAdmissionLastAdmittedBoundary ?? "none",
+      renderMs: round(rendererInfo.transitionLiveAdmissionLastRenderMs ?? renderMs)
     } : null;
     this.lastCompletedLiveDrawAttribution = transitionLiveDrawAttribution?.newlyDrawableCount > 0 ? {
       pass: transitionLiveDrawAttribution.pass ?? "none",
@@ -226,13 +243,14 @@ export class FrameTruthObserver {
     const total = this.total;
     return {
       schemaVersion: "blob.frame_truth.v1", pass: "HC-031W2A",
-      optimizationPass: "HC-031W2A5.3",
+      optimizationPass: "HC-031W2A5.4",
       authority: "read_only_observer", gameplayAuthority: false,
       timingRule: "elapsed callback time is split into <=50ms simulation-registry substeps with a 150ms/callback catch-up ceiling; presentation, camera, transition, and render each run once per callback; excess is dropped",
       transitionRenderWarmupRule: "prepared transition roots compile incrementally against the actual Host target scene; one root per idle slot; geometry bounds are prepared before first visibility",
       transitionFirstDrawStagingRule: "A5.1 whole-root live-scene first-draw staging is retired; authored root visibility is no longer serialized",
       transitionGpuPrimingRule: "prepared renderable children traverse the 1x1 offscreen real draw path before shader-only warmup so GPU residency work starts earlier for each boundary",
-      transitionLiveDrawAttributionRule: "prepared child renderables are passively observed immediately before live render; newly drawable children and priming status are attached to the next long-gap record without changing visibility",
+      transitionLiveAdmissionRule: "authored visibility stays authoritative while primed secondary transition children are admitted to the real draw in small per-callback batches; essential silhouette/cues remain immediate and temporary render-only hides are restored after each draw",
+      transitionLiveDrawAttributionRule: "post-admission prepared children are observed immediately before live render; newly drawable children and priming status are attached to the next long-gap record",
       scope: "renderer.setAnimationLoop callback, not encoded video FPS or independent GPU FPS",
       total: {
         frames: total.frameCount, wallSeconds: round(total.wallMs / 1000),

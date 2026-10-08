@@ -2793,8 +2793,11 @@ export class GameRuntime {
       runtimeSeconds: this.frameState.runtimeSeconds,
       frameState: this.frameState
     }) ?? null;
-    // HC-031W2A5.3: observe prepared children that have just become drawable
-    // after render-budget visibility decisions, without changing visibility.
+    // HC-031W2A5.4: authored transition visibility remains the scene truth, but
+    // secondary prepared children are admitted to the real draw in small
+    // primed batches. Temporary per-render hides are restored immediately.
+    const liveAdmissionBeforeRender = this.firstSliceTransitionCoordinator
+      ?.prepareLiveChildAdmission?.(this.frameState) ?? null;
     const liveDrawAttribution = this.firstSliceTransitionCoordinator
       ?.captureLiveDrawAttribution?.(this.frameState) ?? null;
     const renderStart = performance.now();
@@ -2803,6 +2806,7 @@ export class GameRuntime {
       this.renderer.render(this.scene, this.camera);
     } finally {
       renderEnd = performance.now();
+      this.firstSliceTransitionCoordinator?.restoreLiveChildAdmission?.();
       this.renderBudgetSystem?.restoreAfterRender();
     }
     const renderMs = renderEnd - renderStart;
@@ -2811,6 +2815,8 @@ export class GameRuntime {
       frame: this.frame,
       cellId: this.frameState.activeCellId
     }) ?? activationStagingBeforeRender;
+    const liveAdmission = this.firstSliceTransitionCoordinator?.liveAdmissionSnapshot?.()
+      ?? liveAdmissionBeforeRender;
     const info = this.renderer.info?.render;
     this.frameTruthObserver.endFrame({
       registryMs,
@@ -2878,6 +2884,26 @@ export class GameRuntime {
         transitionGpuPrimingPeakDurationMs: this.frameState.transitionContinuity?.gpuPrimingPeakDurationMs ?? 0,
         transitionGpuPrimingPeakRenderableName: this.frameState.transitionContinuity?.gpuPrimingPeakRenderableName ?? "none",
         transitionGpuPrimingPeakRootName: this.frameState.transitionContinuity?.gpuPrimingPeakRootName ?? "none",
+        transitionLiveAdmissionPass: liveAdmission?.pass ?? "none",
+        transitionLiveAdmissionPolicy: liveAdmission?.policy ?? "none",
+        transitionLiveAdmissionMaxPerFrame: liveAdmission?.maxPerFrame ?? 0,
+        transitionLiveAdmissionRecoveryMaxPerFrame: liveAdmission?.recoveryMaxPerFrame ?? 0,
+        transitionLiveAdmissionRenderBudgetMs: liveAdmission?.renderBudgetMs ?? 0,
+        transitionLiveAdmissionHardStallMs: liveAdmission?.hardStallMs ?? 0,
+        transitionLiveAdmissionActiveBoundary: liveAdmission?.activeBoundary ?? "none",
+        transitionLiveAdmissionSequence: liveAdmission?.sequence ?? 0,
+        transitionLiveAdmissionAdmittedThisRender: liveAdmission?.admittedThisRender ?? 0,
+        transitionLiveAdmissionEssentialThisRender: liveAdmission?.essentialThisRender ?? 0,
+        transitionLiveAdmissionHiddenThisRender: liveAdmission?.hiddenThisRender ?? 0,
+        transitionLiveAdmissionDeferredPrimedThisRender: liveAdmission?.deferredPrimedThisRender ?? 0,
+        transitionLiveAdmissionDeferredUnprimedThisRender: liveAdmission?.deferredUnprimedThisRender ?? 0,
+        transitionLiveAdmissionTotalAdmitted: liveAdmission?.totalAdmitted ?? 0,
+        transitionLiveAdmissionTotalDeferredByBudget: liveAdmission?.totalDeferredByBudget ?? 0,
+        transitionLiveAdmissionTotalDeferredUnprimed: liveAdmission?.totalDeferredUnprimed ?? 0,
+        transitionLiveAdmissionLastAdmittedRenderableName: liveAdmission?.lastAdmittedRenderableName ?? "none",
+        transitionLiveAdmissionLastAdmittedRootName: liveAdmission?.lastAdmittedRootName ?? "none",
+        transitionLiveAdmissionLastAdmittedBoundary: liveAdmission?.lastAdmittedBoundary ?? "none",
+        transitionLiveAdmissionLastRenderMs: liveAdmission?.lastRenderMs ?? 0,
         transitionLiveDrawPass: liveDrawAttribution?.pass ?? "none",
         transitionLiveDrawPolicy: liveDrawAttribution?.policy ?? "none",
         transitionLiveDrawSequence: liveDrawAttribution?.sequence ?? 0,

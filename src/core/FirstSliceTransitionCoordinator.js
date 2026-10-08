@@ -9,6 +9,10 @@ const ACTIVATION_STAGING_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub
 const GPU_PRIME_BOUNDARIES = new Set(["surface_to_guide", "guide_to_hub"]);
 const GPU_PRIME_TARGET_SIZE = 1;
 const LIVE_DRAW_ATTRIBUTION_MAX_ITEMS = 16;
+const LIVE_ADMISSION_MAX_PER_FRAME = 8;
+const LIVE_ADMISSION_RECOVERY_MAX_PER_FRAME = 3;
+const LIVE_ADMISSION_RENDER_BUDGET_MS = 90;
+const LIVE_ADMISSION_HARD_STALL_MS = 250;
 const GPU_PRIME_PRIORITY_ROOTS = new Map([
   ["guide_threshold_layered_interaction_HC006F", -20],
   ["hub_chamber_spatial_authority_HC008G", -20],
@@ -159,8 +163,8 @@ export class FirstSliceTransitionCoordinator {
     // before the real scene draw so the next long-gap sample can name them.
     this.liveDrawableState = new WeakMap();
     this.liveDrawAttribution = {
-      pass: "HC-031W2A5.3",
-      policy: "passive_pre_render_newly_drawable_child_attribution_no_visibility_mutation",
+      pass: "HC-031W2A5.4",
+      policy: "post_admission_pre_render_newly_drawable_child_attribution",
       sequence: 0,
       frame: -1,
       cellId: "none",
@@ -169,6 +173,36 @@ export class FirstSliceTransitionCoordinator {
       unprimedNewlyDrawableCount: 0,
       overflowCount: 0,
       items: []
+    };
+    // HC-031W2A5.4: the A5.3 field run proved that fully primed children can
+    // still hitch when 28-79 of them become live on one renderer callback.
+    // Preserve authored/gameplay visibility as truth, but serialize secondary
+    // child submission only for the real draw. Essential silhouette/cues are
+    // immediate; primed secondary children enter in small render-budgeted
+    // batches; unprimed children wait for their existing 1x1 offscreen prime.
+    this.liveAdmittedRenderables = new WeakSet();
+    this.liveAdmissionRestore = [];
+    this.liveAdmission = {
+      pass: "HC-031W2A5.4",
+      policy: "primed_secondary_child_render_admission_authored_visibility_restored_each_callback",
+      maxPerFrame: LIVE_ADMISSION_MAX_PER_FRAME,
+      recoveryMaxPerFrame: LIVE_ADMISSION_RECOVERY_MAX_PER_FRAME,
+      renderBudgetMs: LIVE_ADMISSION_RENDER_BUDGET_MS,
+      hardStallMs: LIVE_ADMISSION_HARD_STALL_MS,
+      activeBoundary: "none",
+      sequence: 0,
+      admittedThisRender: 0,
+      essentialThisRender: 0,
+      hiddenThisRender: 0,
+      deferredPrimedThisRender: 0,
+      deferredUnprimedThisRender: 0,
+      totalAdmitted: 0,
+      totalDeferredByBudget: 0,
+      totalDeferredUnprimed: 0,
+      lastAdmittedRenderableName: "none",
+      lastAdmittedRootName: "none",
+      lastAdmittedBoundary: "none",
+      lastRenderMs: 0
     };
     this.jobs = this.createJobs();
     this.publish(frameState, 0);
@@ -464,7 +498,9 @@ export class FirstSliceTransitionCoordinator {
   }
 
   notifyRenderComplete({ renderMs = 0 } = {}) {
-    this.activationStaging.lastRenderMs = Math.max(0, Number.isFinite(renderMs) ? renderMs : 0);
+    const safeRenderMs = Math.max(0, Number.isFinite(renderMs) ? renderMs : 0);
+    this.activationStaging.lastRenderMs = safeRenderMs;
+    this.liveAdmission.lastRenderMs = safeRenderMs;
     return this.activationSnapshot();
   }
 
@@ -633,6 +669,121 @@ export class FirstSliceTransitionCoordinator {
     if (cursor !== root) return false;
     const materials = Array.isArray(object.material) ? object.material : [object.material];
     return materials.some((material) => material && material.visible !== false);
+  }
+
+  isLiveAdmissionEssential(record, object) {
+    const rootName = record?.root?.name ?? "";
+    const objectName = object?.name ?? "";
+    if ((record?.priority ?? 99) <= 1) return true;
+    if (objectName.includes("active_cell_ring") || objectName.includes("arrival_focus_line")) return true;
+    if (objectName.includes("hook_nearest_ring") || objectName.includes("hook_relation_line")) return true;
+    if (objectName.includes("convergence_marker")) return true;
+    if (rootName === "hub_chamber_spatial_authority_HC008G") {
+      if (objectName.startsWith("hub_background_membrane_lobe_")) return true;
+      if (objectName === "hub_junction_anchor_001" || objectName === "hub_route_comparison_basin") return true;
+    }
+    return false;
+  }
+
+  liveAdmissionBudgetForPreviousRender() {
+    const previousRenderMs = Math.max(0, Number.isFinite(this.liveAdmission.lastRenderMs)
+      ? this.liveAdmission.lastRenderMs : 0);
+    if (previousRenderMs >= LIVE_ADMISSION_HARD_STALL_MS) return 0;
+    if (previousRenderMs > LIVE_ADMISSION_RENDER_BUDGET_MS) return LIVE_ADMISSION_RECOVERY_MAX_PER_FRAME;
+    return LIVE_ADMISSION_MAX_PER_FRAME;
+  }
+
+  prepareLiveChildAdmission(frameState = this.frameState) {
+    this.restoreLiveChildAdmission();
+    const candidates = [];
+    let essentialThisRender = 0;
+    let activeBoundary = "none";
+
+    for (const record of this.activationRecords.values()) {
+      const root = record.root;
+      if (!root?.isObject3D || !GPU_PRIME_BOUNDARIES.has(record.boundary)) continue;
+      root.traverse?.((object) => {
+        if (!this.isGpuPrimeRenderable(object)) return;
+        const authoredDrawable = this.isRenderableVisibleWithinRoot(object, root);
+        if (!authoredDrawable) return;
+
+        if (this.isLiveAdmissionEssential(record, object)) {
+          if (!this.liveAdmittedRenderables.has(object)) {
+            this.liveAdmittedRenderables.add(object);
+            this.liveAdmission.sequence += 1;
+            this.liveAdmission.totalAdmitted += 1;
+          }
+          essentialThisRender += 1;
+          activeBoundary = activeBoundary === "none" ? record.boundary : activeBoundary;
+          return;
+        }
+        if (this.liveAdmittedRenderables.has(object)) return;
+        candidates.push({
+          record,
+          object,
+          root,
+          boundary: record.boundary,
+          primed: this.gpuPrimedRenderables.has(object),
+          priority: GPU_PRIME_PRIORITY_ROOTS.get(root.name ?? "") ?? record.priority
+        });
+      });
+    }
+
+    candidates.sort((a, b) => Number(b.primed) - Number(a.primed)
+      || a.priority - b.priority
+      || a.record.prepareSequence - b.record.prepareSequence
+      || String(a.object.name ?? a.object.type ?? "").localeCompare(String(b.object.name ?? b.object.type ?? "")));
+
+    const budget = this.liveAdmissionBudgetForPreviousRender();
+    let admittedThisRender = 0;
+    let deferredPrimedThisRender = 0;
+    let deferredUnprimedThisRender = 0;
+
+    for (const entry of candidates) {
+      const canAdmit = entry.primed && admittedThisRender < budget;
+      if (canAdmit) {
+        this.liveAdmittedRenderables.add(entry.object);
+        this.liveAdmission.sequence += 1;
+        this.liveAdmission.totalAdmitted += 1;
+        admittedThisRender += 1;
+        activeBoundary = activeBoundary === "none" ? entry.boundary : activeBoundary;
+        this.liveAdmission.lastAdmittedRenderableName = entry.object.name || entry.object.type || "unnamed_renderable";
+        this.liveAdmission.lastAdmittedRootName = entry.root.name || entry.root.type || "unnamed_prepared_root";
+        this.liveAdmission.lastAdmittedBoundary = entry.boundary;
+        continue;
+      }
+
+      if (entry.primed) {
+        deferredPrimedThisRender += 1;
+        this.liveAdmission.totalDeferredByBudget += 1;
+      } else {
+        deferredUnprimedThisRender += 1;
+        this.liveAdmission.totalDeferredUnprimed += 1;
+      }
+      this.liveAdmissionRestore.push({ object: entry.object, visible: entry.object.visible });
+      entry.object.visible = false;
+      activeBoundary = activeBoundary === "none" ? entry.boundary : activeBoundary;
+    }
+
+    this.liveAdmission.activeBoundary = activeBoundary;
+    this.liveAdmission.admittedThisRender = admittedThisRender;
+    this.liveAdmission.essentialThisRender = essentialThisRender;
+    this.liveAdmission.hiddenThisRender = this.liveAdmissionRestore.length;
+    this.liveAdmission.deferredPrimedThisRender = deferredPrimedThisRender;
+    this.liveAdmission.deferredUnprimedThisRender = deferredUnprimedThisRender;
+    return this.liveAdmissionSnapshot();
+  }
+
+  restoreLiveChildAdmission() {
+    for (let index = this.liveAdmissionRestore.length - 1; index >= 0; index -= 1) {
+      const entry = this.liveAdmissionRestore[index];
+      if (entry?.object?.isObject3D) entry.object.visible = entry.visible;
+    }
+    this.liveAdmissionRestore.length = 0;
+  }
+
+  liveAdmissionSnapshot() {
+    return { ...this.liveAdmission };
   }
 
   captureLiveDrawAttribution(frameState = this.frameState) {
@@ -941,6 +1092,26 @@ export class FirstSliceTransitionCoordinator {
       gpuPrimingPeakDurationMs: this.gpuPriming.peakDurationMs,
       gpuPrimingPeakRenderableName: this.gpuPriming.peakRenderableName,
       gpuPrimingPeakRootName: this.gpuPriming.peakRootName,
+      liveAdmissionPass: this.liveAdmission.pass,
+      liveAdmissionPolicy: this.liveAdmission.policy,
+      liveAdmissionMaxPerFrame: this.liveAdmission.maxPerFrame,
+      liveAdmissionRecoveryMaxPerFrame: this.liveAdmission.recoveryMaxPerFrame,
+      liveAdmissionRenderBudgetMs: this.liveAdmission.renderBudgetMs,
+      liveAdmissionHardStallMs: this.liveAdmission.hardStallMs,
+      liveAdmissionActiveBoundary: this.liveAdmission.activeBoundary,
+      liveAdmissionSequence: this.liveAdmission.sequence,
+      liveAdmissionAdmittedThisRender: this.liveAdmission.admittedThisRender,
+      liveAdmissionEssentialThisRender: this.liveAdmission.essentialThisRender,
+      liveAdmissionHiddenThisRender: this.liveAdmission.hiddenThisRender,
+      liveAdmissionDeferredPrimedThisRender: this.liveAdmission.deferredPrimedThisRender,
+      liveAdmissionDeferredUnprimedThisRender: this.liveAdmission.deferredUnprimedThisRender,
+      liveAdmissionTotalAdmitted: this.liveAdmission.totalAdmitted,
+      liveAdmissionTotalDeferredByBudget: this.liveAdmission.totalDeferredByBudget,
+      liveAdmissionTotalDeferredUnprimed: this.liveAdmission.totalDeferredUnprimed,
+      liveAdmissionLastAdmittedRenderableName: this.liveAdmission.lastAdmittedRenderableName,
+      liveAdmissionLastAdmittedRootName: this.liveAdmission.lastAdmittedRootName,
+      liveAdmissionLastAdmittedBoundary: this.liveAdmission.lastAdmittedBoundary,
+      liveAdmissionLastRenderMs: this.liveAdmission.lastRenderMs,
       liveDrawAttributionPass: this.liveDrawAttribution.pass,
       liveDrawAttributionPolicy: this.liveDrawAttribution.policy,
       liveDrawAttributionSequence: this.liveDrawAttribution.sequence,
