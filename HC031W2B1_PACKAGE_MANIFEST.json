@@ -1,0 +1,33 @@
+{
+  "patchId": "HC-031W2B1",
+  "title": "Depth Hierarchy Foundation",
+  "applyOver": "HC-031W2A5.4",
+  "visibleBuildId": "HC-031W1",
+  "changedCodeTestFileCount": 4,
+  "files": [
+    {
+      "path": "src/morph/GuideThresholdGameplaySystem.js",
+      "baselineSha256": "c0dcbe400d494d38320aa0873efb49b227ce0fdd179a7d5b3625d4129fd5cef3",
+      "patchedSha256": "f9ae615f675ce083bb6ef25c735a6dd468efc90f4c2a1f8010af556de907b9ec",
+      "status": "modified"
+    },
+    {
+      "path": "src/morph/GuideThresholdLayeredInteractionSystem.js",
+      "baselineSha256": "569f1dbadaaece5bc413c9ddc2928c5784644d96119abcc588bf3f4b5d71dfd6",
+      "patchedSha256": "6df52ca897419f301c4060d80c0170e13c735b15df75989b4d1d9d57a6866135",
+      "status": "modified"
+    },
+    {
+      "path": "src/hub/HubChamberFoundationSystem.js",
+      "baselineSha256": "8fae2565edea070a223ea94363d1ae073f6f66c009715e2cbd11472c92a20192",
+      "patchedSha256": "6aa52728be8b680203a5cee011221e1d9ae14e0733c071311e10b58e02ec4c59",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validateHC031W2B1DepthHierarchyFoundation.mjs",
+      "baselineSha256": null,
+      "patchedSha256": "b48add8fa5494597f70f36825d639e984b571a2e3017bf8eb95facf726808b3d",
+      "status": "new"
+    }
+  ]
+}

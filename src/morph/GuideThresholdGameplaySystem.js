@@ -3,6 +3,8 @@ import * as THREE from "three";
 const RECIPE_ID = "GUIDE_THRESHOLD_GAMEPLAY_FILL_HC007B";
 const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
 const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
+const W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0.58;
+const W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0.72;
 
 /**
  * HC-007B fills the Scar Flow / Guide Threshold lead-up with systemic play.
@@ -375,7 +377,7 @@ export class GuideThresholdGameplaySystem {
       const material = new THREE.MeshBasicMaterial({
         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
         transparent: true,
-        opacity: visual.baseOpacity ?? 0.08,
+        opacity: (visual.baseOpacity ?? 0.08) * W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
@@ -384,6 +386,7 @@ export class GuideThresholdGameplaySystem {
       strand.userData.inspectionFadeable = true;
       strand.userData.livingTissue = true;
       strand.userData.hc023cBaseColor = strand.material.color.clone();
+      strand.userData.visualHierarchyRole = "supporting_current_path";
       this.root.add(strand);
       this.strands.push(strand);
     }
@@ -393,7 +396,7 @@ export class GuideThresholdGameplaySystem {
       const material = new THREE.MeshBasicMaterial({
         color: index % 4 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.12 * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
@@ -401,6 +404,7 @@ export class GuideThresholdGameplaySystem {
       mote.userData.pathOffset = index / moteCount;
       mote.userData.inspectionFadeable = true;
       mote.userData.hc023cBaseColor = mote.material.color.clone();
+      mote.userData.visualHierarchyRole = "supporting_current_motion";
       this.root.add(mote);
       this.motes.push(mote);
     }
@@ -430,6 +434,7 @@ export class GuideThresholdGameplaySystem {
       pressureBody.userData.hc023cBaseColor = pressureBody.material.color.clone();
       pressureBody.userData.inspectionFadeable = true;
       pressureBody.userData.objectDefiningRing = false;
+      pressureBody.userData.visualHierarchyRole = "local_actionable_pressure_body";
       this.root.add(pressureBody);
       this.eddies.push(pressureBody);
     }
@@ -447,6 +452,7 @@ export class GuideThresholdGameplaySystem {
     this.convergenceMarker.scale.set(0.72, 1.34, 0.86);
     this.convergenceMarker.userData.targetingSuppressed = true;
     this.convergenceMarker.userData.objectDefiningRing = false;
+    this.convergenceMarker.userData.visualHierarchyRole = "local_actionable_focus";
     this.root.add(this.convergenceMarker);
   }
 
@@ -481,6 +487,7 @@ export class GuideThresholdGameplaySystem {
         * (1 + (livingStyle.opacity - 1) * livingWeight);
       strand.material.opacity += Math.sin(t * 2.1 * livingStyle.motion - index * 0.8)
         * (0.025 + livingStyle.jitter * livingWeight * 0.24);
+      strand.material.opacity *= W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER;
     });
 
     this.motes.forEach((mote, index) => {
@@ -494,7 +501,8 @@ export class GuideThresholdGameplaySystem {
         * (0.02 + livingStyle.jitter * livingWeight * 0.32);
       mote.position.x += Math.cos(t * 3.1 + index * 0.7) * livingStyle.jitter * livingWeight * 0.18;
       mote.material.opacity = (0.08 + reveal * 0.34 + (this.triggerReady ? 0.08 : 0))
-        * (1 + (livingStyle.opacity - 1) * livingWeight);
+        * (1 + (livingStyle.opacity - 1) * livingWeight)
+        * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER;
       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
       mote.scale.setScalar((0.8 + reveal * 0.5) * stateScale);
     });
@@ -666,6 +674,10 @@ export class GuideThresholdGameplaySystem {
       movementReference: "full_3d_curve_tangent",
       verticalExcursion: this.recipe?.path?.verticalExcursion ?? 0,
       objectDefiningRings: false,
+      visualHierarchyPass: "HC-031W2B1",
+      visualHierarchyPolicy: "local_actionable_pressure_and_convergence_over_full_path_additive_support",
+      fullPathSupportOpacityMultiplier: W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
+      currentMoteSupportOpacityMultiplier: W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
       authoredPressureBodies: this.eddies.length
     };
   }

@@ -4,6 +4,9 @@ const RECIPE_ID = "HUB_CHAMBER_PRESENTATION_LOCK_HC006JA";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
 const SURFACE_CELL_ID = "CELL_MEMBRANE_NURSERY_001";
 const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
+const W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER = 0.48;
+const W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER = 0.55;
+const W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER = 0.78;
 
 const NON_HUB_ENVIRONMENT_ROOTS = [
   "membrane_pocket_surface_001",
@@ -372,7 +375,7 @@ export class HubChamberFoundationSystem {
     });
     const foregroundMaterial = this.createTissueMaterial(foregroundColor, {
       emissiveIntensity: 0.025,
-      opacity: visual.foregroundTissueOpacity ?? 0.2,
+      opacity: (visual.foregroundTissueOpacity ?? 0.2) * W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER,
       roughness: 0.76
     });
 
@@ -393,6 +396,7 @@ export class HubChamberFoundationSystem {
       lobe.rotation.set(index * 0.12, index * 0.48, -0.18 + index * 0.09);
       Object.assign(lobe.userData, {
         depthLayer: "background",
+        visualHierarchyRole: "supporting_anatomy",
         targetingSuppressed: true,
         inspectionFadeable: false,
         phase: index * 0.73
@@ -419,6 +423,7 @@ export class HubChamberFoundationSystem {
       rib.scale.set(1.0, 1.35, 0.82);
       Object.assign(rib.userData, {
         depthLayer: "foreground",
+        visualHierarchyRole: "near_camera_frame",
         targetingSuppressed: true,
         inspectionFadeable: true,
         phase: index * 0.91
@@ -1620,7 +1625,7 @@ export class HubChamberFoundationSystem {
     this.depthBodies.forEach((body, index) => {
       const phase = body.userData.phase ?? index;
       const opacity = body.userData.depthLayer === "foreground"
-        ? (visual.foregroundTissueOpacity ?? 0.2)
+        ? (visual.foregroundTissueOpacity ?? 0.2) * W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER
         : (visual.backgroundTissueOpacity ?? 0.17);
       const ambientEcho = 1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight * 0.42;
       body.material.opacity = opacity * this.reveal * (0.92 + Math.sin(runtimeSeconds * 0.32 + phase) * 0.05) * ambientEcho;
@@ -1633,7 +1638,15 @@ export class HubChamberFoundationSystem {
       const phase = mote.userData.phase ?? index;
       mote.position.y = baseY + Math.sin(runtimeSeconds * speed + phase) * range;
       mote.position.z += Math.sin(runtimeSeconds * speed * 0.42 + phase) * 0.0007;
-      mote.material.opacity = (0.055 + (index % 3) * 0.02) * this.reveal * (1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight);
+      const hierarchyMultiplier = mote.userData.depthLayer === "foreground"
+        ? W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER
+        : mote.userData.depthLayer === "middle"
+          ? W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER
+          : 1;
+      mote.material.opacity = (0.055 + (index % 3) * 0.02)
+        * this.reveal
+        * (1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight)
+        * hierarchyMultiplier;
     });
 
     this.animatePlayerTrail(frameState, runtimeSeconds);
@@ -2841,6 +2854,11 @@ export class HubChamberFoundationSystem {
       modeOwner: "HubMode",
       registryOwner: "RegionRegistry/GateRegistry/ObjectiveRegistry",
       visualOwner: "HubChamberFoundationSystem",
+      visualHierarchyPass: "HC-031W2B1",
+      visualHierarchyPolicy: "near_camera_foreground_frames_below_middle_route_space_and_background_host_context",
+      foregroundTissueOpacityMultiplier: W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER,
+      foregroundDriftOpacityMultiplier: W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER,
+      middleDriftOpacityMultiplier: W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER,
       promptOwner: "HubChamberFoundationSystem",
       spatialAuthorityPass: "HC-008G",
       renderTruthPass: "HC-010C",

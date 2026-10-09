@@ -1,0 +1,271 @@
+--- /mnt/data/w2b1_before/GuideThresholdGameplaySystem.js	2026-10-08 04:00:24.975543864 +0000
++++ /mnt/data/hc031w2a54_work/src/morph/GuideThresholdGameplaySystem.js	2026-10-08 04:00:58.497053571 +0000
+@@ -3,6 +3,8 @@
+ const RECIPE_ID = "GUIDE_THRESHOLD_GAMEPLAY_FILL_HC007B";
+ const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
+ const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
++const W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0.58;
++const W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0.72;
+ 
+ /**
+  * HC-007B fills the Scar Flow / Guide Threshold lead-up with systemic play.
+@@ -375,7 +377,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
+         transparent: true,
+-        opacity: visual.baseOpacity ?? 0.08,
++        opacity: (visual.baseOpacity ?? 0.08) * W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -384,6 +386,7 @@
+       strand.userData.inspectionFadeable = true;
+       strand.userData.livingTissue = true;
+       strand.userData.hc023cBaseColor = strand.material.color.clone();
++      strand.userData.visualHierarchyRole = "supporting_current_path";
+       this.root.add(strand);
+       this.strands.push(strand);
+     }
+@@ -393,7 +396,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 4 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
+         transparent: true,
+-        opacity: 0.12,
++        opacity: 0.12 * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -401,6 +404,7 @@
+       mote.userData.pathOffset = index / moteCount;
+       mote.userData.inspectionFadeable = true;
+       mote.userData.hc023cBaseColor = mote.material.color.clone();
++      mote.userData.visualHierarchyRole = "supporting_current_motion";
+       this.root.add(mote);
+       this.motes.push(mote);
+     }
+@@ -430,6 +434,7 @@
+       pressureBody.userData.hc023cBaseColor = pressureBody.material.color.clone();
+       pressureBody.userData.inspectionFadeable = true;
+       pressureBody.userData.objectDefiningRing = false;
++      pressureBody.userData.visualHierarchyRole = "local_actionable_pressure_body";
+       this.root.add(pressureBody);
+       this.eddies.push(pressureBody);
+     }
+@@ -447,6 +452,7 @@
+     this.convergenceMarker.scale.set(0.72, 1.34, 0.86);
+     this.convergenceMarker.userData.targetingSuppressed = true;
+     this.convergenceMarker.userData.objectDefiningRing = false;
++    this.convergenceMarker.userData.visualHierarchyRole = "local_actionable_focus";
+     this.root.add(this.convergenceMarker);
+   }
+ 
+@@ -481,6 +487,7 @@
+         * (1 + (livingStyle.opacity - 1) * livingWeight);
+       strand.material.opacity += Math.sin(t * 2.1 * livingStyle.motion - index * 0.8)
+         * (0.025 + livingStyle.jitter * livingWeight * 0.24);
++      strand.material.opacity *= W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER;
+     });
+ 
+     this.motes.forEach((mote, index) => {
+@@ -494,7 +501,8 @@
+         * (0.02 + livingStyle.jitter * livingWeight * 0.32);
+       mote.position.x += Math.cos(t * 3.1 + index * 0.7) * livingStyle.jitter * livingWeight * 0.18;
+       mote.material.opacity = (0.08 + reveal * 0.34 + (this.triggerReady ? 0.08 : 0))
+-        * (1 + (livingStyle.opacity - 1) * livingWeight);
++        * (1 + (livingStyle.opacity - 1) * livingWeight)
++        * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER;
+       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
+       mote.scale.setScalar((0.8 + reveal * 0.5) * stateScale);
+     });
+@@ -666,6 +674,10 @@
+       movementReference: "full_3d_curve_tangent",
+       verticalExcursion: this.recipe?.path?.verticalExcursion ?? 0,
+       objectDefiningRings: false,
++      visualHierarchyPass: "HC-031W2B1",
++      visualHierarchyPolicy: "local_actionable_pressure_and_convergence_over_full_path_additive_support",
++      fullPathSupportOpacityMultiplier: W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
++      currentMoteSupportOpacityMultiplier: W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
+       authoredPressureBodies: this.eddies.length
+     };
+   }
+--- /mnt/data/w2b1_before/GuideThresholdLayeredInteractionSystem.js	2026-10-08 04:00:24.976543728 +0000
++++ /mnt/data/hc031w2a54_work/src/morph/GuideThresholdLayeredInteractionSystem.js	2026-10-08 04:00:58.497497575 +0000
+@@ -4,6 +4,9 @@
+ const RECIPE_ID = "GUIDE_THRESHOLD_LAYERED_INTERACTION_HC006F";
+ const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
+ const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
++const W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER = 0.56;
++const W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER = 0.72;
++const W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER = 0.62;
+ 
+ /**
+  * HC-006G locks the Guide Threshold movement-led layered reading for live play.
+@@ -557,7 +560,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
+         transparent: true,
+-        opacity: baseOpacity,
++        opacity: baseOpacity * W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -566,6 +569,7 @@
+       strand.userData.inspectionFadeable = true;
+       strand.userData.livingTissue = true;
+       strand.userData.hc023cBaseColor = strand.material.color.clone();
++      strand.userData.visualHierarchyRole = "supporting_current_path";
+       this.root.add(strand);
+       this.strands.push(strand);
+     }
+@@ -596,6 +600,7 @@
+       rib.userData.inspectionFadeable = true;
+       rib.userData.anatomicalPressureBody = true;
+       rib.userData.objectDefiningRing = false;
++      rib.userData.visualHierarchyRole = "local_actionable_settling_body";
+       this.root.add(rib);
+       this.ribs.push(rib);
+     }
+@@ -620,7 +625,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 3 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
+         transparent: true,
+-        opacity: 0.18,
++        opacity: 0.18 * W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -629,6 +634,7 @@
+       mote.userData.pathOffset = index / 16;
+       mote.userData.hc023cBaseColor = mote.material.color.clone();
+       mote.userData.inspectionFadeable = true;
++      mote.userData.visualHierarchyRole = "supporting_current_motion";
+       this.root.add(mote);
+       this.currentMotes.push(mote);
+     }
+@@ -646,9 +652,10 @@
+     this.focusMarker.userData.inspectionNeverFade = true;
+     this.focusMarker.userData.targetingSuppressed = true;
+     this.focusMarker.userData.objectDefiningRing = false;
++    this.focusMarker.userData.visualHierarchyRole = "local_actionable_focus";
+     this.root.add(this.focusMarker);
+ 
+-    this.light = new THREE.PointLight(visual.signalColor ?? 0xaaefff, 0.35, 4.8, 2);
++    this.light = new THREE.PointLight(visual.signalColor ?? 0xaaefff, 0.35 * W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER, 4.8, 2);
+     this.root.add(this.light);
+   }
+ 
+@@ -673,6 +680,7 @@
+         * (1 + (livingStyle.opacity - 1) * livingWeight);
+       strand.material.opacity += Math.sin(runtimeSeconds * 2.5 * livingStyle.motion - index * 0.7)
+         * (0.035 + livingStyle.jitter * livingWeight * 0.2);
++      strand.material.opacity *= W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER;
+     });
+ 
+     this.ribs.forEach((rib, index) => {
+@@ -711,7 +719,8 @@
+         * (0.025 + livingStyle.jitter * livingWeight * 0.28);
+       mote.position.x += Math.cos(runtimeSeconds * 2.8 + index * 0.6) * livingStyle.jitter * livingWeight * 0.16;
+       mote.material.opacity = (0.08 + energy * 0.42 + guidancePulse * 0.12)
+-        * (1 + (livingStyle.opacity - 1) * livingWeight);
++        * (1 + (livingStyle.opacity - 1) * livingWeight)
++        * W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER;
+       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
+       mote.scale.setScalar((0.8 + energy * 0.6) * stateScale);
+     });
+@@ -733,7 +742,8 @@
+     this.light.position.copy(this.currentFocusPosition);
+     this.light.color.set(visual.signalColor ?? 0xaaefff).lerp(livingStyle.tint, livingWeight * 0.36);
+     this.light.intensity = (0.18 + energy * 0.9 + guidancePulse * 0.35)
+-      * (1 + (livingStyle.opacity - 1) * livingWeight * 0.6);
++      * (1 + (livingStyle.opacity - 1) * livingWeight * 0.6)
++      * W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER;
+   }
+ 
+   currentStage() {
+@@ -783,6 +793,11 @@
+       currentFocus: active ? (this.recipe?.focusObjectId ?? "guide_threshold_current_001") : "none",
+       focusObjectId: active ? (this.recipe?.focusObjectId ?? "guide_threshold_current_001") : "none",
+       focusVisualOnly: true,
++      visualHierarchyPass: "HC-031W2B1",
++      visualHierarchyPolicy: "focus_settling_bodies_and_core_guide_over_full_path_additive_support",
++      fullPathSupportOpacityMultiplier: W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER,
++      currentMoteSupportOpacityMultiplier: W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER,
++      localPointLightIntensityMultiplier: W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER,
+       focusDistance: active ? this.focusDistance : 0,
+       focusReady: Boolean(active && (focusReady || this.settleReleaseArmed)),
+       targetRequired: false,
+--- /mnt/data/w2b1_before/HubChamberFoundationSystem.js	2026-10-08 04:00:24.977524953 +0000
++++ /mnt/data/hc031w2a54_work/src/hub/HubChamberFoundationSystem.js	2026-10-08 04:00:58.498448597 +0000
+@@ -4,6 +4,9 @@
+ const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
+ const SURFACE_CELL_ID = "CELL_MEMBRANE_NURSERY_001";
+ const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
++const W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER = 0.48;
++const W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER = 0.55;
++const W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER = 0.78;
+ 
+ const NON_HUB_ENVIRONMENT_ROOTS = [
+   "membrane_pocket_surface_001",
+@@ -372,7 +375,7 @@
+     });
+     const foregroundMaterial = this.createTissueMaterial(foregroundColor, {
+       emissiveIntensity: 0.025,
+-      opacity: visual.foregroundTissueOpacity ?? 0.2,
++      opacity: (visual.foregroundTissueOpacity ?? 0.2) * W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER,
+       roughness: 0.76
+     });
+ 
+@@ -393,6 +396,7 @@
+       lobe.rotation.set(index * 0.12, index * 0.48, -0.18 + index * 0.09);
+       Object.assign(lobe.userData, {
+         depthLayer: "background",
++        visualHierarchyRole: "supporting_anatomy",
+         targetingSuppressed: true,
+         inspectionFadeable: false,
+         phase: index * 0.73
+@@ -419,6 +423,7 @@
+       rib.scale.set(1.0, 1.35, 0.82);
+       Object.assign(rib.userData, {
+         depthLayer: "foreground",
++        visualHierarchyRole: "near_camera_frame",
+         targetingSuppressed: true,
+         inspectionFadeable: true,
+         phase: index * 0.91
+@@ -1620,7 +1625,7 @@
+     this.depthBodies.forEach((body, index) => {
+       const phase = body.userData.phase ?? index;
+       const opacity = body.userData.depthLayer === "foreground"
+-        ? (visual.foregroundTissueOpacity ?? 0.2)
++        ? (visual.foregroundTissueOpacity ?? 0.2) * W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER
+         : (visual.backgroundTissueOpacity ?? 0.17);
+       const ambientEcho = 1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight * 0.42;
+       body.material.opacity = opacity * this.reveal * (0.92 + Math.sin(runtimeSeconds * 0.32 + phase) * 0.05) * ambientEcho;
+@@ -1633,7 +1638,15 @@
+       const phase = mote.userData.phase ?? index;
+       mote.position.y = baseY + Math.sin(runtimeSeconds * speed + phase) * range;
+       mote.position.z += Math.sin(runtimeSeconds * speed * 0.42 + phase) * 0.0007;
+-      mote.material.opacity = (0.055 + (index % 3) * 0.02) * this.reveal * (1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight);
++      const hierarchyMultiplier = mote.userData.depthLayer === "foreground"
++        ? W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER
++        : mote.userData.depthLayer === "middle"
++          ? W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER
++          : 1;
++      mote.material.opacity = (0.055 + (index % 3) * 0.02)
++        * this.reveal
++        * (1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight)
++        * hierarchyMultiplier;
+     });
+ 
+     this.animatePlayerTrail(frameState, runtimeSeconds);
+@@ -2841,6 +2854,11 @@
+       modeOwner: "HubMode",
+       registryOwner: "RegionRegistry/GateRegistry/ObjectiveRegistry",
+       visualOwner: "HubChamberFoundationSystem",
++      visualHierarchyPass: "HC-031W2B1",
++      visualHierarchyPolicy: "near_camera_foreground_frames_below_middle_route_space_and_background_host_context",
++      foregroundTissueOpacityMultiplier: W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER,
++      foregroundDriftOpacityMultiplier: W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER,
++      middleDriftOpacityMultiplier: W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER,
+       promptOwner: "HubChamberFoundationSystem",
+       spatialAuthorityPass: "HC-008G",
+       renderTruthPass: "HC-010C",
