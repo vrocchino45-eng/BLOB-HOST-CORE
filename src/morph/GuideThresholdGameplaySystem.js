@@ -3,8 +3,8 @@ import * as THREE from "three";
 const RECIPE_ID = "GUIDE_THRESHOLD_GAMEPLAY_FILL_HC007B";
 const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
 const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
-const W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0.58;
-const W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0.72;
+const W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0.68;
+const W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0.8;
 
 /**
  * HC-007B fills the Scar Flow / Guide Threshold lead-up with systemic play.
@@ -377,7 +377,7 @@ export class GuideThresholdGameplaySystem {
       const material = new THREE.MeshBasicMaterial({
         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
         transparent: true,
-        opacity: (visual.baseOpacity ?? 0.08) * W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
+        opacity: (visual.baseOpacity ?? 0.08) * W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
@@ -396,7 +396,7 @@ export class GuideThresholdGameplaySystem {
       const material = new THREE.MeshBasicMaterial({
         color: index % 4 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
         transparent: true,
-        opacity: 0.12 * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
+        opacity: 0.12 * W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
@@ -487,7 +487,7 @@ export class GuideThresholdGameplaySystem {
         * (1 + (livingStyle.opacity - 1) * livingWeight);
       strand.material.opacity += Math.sin(t * 2.1 * livingStyle.motion - index * 0.8)
         * (0.025 + livingStyle.jitter * livingWeight * 0.24);
-      strand.material.opacity *= W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER;
+      strand.material.opacity *= W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER;
     });
 
     this.motes.forEach((mote, index) => {
@@ -502,7 +502,7 @@ export class GuideThresholdGameplaySystem {
       mote.position.x += Math.cos(t * 3.1 + index * 0.7) * livingStyle.jitter * livingWeight * 0.18;
       mote.material.opacity = (0.08 + reveal * 0.34 + (this.triggerReady ? 0.08 : 0))
         * (1 + (livingStyle.opacity - 1) * livingWeight)
-        * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER;
+        * W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER;
       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
       mote.scale.setScalar((0.8 + reveal * 0.5) * stateScale);
     });
@@ -674,10 +674,10 @@ export class GuideThresholdGameplaySystem {
       movementReference: "full_3d_curve_tangent",
       verticalExcursion: this.recipe?.path?.verticalExcursion ?? 0,
       objectDefiningRings: false,
-      visualHierarchyPass: "HC-031W2B1",
-      visualHierarchyPolicy: "local_actionable_pressure_and_convergence_over_full_path_additive_support",
-      fullPathSupportOpacityMultiplier: W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
-      currentMoteSupportOpacityMultiplier: W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
+      visualHierarchyPass: "HC-031W2B1.1",
+      visualHierarchyPolicy: "local_actionable_pressure_and_convergence_over_restored_low_energy_path_support",
+      fullPathSupportOpacityMultiplier: W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER,
+      currentMoteSupportOpacityMultiplier: W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER,
       authoredPressureBodies: this.eddies.length
     };
   }

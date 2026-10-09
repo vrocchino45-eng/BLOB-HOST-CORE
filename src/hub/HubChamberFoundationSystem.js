@@ -7,6 +7,9 @@ const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "pani
 const W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER = 0.48;
 const W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER = 0.55;
 const W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER = 0.78;
+const W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START = 0.16;
+const W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL = 0.48;
+const W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER = 0.24;
 
 const NON_HUB_ENVIRONMENT_ROOTS = [
   "membrane_pocket_surface_001",
@@ -122,6 +125,10 @@ export class HubChamberFoundationSystem {
     this.playerTrailDirection = new THREE.Vector3(0, 0, 1);
     this.tempDirection = new THREE.Vector3();
     this.worldForward = new THREE.Vector3(0, 0, 1);
+    this.cameraRelativeBodyPosition = new THREE.Vector3();
+    this.cameraRelativeCameraPosition = new THREE.Vector3();
+    this.cameraRelativeBodyScale = new THREE.Vector3(1, 1, 1);
+    this.cameraRelativeTissueMinimumMultiplier = 1;
     this.active = false;
     this.reveal = 0;
     this.routeIdentityReveal = 0;
@@ -202,6 +209,7 @@ export class HubChamberFoundationSystem {
       this.active = false;
       this.reveal = 0;
       this.routeIdentityReveal = 0;
+      this.cameraRelativeTissueMinimumMultiplier = 1;
       this.screenTruthLatched = false;
       this.screenTruthStableFrames = 0;
       this.setVisible(false);
@@ -1301,6 +1309,34 @@ export class HubChamberFoundationSystem {
     return THREE.MathUtils.clamp(0.24 * ageRetention * stateSignal, 0.09, 0.24);
   }
 
+  cameraRelativeTissueOpacityMultiplier(body) {
+    if (!this.camera || !body?.geometry) return 1;
+
+    const geometry = body.geometry;
+    if (!geometry.boundingSphere) geometry.computeBoundingSphere?.();
+    const localRadius = geometry.boundingSphere?.radius ?? 0;
+    if (!(localRadius > 0)) return 1;
+
+    this.camera.getWorldPosition(this.cameraRelativeCameraPosition);
+    body.getWorldPosition(this.cameraRelativeBodyPosition);
+    body.getWorldScale(this.cameraRelativeBodyScale);
+
+    const worldRadius = localRadius * Math.max(
+      Math.abs(this.cameraRelativeBodyScale.x),
+      Math.abs(this.cameraRelativeBodyScale.y),
+      Math.abs(this.cameraRelativeBodyScale.z),
+      0.001
+    );
+    const distance = Math.max(0.001, this.cameraRelativeCameraPosition.distanceTo(this.cameraRelativeBodyPosition));
+    const apparentSize = worldRadius / distance;
+    const fade = THREE.MathUtils.smoothstep(
+      apparentSize,
+      W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START,
+      W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL
+    );
+    return THREE.MathUtils.lerp(1, W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER, fade);
+  }
+
   animate(dt, runtimeSeconds, routeIdentityReady, frameState) {
     const visual = this.recipe.visual ?? {};
     const hubInvestigation = frameState.hubInvestigationGameplay ?? {};
@@ -1622,13 +1658,24 @@ export class HubChamberFoundationSystem {
       tail.position.y += Math.sin(runtimeSeconds * 0.8 + index) * 0.0008;
     });
 
+    this.cameraRelativeTissueMinimumMultiplier = 1;
     this.depthBodies.forEach((body, index) => {
       const phase = body.userData.phase ?? index;
       const opacity = body.userData.depthLayer === "foreground"
         ? (visual.foregroundTissueOpacity ?? 0.2) * W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER
         : (visual.backgroundTissueOpacity ?? 0.17);
       const ambientEcho = 1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight * 0.42;
-      body.material.opacity = opacity * this.reveal * (0.92 + Math.sin(runtimeSeconds * 0.32 + phase) * 0.05) * ambientEcho;
+      const cameraRelativeMultiplier = this.cameraRelativeTissueOpacityMultiplier(body);
+      this.cameraRelativeTissueMinimumMultiplier = Math.min(
+        this.cameraRelativeTissueMinimumMultiplier,
+        cameraRelativeMultiplier
+      );
+      body.userData.cameraRelativeOpacityMultiplier = cameraRelativeMultiplier;
+      body.material.opacity = opacity
+        * cameraRelativeMultiplier
+        * this.reveal
+        * (0.92 + Math.sin(runtimeSeconds * 0.32 + phase) * 0.05)
+        * ambientEcho;
     });
     this.driftMotes.forEach((mote, index) => {
       const baseY = mote.userData.baseY ?? 0;
@@ -2854,9 +2901,14 @@ export class HubChamberFoundationSystem {
       modeOwner: "HubMode",
       registryOwner: "RegionRegistry/GateRegistry/ObjectiveRegistry",
       visualOwner: "HubChamberFoundationSystem",
-      visualHierarchyPass: "HC-031W2B1",
-      visualHierarchyPolicy: "near_camera_foreground_frames_below_middle_route_space_and_background_host_context",
+      visualHierarchyPass: "HC-031W2B1.1",
+      visualHierarchyPolicy: "camera_relative_large_tissue_attenuates_below_middle_route_space_core_guide_and_background_context",
       foregroundTissueOpacityMultiplier: W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER,
+      cameraRelativeTissueAttenuationActive: Boolean(this.camera),
+      cameraRelativeTissueMinimumOpacityMultiplier: Number(this.cameraRelativeTissueMinimumMultiplier.toFixed(3)),
+      cameraRelativeTissueFadeStart: W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START,
+      cameraRelativeTissueFadeFull: W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL,
+      cameraRelativeTissueMinimumAllowedMultiplier: W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER,
       foregroundDriftOpacityMultiplier: W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER,
       middleDriftOpacityMultiplier: W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER,
       promptOwner: "HubChamberFoundationSystem",

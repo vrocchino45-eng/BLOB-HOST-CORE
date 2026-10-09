@@ -1,0 +1,321 @@
+--- a/src/morph/GuideThresholdGameplaySystem.js
++++ b/src/morph/GuideThresholdGameplaySystem.js
+@@ -3,8 +3,8 @@
+ const RECIPE_ID = "GUIDE_THRESHOLD_GAMEPLAY_FILL_HC007B";
+ const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
+ const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
+-const W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0.58;
+-const W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0.72;
++const W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0.68;
++const W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0.8;
+ 
+ /**
+  * HC-007B fills the Scar Flow / Guide Threshold lead-up with systemic play.
+@@ -377,7 +377,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
+         transparent: true,
+-        opacity: (visual.baseOpacity ?? 0.08) * W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
++        opacity: (visual.baseOpacity ?? 0.08) * W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -396,7 +396,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 4 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
+         transparent: true,
+-        opacity: 0.12 * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
++        opacity: 0.12 * W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -487,7 +487,7 @@
+         * (1 + (livingStyle.opacity - 1) * livingWeight);
+       strand.material.opacity += Math.sin(t * 2.1 * livingStyle.motion - index * 0.8)
+         * (0.025 + livingStyle.jitter * livingWeight * 0.24);
+-      strand.material.opacity *= W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER;
++      strand.material.opacity *= W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER;
+     });
+ 
+     this.motes.forEach((mote, index) => {
+@@ -502,7 +502,7 @@
+       mote.position.x += Math.cos(t * 3.1 + index * 0.7) * livingStyle.jitter * livingWeight * 0.18;
+       mote.material.opacity = (0.08 + reveal * 0.34 + (this.triggerReady ? 0.08 : 0))
+         * (1 + (livingStyle.opacity - 1) * livingWeight)
+-        * W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER;
++        * W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER;
+       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
+       mote.scale.setScalar((0.8 + reveal * 0.5) * stateScale);
+     });
+@@ -674,10 +674,10 @@
+       movementReference: "full_3d_curve_tangent",
+       verticalExcursion: this.recipe?.path?.verticalExcursion ?? 0,
+       objectDefiningRings: false,
+-      visualHierarchyPass: "HC-031W2B1",
+-      visualHierarchyPolicy: "local_actionable_pressure_and_convergence_over_full_path_additive_support",
+-      fullPathSupportOpacityMultiplier: W2B1_SUPPORT_STRAND_OPACITY_MULTIPLIER,
+-      currentMoteSupportOpacityMultiplier: W2B1_SUPPORT_MOTE_OPACITY_MULTIPLIER,
++      visualHierarchyPass: "HC-031W2B1.1",
++      visualHierarchyPolicy: "local_actionable_pressure_and_convergence_over_restored_low_energy_path_support",
++      fullPathSupportOpacityMultiplier: W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER,
++      currentMoteSupportOpacityMultiplier: W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER,
+       authoredPressureBodies: this.eddies.length
+     };
+   }
+--- a/src/morph/GuideThresholdLayeredInteractionSystem.js
++++ b/src/morph/GuideThresholdLayeredInteractionSystem.js
+@@ -4,9 +4,9 @@
+ const RECIPE_ID = "GUIDE_THRESHOLD_LAYERED_INTERACTION_HC006F";
+ const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
+ const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
+-const W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER = 0.56;
+-const W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER = 0.72;
+-const W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER = 0.62;
++const W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER = 0.66;
++const W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER = 0.8;
++const W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER = 0.7;
+ 
+ /**
+  * HC-006G locks the Guide Threshold movement-led layered reading for live play.
+@@ -560,7 +560,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
+         transparent: true,
+-        opacity: baseOpacity * W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER,
++        opacity: baseOpacity * W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -625,7 +625,7 @@
+       const material = new THREE.MeshBasicMaterial({
+         color: index % 3 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
+         transparent: true,
+-        opacity: 0.18 * W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER,
++        opacity: 0.18 * W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER,
+         depthWrite: false,
+         blending: THREE.AdditiveBlending
+       });
+@@ -655,7 +655,7 @@
+     this.focusMarker.userData.visualHierarchyRole = "local_actionable_focus";
+     this.root.add(this.focusMarker);
+ 
+-    this.light = new THREE.PointLight(visual.signalColor ?? 0xaaefff, 0.35 * W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER, 4.8, 2);
++    this.light = new THREE.PointLight(visual.signalColor ?? 0xaaefff, 0.35 * W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER, 4.8, 2);
+     this.root.add(this.light);
+   }
+ 
+@@ -680,7 +680,7 @@
+         * (1 + (livingStyle.opacity - 1) * livingWeight);
+       strand.material.opacity += Math.sin(runtimeSeconds * 2.5 * livingStyle.motion - index * 0.7)
+         * (0.035 + livingStyle.jitter * livingWeight * 0.2);
+-      strand.material.opacity *= W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER;
++      strand.material.opacity *= W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER;
+     });
+ 
+     this.ribs.forEach((rib, index) => {
+@@ -720,7 +720,7 @@
+       mote.position.x += Math.cos(runtimeSeconds * 2.8 + index * 0.6) * livingStyle.jitter * livingWeight * 0.16;
+       mote.material.opacity = (0.08 + energy * 0.42 + guidancePulse * 0.12)
+         * (1 + (livingStyle.opacity - 1) * livingWeight)
+-        * W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER;
++        * W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER;
+       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
+       mote.scale.setScalar((0.8 + energy * 0.6) * stateScale);
+     });
+@@ -743,7 +743,7 @@
+     this.light.color.set(visual.signalColor ?? 0xaaefff).lerp(livingStyle.tint, livingWeight * 0.36);
+     this.light.intensity = (0.18 + energy * 0.9 + guidancePulse * 0.35)
+       * (1 + (livingStyle.opacity - 1) * livingWeight * 0.6)
+-      * W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER;
++      * W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER;
+   }
+ 
+   currentStage() {
+@@ -793,11 +793,11 @@
+       currentFocus: active ? (this.recipe?.focusObjectId ?? "guide_threshold_current_001") : "none",
+       focusObjectId: active ? (this.recipe?.focusObjectId ?? "guide_threshold_current_001") : "none",
+       focusVisualOnly: true,
+-      visualHierarchyPass: "HC-031W2B1",
+-      visualHierarchyPolicy: "focus_settling_bodies_and_core_guide_over_full_path_additive_support",
+-      fullPathSupportOpacityMultiplier: W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER,
+-      currentMoteSupportOpacityMultiplier: W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER,
+-      localPointLightIntensityMultiplier: W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER,
++      visualHierarchyPass: "HC-031W2B1.1",
++      visualHierarchyPolicy: "focus_settling_bodies_and_core_guide_over_restored_low_energy_path_support",
++      fullPathSupportOpacityMultiplier: W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER,
++      currentMoteSupportOpacityMultiplier: W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER,
++      localPointLightIntensityMultiplier: W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER,
+       focusDistance: active ? this.focusDistance : 0,
+       focusReady: Boolean(active && (focusReady || this.settleReleaseArmed)),
+       targetRequired: false,
+--- a/src/hub/HubChamberFoundationSystem.js
++++ b/src/hub/HubChamberFoundationSystem.js
+@@ -7,6 +7,9 @@
+ const W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER = 0.48;
+ const W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER = 0.55;
+ const W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER = 0.78;
++const W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START = 0.16;
++const W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL = 0.48;
++const W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER = 0.24;
+ 
+ const NON_HUB_ENVIRONMENT_ROOTS = [
+   "membrane_pocket_surface_001",
+@@ -122,6 +125,10 @@
+     this.playerTrailDirection = new THREE.Vector3(0, 0, 1);
+     this.tempDirection = new THREE.Vector3();
+     this.worldForward = new THREE.Vector3(0, 0, 1);
++    this.cameraRelativeBodyPosition = new THREE.Vector3();
++    this.cameraRelativeCameraPosition = new THREE.Vector3();
++    this.cameraRelativeBodyScale = new THREE.Vector3(1, 1, 1);
++    this.cameraRelativeTissueMinimumMultiplier = 1;
+     this.active = false;
+     this.reveal = 0;
+     this.routeIdentityReveal = 0;
+@@ -202,6 +209,7 @@
+       this.active = false;
+       this.reveal = 0;
+       this.routeIdentityReveal = 0;
++      this.cameraRelativeTissueMinimumMultiplier = 1;
+       this.screenTruthLatched = false;
+       this.screenTruthStableFrames = 0;
+       this.setVisible(false);
+@@ -1301,6 +1309,34 @@
+     return THREE.MathUtils.clamp(0.24 * ageRetention * stateSignal, 0.09, 0.24);
+   }
+ 
++  cameraRelativeTissueOpacityMultiplier(body) {
++    if (!this.camera || !body?.geometry) return 1;
++
++    const geometry = body.geometry;
++    if (!geometry.boundingSphere) geometry.computeBoundingSphere?.();
++    const localRadius = geometry.boundingSphere?.radius ?? 0;
++    if (!(localRadius > 0)) return 1;
++
++    this.camera.getWorldPosition(this.cameraRelativeCameraPosition);
++    body.getWorldPosition(this.cameraRelativeBodyPosition);
++    body.getWorldScale(this.cameraRelativeBodyScale);
++
++    const worldRadius = localRadius * Math.max(
++      Math.abs(this.cameraRelativeBodyScale.x),
++      Math.abs(this.cameraRelativeBodyScale.y),
++      Math.abs(this.cameraRelativeBodyScale.z),
++      0.001
++    );
++    const distance = Math.max(0.001, this.cameraRelativeCameraPosition.distanceTo(this.cameraRelativeBodyPosition));
++    const apparentSize = worldRadius / distance;
++    const fade = THREE.MathUtils.smoothstep(
++      apparentSize,
++      W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START,
++      W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL
++    );
++    return THREE.MathUtils.lerp(1, W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER, fade);
++  }
++
+   animate(dt, runtimeSeconds, routeIdentityReady, frameState) {
+     const visual = this.recipe.visual ?? {};
+     const hubInvestigation = frameState.hubInvestigationGameplay ?? {};
+@@ -1622,13 +1658,24 @@
+       tail.position.y += Math.sin(runtimeSeconds * 0.8 + index) * 0.0008;
+     });
+ 
++    this.cameraRelativeTissueMinimumMultiplier = 1;
+     this.depthBodies.forEach((body, index) => {
+       const phase = body.userData.phase ?? index;
+       const opacity = body.userData.depthLayer === "foreground"
+         ? (visual.foregroundTissueOpacity ?? 0.2) * W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER
+         : (visual.backgroundTissueOpacity ?? 0.17);
+       const ambientEcho = 1 + (livingMemoryStyle.opacity - 1) * livingMemoryWeight * 0.42;
+-      body.material.opacity = opacity * this.reveal * (0.92 + Math.sin(runtimeSeconds * 0.32 + phase) * 0.05) * ambientEcho;
++      const cameraRelativeMultiplier = this.cameraRelativeTissueOpacityMultiplier(body);
++      this.cameraRelativeTissueMinimumMultiplier = Math.min(
++        this.cameraRelativeTissueMinimumMultiplier,
++        cameraRelativeMultiplier
++      );
++      body.userData.cameraRelativeOpacityMultiplier = cameraRelativeMultiplier;
++      body.material.opacity = opacity
++        * cameraRelativeMultiplier
++        * this.reveal
++        * (0.92 + Math.sin(runtimeSeconds * 0.32 + phase) * 0.05)
++        * ambientEcho;
+     });
+     this.driftMotes.forEach((mote, index) => {
+       const baseY = mote.userData.baseY ?? 0;
+@@ -2854,9 +2901,14 @@
+       modeOwner: "HubMode",
+       registryOwner: "RegionRegistry/GateRegistry/ObjectiveRegistry",
+       visualOwner: "HubChamberFoundationSystem",
+-      visualHierarchyPass: "HC-031W2B1",
+-      visualHierarchyPolicy: "near_camera_foreground_frames_below_middle_route_space_and_background_host_context",
++      visualHierarchyPass: "HC-031W2B1.1",
++      visualHierarchyPolicy: "camera_relative_large_tissue_attenuates_below_middle_route_space_core_guide_and_background_context",
+       foregroundTissueOpacityMultiplier: W2B1_FOREGROUND_TISSUE_OPACITY_MULTIPLIER,
++      cameraRelativeTissueAttenuationActive: Boolean(this.camera),
++      cameraRelativeTissueMinimumOpacityMultiplier: Number(this.cameraRelativeTissueMinimumMultiplier.toFixed(3)),
++      cameraRelativeTissueFadeStart: W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START,
++      cameraRelativeTissueFadeFull: W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL,
++      cameraRelativeTissueMinimumAllowedMultiplier: W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER,
+       foregroundDriftOpacityMultiplier: W2B1_FOREGROUND_DRIFT_OPACITY_MULTIPLIER,
+       middleDriftOpacityMultiplier: W2B1_MIDDLE_DRIFT_OPACITY_MULTIPLIER,
+       promptOwner: "HubChamberFoundationSystem",
+--- /dev/null
++++ b/scripts/validateHC031W2B11CameraRelativeHierarchyBalance.mjs
+@@ -0,0 +1,59 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import * as THREE from "three";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const gameplay = read("../src/morph/GuideThresholdGameplaySystem.js");
++const layered = read("../src/morph/GuideThresholdLayeredInteractionSystem.js");
++const hub = read("../src/hub/HubChamberFoundationSystem.js");
++const surface = read("../src/opening/SurfaceWakeEcologicalCausalitySystem.js");
++
++// Guide / Scar recovers some living-current continuity without returning to the pre-B1 cyan wash.
++assert.match(gameplay, /W2B11_SUPPORT_STRAND_OPACITY_MULTIPLIER = 0\.68/);
++assert.match(gameplay, /W2B11_SUPPORT_MOTE_OPACITY_MULTIPLIER = 0\.8/);
++assert.match(gameplay, /visualHierarchyPass: "HC-031W2B1\.1"/);
++assert.match(gameplay, /restored_low_energy_path_support/);
++assert.match(gameplay, /visualHierarchyRole = "local_actionable_pressure_body"/);
++assert.match(gameplay, /visualHierarchyRole = "local_actionable_focus"/);
++
++assert.match(layered, /W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER = 0\.66/);
++assert.match(layered, /W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER = 0\.8/);
++assert.match(layered, /W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER = 0\.7/);
++assert.match(layered, /visualHierarchyPass: "HC-031W2B1\.1"/);
++assert.match(layered, /restored_low_energy_path_support/);
++assert.match(layered, /visualHierarchyRole = "local_actionable_settling_body"/);
++assert.match(layered, /visualHierarchyRole = "local_actionable_focus"/);
++
++// Hub hierarchy is now camera-relative for all depth tissue, not authored-label-only.
++assert.match(hub, /W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_START = 0\.16/);
++assert.match(hub, /W2B11_CAMERA_TISSUE_APPARENT_SIZE_FADE_FULL = 0\.48/);
++assert.match(hub, /W2B11_CAMERA_TISSUE_MINIMUM_OPACITY_MULTIPLIER = 0\.24/);
++assert.match(hub, /cameraRelativeTissueOpacityMultiplier\(body\)/);
++assert.match(hub, /const apparentSize = worldRadius \/ distance/);
++assert.match(hub, /body\.userData\.cameraRelativeOpacityMultiplier = cameraRelativeMultiplier/);
++assert.match(hub, /camera_relative_large_tissue_attenuates_below_middle_route_space_core_guide_and_background_context/);
++assert.match(hub, /cameraRelativeTissueAttenuationActive: Boolean\(this\.camera\)/);
++assert.match(hub, /visualHierarchyPass: "HC-031W2B1\.1"/);
++
++// The chosen curve must be monotonic: far/small tissue stays authored; near/large tissue attenuates strongly.
++const attenuation = (apparentSize) => {
++  const fade = THREE.MathUtils.smoothstep(apparentSize, 0.16, 0.48);
++  return THREE.MathUtils.lerp(1, 0.24, fade);
++};
++assert.equal(attenuation(0.1), 1);
++assert.ok(attenuation(0.28) < 1 && attenuation(0.28) > 0.24);
++assert.equal(attenuation(0.6), 0.24);
++assert.ok(attenuation(0.2) > attenuation(0.32));
++assert.ok(attenuation(0.32) > attenuation(0.5));
++
++// Surface Wake remains the visual reference and must not be tuned by B1.1.
++assert.match(surface, /opacity: spec\.layer === "foreground" \? 0\.2 : 0\.28/);
++assert.match(surface, /depthLayer = spec\.layer/);
++
++// No global art or camera policy is introduced here.
++for (const source of [gameplay, layered, hub]) {
++  assert.doesNotMatch(source, /toneMappingExposure\s*=/);
++  assert.doesNotMatch(source, /scene\.fog\s*=/);
++}
++
++console.log("HC031W2B1.1 camera-relative hierarchy balance source locks PASS");

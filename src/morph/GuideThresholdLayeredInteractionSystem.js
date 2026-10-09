@@ -4,9 +4,9 @@ import { LayeredInteractionGrammar } from "../interaction/LayeredInteractionGram
 const RECIPE_ID = "GUIDE_THRESHOLD_LAYERED_INTERACTION_HC006F";
 const CELL_ID = "CELL_SCAR_FLOW_FOLD_001";
 const SURFACE_LIVING_STATES = new Set(["cautious", "blooming", "withered", "panic", "embrace", "growth"]);
-const W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER = 0.56;
-const W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER = 0.72;
-const W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER = 0.62;
+const W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER = 0.66;
+const W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER = 0.8;
+const W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER = 0.7;
 
 /**
  * HC-006G locks the Guide Threshold movement-led layered reading for live play.
@@ -560,7 +560,7 @@ export class GuideThresholdLayeredInteractionSystem {
       const material = new THREE.MeshBasicMaterial({
         color: index % 2 === 0 ? (visual.signalColor ?? 0xaaefff) : (visual.memoryColor ?? 0xffdca8),
         transparent: true,
-        opacity: baseOpacity * W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER,
+        opacity: baseOpacity * W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
@@ -625,7 +625,7 @@ export class GuideThresholdLayeredInteractionSystem {
       const material = new THREE.MeshBasicMaterial({
         color: index % 3 === 0 ? (visual.memoryColor ?? 0xffdca8) : (visual.signalColor ?? 0xaaefff),
         transparent: true,
-        opacity: 0.18 * W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER,
+        opacity: 0.18 * W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER,
         depthWrite: false,
         blending: THREE.AdditiveBlending
       });
@@ -655,7 +655,7 @@ export class GuideThresholdLayeredInteractionSystem {
     this.focusMarker.userData.visualHierarchyRole = "local_actionable_focus";
     this.root.add(this.focusMarker);
 
-    this.light = new THREE.PointLight(visual.signalColor ?? 0xaaefff, 0.35 * W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER, 4.8, 2);
+    this.light = new THREE.PointLight(visual.signalColor ?? 0xaaefff, 0.35 * W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER, 4.8, 2);
     this.root.add(this.light);
   }
 
@@ -680,7 +680,7 @@ export class GuideThresholdLayeredInteractionSystem {
         * (1 + (livingStyle.opacity - 1) * livingWeight);
       strand.material.opacity += Math.sin(runtimeSeconds * 2.5 * livingStyle.motion - index * 0.7)
         * (0.035 + livingStyle.jitter * livingWeight * 0.2);
-      strand.material.opacity *= W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER;
+      strand.material.opacity *= W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER;
     });
 
     this.ribs.forEach((rib, index) => {
@@ -720,7 +720,7 @@ export class GuideThresholdLayeredInteractionSystem {
       mote.position.x += Math.cos(runtimeSeconds * 2.8 + index * 0.6) * livingStyle.jitter * livingWeight * 0.16;
       mote.material.opacity = (0.08 + energy * 0.42 + guidancePulse * 0.12)
         * (1 + (livingStyle.opacity - 1) * livingWeight)
-        * W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER;
+        * W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER;
       const stateScale = 1 + (livingStyle.scale - 1) * livingWeight;
       mote.scale.setScalar((0.8 + energy * 0.6) * stateScale);
     });
@@ -743,7 +743,7 @@ export class GuideThresholdLayeredInteractionSystem {
     this.light.color.set(visual.signalColor ?? 0xaaefff).lerp(livingStyle.tint, livingWeight * 0.36);
     this.light.intensity = (0.18 + energy * 0.9 + guidancePulse * 0.35)
       * (1 + (livingStyle.opacity - 1) * livingWeight * 0.6)
-      * W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER;
+      * W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER;
   }
 
   currentStage() {
@@ -793,11 +793,11 @@ export class GuideThresholdLayeredInteractionSystem {
       currentFocus: active ? (this.recipe?.focusObjectId ?? "guide_threshold_current_001") : "none",
       focusObjectId: active ? (this.recipe?.focusObjectId ?? "guide_threshold_current_001") : "none",
       focusVisualOnly: true,
-      visualHierarchyPass: "HC-031W2B1",
-      visualHierarchyPolicy: "focus_settling_bodies_and_core_guide_over_full_path_additive_support",
-      fullPathSupportOpacityMultiplier: W2B1_LAYERED_STRAND_OPACITY_MULTIPLIER,
-      currentMoteSupportOpacityMultiplier: W2B1_LAYERED_MOTE_OPACITY_MULTIPLIER,
-      localPointLightIntensityMultiplier: W2B1_LAYERED_LIGHT_INTENSITY_MULTIPLIER,
+      visualHierarchyPass: "HC-031W2B1.1",
+      visualHierarchyPolicy: "focus_settling_bodies_and_core_guide_over_restored_low_energy_path_support",
+      fullPathSupportOpacityMultiplier: W2B11_LAYERED_STRAND_OPACITY_MULTIPLIER,
+      currentMoteSupportOpacityMultiplier: W2B11_LAYERED_MOTE_OPACITY_MULTIPLIER,
+      localPointLightIntensityMultiplier: W2B11_LAYERED_LIGHT_INTENSITY_MULTIPLIER,
       focusDistance: active ? this.focusDistance : 0,
       focusReady: Boolean(active && (focusReady || this.settleReleaseArmed)),
       targetRequired: false,
