@@ -74,6 +74,7 @@ export class VisualHierarchyCompressionSystem {
 
     frameState.visualHierarchyCompression = {
       pass: "HC-030B1",
+      spatialRevealPass: "HC-031W2B2",
       owner: "VisualHierarchyCompressionSystem",
       active: relationshipActive || Boolean(frameState.verbPhysicalization),
       relationshipGradientActive: this.gradientRoot.visible,
@@ -83,8 +84,8 @@ export class VisualHierarchyCompressionSystem {
       reactiveStress01: stress01,
       hierarchy: {
         primary: "target_material_state_and_response",
-        secondary: "verb_direction_and_relationship_change",
-        tertiary: "rings_lines_wireframes"
+        secondary: "pulse_return_and_local_relationship_change",
+        tertiary: "outgoing_spheres_rings_lines_and_distant_wireframes"
       },
       policy: {
         supportGraphicsQuietByDefault: true,
@@ -168,18 +169,29 @@ export class VisualHierarchyCompressionSystem {
       verbs.pulseChargeShell.material.opacity = Math.min(0.16, verbs.pulseChargeShell.material.opacity * 0.48 * supportLift);
     }
     for (const front of verbs.pulseFronts ?? []) {
-      if (front?.root?.material) front.root.material.opacity *= 0.58 * supportLift;
+      if (front?.root?.material) front.root.material.opacity *= 0.42 * supportLift;
     }
     for (const contour of verbs.pulseContours ?? []) {
+      const tier = contour.spatialTier ?? "local_mid";
+      const tierMultiplier = tier === "local_near"
+        ? 0.56
+        : tier === "local_mid"
+          ? 0.50
+          : tier === "local_far"
+            ? 0.44
+            : tier === "deep_relation"
+              ? 0.42
+              : tier === "deep_layer" ? 0.38 : 0.34;
+      const opacityCap = tier.startsWith("deep_") ? 0.105 + stress01 * 0.015 : 0.14 + stress01 * 0.02;
       for (const material of contour.materials ?? []) {
-        material.opacity = Math.min(0.13 + stress01 * 0.02, material.opacity * 0.42 * supportLift);
+        material.opacity = Math.min(opacityCap, material.opacity * tierMultiplier * supportLift);
       }
     }
     for (const flash of verbs.contactFlashes ?? []) {
-      if (flash?.root?.material) flash.root.material.opacity *= 0.60 * supportLift;
+      if (flash?.root?.material) flash.root.material.opacity *= 0.54 * supportLift;
     }
     for (const mote of verbs.pulseReturnMotes ?? []) {
-      if (mote?.root?.material) mote.root.material.opacity *= 0.82;
+      if (mote?.root?.material) mote.root.material.opacity *= 0.94;
     }
 
     // Absorb: the moving fragments remain comparatively legible; the straight axis,

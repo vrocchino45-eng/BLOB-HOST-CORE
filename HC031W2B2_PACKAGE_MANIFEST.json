@@ -1,0 +1,28 @@
+{
+  "patch": "HC-031W2B2",
+  "title": "Pulse/Sonar Spatial Reveal",
+  "apply_over": "HC-031W2B1.1",
+  "visible_build_identity": "HC-031W1",
+  "changed_project_files": [
+    "src/player/CoreVerbPhysicalizationSystem.js",
+    "src/presentation/VisualHierarchyCompressionSystem.js",
+    "scripts/validateHC031W2B2PulseSonarSpatialReveal.mjs"
+  ],
+  "docs": [
+    "HC031W2B2_PATCH_APPLY.md",
+    "HC031W2B2_BUILD_REPORT.md",
+    "HC031W2B2_FOCUSED_PLAYTEST.md",
+    "HC031W2B2_CHANGED_LINES.diff",
+    "BLOB_HC-031W2B_PHASE_BOX.md"
+  ],
+  "sha256": {
+    "BLOB_HC-031W2B_PHASE_BOX.md": "64578fc6c1825a6e82eef5c809ad1aa96e655f0bfb876b06967f0f41306a1f9a",
+    "HC031W2B2_BUILD_REPORT.md": "65c4e7030c2139691657329740bdce2a842d93f87b726ceb7790971d9c08b9b7",
+    "HC031W2B2_CHANGED_LINES.diff": "c1619c0122840542106c0d4ba8bdee0c65aadbc17ebf8c82631ec1f08d461a29",
+    "HC031W2B2_FOCUSED_PLAYTEST.md": "3f899e97250b4c8f37ed8adb53fc424c14f6fae919955bbc9f41d685132cd6ba",
+    "HC031W2B2_PATCH_APPLY.md": "d13c5c8bcba62fc4e23079da064bdcfc6502e59ab6cce2d6cea7e8d85fad44ff",
+    "scripts/validateHC031W2B2PulseSonarSpatialReveal.mjs": "06714e0e9ca25d439f3385ffbbfa7322e901ad3fbd0419d5b4b560a2949d21ed",
+    "src/player/CoreVerbPhysicalizationSystem.js": "709fe7f544b9cceb77bb90e4320064f33aed621ed3958fd9585eb64307ad3693",
+    "src/presentation/VisualHierarchyCompressionSystem.js": "894234b62a306cbaf26cd5fae3580bf92232adc7ecfb9a8b0de89132d52a3c3a"
+  }
+}

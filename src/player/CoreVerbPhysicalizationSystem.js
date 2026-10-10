@@ -244,6 +244,14 @@ export class CoreVerbPhysicalizationSystem {
       },
       pulseReturnMotes: this.pulseReturnMotes.length,
       pulseReturnMoteBudget: this.maxPulseReturnMotes,
+      pulseSpatialRevealPass: "HC-031W2B2",
+      pulseSpatialRevealLaw: "outgoing_wave_yields_to_distance_tiered_contact_contour_then_directional_return",
+      pulseContourTiers: this.pulseContours.reduce((counts, contour) => {
+        const tier = contour.spatialTier ?? "legacy";
+        counts[tier] = (counts[tier] ?? 0) + 1;
+        return counts;
+      }, {}),
+      repeatedPulseRevealLaw: "first_presence_fragment_second_layering_third_structural_relationship_more_structure_not_more_brightness",
       contactFlashes: this.contactFlashes.length,
       contactFlashBudget: this.maxContactFlashes,
       sharedTransientGeometryPolicy: "shared_geometry_bounded_instances_hc031w2a2",
@@ -398,7 +406,9 @@ export class CoreVerbPhysicalizationSystem {
       mote.root.position.lerpVectors(mote.start, this.playerRoot.position, t);
       const resolutionLift = mote.deep ? Math.max(0, (mote.resolutionStage ?? 1) - 1) : 0;
       mote.root.scale.setScalar((mote.deep ? 1.05 + resolutionLift * 0.16 : 0.75) + (1 - t) * (mote.deep ? 0.85 + resolutionLift * 0.12 : 0.55));
-      mote.root.material.opacity = (mote.deep ? 0.42 + resolutionLift * 0.035 : 0.82) * (1 - t * (mote.deep ? 0.48 : 0.22));
+      const arrivalLift = THREE.MathUtils.smoothstep(t, 0.04, 0.76);
+      const arrivalFade = 1 - THREE.MathUtils.smoothstep(t, 0.84, 1.0);
+      mote.root.material.opacity = THREE.MathUtils.lerp(mote.startOpacity ?? 0.34, mote.peakOpacity ?? 0.72, arrivalLift) * arrivalFade;
     }
     this.pulseReturnMotes = this.pulseReturnMotes.filter((mote) => {
       if (mote.age < mote.life) return true;
@@ -467,7 +477,7 @@ export class CoreVerbPhysicalizationSystem {
       maxRange,
       life: maxRange / waveSpeed + 0.08,
       baseRadius,
-      baseOpacity: focused ? 0.16 + focus01 * 0.08 : charged ? 0.18 + charge01 * 0.06 : 0.10,
+      baseOpacity: focused ? 0.13 + focus01 * 0.06 : charged ? 0.14 + charge01 * 0.045 : 0.075,
       radialScale: focused ? THREE.MathUtils.lerp(0.62, 0.42, focus01) : 1,
       axialScale: focused ? THREE.MathUtils.lerp(1.34, 1.82, focus01) : 1,
       charged,
@@ -519,6 +529,45 @@ export class CoreVerbPhysicalizationSystem {
     return reducedGeometry;
   }
 
+  resolvePulseSpatialReveal(contact, frameState = this.frameState) {
+    const distance = Math.max(0, Number.isFinite(contact?.distance) ? contact.distance : 0);
+    const maxRange = Math.max(1, Number.isFinite(frameState.coreSensoryResponse?.maxRange)
+      ? frameState.coreSensoryResponse.maxRange
+      : 4.25);
+    const distance01 = THREE.MathUtils.clamp(distance / maxRange, 0, 1);
+    const deep = contact?.reachClass === "deep_structural";
+    const resolutionStage = Math.max(1, Math.min(3, contact?.resolutionStage ?? 1));
+
+    // W2B2: sonar should reveal relationships in layers rather than repainting the
+    // whole target as one bright cage. Near/local answers resolve more completely;
+    // distant structural answers begin as fragments and gain structure on repeat reads.
+    const meshLimit = deep
+      ? [1, 2, 3][resolutionStage - 1]
+      : [2, 3, 4][resolutionStage - 1];
+    const spatialTier = deep
+      ? ["deep_fragment", "deep_layer", "deep_relation"][resolutionStage - 1]
+      : distance01 < 0.35
+        ? "local_near"
+        : distance01 < 0.72 ? "local_mid" : "local_far";
+    const baseOpacity = deep
+      ? THREE.MathUtils.lerp(0.18, 0.105, distance01) + (resolutionStage - 1) * 0.012
+      : THREE.MathUtils.lerp(0.34, 0.215, distance01) + (resolutionStage - 1) * 0.015;
+    const life = deep
+      ? 0.74 + (resolutionStage - 1) * 0.16 + distance01 * 0.16
+      : 0.52 + (resolutionStage - 1) * 0.07 + distance01 * 0.06;
+
+    return {
+      deep,
+      distance01,
+      resolutionStage,
+      meshLimit: Math.min(this.maxPulseContourMeshes, meshLimit),
+      spatialTier,
+      baseOpacity,
+      life,
+      propagationSpan: deep ? 0.34 : 0.24
+    };
+  }
+
   spawnPulseContour(contact, color, frameState = this.frameState) {
     const target = this.findObject(contact?.id);
     if (!target?.root?.visible) return;
@@ -540,12 +589,14 @@ export class CoreVerbPhysicalizationSystem {
     contourRoot.name = `pulse_surface_contour_${contact?.id ?? "material"}`;
     contourRoot.position.copy(center);
     contourRoot.userData.targetingSuppressed = true;
+    const reveal = this.resolvePulseSpatialReveal(contact, frameState);
     const materials = [];
+    const materialPhases = [];
     let meshCount = 0;
     let segmentCount = 0;
 
     target.root.traverse((child) => {
-      if (meshCount >= this.maxPulseContourMeshes || !child?.isMesh || !child.geometry?.attributes?.position) return;
+      if (meshCount >= reveal.meshLimit || !child?.isMesh || !child.geometry?.attributes?.position) return;
       const vertexCount = child.geometry.attributes.position.count ?? 0;
       if (vertexCount <= 0 || vertexCount > 1800) return;
       const contourGeometry = this.getReducedPulseContourGeometry(child.geometry);
@@ -568,6 +619,7 @@ export class CoreVerbPhysicalizationSystem {
       wire.matrix.copy(relativeMatrix);
       contourRoot.add(wire);
       materials.push(material);
+      materialPhases.push(reveal.meshLimit > 1 ? meshCount / (reveal.meshLimit - 1) : 0);
       segmentCount += Math.floor(wireCount / 2);
       meshCount += 1;
     });
@@ -579,12 +631,16 @@ export class CoreVerbPhysicalizationSystem {
       targetId: contact?.id ?? "material",
       root: contourRoot,
       materials,
+      materialPhases,
       segmentCount,
       age: 0,
-      life: (contact?.reachClass === "deep_structural" ? 0.92 : 0.66) * (pulseCharacter.contourPersistenceScale ?? 1),
-      baseOpacity: contact?.reachClass === "deep_structural" ? 0.26 : 0.38,
+      life: reveal.life * (pulseCharacter.contourPersistenceScale ?? 1),
+      baseOpacity: reveal.baseOpacity,
       expansionScale: pulseCharacter.contourExpansionScale ?? 1,
-      resolutionStage: Math.max(1, Math.min(3, contact?.resolutionStage ?? 1))
+      resolutionStage: reveal.resolutionStage,
+      spatialTier: reveal.spatialTier,
+      distance01: reveal.distance01,
+      propagationSpan: reveal.propagationSpan
     });
 
     while (this.pulseContours.length > this.maxPulseContours) {
@@ -597,14 +653,19 @@ export class CoreVerbPhysicalizationSystem {
     for (const contour of this.pulseContours) {
       contour.age += dt;
       const t = THREE.MathUtils.clamp(contour.age / contour.life, 0, 1);
-      const attack = THREE.MathUtils.clamp(t / 0.18, 0, 1);
-      const fade = 1 - THREE.MathUtils.clamp((t - 0.42) / 0.58, 0, 1);
       const stage = Math.max(1, contour.resolutionStage ?? 1);
       const scale = 0.94 + t * (0.08 + (stage - 1) * 0.025) * (contour.expansionScale ?? 1);
       contour.root.scale.setScalar(scale);
       contour.root.rotation.y += dt * 0.10 * (stage - 1);
-      const opacity = contour.baseOpacity * attack * fade;
-      for (const material of contour.materials) material.opacity = opacity;
+      const fade = 1 - THREE.MathUtils.clamp((t - 0.56) / 0.44, 0, 1);
+      const propagationSpan = contour.propagationSpan ?? 0.24;
+      for (let index = 0; index < contour.materials.length; index += 1) {
+        const phase = (contour.materialPhases?.[index] ?? 0) * propagationSpan;
+        const localT = THREE.MathUtils.clamp((t - phase) / Math.max(0.01, 1 - phase), 0, 1);
+        const attack = THREE.MathUtils.clamp(localT / 0.14, 0, 1);
+        const phaseFalloff = 1 - (contour.materialPhases?.[index] ?? 0) * 0.16;
+        contour.materials[index].opacity = contour.baseOpacity * attack * fade * phaseFalloff;
+      }
     }
     this.pulseContours = this.pulseContours.filter((contour) => {
       if (contour.age < contour.life) return true;
@@ -641,13 +702,18 @@ export class CoreVerbPhysicalizationSystem {
     root.userData.targetingSuppressed = true;
     this.group.add(root);
     const pulseCharacter = frameState.coreTopologyVerbCharacter?.pulse ?? {};
+    const maxRange = Math.max(1, frameState.coreSensoryResponse?.maxRange ?? 4.25);
+    const distance01 = THREE.MathUtils.clamp((contact.distance ?? 0) / maxRange, 0, 1);
     this.pulseReturnMotes.push({
       root,
       start,
       age: 0,
       life: Math.max(0.08, contact.returnTravelSeconds ?? 0.28) * (pulseCharacter.returnTrailScale ?? 1),
       deep,
-      resolutionStage: Math.max(1, Math.min(3, contact.resolutionStage ?? 1))
+      distance01,
+      resolutionStage: Math.max(1, Math.min(3, contact.resolutionStage ?? 1)),
+      startOpacity: deep ? 0.18 : THREE.MathUtils.lerp(0.44, 0.30, distance01),
+      peakOpacity: deep ? 0.48 : THREE.MathUtils.lerp(0.78, 0.62, distance01)
     });
   }
 
