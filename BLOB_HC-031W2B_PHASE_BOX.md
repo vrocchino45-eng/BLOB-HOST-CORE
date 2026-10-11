@@ -1,27 +1,21 @@
 # BLOB HC-031W2B — Spatial Readability + Interaction Visual Grammar
 
 ## Phase question
-Can the player read BLOB's space, near/far/actionable hierarchy, and verb relationships without conventional waypoint/HUD language?
+Can the player understand space, near/far/actionable hierarchy, the retained noun, and what the three Core verbs are doing without conventional waypoint/HUD language?
 
-## Locked hierarchy
-1. Immediate actionable Host anatomy
-2. Core + Guide + active relationship
-3. Supporting Host anatomy
-4. Distant Host anatomy
-5. Pulse/Sonar may temporarily reorder the hierarchy only to communicate useful spatial/interaction information
+## Locked path
+- **W2B1 / W2B1.1 — Static depth hierarchy: LOCKED.** Surface Wake remains the reference; Guide/Scar support is restrained but present; Hub large near-camera tissue attenuates by apparent size.
+- **W2B2 — Pulse/Sonar spatial reveal: LOCKED.** Pulse is emit → contact → distance-tiered contour → directional return; repeat reads expose more structure rather than more brightness.
+- **W2B3 — Verb / Target Relationship Grammar: ACTIVE CANDIDATE.** Pulse = downward/outward triangle; Absorb = upward/inward triangle; Stabilize = target condition/coherence boundary resolving 4 → 6 → 8 → 12 as disorder falls.
+- **W2B4 — Regional readability proof: NEXT AFTER B3 LOCK.** Prove the same grammar survives Scar, Hub, Comb and Aperture without erasing regional identity.
+- **W2B Lock Run.** 10–15 minute natural playthrough + telemetry/video, then return to gameplay/world progression.
 
-## Pass path
-- **W2B1.1 — Camera-Relative Hierarchy Balance**: finish static depth hierarchy.
-- **W2B2 — Pulse/Sonar Spatial Reveal**: make Pulse construct spatial understanding instead of washing the frame in wireframe.
-- **W2B3 — Verb/Target Relationship Grammar**: unify Stabilize state, Pulse projection, Absorb return, and targeting emphasis.
-- **W2B4 — Regional Readability Proof**: prove the same grammar across Scar, Hub, Comb, and Aperture while preserving regional identity.
-- **W2B Lock Run**: 10–15 minute natural playthrough + telemetry/video; then return to gameplay/world progression.
+## Phase locks
+No new verbs, regions, encounters, route restructuring, movement redesign, global exposure/fog solution, or major geometry replacement. Presentation may change only when needed to communicate the existing system.
 
-## Frozen during W2B
-No new verbs, regions, major encounters, movement redesign, route/progression restructuring, global exposure solution, or broad geometry replacement. W2A timing foundation remains conditionally locked; known Scar transition renderer debt is documented and not reopened unless W2B materially worsens it.
-
-## W2B1.1 scope
-Restore a modest amount of Guide/Scar current continuity and attenuate Hub tissue by actual camera-relative apparent size. Surface Wake remains untouched as the visual reference. No geometry, camera-control, exposure, fog, route, input, targeting, chemistry, or progression changes.
-
-## W2B1.1 exit
-Guide/Scar reads as a living current rather than cyan wall or empty void; Hub near-camera tissue frames rather than veils the chamber; Core/Guide/local action remain dominant. Then static opacity tuning stops and W2B2 begins.
+## Hierarchy rule
+1. Immediate actionable anatomy.
+2. Core / Guide / active relationship.
+3. Supporting Host anatomy.
+4. Distant Host anatomy.
+5. A verb may temporarily reorder attention only to communicate useful information.

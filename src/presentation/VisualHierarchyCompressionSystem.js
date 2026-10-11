@@ -69,12 +69,13 @@ export class VisualHierarchyCompressionSystem {
     const supportLift = 0.72 + acquisition01 * 0.28 + stress01 * 0.10;
 
     this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01);
-    this.compressTargetingGlyphs(relationshipActive, supportLift);
+    this.compressTargetingGlyphs(relationshipActive, supportLift, frameState);
     this.compressVerbPhysicalization(supportLift, stress01);
 
     frameState.visualHierarchyCompression = {
       pass: "HC-030B1",
       spatialRevealPass: "HC-031W2B2",
+      relationshipGrammarPass: "HC-031W2B3",
       owner: "VisualHierarchyCompressionSystem",
       active: relationshipActive || Boolean(frameState.verbPhysicalization),
       relationshipGradientActive: this.gradientRoot.visible,
@@ -84,14 +85,17 @@ export class VisualHierarchyCompressionSystem {
       reactiveStress01: stress01,
       hierarchy: {
         primary: "target_material_state_and_response",
-        secondary: "pulse_return_and_local_relationship_change",
-        tertiary: "outgoing_spheres_rings_lines_and_distant_wireframes"
+        secondary: "verb_direction_glyph_target_condition_and_pulse_return",
+        tertiary: "outgoing_spheres_support_rings_lines_and_distant_wireframes"
       },
       policy: {
         supportGraphicsQuietByDefault: true,
         acquisitionMayBrieflyLiftSupport: true,
         unstableStateMayBrieflyLiftSupport: true,
         targetResponseRemainsUntouched: true,
+        pulseTriangleMeansOutwardProjection: true,
+        absorbTriangleMeansInwardDraw: true,
+        stabilizeBoundaryMeansTargetConditionAndCoherence: true,
         changesTargeting: false,
         changesVerbPower: false,
         changesReactiveState: false,
@@ -142,20 +146,26 @@ export class VisualHierarchyCompressionSystem {
     }
   }
 
-  compressTargetingGlyphs(active, supportLift) {
+  compressTargetingGlyphs(active, supportLift, frameState = this.frameState) {
     if (!active) return;
     const targeting = this.targetingSystem;
-    const glyphMultiplier = 0.46 * supportLift;
-    const boundaryMultiplier = 0.52 * supportLift;
+    const grammar = frameState.verbTargetRelationshipGrammar ?? targeting?.relationshipGlyphState ?? {};
+    const reactiveStage = grammar.reactiveStage ?? frameState.reactiveStateGrammar?.focus?.stage ?? "coherent";
+    const stress01 = STAGE_STRESS[reactiveStage] ?? 0;
+
+    // W2B3 elevates the actual verb/condition grammar one tier above generic support
+    // graphics. It is still bounded beneath the target body's own material response.
+    const glyphMultiplier = (0.68 + stress01 * 0.08) * supportLift;
+    const boundaryMultiplier = (0.72 + stress01 * 0.12) * supportLift;
 
     if (targeting?.pulseTriangle?.material) {
-      targeting.pulseTriangle.material.opacity = Math.min(0.20, targeting.pulseTriangle.material.opacity * glyphMultiplier);
+      targeting.pulseTriangle.material.opacity = Math.min(0.26, targeting.pulseTriangle.material.opacity * glyphMultiplier);
     }
     if (targeting?.absorbTriangle?.material) {
-      targeting.absorbTriangle.material.opacity = Math.min(0.20, targeting.absorbTriangle.material.opacity * glyphMultiplier);
+      targeting.absorbTriangle.material.opacity = Math.min(0.26, targeting.absorbTriangle.material.opacity * glyphMultiplier);
     }
     if (targeting?.coherenceBoundary?.material) {
-      targeting.coherenceBoundary.material.opacity = Math.min(0.16, targeting.coherenceBoundary.material.opacity * boundaryMultiplier);
+      targeting.coherenceBoundary.material.opacity = Math.min(0.24, targeting.coherenceBoundary.material.opacity * boundaryMultiplier);
     }
   }
 

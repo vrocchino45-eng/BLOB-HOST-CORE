@@ -1,0 +1,415 @@
+--- a/src/targeting/TargetingSystem.js
++++ b/src/targeting/TargetingSystem.js
+@@ -2,6 +2,12 @@
+ 
+ const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
+ const COHERENCE_SEGMENTS = 40;
++const W2B3_VERB_COLORS = Object.freeze({
++  pulse: 0x9fe8ff,
++  absorb: 0xffc98e,
++  stabilize: 0x9fffd8
++});
++const W2B3_STAGE_STRESS = Object.freeze({ coherent: 0.08, strained: 0.36, unstable: 0.68, failing: 1.0 });
+ 
+ const clamp01 = (value) => Math.max(0, Math.min(1, value));
+ 
+@@ -73,6 +79,16 @@
+     this.coherenceBoundary = null;
+     this.coherencePositions = new Float32Array(COHERENCE_SEGMENTS * 3);
+     this.linePositions = new Float32Array(6);
++    this.relationshipGlyphState = {
++      pass: "HC-031W2B3",
++      active: false,
++      pulseDirection: "outward_down_triangle",
++      absorbDirection: "inward_up_triangle",
++      coherenceShape: "none",
++      coherenceSides: 0,
++      condition01: 0,
++      residualDisorder01: 0
++    };
+ 
+     this.tmpTargetPosition = new THREE.Vector3();
+     this.tmpPlayerPosition = new THREE.Vector3();
+@@ -1012,12 +1028,13 @@
+     this.relationshipGlyphRoot = root;
+ 
+     this.pulseTriangle = new THREE.LineLoop(triangleGeometry.clone(), triangleMaterial.clone());
+-    this.pulseTriangle.name = "relationship_glyph_pulse_outward_triangle";
++    this.pulseTriangle.name = "relationship_glyph_pulse_outward_down_triangle";
++    this.pulseTriangle.rotation.z = Math.PI;
+     root.add(this.pulseTriangle);
+ 
+     this.absorbTriangle = new THREE.LineLoop(triangleGeometry.clone(), triangleMaterial.clone());
+-    this.absorbTriangle.name = "relationship_glyph_absorb_inward_triangle";
+-    this.absorbTriangle.rotation.z = Math.PI;
++    this.absorbTriangle.name = "relationship_glyph_absorb_inward_up_triangle";
++    this.absorbTriangle.rotation.z = 0;
+     root.add(this.absorbTriangle);
+ 
+     const coherenceGeometry = new THREE.BufferGeometry();
+@@ -1088,6 +1105,17 @@
+     if (!relationshipActive) {
+       if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
+       if (this.coherenceBoundary) this.coherenceBoundary.visible = false;
++      this.relationshipGlyphState = {
++        pass: "HC-031W2B3",
++        active: false,
++        pulseDirection: "outward_down_triangle",
++        absorbDirection: "inward_up_triangle",
++        coherenceShape: "none",
++        coherenceSides: 0,
++        condition01: 0,
++        residualDisorder01: 0
++      };
++      frameState.verbTargetRelationshipGrammar = this.relationshipGlyphState;
+       return;
+     }
+ 
+@@ -1096,11 +1124,14 @@
+     const absorbActive = verbs.has("absorb");
+     const stabilizeActive = verbs.has("stabilize");
+     const t = frameState.runtimeSeconds ?? 0;
+-    const color = this.getTargetColor(frameState.targeting?.targetKind, frameState.targeting?.reticleState);
+ 
+     this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
+     this.getWorldPosition(this.relationshipTarget.root, this.tmpTargetPosition);
+-    this.tmpRelationshipDirection.copy(this.tmpTargetPosition).sub(this.tmpPlayerPosition);
++
++    // W2B3 convention: local +Y points inward (target -> Core). That makes the
++    // canonical downward Pulse triangle point physically outward, while the
++    // upward Absorb triangle points physically inward along the same relationship.
++    this.tmpRelationshipDirection.copy(this.tmpPlayerPosition).sub(this.tmpTargetPosition);
+     const distance = Math.max(0.001, this.tmpRelationshipDirection.length());
+     this.tmpRelationshipDirection.multiplyScalar(1 / distance);
+     this.camera.getWorldDirection(this.tmpCameraDirection).normalize();
+@@ -1121,39 +1152,93 @@
+       this.relationshipGlyphRoot.scale.setScalar(scale);
+       this.pulseTriangle.visible = pulseActive;
+       this.absorbTriangle.visible = absorbActive;
++
+       const paired = pulseActive && absorbActive;
+-      this.pulseTriangle.position.x = paired ? -0.11 : 0;
+-      this.absorbTriangle.position.x = paired ? 0.11 : 0;
+-      this.pulseTriangle.material.color.set(color);
+-      this.absorbTriangle.material.color.set(color);
+-      this.pulseTriangle.material.opacity = 0.20 + clamp01(frameState.targeting?.lockStrength ?? 0) * 0.20;
+-      this.absorbTriangle.material.opacity = 0.20 + clamp01(frameState.targeting?.lockStrength ?? 0) * 0.20;
+-    }
++      const directionalBeat = Math.sin(t * 5.2) * 0.025;
++      this.pulseTriangle.position.set(paired ? -0.10 : 0, pulseActive ? -0.075 - directionalBeat : 0, 0);
++      this.absorbTriangle.position.set(paired ? 0.10 : 0, absorbActive ? 0.075 + directionalBeat : 0, 0);
++      this.pulseTriangle.material.color.set(W2B3_VERB_COLORS.pulse);
++      this.absorbTriangle.material.color.set(W2B3_VERB_COLORS.absorb);
++      const lock01 = clamp01(frameState.targeting?.lockStrength ?? 0);
++      this.pulseTriangle.material.opacity = pulseActive ? 0.30 + lock01 * 0.22 : 0;
++      this.absorbTriangle.material.opacity = absorbActive ? 0.30 + lock01 * 0.22 : 0;
++      this.pulseTriangle.scale.setScalar(0.96 + (pulseActive ? Math.max(0, Math.sin(t * 4.8)) * 0.055 : 0));
++      this.absorbTriangle.scale.setScalar(1.02 - (absorbActive ? Math.max(0, Math.sin(t * 4.8)) * 0.05 : 0));
++    }
++
++    const reactive = frameState.reactiveStateGrammar?.objects?.[this.relationshipTargetId]
++      ?? this.relationshipTarget.root?.userData?.reactiveState
++      ?? frameState.reactiveStateGrammar?.focus
++      ?? null;
++    const stage = reactive?.stage ?? "coherent";
++    const authoredCondition = clamp01(
++      reactive?.presentedCondition01
++      ?? reactive?.condition01
++      ?? W2B3_STAGE_STRESS[stage]
++      ?? 0.18
++    );
++    const stabilizeProgress = stabilizeActive
++      ? clamp01(frameState.verbPhysicalization?.stabilizeProgress ?? 0)
++      : 0;
++    const residualDisorder01 = clamp01(authoredCondition * (1 - stabilizeProgress * 0.78));
++    const coherenceSides = residualDisorder01 >= 0.72
++      ? 4
++      : residualDisorder01 >= 0.40
++        ? 6
++        : residualDisorder01 >= 0.16
++          ? 8
++          : 12;
+ 
+     this.coherenceBoundary.visible = stabilizeActive;
+     if (stabilizeActive) {
+-      const instability = clamp01(this.relationshipTarget.recipe?.chemistry?.instabilityRisk ?? 0.18);
+       const radius = Math.max(0.42, Math.min(0.92, 0.48 + (this.relationshipTarget.root?.scale?.x ?? 1) * 0.18));
+       const positions = this.coherenceBoundary.geometry.attributes.position.array;
++      const sector = (Math.PI * 2) / coherenceSides;
++      const polygonMix = 0.56 + residualDisorder01 * 0.28;
+       for (let i = 0; i < COHERENCE_SEGMENTS; i += 1) {
+         const angle = (i / COHERENCE_SEGMENTS) * Math.PI * 2;
+-        const distortion = instability * (
+-          Math.sin(angle * 3 + t * 2.3) * 0.10
+-          + Math.sin(angle * 5 - t * 1.7) * 0.045
++        const local = ((angle + sector * 0.5) % sector) - sector * 0.5;
++        const polygonRadius = Math.cos(Math.PI / coherenceSides) / Math.max(0.12, Math.cos(local));
++        const regularizedRadius = THREE.MathUtils.lerp(1, polygonRadius, polygonMix);
++        const distortion = residualDisorder01 * (
++          Math.sin(angle * 3 + t * 2.3) * 0.095
++          + Math.sin(angle * 5 - t * 1.7) * 0.042
+         );
+-        const r = radius * (1 + distortion);
++        const r = radius * regularizedRadius * (1 + distortion);
+         positions[i * 3] = Math.cos(angle) * r;
+         positions[i * 3 + 1] = Math.sin(angle) * r;
+         positions[i * 3 + 2] = 0;
+       }
+       this.coherenceBoundary.geometry.attributes.position.needsUpdate = true;
+       this.coherenceBoundary.position.copy(this.tmpTargetPosition);
+-      this.coherenceBoundary.position.x += Math.sin(t * 2.1) * instability * 0.045;
+-      this.coherenceBoundary.position.y += Math.cos(t * 1.8) * instability * 0.035;
++      this.coherenceBoundary.position.x += Math.sin(t * 2.1) * residualDisorder01 * 0.045;
++      this.coherenceBoundary.position.y += Math.cos(t * 1.8) * residualDisorder01 * 0.035;
+       this.coherenceBoundary.quaternion.copy(this.camera.quaternion);
+-      this.coherenceBoundary.material.color.set(color);
+-      this.coherenceBoundary.material.opacity = 0.12 + (1 - instability * 0.45) * 0.16;
++      this.coherenceBoundary.material.color.set(W2B3_VERB_COLORS.stabilize);
++      this.coherenceBoundary.material.opacity = 0.20 + (1 - residualDisorder01) * 0.16;
+     }
++
++    this.relationshipGlyphState = {
++      pass: "HC-031W2B3",
++      active: true,
++      targetId: this.relationshipTargetId,
++      pulseActive,
++      absorbActive,
++      stabilizeActive,
++      pulseDirection: "outward_down_triangle",
++      absorbDirection: "inward_up_triangle",
++      stabilizeMeaning: "condition_and_coherence_not_target_selection",
++      reactiveStage: stage,
++      condition01: Number(authoredCondition.toFixed(3)),
++      stabilizeProgress01: Number(stabilizeProgress.toFixed(3)),
++      residualDisorder01: Number(residualDisorder01.toFixed(3)),
++      coherenceShape: stabilizeActive ? `${coherenceSides}_sided_resolving_boundary` : "none",
++      coherenceSides: stabilizeActive ? coherenceSides : 0,
++      closureLaw: "4_to_6_to_8_to_12_as_disorder_resolves",
++      changesTargetingAuthority: false,
++      changesVerbPower: false
++    };
++    frameState.verbTargetRelationshipGrammar = this.relationshipGlyphState;
+   }
+ 
+   getTargetColor(kind, state) {
+--- a/src/presentation/VisualHierarchyCompressionSystem.js
++++ b/src/presentation/VisualHierarchyCompressionSystem.js
+@@ -69,12 +69,13 @@
+     const supportLift = 0.72 + acquisition01 * 0.28 + stress01 * 0.10;
+ 
+     this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01);
+-    this.compressTargetingGlyphs(relationshipActive, supportLift);
++    this.compressTargetingGlyphs(relationshipActive, supportLift, frameState);
+     this.compressVerbPhysicalization(supportLift, stress01);
+ 
+     frameState.visualHierarchyCompression = {
+       pass: "HC-030B1",
+       spatialRevealPass: "HC-031W2B2",
++      relationshipGrammarPass: "HC-031W2B3",
+       owner: "VisualHierarchyCompressionSystem",
+       active: relationshipActive || Boolean(frameState.verbPhysicalization),
+       relationshipGradientActive: this.gradientRoot.visible,
+@@ -84,14 +85,17 @@
+       reactiveStress01: stress01,
+       hierarchy: {
+         primary: "target_material_state_and_response",
+-        secondary: "pulse_return_and_local_relationship_change",
+-        tertiary: "outgoing_spheres_rings_lines_and_distant_wireframes"
++        secondary: "verb_direction_glyph_target_condition_and_pulse_return",
++        tertiary: "outgoing_spheres_support_rings_lines_and_distant_wireframes"
+       },
+       policy: {
+         supportGraphicsQuietByDefault: true,
+         acquisitionMayBrieflyLiftSupport: true,
+         unstableStateMayBrieflyLiftSupport: true,
+         targetResponseRemainsUntouched: true,
++        pulseTriangleMeansOutwardProjection: true,
++        absorbTriangleMeansInwardDraw: true,
++        stabilizeBoundaryMeansTargetConditionAndCoherence: true,
+         changesTargeting: false,
+         changesVerbPower: false,
+         changesReactiveState: false,
+@@ -142,20 +146,26 @@
+     }
+   }
+ 
+-  compressTargetingGlyphs(active, supportLift) {
++  compressTargetingGlyphs(active, supportLift, frameState = this.frameState) {
+     if (!active) return;
+     const targeting = this.targetingSystem;
+-    const glyphMultiplier = 0.46 * supportLift;
+-    const boundaryMultiplier = 0.52 * supportLift;
++    const grammar = frameState.verbTargetRelationshipGrammar ?? targeting?.relationshipGlyphState ?? {};
++    const reactiveStage = grammar.reactiveStage ?? frameState.reactiveStateGrammar?.focus?.stage ?? "coherent";
++    const stress01 = STAGE_STRESS[reactiveStage] ?? 0;
++
++    // W2B3 elevates the actual verb/condition grammar one tier above generic support
++    // graphics. It is still bounded beneath the target body's own material response.
++    const glyphMultiplier = (0.68 + stress01 * 0.08) * supportLift;
++    const boundaryMultiplier = (0.72 + stress01 * 0.12) * supportLift;
+ 
+     if (targeting?.pulseTriangle?.material) {
+-      targeting.pulseTriangle.material.opacity = Math.min(0.20, targeting.pulseTriangle.material.opacity * glyphMultiplier);
++      targeting.pulseTriangle.material.opacity = Math.min(0.26, targeting.pulseTriangle.material.opacity * glyphMultiplier);
+     }
+     if (targeting?.absorbTriangle?.material) {
+-      targeting.absorbTriangle.material.opacity = Math.min(0.20, targeting.absorbTriangle.material.opacity * glyphMultiplier);
++      targeting.absorbTriangle.material.opacity = Math.min(0.26, targeting.absorbTriangle.material.opacity * glyphMultiplier);
+     }
+     if (targeting?.coherenceBoundary?.material) {
+-      targeting.coherenceBoundary.material.opacity = Math.min(0.16, targeting.coherenceBoundary.material.opacity * boundaryMultiplier);
++      targeting.coherenceBoundary.material.opacity = Math.min(0.24, targeting.coherenceBoundary.material.opacity * boundaryMultiplier);
+     }
+   }
+ 
+--- a/scripts/validateHC031W2B2PulseSonarSpatialReveal.mjs
++++ b/scripts/validateHC031W2B2PulseSonarSpatialReveal.mjs
+@@ -18,8 +18,8 @@
+ assert.match(verbsSource, /arrivalLift = THREE\.MathUtils\.smoothstep/);
+ assert.match(verbsSource, /peakOpacity/);
+ assert.match(hierarchySource, /spatialRevealPass: "HC-031W2B2"/);
+-assert.match(hierarchySource, /pulse_return_and_local_relationship_change/);
+-assert.match(hierarchySource, /outgoing_spheres_rings_lines_and_distant_wireframes/);
++assert.match(hierarchySource, /pulse_return_and_local_relationship_change|verb_direction_glyph_target_condition_and_pulse_return/);
++assert.match(hierarchySource, /outgoing_spheres_rings_lines_and_distant_wireframes|outgoing_spheres_support_rings_lines_and_distant_wireframes/);
+ 
+ // Existing sensory law, actionable range, echo timing, and deep-reach authority stay locked.
+ assert.match(sensorySource, /law: "pulse_is_embodied_sonar_emit_contact_return"/);
+--- /dev/null
++++ b/scripts/validateHC031W2B3VerbTargetRelationshipGrammar.mjs
+@@ -0,0 +1,135 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import * as THREE from "three";
++import { TargetingSystem } from "../src/targeting/TargetingSystem.js";
++import { VisualHierarchyCompressionSystem } from "../src/presentation/VisualHierarchyCompressionSystem.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const targetingSource = read("../src/targeting/TargetingSystem.js");
++const hierarchySource = read("../src/presentation/VisualHierarchyCompressionSystem.js");
++
++// Canonical relationship grammar: Pulse points down/outward, Absorb up/inward,
++// Stabilize describes target condition/coherence without gaining targeting authority.
++assert.match(targetingSource, /pulseDirection: "outward_down_triangle"/);
++assert.match(targetingSource, /absorbDirection: "inward_up_triangle"/);
++assert.match(targetingSource, /this\.pulseTriangle\.rotation\.z = Math\.PI/);
++assert.match(targetingSource, /this\.absorbTriangle\.rotation\.z = 0/);
++assert.match(targetingSource, /local \+Y points inward \(target -> Core\)/);
++assert.match(targetingSource, /closureLaw: "4_to_6_to_8_to_12_as_disorder_resolves"/);
++assert.match(targetingSource, /changesTargetingAuthority: false/);
++assert.match(targetingSource, /changesVerbPower: false/);
++assert.match(hierarchySource, /relationshipGrammarPass: "HC-031W2B3"/);
++assert.match(hierarchySource, /verb_direction_glyph_target_condition_and_pulse_return/);
++
++const scene = new THREE.Scene();
++const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
++camera.position.set(0, 1, 4);
++camera.lookAt(0, 0, 0);
++scene.add(camera);
++const playerRoot = new THREE.Group();
++playerRoot.position.set(0, 0, 0);
++scene.add(playerRoot);
++const targetRoot = new THREE.Group();
++targetRoot.position.set(0, 0, -2);
++targetRoot.visible = true;
++scene.add(targetRoot);
++scene.updateMatrixWorld(true);
++
++const frameState = {
++  runtimeSeconds: 1.25,
++  targeting: {
++    relationshipActive: true,
++    relationshipVerbs: ["pulse"],
++    lockStrength: 0.8,
++    targetKind: "absorbable",
++    reticleState: "assist"
++  },
++  reactiveStateGrammar: {
++    objects: {
++      probe: { stage: "unstable", condition01: 0.72, presentedCondition01: 0.72 }
++    },
++    focus: { stage: "unstable", condition01: 0.72, presentedCondition01: 0.72 }
++  },
++  verbPhysicalization: { stabilizeProgress: 0 }
++};
++
++const targeting = new TargetingSystem({
++  scene,
++  camera,
++  playerRoot,
++  chemObjectSystem: { objects: [] },
++  frameState
++});
++targeting.init();
++targeting.relationshipTarget = {
++  root: targetRoot,
++  recipe: { id: "probe", chemistry: { instabilityRisk: 0.72 } },
++  distance: 2
++};
++targeting.relationshipTargetId = "probe";
++
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(targeting.pulseTriangle.visible, true);
++assert.equal(targeting.absorbTriangle.visible, false);
++assert.ok(Math.abs(targeting.pulseTriangle.rotation.z - Math.PI) < 1e-9);
++assert.equal(frameState.verbTargetRelationshipGrammar.pass, "HC-031W2B3");
++assert.equal(frameState.verbTargetRelationshipGrammar.pulseDirection, "outward_down_triangle");
++
++// Because relationship local +Y is target -> Core, the downward pulse triangle
++// physically points Core -> target in world space.
++const worldPulseDirection = new THREE.Vector3(0, -1, 0).applyQuaternion(targeting.relationshipGlyphRoot.quaternion).normalize();
++const expectedOutward = targetRoot.position.clone().sub(playerRoot.position).normalize();
++assert.ok(worldPulseDirection.dot(expectedOutward) > 0.99);
++
++frameState.targeting.relationshipVerbs = ["absorb"];
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(targeting.pulseTriangle.visible, false);
++assert.equal(targeting.absorbTriangle.visible, true);
++const worldAbsorbDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(targeting.relationshipGlyphRoot.quaternion).normalize();
++const expectedInward = playerRoot.position.clone().sub(targetRoot.position).normalize();
++assert.ok(worldAbsorbDirection.dot(expectedInward) > 0.99);
++assert.equal(frameState.verbTargetRelationshipGrammar.absorbDirection, "inward_up_triangle");
++
++// Stabilize boundary reports real target condition and regularizes as the target
++// itself becomes more coherent. It is not a generic lock-on ring.
++frameState.targeting.relationshipVerbs = ["stabilize"];
++frameState.reactiveStateGrammar.objects.probe = { stage: "failing", condition01: 0.9, presentedCondition01: 0.9 };
++frameState.verbPhysicalization.stabilizeProgress = 0;
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(targeting.coherenceBoundary.visible, true);
++assert.equal(frameState.verbTargetRelationshipGrammar.coherenceSides, 4);
++assert.equal(frameState.verbTargetRelationshipGrammar.stabilizeMeaning, "condition_and_coherence_not_target_selection");
++
++frameState.reactiveStateGrammar.objects.probe = { stage: "strained", condition01: 0.48, presentedCondition01: 0.48 };
++frameState.verbPhysicalization.stabilizeProgress = 0.1;
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(frameState.verbTargetRelationshipGrammar.coherenceSides, 6);
++
++frameState.reactiveStateGrammar.objects.probe = { stage: "coherent", condition01: 0.22, presentedCondition01: 0.22 };
++frameState.verbPhysicalization.stabilizeProgress = 0.25;
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(frameState.verbTargetRelationshipGrammar.coherenceSides, 8);
++
++frameState.reactiveStateGrammar.objects.probe = { stage: "coherent", condition01: 0.1, presentedCondition01: 0.1 };
++frameState.verbPhysicalization.stabilizeProgress = 0.8;
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(frameState.verbTargetRelationshipGrammar.coherenceSides, 12);
++assert.ok(frameState.verbTargetRelationshipGrammar.residualDisorder01 < 0.1);
++
++// W2B3 promotes grammar above generic support, but still caps it below target-body response.
++const hierarchy = new VisualHierarchyCompressionSystem({
++  scene,
++  targetingSystem: targeting,
++  coreVerbPhysicalizationSystem: null,
++  frameState
++});
++targeting.pulseTriangle.material.opacity = 0.5;
++targeting.absorbTriangle.material.opacity = 0.5;
++targeting.coherenceBoundary.material.opacity = 0.4;
++frameState.verbTargetRelationshipGrammar.reactiveStage = "unstable";
++hierarchy.compressTargetingGlyphs(true, 1, frameState);
++assert.ok(targeting.pulseTriangle.material.opacity <= 0.26 && targeting.pulseTriangle.material.opacity > 0.20);
++assert.ok(targeting.absorbTriangle.material.opacity <= 0.26 && targeting.absorbTriangle.material.opacity > 0.20);
++assert.ok(targeting.coherenceBoundary.material.opacity <= 0.24 && targeting.coherenceBoundary.material.opacity > 0.16);
++
++console.log("HC031W2B3 Verb / Target Relationship Grammar locks PASS");

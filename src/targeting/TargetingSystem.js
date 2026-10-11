@@ -2,6 +2,12 @@ import * as THREE from "three";
 
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
 const COHERENCE_SEGMENTS = 40;
+const W2B3_VERB_COLORS = Object.freeze({
+  pulse: 0x9fe8ff,
+  absorb: 0xffc98e,
+  stabilize: 0x9fffd8
+});
+const W2B3_STAGE_STRESS = Object.freeze({ coherent: 0.08, strained: 0.36, unstable: 0.68, failing: 1.0 });
 
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
@@ -73,6 +79,16 @@ export class TargetingSystem {
     this.coherenceBoundary = null;
     this.coherencePositions = new Float32Array(COHERENCE_SEGMENTS * 3);
     this.linePositions = new Float32Array(6);
+    this.relationshipGlyphState = {
+      pass: "HC-031W2B3",
+      active: false,
+      pulseDirection: "outward_down_triangle",
+      absorbDirection: "inward_up_triangle",
+      coherenceShape: "none",
+      coherenceSides: 0,
+      condition01: 0,
+      residualDisorder01: 0
+    };
 
     this.tmpTargetPosition = new THREE.Vector3();
     this.tmpPlayerPosition = new THREE.Vector3();
@@ -1012,12 +1028,13 @@ export class TargetingSystem {
     this.relationshipGlyphRoot = root;
 
     this.pulseTriangle = new THREE.LineLoop(triangleGeometry.clone(), triangleMaterial.clone());
-    this.pulseTriangle.name = "relationship_glyph_pulse_outward_triangle";
+    this.pulseTriangle.name = "relationship_glyph_pulse_outward_down_triangle";
+    this.pulseTriangle.rotation.z = Math.PI;
     root.add(this.pulseTriangle);
 
     this.absorbTriangle = new THREE.LineLoop(triangleGeometry.clone(), triangleMaterial.clone());
-    this.absorbTriangle.name = "relationship_glyph_absorb_inward_triangle";
-    this.absorbTriangle.rotation.z = Math.PI;
+    this.absorbTriangle.name = "relationship_glyph_absorb_inward_up_triangle";
+    this.absorbTriangle.rotation.z = 0;
     root.add(this.absorbTriangle);
 
     const coherenceGeometry = new THREE.BufferGeometry();
@@ -1088,6 +1105,17 @@ export class TargetingSystem {
     if (!relationshipActive) {
       if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
       if (this.coherenceBoundary) this.coherenceBoundary.visible = false;
+      this.relationshipGlyphState = {
+        pass: "HC-031W2B3",
+        active: false,
+        pulseDirection: "outward_down_triangle",
+        absorbDirection: "inward_up_triangle",
+        coherenceShape: "none",
+        coherenceSides: 0,
+        condition01: 0,
+        residualDisorder01: 0
+      };
+      frameState.verbTargetRelationshipGrammar = this.relationshipGlyphState;
       return;
     }
 
@@ -1096,11 +1124,14 @@ export class TargetingSystem {
     const absorbActive = verbs.has("absorb");
     const stabilizeActive = verbs.has("stabilize");
     const t = frameState.runtimeSeconds ?? 0;
-    const color = this.getTargetColor(frameState.targeting?.targetKind, frameState.targeting?.reticleState);
 
     this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
     this.getWorldPosition(this.relationshipTarget.root, this.tmpTargetPosition);
-    this.tmpRelationshipDirection.copy(this.tmpTargetPosition).sub(this.tmpPlayerPosition);
+
+    // W2B3 convention: local +Y points inward (target -> Core). That makes the
+    // canonical downward Pulse triangle point physically outward, while the
+    // upward Absorb triangle points physically inward along the same relationship.
+    this.tmpRelationshipDirection.copy(this.tmpPlayerPosition).sub(this.tmpTargetPosition);
     const distance = Math.max(0.001, this.tmpRelationshipDirection.length());
     this.tmpRelationshipDirection.multiplyScalar(1 / distance);
     this.camera.getWorldDirection(this.tmpCameraDirection).normalize();
@@ -1121,39 +1152,93 @@ export class TargetingSystem {
       this.relationshipGlyphRoot.scale.setScalar(scale);
       this.pulseTriangle.visible = pulseActive;
       this.absorbTriangle.visible = absorbActive;
+
       const paired = pulseActive && absorbActive;
-      this.pulseTriangle.position.x = paired ? -0.11 : 0;
-      this.absorbTriangle.position.x = paired ? 0.11 : 0;
-      this.pulseTriangle.material.color.set(color);
-      this.absorbTriangle.material.color.set(color);
-      this.pulseTriangle.material.opacity = 0.20 + clamp01(frameState.targeting?.lockStrength ?? 0) * 0.20;
-      this.absorbTriangle.material.opacity = 0.20 + clamp01(frameState.targeting?.lockStrength ?? 0) * 0.20;
+      const directionalBeat = Math.sin(t * 5.2) * 0.025;
+      this.pulseTriangle.position.set(paired ? -0.10 : 0, pulseActive ? -0.075 - directionalBeat : 0, 0);
+      this.absorbTriangle.position.set(paired ? 0.10 : 0, absorbActive ? 0.075 + directionalBeat : 0, 0);
+      this.pulseTriangle.material.color.set(W2B3_VERB_COLORS.pulse);
+      this.absorbTriangle.material.color.set(W2B3_VERB_COLORS.absorb);
+      const lock01 = clamp01(frameState.targeting?.lockStrength ?? 0);
+      this.pulseTriangle.material.opacity = pulseActive ? 0.30 + lock01 * 0.22 : 0;
+      this.absorbTriangle.material.opacity = absorbActive ? 0.30 + lock01 * 0.22 : 0;
+      this.pulseTriangle.scale.setScalar(0.96 + (pulseActive ? Math.max(0, Math.sin(t * 4.8)) * 0.055 : 0));
+      this.absorbTriangle.scale.setScalar(1.02 - (absorbActive ? Math.max(0, Math.sin(t * 4.8)) * 0.05 : 0));
     }
+
+    const reactive = frameState.reactiveStateGrammar?.objects?.[this.relationshipTargetId]
+      ?? this.relationshipTarget.root?.userData?.reactiveState
+      ?? frameState.reactiveStateGrammar?.focus
+      ?? null;
+    const stage = reactive?.stage ?? "coherent";
+    const authoredCondition = clamp01(
+      reactive?.presentedCondition01
+      ?? reactive?.condition01
+      ?? W2B3_STAGE_STRESS[stage]
+      ?? 0.18
+    );
+    const stabilizeProgress = stabilizeActive
+      ? clamp01(frameState.verbPhysicalization?.stabilizeProgress ?? 0)
+      : 0;
+    const residualDisorder01 = clamp01(authoredCondition * (1 - stabilizeProgress * 0.78));
+    const coherenceSides = residualDisorder01 >= 0.72
+      ? 4
+      : residualDisorder01 >= 0.40
+        ? 6
+        : residualDisorder01 >= 0.16
+          ? 8
+          : 12;
 
     this.coherenceBoundary.visible = stabilizeActive;
     if (stabilizeActive) {
-      const instability = clamp01(this.relationshipTarget.recipe?.chemistry?.instabilityRisk ?? 0.18);
       const radius = Math.max(0.42, Math.min(0.92, 0.48 + (this.relationshipTarget.root?.scale?.x ?? 1) * 0.18));
       const positions = this.coherenceBoundary.geometry.attributes.position.array;
+      const sector = (Math.PI * 2) / coherenceSides;
+      const polygonMix = 0.56 + residualDisorder01 * 0.28;
       for (let i = 0; i < COHERENCE_SEGMENTS; i += 1) {
         const angle = (i / COHERENCE_SEGMENTS) * Math.PI * 2;
-        const distortion = instability * (
-          Math.sin(angle * 3 + t * 2.3) * 0.10
-          + Math.sin(angle * 5 - t * 1.7) * 0.045
+        const local = ((angle + sector * 0.5) % sector) - sector * 0.5;
+        const polygonRadius = Math.cos(Math.PI / coherenceSides) / Math.max(0.12, Math.cos(local));
+        const regularizedRadius = THREE.MathUtils.lerp(1, polygonRadius, polygonMix);
+        const distortion = residualDisorder01 * (
+          Math.sin(angle * 3 + t * 2.3) * 0.095
+          + Math.sin(angle * 5 - t * 1.7) * 0.042
         );
-        const r = radius * (1 + distortion);
+        const r = radius * regularizedRadius * (1 + distortion);
         positions[i * 3] = Math.cos(angle) * r;
         positions[i * 3 + 1] = Math.sin(angle) * r;
         positions[i * 3 + 2] = 0;
       }
       this.coherenceBoundary.geometry.attributes.position.needsUpdate = true;
       this.coherenceBoundary.position.copy(this.tmpTargetPosition);
-      this.coherenceBoundary.position.x += Math.sin(t * 2.1) * instability * 0.045;
-      this.coherenceBoundary.position.y += Math.cos(t * 1.8) * instability * 0.035;
+      this.coherenceBoundary.position.x += Math.sin(t * 2.1) * residualDisorder01 * 0.045;
+      this.coherenceBoundary.position.y += Math.cos(t * 1.8) * residualDisorder01 * 0.035;
       this.coherenceBoundary.quaternion.copy(this.camera.quaternion);
-      this.coherenceBoundary.material.color.set(color);
-      this.coherenceBoundary.material.opacity = 0.12 + (1 - instability * 0.45) * 0.16;
+      this.coherenceBoundary.material.color.set(W2B3_VERB_COLORS.stabilize);
+      this.coherenceBoundary.material.opacity = 0.20 + (1 - residualDisorder01) * 0.16;
     }
+
+    this.relationshipGlyphState = {
+      pass: "HC-031W2B3",
+      active: true,
+      targetId: this.relationshipTargetId,
+      pulseActive,
+      absorbActive,
+      stabilizeActive,
+      pulseDirection: "outward_down_triangle",
+      absorbDirection: "inward_up_triangle",
+      stabilizeMeaning: "condition_and_coherence_not_target_selection",
+      reactiveStage: stage,
+      condition01: Number(authoredCondition.toFixed(3)),
+      stabilizeProgress01: Number(stabilizeProgress.toFixed(3)),
+      residualDisorder01: Number(residualDisorder01.toFixed(3)),
+      coherenceShape: stabilizeActive ? `${coherenceSides}_sided_resolving_boundary` : "none",
+      coherenceSides: stabilizeActive ? coherenceSides : 0,
+      closureLaw: "4_to_6_to_8_to_12_as_disorder_resolves",
+      changesTargetingAuthority: false,
+      changesVerbPower: false
+    };
+    frameState.verbTargetRelationshipGrammar = this.relationshipGlyphState;
   }
 
   getTargetColor(kind, state) {
