@@ -36,6 +36,9 @@ export class SiltPressureRouteSystem {
     this.habitatLobes = [];
     this.habitatVeins = [];
     this.habitatAnatomy = null;
+    this.habitatDrift = null;
+    this.habitatDriftPositions = null;
+    this.habitatDriftSeeds = [];
     this.habitatSample = { id: "throat", relief: 0, distance: 99 };
     this.siltMotes = [];
     this.safePacket = null;
@@ -544,115 +547,224 @@ export class SiltPressureRouteSystem {
     }
   }
 
-  // LS1A: lateral anatomy only. These bodies provide real spatial landmarks in
-  // the widened Silt movement envelope, not a second ecology/target/collider.
-  // LS1B will give the already-authored reservoirs a conserved material cycle.
+  // LS1A2: preserve LS1A's three reachable anchors and movement owner, but
+  // express them as connected voids inside ONE porous stone-and-silt body.
+  // All geology is non-targetable visual anatomy, not invented collision or
+  // conserved matter. PlayerMovementController remains the sole boundary owner.
   createHabitatFoundation() {
     const foundation = this.recipe.habitatFoundation;
     if (foundation?.pass !== "LS1A") return;
+    const geology = this.recipe.geologicMedium;
+    if (geology?.pass !== "LS1A2") return;
+
     const group = new THREE.Group();
-    group.name = "silt_living_habitat_body_LS1A";
+    group.name = "silt_contained_geologic_medium_LS1A2";
     group.userData.targetingSuppressed = true;
-    const shellGeometry = new THREE.SphereGeometry(1, 24, 14);
-    const strandGeometry = new THREE.IcosahedronGeometry(0.18, 0);
+    const strataGeometry = new THREE.SphereGeometry(1, 18, 12);
+    const massGeometry = new THREE.DodecahedronGeometry(1, 1);
+    const bedGeometry = new THREE.SphereGeometry(1, 14, 8);
+
+    // Displace the *shared unit surface* deterministically. Avoid arbitrary
+    // randomization or regenerated geometry on re-entry / on every frame.
+    const vertex = new THREE.Vector3();
+    const position = strataGeometry.attributes.position;
+    for (let i = 0; i < position.count; i += 1) {
+      vertex.fromBufferAttribute(position, i);
+      const wobble = 1 + 0.062 * Math.sin(vertex.x * 8.7 + vertex.z * 4.9)
+        + 0.038 * Math.cos(vertex.y * 11.2 - vertex.x * 5.3);
+      position.setXYZ(i, vertex.x * wobble, vertex.y * wobble, vertex.z * wobble);
+    }
+    strataGeometry.computeVertexNormals();
+
+    const wallMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: geology.stoneColor,
+      emissive: geology.stoneEmissive,
+      emissiveIntensity: 0.14,
+      roughness: 0.99,
+      metalness: 0,
+      side: THREE.BackSide,
+      transparent: true,
+      opacity: geology.wallOpacity,
+      depthWrite: false
+    }));
+    const massMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: geology.sedimentColor,
+      emissive: geology.sedimentEmissive,
+      emissiveIntensity: 0.1,
+      roughness: 1,
+      transparent: true,
+      opacity: 0.68,
+      depthWrite: false
+    }));
+    const bedMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: geology.bedColor,
+      emissive: geology.sedimentEmissive,
+      emissiveIntensity: 0.07,
+      roughness: 1,
+      transparent: true,
+      opacity: 0.44,
+      depthWrite: false
+    }));
 
     for (const [index, habitat] of foundation.habitats.entries()) {
       const body = new THREE.Group();
-      body.name = `silt_habitat_${habitat.id}`;
+      body.name = `silt_contiguous_pore_${habitat.id}`;
       body.position.fromArray(habitat.center);
       body.userData.targetingSuppressed = true;
-      const shellMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
-        color: habitat.color,
-        emissive: habitat.emissive,
-        emissiveIntensity: 0.2,
-        roughness: 0.95,
-        side: THREE.BackSide,
-        transparent: true,
-        opacity: 0.135,
-        depthWrite: false
-      }));
-      const shell = new THREE.Mesh(shellGeometry, shellMaterial);
-      shell.name = `silt_${habitat.id}_concave_membrane`;
-      shell.scale.fromArray(habitat.radii);
+      body.userData.ls1a = { habitatId: habitat.id, role: habitat.role, contactable: false };
+
+      // Remove geologic shell facets at authored seep openings. A translucent
+      // sphere with intact faces across these routes reads like a false wall.
+      // Cut stable apertures instead of suggesting passages through solid rock.
+      const shellGeometry = strataGeometry.clone();
+      const openings = [];
+      for (const connection of foundation.connections) {
+        const start = new THREE.Vector3().fromArray(connection.from);
+        const finish = new THREE.Vector3().fromArray(connection.to);
+        const center = new THREE.Vector3().fromArray(habitat.center);
+        const nearStart = start.distanceToSquared(center) < 0.6;
+        const nearFinish = finish.distanceToSquared(center) < 0.6;
+        if (!nearStart && !nearFinish) continue;
+        const outward = (nearStart ? finish : start).sub(center);
+        outward.set(outward.x / habitat.radii[0], outward.y / habitat.radii[1],
+          outward.z / habitat.radii[2]).normalize();
+        openings.push(outward);
+      }
+      if (openings.length) {
+        const originalIndices = shellGeometry.index.array;
+        const vertices = shellGeometry.attributes.position;
+        const retainedIndices = [];
+        const centerDirection = new THREE.Vector3();
+        const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+        for (let i = 0; i < originalIndices.length; i += 3) {
+          a.fromBufferAttribute(vertices, originalIndices[i]);
+          b.fromBufferAttribute(vertices, originalIndices[i + 1]);
+          c.fromBufferAttribute(vertices, originalIndices[i + 2]);
+          centerDirection.copy(a).add(b).add(c).normalize();
+          if (openings.some((direction) => centerDirection.dot(direction) > 0.73)) continue;
+          retainedIndices.push(originalIndices[i], originalIndices[i + 1], originalIndices[i + 2]);
+        }
+        shellGeometry.setIndex(retainedIndices);
+      }
+      const shell = new THREE.Mesh(shellGeometry, wallMaterial.clone());
+      this.materials.push(shell.material);
+      shell.name = `silt_${habitat.id}_irregular_inward_stone_stratum`;
+      shell.scale.set(...habitat.radii.map((r) => r * geology.cavityWallScale));
       shell.userData.targetingSuppressed = true;
       body.add(shell);
 
-      // Incomplete, offset muscular folds rather than UI rings. Interrupted
-      // contours leave clear views between the cells and pressure passage.
-      const contourMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
-        color: habitat.color,
-        emissive: habitat.emissive,
-        emissiveIntensity: 0.3,
-        roughness: 0.9,
-        transparent: true,
-        opacity: 0.44,
-        depthWrite: false
-      }));
-      for (let fold = 0; fold < 4; fold += 1) {
-        const path = [];
-        const baseAngle = 0.28 + fold * 1.41;
-        for (let point = 0; point < 11; point += 1) {
-          const a = baseAngle + (point / 10) * (1.12 + (fold % 2) * 0.29);
-          const r = habitat.radii;
-          path.push(new THREE.Vector3(
-            Math.cos(a) * r[0] * (0.86 + 0.07 * Math.sin(point * 0.9 + fold)),
-            Math.sin(a * 1.8 + fold) * r[1] * 0.68,
-            Math.sin(a) * r[2] * (0.83 + 0.07 * Math.cos(point * 0.75))
-          ));
-        }
-        const foldMesh = new THREE.Mesh(
-          new THREE.TubeGeometry(new THREE.CatmullRomCurve3(path), 24, 0.07 + fold * 0.008, 5, false),
-          contourMaterial
+      // Deposited stone/silt sits low and outboard. The center stays open;
+      // a viewer can recognize a cavern rather than a spherical membrane.
+      const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+      bed.name = `silt_${habitat.id}_sediment_catchment_bed`;
+      bed.position.set(0, -habitat.radii[1] * 0.96, 0);
+      bed.scale.set(habitat.radii[0] * 0.83, 0.24, habitat.radii[2] * 0.81);
+      bed.userData.targetingSuppressed = true;
+      body.add(bed);
+
+      // Big displaced inclusions: an overhead rock mass, two opposing
+      // shoulders, and lateral accumulated silt. Never place across a
+      // connection centerline; no false 'sealed door' to the other habitat.
+      const placements = [
+        [-0.76, 0.74, 0.24, 0.74, 0.33, 0.9],
+        [0.81, 0.63, -0.25, 0.58, 0.51, 0.74],
+        [-0.73, -0.7, -0.42, 0.88, 0.28, 0.78],
+        [0.75, -0.72, 0.44, 0.72, 0.25, 0.8]
+      ];
+      for (const [j, item] of placements.entries()) {
+        const rock = new THREE.Mesh(massGeometry, massMaterial);
+        rock.name = `silt_${habitat.id}_stone_inclusion_${j + 1}`;
+        rock.position.set(
+          habitat.radii[0] * item[0],
+          habitat.radii[1] * item[1],
+          habitat.radii[2] * item[2]
         );
-        foldMesh.name = `silt_${habitat.id}_membrane_fold_${fold + 1}`;
-        foldMesh.userData.targetingSuppressed = true;
-        body.add(foldMesh);
+        rock.scale.set(item[3] * 1.25, item[4] * 1.25, item[5] * 1.25);
+        rock.rotation.set(0.17 * j + index * 0.3, 0.63 * j, 0.21 * (j + index));
+        rock.userData.targetingSuppressed = true;
+        body.add(rock);
       }
 
-      // Retained sediment/rib anatomy makes the habitats *spatially different*;
-      // these are not collectable mass or simulated offspring in this pass.
-      for (let n = 0; n < 5; n += 1) {
-        const pebble = new THREE.Mesh(strandGeometry, contourMaterial);
-        pebble.name = `silt_${habitat.id}_fixed_anatomy_${n + 1}`;
-        const azimuth = (n + 0.4) * 2.399 + index;
-        pebble.position.set(
-          Math.cos(azimuth) * habitat.radii[0] * (0.45 + 0.08 * (n % 2)),
-          -habitat.radii[1] * (0.46 - (n % 3) * 0.1),
-          Math.sin(azimuth) * habitat.radii[2] * 0.5
-        );
-        pebble.scale.set(1.8 + (n % 3) * 0.6, 0.55 + (n % 2) * 0.28, 1.1 + (n % 2) * 0.5);
-        pebble.rotation.set(n * 0.2, azimuth, n * 0.31);
-        pebble.userData.targetingSuppressed = true;
-        body.add(pebble);
-      }
-      body.userData.ls1a = { habitatId: habitat.id, role: habitat.role, contactable: false };
       group.add(body);
-      this.habitatLobes.push({ group: body, shell, phase: habitat.phase, recipe: habitat });
+      this.habitatLobes.push({ group: body, shell, phase: habitat.phase, recipe: habitat,
+        wallScale: geology.cavityWallScale, wallOpacity: geology.wallOpacity });
     }
 
-    const veinMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
-      color: 0x715e47,
-      emissive: 0x354033,
-      emissiveIntensity: 0.16,
-      roughness: 0.89,
+    // These are hollow seep *throats* rather than thin lines drawn between
+    // otherwise separate rooms. The inward-facing surfaces overlap the cavities
+    // to visually weld the topology while keeping the middle unobstructed.
+    const channelMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: geology.channelColor,
+      emissive: geology.stoneEmissive,
+      emissiveIntensity: 0.12,
+      side: THREE.BackSide,
       transparent: true,
-      opacity: 0.36,
+      opacity: geology.channelOpacity,
+      roughness: 0.98,
       depthWrite: false
     }));
-    for (const connection of foundation.connections) {
+    for (const [index, connection] of foundation.connections.entries()) {
       const points = [connection.from, connection.bend, connection.to]
         .map((coords) => new THREE.Vector3().fromArray(coords));
-      const vein = new THREE.Mesh(
-        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 36, 0.1, 6, false),
-        veinMaterial
+      const width = geology.channelRadii[index] ?? 1.4;
+      const wall = new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points, false, "centripetal", 0.42),
+          32, width, 8, false),
+        channelMaterial
       );
-      vein.name = `silt_habitat_connection_${connection.id}`;
-      vein.userData.targetingSuppressed = true;
-      group.add(vein);
-      this.habitatVeins.push(vein);
+      wall.name = `silt_seep_cavern_${connection.id}`;
+      wall.userData.targetingSuppressed = true;
+      group.add(wall);
+      this.habitatVeins.push(wall);
     }
+
+    // One continuous stone-lined spinal channel connects the entrance,
+    // pressure ribs and deep release. This is the heavier host-body mark that
+    // makes the lateral pockets feel carved from the same formation.
+    const spine = new THREE.Mesh(
+      new THREE.TubeGeometry(this.pathCurve, 88, geology.spinalWallRadius, 9, false),
+      channelMaterial.clone()
+    );
+    this.materials.push(spine.material);
+    spine.material.opacity = geology.spinalWallOpacity;
+    spine.name = "silt_spinal_host_stone_tunnel_LS1A2";
+    spine.userData.targetingSuppressed = true;
+    group.add(spine);
+
+    // A single bounded batch of slow visual grains. This is ambient medium,
+    // *not* LS1B matter, resource, pickup, entity, or a time-based respawner.
+    const count = geology.driftGrainCount;
+    const driftPositions = new Float32Array(count * 3);
+    const driftGeometry = new THREE.BufferGeometry();
+    driftGeometry.setAttribute("position", new THREE.BufferAttribute(driftPositions, 3));
+    const driftMaterial = this.trackMaterial(new THREE.PointsMaterial({
+      color: geology.driftColor,
+      size: 0.047,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false
+    }));
+    this.habitatDriftSeeds = [];
+    for (let i = 0; i < count; i += 1) {
+      const habitat = foundation.habitats[i % foundation.habitats.length];
+      const theta = (i * 2.399963 + (i % 4)) % (Math.PI * 2);
+      const radial = 0.3 + (i % 7) * 0.075;
+      this.habitatDriftSeeds.push({
+        x: habitat.center[0] + Math.cos(theta) * habitat.radii[0] * radial,
+        y: habitat.center[1] + ((i % 9) / 9 - 0.46) * habitat.radii[1] * 1.25,
+        z: habitat.center[2] + Math.sin(theta) * habitat.radii[2] * radial,
+        phase: i * 1.73
+      });
+    }
+    this.habitatDriftPositions = driftPositions;
+    this.habitatDrift = new THREE.Points(driftGeometry, driftMaterial);
+    this.habitatDrift.name = "silt_visual_seep_grains_fixed_pool_LS1A2";
+    this.habitatDrift.userData.targetingSuppressed = true;
+    group.add(this.habitatDrift);
     this.root.add(group);
     this.habitatAnatomy = group;
+    this.animateHabitatFoundation(this.frameState);
   }
 
   sampleHabitat() {
@@ -673,15 +785,33 @@ export class SiltPressureRouteSystem {
   }
 
   animateHabitatFoundation(frameState) {
-    // Only slight anatomical breathing; avoids perpetual scale multiplication.
-    const time = frameState.runtimeSeconds ?? this.elapsed;
+    const t = frameState.runtimeSeconds ?? this.elapsed;
+    const p = this.localPlayer;
     for (const lobe of this.habitatLobes) {
-      const breath = Math.sin(time * 0.53 + lobe.phase);
+      // Low-amplitude seep/pressure breathing, always set from authored scale.
+      const breath = Math.sin(t * 0.36 + lobe.phase);
       lobe.shell.scale.set(
-        lobe.recipe.radii[0] * (1 + breath * 0.012),
-        lobe.recipe.radii[1] * (1 - breath * 0.012),
-        lobe.recipe.radii[2] * (1 + breath * 0.01)
+        lobe.recipe.radii[0] * lobe.wallScale * (1 + breath * 0.006),
+        lobe.recipe.radii[1] * lobe.wallScale * (1 - breath * 0.005),
+        lobe.recipe.radii[2] * lobe.wallScale * (1 + breath * 0.005)
       );
+      // Locally recede thick cave walls when the Core gets close. Prevent a
+      // translucent foreground veil; avoid accumulating opacity every frame.
+      const c = lobe.recipe.center, r = lobe.recipe.radii;
+      const near = Math.hypot((p.x - c[0]) / r[0], (p.y - c[1]) / r[1], (p.z - c[2]) / r[2]);
+      lobe.shell.material.opacity = lobe.wallOpacity *
+        (1 - 0.62 * THREE.MathUtils.smoothstep(near, 0.76, 1.25));
+    }
+    if (this.habitatDrift && this.habitatDriftPositions) {
+      const out = this.habitatDriftPositions;
+      for (let i = 0; i < this.habitatDriftSeeds.length; i += 1) {
+        const grain = this.habitatDriftSeeds[i];
+        const phase = t * 0.28 + grain.phase;
+        out[i * 3] = grain.x + Math.sin(phase) * 0.16;
+        out[i * 3 + 1] = grain.y - Math.sin(t * 0.21 + grain.phase * 0.4) * 0.09;
+        out[i * 3 + 2] = grain.z + Math.cos(phase * 0.81) * 0.23;
+      }
+      this.habitatDrift.geometry.attributes.position.needsUpdate = true;
     }
   }
 
@@ -1331,7 +1461,9 @@ export class SiltPressureRouteSystem {
       habitatFoundation: {
         pass: this.recipe?.habitatFoundation?.pass ?? "none",
         active: Boolean(active && this.habitatAnatomy),
-        topology: this.recipe?.habitatFoundation?.topology ?? "unexpanded",
+        topology: this.recipe?.geologicMedium?.topology ?? this.recipe?.habitatFoundation?.topology ?? "unexpanded",
+        geologyPass: this.recipe?.geologicMedium?.pass ?? "none",
+        driftGrainsVisualOnly: this.habitatDriftSeeds.length,
         habitatCount: this.habitatLobes.length,
         connectionCount: this.habitatVeins.length,
         currentHabitatId: active ? this.habitatSample.id : "none",

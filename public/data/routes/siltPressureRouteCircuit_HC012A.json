@@ -352,5 +352,35 @@
     "noNewProgression": true,
     "noRenewableMatterYet": true,
     "purpose": "Three reachable contiguous habitats now; LS1B creates one conserved material lifecycle."
+  },
+  "geologicMedium": {
+    "pass": "LS1A2",
+    "scope": "local_contiguous_sediment_and_stone_presentation_only",
+    "topology": "single_stratified_porous_host_body_three_connected_cavities",
+    "cavityWallScale": 1.16,
+    "wallOpacity": 0.59,
+    "channelOpacity": 0.49,
+    "stoneColor": 5062968,
+    "stoneEmissive": 2170395,
+    "sedimentColor": 6705469,
+    "sedimentEmissive": 3155742,
+    "bedColor": 7691332,
+    "channelColor": 5327936,
+    "channelRadii": [
+      1.37,
+      1.68,
+      1.5,
+      1.43
+    ],
+    "driftColor": 10717800,
+    "driftGrainCount": 96,
+    "collisionAuthority": "unchanged_PlayerMovementController_entry_anchored_ellipsoid",
+    "addsColliders": false,
+    "addsContactSurfaces": false,
+    "addsMatter": false,
+    "newProgression": false,
+    "feeling": "microorganism_inside_bounded_seep_caverns_and_sedimentary_stone",
+    "spinalWallRadius": 2.06,
+    "spinalWallOpacity": 0.34
   }
 }
