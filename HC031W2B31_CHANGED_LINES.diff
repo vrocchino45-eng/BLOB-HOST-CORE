@@ -1,0 +1,405 @@
+diff --git asrc/targeting/TargetingSystem.js bsrc/targeting/TargetingSystem.js
+index 911a60b..bee2ccb 100644
+--- asrc/targeting/TargetingSystem.js
++++ bsrc/targeting/TargetingSystem.js
+@@ -80,10 +80,13 @@ export class TargetingSystem {
+     this.coherencePositions = new Float32Array(COHERENCE_SEGMENTS * 3);
+     this.linePositions = new Float32Array(6);
+     this.relationshipGlyphState = {
+-      pass: "HC-031W2B3",
++      pass: "HC-031W2B3.1",
+       active: false,
+       pulseDirection: "outward_down_triangle",
+       absorbDirection: "inward_up_triangle",
++      directionalTravelLaw: "pulse_core_to_noun_absorb_noun_to_core_camera_facing",
++      pulseTravel01: 0,
++      absorbTravel01: 0,
+       coherenceShape: "none",
+       coherenceSides: 0,
+       condition01: 0,
+@@ -1106,10 +1109,13 @@ export class TargetingSystem {
+       if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
+       if (this.coherenceBoundary) this.coherenceBoundary.visible = false;
+       this.relationshipGlyphState = {
+-        pass: "HC-031W2B3",
++        pass: "HC-031W2B3.1",
+         active: false,
+         pulseDirection: "outward_down_triangle",
+         absorbDirection: "inward_up_triangle",
++        directionalTravelLaw: "pulse_core_to_noun_absorb_noun_to_core_camera_facing",
++        pulseTravel01: 0,
++        absorbTravel01: 0,
+         coherenceShape: "none",
+         coherenceSides: 0,
+         condition01: 0,
+@@ -1128,42 +1134,48 @@ export class TargetingSystem {
+     this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
+     this.getWorldPosition(this.relationshipTarget.root, this.tmpTargetPosition);
+ 
+-    // W2B3 convention: local +Y points inward (target -> Core). That makes the
+-    // canonical downward Pulse triangle point physically outward, while the
+-    // upward Absorb triangle points physically inward along the same relationship.
+-    this.tmpRelationshipDirection.copy(this.tmpPlayerPosition).sub(this.tmpTargetPosition);
++    // W2B3.1: direction is carried primarily by movement along the retained
++    // Core <-> noun relationship. The triangle remains the canonical symbol,
++    // but it faces the camera so an oblique view cannot collapse it into a plane.
++    this.tmpRelationshipDirection.copy(this.tmpTargetPosition).sub(this.tmpPlayerPosition);
+     const distance = Math.max(0.001, this.tmpRelationshipDirection.length());
+     this.tmpRelationshipDirection.multiplyScalar(1 / distance);
+-    this.camera.getWorldDirection(this.tmpCameraDirection).normalize();
+-
+-    this.tmpRight.crossVectors(this.tmpRelationshipDirection, this.tmpCameraDirection);
+-    if (this.tmpRight.lengthSq() < 0.0001) {
+-      this.tmpRight.crossVectors(this.camera.up, this.tmpRelationshipDirection);
+-    }
+-    this.tmpRight.normalize();
+-    this.tmpNormal.crossVectors(this.tmpRight, this.tmpRelationshipDirection).normalize();
+-    this.tmpMatrix.makeBasis(this.tmpRight, this.tmpRelationshipDirection, this.tmpNormal);
+ 
+     this.relationshipGlyphRoot.visible = pulseActive || absorbActive;
++    let pulseTravel01 = 0;
++    let absorbTravel01 = 0;
+     if (this.relationshipGlyphRoot.visible) {
+-      this.relationshipGlyphRoot.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, 0.58);
+-      this.relationshipGlyphRoot.quaternion.setFromRotationMatrix(this.tmpMatrix);
+-      const scale = Math.max(0.68, Math.min(1.28, 0.72 + distance * 0.065));
+-      this.relationshipGlyphRoot.scale.setScalar(scale);
++      this.relationshipGlyphRoot.position.set(0, 0, 0);
++      this.relationshipGlyphRoot.quaternion.identity();
++      this.relationshipGlyphRoot.scale.setScalar(1);
+       this.pulseTriangle.visible = pulseActive;
+       this.absorbTriangle.visible = absorbActive;
+ 
+-      const paired = pulseActive && absorbActive;
+-      const directionalBeat = Math.sin(t * 5.2) * 0.025;
+-      this.pulseTriangle.position.set(paired ? -0.10 : 0, pulseActive ? -0.075 - directionalBeat : 0, 0);
+-      this.absorbTriangle.position.set(paired ? 0.10 : 0, absorbActive ? 0.075 + directionalBeat : 0, 0);
++      const travelPhase = (t * 0.92) % 1;
++      const travelEnvelope = THREE.MathUtils.smoothstep(travelPhase, 0.03, 0.18)
++        * (1 - THREE.MathUtils.smoothstep(travelPhase, 0.82, 0.98));
++      pulseTravel01 = 0.12 + travelPhase * 0.76;
++      absorbTravel01 = 0.88 - travelPhase * 0.76;
++      const scale = Math.max(0.68, Math.min(1.28, 0.72 + distance * 0.065));
++      const lock01 = clamp01(frameState.targeting?.lockStrength ?? 0);
++      const directionalOpacity = (0.26 + lock01 * 0.20) * (0.56 + travelEnvelope * 0.44);
++
++      if (pulseActive) {
++        this.pulseTriangle.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, pulseTravel01);
++        this.pulseTriangle.quaternion.copy(this.camera.quaternion);
++        this.pulseTriangle.rotateZ(Math.PI);
++        this.pulseTriangle.scale.setScalar(scale * (0.94 + travelEnvelope * 0.08));
++      }
++      if (absorbActive) {
++        this.absorbTriangle.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, absorbTravel01);
++        this.absorbTriangle.quaternion.copy(this.camera.quaternion);
++        this.absorbTriangle.scale.setScalar(scale * (0.94 + travelEnvelope * 0.08));
++      }
++
+       this.pulseTriangle.material.color.set(W2B3_VERB_COLORS.pulse);
+       this.absorbTriangle.material.color.set(W2B3_VERB_COLORS.absorb);
+-      const lock01 = clamp01(frameState.targeting?.lockStrength ?? 0);
+-      this.pulseTriangle.material.opacity = pulseActive ? 0.30 + lock01 * 0.22 : 0;
+-      this.absorbTriangle.material.opacity = absorbActive ? 0.30 + lock01 * 0.22 : 0;
+-      this.pulseTriangle.scale.setScalar(0.96 + (pulseActive ? Math.max(0, Math.sin(t * 4.8)) * 0.055 : 0));
+-      this.absorbTriangle.scale.setScalar(1.02 - (absorbActive ? Math.max(0, Math.sin(t * 4.8)) * 0.05 : 0));
++      this.pulseTriangle.material.opacity = pulseActive ? directionalOpacity : 0;
++      this.absorbTriangle.material.opacity = absorbActive ? directionalOpacity : 0;
+     }
+ 
+     const reactive = frameState.reactiveStateGrammar?.objects?.[this.relationshipTargetId]
+@@ -1219,7 +1231,7 @@ export class TargetingSystem {
+     }
+ 
+     this.relationshipGlyphState = {
+-      pass: "HC-031W2B3",
++      pass: "HC-031W2B3.1",
+       active: true,
+       targetId: this.relationshipTargetId,
+       pulseActive,
+@@ -1227,6 +1239,10 @@ export class TargetingSystem {
+       stabilizeActive,
+       pulseDirection: "outward_down_triangle",
+       absorbDirection: "inward_up_triangle",
++      directionalTravelLaw: "pulse_core_to_noun_absorb_noun_to_core_camera_facing",
++      cameraFacingDirectionalSymbols: true,
++      pulseTravel01: Number(pulseTravel01.toFixed(3)),
++      absorbTravel01: Number(absorbTravel01.toFixed(3)),
+       stabilizeMeaning: "condition_and_coherence_not_target_selection",
+       reactiveStage: stage,
+       condition01: Number(authoredCondition.toFixed(3)),
+diff --git asrc/presentation/VisualHierarchyCompressionSystem.js bsrc/presentation/VisualHierarchyCompressionSystem.js
+index be24c99..8a08391 100644
+--- asrc/presentation/VisualHierarchyCompressionSystem.js
++++ bsrc/presentation/VisualHierarchyCompressionSystem.js
+@@ -68,14 +68,14 @@ export class VisualHierarchyCompressionSystem {
+     const acquisition01 = 1 - clamp01(age / 0.42);
+     const supportLift = 0.72 + acquisition01 * 0.28 + stress01 * 0.10;
+ 
+-    this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01);
++    this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01, frameState);
+     this.compressTargetingGlyphs(relationshipActive, supportLift, frameState);
+-    this.compressVerbPhysicalization(supportLift, stress01);
++    this.compressVerbPhysicalization(supportLift, stress01, frameState);
+ 
+     frameState.visualHierarchyCompression = {
+       pass: "HC-030B1",
+       spatialRevealPass: "HC-031W2B2",
+-      relationshipGrammarPass: "HC-031W2B3",
++      relationshipGrammarPass: "HC-031W2B3.1",
+       owner: "VisualHierarchyCompressionSystem",
+       active: relationshipActive || Boolean(frameState.verbPhysicalization),
+       relationshipGradientActive: this.gradientRoot.visible,
+@@ -85,7 +85,7 @@ export class VisualHierarchyCompressionSystem {
+       reactiveStress01: stress01,
+       hierarchy: {
+         primary: "target_material_state_and_response",
+-        secondary: "verb_direction_glyph_target_condition_and_pulse_return",
++        secondary: "target_condition_and_directional_relationship_travel",
+         tertiary: "outgoing_spheres_support_rings_lines_and_distant_wireframes"
+       },
+       policy: {
+@@ -95,7 +95,10 @@ export class VisualHierarchyCompressionSystem {
+         targetResponseRemainsUntouched: true,
+         pulseTriangleMeansOutwardProjection: true,
+         absorbTriangleMeansInwardDraw: true,
++        directionalMotionCarriesPushPullMeaning: true,
++        directionalTrianglesStayCameraFacing: true,
+         stabilizeBoundaryMeansTargetConditionAndCoherence: true,
++        stabilizeSupportRingsYieldToConditionBoundary: true,
+         changesTargeting: false,
+         changesVerbPower: false,
+         changesReactiveState: false,
+@@ -104,7 +107,7 @@ export class VisualHierarchyCompressionSystem {
+     };
+   }
+ 
+-  updateRelationshipTrace(active, targeting, acquisition01, stress01) {
++  updateRelationshipTrace(active, targeting, acquisition01, stress01, frameState = this.frameState) {
+     const source = this.targetingSystem?.pointerLine;
+     if (source) {
+       // HC030B1 owns presentation after TargetingSystem has authored the frame.
+@@ -125,7 +128,9 @@ export class VisualHierarchyCompressionSystem {
+ 
+     const color = this.targetingSystem.getTargetColor?.(targeting.targetKind, targeting.reticleState) ?? 0xffffff;
+     const lock = clamp01(targeting.lockStrength ?? 0);
+-    const baseOpacity = 0.026 + lock * 0.030 + acquisition01 * 0.022 + stress01 * 0.008;
++    const stabilizeActive = Boolean(frameState.verbTargetRelationshipGrammar?.stabilizeActive);
++    const stabilizeTraceYield = stabilizeActive ? 0.72 : 1;
++    const baseOpacity = (0.026 + lock * 0.030 + acquisition01 * 0.022 + stress01 * 0.008) * stabilizeTraceYield;
+ 
+     for (let index = 0; index < this.gradientSegments.length; index += 1) {
+       const segment = this.gradientSegments[index];
+@@ -169,7 +174,7 @@ export class VisualHierarchyCompressionSystem {
+     }
+   }
+ 
+-  compressVerbPhysicalization(supportLift, stress01) {
++  compressVerbPhysicalization(supportLift, stress01, frameState = this.frameState) {
+     const verbs = this.coreVerbPhysicalizationSystem;
+     if (!verbs) return;
+ 
+@@ -219,9 +224,12 @@ export class VisualHierarchyCompressionSystem {
+ 
+     // Stabilize: the target settling should carry the message. The tether and three
+     // gyroscopic rings remain readable but no longer dominate the object silhouette.
+-    if (verbs.stabilizeLine?.material) verbs.stabilizeLine.material.opacity *= 0.28 * supportLift;
++    const stabilizeGrammarActive = Boolean(frameState.verbTargetRelationshipGrammar?.stabilizeActive);
++    const stabilizeLineMultiplier = stabilizeGrammarActive ? 0.22 : 0.28;
++    const stabilizeRingMultiplier = stabilizeGrammarActive ? 0.30 : 0.50;
++    if (verbs.stabilizeLine?.material) verbs.stabilizeLine.material.opacity *= stabilizeLineMultiplier * supportLift;
+     for (const ring of verbs.stabilizeField?.children ?? []) {
+-      if (ring?.material) ring.material.opacity *= 0.50 * supportLift;
++      if (ring?.material) ring.material.opacity *= stabilizeRingMultiplier * supportLift;
+     }
+   }
+ }
+diff --git ascripts/validateHC031W2B2PulseSonarSpatialReveal.mjs bscripts/validateHC031W2B2PulseSonarSpatialReveal.mjs
+index 0cecf95..c5413ff 100644
+--- ascripts/validateHC031W2B2PulseSonarSpatialReveal.mjs
++++ bscripts/validateHC031W2B2PulseSonarSpatialReveal.mjs
+@@ -18,7 +18,7 @@ assert.match(verbsSource, /materialPhases/);
+ assert.match(verbsSource, /arrivalLift = THREE\.MathUtils\.smoothstep/);
+ assert.match(verbsSource, /peakOpacity/);
+ assert.match(hierarchySource, /spatialRevealPass: "HC-031W2B2"/);
+-assert.match(hierarchySource, /pulse_return_and_local_relationship_change|verb_direction_glyph_target_condition_and_pulse_return/);
++assert.match(hierarchySource, /pulse_return_and_local_relationship_change|verb_direction_glyph_target_condition_and_pulse_return|target_condition_and_directional_relationship_travel/);
+ assert.match(hierarchySource, /outgoing_spheres_rings_lines_and_distant_wireframes|outgoing_spheres_support_rings_lines_and_distant_wireframes/);
+ 
+ // Existing sensory law, actionable range, echo timing, and deep-reach authority stay locked.
+diff --git ascripts/validateHC031W2B3VerbTargetRelationshipGrammar.mjs bscripts/validateHC031W2B3VerbTargetRelationshipGrammar.mjs
+index f57f845..a0309b0 100644
+--- ascripts/validateHC031W2B3VerbTargetRelationshipGrammar.mjs
++++ bscripts/validateHC031W2B3VerbTargetRelationshipGrammar.mjs
+@@ -12,14 +12,15 @@ const hierarchySource = read("../src/presentation/VisualHierarchyCompressionSyst
+ // Stabilize describes target condition/coherence without gaining targeting authority.
+ assert.match(targetingSource, /pulseDirection: "outward_down_triangle"/);
+ assert.match(targetingSource, /absorbDirection: "inward_up_triangle"/);
+-assert.match(targetingSource, /this\.pulseTriangle\.rotation\.z = Math\.PI/);
+-assert.match(targetingSource, /this\.absorbTriangle\.rotation\.z = 0/);
+-assert.match(targetingSource, /local \+Y points inward \(target -> Core\)/);
++assert.match(targetingSource, /pulse_core_to_noun_absorb_noun_to_core_camera_facing/);
++assert.match(targetingSource, /this\.pulseTriangle\.rotateZ\(Math\.PI\)/);
++assert.match(targetingSource, /this\.pulseTriangle\.quaternion\.copy\(this\.camera\.quaternion\)/);
++assert.match(targetingSource, /this\.absorbTriangle\.quaternion\.copy\(this\.camera\.quaternion\)/);
+ assert.match(targetingSource, /closureLaw: "4_to_6_to_8_to_12_as_disorder_resolves"/);
+ assert.match(targetingSource, /changesTargetingAuthority: false/);
+ assert.match(targetingSource, /changesVerbPower: false/);
+-assert.match(hierarchySource, /relationshipGrammarPass: "HC-031W2B3"/);
+-assert.match(hierarchySource, /verb_direction_glyph_target_condition_and_pulse_return/);
++assert.match(hierarchySource, /relationshipGrammarPass: "HC-031W2B3\.1"/);
++assert.match(hierarchySource, /target_condition_and_directional_relationship_travel/);
+ 
+ const scene = new THREE.Scene();
+ const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+@@ -71,23 +72,18 @@ targeting.relationshipTargetId = "probe";
+ targeting.updateRelationshipGlyphs(frameState);
+ assert.equal(targeting.pulseTriangle.visible, true);
+ assert.equal(targeting.absorbTriangle.visible, false);
+-assert.ok(Math.abs(targeting.pulseTriangle.rotation.z - Math.PI) < 1e-9);
+-assert.equal(frameState.verbTargetRelationshipGrammar.pass, "HC-031W2B3");
++assert.equal(frameState.verbTargetRelationshipGrammar.pass, "HC-031W2B3.1");
+ assert.equal(frameState.verbTargetRelationshipGrammar.pulseDirection, "outward_down_triangle");
+-
+-// Because relationship local +Y is target -> Core, the downward pulse triangle
+-// physically points Core -> target in world space.
+-const worldPulseDirection = new THREE.Vector3(0, -1, 0).applyQuaternion(targeting.relationshipGlyphRoot.quaternion).normalize();
+-const expectedOutward = targetRoot.position.clone().sub(playerRoot.position).normalize();
+-assert.ok(worldPulseDirection.dot(expectedOutward) > 0.99);
++assert.equal(frameState.verbTargetRelationshipGrammar.directionalTravelLaw, "pulse_core_to_noun_absorb_noun_to_core_camera_facing");
++const pulseDistanceFromCore = targeting.pulseTriangle.position.distanceTo(playerRoot.position);
++assert.ok(pulseDistanceFromCore > 0 && pulseDistanceFromCore < playerRoot.position.distanceTo(targetRoot.position));
+ 
+ frameState.targeting.relationshipVerbs = ["absorb"];
+ targeting.updateRelationshipGlyphs(frameState);
+ assert.equal(targeting.pulseTriangle.visible, false);
+ assert.equal(targeting.absorbTriangle.visible, true);
+-const worldAbsorbDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(targeting.relationshipGlyphRoot.quaternion).normalize();
+-const expectedInward = playerRoot.position.clone().sub(targetRoot.position).normalize();
+-assert.ok(worldAbsorbDirection.dot(expectedInward) > 0.99);
++const absorbDistanceFromCore = targeting.absorbTriangle.position.distanceTo(playerRoot.position);
++assert.ok(absorbDistanceFromCore > 0 && absorbDistanceFromCore < playerRoot.position.distanceTo(targetRoot.position));
+ assert.equal(frameState.verbTargetRelationshipGrammar.absorbDirection, "inward_up_triangle");
+ 
+ // Stabilize boundary reports real target condition and regularizes as the target
+diff --git ascripts/validateHC031W2B31DirectionalRelationshipReadability.mjs bscripts/validateHC031W2B31DirectionalRelationshipReadability.mjs
+new file mode 100644
+index 0000000..96b9f0a
+--- /dev/null
++++ bscripts/validateHC031W2B31DirectionalRelationshipReadability.mjs
+@@ -0,0 +1,116 @@
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import * as THREE from "three";
++import { TargetingSystem } from "../src/targeting/TargetingSystem.js";
++import { VisualHierarchyCompressionSystem } from "../src/presentation/VisualHierarchyCompressionSystem.js";
++
++const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
++const targetingSource = read("../src/targeting/TargetingSystem.js");
++const hierarchySource = read("../src/presentation/VisualHierarchyCompressionSystem.js");
++
++assert.match(targetingSource, /pass: "HC-031W2B3\.1"/);
++assert.match(targetingSource, /pulse_core_to_noun_absorb_noun_to_core_camera_facing/);
++assert.match(targetingSource, /pulseTravel01 = 0\.12 \+ travelPhase \* 0\.76/);
++assert.match(targetingSource, /absorbTravel01 = 0\.88 - travelPhase \* 0\.76/);
++assert.match(targetingSource, /this\.pulseTriangle\.quaternion\.copy\(this\.camera\.quaternion\)/);
++assert.match(targetingSource, /this\.absorbTriangle\.quaternion\.copy\(this\.camera\.quaternion\)/);
++assert.match(hierarchySource, /relationshipGrammarPass: "HC-031W2B3\.1"/);
++assert.match(hierarchySource, /stabilizeSupportRingsYieldToConditionBoundary: true/);
++assert.match(hierarchySource, /stabilizeGrammarActive \? 0\.30 : 0\.50/);
++
++const scene = new THREE.Scene();
++const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
++camera.position.set(3, 2, 5);
++camera.lookAt(0, 0, 0);
++scene.add(camera);
++const playerRoot = new THREE.Group();
++playerRoot.position.set(-0.5, 0.2, 0.5);
++scene.add(playerRoot);
++const targetRoot = new THREE.Group();
++targetRoot.position.set(2.2, 0.8, -2.4);
++scene.add(targetRoot);
++scene.updateMatrixWorld(true);
++
++const frameState = {
++  runtimeSeconds: 0.10,
++  targeting: {
++    relationshipActive: true,
++    relationshipVerbs: ["pulse"],
++    lockStrength: 0.8,
++    targetKind: "absorbable",
++    reticleState: "assist"
++  },
++  reactiveStateGrammar: {
++    objects: { probe: { stage: "unstable", condition01: 0.72, presentedCondition01: 0.72 } },
++    focus: { stage: "unstable", condition01: 0.72, presentedCondition01: 0.72 }
++  },
++  verbPhysicalization: { stabilizeProgress: 0 }
++};
++
++const targeting = new TargetingSystem({
++  scene,
++  camera,
++  playerRoot,
++  chemObjectSystem: { objects: [] },
++  frameState
++});
++targeting.init();
++targeting.relationshipTarget = {
++  root: targetRoot,
++  recipe: { id: "probe", chemistry: { instabilityRisk: 0.72 } },
++  distance: playerRoot.position.distanceTo(targetRoot.position)
++};
++targeting.relationshipTargetId = "probe";
++
++targeting.updateRelationshipGlyphs(frameState);
++const pulseEarly = targeting.pulseTriangle.position.clone();
++const pulseEarlyTravel = frameState.verbTargetRelationshipGrammar.pulseTravel01;
++frameState.runtimeSeconds = 0.32;
++targeting.updateRelationshipGlyphs(frameState);
++const pulseLater = targeting.pulseTriangle.position.clone();
++const pulseLaterTravel = frameState.verbTargetRelationshipGrammar.pulseTravel01;
++assert.ok(pulseLaterTravel > pulseEarlyTravel, "Pulse travel must advance Core -> noun");
++assert.ok(pulseLater.distanceTo(targetRoot.position) < pulseEarly.distanceTo(targetRoot.position));
++
++const cameraForward = new THREE.Vector3();
++camera.getWorldDirection(cameraForward).normalize();
++const pulseNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(targeting.pulseTriangle.quaternion).normalize();
++assert.ok(Math.abs(pulseNormal.dot(cameraForward)) > 0.99, "Pulse triangle must remain camera-facing under oblique view");
++
++frameState.targeting.relationshipVerbs = ["absorb"];
++frameState.runtimeSeconds = 0.10;
++targeting.updateRelationshipGlyphs(frameState);
++const absorbEarly = targeting.absorbTriangle.position.clone();
++const absorbEarlyTravel = frameState.verbTargetRelationshipGrammar.absorbTravel01;
++frameState.runtimeSeconds = 0.32;
++targeting.updateRelationshipGlyphs(frameState);
++const absorbLater = targeting.absorbTriangle.position.clone();
++const absorbLaterTravel = frameState.verbTargetRelationshipGrammar.absorbTravel01;
++assert.ok(absorbLaterTravel < absorbEarlyTravel, "Absorb travel must advance noun -> Core");
++assert.ok(absorbLater.distanceTo(playerRoot.position) < absorbEarly.distanceTo(playerRoot.position));
++const absorbNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(targeting.absorbTriangle.quaternion).normalize();
++assert.ok(Math.abs(absorbNormal.dot(cameraForward)) > 0.99, "Absorb triangle must remain camera-facing under oblique view");
++
++// Stabilize keeps condition fixed on the noun and makes older support yield.
++frameState.targeting.relationshipVerbs = ["stabilize"];
++targeting.updateRelationshipGlyphs(frameState);
++assert.equal(targeting.coherenceBoundary.visible, true);
++assert.equal(frameState.verbTargetRelationshipGrammar.stabilizeMeaning, "condition_and_coherence_not_target_selection");
++
++const stabilizeLine = { material: { opacity: 1 } };
++const stabilizeField = new THREE.Group();
++for (let i = 0; i < 3; i += 1) {
++  stabilizeField.add(new THREE.Mesh(new THREE.RingGeometry(0.2, 0.22, 8), new THREE.MeshBasicMaterial({ transparent: true, opacity: 1 })));
++}
++const hierarchy = new VisualHierarchyCompressionSystem({
++  scene,
++  targetingSystem: targeting,
++  coreVerbPhysicalizationSystem: { stabilizeLine, stabilizeField },
++  frameState
++});
++frameState.verbTargetRelationshipGrammar.stabilizeActive = true;
++hierarchy.compressVerbPhysicalization(1, 0, frameState);
++assert.ok(Math.abs(stabilizeLine.material.opacity - 0.22) < 1e-9);
++for (const ring of stabilizeField.children) assert.ok(Math.abs(ring.material.opacity - 0.30) < 1e-9);
++
++console.log("HC031W2B3.1 Directional Relationship Readability locks PASS");

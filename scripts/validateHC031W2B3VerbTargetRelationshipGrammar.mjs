@@ -12,14 +12,15 @@ const hierarchySource = read("../src/presentation/VisualHierarchyCompressionSyst
 // Stabilize describes target condition/coherence without gaining targeting authority.
 assert.match(targetingSource, /pulseDirection: "outward_down_triangle"/);
 assert.match(targetingSource, /absorbDirection: "inward_up_triangle"/);
-assert.match(targetingSource, /this\.pulseTriangle\.rotation\.z = Math\.PI/);
-assert.match(targetingSource, /this\.absorbTriangle\.rotation\.z = 0/);
-assert.match(targetingSource, /local \+Y points inward \(target -> Core\)/);
+assert.match(targetingSource, /pulse_core_to_noun_absorb_noun_to_core_camera_facing/);
+assert.match(targetingSource, /this\.pulseTriangle\.rotateZ\(Math\.PI\)/);
+assert.match(targetingSource, /this\.pulseTriangle\.quaternion\.copy\(this\.camera\.quaternion\)/);
+assert.match(targetingSource, /this\.absorbTriangle\.quaternion\.copy\(this\.camera\.quaternion\)/);
 assert.match(targetingSource, /closureLaw: "4_to_6_to_8_to_12_as_disorder_resolves"/);
 assert.match(targetingSource, /changesTargetingAuthority: false/);
 assert.match(targetingSource, /changesVerbPower: false/);
-assert.match(hierarchySource, /relationshipGrammarPass: "HC-031W2B3"/);
-assert.match(hierarchySource, /verb_direction_glyph_target_condition_and_pulse_return/);
+assert.match(hierarchySource, /relationshipGrammarPass: "HC-031W2B3\.1"/);
+assert.match(hierarchySource, /target_condition_and_directional_relationship_travel/);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
@@ -71,23 +72,18 @@ targeting.relationshipTargetId = "probe";
 targeting.updateRelationshipGlyphs(frameState);
 assert.equal(targeting.pulseTriangle.visible, true);
 assert.equal(targeting.absorbTriangle.visible, false);
-assert.ok(Math.abs(targeting.pulseTriangle.rotation.z - Math.PI) < 1e-9);
-assert.equal(frameState.verbTargetRelationshipGrammar.pass, "HC-031W2B3");
+assert.equal(frameState.verbTargetRelationshipGrammar.pass, "HC-031W2B3.1");
 assert.equal(frameState.verbTargetRelationshipGrammar.pulseDirection, "outward_down_triangle");
-
-// Because relationship local +Y is target -> Core, the downward pulse triangle
-// physically points Core -> target in world space.
-const worldPulseDirection = new THREE.Vector3(0, -1, 0).applyQuaternion(targeting.relationshipGlyphRoot.quaternion).normalize();
-const expectedOutward = targetRoot.position.clone().sub(playerRoot.position).normalize();
-assert.ok(worldPulseDirection.dot(expectedOutward) > 0.99);
+assert.equal(frameState.verbTargetRelationshipGrammar.directionalTravelLaw, "pulse_core_to_noun_absorb_noun_to_core_camera_facing");
+const pulseDistanceFromCore = targeting.pulseTriangle.position.distanceTo(playerRoot.position);
+assert.ok(pulseDistanceFromCore > 0 && pulseDistanceFromCore < playerRoot.position.distanceTo(targetRoot.position));
 
 frameState.targeting.relationshipVerbs = ["absorb"];
 targeting.updateRelationshipGlyphs(frameState);
 assert.equal(targeting.pulseTriangle.visible, false);
 assert.equal(targeting.absorbTriangle.visible, true);
-const worldAbsorbDirection = new THREE.Vector3(0, 1, 0).applyQuaternion(targeting.relationshipGlyphRoot.quaternion).normalize();
-const expectedInward = playerRoot.position.clone().sub(targetRoot.position).normalize();
-assert.ok(worldAbsorbDirection.dot(expectedInward) > 0.99);
+const absorbDistanceFromCore = targeting.absorbTriangle.position.distanceTo(playerRoot.position);
+assert.ok(absorbDistanceFromCore > 0 && absorbDistanceFromCore < playerRoot.position.distanceTo(targetRoot.position));
 assert.equal(frameState.verbTargetRelationshipGrammar.absorbDirection, "inward_up_triangle");
 
 // Stabilize boundary reports real target condition and regularizes as the target

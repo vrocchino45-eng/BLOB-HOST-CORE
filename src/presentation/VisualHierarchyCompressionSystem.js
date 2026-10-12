@@ -68,14 +68,14 @@ export class VisualHierarchyCompressionSystem {
     const acquisition01 = 1 - clamp01(age / 0.42);
     const supportLift = 0.72 + acquisition01 * 0.28 + stress01 * 0.10;
 
-    this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01);
+    this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01, frameState);
     this.compressTargetingGlyphs(relationshipActive, supportLift, frameState);
-    this.compressVerbPhysicalization(supportLift, stress01);
+    this.compressVerbPhysicalization(supportLift, stress01, frameState);
 
     frameState.visualHierarchyCompression = {
       pass: "HC-030B1",
       spatialRevealPass: "HC-031W2B2",
-      relationshipGrammarPass: "HC-031W2B3",
+      relationshipGrammarPass: "HC-031W2B3.1",
       owner: "VisualHierarchyCompressionSystem",
       active: relationshipActive || Boolean(frameState.verbPhysicalization),
       relationshipGradientActive: this.gradientRoot.visible,
@@ -85,7 +85,7 @@ export class VisualHierarchyCompressionSystem {
       reactiveStress01: stress01,
       hierarchy: {
         primary: "target_material_state_and_response",
-        secondary: "verb_direction_glyph_target_condition_and_pulse_return",
+        secondary: "target_condition_and_directional_relationship_travel",
         tertiary: "outgoing_spheres_support_rings_lines_and_distant_wireframes"
       },
       policy: {
@@ -95,7 +95,10 @@ export class VisualHierarchyCompressionSystem {
         targetResponseRemainsUntouched: true,
         pulseTriangleMeansOutwardProjection: true,
         absorbTriangleMeansInwardDraw: true,
+        directionalMotionCarriesPushPullMeaning: true,
+        directionalTrianglesStayCameraFacing: true,
         stabilizeBoundaryMeansTargetConditionAndCoherence: true,
+        stabilizeSupportRingsYieldToConditionBoundary: true,
         changesTargeting: false,
         changesVerbPower: false,
         changesReactiveState: false,
@@ -104,7 +107,7 @@ export class VisualHierarchyCompressionSystem {
     };
   }
 
-  updateRelationshipTrace(active, targeting, acquisition01, stress01) {
+  updateRelationshipTrace(active, targeting, acquisition01, stress01, frameState = this.frameState) {
     const source = this.targetingSystem?.pointerLine;
     if (source) {
       // HC030B1 owns presentation after TargetingSystem has authored the frame.
@@ -125,7 +128,9 @@ export class VisualHierarchyCompressionSystem {
 
     const color = this.targetingSystem.getTargetColor?.(targeting.targetKind, targeting.reticleState) ?? 0xffffff;
     const lock = clamp01(targeting.lockStrength ?? 0);
-    const baseOpacity = 0.026 + lock * 0.030 + acquisition01 * 0.022 + stress01 * 0.008;
+    const stabilizeActive = Boolean(frameState.verbTargetRelationshipGrammar?.stabilizeActive);
+    const stabilizeTraceYield = stabilizeActive ? 0.72 : 1;
+    const baseOpacity = (0.026 + lock * 0.030 + acquisition01 * 0.022 + stress01 * 0.008) * stabilizeTraceYield;
 
     for (let index = 0; index < this.gradientSegments.length; index += 1) {
       const segment = this.gradientSegments[index];
@@ -169,7 +174,7 @@ export class VisualHierarchyCompressionSystem {
     }
   }
 
-  compressVerbPhysicalization(supportLift, stress01) {
+  compressVerbPhysicalization(supportLift, stress01, frameState = this.frameState) {
     const verbs = this.coreVerbPhysicalizationSystem;
     if (!verbs) return;
 
@@ -219,9 +224,12 @@ export class VisualHierarchyCompressionSystem {
 
     // Stabilize: the target settling should carry the message. The tether and three
     // gyroscopic rings remain readable but no longer dominate the object silhouette.
-    if (verbs.stabilizeLine?.material) verbs.stabilizeLine.material.opacity *= 0.28 * supportLift;
+    const stabilizeGrammarActive = Boolean(frameState.verbTargetRelationshipGrammar?.stabilizeActive);
+    const stabilizeLineMultiplier = stabilizeGrammarActive ? 0.22 : 0.28;
+    const stabilizeRingMultiplier = stabilizeGrammarActive ? 0.30 : 0.50;
+    if (verbs.stabilizeLine?.material) verbs.stabilizeLine.material.opacity *= stabilizeLineMultiplier * supportLift;
     for (const ring of verbs.stabilizeField?.children ?? []) {
-      if (ring?.material) ring.material.opacity *= 0.50 * supportLift;
+      if (ring?.material) ring.material.opacity *= stabilizeRingMultiplier * supportLift;
     }
   }
 }

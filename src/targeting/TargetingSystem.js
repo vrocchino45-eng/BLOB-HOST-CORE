@@ -80,10 +80,13 @@ export class TargetingSystem {
     this.coherencePositions = new Float32Array(COHERENCE_SEGMENTS * 3);
     this.linePositions = new Float32Array(6);
     this.relationshipGlyphState = {
-      pass: "HC-031W2B3",
+      pass: "HC-031W2B3.1",
       active: false,
       pulseDirection: "outward_down_triangle",
       absorbDirection: "inward_up_triangle",
+      directionalTravelLaw: "pulse_core_to_noun_absorb_noun_to_core_camera_facing",
+      pulseTravel01: 0,
+      absorbTravel01: 0,
       coherenceShape: "none",
       coherenceSides: 0,
       condition01: 0,
@@ -1106,10 +1109,13 @@ export class TargetingSystem {
       if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
       if (this.coherenceBoundary) this.coherenceBoundary.visible = false;
       this.relationshipGlyphState = {
-        pass: "HC-031W2B3",
+        pass: "HC-031W2B3.1",
         active: false,
         pulseDirection: "outward_down_triangle",
         absorbDirection: "inward_up_triangle",
+        directionalTravelLaw: "pulse_core_to_noun_absorb_noun_to_core_camera_facing",
+        pulseTravel01: 0,
+        absorbTravel01: 0,
         coherenceShape: "none",
         coherenceSides: 0,
         condition01: 0,
@@ -1128,42 +1134,48 @@ export class TargetingSystem {
     this.getWorldPosition(this.playerRoot, this.tmpPlayerPosition);
     this.getWorldPosition(this.relationshipTarget.root, this.tmpTargetPosition);
 
-    // W2B3 convention: local +Y points inward (target -> Core). That makes the
-    // canonical downward Pulse triangle point physically outward, while the
-    // upward Absorb triangle points physically inward along the same relationship.
-    this.tmpRelationshipDirection.copy(this.tmpPlayerPosition).sub(this.tmpTargetPosition);
+    // W2B3.1: direction is carried primarily by movement along the retained
+    // Core <-> noun relationship. The triangle remains the canonical symbol,
+    // but it faces the camera so an oblique view cannot collapse it into a plane.
+    this.tmpRelationshipDirection.copy(this.tmpTargetPosition).sub(this.tmpPlayerPosition);
     const distance = Math.max(0.001, this.tmpRelationshipDirection.length());
     this.tmpRelationshipDirection.multiplyScalar(1 / distance);
-    this.camera.getWorldDirection(this.tmpCameraDirection).normalize();
-
-    this.tmpRight.crossVectors(this.tmpRelationshipDirection, this.tmpCameraDirection);
-    if (this.tmpRight.lengthSq() < 0.0001) {
-      this.tmpRight.crossVectors(this.camera.up, this.tmpRelationshipDirection);
-    }
-    this.tmpRight.normalize();
-    this.tmpNormal.crossVectors(this.tmpRight, this.tmpRelationshipDirection).normalize();
-    this.tmpMatrix.makeBasis(this.tmpRight, this.tmpRelationshipDirection, this.tmpNormal);
 
     this.relationshipGlyphRoot.visible = pulseActive || absorbActive;
+    let pulseTravel01 = 0;
+    let absorbTravel01 = 0;
     if (this.relationshipGlyphRoot.visible) {
-      this.relationshipGlyphRoot.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, 0.58);
-      this.relationshipGlyphRoot.quaternion.setFromRotationMatrix(this.tmpMatrix);
-      const scale = Math.max(0.68, Math.min(1.28, 0.72 + distance * 0.065));
-      this.relationshipGlyphRoot.scale.setScalar(scale);
+      this.relationshipGlyphRoot.position.set(0, 0, 0);
+      this.relationshipGlyphRoot.quaternion.identity();
+      this.relationshipGlyphRoot.scale.setScalar(1);
       this.pulseTriangle.visible = pulseActive;
       this.absorbTriangle.visible = absorbActive;
 
-      const paired = pulseActive && absorbActive;
-      const directionalBeat = Math.sin(t * 5.2) * 0.025;
-      this.pulseTriangle.position.set(paired ? -0.10 : 0, pulseActive ? -0.075 - directionalBeat : 0, 0);
-      this.absorbTriangle.position.set(paired ? 0.10 : 0, absorbActive ? 0.075 + directionalBeat : 0, 0);
+      const travelPhase = (t * 0.92) % 1;
+      const travelEnvelope = THREE.MathUtils.smoothstep(travelPhase, 0.03, 0.18)
+        * (1 - THREE.MathUtils.smoothstep(travelPhase, 0.82, 0.98));
+      pulseTravel01 = 0.12 + travelPhase * 0.76;
+      absorbTravel01 = 0.88 - travelPhase * 0.76;
+      const scale = Math.max(0.68, Math.min(1.28, 0.72 + distance * 0.065));
+      const lock01 = clamp01(frameState.targeting?.lockStrength ?? 0);
+      const directionalOpacity = (0.26 + lock01 * 0.20) * (0.56 + travelEnvelope * 0.44);
+
+      if (pulseActive) {
+        this.pulseTriangle.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, pulseTravel01);
+        this.pulseTriangle.quaternion.copy(this.camera.quaternion);
+        this.pulseTriangle.rotateZ(Math.PI);
+        this.pulseTriangle.scale.setScalar(scale * (0.94 + travelEnvelope * 0.08));
+      }
+      if (absorbActive) {
+        this.absorbTriangle.position.copy(this.tmpPlayerPosition).lerp(this.tmpTargetPosition, absorbTravel01);
+        this.absorbTriangle.quaternion.copy(this.camera.quaternion);
+        this.absorbTriangle.scale.setScalar(scale * (0.94 + travelEnvelope * 0.08));
+      }
+
       this.pulseTriangle.material.color.set(W2B3_VERB_COLORS.pulse);
       this.absorbTriangle.material.color.set(W2B3_VERB_COLORS.absorb);
-      const lock01 = clamp01(frameState.targeting?.lockStrength ?? 0);
-      this.pulseTriangle.material.opacity = pulseActive ? 0.30 + lock01 * 0.22 : 0;
-      this.absorbTriangle.material.opacity = absorbActive ? 0.30 + lock01 * 0.22 : 0;
-      this.pulseTriangle.scale.setScalar(0.96 + (pulseActive ? Math.max(0, Math.sin(t * 4.8)) * 0.055 : 0));
-      this.absorbTriangle.scale.setScalar(1.02 - (absorbActive ? Math.max(0, Math.sin(t * 4.8)) * 0.05 : 0));
+      this.pulseTriangle.material.opacity = pulseActive ? directionalOpacity : 0;
+      this.absorbTriangle.material.opacity = absorbActive ? directionalOpacity : 0;
     }
 
     const reactive = frameState.reactiveStateGrammar?.objects?.[this.relationshipTargetId]
@@ -1219,7 +1231,7 @@ export class TargetingSystem {
     }
 
     this.relationshipGlyphState = {
-      pass: "HC-031W2B3",
+      pass: "HC-031W2B3.1",
       active: true,
       targetId: this.relationshipTargetId,
       pulseActive,
@@ -1227,6 +1239,10 @@ export class TargetingSystem {
       stabilizeActive,
       pulseDirection: "outward_down_triangle",
       absorbDirection: "inward_up_triangle",
+      directionalTravelLaw: "pulse_core_to_noun_absorb_noun_to_core_camera_facing",
+      cameraFacingDirectionalSymbols: true,
+      pulseTravel01: Number(pulseTravel01.toFixed(3)),
+      absorbTravel01: Number(absorbTravel01.toFixed(3)),
       stabilizeMeaning: "condition_and_coherence_not_target_selection",
       reactiveStage: stage,
       condition01: Number(authoredCondition.toFixed(3)),

@@ -1,21 +1,22 @@
 # BLOB HC-031W2B — Spatial Readability + Interaction Visual Grammar
 
-## Phase question
-Can the player understand space, near/far/actionable hierarchy, the retained noun, and what the three Core verbs are doing without conventional waypoint/HUD language?
+Core phase question:
+> Can the player understand what is near/far/actionable, what noun they are acting on, and what their verbs are doing without conventional waypoint/HUD language?
 
-## Locked path
-- **W2B1 / W2B1.1 — Static depth hierarchy: LOCKED.** Surface Wake remains the reference; Guide/Scar support is restrained but present; Hub large near-camera tissue attenuates by apparent size.
-- **W2B2 — Pulse/Sonar spatial reveal: LOCKED.** Pulse is emit → contact → distance-tiered contour → directional return; repeat reads expose more structure rather than more brightness.
-- **W2B3 — Verb / Target Relationship Grammar: ACTIVE CANDIDATE.** Pulse = downward/outward triangle; Absorb = upward/inward triangle; Stabilize = target condition/coherence boundary resolving 4 → 6 → 8 → 12 as disorder falls.
-- **W2B4 — Regional readability proof: NEXT AFTER B3 LOCK.** Prove the same grammar survives Scar, Hub, Comb and Aperture without erasing regional identity.
-- **W2B Lock Run.** 10–15 minute natural playthrough + telemetry/video, then return to gameplay/world progression.
+## Status
+- **W2B1 / W2B1.1 — Static Depth Hierarchy: LOCKED**
+  - Near actionable Host > Core/Guide > supporting anatomy > distant Host.
+  - Camera-relative attenuation prevents large near-camera Hub tissue from flattening the chamber.
+- **W2B2 — Pulse/Sonar Spatial Reveal: LOCKED**
+  - Pulse reveals local/deep anatomy by spatial tier; repeated reads expose more structure instead of more global brightness.
+- **W2B3 — Verb / Target Relationship Grammar: CONCEPT PROVEN**
+  - Pulse = outward/down-triangle, Absorb = inward/up-triangle, Stabilize = condition/coherence.
+- **W2B3.1 — Directional Relationship Readability: ACTIVE LOCK CANDIDATE**
+  - Direction is carried by camera-facing triangle motion along the retained Core↔noun relationship.
+  - Pulse travels Core→noun; Absorb noun→Core; Stabilize remains noun-anchored.
+- **W2B4 — Regional Readability Proof: NEXT**
+  - Prove the same grammar across Scar, Hub, Comb, Aperture without flattening regional identity.
+- **W2B Lock Run — AFTER W2B4**
 
-## Phase locks
-No new verbs, regions, encounters, route restructuring, movement redesign, global exposure/fog solution, or major geometry replacement. Presentation may change only when needed to communicate the existing system.
-
-## Hierarchy rule
-1. Immediate actionable anatomy.
-2. Core / Guide / active relationship.
-3. Supporting Host anatomy.
-4. Distant Host anatomy.
-5. A verb may temporarily reorder attention only to communicate useful information.
+## Locked during W2B3.1
+No movement, targeting authority, controller mapping, verb power/range, chemistry, route/progression, camera behavior, global exposure/fog, geometry replacement, or W2B2 sonar-authority changes.

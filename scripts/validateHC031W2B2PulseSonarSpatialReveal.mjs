@@ -18,7 +18,7 @@ assert.match(verbsSource, /materialPhases/);
 assert.match(verbsSource, /arrivalLift = THREE\.MathUtils\.smoothstep/);
 assert.match(verbsSource, /peakOpacity/);
 assert.match(hierarchySource, /spatialRevealPass: "HC-031W2B2"/);
-assert.match(hierarchySource, /pulse_return_and_local_relationship_change|verb_direction_glyph_target_condition_and_pulse_return/);
+assert.match(hierarchySource, /pulse_return_and_local_relationship_change|verb_direction_glyph_target_condition_and_pulse_return|target_condition_and_directional_relationship_travel/);
 assert.match(hierarchySource, /outgoing_spheres_rings_lines_and_distant_wireframes|outgoing_spheres_support_rings_lines_and_distant_wireframes/);
 
 // Existing sensory law, actionable range, echo timing, and deep-reach authority stay locked.
