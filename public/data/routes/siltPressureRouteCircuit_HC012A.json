@@ -209,5 +209,148 @@
     "aimChoosesTargetForTargetableNouns": true,
     "environmentalPressureMayBeRelatedWithoutNounTarget": true,
     "packedResidueFailureRecoverable": true
+  },
+  "habitatFoundation": {
+    "pass": "LS1A",
+    "scope": "spatial_foundation_only_no_new_material_instances_or_spawns",
+    "topology": "three_lateral_lobes_connected_to_original_silt_pressure_throat",
+    "playerSpace": "active_route_entry_anchored_movement_envelope",
+    "visualOnlyAnatomy": true,
+    "addsContactSurfaces": false,
+    "authoritativeCompletion": "SiltPressureRouteSystem_original_route",
+    "habitats": [
+      {
+        "id": "reservoir",
+        "role": "compression_and_porosity",
+        "center": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "radii": [
+          3.35,
+          2.0,
+          3.4
+        ],
+        "color": 7688499,
+        "emissive": 6043938,
+        "relief": 0.64,
+        "phase": 0
+      },
+      {
+        "id": "garden",
+        "role": "sediment_catchment_future_nursery",
+        "center": [
+          -5.35,
+          -0.74,
+          -10.4
+        ],
+        "radii": [
+          3.15,
+          2.35,
+          3.3
+        ],
+        "color": 7103056,
+        "emissive": 4077864,
+        "relief": 0.94,
+        "phase": 1.8
+      },
+      {
+        "id": "veins",
+        "role": "exchange_and_return_flow",
+        "center": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "radii": [
+          2.85,
+          2.2,
+          3.25
+        ],
+        "color": 4874584,
+        "emissive": 2506042,
+        "relief": 0.9,
+        "phase": 3.2
+      }
+    ],
+    "connections": [
+      {
+        "id": "throat_to_reservoir",
+        "from": [
+          0.55,
+          -0.36,
+          -8.5
+        ],
+        "to": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "bend": [
+          1.3,
+          -0.56,
+          -10.3
+        ]
+      },
+      {
+        "id": "reservoir_to_garden",
+        "from": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "to": [
+          -5.35,
+          -0.74,
+          -10.4
+        ],
+        "bend": [
+          -1.8,
+          -0.83,
+          -12.7
+        ]
+      },
+      {
+        "id": "reservoir_to_veins",
+        "from": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "to": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "bend": [
+          3.85,
+          -0.8,
+          -13.35
+        ]
+      },
+      {
+        "id": "veins_to_deep_throat",
+        "from": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "to": [
+          -0.15,
+          -0.48,
+          -18.25
+        ],
+        "bend": [
+          3.15,
+          -0.8,
+          -18.45
+        ]
+      }
+    ],
+    "noNewVerbs": true,
+    "noNewProgression": true,
+    "noRenewableMatterYet": true,
+    "purpose": "Three reachable contiguous habitats now; LS1B creates one conserved material lifecycle."
   }
 }

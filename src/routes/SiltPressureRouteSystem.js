@@ -33,6 +33,10 @@ export class SiltPressureRouteSystem {
     this.envelope = null;
     this.ribGroups = [];
     this.passageBanks = [];
+    this.habitatLobes = [];
+    this.habitatVeins = [];
+    this.habitatAnatomy = null;
+    this.habitatSample = { id: "throat", relief: 0, distance: 99 };
     this.siltMotes = [];
     this.safePacket = null;
     this.safePacketCore = null;
@@ -175,9 +179,11 @@ export class SiltPressureRouteSystem {
     this.failureFlashAge += dt;
     const sample = this.samplePlayerPath();
     this.updateDistances();
+    this.sampleHabitat();
     this.updatePlay(dt, frameState, sample);
     this.applyDynamicPressure(frameState, sample);
     this.animate(frameState, sample);
+    this.animateHabitatFoundation(frameState);
     this.applyHostRhythmVisual(frameState);
     this.publish(frameState, true);
   }
@@ -394,6 +400,7 @@ export class SiltPressureRouteSystem {
     }
     this.createSiltMotes();
     this.createAppetitePackets();
+    this.createHabitatFoundation();
     this.createDeepOrgan();
     this.createReturnFold();
     this.scene.add(this.root);
@@ -534,6 +541,147 @@ export class SiltPressureRouteSystem {
       packet.userData.targetingSuppressed = true;
       this.root.add(packet);
       this.densePackets.push(packet);
+    }
+  }
+
+  // LS1A: lateral anatomy only. These bodies provide real spatial landmarks in
+  // the widened Silt movement envelope, not a second ecology/target/collider.
+  // LS1B will give the already-authored reservoirs a conserved material cycle.
+  createHabitatFoundation() {
+    const foundation = this.recipe.habitatFoundation;
+    if (foundation?.pass !== "LS1A") return;
+    const group = new THREE.Group();
+    group.name = "silt_living_habitat_body_LS1A";
+    group.userData.targetingSuppressed = true;
+    const shellGeometry = new THREE.SphereGeometry(1, 24, 14);
+    const strandGeometry = new THREE.IcosahedronGeometry(0.18, 0);
+
+    for (const [index, habitat] of foundation.habitats.entries()) {
+      const body = new THREE.Group();
+      body.name = `silt_habitat_${habitat.id}`;
+      body.position.fromArray(habitat.center);
+      body.userData.targetingSuppressed = true;
+      const shellMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+        color: habitat.color,
+        emissive: habitat.emissive,
+        emissiveIntensity: 0.2,
+        roughness: 0.95,
+        side: THREE.BackSide,
+        transparent: true,
+        opacity: 0.135,
+        depthWrite: false
+      }));
+      const shell = new THREE.Mesh(shellGeometry, shellMaterial);
+      shell.name = `silt_${habitat.id}_concave_membrane`;
+      shell.scale.fromArray(habitat.radii);
+      shell.userData.targetingSuppressed = true;
+      body.add(shell);
+
+      // Incomplete, offset muscular folds rather than UI rings. Interrupted
+      // contours leave clear views between the cells and pressure passage.
+      const contourMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+        color: habitat.color,
+        emissive: habitat.emissive,
+        emissiveIntensity: 0.3,
+        roughness: 0.9,
+        transparent: true,
+        opacity: 0.44,
+        depthWrite: false
+      }));
+      for (let fold = 0; fold < 4; fold += 1) {
+        const path = [];
+        const baseAngle = 0.28 + fold * 1.41;
+        for (let point = 0; point < 11; point += 1) {
+          const a = baseAngle + (point / 10) * (1.12 + (fold % 2) * 0.29);
+          const r = habitat.radii;
+          path.push(new THREE.Vector3(
+            Math.cos(a) * r[0] * (0.86 + 0.07 * Math.sin(point * 0.9 + fold)),
+            Math.sin(a * 1.8 + fold) * r[1] * 0.68,
+            Math.sin(a) * r[2] * (0.83 + 0.07 * Math.cos(point * 0.75))
+          ));
+        }
+        const foldMesh = new THREE.Mesh(
+          new THREE.TubeGeometry(new THREE.CatmullRomCurve3(path), 24, 0.07 + fold * 0.008, 5, false),
+          contourMaterial
+        );
+        foldMesh.name = `silt_${habitat.id}_membrane_fold_${fold + 1}`;
+        foldMesh.userData.targetingSuppressed = true;
+        body.add(foldMesh);
+      }
+
+      // Retained sediment/rib anatomy makes the habitats *spatially different*;
+      // these are not collectable mass or simulated offspring in this pass.
+      for (let n = 0; n < 5; n += 1) {
+        const pebble = new THREE.Mesh(strandGeometry, contourMaterial);
+        pebble.name = `silt_${habitat.id}_fixed_anatomy_${n + 1}`;
+        const azimuth = (n + 0.4) * 2.399 + index;
+        pebble.position.set(
+          Math.cos(azimuth) * habitat.radii[0] * (0.45 + 0.08 * (n % 2)),
+          -habitat.radii[1] * (0.46 - (n % 3) * 0.1),
+          Math.sin(azimuth) * habitat.radii[2] * 0.5
+        );
+        pebble.scale.set(1.8 + (n % 3) * 0.6, 0.55 + (n % 2) * 0.28, 1.1 + (n % 2) * 0.5);
+        pebble.rotation.set(n * 0.2, azimuth, n * 0.31);
+        pebble.userData.targetingSuppressed = true;
+        body.add(pebble);
+      }
+      body.userData.ls1a = { habitatId: habitat.id, role: habitat.role, contactable: false };
+      group.add(body);
+      this.habitatLobes.push({ group: body, shell, phase: habitat.phase, recipe: habitat });
+    }
+
+    const veinMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: 0x715e47,
+      emissive: 0x354033,
+      emissiveIntensity: 0.16,
+      roughness: 0.89,
+      transparent: true,
+      opacity: 0.36,
+      depthWrite: false
+    }));
+    for (const connection of foundation.connections) {
+      const points = [connection.from, connection.bend, connection.to]
+        .map((coords) => new THREE.Vector3().fromArray(coords));
+      const vein = new THREE.Mesh(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 36, 0.1, 6, false),
+        veinMaterial
+      );
+      vein.name = `silt_habitat_connection_${connection.id}`;
+      vein.userData.targetingSuppressed = true;
+      group.add(vein);
+      this.habitatVeins.push(vein);
+    }
+    this.root.add(group);
+    this.habitatAnatomy = group;
+  }
+
+  sampleHabitat() {
+    const habitats = this.recipe?.habitatFoundation?.habitats ?? [];
+    let closest = { id: "throat", relief: 0, distance: 99 };
+    for (const habitat of habitats) {
+      const center = habitat.center;
+      const radii = habitat.radii;
+      const dx = (this.localPlayer.x - center[0]) / radii[0];
+      const dy = (this.localPlayer.y - center[1]) / radii[1];
+      const dz = (this.localPlayer.z - center[2]) / radii[2];
+      const normalizedDistance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      const relief = THREE.MathUtils.clamp((1.27 - normalizedDistance) / 0.66, 0, 1);
+      if (relief > closest.relief) closest = { id: habitat.id, relief, distance: normalizedDistance };
+    }
+    this.habitatSample = closest;
+    return closest;
+  }
+
+  animateHabitatFoundation(frameState) {
+    // Only slight anatomical breathing; avoids perpetual scale multiplication.
+    const time = frameState.runtimeSeconds ?? this.elapsed;
+    for (const lobe of this.habitatLobes) {
+      const breath = Math.sin(time * 0.53 + lobe.phase);
+      lobe.shell.scale.set(
+        lobe.recipe.radii[0] * (1 + breath * 0.012),
+        lobe.recipe.radii[1] * (1 - breath * 0.012),
+        lobe.recipe.radii[2] * (1 + breath * 0.01)
+      );
     }
   }
 
@@ -820,6 +968,7 @@ export class SiltPressureRouteSystem {
     const pocketDistance = Math.abs(progress - 0.60);
     const openPocket = THREE.MathUtils.clamp(1 - pocketDistance / 0.16, 0, 1);
     const released = this.completed ? 1 : 0;
+    const habitatRelief = this.habitatSample?.relief ?? 0;
     const failureWeight = this.compressionFailure ? 1 : 0;
     const effectiveCompression = THREE.MathUtils.clamp(
       this.compression + failureWeight * 0.18 - openPocket * 0.18 - released * 0.28,
@@ -835,8 +984,8 @@ export class SiltPressureRouteSystem {
           : 0.06 + openPocket * 0.035;
     frameState.physicalFeel = {
       ...contractFeel,
-      viscosity: 0.54 + effectiveCompression * 0.34,
-      pressure: 0.60 + effectiveCompression * 0.36,
+      viscosity: 0.54 + effectiveCompression * 0.34 - habitatRelief * 0.18,
+      pressure: 0.60 + effectiveCompression * 0.36 - habitatRelief * 0.12,
       flowVector: {
         x: tangent.x * drift * direction,
         y: tangent.y * drift * direction - effectiveCompression * 0.035,
@@ -845,19 +994,21 @@ export class SiltPressureRouteSystem {
       routeFeelProfile: "silt_compression_release_gradient",
       accelerationScale: this.completed
         ? 1.08
-        : 0.78 + openPocket * 0.18 + (this.ribsReleased ? 0.06 : 0) - failureWeight * 0.08,
+        : 0.78 + Math.max(openPocket * 0.18, habitatRelief * 0.23) + (this.ribsReleased ? 0.06 : 0) - failureWeight * 0.08,
       speedScale: this.completed
         ? 1.10
-        : 0.76 + openPocket * 0.18 + (this.ribsReleased ? 0.06 : 0) - failureWeight * 0.07,
+        : 0.76 + Math.max(openPocket * 0.18, habitatRelief * 0.25) + (this.ribsReleased ? 0.06 : 0) - failureWeight * 0.07,
       boostScale: this.completed
         ? 1.0
-        : 0.60 + openPocket * 0.24 + (this.ribsReleased ? 0.08 : 0) - failureWeight * 0.10,
+        : 0.60 + Math.max(openPocket * 0.24, habitatRelief * 0.3) + (this.ribsReleased ? 0.08 : 0) - failureWeight * 0.10,
       flowCouplingScale: this.completed ? 1.24 : 0.82 + openPocket * 0.18,
       withFlowSpeedBonus: this.completed ? 0.18 : 0.04,
       againstFlowSpeedPenalty: this.completed ? 0.08 : 0.10,
       spatialFeel: {
         progress,
         openPocket,
+        habitatId: this.habitatSample?.id ?? "throat",
+        habitatRelief,
         effectiveCompression,
         condition: this.completed
           ? "released_silt_breath_accelerates_return"
@@ -1177,6 +1328,19 @@ export class SiltPressureRouteSystem {
       porousNutrientCount: Number(!this.safeMatterAbsorbed),
       packedResidueCount: this.densePackets.length,
       visualMotionLanguages: [...(this.recipe?.visual?.motionLanguages ?? [])],
+      habitatFoundation: {
+        pass: this.recipe?.habitatFoundation?.pass ?? "none",
+        active: Boolean(active && this.habitatAnatomy),
+        topology: this.recipe?.habitatFoundation?.topology ?? "unexpanded",
+        habitatCount: this.habitatLobes.length,
+        connectionCount: this.habitatVeins.length,
+        currentHabitatId: active ? this.habitatSample.id : "none",
+        habitatRelief: active ? this.habitatSample.relief : 0,
+        addsContactSurfaces: false,
+        newMaterialInstances: 0,
+        renewsMatter: false,
+        newProgression: false
+      },
       genericRingCount: 0,
       triggerMarkerCount: 0,
       lastInteraction: this.lastInteraction,
