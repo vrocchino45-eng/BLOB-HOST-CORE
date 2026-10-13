@@ -17,7 +17,7 @@ assert.equal(recipe.habitatFoundation.pass, 'LS1A');
 assert.equal(recipe.habitatFoundation.habitats.length, 3);
 assert.deepEqual(recipe.habitatFoundation.habitats.map((item) => item.id), ['reservoir', 'garden', 'veins']);
 assert.equal(recipe.habitatFoundation.connections.length, 4);
-assert.equal(recipe.habitatFoundation.noRenewableMatterYet, true);
+assert.equal(recipe.habitatFoundation.noRenewableMatterYet, !Boolean(recipe.livingMaterialCycle));
 assert.equal(recipe.habitatFoundation.addsContactSurfaces, false);
 assert.deepEqual(original.movementBounds.radii, [4.5, 3.2, 22.5]);
 const oldSilt = [6.8, 4.25, 21.2];
@@ -52,8 +52,8 @@ update();
 assert.equal(silt.habitatLobes.length,3);
 assert.equal(silt.habitatVeins.length,4);
 assert.equal(frame.siltPressureRoute.habitatFoundation.active,true);
-assert.equal(frame.siltPressureRoute.habitatFoundation.newMaterialInstances,0);
-assert.equal(frame.siltPressureRoute.habitatFoundation.renewsMatter,false);
+assert.equal(frame.siltPressureRoute.habitatFoundation.newMaterialInstances,recipe.livingMaterialCycle?.unitCount ?? 0);
+assert.equal(frame.siltPressureRoute.habitatFoundation.renewsMatter,Boolean(recipe.livingMaterialCycle));
 assert.deepEqual([controller.boundary.x,controller.boundary.y,controller.boundary.z],route.movementBounds.radii);
 
 function assertInside(point, label, margin=0.92) {
@@ -141,4 +141,4 @@ assert(addedMeshes <= 40,`LS1A added ${addedMeshes} meshes; too high`);
 assert(triangleCount < 10000,`LS1A added ${triangleCount} triangles; too high`);
 console.log(`[LS1A] three habitat anchors + four connectors inside actual controller envelope: ${located.join(' ')}`);
 console.log('[LS1A] active controller boundaries, original pressure/absorb/deep completion and return retention PASS');
-console.log(`[LS1A] new habitat presentation ${addedMeshes} meshes, ${Math.round(triangleCount)} triangles; no new gameplay credit or renewable matter PASS`);
+console.log(`[LS1A] new habitat presentation ${addedMeshes} meshes, ${Math.round(triangleCount)} triangles; no new route credit and LS1B material integration compatible PASS`);

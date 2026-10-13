@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -39,6 +40,12 @@ export class SiltPressureRouteSystem {
     this.habitatDrift = null;
     this.habitatDriftPositions = null;
     this.habitatDriftSeeds = [];
+    this.livingCycle = null;
+    this.livingMatterGroup = null;
+    this.livingMatterMeshes = [];
+    this.livingReservoirBody = null;
+    this.livingMatterPaths = null;
+    this.livingMatterV = new THREE.Vector3();
     this.habitatSample = { id: "throat", relief: 0, distance: 99 };
     this.siltMotes = [];
     this.safePacket = null;
@@ -184,6 +191,16 @@ export class SiltPressureRouteSystem {
     this.updateDistances();
     this.sampleHabitat();
     this.updatePlay(dt, frameState, sample);
+    // Existing safePacket absorption remains the one-time route reward; it
+    // wakes a separate, finite reservoir stock, not a respawned safePacket.
+    if (this.safeMatterAbsorbed) this.livingCycle?.awakenFromCanonicalAbsorb();
+    this.livingCycle?.update(dt, {
+      habitatId: this.habitatSample.id,
+      pulsePressed: Boolean(frameState.input?.pulsePressed),
+      pulseEventId: frameState.input?.pulseEventId ?? frameState.frame,
+      stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
+    });
+    this.animateLivingMatter();
     this.applyDynamicPressure(frameState, sample);
     this.animate(frameState, sample);
     this.animateHabitatFoundation(frameState);
@@ -404,6 +421,7 @@ export class SiltPressureRouteSystem {
     this.createSiltMotes();
     this.createAppetitePackets();
     this.createHabitatFoundation();
+    this.createLivingMaterialCycle();
     this.createDeepOrgan();
     this.createReturnFold();
     this.scene.add(this.root);
@@ -765,6 +783,117 @@ export class SiltPressureRouteSystem {
     this.root.add(group);
     this.habitatAnatomy = group;
     this.animateHabitatFoundation(this.frameState);
+  }
+
+  // LS1B — the material-cycle owner is a finite logic ledger, not a second
+  // route-progress, target, or chemistry owner. Every logical unit has exactly
+  // one reused mesh and a stable identity through repeated regenerations.
+  createLivingMaterialCycle() {
+    const recipe = this.recipe?.livingMaterialCycle;
+    if (recipe?.pass !== "LS1B") return;
+    this.livingCycle = new SiltLivingMaterialCycle(recipe);
+    const habitat = this.recipe.habitatFoundation;
+    const byId = Object.fromEntries(habitat.habitats.map((h) => [h.id, h.center]));
+    const between = (fromId, toId) => habitat.connections.find((c) =>
+      c.id === `${fromId}_to_${toId}`);
+    const reservoirToVeins = between("reservoir", "veins");
+    const reservoirToGarden = between("reservoir", "garden");
+    if (!reservoirToVeins || !reservoirToGarden) {
+      throw new Error("[Silt] missing authored vein and garden material connection");
+    }
+    const v = coords => new THREE.Vector3().fromArray(coords);
+    const makeCurve = points => new THREE.CatmullRomCurve3(points.map(v), false, "centripetal", 0.42);
+    this.livingMatterPaths = {
+      veins: makeCurve([reservoirToVeins.from, reservoirToVeins.bend, reservoirToVeins.to]),
+      garden_transit: makeCurve([reservoirToVeins.to, reservoirToVeins.bend,
+        reservoirToGarden.from, reservoirToGarden.bend, reservoirToGarden.to]),
+      returning: makeCurve([reservoirToGarden.to, reservoirToGarden.bend, reservoirToGarden.from])
+    };
+    this.livingMatterLocations = { reservoir: v(byId.reservoir), garden: v(byId.garden) };
+    const fragmentMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: 0xcaa36c, emissive: 0x725038, emissiveIntensity: 0.22,
+      roughness: 0.91, transparent: true, opacity: 0.86, depthWrite: false
+    }));
+    const budMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: 0x84a68a, emissive: 0x36563e, emissiveIntensity: 0.26,
+      roughness: 0.81, transparent: true, opacity: 0.87, depthWrite: false
+    }));
+    const fragmentGeometry = new THREE.IcosahedronGeometry(0.17, 1);
+    const budGeometry = new THREE.ConeGeometry(0.13, 0.36, 5);
+    this.livingMatterGroup = new THREE.Group();
+    this.livingMatterGroup.name = "silt_LS1B_authoritative_closed_matter_cycle";
+    this.livingMatterGroup.userData.targetingSuppressed = true;
+    const stockMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: 0x967045, emissive: 0x574028, emissiveIntensity: 0.11,
+      roughness: 0.94, transparent: true, opacity: 0.35, depthWrite: false
+    }));
+    this.livingReservoirBody = new THREE.Mesh(new THREE.IcosahedronGeometry(0.75, 1), stockMaterial);
+    this.livingReservoirBody.name = "silt_LS1B_replenishing_reservoir_stock_not_quest_packet";
+    this.livingReservoirBody.position.copy(this.livingMatterLocations.reservoir);
+    this.livingReservoirBody.position.y -= 0.18;
+    this.livingReservoirBody.userData.targetingSuppressed = true;
+    this.livingMatterGroup.add(this.livingReservoirBody);
+    for (const unit of this.livingCycle.units) {
+      const body = new THREE.Group();
+      body.name = `silt_LS1B_${unit.id}`;
+      body.userData.targetingSuppressed = true;
+      const fragment = new THREE.Mesh(fragmentGeometry, fragmentMaterial);
+      fragment.name = "retained_matter_fragment";
+      fragment.userData.targetingSuppressed = true;
+      const bud = new THREE.Mesh(budGeometry, budMaterial);
+      bud.name = "regrown_sediment_body";
+      bud.position.y = 0.14;
+      bud.userData.targetingSuppressed = true;
+      body.add(fragment, bud);
+      this.livingMatterGroup.add(body);
+      this.livingMatterMeshes.push({ body, fragment, bud });
+    }
+    this.livingMatterGroup.visible = false;
+    this.root.add(this.livingMatterGroup);
+  }
+
+  animateLivingMatter() {
+    const cycle = this.livingCycle;
+    if (!cycle || !this.livingMatterGroup) return;
+    this.livingMatterGroup.visible = cycle.active;
+    if (!cycle.active) return;
+    const stored = cycle.units.filter(u => u.phase === "reservoir").length;
+    const fractionStored = stored / cycle.unitCount;
+    this.livingReservoirBody.scale.setScalar(0.34 + fractionStored * 0.66);
+    this.livingReservoirBody.material.opacity = 0.19 + fractionStored * 0.27;
+    for (let index = 0; index < cycle.units.length; index++) {
+      const unit = cycle.units[index];
+      const mesh = this.livingMatterMeshes[index];
+      const fraction = (index * 2.399963) % (2 * Math.PI);
+      const small = 0.24 + (index % 3) * 0.15;
+      const p = mesh.body.position;
+      if (unit.phase === "reservoir") {
+        p.copy(this.livingMatterLocations.reservoir);
+        p.x += Math.cos(fraction) * small;
+        p.y -= 0.2 + 0.12 * (index % 2);
+        p.z += Math.sin(fraction) * small;
+      } else if (unit.phase === "settled" || unit.phase === "growing" || unit.phase === "mature") {
+        p.copy(this.livingMatterLocations.garden);
+        p.x += Math.cos(fraction) * (0.65 + small);
+        p.z += Math.sin(fraction) * (0.65 + small);
+        p.y -= 1.14;
+      } else {
+        const path = this.livingMatterPaths[unit.phase];
+        const duration = unit.phase === "veins" ? 6 : unit.phase === "garden_transit" ? 8 : 10;
+        const alpha = THREE.MathUtils.clamp(unit.age / duration, 0, 1);
+        path.getPointAt(alpha, this.livingMatterV);
+        p.copy(this.livingMatterV);
+        p.y += 0.18 * Math.sin(alpha * Math.PI * 3 + fraction);
+        p.x += 0.12 * Math.sin(alpha * 8 + fraction);
+      }
+      const growing = unit.phase === "growing" || unit.phase === "mature";
+      const growth = unit.phase === "growing" ? Math.min(1, unit.age / 9) : 1;
+      mesh.fragment.visible = !growing;
+      mesh.bud.visible = growing;
+      mesh.bud.scale.setScalar(Math.max(0.06, growth) * (0.76 + 0.12 * (index % 3)));
+      mesh.body.rotation.y = fraction + 0.13 * Math.sin(cycle.elapsed + fraction);
+      mesh.body.visible = true;
+    }
   }
 
   sampleHabitat() {
@@ -1469,10 +1598,11 @@ export class SiltPressureRouteSystem {
         currentHabitatId: active ? this.habitatSample.id : "none",
         habitatRelief: active ? this.habitatSample.relief : 0,
         addsContactSurfaces: false,
-        newMaterialInstances: 0,
-        renewsMatter: false,
+        newMaterialInstances: this.livingCycle?.units.length ?? 0,
+        renewsMatter: Boolean(this.livingCycle),
         newProgression: false
       },
+      livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
       genericRingCount: 0,
       triggerMarkerCount: 0,
       lastInteraction: this.lastInteraction,

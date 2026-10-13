@@ -350,7 +350,7 @@
     ],
     "noNewVerbs": true,
     "noNewProgression": true,
-    "noRenewableMatterYet": true,
+    "noRenewableMatterYet": false,
     "purpose": "Three reachable contiguous habitats now; LS1B creates one conserved material lifecycle."
   },
   "geologicMedium": {
@@ -382,5 +382,36 @@
     "feeling": "microorganism_inside_bounded_seep_caverns_and_sedimentary_stone",
     "spinalWallRadius": 2.06,
     "spinalWallOpacity": 0.34
+  },
+  "livingMaterialCycle": {
+    "pass": "LS1B",
+    "scope": "silt_closed_bounded_reservoir_matter_only",
+    "authority": "SiltLivingMaterialCycle",
+    "firstTrigger": "existing_safeMatterAbsorbed_once_not_repeatable_reward",
+    "unitCount": 8,
+    "unitMass": 1,
+    "maximumActiveTransport": 3,
+    "releaseIntervalSeconds": 5.6,
+    "minimumSettleSeconds": 5.0,
+    "flowBoostSeconds": 7,
+    "flowBoostMultiplier": 1.55,
+    "gardenStabilizeMultiplier": 1.6,
+    "lifecycle": [
+      "reservoir",
+      "veins",
+      "garden_transit",
+      "settled",
+      "growing",
+      "mature",
+      "returning"
+    ],
+    "regeneration": "conserved_mass_returns_to_reservoir_without_resetting_original_porous_packet",
+    "simulation": "active_cell_only_no_offscreen_elapsed_pretence",
+    "playerEffects": "Pulse_near_reservoir_or_veins_accelerates_flow_Stabilize_in_garden_accelerates_bud_growth",
+    "progressionAuthority": false,
+    "nutrientGrant": false,
+    "colliders": false,
+    "targetingAuthority": false,
+    "newAbilities": false
   }
 }

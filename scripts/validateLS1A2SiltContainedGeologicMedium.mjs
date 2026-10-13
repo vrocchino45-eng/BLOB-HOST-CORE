@@ -58,8 +58,8 @@ assert(silt.habitatAnatomy.getObjectByName("silt_visual_seep_grains_fixed_pool_L
 assert.equal(silt.habitatDriftSeeds.length, geology.driftGrainCount);
 assert.equal(silt.habitatDriftPositions.length, geology.driftGrainCount * 3);
 assert.deepEqual([controller.boundary.x, controller.boundary.y, controller.boundary.z], movement.movementBounds.radii);
-assert.equal(frame.siltPressureRoute.habitatFoundation.newMaterialInstances, 0);
-assert.equal(frame.siltPressureRoute.habitatFoundation.renewsMatter, false);
+assert.equal(frame.siltPressureRoute.habitatFoundation.newMaterialInstances, recipe.livingMaterialCycle?.unitCount ?? 0);
+assert.equal(frame.siltPressureRoute.habitatFoundation.renewsMatter, Boolean(recipe.livingMaterialCycle));
 
 const bounds = movement.movementBounds.radii;
 function inBoundary(position, name) {
