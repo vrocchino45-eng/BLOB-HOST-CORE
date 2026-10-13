@@ -78,6 +78,7 @@ import { SurfaceWakeGameplaySystem } from "../opening/SurfaceWakeGameplaySystem.
 import { SurfaceWakeEcologicalCausalitySystem } from "../opening/SurfaceWakeEcologicalCausalitySystem.js";
 import { CinematicAwakeningSystem } from "../cinematic/CinematicAwakeningSystem.js";
 import { PlaytestHudSystem } from "../ui/PlaytestHudSystem.js";
+import { QuickLookInspectorSystem } from "../ui/QuickLookInspectorSystem.js";
 import { StatusPageSystem } from "../ui/StatusPageSystem.js";
 import { RegionRegistry } from "../world/RegionRegistry.js";
 import { GateRegistry } from "../world/GateRegistry.js";
@@ -2500,6 +2501,8 @@ export class GameRuntime {
       playerRoot: this.playerCore
     });
 
+    this.quickLookInspectorSystem = new QuickLookInspectorSystem({ frameState: this.frameState });
+
     this.playtestHudSystem = new PlaytestHudSystem({
       recipeDataSystem: this.recipeDataSystem,
       frameState: this.frameState
@@ -2683,6 +2686,8 @@ export class GameRuntime {
     this.registry.register("visualComposer", this.visualComposer);
     this.registry.register("motionSignatureSystem", this.motionSignatureSystem);
     this.registry.register("playtestHudSystem", this.playtestHudSystem, { allowUpdateError: true });
+    // LS1C0: optional read-only late-frame inspector of actual canonical state.
+    this.registry.register("quickLookInspectorSystem", this.quickLookInspectorSystem, { allowUpdateError: true });
     // HC028A read-only observer runs last so it sees the resolved frame truth.
     this.registry.register("sessionTelemetrySystem", this.sessionTelemetrySystem, { allowUpdateError: true });
 
