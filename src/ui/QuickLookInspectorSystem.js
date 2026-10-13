@@ -46,7 +46,7 @@ export function buildQuickLookSnapshot(frameState = {}) {
         ? '12: four resolving engine phases per function.'
         : 'Core phase publication unavailable.';
   const base = {
-    pass: 'LS1C0', region, cellId: frameState.activeCellId ?? 'none',
+    pass: 'LS1C0.1', region, cellId: frameState.activeCellId ?? 'none',
     focus: hasTarget ? goodText(target.targetLabel, target.targetId) : 'No canonical target selected',
     focusSource: hasTarget ? 'Live targeting system' : 'Region / habitat position, not camera raycast',
     focusKind: hasTarget ? goodText(target.targetKind, 'Unclassified') : 'none',
@@ -128,40 +128,124 @@ function line(parent, title, items) {
   }
 }
 
+/**
+ * LS1C0.1 — screen projection for scene-owned anchors only. No raycast, no
+ * implied contact/collision. Keep projection independent of progression.
+ */
+export function projectQuickLookAnchor(anchor, camera, viewport, maxDistance = 27) {
+  if (!anchor?.getWorldPosition || !camera || !viewport?.width || !viewport?.height) return null;
+  if (!anchor.visible) return null;
+  // Camera uses the same world coordinate system as the owned scene object.
+  const cameraWorld = camera.position.clone();
+  camera.getWorldPosition(cameraWorld);
+  const world = anchor.getWorldPosition(camera.position.clone());
+  const direction = world.clone().sub(cameraWorld);
+  const distance = direction.length();
+  if (distance > maxDistance || distance < 0.001) return null;
+  const forward = camera.getWorldDirection(camera.position.clone());
+  if (forward.dot(direction) <= 0.15) return null;
+  const ndc = world.project(camera);
+  if (!Number.isFinite(ndc.x) || !Number.isFinite(ndc.y) || ndc.z > 1 || ndc.z < -1) return null;
+  // Offscreen objects do not place edge arrows or fictional landmark pointers.
+  if (Math.abs(ndc.x) > 0.93 || Math.abs(ndc.y) > 0.89) return null;
+  return {
+    x: viewport.left + (ndc.x + 1) * viewport.width / 2,
+    y: viewport.top + (1 - ndc.y) * viewport.height / 2,
+    distance
+  };
+}
+
+const bubbleCss = {
+  position: 'fixed', minWidth: '104px', maxWidth: '180px',
+  color: '#e6f4e9', background: 'rgba(8,21,26,.88)',
+  border: '1px solid rgba(166,215,197,.62)', borderRadius: '11px',
+  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+  fontSize: '10px', lineHeight: '1.34', padding: '7px 9px',
+  zIndex: '47', pointerEvents: 'none', boxShadow: '0 3px 16px #0009'
+};
+
 export class QuickLookInspectorSystem {
   constructor({ frameState }) {
     if (!frameState) throw new Error('[QuickLookInspectorSystem] frameState is required');
     this.frameState = frameState;
     this.open = false;
+    this.expanded = false;
     this.root = null;
     this.body = null;
+    this.mute = null;
+    this.bubbleLayer = null;
+    this.bubbles = new Map();
+    this.bubbleLinks = new Map();
+    this.lastSnapshot = null;
+    this.detailToggle = null;
+    this.sceneRefs = null;
     this.lastSignature = '';
     this.sampleAccum = 0;
     this.comboHeldSeconds = 0;
     this.comboConsumed = false;
     this.boundKeydown = event => {
       if (event.code === 'F4' && !event.repeat) {
-        this.toggle();
+        if (event.shiftKey && this.open) this.toggleDetails();
+        else this.toggle();
         event.preventDefault();
       }
     };
   }
 
+  // GameRuntime supplies actual existing scene owners. No copies of simulation
+  // truth, target picking, authored transforms, or separate world registry.
+  bindScene({ camera, playerRoot, siltRoute, targetingSystem, viewportElement }) {
+    this.sceneRefs = { camera, playerRoot, siltRoute, targetingSystem, viewportElement };
+  }
+
   init() {
-    // Independent shortcut: F1–F3/Back debug cycling and Tab/View status stay untouched.
     window.addEventListener('keydown', this.boundKeydown);
+    this.mute = document.createElement('div');
+    this.mute.id = 'blob-quick-look-world-mute';
+    Object.assign(this.mute.style, {
+      position: 'fixed', inset: '0', background: 'rgba(9,19,23,.27)',
+      pointerEvents: 'none', zIndex: '36', display: 'none'
+    });
+    document.body.appendChild(this.mute);
+
+    this.bubbleLayer = document.createElement('div');
+    this.bubbleLayer.id = 'blob-quick-look-world-bubbles';
+    Object.assign(this.bubbleLayer.style, {
+      position: 'fixed', inset: '0', display: 'none', pointerEvents: 'none', zIndex: '46'
+    });
+    document.body.appendChild(this.bubbleLayer);
+
+    this.detailToggle = document.createElement('button');
+    this.detailToggle.type = 'button';
+    this.detailToggle.textContent = 'DESIGN NOTES ▸';
+    this.detailToggle.setAttribute('aria-label', 'Expand BLOB Quick Look design notes');
+    Object.assign(this.detailToggle.style, {
+      position: 'fixed', right: '16px', bottom: '16px', zIndex: '48',
+      display: 'none', pointerEvents: 'auto', padding: '7px 11px',
+      border: '1px solid rgba(163,213,199,.68)', borderRadius: '9px',
+      background: 'rgba(7,22,27,.9)', color: '#e3f5ef',
+      font: '11px ui-monospace, SFMono-Regular, Consolas, monospace',
+      cursor: 'pointer'
+    });
+    this.detailToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.toggleDetails();
+    });
+    document.body.appendChild(this.detailToggle);
+
     this.root = document.createElement('aside');
     this.root.id = 'blob-quick-look-design-inspector';
-    this.root.setAttribute('aria-label', 'BLOB quick look world design inspector');
+    this.root.setAttribute('aria-label', 'BLOB expanded world design inspector');
     this.root.tabIndex = 0;
     Object.assign(this.root.style, {
-      position: 'fixed', right: '14px', bottom: '18px', width: 'min(420px, calc(100vw - 28px))',
-      maxHeight: 'min(78vh, 640px)', overflowY: 'auto', display: 'none',
-      color: '#e8f6ed', background: 'rgba(5,12,17,.91)',
+      position: 'fixed', right: '14px', bottom: '51px',
+      width: 'min(375px, calc(100vw - 28px))',
+      maxHeight: 'min(62vh, 560px)', overflowY: 'auto', display: 'none',
+      color: '#e8f6ed', background: 'rgba(5,12,17,.95)',
       border: '1px solid rgba(151,220,204,.55)', borderRadius: '12px',
       fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
       fontSize: '11px', lineHeight: '1.4', padding: '12px',
-      zIndex: '45', pointerEvents: 'auto', boxShadow: '0 5px 22px #0009' 
+      zIndex: '47', pointerEvents: 'auto', boxShadow: '0 5px 22px #0009'
     });
     this.body = document.createElement('div');
     this.root.appendChild(this.body);
@@ -171,10 +255,27 @@ export class QuickLookInspectorSystem {
 
   toggle() {
     this.open = !this.open;
-    if (this.root) this.root.style.display = this.open ? 'block' : 'none';
+    if (!this.open) this.expanded = false;
+    if (this.mute) this.mute.style.display = this.open ? 'block' : 'none';
+    if (this.bubbleLayer) this.bubbleLayer.style.display = this.open ? 'block' : 'none';
+    if (this.detailToggle) this.detailToggle.style.display = this.open ? 'block' : 'none';
+    if (this.root) this.root.style.display = this.open && this.expanded ? 'block' : 'none';
     this.lastSignature = '';
     this.publish();
-    if (this.open) this.render(buildQuickLookSnapshot(this.frameState));
+    if (this.open) {
+      this.lastSnapshot = buildQuickLookSnapshot(this.frameState);
+      this.render(this.lastSnapshot);
+      this.syncCamera();
+    }
+  }
+
+  toggleDetails() {
+    if (!this.open) return;
+    this.expanded = !this.expanded;
+    if (this.root) this.root.style.display = this.expanded ? 'block' : 'none';
+    if (this.detailToggle) this.detailToggle.textContent = this.expanded ? 'DESIGN NOTES ▾' : 'DESIGN NOTES ▸';
+    this.lastSignature = '';
+    this.publish();
   }
 
   pollGamepad(dt) {
@@ -196,6 +297,7 @@ export class QuickLookInspectorSystem {
     if (this.sampleAccum < .2) return;
     this.sampleAccum = 0;
     const snapshot = buildQuickLookSnapshot(frameState);
+    this.lastSnapshot = snapshot;
     const signature = JSON.stringify(snapshot);
     if (signature !== this.lastSignature) this.render(snapshot, signature);
     this.publish(snapshot);
@@ -203,12 +305,147 @@ export class QuickLookInspectorSystem {
 
   publish(snapshot = null) {
     this.frameState.quickLookInspector = {
-      pass: 'LS1C0', open: this.open, presentationOnly: true,
-      shortcutKeyboard: 'F4', shortcutController: 'Hold LB + RB for 0.6s',
+      pass: 'LS1C0.1', open: this.open, expanded: this.expanded,
+      presentationOnly: true, worldAnchors: Boolean(this.sceneRefs),
+      shortcutKeyboard: 'F4 / Shift+F4 design notes',
+      shortcutController: 'Hold LB + RB for 0.6s',
       cellId: this.frameState.activeCellId ?? 'none',
       inspectedHabitat: this.frameState.siltPressureRoute?.habitatFoundation?.currentHabitatId ?? 'none',
       lastRegion: snapshot?.region ?? 'none'
     };
+  }
+
+  // A label is shown only for a live scene owner within camera view. A Silt
+  // 'habitat' is an authored zone, NOT a raycast-targetable material object.
+  resolveBubbles(snapshot) {
+    const { playerRoot, siltRoute, targetingSystem } = this.sceneRefs ?? {};
+    const live = this.frameState.siltPressureRoute ?? {};
+    const cycle = live.livingMaterialCycle;
+    const count = cycle?.counts ?? {};
+    const result = [];
+    if (playerRoot) result.push({
+      id: 'core', anchor: playerRoot,
+      title: `CORE · ${snapshot.phaseCount ?? '?'}-PHASE`,
+      detail: `${goodText(this.frameState.coreEngine?.currentPhaseFunction, 'engine')} · X / RT / LT`,
+      offsetX: 30, offsetY: 24, maxDistance: 80, accent: '#9ee9da'
+    });
+
+    const target = targetingSystem?.relationshipTarget ?? targetingSystem?.attentionTarget;
+    if (this.frameState.targeting?.active && target?.root) result.push({
+      id: 'target', anchor: target.root,
+      title: snapshot.focus,
+      detail: `Live selected target · ${goodText(snapshot.focusKind, 'object')}`,
+      offsetX: 18, offsetY: -49, maxDistance: 19, accent: '#f2ce96'
+    });
+
+    if (snapshot.cellId === 'CELL_SILT_PRESSURE_ROUTE_001' && siltRoute?.active) {
+      const current = live.habitatFoundation?.currentHabitatId;
+      const lobe = siltRoute.habitatLobes?.find(({ recipe }) => recipe?.id === current);
+      if (lobe?.group) {
+        const title = current === 'garden' ? 'SEDIMENT GARDEN'
+          : current === 'veins' ? 'CIRCULATION VEINS' : 'SILT RESERVOIR';
+        const detail = current === 'garden'
+          ? `Settled ${whole(count.settled)} · growing ${whole(count.growing) + whole(count.mature)} · hold LT`
+          : current === 'veins'
+            ? `Seeping ${whole(count.veins) + whole(count.garden_transit)} · X speeds flow`
+            : `Stock ${whole(count.reservoir)} / ${whole(cycle?.currentUnitCount)} · X speeds flow`;
+        result.push({ id: 'habitat', anchor: lobe.group, title, detail,
+          offsetX: -48, offsetY: -71, maxDistance: 24, accent: '#b6c891' });
+      }
+      // The quest packet is genuine scene geometry; the replenishing stock is
+      // a separate scene mesh and must never be presented as the quest reward.
+      if (!this.frameState.targeting?.active) {
+        const packet = !live.safeMatterAbsorbed && siltRoute.safePacket?.visible
+          ? siltRoute.safePacket : cycle?.active ? siltRoute.livingReservoirBody : null;
+        if (packet) result.push({
+          id: 'reservoirObject', anchor: packet,
+          title: live.safeMatterAbsorbed ? 'REPLENISHING STOCK' : 'YELLOW POROUS PACKET',
+          detail: live.safeMatterAbsorbed
+            ? `${whole(count.reservoir)} stored pieces · renewable mass`
+            : 'Hold RT nearby · one-time route packet',
+          offsetX: 24, offsetY: -39, maxDistance: 14, accent: '#ebc077'
+        });
+      }
+    }
+    // No generic scenery bubble unless the target provider identifies it.
+    return result.slice(0, 3);
+  }
+
+  // Called after camera update once per rendered frame, not per simulation
+  // substep. Update positions only; content is refreshed at 5 Hz by update().
+  syncCamera() {
+    if (!this.open || !this.bubbleLayer || !this.sceneRefs?.camera) return;
+    const { camera, viewportElement } = this.sceneRefs;
+    const rect = viewportElement?.getBoundingClientRect?.() ?? {
+      left: 0, top: 0, width: window.innerWidth, height: window.innerHeight
+    };
+    if (!rect.width || !rect.height) return;
+    camera.updateMatrixWorld?.();
+    const descriptors = this.resolveBubbles(this.lastSnapshot ?? buildQuickLookSnapshot(this.frameState));
+    const visible = new Set();
+    const occupied = [];
+    for (const desc of descriptors) {
+      const pos = projectQuickLookAnchor(desc.anchor, camera, rect, desc.maxDistance);
+      if (!pos) continue;
+      const w = desc.id === 'core' ? 140 : 174;
+      const h = 48;
+      let x = Math.max(rect.left + 6, Math.min(rect.left + rect.width - w - 6, pos.x + desc.offsetX));
+      let y = Math.max(rect.top + 7, Math.min(rect.top + rect.height - h - 8, pos.y + desc.offsetY));
+      // Keep annotations apart when multiple anchors overlap in projection.
+      for (let tries = 0; tries < 4 && occupied.some(r =>
+        x < r.x + r.w + 8 && x + w + 8 > r.x && y < r.y + r.h + 8 && y + h + 8 > r.y
+      ); tries++) y = Math.max(rect.top + 7,
+        Math.min(rect.top + rect.height - h - 8, y + (tries % 2 === 0 ? 61 : -122)));
+      occupied.push({ x, y, w, h });
+      visible.add(desc.id);
+      let el = this.bubbles.get(desc.id);
+      if (!el) {
+        el = document.createElement('div');
+        el.dataset.quickLookBubble = desc.id;
+        Object.assign(el.style, bubbleCss);
+        const name = document.createElement('div');
+        name.style.cssText = 'font-weight:700;font-size:10px;letter-spacing:.04em';
+        const detail = document.createElement('div');
+        detail.style.cssText = 'font-size:10px;color:#cad5d0;margin-top:2px';
+        el.append(name, detail);
+        this.bubbleLayer.appendChild(el);
+        this.bubbles.set(desc.id, el);
+        if (desc.id !== 'core') {
+          const link = document.createElement('div');
+          link.dataset.quickLookLink = desc.id;
+          Object.assign(link.style, {
+            position: 'fixed', height: '0', pointerEvents: 'none',
+            borderTop: '1px dashed rgba(178,212,200,.55)',
+            transformOrigin: 'left center', zIndex: '46'
+          });
+          this.bubbleLayer.appendChild(link);
+          this.bubbleLinks.set(desc.id, link);
+        }
+      }
+      if (el.dataset.contentKey !== `${desc.title}|${desc.detail}`) {
+        el.firstChild.textContent = desc.title;
+        el.lastChild.textContent = desc.detail;
+        el.dataset.contentKey = `${desc.title}|${desc.detail}`;
+      }
+      el.style.borderColor = desc.accent;
+      el.style.transform = `translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`;
+      el.style.display = 'block';
+      const link = this.bubbleLinks.get(desc.id);
+      if (link) {
+        const toX = x + w / 2;
+        const toY = y + h / 2;
+        const dx = toX - pos.x;
+        const dy = toY - pos.y;
+        const length = Math.hypot(dx, dy);
+        link.style.left = `${Math.round(pos.x)}px`;
+        link.style.top = `${Math.round(pos.y)}px`;
+        link.style.width = `${Math.round(length)}px`;
+        link.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+        link.style.display = 'block';
+      }
+    }
+    for (const [id, el] of this.bubbles) if (!visible.has(id)) el.style.display = 'none';
+    for (const [id, link] of this.bubbleLinks) if (!visible.has(id)) link.style.display = 'none';
   }
 
   render(snapshot, signature = JSON.stringify(snapshot)) {
@@ -218,10 +455,10 @@ export class QuickLookInspectorSystem {
     b.replaceChildren();
     const header = document.createElement('div');
     header.style.cssText = 'font-weight:700;font-size:13px;color:#d9f9ed;margin-bottom:3px';
-    header.textContent = `QUICK LOOK // ${snapshot.region}`;
+    header.textContent = `WORLD DESIGN // ${snapshot.region}`;
     const hint = document.createElement('div');
     hint.style.cssText = 'font-size:10px;color:#93b4bb';
-    hint.textContent = 'F4 / hold LB+RB 0.6s to close · scroll for more · gameplay continues';
+    hint.textContent = 'F4 / LB+RB to close · Shift+F4 to hide notes · world labels follow objects';
     const loc = document.createElement('div');
     loc.style.cssText = 'color:#fae4af;font-size:12px;margin-top:9px';
     loc.textContent = `LANDMARK: ${snapshot.landmark}`;
@@ -236,7 +473,7 @@ export class QuickLookInspectorSystem {
     line(b, 'PLAYTEST QUESTIONS / PROPOSED CHANGES', snapshot.gap);
     const footer = document.createElement('div');
     footer.style.cssText = 'font-size:9px;color:#92a6a8;margin-top:12px;border-top:1px solid #66868c55;padding-top:7px';
-    footer.textContent = 'Read-only diagnostic · no route credits, tuning changes, or targeting authority';
+    footer.textContent = 'Scene-anchored diagnostic · labels do not change actual targeting, geometry or gameplay';
     b.appendChild(footer);
   }
 }

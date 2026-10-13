@@ -2502,6 +2502,13 @@ export class GameRuntime {
     });
 
     this.quickLookInspectorSystem = new QuickLookInspectorSystem({ frameState: this.frameState });
+    this.quickLookInspectorSystem.bindScene({
+      camera: this.camera,
+      playerRoot: this.playerCore,
+      siltRoute: this.siltPressureRouteSystem,
+      targetingSystem: this.targetingSystem,
+      viewportElement: this.renderer?.domElement
+    });
 
     this.playtestHudSystem = new PlaytestHudSystem({
       recipeDataSystem: this.recipeDataSystem,
@@ -2776,6 +2783,8 @@ export class GameRuntime {
 
     const cameraStart = presentationEnd;
     this.updateCamera(catchUp.simulatedSeconds);
+    // LS1C0.1: render-cadence world labels follow the actual camera/Core anchors.
+    this.quickLookInspectorSystem?.syncCamera();
     const cameraEnd = performance.now();
     const cameraUpdateMs = cameraEnd - cameraStart;
 
