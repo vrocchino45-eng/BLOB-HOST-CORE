@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import { SiltGripAuthority } from '../src/contact/SiltGripAuthority.js';
+const g = new SiltGripAuthority();
+const unit = { id: 'silt-grain-01', phase: 'settled', mass: 1 };
+const input = { unit, unitPosition: [1,0,0], corePosition: [0,0,0], stabilizeHeld: true, aPressed: true };
+assert.equal(g.tryGrip({...input, coreWork:true}), false);
+assert.equal(g.tryGrip({...input, stabilizeHeld:false}), false);
+assert.equal(g.tryGrip({...input, unitPosition:[9,0,0]}), false);
+assert.equal(g.tryGrip(input), true);
+assert.equal(g.heldId, unit.id);
+assert.equal(g.moveTo([1.2,0,0],[0,0,0]),true);
+assert.equal(g.moveTo([5,0,0],[0,0,0]),false);
+assert.deepEqual(g.update({corePosition:[0,0,0],stabilizeHeld:true}).position,[1.2,0,0]);
+assert.equal(g.update({corePosition:[0,0,0],stabilizeHeld:false}).releasedUnitId,unit.id);
+assert.equal(g.heldId,null);
+assert.equal(unit.mass,1);
+console.log('LS1D1A grip authority isolated checks: PASS');
