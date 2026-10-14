@@ -32,6 +32,7 @@ import { CoreVerbPhysicalizationSystem } from "../player/CoreVerbPhysicalization
 import { CoreVerbEngineCouplingSystem } from "../player/CoreVerbEngineCouplingSystem.js";
 import { AmbientMaterialInteractionSystem } from "../world/AmbientMaterialInteractionSystem.js";
 import { HostRhythmSystem } from "../world/HostRhythmSystem.js";
+import { TemporalHistorySystem } from "../world/TemporalHistorySystem.js";
 import { RegionalPhysicalEmbodimentSystem } from "../world/RegionalPhysicalEmbodimentSystem.js";
 import { HostContactShelfSystem } from "../world/HostContactShelfSystem.js";
 import { HostContactEcologyContinuationSystem } from "../world/HostContactEcologyContinuationSystem.js";
@@ -2070,6 +2071,7 @@ export class GameRuntime {
     });
 
     this.hostRhythmSystem = new HostRhythmSystem({ frameState: this.frameState });
+    this.temporalHistorySystem = new TemporalHistorySystem({ frameState: this.frameState });
     this.regionalPhysicalEmbodimentSystem = new RegionalPhysicalEmbodimentSystem({ frameState: this.frameState });
     this.liftFieldReadabilitySystem = new LiftFieldReadabilitySystem({
       scene: this.scene,
@@ -2633,6 +2635,8 @@ export class GameRuntime {
     // HC028D bridges the already-resolved Host composition and Core engine state.
     // It runs before CoreGrowth/Embodiment so the same-frame gyro can visually entrain.
     this.registry.register("coreWorldResonanceSystem", this.coreWorldResonanceSystem);
+    // LS1D0: read-only, simulation-clock-based exposure history.
+    this.registry.register("temporalHistorySystem", this.temporalHistorySystem);
     // HC028D1 reads canonical verb intent after the Core engine has resolved and
     // publishes presentation-only function-plane drive before embodiment renders.
     this.registry.register("coreVerbEngineCouplingSystem", this.coreVerbEngineCouplingSystem);
