@@ -30,6 +30,7 @@ export class DeliberateCommitmentSystem {
     const freshWorldPress = Boolean(
       input.interactPressed
       && input.primaryActionContext !== "core_work"
+      && !(input.stabilizeHeld || input.resonanceHeld)
       && eventId !== this.lastInteractEventId
     );
     if (freshWorldPress) this.lastInteractEventId = eventId;

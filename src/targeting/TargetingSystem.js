@@ -70,6 +70,10 @@ export class TargetingSystem {
     this.stabilizeRedirectSequence = 0;
     this.stabilizeMacroSuppressionSequence = 0;
 
+    this.explicitLockId = "none";
+    this.explicitLockSequence = 0;
+    this.explicitLockReason = "not_locked";
+    this.openAimGlyph = null;
     this.reticle = null;
     this.pointerLine = null;
     this.selectedHalo = null;
@@ -111,6 +115,7 @@ export class TargetingSystem {
 
   init() {
     this.createReticle();
+    this.createOpenAimGlyph();
     this.createSelectedHalo();
     this.createPointerLine();
     this.createRelationshipGlyphs();
@@ -128,6 +133,7 @@ export class TargetingSystem {
     const intent = this.resolveRelationshipIntent(frameState.input);
     const safeDt = Math.max(0, dt ?? 0);
     this.candidate = this.pickTarget(this.candidate);
+    this.updateExplicitAimLock(frameState);
     this.updateAttention(safeDt, frameState, intent);
     this.updateRelationship(safeDt, frameState, intent);
     this.target = this.relationshipTarget ?? this.attentionTarget ?? this.candidate;
@@ -160,6 +166,8 @@ export class TargetingSystem {
   }
 
   clearTargetState(frameState, reason = "explicit_target_clear") {
+    this.explicitLockId = "none";
+    this.explicitLockReason = reason;
     this.candidate = null;
     this.target = null;
     this.availableBest = null;
@@ -1052,6 +1060,66 @@ export class TargetingSystem {
     this.coherenceBoundary.name = "relationship_glyph_stabilize_coherence_boundary";
     this.coherenceBoundary.visible = false;
     this.scene.add(this.coherenceBoundary);
+  }
+
+  createOpenAimGlyph() {
+    // Camera-facing overlay: open corners while LT is held, closed corners after A.
+    const points = [];
+    for (const [sx, sy] of [[-1,-1],[-1,1],[1,-1],[1,1]]) {
+      points.push(sx * 0.12, sy * 0.085, 0, sx * 0.065, sy * 0.085, 0);
+      points.push(sx * 0.12, sy * 0.085, 0, sx * 0.12, sy * 0.045, 0);
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
+    const material = new THREE.LineBasicMaterial({ color: 0x9fffd8, transparent: true, opacity: 0.8, depthTest: false, depthWrite: false });
+    this.openAimGlyph = new THREE.LineSegments(geometry, material);
+    this.openAimGlyph.name = "ls1d1c_camera_aim_open_crosshairs";
+    this.openAimGlyph.renderOrder = 999;
+    this.openAimGlyph.frustumCulled = false;
+    this.openAimGlyph.visible = false;
+    this.camera.add(this.openAimGlyph);
+    this.openAimGlyph.position.set(0, 0, -1.4);
+  }
+
+  updateExplicitAimLock(frameState) {
+    const input = frameState.input ?? {};
+    const aiming = Boolean(input.stabilizeHeld || input.resonanceHeld);
+    const candidate = this.candidate;
+    const candidateId = candidate?.recipe?.id ?? "none";
+    // This pass establishes camera lock only; debris-specific ownership follows.
+    if (this.explicitLockId !== "none") {
+      const stillAvailable = this.candidateSnapshotsById.has(this.explicitLockId);
+      if (!stillAvailable) {
+        this.explicitLockId = "none";
+        this.explicitLockReason = "target_unavailable";
+      }
+    }
+    if (aiming && input.interactPressed) {
+      if (this.explicitLockId !== "none") {
+        this.explicitLockId = "none";
+        this.explicitLockReason = "a_released_lock";
+      } else if (candidateId !== "none" && (candidate.aimDot ?? -1) >= this.stabilizeSteerAimThreshold) {
+        this.explicitLockId = candidateId;
+        this.explicitLockReason = "a_locked_camera_candidate";
+      } else {
+        this.explicitLockReason = "a_no_centered_candidate";
+      }
+      this.explicitLockSequence += 1;
+    }
+    frameState.cameraAimLock = {
+      pass: "LS1D1C", aiming, candidateId,
+      candidateAimDot: candidate?.aimDot ?? -1,
+      lockedId: this.explicitLockId,
+      sequence: this.explicitLockSequence,
+      reason: this.explicitLockReason,
+      mode: this.explicitLockId !== "none" ? "locked" : aiming ? "open" : "hidden"
+    };
+    if (this.openAimGlyph) {
+      this.openAimGlyph.visible = aiming || this.explicitLockId !== "none";
+      const locked = this.explicitLockId !== "none";
+      this.openAimGlyph.scale.setScalar(locked ? 0.66 : 1);
+      this.openAimGlyph.material.color.setHex(locked ? 0xffd08b : candidateId !== "none" ? 0x9fffd8 : 0xa6bac4);
+    }
   }
 
   updateReticle(frameState) {
