@@ -1,9 +1,14 @@
-# LS1D1A — Isolated Grip Authority (not gameplay integrated)
+# LS1D1B — Runtime Silt Grip (experimental)
 
-This is a deliberately limited first patch: a pure state authority plus focused validator. It does **not** wire into GameRuntime, input dispatch, SiltLivingMaterialCycle, scene meshes, or HUD. No in-game grip is available after applying this patch alone.
+Merge only changed files into current BLOB-HOST-CORE. Back up/commit first.
 
-Merge paths at repository root and run:
+- Stabilize + A grips nearest eligible visible Silt grain within 2.2 local units, after LS1B cycle awakens.
+- While holding Stabilize, the grain follows the Core at its initial relative offset, bounded by grip authority.
+- Release Stabilize or press A again to release; leaving Silt also releases.
+- Held grain pauses its LS1B cycle phase/age; all eight identities and mass are conserved.
+- Snapshot includes `siltGrip` for telemetry. No new HUD display, shell attachment or persistence.
+- Existing deliberate commitment system remains unchanged. If an authored A commitment is offered at the same moment, input priority still requires gameplay verification.
 
-    node scripts/validateLS1D1AGripAuthority.mjs
+Run: `node scripts/validateLS1D1BGripIntegration.mjs`
 
-Next integration must coordinate: A press precedence with DeliberateCommitmentSystem; suspend selected unit progression in SiltLivingMaterialCycle without changing unit count/mass; route draw position override; deterministic release into cycle; Living HUD state; regression checks for ordinary A and Core Work A.
+Playtest: awaken LS1B via canonical packet, approach a moving grain, hold Stabilize + press A, move, release, confirm grain resumes its cycle. Confirm existing A interaction and Silt progression are not disturbed.

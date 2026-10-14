@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
+import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -41,6 +42,8 @@ export class SiltPressureRouteSystem {
     this.habitatDriftPositions = null;
     this.habitatDriftSeeds = [];
     this.livingCycle = null;
+    this.siltGrip = new SiltGripAuthority();
+    this.siltGripLocalOffset = new THREE.Vector3(0, 0.1, -0.9);
     this.livingMatterGroup = null;
     this.livingMatterMeshes = [];
     this.livingReservoirBody = null;
@@ -170,6 +173,7 @@ export class SiltPressureRouteSystem {
 
   onRuntimeUnmount(frameState) {
     this.active = false;
+    this.siltGrip.release();
     this.setVisible(false);
     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
       ? "returned_to_hub_through_silt_fold"
@@ -194,7 +198,9 @@ export class SiltPressureRouteSystem {
     // Existing safePacket absorption remains the one-time route reward; it
     // wakes a separate, finite reservoir stock, not a respawned safePacket.
     if (this.safeMatterAbsorbed) this.livingCycle?.awakenFromCanonicalAbsorb();
+    this.updateSiltGrip(frameState);
     this.livingCycle?.update(dt, {
+      heldUnitId: this.siltGrip.heldId,
       habitatId: this.habitatSample.id,
       pulsePressed: Boolean(frameState.input?.pulsePressed),
       pulseEventId: frameState.input?.pulseEventId ?? frameState.frame,
@@ -852,6 +858,40 @@ export class SiltPressureRouteSystem {
     this.root.add(this.livingMatterGroup);
   }
 
+  // LS1D1B: route-local contact, no new material or global input owner.
+  updateSiltGrip(frameState) {
+    if (!this.livingCycle?.active) { this.siltGrip.release(); return; }
+    const input = frameState.input ?? {};
+    const coreLocal = this.localPlayer.toArray();
+    const held = this.livingCycle.units.find(u => u.id === this.siltGrip.heldId);
+    if (held) {
+      if (input.interactPressed || !input.stabilizeHeld) { this.siltGrip.release(); return; }
+      const desired = this.localPlayer.clone().add(this.siltGripLocalOffset).toArray();
+      this.siltGrip.moveTo(desired, coreLocal);
+      this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
+      return;
+    }
+    if (!input.interactPressed || !input.stabilizeHeld) return;
+    // Use last rendered local coordinates; stable identity stays in LS1B ledger.
+    let closest = null;
+    for (let i = 0; i < this.livingCycle.units.length; i++) {
+      const unit = this.livingCycle.units[i];
+      if (!["veins", "garden_transit", "settled"].includes(unit.phase)) continue;
+      const mesh = this.livingMatterMeshes[i];
+      if (!mesh) continue;
+      const position = mesh.body.position.toArray();
+      const distance = mesh.body.position.distanceTo(this.localPlayer);
+      if (distance <= this.siltGrip.range && (!closest || distance < closest.distance)) {
+        closest = { unit, position, distance };
+      }
+    }
+    if (closest && this.siltGrip.tryGrip({ unit: closest.unit,
+      unitPosition: closest.position, corePosition: coreLocal,
+      stabilizeHeld: true, aPressed: true })) {
+      this.siltGripLocalOffset.fromArray(closest.position).sub(this.localPlayer);
+    }
+  }
+
   animateLivingMatter() {
     const cycle = this.livingCycle;
     if (!cycle || !this.livingMatterGroup) return;
@@ -867,6 +907,11 @@ export class SiltPressureRouteSystem {
       const fraction = (index * 2.399963) % (2 * Math.PI);
       const small = 0.24 + (index % 3) * 0.15;
       const p = mesh.body.position;
+      if (unit.id === this.siltGrip.heldId && this.siltGrip.position) {
+        p.fromArray(this.siltGrip.position);
+        mesh.body.visible = true;
+        continue;
+      }
       if (unit.phase === "reservoir") {
         p.copy(this.livingMatterLocations.reservoir);
         p.x += Math.cos(fraction) * small;
@@ -1603,6 +1648,7 @@ export class SiltPressureRouteSystem {
         newProgression: false
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
+      siltGrip: this.siltGrip.snapshot(),
       genericRingCount: 0,
       triggerMarkerCount: 0,
       lastInteraction: this.lastInteraction,

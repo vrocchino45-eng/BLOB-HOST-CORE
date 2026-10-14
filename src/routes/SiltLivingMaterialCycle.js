@@ -93,7 +93,7 @@ export class SiltLivingMaterialCycle {
     const traveling = this.units.filter(u => ["veins", "garden_transit", "returning"].includes(u.phase)).length;
     this.releaseClock += dt * rate;
     if (traveling < cap && this.releaseClock >= this.recipe.releaseIntervalSeconds) {
-      const stored = this.units.find(u => u.phase === "reservoir");
+      const stored = this.units.find(u => u.phase === "reservoir" && u.id !== input.heldUnitId);
       if (stored) {
         this.releaseClock = 0;
         this.transition(stored, "veins");
@@ -102,6 +102,7 @@ export class SiltLivingMaterialCycle {
     }
 
     for (const unit of this.units) {
+      if (unit.id === input.heldUnitId) continue;
       if (unit.phase === "reservoir" || unit.phase === "settled") continue;
       const gardenHoned = input.habitatId === "garden" && Boolean(input.stabilizeHeld);
       const growRate = gardenHoned && unit.phase === "growing" ? this.recipe.gardenStabilizeMultiplier : 1;
@@ -123,9 +124,9 @@ export class SiltLivingMaterialCycle {
     // Buds need sediment *accumulation*: two deposited units of at least the
     // authored minimum settled age. Mass and identities survive the pairing.
     for (const unit of this.units) {
-      if (unit.phase === "settled") unit.age += dt;
+      if (unit.phase === "settled" && unit.id !== input.heldUnitId) unit.age += dt;
     }
-    const settled = this.units.filter(u => u.phase === "settled" && u.age >= this.recipe.minimumSettleSeconds);
+    const settled = this.units.filter(u => u.phase === "settled" && u.id !== input.heldUnitId && u.age >= this.recipe.minimumSettleSeconds);
     if (settled.length >= 2) {
       this.transition(settled[0], "growing");
       this.transition(settled[1], "growing");

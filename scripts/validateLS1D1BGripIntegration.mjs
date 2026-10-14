@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import { SiltGripAuthority } from '../src/contact/SiltGripAuthority.js';
+import { SiltLivingMaterialCycle } from '../src/routes/SiltLivingMaterialCycle.js';
+const recipe = {pass:'LS1B',unitCount:8,releaseIntervalSeconds:1,maximumActiveTransport:3,flowBoostSeconds:1,flowBoostMultiplier:1,gardenStabilizeMultiplier:1,minimumSettleSeconds:1};
+const cycle = new SiltLivingMaterialCycle(recipe);
+cycle.awakenFromCanonicalAbsorb();cycle.update(0.2,{habitatId:'reservoir'});
+const unit=cycle.units.find(u=>u.phase==='veins');assert.ok(unit);
+const grip=new SiltGripAuthority();assert.equal(grip.tryGrip({unit,unitPosition:[0,0,0],corePosition:[0,0,1],stabilizeHeld:true,aPressed:true}),true);
+const before={phase:unit.phase,age:unit.age};
+for(let i=0;i<20;i++)cycle.update(0.2,{heldUnitId:grip.heldId});
+assert.equal(unit.phase,before.phase);assert.equal(unit.age,before.age);
+assert.equal(cycle.snapshot().conservedMass,8);assert.equal(cycle.snapshot().currentUnitCount,8);
+grip.release();cycle.update(0.2,{});assert.ok(unit.age>before.age);
+console.log('LS1D1B grip ledger suspension and conservation: PASS');
