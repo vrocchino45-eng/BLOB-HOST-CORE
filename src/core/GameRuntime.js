@@ -8,6 +8,7 @@ import { buildBoundedSimulationSteps } from "./BoundedSimulationCatchUp.js";
 import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
 import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
 import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
+import { WorldObjectCensusSystem } from "../debug/WorldObjectCensusSystem.js";
 import { DebugAreaJumpSystem } from "../debug/DebugAreaJumpSystem.js";
 import { InputSystem } from "../input/InputSystem.js";
 import { DeliberateCommitmentSystem } from "../input/DeliberateCommitmentSystem.js";
@@ -2485,6 +2486,8 @@ export class GameRuntime {
     this.debugDisplaySystem = new DebugDisplaySystem({
       frameState: this.frameState
     });
+    this.worldObjectCensusSystem = new WorldObjectCensusSystem({ scene: this.scene, frameState: this.frameState });
+    this.worldObjectCensusSystem.init();
 
     this.guidePromptSystem = new GuidePromptSystem({
       recipeDataSystem: this.recipeDataSystem,
