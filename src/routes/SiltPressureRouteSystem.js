@@ -15,7 +15,7 @@ const RECIPE_ID = "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A";
  * player or mutates objective, gate, active-cell, or route-history truth.
  */
 export class SiltPressureRouteSystem {
-  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {
+  constructor({ recipeDataSystem, scene, playerRoot, frameState, camera }) {
     if (!recipeDataSystem) throw new Error("[SiltPressureRouteSystem] recipeDataSystem is required.");
     if (!scene) throw new Error("[SiltPressureRouteSystem] scene is required.");
     if (!playerRoot) throw new Error("[SiltPressureRouteSystem] playerRoot is required.");
@@ -25,6 +25,14 @@ export class SiltPressureRouteSystem {
     this.scene = scene;
     this.playerRoot = playerRoot;
     this.frameState = frameState;
+    this.camera = camera;
+    this.siltAimCandidateId = null;
+    this.siltAimLockedId = null;
+    this.siltAimCameraPosition = new THREE.Vector3();
+    this.siltAimCameraDirection = new THREE.Vector3();
+    this.siltAimWorldPosition = new THREE.Vector3();
+    this.siltAimDirection = new THREE.Vector3();
+    this.siltAimMarker = null;
 
     this.recipe = null;
     this.root = null;
@@ -176,6 +184,8 @@ export class SiltPressureRouteSystem {
   onRuntimeUnmount(frameState) {
     this.active = false;
     this.siltGrip.release();
+    this.siltAimCandidateId = null;
+    this.siltAimLockedId = null;
     this.setVisible(false);
     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
       ? "returned_to_hub_through_silt_fold"
@@ -214,6 +224,7 @@ export class SiltPressureRouteSystem {
       stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
     });
     this.animateLivingMatter();
+    this.updateSiltAimMarker();
     this.applyDynamicPressure(frameState, sample);
     this.animate(frameState, sample);
     this.animateHabitatFoundation(frameState);
@@ -865,40 +876,105 @@ export class SiltPressureRouteSystem {
     }
     this.livingMatterGroup.visible = false;
     this.root.add(this.livingMatterGroup);
+    // One reusable candidate/lock marker, not one mesh per material unit.
+    const markerPoints = [];
+    for (const [x, y] of [[-1,-1],[-1,1],[1,-1],[1,1]]) {
+      markerPoints.push(x*.29,y*.29,0, x*.15,y*.29,0);
+      markerPoints.push(x*.29,y*.29,0, x*.29,y*.15,0);
+    }
+    const markerGeometry = new THREE.BufferGeometry();
+    markerGeometry.setAttribute("position", new THREE.Float32BufferAttribute(markerPoints, 3));
+    this.siltAimMarker = new THREE.LineSegments(markerGeometry,
+      new THREE.LineBasicMaterial({ color: 0x9fffd8, transparent: true, opacity: 0.92, depthWrite: false }));
+    this.siltAimMarker.name = "LS1D1D1_silt_material_candidate_lock_marker";
+    this.siltAimMarker.visible = false;
+    this.siltAimMarker.renderOrder = 20;
+    this.root.add(this.siltAimMarker);
   }
 
-  // LS1D1B: route-local contact, no new material or global input owner.
+  // LS1D1D1: Silt candidates are chosen by camera direction, never nearest-first.
+  // The world/region targeting authority remains unchanged; Silt publishes its own
+  // explicit material target ID until shared Host target registration is ready.
   updateSiltGrip(frameState) {
-    if (!this.livingCycle?.active) { this.siltGrip.release(); return; }
     const input = frameState.input ?? {};
-    const coreLocal = this.localPlayer.toArray();
-    const held = this.livingCycle.units.find(u => u.id === this.siltGrip.heldId);
-    if (held) {
-      if (input.interactPressed || !input.stabilizeHeld) { this.siltGrip.release(); return; }
-      const desired = this.localPlayer.clone().add(this.siltGripLocalOffset).toArray();
-      this.siltGrip.moveTo(desired, coreLocal);
-      this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
+    const aiming = Boolean(input.stabilizeHeld);
+    const units = this.livingCycle?.units ?? [];
+    const eligible = new Set(["veins", "garden_transit", "settled"]);
+    if (!this.livingCycle?.active) {
+      this.siltGrip.release();
+      this.siltAimCandidateId = null;
+      this.siltAimLockedId = null;
+      frameState.siltMaterialAim = { aiming: false, candidateId: null, lockedId: null, heldId: null };
       return;
     }
-    if (!input.interactPressed || !input.stabilizeHeld) return;
-    // Use last rendered local coordinates; stable identity stays in LS1B ledger.
-    let closest = null;
-    for (let i = 0; i < this.livingCycle.units.length; i++) {
-      const unit = this.livingCycle.units[i];
-      if (!["veins", "garden_transit", "settled"].includes(unit.phase)) continue;
-      const mesh = this.livingMatterMeshes[i];
-      if (!mesh) continue;
-      const position = mesh.body.position.toArray();
-      const distance = mesh.body.position.distanceTo(this.localPlayer);
-      if (distance <= this.siltGrip.range && (!closest || distance < closest.distance)) {
-        closest = { unit, position, distance };
+
+    let best = null;
+    if (aiming && this.camera) {
+      this.camera.updateMatrixWorld();
+      this.root.updateMatrixWorld();
+      this.camera.getWorldPosition(this.siltAimCameraPosition);
+      this.camera.getWorldDirection(this.siltAimCameraDirection);
+      for (let i = 0; i < units.length; i++) {
+        const unit = units[i];
+        const mesh = this.livingMatterMeshes[i];
+        if (!eligible.has(unit.phase) || !mesh?.body?.visible) continue;
+        const localPosition = mesh.body.position;
+        if (localPosition.distanceTo(this.localPlayer) > this.siltGrip.range) continue;
+        this.siltAimWorldPosition.copy(localPosition);
+        this.root.localToWorld(this.siltAimWorldPosition);
+        this.siltAimDirection.copy(this.siltAimWorldPosition).sub(this.siltAimCameraPosition);
+        const length = this.siltAimDirection.length();
+        if (length < 0.001) continue;
+        const dot = this.siltAimDirection.multiplyScalar(1 / length).dot(this.siltAimCameraDirection);
+        if (dot < 0.90) continue;
+        if (!best || dot > best.dot) best = { unit, position: localPosition.toArray(), dot };
       }
     }
-    if (closest && this.siltGrip.tryGrip({ unit: closest.unit,
-      unitPosition: closest.position, corePosition: coreLocal,
-      stabilizeHeld: true, aPressed: true })) {
-      this.siltGripLocalOffset.fromArray(closest.position).sub(this.localPlayer);
+    this.siltAimCandidateId = best?.unit.id ?? null;
+    const held = units.find(unit => unit.id === this.siltGrip.heldId);
+    if (held) {
+      if (input.interactPressed || !aiming) {
+        this.siltGrip.release();
+        this.siltAimLockedId = null;
+      } else {
+        const coreLocal = this.localPlayer.toArray();
+        const desired = this.localPlayer.clone().add(this.siltGripLocalOffset).toArray();
+        this.siltGrip.moveTo(desired, coreLocal);
+        this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
+      }
+    } else if (this.siltGrip.heldId) {
+      this.siltGrip.release();
+      this.siltAimLockedId = null;
+    } else if (aiming && input.interactPressed && best) {
+      const coreLocal = this.localPlayer.toArray();
+      if (this.siltGrip.tryGrip({ unit: best.unit, unitPosition: best.position,
+        corePosition: coreLocal, stabilizeHeld: true, aPressed: true })) {
+        this.siltGripLocalOffset.fromArray(best.position).sub(this.localPlayer);
+        this.siltAimLockedId = best.unit.id;
+      }
     }
+    frameState.siltMaterialAim = {
+      pass: "LS1D1D1", aiming,
+      candidateId: this.siltAimCandidateId,
+      lockedId: this.siltAimLockedId,
+      heldId: this.siltGrip.heldId,
+      candidateAimDot: best ? Number(best.dot.toFixed(3)) : null,
+      state: this.siltGrip.heldId ? "locked" : best ? "candidate" : aiming ? "open" : "hidden"
+    };
+  }
+
+  updateSiltAimMarker() {
+    if (!this.siltAimMarker) return;
+    const targetId = this.siltGrip.heldId ?? this.siltAimCandidateId;
+    const index = this.livingCycle?.units.findIndex(unit => unit.id === targetId) ?? -1;
+    const mesh = index >= 0 ? this.livingMatterMeshes[index] : null;
+    this.siltAimMarker.visible = Boolean(targetId && mesh?.body?.visible && this.camera);
+    if (!this.siltAimMarker.visible) return;
+    this.siltAimMarker.position.copy(mesh.body.position);
+    this.siltAimMarker.quaternion.copy(this.camera.quaternion);
+    const locked = Boolean(this.siltGrip.heldId);
+    this.siltAimMarker.scale.setScalar(locked ? 0.75 : 1);
+    this.siltAimMarker.material.color.setHex(locked ? 0xffd08b : 0x9fffd8);
   }
 
   animateLivingMatter() {

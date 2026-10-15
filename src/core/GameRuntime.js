@@ -2382,7 +2382,8 @@ export class GameRuntime {
       recipeDataSystem: this.recipeDataSystem,
       scene: this.scene,
       playerRoot: this.playerCore,
-      frameState: this.frameState
+      frameState: this.frameState,
+      camera: this.camera
     });
     this.combThresholdFoundationSystem = new CombThresholdFoundationSystem({
       recipeDataSystem: this.recipeDataSystem,
