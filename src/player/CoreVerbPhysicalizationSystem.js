@@ -967,7 +967,24 @@ export class CoreVerbPhysicalizationSystem {
     if (Math.random() < dt * 1.25) this.spawnContactFlash(target.position, 0x9fffd8, 0.22, 0.46, 0.34, 0.22);
   }
 
+  // LS1D1D2C1: presentation-only committed Silt destination. A grip snapshot
+  // is not a material transaction and must never authorize absorb or fracture.
+  getCommittedSiltVisualTarget(frameState) {
+    const grip = frameState.siltPressureRoute?.siltGrip;
+    if (!grip || grip.status !== "gripping" || !grip.heldId) return null;
+    const position = grip.position;
+    if (!Array.isArray(position) || position.length < 3 ||
+        !position.slice(0, 3).every(Number.isFinite)) return null;
+    return {
+      id: grip.heldId,
+      position: new THREE.Vector3(position[0], position[1], position[2]),
+      ownership: "silt_committed_visual_only"
+    };
+  }
+
   getStabilizeTarget(frameState) {
+    const committedSilt = this.getCommittedSiltVisualTarget(frameState);
+    if (committedSilt) return committedSilt;
     // HC029B: when Stabilize has established a retained relationship, that object
     // owns the focused coherence field. Route/Host fallbacks remain available only
     // when no valid relationship object exists.
