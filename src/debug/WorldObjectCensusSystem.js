@@ -7,12 +7,67 @@ export class WorldObjectCensusSystem {
     this.panel = null;
     this.visible = false;
     this.lastReport = null;
+    this.captureActive = false;
+    this.captureEvents = [];
+    this.captureStartedAt = null;
+    this.captureTimer = null;
+    this.capturePrevious = null;
     this.keyHandler = event => {
+      if (event.altKey && event.shiftKey && event.code === 'KeyR') { event.preventDefault(); this.toggleCapture(); return; }
+      if (event.altKey && event.shiftKey && event.code === 'KeyE') { event.preventDefault(); this.exportTimeline(); return; }
+      if (this.captureActive && !event.repeat && ['KeyA', 'KeyX', 'KeyP', 'Digit6'].includes(event.code)) {
+        this.recordEvent('keyboard-input', { code: event.code, shift: event.shiftKey });
+      }
       if (event.code === 'F4') { event.preventDefault(); this.toggle(); }
       if (event.code === 'F5' && this.visible) { event.preventDefault(); this.exportReport(); }
     };
   }
   init() { window.addEventListener('keydown', this.keyHandler); }
+  recordEvent(type, details = {}) {
+    if (!this.captureActive) return;
+    this.captureEvents.push({ time: new Date().toISOString(), type, ...details });
+    if (this.captureEvents.length > 2500) this.captureEvents.shift();
+  }
+  sampleState() {
+    const fs = this.frameState ?? {};
+    const aim = fs.siltMaterialAim ?? {};
+    const grip = fs.siltPressureRoute?.siltGrip ?? {};
+    const state = {
+      candidateId: aim.candidateId ?? null, lockedId: aim.lockedId ?? null,
+      heldId: aim.heldId ?? null, gripStatus: grip.status ?? null,
+      legacyTargetId: fs.targeting?.targetId ?? null,
+      siltCompleted: !!fs.siltPressureRoute?.completed,
+      returnFoldReady: !!fs.siltPressureRoute?.returnFoldReady,
+    };
+    if (JSON.stringify(state) !== JSON.stringify(this.capturePrevious)) {
+      this.recordEvent('observed-state-change', { state });
+      this.capturePrevious = state;
+    }
+  }
+  toggleCapture() {
+    if (this.captureActive) {
+      this.sampleState();
+      clearInterval(this.captureTimer); this.captureTimer = null;
+      this.recordEvent('capture-stopped'); this.captureActive = false;
+      return;
+    }
+    this.captureEvents = []; this.capturePrevious = null;
+    this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
+    this.recordEvent('capture-started'); this.sampleState();
+    this.captureTimer = setInterval(() => this.sampleState(), 150);
+  }
+  exportTimeline() {
+    if (this.captureActive) this.sampleState();
+    const report = {
+      pass: 'LS1D1D2E-OBSERVATION', captureStartedAt: this.captureStartedAt,
+      exportedAt: new Date().toISOString(), captureActive: this.captureActive,
+      limitations: 'Read-only sampled state transitions and keyboard input. No authoritative Pulse force, Absorb transaction, orb spawn, gamepad input, or traversal trigger provenance. Shift+6 keyboard event is not proof of resulting entry mode.',
+      events: this.captureEvents, finalCensus: this.snapshot(),
+    };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2E_OBSERVATION.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
   snapshot() {
     const groups = new Map();
     let meshes = 0, excluded = 0, named = 0;
