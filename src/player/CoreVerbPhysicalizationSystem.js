@@ -231,6 +231,14 @@ export class CoreVerbPhysicalizationSystem {
       for (const flash of this.contactFlashes) flash.root.material.opacity *= (1 - effectSuppression);
     }
 
+    const visualGrip = this.getCommittedSiltVisualTarget(frameState);
+    frameState.verbVisualTargetAuthority = {
+      targetId: visualGrip?.id ?? "none",
+      pulse: visualGrip ? "silt-committed-direction-preview" : "legacy",
+      absorb: visualGrip && frameState.input?.absorbHeld ? "silt-committed-preview-no-transfer" : "legacy",
+      stabilize: visualGrip ? "silt-committed" : "legacy",
+      gameplayAuthorityChanged: false
+    };
     frameState.verbPhysicalization = {
       pass: "HC-028G",
       pulseFronts: this.pulseFronts.length,
@@ -307,14 +315,16 @@ export class CoreVerbPhysicalizationSystem {
     const pulseHeld = Boolean(input.pulseHeld);
     const pulseCharacter = frameState.coreTopologyVerbCharacter?.pulse ?? {};
     const stabilizedProjection = frameState.stabilizedProjection ?? {};
+    const committedSiltPulse = this.getCommittedSiltVisualTarget(frameState);
     const focusedProjection = Boolean(stabilizedProjection.active && stabilizedProjection.chord === "cohere_project");
     const focus01 = THREE.MathUtils.clamp(stabilizedProjection.focus01 ?? 0, 0, 1);
     if (this.pulseChargeShell) {
       this.pulseChargeShell.visible = pulseHeld;
       this.pulseChargeShell.position.copy(this.playerRoot.position);
-      if (focusedProjection) {
+      if (focusedProjection || committedSiltPulse) {
         const dir = stabilizedProjection.direction ?? { x: 0, y: 0, z: -1 };
         this.temp.set(dir.x ?? 0, dir.y ?? 0, dir.z ?? -1);
+        if (committedSiltPulse) this.temp.copy(committedSiltPulse.position).sub(this.playerRoot.position);
         if (this.temp.lengthSq() < 0.0001) this.temp.set(0, 0, -1);
         this.temp.normalize();
         this.pulseChargeShell.quaternion.setFromUnitVectors(this.worldForward, this.temp);
@@ -433,7 +443,8 @@ export class CoreVerbPhysicalizationSystem {
     const charged = sensory.pulseMode === "charged";
     const charge01 = THREE.MathUtils.clamp(sensory.charge01 ?? 0, 0, 1);
     const projection = frameState.stabilizedProjection ?? {};
-    const focused = Boolean(projection.active && projection.chord === "cohere_project");
+    const committedSilt = this.getCommittedSiltVisualTarget(frameState);
+    const focused = Boolean(committedSilt || (projection.active && projection.chord === "cohere_project"));
     const focus01 = focused ? THREE.MathUtils.clamp(projection.focus01 ?? 0.7, 0, 1) : 0;
     const material = new THREE.MeshBasicMaterial({
       color: focused ? 0xb8ffe8 : charged ? 0xb8f5ff : 0x9fe8ff,
@@ -462,7 +473,9 @@ export class CoreVerbPhysicalizationSystem {
     const waveSpeed = Math.max(4.5, sensory.waveSpeed ?? 6.6);
     const maxRange = Math.max(1, sensory.maxRange ?? 4.25);
     const directionData = projection.direction ?? frameState.playerKinematics?.cameraRelativeForward ?? { x: 0, y: 0, z: -1 };
-    const direction = new THREE.Vector3(directionData.x ?? 0, directionData.y ?? 0, directionData.z ?? -1);
+    const direction = committedSilt
+      ? committedSilt.position.clone().sub(this.playerRoot.position)
+      : new THREE.Vector3(directionData.x ?? 0, directionData.y ?? 0, directionData.z ?? -1);
     if (direction.lengthSq() < 0.0001) direction.set(0, 0, -1);
     direction.normalize();
     if (focused) root.quaternion.setFromUnitVectors(this.worldForward, direction);
@@ -748,11 +761,15 @@ export class CoreVerbPhysicalizationSystem {
     const held = Boolean(frameState.input?.absorbHeld);
     const targetId = frameState.bondState?.objectId ?? "none";
     const target = this.findObject(targetId);
+    const committedSilt = this.getCommittedSiltVisualTarget(frameState);
+    // Presentation only: do not infer a bond, progress, or material transfer from grip.
+    const siltPreview = Boolean(held && committedSilt && !target);
+    const visualPosition = siltPreview ? committedSilt.position : target?.root?.position;
     const progress = frameState.bondState?.absorbProgress ?? 0;
     const absorbPower = THREE.MathUtils.clamp(frameState.corePerformance?.verbModifiers?.absorb?.powerMultiplier ?? 1, 0.72, 1.42);
     const strength = frameState.bondState?.strength ?? 0;
-    const active = held && target && !target.absorbed && target.root.visible;
-    const targetCommitment = active ? 1 : 0;
+    const active = Boolean(siltPreview || (held && target && !target.absorbed && target.root.visible));
+    const targetCommitment = active && !siltPreview ? 1 : 0;
     const absorbCharacter = frameState.coreTopologyVerbCharacter?.absorb ?? {};
     const composition = frameState.verbComposition ?? {};
     const compositionOwnsTarget = Boolean(composition.relationshipBound && composition.targetId === targetId);
@@ -773,7 +790,7 @@ export class CoreVerbPhysicalizationSystem {
     }
 
     const pos = this.absorbLine.geometry.attributes.position.array;
-    pos[0] = target.root.position.x; pos[1] = target.root.position.y; pos[2] = target.root.position.z;
+    pos[0] = visualPosition.x; pos[1] = visualPosition.y; pos[2] = visualPosition.z;
     pos[3] = this.playerRoot.position.x; pos[4] = this.playerRoot.position.y; pos[5] = this.playerRoot.position.z;
     this.absorbLine.geometry.attributes.position.needsUpdate = true;
     this.absorbLine.material.opacity = Math.min(0.74, (0.12 + strength * 0.26 + progress * 0.18 + this.absorbCommitment * 0.18) * (0.86 + absorbPower * 0.14));
@@ -782,7 +799,7 @@ export class CoreVerbPhysicalizationSystem {
     for (const ring of this.absorbFunnel.children) {
       const index = ring.userData.funnelIndex ?? 0;
       const along = 0.20 + index * 0.23;
-      ring.position.lerpVectors(target.root.position, this.playerRoot.position, along);
+      ring.position.lerpVectors(visualPosition, this.playerRoot.position, along);
       ring.lookAt(this.playerRoot.position);
       ring.rotation.z += dt
         * (0.85 + index * 0.32 + this.absorbCommitment * 1.45)
@@ -793,10 +810,15 @@ export class CoreVerbPhysicalizationSystem {
       ring.scale.setScalar((0.74 + index * 0.12 + this.absorbCommitment * 0.20) * breathe * collapse * (absorbCharacter.convergenceFocusScale ?? 1));
       ring.material.opacity = 0.10 + this.absorbCommitment * (0.16 + index * 0.04) + compositionTension * 0.035;
     }
-    this.updateAbsorbFilaments(target.root.position, progress, now, absorbCharacter, compositionSpin, compositionTension);
+    this.updateAbsorbFilaments(visualPosition, siltPreview ? 0 : progress, now, absorbCharacter, compositionSpin, compositionTension);
 
     const spawnChance = Math.min(0.88, dt * (12 + progress * 20 + this.absorbCommitment * 22));
-    if (Math.random() < spawnChance) this.spawnAbsorbMote(target.root.position, progress, absorbCharacter);
+    if (!siltPreview && Math.random() < spawnChance) this.spawnAbsorbMote(visualPosition, progress, absorbCharacter);
+    if (siltPreview) {
+      this.absorbLine.material.opacity = Math.min(this.absorbLine.material.opacity, 0.20);
+      for (const ring of this.absorbFunnel.children) ring.material.opacity = Math.min(ring.material.opacity, 0.11);
+      for (const filament of this.absorbFilaments.children) filament.material.opacity = Math.min(filament.material.opacity, 0.10);
+    }
     this.updateAbsorbMotes(dt);
   }
 
