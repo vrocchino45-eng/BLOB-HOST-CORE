@@ -234,8 +234,8 @@ export class CoreVerbPhysicalizationSystem {
     const visualGrip = this.getCommittedSiltVisualTarget(frameState);
     frameState.verbVisualTargetAuthority = {
       targetId: visualGrip?.id ?? "none",
-      pulse: visualGrip ? "silt-committed-direction-preview" : "legacy",
-      absorb: visualGrip && frameState.input?.absorbHeld ? "silt-committed-preview-no-transfer" : "legacy",
+      pulse: visualGrip ? "silt-committed-direction-and-contact-preview" : "legacy",
+      absorb: visualGrip && frameState.input?.absorbHeld ? "silt-committed-priority-preview-no-transfer" : "legacy",
       stabilize: visualGrip ? "silt-committed" : "legacy",
       gameplayAuthorityChanged: false
     };
@@ -341,6 +341,8 @@ export class CoreVerbPhysicalizationSystem {
     if (frameState.input?.pulsePressed && eventId !== this.lastPulseEventId) {
       this.lastPulseEventId = eventId;
       this.spawnPulseFront(sensory, frameState);
+      // Focused feedback belongs at the committed material, not the Guide-era fallback.
+      if (committedSiltPulse) this.spawnContactFlash(committedSiltPulse.position, 0xb8ffe8, 0.30, 0.38, 0.20, 0.28);
     }
 
     // HC027D: the wave no longer makes targets flash immediately. Contact occurs
@@ -449,7 +451,7 @@ export class CoreVerbPhysicalizationSystem {
     const material = new THREE.MeshBasicMaterial({
       color: focused ? 0xb8ffe8 : charged ? 0xb8f5ff : 0x9fe8ff,
       transparent: true,
-      opacity: focused ? 0.18 : charged ? 0.18 : 0.10,
+      opacity: committedSilt ? 0.045 : focused ? 0.18 : charged ? 0.18 : 0.10,
       wireframe: true,
       depthWrite: false
     });
@@ -490,7 +492,7 @@ export class CoreVerbPhysicalizationSystem {
       maxRange,
       life: maxRange / waveSpeed + 0.08,
       baseRadius,
-      baseOpacity: focused ? 0.13 + focus01 * 0.06 : charged ? 0.14 + charge01 * 0.045 : 0.075,
+      baseOpacity: committedSilt ? 0.035 : focused ? 0.13 + focus01 * 0.06 : charged ? 0.14 + charge01 * 0.045 : 0.075,
       radialScale: focused ? THREE.MathUtils.lerp(0.62, 0.42, focus01) : 1,
       axialScale: focused ? THREE.MathUtils.lerp(1.34, 1.82, focus01) : 1,
       charged,
@@ -763,7 +765,7 @@ export class CoreVerbPhysicalizationSystem {
     const target = this.findObject(targetId);
     const committedSilt = this.getCommittedSiltVisualTarget(frameState);
     // Presentation only: do not infer a bond, progress, or material transfer from grip.
-    const siltPreview = Boolean(held && committedSilt && !target);
+    const siltPreview = Boolean(held && committedSilt); // Explicit A commitment outranks a stale legacy bond for presentation.
     const visualPosition = siltPreview ? committedSilt.position : target?.root?.position;
     const progress = frameState.bondState?.absorbProgress ?? 0;
     const absorbPower = THREE.MathUtils.clamp(frameState.corePerformance?.verbModifiers?.absorb?.powerMultiplier ?? 1, 0.72, 1.42);
