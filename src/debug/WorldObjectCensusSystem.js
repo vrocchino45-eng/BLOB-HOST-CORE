@@ -1,4 +1,4 @@
-// LS1D1D2A: read-only diagnostic. Does not register targets or alter progression.
+// LS1D1D2B: read-only identity bridge diagnostic. Does not register targets or alter progression.
 const safe = value => String(value ?? 'none').slice(0, 100);
 export class WorldObjectCensusSystem {
   constructor({ scene, frameState }) {
@@ -33,11 +33,40 @@ export class WorldObjectCensusSystem {
     const providers = [fs.worldAttentionCandidates, fs.entityAttentionCandidates];
     const candidates = providers.flatMap(p => p?.active && Array.isArray(p.items) ? p.items : []).map(item => ({ id: safe(item.id), label: safe(item.label ?? item.id), source: safe(item.source), kind: safe(item.targetKind) }));
     const silt = fs.siltPressureRoute ?? {};
+    const aim = fs.siltMaterialAim ?? {};
+    const knownFamilies = [
+      ['guide', /guide_orbiter|guide_path|guide_surface|hub_guide/i],
+      ['silt_material', /^silt_LS1B_silt-grain/i],
+      ['silt_stock', /silt_LS1B_authoritative_closed_matter_cycle|silt_porous_nutrient_packet/i],
+      ['verb_effect', /core_verb_physicalization|absorb_commitment|absorb_helical|stabilize_gyroscopic/i]
+    ];
+    const entityFamilies = knownFamilies.map(([kind, pattern]) => ({
+      kind,
+      owners: [...groups.values()].filter(row => pattern.test(row.owner)).map(row => ({
+        owner: row.owner, primitives: row.count, suppressed: row.suppressed,
+        classification: 'scene-owner-only',
+      }))
+    }));
+    const effectiveId = aim.heldId ?? aim.lockedId ?? aim.candidateId ?? null;
+    const materialTarget = {
+      candidateId: aim.candidateId ?? null,
+      lockedId: aim.lockedId ?? null,
+      heldId: aim.heldId ?? null,
+      effectiveId,
+      authority: aim.heldId || aim.lockedId ? 'silt-committed' : aim.candidateId ? 'silt-candidate' : 'none',
+      position: silt.siltGrip?.position ?? null,
+      positionMeaning: silt.siltGrip?.position ? 'grip-snapshot-only' : 'unavailable',
+      verbDestinations: {
+        pulse: 'unverified-legacy-route', absorb: 'unverified-legacy-route',
+        stabilize: 'unverified-legacy-route'
+      }
+    };
     return {
-      pass: 'LS1D1D2A', timestamp: new Date().toISOString(),
+      pass: 'LS1D1D2B', timestamp: new Date().toISOString(),
       summary: { renderedPrimitives: meshes, namedPrimitives: named, targetingSuppressedPrimitives: excluded, groupedOwners: groups.size, registeredAttentionCandidates: candidates.length },
       selected: { legacyTarget: fs.targeting?.targetId ?? 'none', legacyLabel: fs.targeting?.targetLabel ?? 'none', legacySource: fs.targeting?.worldAttentionSource ?? 'none', siltGrip: silt.siltGrip ?? null },
       attentionCandidates: candidates.slice(0, 300),
+      entityBridge: { materialTarget, entityFamilies, note: 'Diagnostic association only. No registration, target routing, or verb behavior modified.' },
       progression: { silt: { active: !!silt.active, completed: !!silt.completed, returnFoldReady: !!silt.returnFoldReady, pressureRead: !!silt.pressureRead, ribsReleased: !!silt.ribsReleased, safeMatterAbsorbed: !!silt.safeMatterAbsorbed, status: safe(silt.status) } },
       groups: [...groups.values()].sort((a,b) => b.count - a.count).slice(0, 250),
       caveat: 'Mesh grouping is diagnostic, not stable entity identity. Missing labels do not imply targetability.'
@@ -52,13 +81,13 @@ export class WorldObjectCensusSystem {
     panel.setAttribute('role', 'status');
     panel.style.cssText = 'position:fixed;top:12px;right:12px;z-index:99999;max-width:min(430px,90vw);max-height:75vh;overflow:auto;padding:14px;background:rgba(8,14,20,.94);color:#d9f5ee;border:1px solid #79a9a0;border-radius:8px;font:12px/1.5 monospace;pointer-events:none;white-space:pre-wrap';
     const preview = r.groups.slice(0, 16).map(g => `${g.owner}: ${g.count}${g.suppressed ? ' [suppressed '+g.suppressed+']' : ''}`).join('\n');
-    panel.textContent = `WORLD OBJECT CENSUS / LS1D1D2A\nF4 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
+    panel.textContent = `WORLD OBJECT CENSUS / LS1D1D2B\nF4 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
     document.body.appendChild(panel); this.panel = panel;
   }
   exportReport() {
     const report = this.snapshot(); this.lastReport = report;
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2A_WORLD_CENSUS.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2B_ENTITY_BRIDGE.json'; a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 }
