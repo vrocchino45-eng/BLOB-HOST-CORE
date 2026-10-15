@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
 import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
+import { MaterialIdentityLedger } from "../ecology/MaterialIdentityLedger.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -43,6 +44,7 @@ export class SiltPressureRouteSystem {
     this.habitatDriftSeeds = [];
     this.livingCycle = null;
     this.siltGrip = new SiltGripAuthority();
+    this.materialIdentity = null;
     this.siltGripLocalOffset = new THREE.Vector3(0, 0.1, -0.9);
     this.livingMatterGroup = null;
     this.livingMatterMeshes = [];
@@ -199,6 +201,11 @@ export class SiltPressureRouteSystem {
     // wakes a separate, finite reservoir stock, not a respawned safePacket.
     if (this.safeMatterAbsorbed) this.livingCycle?.awakenFromCanonicalAbsorb();
     this.updateSiltGrip(frameState);
+    if (this.materialIdentity) {
+      for (const unit of this.livingCycle.units) {
+        this.materialIdentity.transfer(unit.id, unit.id === this.siltGrip.heldId ? "grip" : "environment", "individual");
+      }
+    }
     this.livingCycle?.update(dt, {
       heldUnitId: this.siltGrip.heldId,
       habitatId: this.habitatSample.id,
@@ -798,6 +805,8 @@ export class SiltPressureRouteSystem {
     const recipe = this.recipe?.livingMaterialCycle;
     if (recipe?.pass !== "LS1B") return;
     this.livingCycle = new SiltLivingMaterialCycle(recipe);
+    this.materialIdentity = new MaterialIdentityLedger({ originRegion: 'silt', originSignature: 'silt_accumulation_connection' });
+    for (const unit of this.livingCycle.units) this.materialIdentity.register({ id: unit.id, mass: unit.mass });
     const habitat = this.recipe.habitatFoundation;
     const byId = Object.fromEntries(habitat.habitats.map((h) => [h.id, h.center]));
     const between = (fromId, toId) => habitat.connections.find((c) =>
@@ -1649,6 +1658,7 @@ export class SiltPressureRouteSystem {
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
       siltGrip: this.siltGrip.snapshot(),
+      materialIdentity: this.materialIdentity?.snapshot() ?? null,
       genericRingCount: 0,
       triggerMarkerCount: 0,
       lastInteraction: this.lastInteraction,

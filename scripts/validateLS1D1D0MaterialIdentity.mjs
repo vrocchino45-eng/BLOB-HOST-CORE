@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { MaterialIdentityLedger } from '../src/ecology/MaterialIdentityLedger.js';
+const ledger = new MaterialIdentityLedger({ originRegion: 'silt', originSignature: 'silt_accumulation_connection' });
+for (let i=1; i<=8; i++) ledger.register({ id: `silt-grain-${String(i).padStart(2,'0')}`, mass: 1 });
+const before = ledger.totalMass();
+assert.equal(before, 8);
+assert.equal(ledger.transfer('silt-grain-01', 'grip', 'individual'), true);
+assert.equal(ledger.transfer('silt-grain-01', 'environment', 'aggregate'), true);
+assert.equal(ledger.transfer('silt-grain-01', 'orbit', 'individual'), true);
+assert.equal(ledger.transfer('silt-grain-01', 'core', 'dormant'), true);
+assert.equal(ledger.totalMass(), before);
+assert.equal(ledger.get('silt-grain-01').originSignature, 'silt_accumulation_connection');
+assert.throws(() => ledger.register({ id: 'silt-grain-01', mass: 1 }));
+const route = fs.readFileSync('src/routes/SiltPressureRouteSystem.js','utf8');
+for (const token of ['new MaterialIdentityLedger(', 'materialIdentity.register(', 'materialIdentity.transfer(', 'materialIdentity: this.materialIdentity?.snapshot()']) assert.ok(route.includes(token), token);
+console.log('LS1D1D0 identity ledger: PASS (static/simulation only; targeting convergence pending)');
