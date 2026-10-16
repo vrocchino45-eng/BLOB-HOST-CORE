@@ -6,6 +6,9 @@
  * authored catchment patch, plus a directed Pulse toward that patch.
  * At maximum grip extension the tether can resist a directed Pulse without
  * any kinematic displacement; that resistance can still load sediment.
+ * D2L adds a local contact brace: once the committed grain truly touches the
+ * patch while LT is held, the surface can temporarily retain that *exact*
+ * contact position, subject to both Core drift and grip-range limits.
  */
 export class SiltCompressionContact {
   constructor({ position, horizontalRadius = 0.82, minHeight = -0.18,
@@ -35,6 +38,17 @@ export class SiltCompressionContact {
     this.lastPulseMode = 'none';
     this.pressFeedbackSeconds = 0;
     this.missedFeedbackSeconds = 0;
+    this.braced = false;
+    this.braceAnchor = null;
+    this.braceCore = null;
+    this.braces = 0;
+    this.braceReleases = 0;
+    this.lastBraceReason = 'none';
+    this.braceCooldownSeconds = 0;
+    // Not a larger grip radius: this limits Core displacement from the
+    // engagement point while the grain stays at its actual world position.
+    this.braceMaxCoreDrift = 0.85;
+    this.braceMaxTether = 1.58;
   }
 
   near(position) {
@@ -48,11 +62,13 @@ export class SiltCompressionContact {
 
   update({ dt = 0, heldId = null, heldPosition = null,
            pulseApproach = 0, resistedPulseApproach = 0,
-           pulseAttempted = false, absorbHeld = false } = {}) {
+           pulseAttempted = false, absorbHeld = false,
+           braceHeld = false, corePosition = null, bracedPulse = false } = {}) {
     const seconds = Number.isFinite(dt) ? Math.max(0, Math.min(dt, 0.1)) : 0;
     this.echoSeconds = Math.max(0, this.echoSeconds - seconds);
     this.pressFeedbackSeconds = Math.max(0, this.pressFeedbackSeconds - seconds);
     this.missedFeedbackSeconds = Math.max(0, this.missedFeedbackSeconds - seconds);
+    this.braceCooldownSeconds = Math.max(0, this.braceCooldownSeconds - seconds);
     const events = [];
     const publish = outcome => {
       this.lastOutcome = outcome;
@@ -65,7 +81,23 @@ export class SiltCompressionContact {
     const horizontalDistance = validPosition ? Math.hypot(
       heldPosition[0] - this.position[0], heldPosition[2] - this.position[2]) : null;
     const heightOffset = validPosition ? heldPosition[1] - this.position[1] : null;
+    const validCore = Array.isArray(corePosition) && corePosition.length === 3
+      && corePosition.every(Number.isFinite);
+    const separation = (a,b) => Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+    const clearBrace = reason => {
+      if (!this.braced) return;
+      this.braced = false;
+      this.braceAnchor = null;
+      this.braceCore = null;
+      this.braceReleases++;
+      this.lastBraceReason = reason;
+      this.braceCooldownSeconds = Math.max(this.braceCooldownSeconds, 0.38);
+      this.echoSeconds = Math.max(this.echoSeconds, 0.55);
+      publish('contact-brace-released');
+      events.at(-1).reason = reason;
+    };
     if (this.heldId !== nextId) {
+      clearBrace(nextId ? 'different-material' : 'grip-released');
       if (this.inContact || this.pressure > 0) {
         publish('contact-released');
         this.separations++;
@@ -80,6 +112,21 @@ export class SiltCompressionContact {
       this.lastPulseMode = 'none';
       this.pressFeedbackSeconds = 0;
       this.missedFeedbackSeconds = 0;
+      if (!nextId) this.braceCooldownSeconds = 0;
+    }
+    // Never maintain a fictional remote contact. Bracing is valid only while
+    // the same material is held, LT stays active, and the Core remains near
+    // both the engagement point and the existing 1.6-unit tether envelope.
+    if (this.braced) {
+      const reason = !braceHeld ? 'stabilize-ended'
+        : absorbHeld ? 'absorb-withdrawal'
+        : !validPosition || !validCore ? 'position-unavailable'
+        : separation(corePosition,this.braceAnchor) > this.braceMaxTether ? 'tether-range'
+        : separation(corePosition,this.braceCore) > this.braceMaxCoreDrift ? 'core-drift'
+        : !this.near(heldPosition) ? 'contact-lost'
+        : separation(heldPosition,this.braceAnchor) > 0.14 ? 'contact-slipped'
+        : null;
+      if (reason) clearBrace(reason);
     }
     const touching = Boolean(nextId && this.near(heldPosition));
     if (touching && !this.inContact) {
@@ -92,16 +139,30 @@ export class SiltCompressionContact {
       this.echoSeconds = Math.max(this.echoSeconds, 1.6);
       publish('contact-separated');
     }
+    if (touching && !this.braced && this.braceCooldownSeconds === 0 &&
+        braceHeld && !absorbHeld && validCore &&
+        separation(heldPosition,corePosition) <= this.braceMaxTether) {
+      // Snap nothing: the only anchor allowed is where the held grain actually
+      // touched the authored patch. Contact is achieved before the brace.
+      this.braced = true;
+      this.braceAnchor = [...heldPosition];
+      this.braceCore = [...corePosition];
+      this.braces++;
+      this.lastBraceReason = 'engaged';
+      this.echoSeconds = Math.max(this.echoSeconds, 0.75);
+      publish('contact-brace-engaged');
+    }
     const approach = Number.isFinite(pulseApproach) ? Math.max(0, pulseApproach) : 0;
     const resisted = Number.isFinite(resistedPulseApproach) ? Math.max(0, resistedPulseApproach) : 0;
     // An explicitly supplied accepted approach is itself a Pulse receipt;
     // keep pure-state callers compatible with the D2J contract.
-    if ((pulseAttempted || approach > 0.012 || resisted > 0.012) && nextId) {
+    if ((pulseAttempted || approach > 0.012 || resisted > 0.012 || bracedPulse) && nextId) {
       // A directed resisted Pulse is meaningful pressure, but only while the
       // *committed grain* really overlaps the patch. No remote loading.
       const validMove = approach > 0.012;
       const validResistance = resisted > 0.012;
-      const mode = validMove ? 'approach' : validResistance ? 'tether-resistance' : 'none';
+      const mode = this.braced && bracedPulse ? 'stabilized-brace'
+        : validMove ? 'approach' : validResistance ? 'tether-resistance' : 'none';
       this.lastPulseMode = mode;
       if (touching && !absorbHeld && mode !== 'none') {
         this.pressure = Math.min(1, this.pressure + this.pressurePerPulse);
@@ -143,7 +204,7 @@ export class SiltCompressionContact {
         }
       }
     }
-    if (this.pressure > 0 && (!touching || absorbHeld)) {
+    if (this.pressure > 0 && (!this.braced || absorbHeld)) {
       this.pressure = Math.max(0, this.pressure - seconds * (absorbHeld ? 1.4 : 0.8));
       if (this.imprinted && this.pressure < 0.15) {
         this.imprinted = false;
@@ -164,8 +225,12 @@ export class SiltCompressionContact {
 
   snapshot() {
     return {
-      pass: 'LS1D1D2K', patchId: 'silt-garden-catchment-contact',
+      pass: 'LS1D1D2L', patchId: 'silt-garden-catchment-contact',
       heldId: this.heldId, inContact: this.inContact,
+      braced: this.braced, braceAnchor: this.braceAnchor && [...this.braceAnchor],
+      braces: this.braces, braceReleases: this.braceReleases,
+      lastBraceReason: this.lastBraceReason,
+      braceCooldownSeconds: Number(this.braceCooldownSeconds.toFixed(3)),
       pressure: Number(this.pressure.toFixed(4)), imprinted: this.imprinted,
       echoSeconds: Number(this.echoSeconds.toFixed(3)),
       contacts: this.contacts, presses: this.presses,

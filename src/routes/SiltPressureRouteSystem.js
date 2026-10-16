@@ -41,6 +41,7 @@ export class SiltPressureRouteSystem {
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
+    this.heldContactBracedPulseFrame = false;
 
     this.recipe = null;
     this.root = null;
@@ -233,8 +234,9 @@ export class SiltPressureRouteSystem {
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
+    this.heldContactBracedPulseFrame = false;
     frameState.siltMaterialAim = {
-      pass: 'LS1D1D2K', aiming: false, candidateId: null,
+      pass: 'LS1D1D2L', aiming: false, candidateId: null,
       lockedId: null, heldId: null, state: 'hidden'
     };
     this.setVisible(false);
@@ -1000,11 +1002,15 @@ export class SiltPressureRouteSystem {
       pulseApproach: this.heldContactPulseApproachFrame,
       resistedPulseApproach: this.heldContactPulseResistedFrame,
       pulseAttempted: this.heldContactPulseAttemptedFrame,
+      bracedPulse: this.heldContactBracedPulseFrame,
+      braceHeld: Boolean(frameState.input?.stabilizeHeld),
+      corePosition: this.localPlayer?.toArray?.() ?? null,
       absorbHeld: Boolean(frameState.input?.absorbHeld)
     });
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
+    this.heldContactBracedPulseFrame = false;
     for (const event of events) {
       this.recordSiltDecision('silt-contact', {
         ...event, contactPatchId: 'silt-garden-catchment-contact',
@@ -1014,23 +1020,28 @@ export class SiltPressureRouteSystem {
     }
     const state = this.siltContact.snapshot();
     if (this.siltContactMesh) {
+      // The patch itself gently yields and visibly sinks under held pressure.
+      // Cosmetic movement only; collision/geometry authority is unchanged.
       this.siltContactMesh.scale.y = 1 - state.pressure * 0.55;
+      this.siltContactMesh.position.y = this.siltContact.position[1] - state.pressure * 0.13;
       this.siltContactMesh.material.color.setHex(state.imprinted ? 0xe8d4b0
         : state.pressFeedbackSeconds > 0 ? 0xe2b765
         : state.missedFeedbackSeconds > 0 ? 0xc6887c
+        : state.braced ? 0x56dfb6
         : state.inContact ? 0x89b9ac : 0x8a6e4a);
       this.siltContactMesh.material.emissiveIntensity = 0.18 + state.pressure * 0.65
         + (state.inContact ? 0.1 : 0) + (state.imprinted ? 0.22 : 0);
     }
     if (this.siltContactEcho) {
-      this.siltContactEcho.visible = state.inContact || state.echoSeconds > 0;
-      this.siltContactEcho.scale.setScalar(1 + state.pressure * 0.2
+      this.siltContactEcho.visible = state.braced || state.inContact || state.echoSeconds > 0;
+      this.siltContactEcho.scale.setScalar((state.braced ? 1.13 : 1) + state.pressure * 0.2
         + Math.max(0, state.echoSeconds) * 0.12);
-      this.siltContactEcho.material.opacity = 0.12 + state.pressure * 0.47
+      this.siltContactEcho.material.opacity = (state.braced ? 0.34 : 0.12) + state.pressure * 0.47
         + Math.min(0.2, state.echoSeconds * 0.09);
       this.siltContactEcho.material.color.setHex(state.imprinted ? 0xf4d3a3
         : state.pressFeedbackSeconds > 0 ? 0xffd084
         : state.missedFeedbackSeconds > 0 ? 0xd59892
+        : state.braced ? 0x72ffce
         : state.inContact ? 0x9ce1d4 : 0xd4ac79);
     }
   }
@@ -1043,6 +1054,7 @@ export class SiltPressureRouteSystem {
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
+    this.heldContactBracedPulseFrame = false;
     const aiming = Boolean(input.stabilizeHeld);
     const units = this.livingCycle?.units ?? [];
     const eligible = new Set(["veins", "garden_transit", "settled"]);
@@ -1185,8 +1197,28 @@ export class SiltPressureRouteSystem {
     const pullRadius = absorbing
       ? Math.max(minRadius, pushRadius - Math.max(0, Math.min(dt, 0.1)) * 0.72)
       : pushRadius;
-    const proposedOffset = offset.clone().multiplyScalar(pullRadius / originalRadius);
-    const desired = this.localPlayer.clone().add(proposedOffset).toArray();
+    let proposedOffset = offset.clone().multiplyScalar(pullRadius / originalRadius);
+    let desired = this.localPlayer.clone().add(proposedOffset).toArray();
+    const brace = this.siltContact;
+    const anchor = brace?.braced && brace.heldId === id && !absorbing
+      ? brace.braceAnchor : null;
+    let bracedPressurePulse = false;
+    if (anchor) {
+      const anchorVector = new THREE.Vector3().fromArray(anchor);
+      const coreToAnchor = anchorVector.clone().sub(this.localPlayer);
+      const driftFromEntry = this.localPlayer.clone().sub(
+        new THREE.Vector3().fromArray(brace.braceCore)).length();
+      if (driftFromEntry <= brace.braceMaxCoreDrift &&
+          coreToAnchor.length() <= brace.braceMaxTether) {
+        // A tiny amount of Core motion leaves the *same material* at its actual
+        // contact position. The tether length still comes from grip.moveTo.
+        desired = [...anchor];
+        proposedOffset = coreToAnchor;
+        bracedPressurePulse = push;
+      }
+      // On a stretched brace, resume normal D2I motion; contact.update
+      // separately publishes why the temporary brace released.
+    }
     // Only commit movement after the grip accepts the new position.
     const accepted = this.siltGrip.moveTo(desired, coreLocal);
     if (!accepted) {
@@ -1197,12 +1229,14 @@ export class SiltPressureRouteSystem {
       }, frameState);
       return;
     }
-    // D2K: accepted movement toward the patch, OR a correctly aimed Pulse
+    // D2L preserves D2K: accepted movement toward the patch, OR an aimed Pulse
     // against the *existing* outer tether stop, can load reversible contact.
     // The virtual beyond-bound displacement is intent geometry only. The grain
-    // never moves past D2I limits, and away/tangential Pulse cannot press.
+    // never moves past D2I limits, and away/tangential *unbraced* Pulse
+    // cannot press. A deliberate LT brace channels later Pulses into pressure.
     if (push && this.siltContact) {
       this.heldContactPulseAttemptedFrame = true;
+      this.heldContactBracedPulseFrame = bracedPressurePulse;
       const patch = this.siltContact.position;
       const near = radius => {
         const scale = radius / originalRadius;
@@ -1213,8 +1247,8 @@ export class SiltPressureRouteSystem {
         );
       };
       const acceptedApproach = near(startingRadius) - near(pushRadius);
-      this.heldContactPulseApproachFrame = Math.max(0, acceptedApproach);
-      if (pushRadius <= startingRadius + 0.0001) {
+      this.heldContactPulseApproachFrame = bracedPressurePulse ? 0 : Math.max(0, acceptedApproach);
+      if (!bracedPressurePulse && pushRadius <= startingRadius + 0.0001) {
         this.heldContactPulseResistedFrame = Math.max(0,
           near(startingRadius) - near(startingRadius + 0.28));
       }
@@ -1222,17 +1256,20 @@ export class SiltPressureRouteSystem {
     offset.copy(proposedOffset);
     this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
     if (push) {
-      const displacement = Math.max(0, pushRadius - startingRadius);
-      this.heldMotionFeedbackKind = displacement > 0.0001 ? 'pulse-outward' : 'outer-bound';
+      const displacement = bracedPressurePulse ? 0 : Math.max(0, pushRadius - startingRadius);
+      this.heldMotionFeedbackKind = bracedPressurePulse ? 'brace-pressure'
+        : displacement > 0.0001 ? 'pulse-outward' : 'outer-bound';
       this.heldMotionFeedbackAt = this.elapsed;
       this.heldMotionPulseCount++;
       const receipt = {
         verb: 'pulse', pulseEventId: input.pulseEventId ?? null,
-        heldGrainId: id, outcome: displacement > 0.0001 ? 'outward-displacement' : 'outer-bound-reached',
+        heldGrainId: id, outcome: bracedPressurePulse ? 'stabilized-contact-resistance'
+          : displacement > 0.0001 ? 'outward-displacement' : 'outer-bound-reached',
         previousRadius: Number(startingRadius.toFixed(4)),
-        resultingRadius: Number(pushRadius.toFixed(4)),
+        resultingRadius: Number((bracedPressurePulse ? proposedOffset.length() : pushRadius).toFixed(4)),
         appliedDisplacement: Number(displacement.toFixed(4)),
-        motionModel: 'bounded-kinematic-offset', noMaterialTransfer: true
+        motionModel: bracedPressurePulse ? 'stabilized-contact-brace' : 'bounded-kinematic-offset',
+        noMaterialTransfer: true
       };
       this.heldMotionLast = receipt;
       this.recordSiltDecision('held-material-motion', receipt, frameState);
@@ -1281,13 +1318,16 @@ export class SiltPressureRouteSystem {
     const feedbackAge = this.elapsed - this.heldMotionFeedbackAt;
     const showFeedback = locked && feedbackAge >= 0 && feedbackAge < 0.48;
     const kind = showFeedback ? this.heldMotionFeedbackKind : 'none';
-    const color = kind === 'pulse-outward' ? 0x84cfff
+    const color = kind === 'brace-pressure' ? 0xffd684
+      : this.siltContact?.braced && locked ? 0x72ffce
+      : kind === 'pulse-outward' ? 0x84cfff
       : kind === 'absorb-inward' ? 0x89edc1
       : kind === 'outer-bound' ? 0xff917b
       : kind === 'inner-bound' ? 0xbda1ff
       : locked ? 0xffd08b : 0x9fffd8;
     const wave = showFeedback ? Math.max(0, 1 - feedbackAge / 0.48) : 0;
     const bracketScale = !locked ? 1
+      : kind === 'brace-pressure' ? 0.85 + 0.15 * wave
       : kind === 'pulse-outward' ? 0.75 + 0.20 * wave
       : kind === 'absorb-inward' ? 0.75 - 0.12 * wave
       : kind === 'outer-bound' || kind === 'inner-bound' ? 0.75 + 0.16 * wave
@@ -1301,7 +1341,7 @@ export class SiltPressureRouteSystem {
       line.setXYZ(1, mesh.body.position.x, mesh.body.position.y, mesh.body.position.z);
       line.needsUpdate = true;
       this.siltGripTether.material.color.setHex(color);
-      this.siltGripTether.material.opacity = 0.30 + 0.22 * wave;
+      this.siltGripTether.material.opacity = (this.siltContact?.braced ? 0.59 : 0.30) + 0.22 * wave;
     }
   }
 
@@ -2128,7 +2168,7 @@ export class SiltPressureRouteSystem {
         contract: "Pulse pushes, Absorb pulls, neither consumes the held grain"
       },
       transactionTrace: {
-        pass: "LS1D1D2J",
+        pass: "LS1D1D2L",
         lastSequence: this.transactionSequence,
         events: this.transactionTrace.slice(),
         scope: "SiltPressureRouteSystem decisions only; no global verb-route inference"
