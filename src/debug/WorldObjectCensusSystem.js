@@ -78,6 +78,7 @@ export class WorldObjectCensusSystem {
     const identity = silt.materialIdentity ?? {};
     const chem = fs.chemObjectState ?? {};
     const bond = fs.bondState ?? {};
+    const motion = silt.heldMaterialMotion ?? {};
     return {
       pulseEventId: Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0,
       pulsePressed: !!input.pulsePressed,
@@ -101,6 +102,14 @@ export class WorldObjectCensusSystem {
       lastSiltInteraction: silt.lastInteraction ?? null,
       siltCompleted: !!silt.completed,
       siltSafeMatterAbsorbed: !!silt.safeMatterAbsorbed,
+      heldMaterialMotion: {
+        heldId: motion.heldId ?? null,
+        radius: Number.isFinite(motion.radius) ? motion.radius : null,
+        pulseCount: Number(motion.pulseCount ?? 0),
+        cumulativePullDistance: Number(motion.cumulativePullDistance ?? 0),
+        lastReceipt: motion.lastReceipt ?? null,
+        transferPerformed: !!motion.transferPerformed
+      },
       visualVerbAuthority: {
         targetId: fs.verbVisualTargetAuthority?.targetId ?? "none",
         pulse: fs.verbVisualTargetAuthority?.pulse ?? "unpublished",
@@ -213,18 +222,33 @@ export class WorldObjectCensusSystem {
       if (event.type === 'game-absorb-started' && event.heldTargetAtSample) heldAbsorbStarts.push({ time: event.time, unitId: event.heldTargetAtSample });
     }
     const routeDecisionCounts = {};
+    const heldMotion = { pulseOutward: 0, pulseAtBound: 0, absorbInward: 0, absorbAtBound: 0, totalPulseDisplacement: 0, totalAbsorbDisplacement: 0 };
     for (const e of this.captureEvents) {
       if (e.type !== 'silt-authoritative-route-decision') continue;
       const d = e.decision ?? {};
-      const key = `${d.kind ?? 'unknown'}:${d.route ?? d.decision ?? 'unknown'}`;
+      const key = `${d.kind ?? 'unknown'}:${d.route ?? d.decision ?? d.outcome ?? 'unknown'}`;
       routeDecisionCounts[key] = (routeDecisionCounts[key] ?? 0) + 1;
+      if (d.kind !== 'held-material-motion') continue;
+      if (d.verb === 'pulse') {
+        if (d.appliedDisplacement > 0) heldMotion.pulseOutward++;
+        else heldMotion.pulseAtBound++;
+        heldMotion.totalPulseDisplacement += d.appliedDisplacement ?? 0;
+      }
+      if (d.verb === 'absorb') {
+        if (d.appliedDisplacement > 0) heldMotion.absorbInward++;
+        else heldMotion.absorbAtBound++;
+        heldMotion.totalAbsorbDisplacement += d.appliedDisplacement ?? 0;
+      }
     }
+    heldMotion.totalPulseDisplacement = Number(heldMotion.totalPulseDisplacement.toFixed(4));
+    heldMotion.totalAbsorbDisplacement = Number(heldMotion.totalAbsorbDisplacement.toFixed(4));
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
-      routeDecisionCounts, pulsesObservedWhileHolding: heldPulses,
+      routeDecisionCounts, heldMaterialMotion: heldMotion, pulsesObservedWhileHolding: heldPulses,
       absorbStartsObservedWhileHolding: heldAbsorbStarts,
       targetedPulseForceConfirmed: false, heldGrainAbsorptionConfirmed: false,
-      proofLimit: 'Silt decision receipts identify environmental pressure/spatial appetite handling. They cannot verify or rule out an effect in a separate subsystem.'
+      heldGrainKinematicDisplacementConfirmed: heldMotion.pulseOutward > 0 || heldMotion.absorbInward > 0,
+      proofLimit: 'D2H held-material receipts report bounded positional displacement accepted by the Silt grip; these are not physics impulse, chemistry consumption, or material-ownership transfer proofs. Environmental Silt route and other gameplay subsystems remain separate.'
     };
   }
   materialContext() {
@@ -303,13 +327,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2G-TRANSACTION-ROUTE-AUDIT', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2H-HELD-MATERIAL-MOTION', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled global state plus bounded event receipts from Silt route Pulse and spatial Absorb decision points. Receipts prove Silt route branches, not effects in other systems. Neither held-grain physics nor held-grain material consumption exists in this route audit; orb and traversal provenance remain unobserved.',
+      limitations: '150ms sampled global state plus bounded route and held-material-motion receipts. D2H receipts measure accepted Silt grip offset changes, not physics impulses or Core intake. No held-grain chemistry or material ownership transfer. Other subsystems, orb provenance, and traversal provenance remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2G_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2H_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

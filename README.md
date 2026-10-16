@@ -1,46 +1,53 @@
-# BLOB HOST CORE — LS1D1D2G Silt Verb Route Transaction Audit
+# BLOB: HOST CORE — LS1D1D2H Held-Material Motion
 
-**Changed-files patch; apply after LS1D1D2F REC_AND_AUTHORITY.**
+**Apply after LS1D1D2G Transaction Route Audit.** Changed-files-only ZIP; copy the `src/` folder over the current game project, preserving all other files. Restart Vite/reload the game as needed. Do NOT apply the deferred LS1D1D2E experimental authority guard.
 
-## Exact replacements (2 existing files only)
+## Exact replacements (2 files)
 
 - `src/routes/SiltPressureRouteSystem.js`
 - `src/debug/WorldObjectCensusSystem.js`
 
-No deletion. Do not apply the unapplied experimental `LS1D1D2E_AUTHORITY_GUARD` patch. Preserve all other source files.
+No other files are changed. **Do not delete, reset, or replace** the LS1 base project, existing patches, Hub, Surface, legacy ecology, or other routes. Historical HC build indices remain referenced.
 
-## Source-based finding
+## Mode / scope / locks
 
-- `SiltPressureRouteSystem.updatePlay()` handles **Pulse** as a pressure read/echo/unbound signal, and **Absorb** as distance-based porous-packet or packed-residue appetite selection. It does not use `siltGrip.heldId` as the receiver for Pulse force or as absorbable matter.
-- `SiltGripAuthority` plus `MaterialIdentityLedger` manage held-grain identity and transfers between environment and grip, with release returning ownership to environment.
-- `CoreVerbPhysicalizationSystem` explicitly labels committed Silt Absorb visuals `silt-committed-priority-preview-no-transfer`. The filament does not prove a material transfer.
-- Other game systems have their own Pulse/chemistry routes; this patch does **not** claim to characterize those paths.
+Mode: **first functional convergence of a committed Silt material target**. Only the existing Silt grip's positional offset changes.
 
-## Additions — diagnostics only
+- **Locked:** Stabilize alone is never an automatic grab; LT + A commits, A releases, releasing LT releases; aim candidate may change independently of committed object. Existing Grip Authority, Material Identity Ledger, 8-unit cycle, environmental pressure Pulse, spatial packet Absorb, chemistry, region progression and traversal are not modified.
+- **Pulse:** on a fresh canonical Pulse event **while a grain was already held**, move the held grain **outward from the Core** by up to 0.28 local units, subject to the existing 1.6-unit grip limit. This is bounded kinematic displacement, **not a force/velocity impulse**. If already at outer limit, the receipt records the bound instead of inventing an effect.
+- **Absorb:** while held, move the held grain **inward toward the Core** at 0.72 local units/second, clamped to 0.38 units minimum range. This does **not** consume, transfer or award material; environmental spatial Absorb continues unchanged.
+- **Follow:** without Pulse or Absorb, the grain continues to follow the Core at its maintained local grip offset. Movement targets the committed ID only; it does not follow the camera candidate.
+- **Release:** normal A/LT release, same material ID; material ownership returns to environment through existing ledger path. No mass creation or loss.
 
-1. **Actual Silt route receipts** at Pulse and Absorb branch decisions, with monotonic sequence, frame, held-grain ID, prior aim candidate, selected environmental branch, and selection distances.
-2. **Bounded 64-event ring** published under `frameState.siltPressureRoute.transactionTrace`. No new gameplay mechanics, selection priority, ownership, physics, movement, ecology, traversal, visuals, or progression.
-3. **Existing observation recorder** collects every new route receipt since the previous 150ms sample (rather than guessing from button input). Starts at the current trace sequence so old receipts are not replayed; explicitly flags an overwritten ring gap.
-4. The JSON retains the REC indicator, controller edges, input timestamps, material ledger and Silt progression counters. Adds route decision summary and existing presentation authority readout.
+## Telemetry
 
-### Important proof limit
+The already-enabled **Alt+Shift+R** REC toggle and **Alt+Shift+E** export remain. Export name: `BLOB_LS1D1D2H_OBSERVATION.json`.
 
-A receipt `heldGrainId: "silt-grain-01"` + `route: "retained-pressure-echo"` means the grain *was being held when Silt's environmental pressure handler processed Pulse*. It does **not** prove the grain received impulse. Likewise `decision: "no-spatial-packet-selected"` means Silt's spatial appetite handler found no eligible packet, even if a grain was held. Other systems are not ruled in or out.
+`frameState.siltPressureRoute.heldMaterialMotion` reports held ID, radius, Pulse count, cumulative inward motion and the latest action receipt. `transactionTrace` now contains `kind: "held-material-motion"` receipts alongside the untouched Silt environmental route receipts, including exact source Pulse event ID, accepted positional displacement or boundary rejection. Exported summary includes held material motion counts separately from force or transfer proofs.
 
-## Short user playtest
+The recorder samples every 150 ms and the route keeps only 64 bounded receipts. Small events may be dropped if sampling stalls. Neither physics impulse nor material consumption is claimed.
 
-1. Replace the two files above. Restart Vite if needed, and reload the game.
-2. Press **Alt+Shift+R once**. Look for `● REC mm:ss`.
-3. In Silt, hold **LT (Stabilize)**, aim at a grain, press **A** to commit.
-4. While held, use **Pulse**, then **RT (Absorb)**, and move your aim off that grain.
-5. Release with **A** or releasing LT.
-6. Press **Alt+Shift+R again** to stop, then **Alt+Shift+E** to export `BLOB_LS1D1D2G_OBSERVATION.json`.
-7. Upload the JSON. A 1–2 minute capture is sufficient.
+## Test (about 1–2 minutes)
 
-## Validation
+1. Enter LS1 Silt. Hit **Alt+Shift+R once**; confirm `● REC 00:00` is visible, then release those keys.
+2. Hold **LT**; aim at a glowing Silt grain and press **A once** to lock.
+3. Use **Pulse** a few times. Observe an outward change in held-ball distance, up to the tether boundary.
+4. Hold **RT (Absorb)** while the ball is held: observe the ball pull closer (not disappear). Rotate camera to a different grain; lock should stay on original.
+5. Release with **A** or LT; confirm return to its environment behavior.
+6. Stop with **Alt+Shift+R**, export with **Alt+Shift+E**, upload `BLOB_LS1D1D2H_OBSERVATION.json`.
 
-- Both changed JS files: `node --check` PASS.
-- Actual `SiltPressureRouteSystem.updatePlay` branch behavior, run with a minimal THREE math stub and real route prototype + recorder integration: **14/14 PASS**.
-- D2F backward-compatibility recorder/grip/material bot: **24/24 PASS**.
-- ZIP integrity: PASS.
-- Full Vite/Three rendered runtime: **NOT RUN** (package dependencies unavailable).
+## Acceptance / regressions
+
+- Pulse while held changes accepted grip position outward (or explicitly reports tether boundary); no new grip is created by Pulse.
+- Absorb while held changes accepted position inward without changing ownership, unit count, chemistry count or mass.
+- Existing global/environmental Pulse/Absorb routes still run, Silt progression remains possible, camera candidate can change without reassigning lock, release returns ownership.
+- Historic ecology and traversal are left untouched; test them in live gameplay separately if this pass appears to affect them.
+
+## Verification
+
+- Source syntax: `node --check` **2/2 PASS**.
+- D2H Silt grip / identity / cycle / recorder component bot using real project classes and a minimal THREE math stub: **26/26 PASS**.
+- Retained D2G environmental Pulse and Absorb branch tests: **14/14 PASS**.
+- Retained D2F recording, grip, material identity checks: **24/24 PASS**.
+- Full rendered Vite/Three playthrough: **NOT RUN**; external package dependencies unavailable.
+- No physics-engine impulse, Core intake, material recipe, or Force/Transfer guarantee is claimed. The next pass can address Core intake ownership only after the appropriate Core inventory/chemistry contract is designed.
