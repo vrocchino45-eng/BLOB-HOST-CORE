@@ -105,6 +105,8 @@ export class WorldObjectCensusSystem {
       heldMaterialMotion: {
         heldId: motion.heldId ?? null,
         radius: Number.isFinite(motion.radius) ? motion.radius : null,
+        initialGripRadius: Number.isFinite(motion.initialGripRadius) ? motion.initialGripRadius : null,
+        feedbackKind: motion.feedbackKind ?? 'none',
         pulseCount: Number(motion.pulseCount ?? 0),
         cumulativePullDistance: Number(motion.cumulativePullDistance ?? 0),
         lastReceipt: motion.lastReceipt ?? null,
@@ -242,6 +244,13 @@ export class WorldObjectCensusSystem {
     }
     heldMotion.totalPulseDisplacement = Number(heldMotion.totalPulseDisplacement.toFixed(4));
     heldMotion.totalAbsorbDisplacement = Number(heldMotion.totalAbsorbDisplacement.toFixed(4));
+    // The sampled trace may omit receipts (64-item Silt ring / 150ms recorder).
+    // Show the actual authoritative counter separately, without assuming that
+    // a receipt sum equals the full gameplay total.
+    heldMotion.authoritativeCumulativePullDistance = Number(
+      this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance.toFixed(4));
+    heldMotion.unreconciledPullDistance = Number(Math.max(0,
+      heldMotion.authoritativeCumulativePullDistance - heldMotion.totalAbsorbDisplacement).toFixed(4));
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
       routeDecisionCounts, heldMaterialMotion: heldMotion, pulsesObservedWhileHolding: heldPulses,
@@ -327,13 +336,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2H-HELD-MATERIAL-MOTION', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2I-MOTION-FEEL-CALIBRATION', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
       limitations: '150ms sampled global state plus bounded route and held-material-motion receipts. D2H receipts measure accepted Silt grip offset changes, not physics impulses or Core intake. No held-grain chemistry or material ownership transfer. Other subsystems, orb provenance, and traversal provenance remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2H_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2I_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

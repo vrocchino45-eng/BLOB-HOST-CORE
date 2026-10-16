@@ -33,6 +33,7 @@ export class SiltPressureRouteSystem {
     this.siltAimWorldPosition = new THREE.Vector3();
     this.siltAimDirection = new THREE.Vector3();
     this.siltAimMarker = null;
+    this.siltGripTether = null;
 
     this.recipe = null;
     this.root = null;
@@ -63,6 +64,9 @@ export class SiltPressureRouteSystem {
     this.heldMotionLast = null;
     this.heldMotionPulseCount = 0;
     this.heldMotionPullDistance = 0;
+    this.heldMotionFeedbackKind = 'none';
+    this.heldMotionFeedbackAt = -99;
+    this.heldGripInitialRadius = null;
     this.livingMatterGroup = null;
     this.livingMatterMeshes = [];
     this.livingReservoirBody = null;
@@ -203,6 +207,8 @@ export class SiltPressureRouteSystem {
     this.heldAbsorbId = null;
     this.heldAbsorbReportSeconds = 0;
     this.heldAbsorbReportDistance = 0;
+    this.heldMotionFeedbackKind = 'none';
+    this.heldGripInitialRadius = null;
     this.siltAimCandidateId = null;
     this.siltAimLockedId = null;
     this.setVisible(false);
@@ -909,6 +915,17 @@ export class SiltPressureRouteSystem {
     this.siltAimMarker.visible = false;
     this.siltAimMarker.renderOrder = 20;
     this.root.add(this.siltAimMarker);
+    // A single low-opacity connection makes the held distance readable.
+    // It is strictly visual: never used for targeting, collision, or movement.
+    const tetherGeometry = new THREE.BufferGeometry();
+    tetherGeometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(6), 3));
+    this.siltGripTether = new THREE.Line(tetherGeometry,
+      new THREE.LineBasicMaterial({ color: 0xffd08b, transparent: true,
+        opacity: 0.30, depthWrite: false }));
+    this.siltGripTether.name = 'LS1D1D2I_silt_committed_grip_tether';
+    this.siltGripTether.visible = false;
+    this.siltGripTether.renderOrder = 19;
+    this.root.add(this.siltGripTether);
   }
 
   // LS1D1D1: Silt candidates are chosen by camera direction, never nearest-first.
@@ -923,6 +940,8 @@ export class SiltPressureRouteSystem {
       this.siltGrip.release();
       this.heldPulsePending = false;
       this.heldAbsorbId = null;
+      this.heldMotionFeedbackKind = 'none';
+      this.heldGripInitialRadius = null;
       this.siltAimCandidateId = null;
       this.siltAimLockedId = null;
       frameState.siltMaterialAim = { aiming: false, candidateId: null, lockedId: null, heldId: null };
@@ -955,22 +974,48 @@ export class SiltPressureRouteSystem {
     const held = units.find(unit => unit.id === this.siltGrip.heldId);
     if (held) {
       if (input.interactPressed || !aiming) {
+        this.flushHeldAbsorbMotion(frameState, 'grip-released');
         this.siltGrip.release();
         this.siltAimLockedId = null;
         this.heldAbsorbId = null;
         this.heldAbsorbReportSeconds = 0;
         this.heldAbsorbReportDistance = 0;
+        this.heldMotionFeedbackKind = 'none';
+        this.heldGripInitialRadius = null;
       } else {
         this.updateHeldMaterialMotion(dt, frameState);
       }
     } else if (this.siltGrip.heldId) {
       this.siltGrip.release();
+      this.heldMotionFeedbackKind = 'none';
+      this.heldGripInitialRadius = null;
       this.siltAimLockedId = null;
     } else if (aiming && input.interactPressed && best) {
       const coreLocal = this.localPlayer.toArray();
       if (this.siltGrip.tryGrip({ unit: best.unit, unitPosition: best.position,
         corePosition: coreLocal, stabilizeHeld: true, aPressed: true })) {
+        // D2I: seat newly acquired matter inside the outer boundary so the
+        // first Pulse can move it. Maintain its original direction and never
+        // push a naturally close grain farther out just to reach a preset.
         this.siltGripLocalOffset.fromArray(best.position).sub(this.localPlayer);
+        const acquiredRadius = this.siltGripLocalOffset.length();
+        const preferredRadius = Math.max(0.5, this.siltGrip.maxOffset - 0.45);
+        if (acquiredRadius > preferredRadius) {
+          const seatedOffset = this.siltGripLocalOffset.clone().multiplyScalar(preferredRadius / acquiredRadius);
+          const seatedPosition = this.localPlayer.clone().add(seatedOffset).toArray();
+          if (this.siltGrip.moveTo(seatedPosition, coreLocal)) {
+            this.siltGripLocalOffset.copy(seatedOffset);
+          }
+        }
+        this.heldGripInitialRadius = Number(this.siltGripLocalOffset.length().toFixed(4));
+        this.recordSiltDecision('held-material-motion', {
+          verb: 'grip', heldGrainId: best.unit.id,
+          outcome: 'acquired-with-outward-headroom',
+          originalRadius: Number(acquiredRadius.toFixed(4)),
+          resultingRadius: this.heldGripInitialRadius,
+          outwardHeadroom: Number(Math.max(0, this.siltGrip.maxOffset - this.heldGripInitialRadius).toFixed(4)),
+          noMaterialTransfer: true
+        }, frameState);
         this.siltAimLockedId = best.unit.id;
         this.heldAbsorbId = null;
         this.heldAbsorbReportSeconds = 0;
@@ -986,6 +1031,28 @@ export class SiltPressureRouteSystem {
       candidateAimDot: best ? Number(best.dot.toFixed(3)) : null,
       state: this.siltGrip.heldId ? "locked" : best ? "candidate" : aiming ? "open" : "hidden"
     };
+  }
+
+  // Flush sub-0.25s pull remainders on release or when RT ends. This
+  // reconciles event-receipt totals with the continuous authoritative counter
+  // when all receipts are retained by the recorder.
+  flushHeldAbsorbMotion(frameState, reason = 'absorb-ended') {
+    const id = this.siltGrip.heldId;
+    const amount = this.heldAbsorbReportDistance;
+    if (id && amount > 0.0001) {
+      const receipt = {
+        verb: 'absorb', heldGrainId: id, outcome: 'inward-displacement',
+        resultingRadius: Number(this.siltGripLocalOffset.length().toFixed(4)),
+        appliedDisplacement: Number(amount.toFixed(4)),
+        receiptReason: reason, motionModel: 'bounded-kinematic-offset',
+        noMaterialTransfer: true
+      };
+      this.heldMotionLast = receipt;
+      this.recordSiltDecision('held-material-motion', receipt, frameState);
+    }
+    this.heldAbsorbReportDistance = 0;
+    this.heldAbsorbReportSeconds = 0;
+    this.heldAbsorbId = null;
   }
 
   // D2H: the lock, not the camera candidate, owns local kinematic movement.
@@ -1024,6 +1091,8 @@ export class SiltPressureRouteSystem {
     this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
     if (push) {
       const displacement = Math.max(0, pushRadius - startingRadius);
+      this.heldMotionFeedbackKind = displacement > 0.0001 ? 'pulse-outward' : 'outer-bound';
+      this.heldMotionFeedbackAt = this.elapsed;
       this.heldMotionPulseCount++;
       const receipt = {
         verb: 'pulse', pulseEventId: input.pulseEventId ?? null,
@@ -1038,6 +1107,8 @@ export class SiltPressureRouteSystem {
     }
     if (absorbing) {
       const displacement = Math.max(0, pushRadius - pullRadius);
+      this.heldMotionFeedbackKind = displacement > 0.0001 ? 'absorb-inward' : 'inner-bound';
+      this.heldMotionFeedbackAt = this.elapsed;
       this.heldMotionPullDistance += displacement;
       this.heldAbsorbReportDistance += displacement;
       this.heldAbsorbReportSeconds += Math.max(0, Math.min(dt, 0.1));
@@ -1057,9 +1128,7 @@ export class SiltPressureRouteSystem {
       }
       this.heldAbsorbId = id;
     } else {
-      this.heldAbsorbId = null;
-      this.heldAbsorbReportDistance = 0;
-      this.heldAbsorbReportSeconds = 0;
+      this.flushHeldAbsorbMotion(frameState);
     }
   }
 
@@ -1068,13 +1137,40 @@ export class SiltPressureRouteSystem {
     const targetId = this.siltGrip.heldId ?? this.siltAimCandidateId;
     const index = this.livingCycle?.units.findIndex(unit => unit.id === targetId) ?? -1;
     const mesh = index >= 0 ? this.livingMatterMeshes[index] : null;
-    this.siltAimMarker.visible = Boolean(targetId && mesh?.body?.visible && this.camera);
-    if (!this.siltAimMarker.visible) return;
+    const visible = Boolean(targetId && mesh?.body?.visible && this.camera);
+    this.siltAimMarker.visible = visible;
+    const locked = Boolean(this.siltGrip.heldId);
+    if (this.siltGripTether) this.siltGripTether.visible = visible && locked;
+    if (!visible) return;
     this.siltAimMarker.position.copy(mesh.body.position);
     this.siltAimMarker.quaternion.copy(this.camera.quaternion);
-    const locked = Boolean(this.siltGrip.heldId);
-    this.siltAimMarker.scale.setScalar(locked ? 0.75 : 1);
-    this.siltAimMarker.material.color.setHex(locked ? 0xffd08b : 0x9fffd8);
+    // Keep the familiar brackets; briefly change hue and spacing to make
+    // motion/limits distinct without adding an intrusive debug HUD.
+    const feedbackAge = this.elapsed - this.heldMotionFeedbackAt;
+    const showFeedback = locked && feedbackAge >= 0 && feedbackAge < 0.48;
+    const kind = showFeedback ? this.heldMotionFeedbackKind : 'none';
+    const color = kind === 'pulse-outward' ? 0x84cfff
+      : kind === 'absorb-inward' ? 0x89edc1
+      : kind === 'outer-bound' ? 0xff917b
+      : kind === 'inner-bound' ? 0xbda1ff
+      : locked ? 0xffd08b : 0x9fffd8;
+    const wave = showFeedback ? Math.max(0, 1 - feedbackAge / 0.48) : 0;
+    const bracketScale = !locked ? 1
+      : kind === 'pulse-outward' ? 0.75 + 0.20 * wave
+      : kind === 'absorb-inward' ? 0.75 - 0.12 * wave
+      : kind === 'outer-bound' || kind === 'inner-bound' ? 0.75 + 0.16 * wave
+      : 0.75;
+    this.siltAimMarker.scale.setScalar(bracketScale);
+    this.siltAimMarker.material.color.setHex(color);
+    this.siltAimMarker.material.opacity = locked && showFeedback ? 1 : 0.92;
+    if (this.siltGripTether) {
+      const line = this.siltGripTether.geometry.getAttribute('position');
+      line.setXYZ(0, this.localPlayer.x, this.localPlayer.y, this.localPlayer.z);
+      line.setXYZ(1, mesh.body.position.x, mesh.body.position.y, mesh.body.position.z);
+      line.needsUpdate = true;
+      this.siltGripTether.material.color.setHex(color);
+      this.siltGripTether.material.opacity = 0.30 + 0.22 * wave;
+    }
   }
 
   animateLivingMatter() {
@@ -1885,7 +1981,10 @@ export class SiltPressureRouteSystem {
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
       heldMaterialMotion: {
-        pass: "LS1D1D2H", heldId: this.siltGrip.heldId,
+        pass: "LS1D1D2I", heldId: this.siltGrip.heldId,
+        initialGripRadius: this.heldGripInitialRadius,
+        feedbackKind: this.heldMotionFeedbackKind,
+        feedbackAge: Number(Math.max(0, this.elapsed - this.heldMotionFeedbackAt).toFixed(3)),
         radius: this.siltGrip.heldId && this.siltGrip.position
           ? Number(this.siltGripLocalOffset.length().toFixed(4)) : null,
         minRadius: 0.38, maxRadius: this.siltGrip.maxOffset,
@@ -1896,7 +1995,7 @@ export class SiltPressureRouteSystem {
         contract: "Pulse pushes, Absorb pulls, neither consumes the held grain"
       },
       transactionTrace: {
-        pass: "LS1D1D2H",
+        pass: "LS1D1D2I",
         lastSequence: this.transactionSequence,
         events: this.transactionTrace.slice(),
         scope: "SiltPressureRouteSystem decisions only; no global verb-route inference"
