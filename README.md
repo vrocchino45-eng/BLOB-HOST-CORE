@@ -1,41 +1,43 @@
-# BLOB: HOST CORE — LS1D1D2J Reversible Silt Contact
+# BLOB: HOST CORE — LS1D1D2K Contact Convergence
 
-## Apply
-Apply this **changed-files patch over LS1D1D2I** (not a standalone game). Extract the included `src/` directory into your existing project, replacing the two listed existing files and adding one new module. Keep all other files and the historical HC/LS1 index. Do **not** apply deferred `LS1D1D2E_AUTHORITY_GUARD`.
+## Install / base
+Apply this **changed-files only** overlay **on top of LS1D1D2J** (not standalone). Replace exactly:
 
-Files:
-- `src/contact/SiltCompressionContact.js` (new, pure reversible contact state)
-- `src/routes/SiltPressureRouteSystem.js` (one authored garden catchment patch, contact receipts, visual pressure/echo)
-- `src/debug/WorldObjectCensusSystem.js` (D2J contact telemetry export)
+- `src/contact/SiltCompressionContact.js`
+- `src/routes/SiltPressureRouteSystem.js`
+- `src/debug/WorldObjectCensusSystem.js`
 
-## Mode / purpose
-**Convergence → one functional Silt interaction.** Move beyond push/pull without introducing a second chemistry or material system. The Core deliberately holds a conserved grain; an outward Pulse toward one visible sediment catchment patch loads compression. After two effective presses a temporary imprint forms. Absorb draws the grain back and relaxes that pressure; releasing the grain also clears it. A short afterimage fades. The player can repeat this with the same grain or another grain.
+Keep all other files, HC/LS1 history, Silt ecology, Guide, region travel, and data. **Do not** install deferred `BLOB_LS1D1D2E_AUTHORITY_GUARD_CHANGED_FILES.zip` as part of this pass.
 
-## Spatial scope
-A single **amber-brown compression patch** sits low on the sediment bed in the existing **garden** Silt habitat (the sediment catchment/nursery). It has a subtle ring and brightens under pressure. The grain must physically approach the patch while locked; pressing elsewhere, pressing away, hitting the outer tether limit, or having a merely selected candidate **does not** load the patch. This uses proximity and an accepted kinematic Pulse displacement, **not** Three.js collision or physics force.
+## Pass mode / goal
+**Convergence / contact pressure accessibility and lifecycle truth** after a real D2J session detected six contact entries, no new successful presses, and 23 attempts blocked at the existing 1.60-unit outward grip limit. Fix pressure behavior at contact without changing the movement model or rewards.
 
-## Locked / forbidden changes
-- Lock D2I movement feel: LT + A deliberate grip, A/LT release, initial 1.15 radius headroom, bounded Pulse push and held Absorb pull, camera-independent committed ID, existing tether/limit cues.
-- Lock eight Silt grain IDs, lifecycle, `MaterialIdentityLedger` owners/mass/composition, canonical porous nutrient, existing pressure and appetite routes, objectives, chemistry, ecology, Guide, Hub/Surface crossing, and historical HC numbers.
-- No new progression gates, rewards, recipes, damage, colliders, player movement, material absorption, material duplication, force physics, or persistent deformation. **Do not** infer that this is a chemistry bond or fracture.
-- All existing geologic shell/banks stay visual-only. Only the new authored catchment patch responds to committed-grain proximity.
+## Mechanical rule (single authored Silt catchment patch)
+1. With LT + A, commit a living grain. The D2I camera-independent lock, initial headroom, maximum 1.60-unit outward and minimum 0.38-unit inward radii remain unchanged.
+2. Move the held grain to the garden catchment patch. **Turquoise** means overlapping/contact.
+3. Press **X / Pulse** **toward** the sediment. Either an accepted forward grain movement *or* a Pulse resisted by the existing outward tether stop can load pressure **only if the held grain is physically in the contact patch** and the projected Pulse points toward the patch. **Amber** means pressure loaded. Two qualifying presses form a temporary, **pale-gold** visual imprint.
+4. A Pulse directed away or tangentially, a remote/candidate-only Pulse, an unrelated environmental Pulse or a simultaneous RT hold cannot compress the patch. A brief subdued coral cue indicates an overlapping but unproductive Pulse. The diagnostic receipt identifies `away-or-tangent`, `outside-radius`, `outside-height`, or `absorb-held`, with local distance/height where the patch is in approach range.
+5. Hold **RT / Absorb** to withdraw a held grain. Contact pressure relaxes, the imprint reverses. Releasing the grain also resets contact pressure. There is no material intake from this patch.
 
-## Test / visual and feel target (2–4 minutes)
-1. Use the existing Silt entry. Complete the original porous packet interaction to wake the eight-grain living cycle; this patch does not bypass the original route.
-2. Start REC: **Alt + Shift + R**. Locate the low sediment bed in the **garden** lobe and the amber-brown contact patch with a thin ring.
-3. Hold **LT**, aim at a moving grain, and press **A** to lock it. Move the Core and held grain toward the garden patch. Note: the grain must be close to the patch, not merely the Core.
-4. Pulse **toward** the patch, and if it remains within contact range Pulse a second time. The patch should brighten/compress and show a pale temporary echo/imprint. A Pulse at max tether reach or directed away should do nothing to the patch.
-5. Hold **RT** to pull the grain away. The patch should recover. Release with A or LT, then confirm the grain remains in the living Silt cycle. Try the same behavior again if desired.
-6. Stop REC with **Alt + Shift + R**; export JSON with **Alt + Shift + E** as `BLOB_LS1D1D2J_OBSERVATION.json`.
+**Important:** “Resisted pressure” is authored contact intent and a reversible surface response, **not** a physics force, rigid-body collider, new material mass, bond or permanent deformation. The virtual beyond-bound position only determines whether the intended direction would approach the patch; it never moves the grain. Pulse also retains its independent environmental pressure route.
 
-If an imprint is hard to reach in this test, **do not force another input redesign**: report whether you could find the patch, maneuver the held grain near it, and get `contact-entered` / `contact-pressed` in telemetry. The spatial accessibility should be judged on actual gameplay.
+## Separate repair: unmount and telemetry
+On leaving Silt, any outstanding held RT pull is receipted, the committed material and any stranded Silt-only grip-owned records are returned to `environment` in the existing `MaterialIdentityLedger`, the grip is released, and published `siltMaterialAim` lock/candidate IDs clear **before the final inactive publish**. This does not transfer unrelated materials, change ownership type elsewhere, or reset the eight grain histories.
 
-## Acceptance
-- A committed grain approaches one visible authored Silt patch; a real outward Pulse **toward** the patch increments reversible pressure; a second effective press forms one temporary imprint.
-- Stationary/away/blocked Pulse and candidate-only inputs do not create phantom contact pressure.
-- RT withdrawal, spatial separation, or grip release undoes compression and clears the imprint (short-lived visual echo may remain).
-- The existing material ledger holds exactly 8 units, the grain identity and release owner survive, and old Silt pressure/packet progression still work without any new route credit.
-- The JSON contains independent `silt-contact` outcomes and a final `siltContact` snapshot; no claim of collision physics or Core intake.
+The recorder now snapshots the existing lifetime `cumulativePullDistance` counter **when Alt+Shift+R starts**, then reports `captureStartPullBaseline`, `authoritativeSessionPullDistance`, and compares the latter with this-session motion receipts. It no longer treats prior gameplay as missing sampled displacement. Existing bounded trace-gap limitations still apply.
 
-## Validation limits
-Component bots: **136/136 checks** (52 new contact/visual/source checks; 46 D2I movement/grip regressions; 14 environmental-route checks; 24 existing recorder/ledger checks). 3/3 JavaScript syntax checks. All bot checks are source/component tests with stubbed geometry where applicable, **not a rendered game playthrough**. Source behavior is supported; spatial reachability, perceived visuals, performance, and control feel must be field tested. No test proves external ecology/Hub traversal beyond the unchanged source paths.
+## Locked and forbidden
+Frozen: target selection, grip ownership in play, movement coefficients, D2I start offset, physical limits, environmental pressure/rib progression, canonical porous appetite, material recipes/composition, eight-unit closed Silt cycle, all ecology, Guide, passage geometry, player and camera controls, Hub/Surface transitions, historical HC and LS1 indices, and unrelated chemistry.
+
+Forbidden: new contact surfaces, fracture, Core absorption, permanent imprint, extra Silt rewards/gates, material duplication or loss, changing global targeting, additional controller combinations, or architecture overlays.
+
+## Acceptance / manual test (about 2–3 min)
+- Start current D2J build with D2K overlay; move to low amber-brown garden contact patch.
+- Alt+Shift+R to start REC. Lock a grain with LT + A.
+- Guide grain into patch: verify **turquoise** contact. Pulse toward patch twice. Especially test **while at outward tether bound**: a qualifying directed resisted Pulse should still show **amber**, then **pale-gold imprint**. Aimed-away Pulse should not add pressure.
+- RT pull grain away: surface recovers. Release and reacquire; verify same grain exists.
+- Optionally exit Silt while a different grain is locked: ledger and published lock must release. Original completion and return fold remain unaltered.
+- Alt+Shift+R stop; Alt+Shift+E export `BLOB_LS1D1D2K_OBSERVATION.json`.
+
+## Validation / limitations
+Targeted D2K edge bot: 27 passed. D2J contact+visual bot updated against D2K: 52 passed. D2I movement regression: 46 passed. Existing Silt environmental route: 14 passed. Recorder + identity cycle: 24 passed. **163 checks total** (some suites overlap), 3/3 JS syntax passes, ZIP integrity verified. These tests exercise genuine source methods with stubbed Three vector/material objects; they are **not** a full Vite/Three browser run or a visual/performance guarantee. Real player test is still required before calling this pass accepted.

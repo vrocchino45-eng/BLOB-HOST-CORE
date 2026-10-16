@@ -39,6 +39,8 @@ export class SiltPressureRouteSystem {
     this.siltContactMesh = null;
     this.siltContactEcho = null;
     this.heldContactPulseApproachFrame = 0;
+    this.heldContactPulseResistedFrame = 0;
+    this.heldContactPulseAttemptedFrame = false;
 
     this.recipe = null;
     this.root = null;
@@ -206,6 +208,17 @@ export class SiltPressureRouteSystem {
   }
 
   onRuntimeUnmount(frameState) {
+    // LS1D1D2K: region exit is a real release transaction. There may not be
+    // another Silt update after unmount to reconcile the grip with the ledger.
+    // Flush the pending pull and restore any stranded grip owner first.
+    this.flushHeldAbsorbMotion(frameState, 'silt-unmounted');
+    const departingUnitId = this.siltGrip.heldId;
+    if (departingUnitId) this.materialIdentity?.transfer(departingUnitId, 'environment', 'individual');
+    // Defensive repair is scoped to this Silt ledger only, never external
+    // material. No new owners, mass, chemistry or progression are created.
+    for (const record of this.materialIdentity?.records?.values() ?? []) {
+      if (record.owner === 'grip') this.materialIdentity.transfer(record.id, 'environment', 'individual');
+    }
     this.active = false;
     this.siltGrip.release();
     this.heldPulsePending = false;
@@ -218,6 +231,12 @@ export class SiltPressureRouteSystem {
     this.siltAimLockedId = null;
     this.siltContact?.update({ dt: 0, heldId: null });
     this.heldContactPulseApproachFrame = 0;
+    this.heldContactPulseResistedFrame = 0;
+    this.heldContactPulseAttemptedFrame = false;
+    frameState.siltMaterialAim = {
+      pass: 'LS1D1D2K', aiming: false, candidateId: null,
+      lockedId: null, heldId: null, state: 'hidden'
+    };
     this.setVisible(false);
     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
       ? "returned_to_hub_through_silt_fold"
@@ -979,9 +998,13 @@ export class SiltPressureRouteSystem {
       heldId: this.siltGrip.heldId,
       heldPosition: this.siltGrip.position,
       pulseApproach: this.heldContactPulseApproachFrame,
+      resistedPulseApproach: this.heldContactPulseResistedFrame,
+      pulseAttempted: this.heldContactPulseAttemptedFrame,
       absorbHeld: Boolean(frameState.input?.absorbHeld)
     });
     this.heldContactPulseApproachFrame = 0;
+    this.heldContactPulseResistedFrame = 0;
+    this.heldContactPulseAttemptedFrame = false;
     for (const event of events) {
       this.recordSiltDecision('silt-contact', {
         ...event, contactPatchId: 'silt-garden-catchment-contact',
@@ -992,9 +1015,12 @@ export class SiltPressureRouteSystem {
     const state = this.siltContact.snapshot();
     if (this.siltContactMesh) {
       this.siltContactMesh.scale.y = 1 - state.pressure * 0.55;
-      this.siltContactMesh.material.color.setHex(state.inContact ? 0xb59a73 : 0x8a6e4a);
+      this.siltContactMesh.material.color.setHex(state.imprinted ? 0xe8d4b0
+        : state.pressFeedbackSeconds > 0 ? 0xe2b765
+        : state.missedFeedbackSeconds > 0 ? 0xc6887c
+        : state.inContact ? 0x89b9ac : 0x8a6e4a);
       this.siltContactMesh.material.emissiveIntensity = 0.18 + state.pressure * 0.65
-        + (state.imprinted ? 0.22 : 0);
+        + (state.inContact ? 0.1 : 0) + (state.imprinted ? 0.22 : 0);
     }
     if (this.siltContactEcho) {
       this.siltContactEcho.visible = state.inContact || state.echoSeconds > 0;
@@ -1002,7 +1028,10 @@ export class SiltPressureRouteSystem {
         + Math.max(0, state.echoSeconds) * 0.12);
       this.siltContactEcho.material.opacity = 0.12 + state.pressure * 0.47
         + Math.min(0.2, state.echoSeconds * 0.09);
-      this.siltContactEcho.material.color.setHex(state.imprinted ? 0xf4d3a3 : 0xd4ac79);
+      this.siltContactEcho.material.color.setHex(state.imprinted ? 0xf4d3a3
+        : state.pressFeedbackSeconds > 0 ? 0xffd084
+        : state.missedFeedbackSeconds > 0 ? 0xd59892
+        : state.inContact ? 0x9ce1d4 : 0xd4ac79);
     }
   }
 
@@ -1012,6 +1041,8 @@ export class SiltPressureRouteSystem {
   updateSiltGrip(frameState, dt = 0) {
     const input = frameState.input ?? {};
     this.heldContactPulseApproachFrame = 0;
+    this.heldContactPulseResistedFrame = 0;
+    this.heldContactPulseAttemptedFrame = false;
     const aiming = Boolean(input.stabilizeHeld);
     const units = this.livingCycle?.units ?? [];
     const eligible = new Set(["veins", "garden_transit", "settled"]);
@@ -1166,9 +1197,12 @@ export class SiltPressureRouteSystem {
       }, frameState);
       return;
     }
-    // Only an *accepted* outward Pulse approaching the authored patch can
-    // load sediment pressure. A pulse elsewhere (or away) cannot do so.
-    if (push && this.siltContact && pushRadius > startingRadius + 0.0001) {
+    // D2K: accepted movement toward the patch, OR a correctly aimed Pulse
+    // against the *existing* outer tether stop, can load reversible contact.
+    // The virtual beyond-bound displacement is intent geometry only. The grain
+    // never moves past D2I limits, and away/tangential Pulse cannot press.
+    if (push && this.siltContact) {
+      this.heldContactPulseAttemptedFrame = true;
       const patch = this.siltContact.position;
       const near = radius => {
         const scale = radius / originalRadius;
@@ -1178,7 +1212,12 @@ export class SiltPressureRouteSystem {
           this.localPlayer.z + offset.z * scale - patch[2]
         );
       };
-      this.heldContactPulseApproachFrame = Math.max(0, near(startingRadius) - near(pushRadius));
+      const acceptedApproach = near(startingRadius) - near(pushRadius);
+      this.heldContactPulseApproachFrame = Math.max(0, acceptedApproach);
+      if (pushRadius <= startingRadius + 0.0001) {
+        this.heldContactPulseResistedFrame = Math.max(0,
+          near(startingRadius) - near(startingRadius + 0.28));
+      }
     }
     offset.copy(proposedOffset);
     this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });

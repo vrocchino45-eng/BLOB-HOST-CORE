@@ -10,6 +10,7 @@ export class WorldObjectCensusSystem {
     this.captureActive = false;
     this.captureEvents = [];
     this.captureStartedAt = null;
+    this.capturePullBaseline = null;
     this.captureTimer = null;
     this.capturePrevious = null;
     this.inputPrevious = null;
@@ -114,6 +115,9 @@ export class WorldObjectCensusSystem {
         imprints: Number(contact.imprints ?? 0),
         separations: Number(contact.separations ?? 0),
         lastOutcome: contact.lastOutcome ?? null,
+        lastPulseOutcome: contact.lastPulseOutcome ?? null,
+        lastPulseReason: contact.lastPulseReason ?? null,
+        lastPulseMode: contact.lastPulseMode ?? null,
         massTransfer: !!contact.massTransfer,
         progressionCredit: !!contact.progressionCredit
       },
@@ -268,13 +272,21 @@ export class WorldObjectCensusSystem {
     // a receipt sum equals the full gameplay total.
     heldMotion.authoritativeCumulativePullDistance = Number(
       this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance.toFixed(4));
-    heldMotion.unreconciledPullDistance = Number(Math.max(0,
-      heldMotion.authoritativeCumulativePullDistance - heldMotion.totalAbsorbDisplacement).toFixed(4));
+    // Compare like with like: authoritative *this session* minus the counter
+    // captured when REC began, not the lifetime route cumulative total.
+    heldMotion.captureStartPullBaseline = Number.isFinite(this.capturePullBaseline)
+      ? Number(this.capturePullBaseline.toFixed(4)) : null;
+    heldMotion.authoritativeSessionPullDistance = heldMotion.captureStartPullBaseline === null
+      ? null : Number(Math.max(0,
+        heldMotion.authoritativeCumulativePullDistance - heldMotion.captureStartPullBaseline).toFixed(4));
+    heldMotion.unreconciledPullDistance = heldMotion.authoritativeSessionPullDistance === null
+      ? null : Number(Math.abs(
+        heldMotion.authoritativeSessionPullDistance - heldMotion.totalAbsorbDisplacement).toFixed(4));
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
       routeDecisionCounts, heldMaterialMotion: heldMotion,
       siltContact: { outcomes: contactOutcomes, finalState: this.authoritySnapshot().siltContact,
-        proofLimit: 'Contact is authored-patch proximity with accepted Pulse approach. Imprint is reversible visual/pressure state, not collisions, fracture, or chemical bond.' },
+        proofLimit: 'Contact is authored-patch proximity with a directed Pulse approach or resisted tether press. Imprint is reversible visual/pressure state, not collisions, fracture, or chemical bond.' },
       pulsesObservedWhileHolding: heldPulses,
       absorbStartsObservedWhileHolding: heldAbsorbStarts,
       targetedPulseForceConfirmed: false, heldGrainAbsorptionConfirmed: false,
@@ -352,19 +364,20 @@ export class WorldObjectCensusSystem {
     }
     this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
     this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
+    this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
     this.captureTimer = setInterval(() => this.sampleState(), 150);
   }
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2J-REVERSIBLE-SILT-CONTACT', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2K-CONTACT-CONVERGENCE', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled input plus bounded Silt route and contact receipts. D2J contact is authored-patch proximity plus accepted Pulse approach, not colliders or material chemistry. No Core intake, fracture, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
+      limitations: '150ms sampled input plus bounded Silt route and contact receipts. D2K contact is authored-patch proximity plus directed Pulse approach or bounded tether resistance, not colliders or material chemistry. No Core intake, fracture, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2J_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2K_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
