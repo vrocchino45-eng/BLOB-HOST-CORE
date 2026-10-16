@@ -12,23 +12,65 @@ export class WorldObjectCensusSystem {
     this.captureStartedAt = null;
     this.captureTimer = null;
     this.capturePrevious = null;
+    this.inputPrevious = null;
+    this.captureTick = 0;
     this.keyHandler = event => {
       if (event.altKey && event.shiftKey && event.code === 'KeyR') { event.preventDefault(); this.toggleCapture(); return; }
       if (event.altKey && event.shiftKey && event.code === 'KeyE') { event.preventDefault(); this.exportTimeline(); return; }
-      if (this.captureActive && !event.repeat && ['KeyA', 'KeyX', 'KeyP', 'Digit6'].includes(event.code)) {
-        this.recordEvent('keyboard-input', { code: event.code, shift: event.shiftKey });
-      }
+      if (this.captureActive && !event.repeat) this.recordEvent('keyboard-down', { code: event.code, shift: event.shiftKey, alt: event.altKey, ctrl: event.ctrlKey, target: this.materialContext() });
       if (event.code === 'F4') { event.preventDefault(); this.toggle(); }
       if (event.code === 'F5' && this.visible) { event.preventDefault(); this.exportReport(); }
     };
   }
-  init() { window.addEventListener('keydown', this.keyHandler); }
+  init() {
+    window.addEventListener('keydown', this.keyHandler);
+    this.keyUpHandler = event => {
+      if (this.captureActive) this.recordEvent('keyboard-up', { code: event.code, target: this.materialContext() });
+    };
+    window.addEventListener('keyup', this.keyUpHandler);
+  }
+  materialContext() {
+    const fs = this.frameState ?? {};
+    const aim = fs.siltMaterialAim ?? {};
+    const grip = fs.siltPressureRoute?.siltGrip ?? {};
+    return {
+      candidateId: aim.candidateId ?? null,
+      lockedId: aim.lockedId ?? null,
+      heldId: aim.heldId ?? null,
+      gripStatus: grip.status ?? null,
+      legacyTargetId: fs.targeting?.targetId ?? null,
+    };
+  }
+  sampleInputs() {
+    // Raw browser gamepad button/axis telemetry, not inferred game verbs.
+    const pads = typeof navigator !== 'undefined' && navigator.getGamepads ? Array.from(navigator.getGamepads()).filter(Boolean) : [];
+    const current = pads.map(pad => ({
+      index: pad.index, id: String(pad.id).slice(0, 100),
+      buttons: Array.from(pad.buttons, b => !!b.pressed),
+      axes: Array.from(pad.axes, x => Math.round(x * 10) / 10),
+    }));
+    const previous = this.inputPrevious ?? [];
+    for (const pad of current) {
+      const old = previous.find(p => p.index === pad.index);
+      for (let i = 0; i < pad.buttons.length; i++) {
+        if (pad.buttons[i] !== (old?.buttons[i] ?? false)) {
+          this.recordEvent('gamepad-button-edge', { padIndex: pad.index, buttonIndex: i,
+            pressed: pad.buttons[i], target: this.materialContext() });
+        }
+      }
+      if (!old || pad.axes.some((x, i) => Math.abs(x - (old.axes[i] ?? 0)) >= 0.4)) {
+        this.recordEvent('gamepad-axes', { padIndex: pad.index, axes: pad.axes, target: this.materialContext() });
+      }
+    }
+    this.inputPrevious = current;
+  }
   recordEvent(type, details = {}) {
     if (!this.captureActive) return;
     this.captureEvents.push({ time: new Date().toISOString(), type, ...details });
     if (this.captureEvents.length > 2500) this.captureEvents.shift();
   }
   sampleState() {
+    this.sampleInputs();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
     const grip = fs.siltPressureRoute?.siltGrip ?? {};
@@ -51,7 +93,7 @@ export class WorldObjectCensusSystem {
       this.recordEvent('capture-stopped'); this.captureActive = false;
       return;
     }
-    this.captureEvents = []; this.capturePrevious = null;
+    this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null;
     this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
     this.recordEvent('capture-started'); this.sampleState();
     this.captureTimer = setInterval(() => this.sampleState(), 150);
@@ -59,9 +101,9 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2E-OBSERVATION', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2E-INPUT-EDGES', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: 'Read-only sampled state transitions and keyboard input. No authoritative Pulse force, Absorb transaction, orb spawn, gamepad input, or traversal trigger provenance. Shift+6 keyboard event is not proof of resulting entry mode.',
+      limitations: 'Read-only 150ms sampling, raw keyboard/gamepad edges, and observed Silt state. Brief button taps may be missed; gamepad indices are not mapped to gameplay verbs. No authoritative Pulse force, Absorb transaction, orb spawn, or traversal provenance.',
       events: this.captureEvents, finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));

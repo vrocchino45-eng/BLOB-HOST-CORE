@@ -1,13 +1,9 @@
-# LS1D1D2E observation capture — changed-files patch
+# LS1D1D2E input-edge capture correction
 
-Apply over the LS1D1D2C2R working baseline. This replaces only `src/debug/WorldObjectCensusSystem.js`. It does not apply the untested authority guard.
+Apply over the LS1D1D2E Observation Capture build (it replaces only `src/debug/WorldObjectCensusSystem.js`).
 
-## Capture
+Alt+Shift+R starts/stops; Alt+Shift+E exports. F4/F5 unchanged.
 
-- Alt+Shift+R: start/stop a capture. This samples selected Silt and legacy targeting fields every 150 ms, storing only changes.
-- Alt+Shift+E: download a JSON timeline and the current F5 census snapshot.
-- Existing F4 census overlay and F5 export remain unchanged.
+New events: keyboard-down/up, gamepad-button-edge (raw button indices), gamepad-axes (coarsely quantized), observed-state-change. Each input event includes the current Silt material target snapshot. No gameplay routing is changed.
 
-Run one capture for normal entry, another for Shift+6. During each, lock a grain, rotate away, Pulse, Absorb, release, and interact with ecology/traversal objects. Export both captures. The tool can detect target state changes and keyboard inputs but **cannot establish** gamepad buttons, authoritative force, chemistry transactions, orb source, or traversal cause. Those need dedicated event hooks in the owning systems before we claim functional bot coverage.
-
-No new dependencies. No gameplay mechanics changed. Syntax checked with `node --check`.
+Caveats: 150ms polling may miss quick gamepad taps. Input events prove inputs, not that Pulse or Absorb changed material. Controller button indices are raw, not inferred verb names. Test in browser; syntax check alone is not a gameplay test.
