@@ -107,6 +107,12 @@ export class SiltPressureRouteSystem {
     this.appetiteDrawSequence = 0;
     this.lastAppetiteDrawKind = "none";
 
+    // LS1D1D2G: bounded, read-only receipts from the route's actual verb
+    // decision points. No force, selection, ownership, or progression changes.
+    this.transactionSequence = 0;
+    this.transactionTrace = [];
+    this.lastAbsorbDecision = null;
+
     this.braceSeconds = 0;
     this.ribsReleased = false;
     this.safeAbsorbSeconds = 0;
@@ -1170,6 +1176,20 @@ export class SiltPressureRouteSystem {
     }
   }
 
+  recordSiltDecision(kind, details = {}, frameState = this.frameState) {
+    const entry = {
+      sequence: ++this.transactionSequence,
+      kind,
+      frame: frameState?.frame ?? null,
+      siltElapsedSeconds: Number(this.elapsed.toFixed(3)),
+      heldGrainId: this.siltGrip.heldId,
+      candidateAtFrameStart: frameState?.siltMaterialAim?.candidateId ?? null,
+      ...details
+    };
+    this.transactionTrace.push(entry);
+    if (this.transactionTrace.length > 64) this.transactionTrace.shift();
+  }
+
   updatePlay(dt, frameState, sample) {
     const input = frameState.input ?? {};
     const composition = frameState.verbComposition ?? {};
@@ -1238,6 +1258,16 @@ export class SiltPressureRouteSystem {
             : "pressure_relationship_not_yet_settled";
         this.warning = "hold_stabilize_then_pulse_to_read_pressure";
       }
+      this.recordSiltDecision("pulse-route", {
+        pulseEventId,
+        route: this.lastInteraction === "stabilized_pressure_relationship_read_by_pulse"
+          ? "pressure-read-committed"
+          : this.lastInteraction === "pulse_echoes_through_retained_pressure_relationship"
+            ? "retained-pressure-echo" : "unbound-pressure-pulse",
+        interaction: this.lastInteraction,
+        heldGrainForceAppliedByThisRoute: false,
+        note: "This Silt handler changes pressure/read state, not held-grain velocity. Other systems are not assessed."
+      }, frameState);
     }
 
     if (this.stabilizing) {
@@ -1304,6 +1334,32 @@ export class SiltPressureRouteSystem {
       }
     } else if (!this.absorbHeld) {
       this.greedyAbsorbSeconds = Math.max(0, this.greedyAbsorbSeconds - dt * 2.5);
+    }
+    // Capture the route's actual spatial appetite decision without treating
+    // the locked grain as the porous packet or packed residue.
+    const absorbDecision = !this.absorbHeld ? "inactive"
+      : this.completed ? "route-already-completed"
+      : this.compressionFailure ? "blocked-by-compression"
+      : this.lastInteraction === "porous_nutrient_accepted_dense_residue_left_intact" ? "porous-packet-committed"
+      : this.lastInteraction === "selective_absorb_drawing_porous_nutrient" ? "porous-packet-drawing"
+      : this.lastInteraction === "greedy_absorb_loading_packed_residue" ? "packed-residue-risk"
+      : this.lastInteraction === "absorb_reaches_no_selected_spatial_matter" ? "no-spatial-packet-selected"
+      : this.lastInteraction === "appetite_waits_for_pressure_relationship_and_brace" ? "waiting-for-brace"
+      : "no-spatial-absorb-transaction";
+    if (absorbDecision !== this.lastAbsorbDecision) {
+      if (this.absorbHeld || this.previousAbsorbHeld) {
+        this.recordSiltDecision("absorb-route", {
+          decision: absorbDecision,
+          appetiteObject: absorbDecision.startsWith("porous-packet") ? "canonical-porous-packet"
+            : absorbDecision === "packed-residue-risk" ? "canonical-packed-residue" : null,
+          safePacketDistance: Number.isFinite(this.safePacketDistance) ? Number(this.safePacketDistance.toFixed(3)) : null,
+          nearestDenseDistance: Number.isFinite(this.nearestDenseDistance) ? Number(this.nearestDenseDistance.toFixed(3)) : null,
+          safePacketDrawSeconds: Number(this.safeAbsorbSeconds.toFixed(3)),
+          heldGrainTransferAppliedByThisRoute: false,
+          note: "Silt appetite selection operates on spatial packets; grip ledger is separate."
+        }, frameState);
+      }
+      this.lastAbsorbDecision = absorbDecision;
     }
     this.previousAbsorbHeld = this.absorbHeld;
 
@@ -1733,6 +1789,12 @@ export class SiltPressureRouteSystem {
         newProgression: false
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
+      transactionTrace: {
+        pass: "LS1D1D2G",
+        lastSequence: this.transactionSequence,
+        events: this.transactionTrace.slice(),
+        scope: "SiltPressureRouteSystem decisions only; no global verb-route inference"
+      },
       siltGrip: this.siltGrip.snapshot(),
       materialIdentity: this.materialIdentity?.snapshot() ?? null,
       genericRingCount: 0,

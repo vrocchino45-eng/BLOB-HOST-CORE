@@ -15,6 +15,7 @@ export class WorldObjectCensusSystem {
     this.inputPrevious = null;
     this.captureTick = 0;
     this.authorityPrevious = null;
+    this.lastSiltDecisionSequence = null;
     this.recIndicator = null;
     this.recNoticeTimeout = null;
     this.keyHandler = event => {
@@ -100,6 +101,12 @@ export class WorldObjectCensusSystem {
       lastSiltInteraction: silt.lastInteraction ?? null,
       siltCompleted: !!silt.completed,
       siltSafeMatterAbsorbed: !!silt.safeMatterAbsorbed,
+      visualVerbAuthority: {
+        targetId: fs.verbVisualTargetAuthority?.targetId ?? "none",
+        pulse: fs.verbVisualTargetAuthority?.pulse ?? "unpublished",
+        absorb: fs.verbVisualTargetAuthority?.absorb ?? "unpublished",
+        gameplayAuthorityChanged: !!fs.verbVisualTargetAuthority?.gameplayAuthorityChanged
+      },
     };
   }
   sampleAuthority() {
@@ -172,6 +179,30 @@ export class WorldObjectCensusSystem {
     }
     this.authorityPrevious = now;
   }
+  sampleSiltDecisions() {
+    const trace = this.frameState?.siltPressureRoute?.transactionTrace;
+    if (!trace || !Number.isFinite(trace.lastSequence) || !Array.isArray(trace.events)) return;
+    if (this.lastSiltDecisionSequence === null) {
+      // Capture entry is a diagnostic boundary: don't replay decisions made
+      // before recording started. Receipts made later survive 150ms sampling.
+      this.lastSiltDecisionSequence = trace.lastSequence;
+      this.recordEvent('silt-decision-trace-baseline', { sequence: trace.lastSequence });
+      return;
+    }
+    const recent = trace.events.filter(e => e.sequence > this.lastSiltDecisionSequence)
+      .sort((a, b) => a.sequence - b.sequence);
+    if (recent.length && recent[0].sequence > this.lastSiltDecisionSequence + 1) {
+      this.recordEvent('silt-decision-trace-gap', {
+        firstAvailableSequence: recent[0].sequence,
+        lastRecordedSequence: this.lastSiltDecisionSequence,
+        caveat: 'Route ring buffer was overwritten between samples; events were lost.'
+      });
+    }
+    for (const decision of recent) {
+      this.recordEvent('silt-authoritative-route-decision', { decision });
+      this.lastSiltDecisionSequence = decision.sequence;
+    }
+  }
   timelineSummary() {
     const counts = {};
     const heldPulses = [];
@@ -181,11 +212,19 @@ export class WorldObjectCensusSystem {
       if (event.type === 'game-pulse-event' && event.heldTargetAtSample) heldPulses.push({ time: event.time, unitId: event.heldTargetAtSample, pulseEventId: event.pulseEventId });
       if (event.type === 'game-absorb-started' && event.heldTargetAtSample) heldAbsorbStarts.push({ time: event.time, unitId: event.heldTargetAtSample });
     }
+    const routeDecisionCounts = {};
+    for (const e of this.captureEvents) {
+      if (e.type !== 'silt-authoritative-route-decision') continue;
+      const d = e.decision ?? {};
+      const key = `${d.kind ?? 'unknown'}:${d.route ?? d.decision ?? 'unknown'}`;
+      routeDecisionCounts[key] = (routeDecisionCounts[key] ?? 0) + 1;
+    }
     return {
-      eventCounts: counts, pulsesObservedWhileHolding: heldPulses,
+      eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
+      routeDecisionCounts, pulsesObservedWhileHolding: heldPulses,
       absorbStartsObservedWhileHolding: heldAbsorbStarts,
       targetedPulseForceConfirmed: false, heldGrainAbsorptionConfirmed: false,
-      proofLimit: 'Correlated input and snapshots are not direct force/transfer transactions; authoritative target-specific instrumentation remains a separate task.'
+      proofLimit: 'Silt decision receipts identify environmental pressure/spatial appetite handling. They cannot verify or rule out an effect in a separate subsystem.'
     };
   }
   materialContext() {
@@ -231,6 +270,7 @@ export class WorldObjectCensusSystem {
   sampleState() {
     this.sampleInputs();
     this.sampleAuthority();
+    this.sampleSiltDecisions();
     this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
@@ -255,7 +295,7 @@ export class WorldObjectCensusSystem {
       this.updateRecordIndicator('REC STOPPED · Alt+Shift+E export JSON');
       return;
     }
-    this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null;
+    this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
     this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
     this.captureTimer = setInterval(() => this.sampleState(), 150);
@@ -263,13 +303,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2F-AUTHORITY-OBSERVATION', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2G-TRANSACTION-ROUTE-AUDIT', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: 'Read-only 150ms sampling; raw gamepad edges, published Core input, Silt environment progression, chemistry count, and material ownership. Short events can be missed. No authoritative held-grain Pulse force or held-grain Absorb transaction, orb provenance, or traversal provenance.',
+      limitations: '150ms sampled global state plus bounded event receipts from Silt route Pulse and spatial Absorb decision points. Receipts prove Silt route branches, not effects in other systems. Neither held-grain physics nor held-grain material consumption exists in this route audit; orb and traversal provenance remain unobserved.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2F_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2G_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
