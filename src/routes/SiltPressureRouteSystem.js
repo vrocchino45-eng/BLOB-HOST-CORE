@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
 import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
 import { MaterialIdentityLedger } from "../ecology/MaterialIdentityLedger.js";
+import { SiltCompressionContact } from "../contact/SiltCompressionContact.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -34,6 +35,10 @@ export class SiltPressureRouteSystem {
     this.siltAimDirection = new THREE.Vector3();
     this.siltAimMarker = null;
     this.siltGripTether = null;
+    this.siltContact = null;
+    this.siltContactMesh = null;
+    this.siltContactEcho = null;
+    this.heldContactPulseApproachFrame = 0;
 
     this.recipe = null;
     this.root = null;
@@ -211,6 +216,8 @@ export class SiltPressureRouteSystem {
     this.heldGripInitialRadius = null;
     this.siltAimCandidateId = null;
     this.siltAimLockedId = null;
+    this.siltContact?.update({ dt: 0, heldId: null });
+    this.heldContactPulseApproachFrame = 0;
     this.setVisible(false);
     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
       ? "returned_to_hub_through_silt_fold"
@@ -249,6 +256,7 @@ export class SiltPressureRouteSystem {
       stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
     });
     this.animateLivingMatter();
+    this.updateSiltContact(dt, frameState);
     this.updateSiltAimMarker();
     this.applyDynamicPressure(frameState, sample);
     this.animate(frameState, sample);
@@ -471,6 +479,7 @@ export class SiltPressureRouteSystem {
     this.createAppetitePackets();
     this.createHabitatFoundation();
     this.createLivingMaterialCycle();
+    this.createSiltContactPatch();
     this.createDeepOrgan();
     this.createReturnFold();
     this.scene.add(this.root);
@@ -928,11 +937,81 @@ export class SiltPressureRouteSystem {
     this.root.add(this.siltGripTether);
   }
 
+  // D2J: the one deliberately contactable *Silt sediment* patch, located
+  // on the existing garden catchment. Every other LS1A2 geologic surface
+  // remains visual-only. This is a proximity relationship, not a collider.
+  createSiltContactPatch() {
+    const garden = this.recipe?.habitatFoundation?.habitats?.find(h => h.id === 'garden');
+    if (!garden) return;
+    const position = [garden.center[0],
+      garden.center[1] - garden.radii[1] * 0.83, garden.center[2]];
+    this.siltContact = new SiltCompressionContact({ position });
+    const material = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: 0x8a6e4a, emissive: 0x3c2f21, emissiveIntensity: 0.18,
+      roughness: 0.94, transparent: true, opacity: 0.78,
+      depthWrite: false, side: THREE.DoubleSide
+    }));
+    const patch = new THREE.Mesh(new THREE.CylinderGeometry(0.73, 0.77, 0.06, 20), material);
+    patch.name = 'silt_LS1D1D2J_garden_catchment_pressure_patch';
+    patch.position.fromArray(position);
+    patch.userData.targetingSuppressed = true;
+    patch.userData.siltContact = { id: 'silt-garden-catchment-contact',
+      accepts: 'committed_grain_approaching_on_pulse', collision: false };
+    this.siltContactMesh = patch;
+    this.root.add(patch);
+    const echoMaterial = this.trackMaterial(new THREE.MeshBasicMaterial({
+      color: 0xd4ac79, transparent: true, opacity: 0.24, depthWrite: false,
+      side: THREE.DoubleSide
+    }));
+    const echo = new THREE.Mesh(new THREE.RingGeometry(0.77, 0.83, 28), echoMaterial);
+    echo.name = 'silt_LS1D1D2J_reversible_contact_echo';
+    echo.rotation.x = -Math.PI / 2;
+    echo.position.fromArray(position);
+    echo.position.y += 0.05;
+    echo.userData.targetingSuppressed = true;
+    this.siltContactEcho = echo;
+    this.root.add(echo);
+  }
+
+  updateSiltContact(dt, frameState) {
+    if (!this.siltContact) return;
+    const events = this.siltContact.update({ dt,
+      heldId: this.siltGrip.heldId,
+      heldPosition: this.siltGrip.position,
+      pulseApproach: this.heldContactPulseApproachFrame,
+      absorbHeld: Boolean(frameState.input?.absorbHeld)
+    });
+    this.heldContactPulseApproachFrame = 0;
+    for (const event of events) {
+      this.recordSiltDecision('silt-contact', {
+        ...event, contactPatchId: 'silt-garden-catchment-contact',
+        heldGrainId: event.unitId,
+        semantic: 'held_silt_grain_against_garden_sediment'
+      }, frameState);
+    }
+    const state = this.siltContact.snapshot();
+    if (this.siltContactMesh) {
+      this.siltContactMesh.scale.y = 1 - state.pressure * 0.55;
+      this.siltContactMesh.material.color.setHex(state.inContact ? 0xb59a73 : 0x8a6e4a);
+      this.siltContactMesh.material.emissiveIntensity = 0.18 + state.pressure * 0.65
+        + (state.imprinted ? 0.22 : 0);
+    }
+    if (this.siltContactEcho) {
+      this.siltContactEcho.visible = state.inContact || state.echoSeconds > 0;
+      this.siltContactEcho.scale.setScalar(1 + state.pressure * 0.2
+        + Math.max(0, state.echoSeconds) * 0.12);
+      this.siltContactEcho.material.opacity = 0.12 + state.pressure * 0.47
+        + Math.min(0.2, state.echoSeconds * 0.09);
+      this.siltContactEcho.material.color.setHex(state.imprinted ? 0xf4d3a3 : 0xd4ac79);
+    }
+  }
+
   // LS1D1D1: Silt candidates are chosen by camera direction, never nearest-first.
   // The world/region targeting authority remains unchanged; Silt publishes its own
   // explicit material target ID until shared Host target registration is ready.
   updateSiltGrip(frameState, dt = 0) {
     const input = frameState.input ?? {};
+    this.heldContactPulseApproachFrame = 0;
     const aiming = Boolean(input.stabilizeHeld);
     const units = this.livingCycle?.units ?? [];
     const eligible = new Set(["veins", "garden_transit", "settled"]);
@@ -1086,6 +1165,20 @@ export class SiltPressureRouteSystem {
         noMaterialTransfer: true
       }, frameState);
       return;
+    }
+    // Only an *accepted* outward Pulse approaching the authored patch can
+    // load sediment pressure. A pulse elsewhere (or away) cannot do so.
+    if (push && this.siltContact && pushRadius > startingRadius + 0.0001) {
+      const patch = this.siltContact.position;
+      const near = radius => {
+        const scale = radius / originalRadius;
+        return Math.hypot(
+          this.localPlayer.x + offset.x * scale - patch[0],
+          (this.localPlayer.y + offset.y * scale - patch[1]) * 1.15,
+          this.localPlayer.z + offset.z * scale - patch[2]
+        );
+      };
+      this.heldContactPulseApproachFrame = Math.max(0, near(startingRadius) - near(pushRadius));
     }
     offset.copy(proposedOffset);
     this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
@@ -1980,8 +2073,9 @@ export class SiltPressureRouteSystem {
         newProgression: false
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
+      siltContact: this.siltContact?.snapshot() ?? null,
       heldMaterialMotion: {
-        pass: "LS1D1D2I", heldId: this.siltGrip.heldId,
+        pass: "LS1D1D2J", heldId: this.siltGrip.heldId,
         initialGripRadius: this.heldGripInitialRadius,
         feedbackKind: this.heldMotionFeedbackKind,
         feedbackAge: Number(Math.max(0, this.elapsed - this.heldMotionFeedbackAt).toFixed(3)),
@@ -1995,7 +2089,7 @@ export class SiltPressureRouteSystem {
         contract: "Pulse pushes, Absorb pulls, neither consumes the held grain"
       },
       transactionTrace: {
-        pass: "LS1D1D2I",
+        pass: "LS1D1D2J",
         lastSequence: this.transactionSequence,
         events: this.transactionTrace.slice(),
         scope: "SiltPressureRouteSystem decisions only; no global verb-route inference"

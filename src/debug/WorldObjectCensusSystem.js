@@ -79,6 +79,7 @@ export class WorldObjectCensusSystem {
     const chem = fs.chemObjectState ?? {};
     const bond = fs.bondState ?? {};
     const motion = silt.heldMaterialMotion ?? {};
+    const contact = silt.siltContact ?? {};
     return {
       pulseEventId: Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0,
       pulsePressed: !!input.pulsePressed,
@@ -102,6 +103,20 @@ export class WorldObjectCensusSystem {
       lastSiltInteraction: silt.lastInteraction ?? null,
       siltCompleted: !!silt.completed,
       siltSafeMatterAbsorbed: !!silt.safeMatterAbsorbed,
+      siltContact: {
+        patchId: contact.patchId ?? null,
+        heldId: contact.heldId ?? null,
+        inContact: !!contact.inContact,
+        pressure: Number(contact.pressure ?? 0),
+        imprinted: !!contact.imprinted,
+        contacts: Number(contact.contacts ?? 0),
+        presses: Number(contact.presses ?? 0),
+        imprints: Number(contact.imprints ?? 0),
+        separations: Number(contact.separations ?? 0),
+        lastOutcome: contact.lastOutcome ?? null,
+        massTransfer: !!contact.massTransfer,
+        progressionCredit: !!contact.progressionCredit
+      },
       heldMaterialMotion: {
         heldId: motion.heldId ?? null,
         radius: Number.isFinite(motion.radius) ? motion.radius : null,
@@ -224,12 +239,16 @@ export class WorldObjectCensusSystem {
       if (event.type === 'game-absorb-started' && event.heldTargetAtSample) heldAbsorbStarts.push({ time: event.time, unitId: event.heldTargetAtSample });
     }
     const routeDecisionCounts = {};
+    const contactOutcomes = {};
     const heldMotion = { pulseOutward: 0, pulseAtBound: 0, absorbInward: 0, absorbAtBound: 0, totalPulseDisplacement: 0, totalAbsorbDisplacement: 0 };
     for (const e of this.captureEvents) {
       if (e.type !== 'silt-authoritative-route-decision') continue;
       const d = e.decision ?? {};
       const key = `${d.kind ?? 'unknown'}:${d.route ?? d.decision ?? d.outcome ?? 'unknown'}`;
       routeDecisionCounts[key] = (routeDecisionCounts[key] ?? 0) + 1;
+      if (d.kind === 'silt-contact') {
+        contactOutcomes[d.outcome ?? 'unknown'] = (contactOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
+      }
       if (d.kind !== 'held-material-motion') continue;
       if (d.verb === 'pulse') {
         if (d.appliedDisplacement > 0) heldMotion.pulseOutward++;
@@ -253,7 +272,10 @@ export class WorldObjectCensusSystem {
       heldMotion.authoritativeCumulativePullDistance - heldMotion.totalAbsorbDisplacement).toFixed(4));
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
-      routeDecisionCounts, heldMaterialMotion: heldMotion, pulsesObservedWhileHolding: heldPulses,
+      routeDecisionCounts, heldMaterialMotion: heldMotion,
+      siltContact: { outcomes: contactOutcomes, finalState: this.authoritySnapshot().siltContact,
+        proofLimit: 'Contact is authored-patch proximity with accepted Pulse approach. Imprint is reversible visual/pressure state, not collisions, fracture, or chemical bond.' },
+      pulsesObservedWhileHolding: heldPulses,
       absorbStartsObservedWhileHolding: heldAbsorbStarts,
       targetedPulseForceConfirmed: false, heldGrainAbsorptionConfirmed: false,
       heldGrainKinematicDisplacementConfirmed: heldMotion.pulseOutward > 0 || heldMotion.absorbInward > 0,
@@ -336,13 +358,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2I-MOTION-FEEL-CALIBRATION', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2J-REVERSIBLE-SILT-CONTACT', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled global state plus bounded route and held-material-motion receipts. D2H receipts measure accepted Silt grip offset changes, not physics impulses or Core intake. No held-grain chemistry or material ownership transfer. Other subsystems, orb provenance, and traversal provenance remain unaudited.',
+      limitations: '150ms sampled input plus bounded Silt route and contact receipts. D2J contact is authored-patch proximity plus accepted Pulse approach, not colliders or material chemistry. No Core intake, fracture, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2I_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2J_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
