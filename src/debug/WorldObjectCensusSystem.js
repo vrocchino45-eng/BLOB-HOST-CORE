@@ -14,6 +14,9 @@ export class WorldObjectCensusSystem {
     this.capturePrevious = null;
     this.inputPrevious = null;
     this.captureTick = 0;
+    this.authorityPrevious = null;
+    this.recIndicator = null;
+    this.recNoticeTimeout = null;
     this.keyHandler = event => {
       if (event.altKey && event.shiftKey && event.code === 'KeyR') { event.preventDefault(); this.toggleCapture(); return; }
       if (event.altKey && event.shiftKey && event.code === 'KeyE') { event.preventDefault(); this.exportTimeline(); return; }
@@ -28,6 +31,162 @@ export class WorldObjectCensusSystem {
       if (this.captureActive) this.recordEvent('keyboard-up', { code: event.code, target: this.materialContext() });
     };
     window.addEventListener('keyup', this.keyUpHandler);
+    this.createRecordIndicator();
+  }
+  createRecordIndicator() {
+    if (this.recIndicator || typeof document === 'undefined' || !document.body) return;
+    const element = document.createElement('div');
+    element.setAttribute('role', 'status');
+    element.setAttribute('aria-live', 'polite');
+    element.setAttribute('aria-label', 'BLOB observation recording status');
+    element.style.cssText = 'position:fixed;top:12px;left:12px;z-index:100002;pointer-events:none;display:none;padding:7px 10px;background:rgba(8,14,20,.93);border:1px solid rgba(238,99,99,.8);border-radius:7px;color:#fff;font:600 12px/1.4 monospace;letter-spacing:.04em;box-shadow:0 2px 14px rgba(0,0,0,.35)';
+    document.body.appendChild(element);
+    this.recIndicator = element;
+  }
+  updateRecordIndicator(message = null) {
+    this.createRecordIndicator();
+    if (!this.recIndicator) return;
+    if (this.recNoticeTimeout) { clearTimeout(this.recNoticeTimeout); this.recNoticeTimeout = null; }
+    if (this.captureActive) {
+      const elapsed = this.captureStartedAt ? Math.floor(Math.max(0, Date.now() - Date.parse(this.captureStartedAt)) / 1000) : 0;
+      const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const seconds = String(elapsed % 60).padStart(2, '0');
+      this.recIndicator.textContent = `● REC ${minutes}:${seconds}  ·  Alt+Shift+R stop`;
+      this.recIndicator.style.display = 'block';
+      return;
+    }
+    if (message) {
+      this.recIndicator.textContent = message;
+      this.recIndicator.style.display = 'block';
+      this.recNoticeTimeout = setTimeout(() => {
+        if (!this.captureActive && this.recIndicator) this.recIndicator.style.display = 'none';
+        this.recNoticeTimeout = null;
+      }, 3500);
+    } else {
+      this.recIndicator.style.display = 'none';
+    }
+  }
+  // These are *published game-state outcomes*, not guesses from controller buttons.
+  // None of these fields proves that a specific held grain received Pulse force
+  // or an Absorb mass transfer. Record context for correlation only.
+  authoritySnapshot() {
+    const fs = this.frameState ?? {};
+    const input = fs.input ?? {};
+    const silt = fs.siltPressureRoute ?? {};
+    const cycle = silt.livingMaterialCycle ?? {};
+    const identity = silt.materialIdentity ?? {};
+    const chem = fs.chemObjectState ?? {};
+    const bond = fs.bondState ?? {};
+    return {
+      pulseEventId: Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0,
+      pulsePressed: !!input.pulsePressed,
+      pulseHeld: !!input.pulseHeld,
+      absorbHeld: !!input.absorbHeld,
+      stabilizeHeld: !!input.stabilizeHeld,
+      pressureReadSequence: Number(silt.pressureReadSequence ?? 0),
+      unboundPulseCount: Number(silt.unboundPulseCount ?? 0),
+      appetiteDrawSequence: Number(silt.appetiteDrawSequence ?? 0),
+      lastAppetiteDrawKind: silt.lastAppetiteDrawKind ?? null,
+      cycleEventSequence: Number(cycle.lastEventSequence ?? 0),
+      cycleLastEvent: cycle.lastEvent ?? null,
+      cycleMass: Number.isFinite(cycle.conservedMass) ? cycle.conservedMass : null,
+      materialOwnerSequence: Array.isArray(identity.records)
+        ? identity.records.map(item => ({ id: item.id, owner: item.owner, representation: item.representation, historySequence: item.historySequence }))
+        : [],
+      chemAbsorbedObjects: Number(chem.absorbedObjects ?? 0),
+      chemResponse: chem.pulseResponse ?? null,
+      bondObjectId: bond.objectId ?? null,
+      bondAbsorbProgress: Number(bond.absorbProgress ?? 0),
+      lastSiltInteraction: silt.lastInteraction ?? null,
+      siltCompleted: !!silt.completed,
+      siltSafeMatterAbsorbed: !!silt.safeMatterAbsorbed,
+    };
+  }
+  sampleAuthority() {
+    const now = this.authoritySnapshot();
+    const before = this.authorityPrevious;
+    const target = this.materialContext();
+    if (!before) {
+      this.recordEvent('authority-baseline', { state: now, target });
+    } else {
+      if (now.pulseEventId > before.pulseEventId) {
+        this.recordEvent('game-pulse-event', {
+          pulseEventId: now.pulseEventId, previousPulseEventId: before.pulseEventId,
+          heldTargetAtSample: target.heldId, target,
+          caveat: 'Canonical input Pulse sequence, not evidence of force applied to held material.'
+        });
+      }
+      if (now.absorbHeld !== before.absorbHeld) {
+        this.recordEvent(now.absorbHeld ? 'game-absorb-started' : 'game-absorb-ended',
+          { heldTargetAtSample: target.heldId, target });
+      }
+      if (now.stabilizeHeld !== before.stabilizeHeld) {
+        this.recordEvent(now.stabilizeHeld ? 'game-stabilize-started' : 'game-stabilize-ended', { target });
+      }
+      if (now.pressureReadSequence > before.pressureReadSequence) {
+        this.recordEvent('silt-pressure-read-committed', {
+          sequence: now.pressureReadSequence, target,
+          caveat: 'Silt environment pressure progression; not a held-grain Pulse impact.'
+        });
+      }
+      if (now.unboundPulseCount > before.unboundPulseCount) {
+        this.recordEvent('silt-unbound-pulse-count-increased', { delta: now.unboundPulseCount - before.unboundPulseCount, target });
+      }
+      if (now.appetiteDrawSequence > before.appetiteDrawSequence) {
+        this.recordEvent('silt-porous-absorb-committed', {
+          sequence: now.appetiteDrawSequence, kind: now.lastAppetiteDrawKind, target,
+          caveat: 'Canonical Silt safe-packet progression; not proof that the held grain was absorbed.'
+        });
+      }
+      if (now.chemAbsorbedObjects > before.chemAbsorbedObjects) {
+        this.recordEvent('chemistry-absorption-committed', {
+          delta: now.chemAbsorbedObjects - before.chemAbsorbedObjects,
+          total: now.chemAbsorbedObjects, chemistryTargetId: now.bondObjectId, target,
+          caveat: 'Bond/chemistry object, not necessarily the held Silt grain.'
+        });
+      }
+      if (now.cycleEventSequence > before.cycleEventSequence) {
+        this.recordEvent('silt-cycle-event-observed', {
+          lastSequence: now.cycleEventSequence, delta: now.cycleEventSequence - before.cycleEventSequence,
+          lastKind: now.cycleLastEvent, conservedMass: now.cycleMass, target,
+          caveat: 'Only the last published cycle event is known; intervening events may be missed.'
+        });
+      }
+      const oldOwners = new Map(before.materialOwnerSequence.map(item => [item.id, item]));
+      for (const unit of now.materialOwnerSequence) {
+        const old = oldOwners.get(unit.id);
+        if (old && (unit.owner !== old.owner || unit.representation !== old.representation || unit.historySequence !== old.historySequence)) {
+          this.recordEvent('silt-material-owner-changed', {
+            unitId: unit.id, from: old.owner, to: unit.owner,
+            fromRepresentation: old.representation, toRepresentation: unit.representation,
+            historySequence: unit.historySequence, target
+          });
+        }
+      }
+      if (now.siltCompleted && !before.siltCompleted) {
+        this.recordEvent('silt-completion-committed', { target });
+      }
+      if (now.siltSafeMatterAbsorbed && !before.siltSafeMatterAbsorbed) {
+        this.recordEvent('silt-safe-matter-flag-earned', { target });
+      }
+    }
+    this.authorityPrevious = now;
+  }
+  timelineSummary() {
+    const counts = {};
+    const heldPulses = [];
+    const heldAbsorbStarts = [];
+    for (const event of this.captureEvents) {
+      counts[event.type] = (counts[event.type] ?? 0) + 1;
+      if (event.type === 'game-pulse-event' && event.heldTargetAtSample) heldPulses.push({ time: event.time, unitId: event.heldTargetAtSample, pulseEventId: event.pulseEventId });
+      if (event.type === 'game-absorb-started' && event.heldTargetAtSample) heldAbsorbStarts.push({ time: event.time, unitId: event.heldTargetAtSample });
+    }
+    return {
+      eventCounts: counts, pulsesObservedWhileHolding: heldPulses,
+      absorbStartsObservedWhileHolding: heldAbsorbStarts,
+      targetedPulseForceConfirmed: false, heldGrainAbsorptionConfirmed: false,
+      proofLimit: 'Correlated input and snapshots are not direct force/transfer transactions; authoritative target-specific instrumentation remains a separate task.'
+    };
   }
   materialContext() {
     const fs = this.frameState ?? {};
@@ -71,6 +230,8 @@ export class WorldObjectCensusSystem {
   }
   sampleState() {
     this.sampleInputs();
+    this.sampleAuthority();
+    this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
     const grip = fs.siltPressureRoute?.siltGrip ?? {};
@@ -91,23 +252,25 @@ export class WorldObjectCensusSystem {
       this.sampleState();
       clearInterval(this.captureTimer); this.captureTimer = null;
       this.recordEvent('capture-stopped'); this.captureActive = false;
+      this.updateRecordIndicator('REC STOPPED · Alt+Shift+E export JSON');
       return;
     }
-    this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null;
+    this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null;
     this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
-    this.recordEvent('capture-started'); this.sampleState();
+    this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
     this.captureTimer = setInterval(() => this.sampleState(), 150);
   }
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2E-INPUT-EDGES', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2F-AUTHORITY-OBSERVATION', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: 'Read-only 150ms sampling, raw keyboard/gamepad edges, and observed Silt state. Brief button taps may be missed; gamepad indices are not mapped to gameplay verbs. No authoritative Pulse force, Absorb transaction, orb spawn, or traversal provenance.',
-      events: this.captureEvents, finalCensus: this.snapshot(),
+      limitations: 'Read-only 150ms sampling; raw gamepad edges, published Core input, Silt environment progression, chemistry count, and material ownership. Short events can be missed. No authoritative held-grain Pulse force or held-grain Absorb transaction, orb provenance, or traversal provenance.',
+      summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2E_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2F_OBSERVATION.json'; a.click();
+    this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   snapshot() {
