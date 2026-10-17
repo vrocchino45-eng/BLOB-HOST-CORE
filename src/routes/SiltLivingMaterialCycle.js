@@ -85,6 +85,11 @@ export class SiltLivingMaterialCycle {
   }
 
   advance(dt, input) {
+    // D2N1: freeze an individually seated receiving-site unit as well as an
+    // independently Core-held unit. Never create or remove a material unit.
+    const withheld = new Set(Array.isArray(input.withheldUnitIds)
+      ? input.withheldUnitIds : [input.heldUnitId]);
+    const isWithheld = unit => withheld.has(unit.id);
     this.elapsed += dt;
     this.flowBoost = Math.max(0, this.flowBoost - dt);
     const boosted = this.flowBoost > 0;
@@ -93,7 +98,7 @@ export class SiltLivingMaterialCycle {
     const traveling = this.units.filter(u => ["veins", "garden_transit", "returning"].includes(u.phase)).length;
     this.releaseClock += dt * rate;
     if (traveling < cap && this.releaseClock >= this.recipe.releaseIntervalSeconds) {
-      const stored = this.units.find(u => u.phase === "reservoir" && u.id !== input.heldUnitId);
+      const stored = this.units.find(u => u.phase === "reservoir" && !isWithheld(u));
       if (stored) {
         this.releaseClock = 0;
         this.transition(stored, "veins");
@@ -102,7 +107,7 @@ export class SiltLivingMaterialCycle {
     }
 
     for (const unit of this.units) {
-      if (unit.id === input.heldUnitId) continue;
+      if (isWithheld(unit)) continue;
       if (unit.phase === "reservoir" || unit.phase === "settled") continue;
       const gardenHoned = input.habitatId === "garden" && Boolean(input.stabilizeHeld);
       const growRate = gardenHoned && unit.phase === "growing" ? this.recipe.gardenStabilizeMultiplier : 1;
@@ -124,9 +129,9 @@ export class SiltLivingMaterialCycle {
     // Buds need sediment *accumulation*: two deposited units of at least the
     // authored minimum settled age. Mass and identities survive the pairing.
     for (const unit of this.units) {
-      if (unit.phase === "settled" && unit.id !== input.heldUnitId) unit.age += dt;
+      if (unit.phase === "settled" && !isWithheld(unit)) unit.age += dt;
     }
-    const settled = this.units.filter(u => u.phase === "settled" && u.id !== input.heldUnitId && u.age >= this.recipe.minimumSettleSeconds);
+    const settled = this.units.filter(u => u.phase === "settled" && !isWithheld(u) && u.age >= this.recipe.minimumSettleSeconds);
     if (settled.length >= 2) {
       this.transition(settled[0], "growing");
       this.transition(settled[1], "growing");

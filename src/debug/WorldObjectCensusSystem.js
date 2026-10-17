@@ -81,6 +81,7 @@ export class WorldObjectCensusSystem {
     const bond = fs.bondState ?? {};
     const motion = silt.heldMaterialMotion ?? {};
     const contact = silt.siltContact ?? {};
+    const seat = silt.siltPlateSeat ?? {};
     return {
       pulseEventId: Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0,
       pulsePressed: !!input.pulsePressed,
@@ -104,6 +105,15 @@ export class WorldObjectCensusSystem {
       lastSiltInteraction: silt.lastInteraction ?? null,
       siltCompleted: !!silt.completed,
       siltSafeMatterAbsorbed: !!silt.safeMatterAbsorbed,
+      siltPlateSeat: {
+        siteId: seat.siteId ?? null, unitId: seat.unitId ?? null,
+        occupied: !!seat.occupied, seats: Number(seat.seats ?? 0),
+        extractions: Number(seat.extractions ?? 0),
+        sequence: Number(seat.sequence ?? 0),
+        position: Array.isArray(seat.position) ? [...seat.position] : null,
+        owner: seat.owner ?? 'environment',
+        progressionCredit: !!seat.progressionCredit
+      },
       siltContact: {
         patchId: contact.patchId ?? null,
         heldId: contact.heldId ?? null,
@@ -207,6 +217,12 @@ export class WorldObjectCensusSystem {
           });
         }
       }
+      if (now.siltPlateSeat.sequence > before.siltPlateSeat.sequence) {
+        this.recordEvent('silt-site-relationship-changed', {
+          site: now.siltPlateSeat, previous: before.siltPlateSeat,
+          caveat: 'Authored site retention, not mass ownership or Core chemistry.'
+        });
+      }
       if (now.siltCompleted && !before.siltCompleted) {
         this.recordEvent('silt-completion-committed', { target });
       }
@@ -251,6 +267,7 @@ export class WorldObjectCensusSystem {
     }
     const routeDecisionCounts = {};
     const contactOutcomes = {};
+    const seatOutcomes = {};
     const heldMotion = { pulseOutward: 0, pulseAtBound: 0, pulseBraced: 0, absorbInward: 0, absorbAtBound: 0, totalPulseDisplacement: 0, totalAbsorbDisplacement: 0 };
     for (const e of this.captureEvents) {
       if (e.type !== 'silt-authoritative-route-decision') continue;
@@ -259,6 +276,9 @@ export class WorldObjectCensusSystem {
       routeDecisionCounts[key] = (routeDecisionCounts[key] ?? 0) + 1;
       if (d.kind === 'silt-contact') {
         contactOutcomes[d.outcome ?? 'unknown'] = (contactOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
+      }
+      if (d.kind === 'silt-seat') {
+        seatOutcomes[d.outcome ?? 'unknown'] = (seatOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
       }
       if (d.kind !== 'held-material-motion') continue;
       if (d.verb === 'pulse') {
@@ -293,6 +313,9 @@ export class WorldObjectCensusSystem {
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
       routeDecisionCounts, heldMaterialMotion: heldMotion,
+      siltPlateSeat: { outcomes: seatOutcomes,
+        finalState: this.authoritySnapshot().siltPlateSeat,
+        proofLimit: 'One route-local receiving site; environment remains ledger owner. No global persistent save or native-path motion rewrite.' },
       siltContact: { outcomes: contactOutcomes, finalState: this.authoritySnapshot().siltContact,
         proofLimit: 'Contact is authored-patch proximity and bounded Stabilize brace; D2M prioritizes an already-touching brace before Pulse and reports tether tension. Imprint is reversible visual/pressure state, not collisions, force, fracture, or chemical bond.' },
       pulsesObservedWhileHolding: heldPulses,
@@ -379,13 +402,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2M-CONTACT-PULSE-ARBITRATION', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2N1-INTERACTION-MATRIX-PLATE-SEATING', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled input plus bounded Silt route receipts. D2M preserves free-grain movement and routes Pulse through already-touching Stabilized contact before displacement, with a hard original tether and visual strain cue. No collision force, chemistry, Core intake, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
+      limitations: '150ms sampled input plus bounded Silt route receipts. D2N1 retains one legitimately imprinted Silt grain at the authored receiving site on deliberate grip release; unseated grains retain D2M movement and native-cycle routes. One canonical site, no general save persistence or altered free-grain trajectories. No collision force, chemistry, Core intake, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2M_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2N1_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

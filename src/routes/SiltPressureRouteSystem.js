@@ -3,6 +3,7 @@ import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
 import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
 import { MaterialIdentityLedger } from "../ecology/MaterialIdentityLedger.js";
 import { SiltCompressionContact } from "../contact/SiltCompressionContact.js";
+import { SiltPlateSeat } from "../contact/SiltPlateSeat.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -36,6 +37,9 @@ export class SiltPressureRouteSystem {
     this.siltAimMarker = null;
     this.siltGripTether = null;
     this.siltContact = null;
+    // The first specific instance of the reusable interaction matrix:
+    // earned, deliberate surface seating after the pressure imprint.
+    this.siltPlateSeat = new SiltPlateSeat();
     this.siltContactMesh = null;
     this.siltContactEcho = null;
     this.siltContactIndent = null;
@@ -272,6 +276,7 @@ export class SiltPressureRouteSystem {
     }
     this.livingCycle?.update(dt, {
       heldUnitId: this.siltGrip.heldId,
+      withheldUnitIds: [this.siltGrip.heldId, this.siltPlateSeat.unitId].filter(Boolean),
       habitatId: this.habitatSample.id,
       pulsePressed: Boolean(frameState.input?.pulsePressed),
       pulseEventId: frameState.input?.pulseEventId ?? frameState.frame,
@@ -1036,29 +1041,32 @@ export class SiltPressureRouteSystem {
       }, frameState);
     }
     const state = this.siltContact.snapshot();
+    const seated = Boolean(this.siltPlateSeat.unitId);
+    const visiblePressure = seated ? 1 : state.pressure;
+    const visibleImprint = seated || state.imprinted;
     if (this.siltContactMesh) {
       // The patch itself gently yields and visibly sinks under held pressure.
       // Cosmetic movement only; collision/geometry authority is unchanged.
-      this.siltContactMesh.scale.y = 1 - state.pressure * 0.55;
-      this.siltContactMesh.scale.x = 1 - state.pressure * 0.07;
-      this.siltContactMesh.scale.z = 1 - state.pressure * 0.07;
-      this.siltContactMesh.position.y = this.siltContact.position[1] - state.pressure * 0.13;
-      this.siltContactMesh.material.color.setHex(state.imprinted ? 0xe8d4b0
+      this.siltContactMesh.scale.y = 1 - visiblePressure * 0.55;
+      this.siltContactMesh.scale.x = 1 - visiblePressure * 0.07;
+      this.siltContactMesh.scale.z = 1 - visiblePressure * 0.07;
+      this.siltContactMesh.position.y = this.siltContact.position[1] - visiblePressure * 0.13;
+      this.siltContactMesh.material.color.setHex(visibleImprint ? 0xe8d4b0
         : state.pressFeedbackSeconds > 0 ? 0xe2b765
         : state.missedFeedbackSeconds > 0 ? 0xc6887c
         : state.braced && state.braceDriftWarning ? 0xf3a65e
         : state.braced ? 0x56dfb6
         : state.inContact ? 0x89b9ac : 0x8a6e4a);
-      this.siltContactMesh.material.emissiveIntensity = 0.18 + state.pressure * 0.65
-        + (state.inContact ? 0.1 : 0) + (state.imprinted ? 0.22 : 0);
+      this.siltContactMesh.material.emissiveIntensity = 0.18 + visiblePressure * 0.65
+        + (state.inContact ? 0.1 : 0) + (visibleImprint ? 0.22 : 0);
     }
     if (this.siltContactEcho) {
-      this.siltContactEcho.visible = state.braced || state.inContact || state.echoSeconds > 0;
-      this.siltContactEcho.scale.setScalar((state.braced ? 1.13 : 1) + state.pressure * 0.2
+      this.siltContactEcho.visible = seated || state.braced || state.inContact || state.echoSeconds > 0;
+      this.siltContactEcho.scale.setScalar((seated || state.braced ? 1.13 : 1) + visiblePressure * 0.2
         + Math.max(0, state.echoSeconds) * 0.12);
-      this.siltContactEcho.material.opacity = (state.braced ? 0.34 : 0.12) + state.pressure * 0.47
+      this.siltContactEcho.material.opacity = (seated || state.braced ? 0.34 : 0.12) + visiblePressure * 0.47
         + Math.min(0.2, state.echoSeconds * 0.09);
-      this.siltContactEcho.material.color.setHex(state.imprinted ? 0xf4d3a3
+      this.siltContactEcho.material.color.setHex(visibleImprint ? 0xf4d3a3
         : state.pressFeedbackSeconds > 0 ? 0xffd084
         : state.missedFeedbackSeconds > 0 ? 0xd59892
         : state.braced && state.braceDriftWarning ? 0xffad78
@@ -1066,14 +1074,14 @@ export class SiltPressureRouteSystem {
         : state.inContact ? 0x9ce1d4 : 0xd4ac79);
     }
     if (this.siltContactIndent) {
-      this.siltContactIndent.visible = state.pressure > 0.005 || state.imprinted;
+      this.siltContactIndent.visible = visiblePressure > 0.005 || visibleImprint;
       this.siltContactIndent.position.y = this.siltContact.position[1]
-        + 0.085 - state.pressure * 0.11;
-      this.siltContactIndent.scale.setScalar(1 - state.pressure * 0.13);
-      this.siltContactIndent.material.opacity = state.imprinted ? 0.91
-        : Math.min(0.78, 0.18 + state.pressure * 0.64);
+        + 0.085 - visiblePressure * 0.11;
+      this.siltContactIndent.scale.setScalar(1 - visiblePressure * 0.13);
+      this.siltContactIndent.material.opacity = visibleImprint ? 0.91
+        : Math.min(0.78, 0.18 + visiblePressure * 0.64);
       this.siltContactIndent.material.color.setHex(
-        state.imprinted ? 0xffefc6 : 0xf7ba6e);
+        visibleImprint ? 0xffefc6 : 0xf7ba6e);
     }
   }
 
@@ -1113,6 +1121,10 @@ export class SiltPressureRouteSystem {
         if (!eligible.has(unit.phase) || !mesh?.body?.visible) continue;
         const localPosition = mesh.body.position;
         if (localPosition.distanceTo(this.localPlayer) > this.siltGrip.range) continue;
+        // Seated material must be physically within the original 1.6-unit
+        // leash before extraction. Don't acquire a remote fixed-site anchor.
+        if (this.siltPlateSeat.isSeated(unit.id) &&
+            localPosition.distanceTo(this.localPlayer) > this.siltGrip.maxOffset - 0.01) continue;
         this.siltAimWorldPosition.copy(localPosition);
         this.root.localToWorld(this.siltAimWorldPosition);
         this.siltAimDirection.copy(this.siltAimWorldPosition).sub(this.siltAimCameraPosition);
@@ -1127,6 +1139,17 @@ export class SiltPressureRouteSystem {
     const held = units.find(unit => unit.id === this.siltGrip.heldId);
     if (held) {
       if (input.interactPressed || !aiming) {
+        // Intentional release of a proven imprint hands this specific grain
+        // to the receiving site. RT withdrawal or an unpressed contact never seats.
+        if (!input.absorbHeld && this.siltContact?.heldId === held.id) {
+          const receipt = this.siltPlateSeat.trySeat({
+            unitId: held.id, heldPosition: this.siltGrip.position,
+            isBraced: this.siltContact.braced,
+            imprinted: this.siltContact.imprinted,
+            actuallyTouching: this.siltContact.near(this.siltGrip.position)
+          });
+          if (receipt) this.recordSiltDecision('silt-seat', receipt, frameState);
+        }
         this.flushHeldAbsorbMotion(frameState, 'grip-released');
         this.siltGrip.release();
         this.siltAimLockedId = null;
@@ -1147,13 +1170,18 @@ export class SiltPressureRouteSystem {
       const coreLocal = this.localPlayer.toArray();
       if (this.siltGrip.tryGrip({ unit: best.unit, unitPosition: best.position,
         corePosition: coreLocal, stabilizeHeld: true, aPressed: true })) {
+        const wasSeated = this.siltPlateSeat.isSeated(best.unit.id);
+        if (wasSeated) {
+          const receipt = this.siltPlateSeat.tryExtract({ unitId: best.unit.id, gripAccepted: true });
+          if (receipt) this.recordSiltDecision('silt-seat', receipt, frameState);
+        }
         // D2I: seat newly acquired matter inside the outer boundary so the
         // first Pulse can move it. Maintain its original direction and never
         // push a naturally close grain farther out just to reach a preset.
         this.siltGripLocalOffset.fromArray(best.position).sub(this.localPlayer);
         const acquiredRadius = this.siltGripLocalOffset.length();
         const preferredRadius = Math.max(0.5, this.siltGrip.maxOffset - 0.45);
-        if (acquiredRadius > preferredRadius) {
+        if (!wasSeated && acquiredRadius > preferredRadius) {
           const seatedOffset = this.siltGripLocalOffset.clone().multiplyScalar(preferredRadius / acquiredRadius);
           const seatedPosition = this.localPlayer.clone().add(seatedOffset).toArray();
           if (this.siltGrip.moveTo(seatedPosition, coreLocal)) {
@@ -1409,6 +1437,15 @@ export class SiltPressureRouteSystem {
       const p = mesh.body.position;
       if (unit.id === this.siltGrip.heldId && this.siltGrip.position) {
         p.fromArray(this.siltGrip.position);
+        mesh.body.visible = true;
+        continue;
+      }
+      if (this.siltPlateSeat.isSeated(unit.id)) {
+        // Physically distinct surface site, not a held Core tether. The unit
+        // keeps its stable identity and one reused visual body.
+        p.fromArray(this.siltPlateSeat.position);
+        mesh.fragment.visible = true;
+        mesh.bud.visible = false;
         mesh.body.visible = true;
         continue;
       }
@@ -2200,6 +2237,14 @@ export class SiltPressureRouteSystem {
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
       siltContact: this.siltContact?.snapshot() ?? null,
+      siltPlateSeat: this.siltPlateSeat.snapshot(),
+      interactionMatrix: {
+        pass: 'LS1D1D2N1', siteId: this.siltPlateSeat.siteId,
+        implementedRecipe: 'stabilize-grip > touch > pulse-to-imprint > deliberate-release-to-seat > stabilize-grip-to-extract',
+        seatedUnitId: this.siltPlateSeat.unitId,
+        freeTrajectoryMemoryImplemented: false,
+        otherRegionInteractionsImplemented: false
+      },
       heldMaterialMotion: {
         pass: "LS1D1D2J", heldId: this.siltGrip.heldId,
         initialGripRadius: this.heldGripInitialRadius,
@@ -2215,7 +2260,7 @@ export class SiltPressureRouteSystem {
         contract: "Pulse pushes, Absorb pulls, neither consumes the held grain"
       },
       transactionTrace: {
-        pass: "LS1D1D2M",
+        pass: "LS1D1D2N1",
         lastSequence: this.transactionSequence,
         events: this.transactionTrace.slice(),
         scope: "SiltPressureRouteSystem decisions only; no global verb-route inference"

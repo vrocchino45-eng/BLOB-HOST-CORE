@@ -1,41 +1,59 @@
-# BLOB: HOST CORE — LS1D1D2M Contact/Pulse Arbitration
+# BLOB: HOST CORE — LS1D1D2N1 Interaction Matrix / Plate Seating
 
-## Install
+## Installation
 
-**Changed-files overlay, NOT a standalone game. Apply over LS1D1D2L.** In the existing BLOB project, overwrite only these three paths:
+**Changed-files overlay, NOT a standalone build. Apply on top of LS1D1D2M.** Overwrite only the paths included in this archive. Do not replace the entire game, change HC/LS1 indexed histories, or apply the deferred D2E authority guard.
 
-- `src/contact/SiltCompressionContact.js`
-- `src/routes/SiltPressureRouteSystem.js`
-- `src/debug/WorldObjectCensusSystem.js`
+### Changed source files
 
-Do not replace the rest of the project, delete old HC/LS1 indexed history, or add the deferred experimental D2E authority guard.
+- `src/contact/SiltPlateSeat.js` — **new** pure one-site seat/extract relationship state.
+- `src/routes/SiltPressureRouteSystem.js` — connects deliberate release, actual contact/imprint and regrip to the seat; retains same reused grain mesh at the authored plate.
+- `src/routes/SiltLivingMaterialCycle.js` — permits multiple independently withheld identities (Core grip and plate site); existing callers passing `heldUnitId` alone still work.
+- `src/debug/WorldObjectCensusSystem.js` — reports site relationship and seat/extract receipts in JSON.
+- `docs/BLOB_INTERACTION_MATRIX_V1.md` — conceptual verb/relationship matrix with each row marked implemented or proposed.
 
-## Convergence purpose
+## Goal and evidence
 
-The D2L observation confirmed **27 braces, 5 loaded presses, and the first reversible imprint**, but also 27 brace releases: **11 due to the original tether range, 9 due to a separate 0.85 Core-drift cap, 6 grip releases, 1 Absorb withdrawal**. The player identified the remaining control contradiction: Pulse can move an already-touching grain off the patch instead of pressing into the plate. This pass addresses that contradiction without redefining free-grain Pulse.
+D2M's actual player observation confirmed **22 pressure presses, four imprints, 19 braced Pulse receipts** and improved control. The next missing relationship was **a material grain staying at the plate after the Core releases it**. D2N1 implements only this authored Silt interaction; it is not a general system of orbiting material or universal sockets.
 
-## Changes
+### Specific sequence implemented
 
-1. **Contact-before-Pulse arbitration.** If the *already committed* grain is physically touching the one existing Silt garden patch, LT is held, Absorb is not held, and the normal brace cooldown/range rules are met, the route engages the brace **before** applying X/Pulse movement that frame. The Pulse is then routed through the actual contact and registers `stabilized-contact-resistance` with **zero grain displacement**. This is not auto-targeting or a remote snap. If the grain is outside the patch, Pulse still moves it normally, and the player must first establish legitimate contact.
-2. **One hard leash, visible warning.** The existing Silt grip remains **max 1.6 units**; the stable brace remains capped at **1.58**, with unchanged **0.38** inward movement radius. The former **0.85 Core displacement-from-brace-entry** rule no longer silently breaks the brace; beyond it the tether and plate show amber/orange *strain* warning, while the real 1.58 limit still releases it. A genuinely stretched/grip-released/Absorb-withdrawn connection breaks as before. No infinite leash or Core constraint.
-3. **More visible authored deformation.** Pressure contracts and lowers the existing patch; a single cosmetic inner depression contour appears as pressure builds (amber) and becomes pale gold on imprint. Strain cue is warmer orange, separate from turquoise contact and pale-gold imprint. The contour is `targetingSuppressed`, non-collidable, and provides no additional region interaction.
-4. **Recorder clarity.** Published contact state and JSON now include `braceTension` (0–1) and `braceDriftWarning` (boolean). Export is `BLOB_LS1D1D2M_OBSERVATION.json`; original owner, motion, contact, progression, and census fields stay available. Historical HC/LS1 history remains indexed.
+1. **LT + A** — deliberately grip an eligible Silt grain using the existing camera/selection authority.
+2. Bring it into real proximity of the single garden contact patch while holding **LT / Stabilize**.
+3. **X / Pulse at least twice** while touching and braced. The two qualifying presses produce D2M's threshold imprint. Free Pulse, contact pressure and control constants are unmodified.
+4. **Release with A or let go of LT**, while the imprint is complete and contact is still legitimately braced. The grain seats at its **actual contact position**. It stays at the plate when the Core moves away. Site glow remains pale gold; the Core grip releases. RT withdrawal **does not** seat a grain.
+5. Return to the plate, move within the original **1.6-unit** tether reach, aim at the same grain and press **LT + A** again. The grain is extracted from the site *only if the existing grip succeeds*. Use **RT** to pull it, or **X** to push as before.
+6. The receiving plate accepts only **one** grain at a time. A second, unseated grain keeps its own native material cycle. A grain released before imprint is **not seated** and returns to the existing native Silt path.
 
-## Mechanics explicitly locked
+## Critical authority distinctions
 
-D2I unbraced movement **Pulse +0.28** per accepted tap and **Absorb 0.72/s**, min/max grip radii **0.38/1.6**; LT+A acquisition; A/LT release; pressure gain **0.42/Pulse**, imprint threshold **0.80**, release/recovery behavior; eight stable Silt grain identities; lifecycle/mass conserved; original environmental porous nutrient and Silt route progression; Hub/Surface traversal, Guide and ecology, external verb routing, camera aim. No new mechanics beyond the one localized contact arbitration or reward changes.
+- **Matter and site are separate.** While seated, the identity ledger still reports owner `environment`, representation `individual`. A site occupancy record is a spatial relationship, not a new mass owner. Grip uses the original owner `grip`; release restores `environment`.
+- **Same physical identity.** No clone, spawn, replacement mesh, new recipe/chemistry or Silt progression requirement. Conserved material mass remains eight units. A seated unit is withheld from the existing cycle while anchored, and is released back into its normal cycle after extraction and free release.
+- **Same original motion.** Unbraced Pulse +0.28/tap, Absorb 0.72/sec, min/max radius 0.38 / 1.60, brace boundary and D2M pressure thresholds unchanged.
+- **Bounded locality.** Site position persists across Silt unmount/remount **in the same runtime**. No saved-game serialization, persistent storage, cross-region physical simulation, actual collision/force, fracture, or material chemistry.
+- **Not D2O trajectory memory.** An unseated grain presently returns to its scripted native cycle, *not* a new independent ballistic/native-attractor path. D2O is the isolated pass to address the user's longer-term North Star motion requirement.
 
-**Authority limits:** One authored patch with proximity/held-grain state—not full rigid-body collisions, physics impulses, chemistry, fracture, bonding, Core intake, material consumption, or persistent terrain deformation. No contact-generated progression credit.
+## Manual acceptance / 2–3 minute field test
 
-## Manual acceptance — 2–3 minutes
+1. Load Silt after applying D2N1 over D2M. Start recorder **Alt+Shift+R**.
+2. Verify a held grain away from the plate still responds to X and RT exactly like D2M.
+3. Bring another valid grain into real plate contact; while LT holds the brace, Pulse twice. See pressure and gold imprint.
+4. Release **A** while still at the plate. The grain should **stay on the plate** as the Core moves away farther than the former tether radius; tether disappears but the gold seat remains.
+5. Return within 1.6, camera aim, press **LT+A**. The **same grain** should resume Core grip; its seat clears. RT withdraws it. Repeat one more time.
+6. While one grain is seated, test another grain elsewhere: it must continue circulating and remain manipulable. Deliberately try pressing a second grain onto the occupied plate; it must not replace the first or create an extra mass unit.
+7. Leave and revisit Silt in the same running game; check whether the seat retained its grain. Confirm standard Silt porous packet completion still works.
+8. Stop with **Alt+Shift+R**; export with **Alt+Shift+E** as `BLOB_LS1D1D2N1_OBSERVATION.json`. Upload JSON and describe whether release now feels like an intentional *placement*, not a snap.
 
-1. Apply the ZIP over D2L and enter the Silt garden. Start capture via **Alt+Shift+R**.
-2. Aim at a valid grain, hold LT + A to grip, and bring the grain against the sediment patch. Look for turquoise contact/brace feedback.
-3. Without changing the Core position, tap X twice. **The ball should stay on the plate** while the plate visibly depresses and an imprint appears. The first Pulse must not throw it out of alignment.
-4. Move the Core a little farther while still holding LT. The brace should remain if the grain remains within the original tether. The tether turns orange near strain; moving beyond its maximum breaks the brace.
-5. Hold RT to withdraw. The brace and imprint relax. Release/reacquire; use Pulse on a **free grain away from the plate** to verify the old push still works.
-6. Stop recording with **Alt+Shift+R**, export with **Alt+Shift+E**, upload `BLOB_LS1D1D2M_OBSERVATION.json` and report whether contact now feels intentional.
+Expected recorded decisions: `silt-seat:plate-seated`, `silt-seat:plate-extracted`; `siltPlateSeat.occupied` and `unitId`; original eight material IDs/mass/ledger owner accounting. **Existing recorder contact `imprinted` may go false after Core grip releases because the retained occupancy is now in `siltPlateSeat`, not temporary `siltContact` pressure.**
 
-## Validation and limitations
+## Validation
 
-**107 current D2M assertions passed** using genuine `SiltCompressionContact`, the actual route `updateHeldMaterialMotion`, source recorder logic, the real original `SiltGripAuthority` in a Node harness, and stubbed Three.js vectors/materials; including pre-Pulse arbitration, consecutive pressure Pulses, imprint, correct withdrawal/release, free-grain motion, hard tether limit, output telemetry, stronger visuals, unmount identity/lock cleanup. **3/3 changed JS syntax checks passed.** The earlier D2L suite had 204 assertions; its complete harness is not available to rerun in this session and is *not* counted toward D2M's 107. No Vite/browser/WebGL rendered run has been conducted. Real feel and visuals require the above playtest.
+- 29 assertions: genuine original Silt grip, actual route release/reacquire, contact and visual retention, duplicate site rejection, independent unit pause, movement locks.
+- 41 assertions: Silt identity ledger, LS1B lifecycle and backward compatibility, recorder site-state publication, original contact pressure rules.
+- **70/70** assertions passed in isolated Node tests.
+- Four modified/new JS syntax checks passed; ZIP CRC and SHA-256 are included in the separate validation summary.
+- **NOT tested:** real Vite/browser/WebGL render, gamepad feel, visual visibility on the user's machine, persisted save/load, or D2O motion. Player field test required.
+
+## Build pass rules
+
+**Mode:** convergence / implementation proof. **Purpose:** establish one reusable grammar example where Stabilize/Pulse pressure prepares a receiving site and deliberate release seats individually conserved matter. **Allowed:** Silt site relation, dual-withheld Silt cycle, visuals and receipts, companion matrix reference. **Forbidden:** rewriting movement/targeting, environmental cycle for other regions, owner schema, chemistry or progression. **Locks:** D2I/D2M, camera, Guide, ecology, Hub/Surface. **Delete/disable:** none. **Visual:** gold persistent plate and one retained visible grain. **Acceptance:** place, leave, return, extract; **regression:** eight IDs/mass, grip and nonseated native cycle, independent unrelated verbs and Silt completion.
