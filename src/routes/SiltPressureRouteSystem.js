@@ -38,6 +38,7 @@ export class SiltPressureRouteSystem {
     this.siltContact = null;
     this.siltContactMesh = null;
     this.siltContactEcho = null;
+    this.siltContactIndent = null;
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
@@ -236,7 +237,7 @@ export class SiltPressureRouteSystem {
     this.heldContactPulseAttemptedFrame = false;
     this.heldContactBracedPulseFrame = false;
     frameState.siltMaterialAim = {
-      pass: 'LS1D1D2L', aiming: false, candidateId: null,
+      pass: 'LS1D1D2M', aiming: false, candidateId: null,
       lockedId: null, heldId: null, state: 'hidden'
     };
     this.setVisible(false);
@@ -992,6 +993,22 @@ export class SiltPressureRouteSystem {
     echo.userData.targetingSuppressed = true;
     this.siltContactEcho = echo;
     this.root.add(echo);
+    // Contact authority remains one authored surface. This inner depression
+    // contour is visual only; it never participates in collision or targeting.
+    const indentMaterial = this.trackMaterial(new THREE.MeshBasicMaterial({
+      color: 0xe2b765, transparent: true, opacity: 0, depthWrite: false,
+      side: THREE.DoubleSide
+    }));
+    const indent = new THREE.Mesh(new THREE.RingGeometry(0.27, 0.43, 32), indentMaterial);
+    indent.name = 'silt_LS1D1D2M_contact_depression_contour';
+    indent.rotation.x = -Math.PI / 2;
+    indent.position.fromArray(position);
+    indent.position.y += 0.085;
+    indent.visible = false;
+    indent.renderOrder = 18;
+    indent.userData.targetingSuppressed = true;
+    this.siltContactIndent = indent;
+    this.root.add(indent);
   }
 
   updateSiltContact(dt, frameState) {
@@ -1023,10 +1040,13 @@ export class SiltPressureRouteSystem {
       // The patch itself gently yields and visibly sinks under held pressure.
       // Cosmetic movement only; collision/geometry authority is unchanged.
       this.siltContactMesh.scale.y = 1 - state.pressure * 0.55;
+      this.siltContactMesh.scale.x = 1 - state.pressure * 0.07;
+      this.siltContactMesh.scale.z = 1 - state.pressure * 0.07;
       this.siltContactMesh.position.y = this.siltContact.position[1] - state.pressure * 0.13;
       this.siltContactMesh.material.color.setHex(state.imprinted ? 0xe8d4b0
         : state.pressFeedbackSeconds > 0 ? 0xe2b765
         : state.missedFeedbackSeconds > 0 ? 0xc6887c
+        : state.braced && state.braceDriftWarning ? 0xf3a65e
         : state.braced ? 0x56dfb6
         : state.inContact ? 0x89b9ac : 0x8a6e4a);
       this.siltContactMesh.material.emissiveIntensity = 0.18 + state.pressure * 0.65
@@ -1041,8 +1061,19 @@ export class SiltPressureRouteSystem {
       this.siltContactEcho.material.color.setHex(state.imprinted ? 0xf4d3a3
         : state.pressFeedbackSeconds > 0 ? 0xffd084
         : state.missedFeedbackSeconds > 0 ? 0xd59892
+        : state.braced && state.braceDriftWarning ? 0xffad78
         : state.braced ? 0x72ffce
         : state.inContact ? 0x9ce1d4 : 0xd4ac79);
+    }
+    if (this.siltContactIndent) {
+      this.siltContactIndent.visible = state.pressure > 0.005 || state.imprinted;
+      this.siltContactIndent.position.y = this.siltContact.position[1]
+        + 0.085 - state.pressure * 0.11;
+      this.siltContactIndent.scale.setScalar(1 - state.pressure * 0.13);
+      this.siltContactIndent.material.opacity = state.imprinted ? 0.91
+        : Math.min(0.78, 0.18 + state.pressure * 0.64);
+      this.siltContactIndent.material.color.setHex(
+        state.imprinted ? 0xffefc6 : 0xf7ba6e);
     }
   }
 
@@ -1200,24 +1231,39 @@ export class SiltPressureRouteSystem {
     let proposedOffset = offset.clone().multiplyScalar(pullRadius / originalRadius);
     let desired = this.localPlayer.clone().add(proposedOffset).toArray();
     const brace = this.siltContact;
+    // D2M: input is processed before the normal end-of-frame contact tick.
+    // If the committed grain ALREADY touches sediment when X is pressed,
+    // establish its real-position brace first. Otherwise this same Pulse
+    // would displace the grain out of the patch before contact can react.
+    if (push && brace && input.stabilizeHeld && !absorbing && !brace.braced
+        && brace.near(this.siltGrip.position)) {
+      const prePulseEvents = brace.update({ dt: 0, heldId: id,
+        heldPosition: this.siltGrip.position, corePosition: coreLocal,
+        braceHeld: true, absorbHeld: false });
+      for (const event of prePulseEvents) {
+        this.recordSiltDecision('silt-contact', {
+          ...event, contactPatchId: 'silt-garden-catchment-contact',
+          heldGrainId: event.unitId,
+          semantic: 'held_silt_grain_against_garden_sediment'
+        }, frameState);
+      }
+    }
     const anchor = brace?.braced && brace.heldId === id && !absorbing
       ? brace.braceAnchor : null;
     let bracedPressurePulse = false;
     if (anchor) {
       const anchorVector = new THREE.Vector3().fromArray(anchor);
       const coreToAnchor = anchorVector.clone().sub(this.localPlayer);
-      const driftFromEntry = this.localPlayer.clone().sub(
-        new THREE.Vector3().fromArray(brace.braceCore)).length();
-      if (driftFromEntry <= brace.braceMaxCoreDrift &&
-          coreToAnchor.length() <= brace.braceMaxTether) {
-        // A tiny amount of Core motion leaves the *same material* at its actual
-        // contact position. The tether length still comes from grip.moveTo.
+      if (coreToAnchor.length() <= brace.braceMaxTether) {
+        // Core motion within the unchanged tether range leaves the same
+        // material at its actual contact point. Extra drift now warns visually
+        // instead of breaking an otherwise valid physical relationship.
         desired = [...anchor];
         proposedOffset = coreToAnchor;
         bracedPressurePulse = push;
       }
-      // On a stretched brace, resume normal D2I motion; contact.update
-      // separately publishes why the temporary brace released.
+      // Beyond the unchanged tether range, resume normal D2I motion;
+      // contact.update publishes the hard tether release.
     }
     // Only commit movement after the grip accepts the new position.
     const accepted = this.siltGrip.moveTo(desired, coreLocal);
@@ -1229,7 +1275,7 @@ export class SiltPressureRouteSystem {
       }, frameState);
       return;
     }
-    // D2L preserves D2K: accepted movement toward the patch, OR an aimed Pulse
+    // D2M preserves D2K: accepted movement toward the patch, OR an aimed Pulse
     // against the *existing* outer tether stop, can load reversible contact.
     // The virtual beyond-bound displacement is intent geometry only. The grain
     // never moves past D2I limits, and away/tangential *unbraced* Pulse
@@ -1319,6 +1365,7 @@ export class SiltPressureRouteSystem {
     const showFeedback = locked && feedbackAge >= 0 && feedbackAge < 0.48;
     const kind = showFeedback ? this.heldMotionFeedbackKind : 'none';
     const color = kind === 'brace-pressure' ? 0xffd684
+      : this.siltContact?.braced && this.siltContact?.braceDriftWarning && locked ? 0xffad78
       : this.siltContact?.braced && locked ? 0x72ffce
       : kind === 'pulse-outward' ? 0x84cfff
       : kind === 'absorb-inward' ? 0x89edc1
@@ -2168,7 +2215,7 @@ export class SiltPressureRouteSystem {
         contract: "Pulse pushes, Absorb pulls, neither consumes the held grain"
       },
       transactionTrace: {
-        pass: "LS1D1D2L",
+        pass: "LS1D1D2M",
         lastSequence: this.transactionSequence,
         events: this.transactionTrace.slice(),
         scope: "SiltPressureRouteSystem decisions only; no global verb-route inference"

@@ -8,7 +8,9 @@
  * any kinematic displacement; that resistance can still load sediment.
  * D2L adds a local contact brace: once the committed grain truly touches the
  * patch while LT is held, the surface can temporarily retain that *exact*
- * contact position, subject to both Core drift and grip-range limits.
+ * contact position. D2M lets the established relationship resist free-grain
+ * displacement on the very first Pulse, and uses Core drift as feedback rather
+ * than a second invisible release limit. The original tether limit remains hard.
  */
 export class SiltCompressionContact {
   constructor({ position, horizontalRadius = 0.82, minHeight = -0.18,
@@ -45,9 +47,11 @@ export class SiltCompressionContact {
     this.braceReleases = 0;
     this.lastBraceReason = 'none';
     this.braceCooldownSeconds = 0;
-    // Not a larger grip radius: this limits Core displacement from the
-    // engagement point while the grain stays at its actual world position.
+    // This is a visual strain cue, NOT an extra tether or Core movement cap.
+    // The original tether envelope remains the hard release authority.
     this.braceMaxCoreDrift = 0.85;
+    this.braceTension = 0;
+    this.braceDriftWarning = false;
     this.braceMaxTether = 1.58;
   }
 
@@ -87,6 +91,8 @@ export class SiltCompressionContact {
     const clearBrace = reason => {
       if (!this.braced) return;
       this.braced = false;
+      this.braceTension = 0;
+      this.braceDriftWarning = false;
       this.braceAnchor = null;
       this.braceCore = null;
       this.braceReleases++;
@@ -122,7 +128,6 @@ export class SiltCompressionContact {
         : absorbHeld ? 'absorb-withdrawal'
         : !validPosition || !validCore ? 'position-unavailable'
         : separation(corePosition,this.braceAnchor) > this.braceMaxTether ? 'tether-range'
-        : separation(corePosition,this.braceCore) > this.braceMaxCoreDrift ? 'core-drift'
         : !this.near(heldPosition) ? 'contact-lost'
         : separation(heldPosition,this.braceAnchor) > 0.14 ? 'contact-slipped'
         : null;
@@ -148,9 +153,20 @@ export class SiltCompressionContact {
       this.braceAnchor = [...heldPosition];
       this.braceCore = [...corePosition];
       this.braces++;
+      this.braceTension = 0;
+      this.braceDriftWarning = false;
       this.lastBraceReason = 'engaged';
       this.echoSeconds = Math.max(this.echoSeconds, 0.75);
       publish('contact-brace-engaged');
+    }
+    // D2M: moving the Core should not spontaneously flick the held material
+    // off a *real* contact. The old 0.85 drift threshold is now a visible
+    // strain warning. Actual release remains at the existing tether boundary.
+    if (this.braced && validCore) {
+      const tetherDistance = separation(corePosition, this.braceAnchor);
+      this.braceTension = Math.max(0, Math.min(1, (tetherDistance - 1.13) / 0.45));
+      this.braceDriftWarning = separation(corePosition, this.braceCore) > this.braceMaxCoreDrift
+        || tetherDistance >= this.braceMaxTether - 0.16;
     }
     const approach = Number.isFinite(pulseApproach) ? Math.max(0, pulseApproach) : 0;
     const resisted = Number.isFinite(resistedPulseApproach) ? Math.max(0, resistedPulseApproach) : 0;
@@ -225,11 +241,13 @@ export class SiltCompressionContact {
 
   snapshot() {
     return {
-      pass: 'LS1D1D2L', patchId: 'silt-garden-catchment-contact',
+      pass: 'LS1D1D2M', patchId: 'silt-garden-catchment-contact',
       heldId: this.heldId, inContact: this.inContact,
       braced: this.braced, braceAnchor: this.braceAnchor && [...this.braceAnchor],
       braces: this.braces, braceReleases: this.braceReleases,
       lastBraceReason: this.lastBraceReason,
+      braceTension: Number(this.braceTension.toFixed(3)),
+      braceDriftWarning: this.braceDriftWarning,
       braceCooldownSeconds: Number(this.braceCooldownSeconds.toFixed(3)),
       pressure: Number(this.pressure.toFixed(4)), imprinted: this.imprinted,
       echoSeconds: Number(this.echoSeconds.toFixed(3)),

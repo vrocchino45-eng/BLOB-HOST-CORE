@@ -112,6 +112,8 @@ export class WorldObjectCensusSystem {
         braces: Number(contact.braces ?? 0),
         braceReleases: Number(contact.braceReleases ?? 0),
         lastBraceReason: contact.lastBraceReason ?? 'none',
+        braceTension: Number(contact.braceTension ?? 0),
+        braceDriftWarning: !!contact.braceDriftWarning,
         braceAnchor: Array.isArray(contact.braceAnchor) ? [...contact.braceAnchor] : null,
         pressure: Number(contact.pressure ?? 0),
         imprinted: !!contact.imprinted,
@@ -292,7 +294,7 @@ export class WorldObjectCensusSystem {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
       routeDecisionCounts, heldMaterialMotion: heldMotion,
       siltContact: { outcomes: contactOutcomes, finalState: this.authoritySnapshot().siltContact,
-        proofLimit: 'Contact is authored-patch proximity and a bounded stabilized brace, with directed Pulse approach, resisted tether press, or Pulse through the retained connection. Imprint is reversible visual/pressure state, not collisions, fracture, or chemical bond.' },
+        proofLimit: 'Contact is authored-patch proximity and bounded Stabilize brace; D2M prioritizes an already-touching brace before Pulse and reports tether tension. Imprint is reversible visual/pressure state, not collisions, force, fracture, or chemical bond.' },
       pulsesObservedWhileHolding: heldPulses,
       absorbStartsObservedWhileHolding: heldAbsorbStarts,
       targetedPulseForceConfirmed: false, heldGrainAbsorptionConfirmed: false,
@@ -377,13 +379,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2L-STABILIZED-SURFACE-CONTACT', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2M-CONTACT-PULSE-ARBITRATION', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled input plus bounded Silt route and contact receipts. D2L adds a locally retained contact brace to authored-patch proximity and directed Pulse or resisted tether pressure, not colliders or material chemistry. No Core intake, fracture, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
+      limitations: '150ms sampled input plus bounded Silt route receipts. D2M preserves free-grain movement and routes Pulse through already-touching Stabilized contact before displacement, with a hard original tether and visual strain cue. No collision force, chemistry, Core intake, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2L_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2M_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
