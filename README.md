@@ -1,59 +1,46 @@
-# BLOB: HOST CORE — LS1D1D2N1 Interaction Matrix / Plate Seating
+# BLOB: HOST CORE — LS1D1D2N1V Visible Plate Seating
 
 ## Installation
 
-**Changed-files overlay, NOT a standalone build. Apply on top of LS1D1D2M.** Overwrite only the paths included in this archive. Do not replace the entire game, change HC/LS1 indexed histories, or apply the deferred D2E authority guard.
+**Changed-files overlay, NOT a standalone game. Apply over LS1D1D2N1.** Overwrite only the two source paths included in this archive. Do not replace the full project, rewrite HC/LS history, or apply the deferred D2E authority guard.
 
-### Changed source files
+### Modified files
 
-- `src/contact/SiltPlateSeat.js` — **new** pure one-site seat/extract relationship state.
-- `src/routes/SiltPressureRouteSystem.js` — connects deliberate release, actual contact/imprint and regrip to the seat; retains same reused grain mesh at the authored plate.
-- `src/routes/SiltLivingMaterialCycle.js` — permits multiple independently withheld identities (Core grip and plate site); existing callers passing `heldUnitId` alone still work.
-- `src/debug/WorldObjectCensusSystem.js` — reports site relationship and seat/extract receipts in JSON.
-- `docs/BLOB_INTERACTION_MATRIX_V1.md` — conceptual verb/relationship matrix with each row marked implemented or proposed.
+- `src/contact/SiltPlateSeat.js` — records both the original real contact point and a bounded, visible resting position within the existing plate. Same unit ID; environmental ledger ownership and identity remain unchanged. Legacy direct callers without a `sitePosition` keep their former positioning behavior.
+- `src/routes/SiltPressureRouteSystem.js` — tells the site its authored plate position; eases the *same existing material mesh* from actual contact to the visible rest position over 0.42 seconds; adds an illuminated socket base, occupied rim, and outlined grain. Hides all socket elements immediately on valid extraction. Presentation finishes while hidden when leaving Silt.
 
-## Goal and evidence
+## Why this correction exists
 
-D2M's actual player observation confirmed **22 pressure presses, four imprints, 19 braced Pulse receipts** and improved control. The next missing relationship was **a material grain staying at the plate after the Core releases it**. D2N1 implements only this authored Silt interaction; it is not a general system of orbiting material or universal sockets.
+The player's D2N1 recording showed 3 seat/extract pairs, but they reported the ball appeared to disappear. Last-contact seating was found at three disparate positions: one ~0.58 units above the plate, another level with the plate, and another near the rim. The plate's compressed surface also moves vertically. D2N1V provides a clear authored receiving position and geometry for a seated grain. **The first gameplay visibility failure is not considered resolved until the player verifies the rendered result.**
 
-### Specific sequence implemented
+## Behavior / scope
 
-1. **LT + A** — deliberately grip an eligible Silt grain using the existing camera/selection authority.
-2. Bring it into real proximity of the single garden contact patch while holding **LT / Stabilize**.
-3. **X / Pulse at least twice** while touching and braced. The two qualifying presses produce D2M's threshold imprint. Free Pulse, contact pressure and control constants are unmodified.
-4. **Release with A or let go of LT**, while the imprint is complete and contact is still legitimately braced. The grain seats at its **actual contact position**. It stays at the plate when the Core moves away. Site glow remains pale gold; the Core grip releases. RT withdrawal **does not** seat a grain.
-5. Return to the plate, move within the original **1.6-unit** tether reach, aim at the same grain and press **LT + A** again. The grain is extracted from the site *only if the existing grip succeeds*. Use **RT** to pull it, or **X** to push as before.
-6. The receiving plate accepts only **one** grain at a time. A second, unseated grain keeps its own native material cycle. A grain released before imprint is **not seated** and returns to the existing native Silt path.
+1. Keep D2M's normal LT+A grain acquisition, X Pulse, RT Absorb, D2N1 contact/imprint requirements, and A or LT-release deliberate seating.
+2. Once a *legitimate* D2N1 seat transaction succeeds, retain the original grain identity and existing mesh. Preserve its recorded contact position in `contactPosition`.
+3. Gently move the rendered grain over 0.42 seconds toward a site-specific position inside 0.32 units of the plate center (radially no farther out than actual contact), with its center 0.22 units above the original plate reference elevation. An illuminated pedestal and ring support the grain at that final position; a light wireframe outline identifies it as the seated material, not a new object.
+4. Core movement or grip release no longer hides the seated grain; it remains anchored as D2N1 specified. No new force, collision, chemistry or progression credit is created.
+5. On the existing intentional successful extraction, hide the socket's base, ring, and outline, and restore the same grain to its normal Core-held manipulation.
+6. All other Silt grains follow their old authored cycle; no trajectory memory is introduced. Site occupancy remains local to the game runtime, not durable across save/load.
 
-## Critical authority distinctions
+**Locked:** D2I movement numbers (+0.28 Pulse, 0.72/sec Absorb, 0.38–1.60 tether), D2M contact pressure and brace decisions, targeting and interaction inputs, eight-unit identity/mass, Silt progression, other environments, Core/Guide, and no authority transfer on seating.
 
-- **Matter and site are separate.** While seated, the identity ledger still reports owner `environment`, representation `individual`. A site occupancy record is a spatial relationship, not a new mass owner. Grip uses the original owner `grip`; release restores `environment`.
-- **Same physical identity.** No clone, spawn, replacement mesh, new recipe/chemistry or Silt progression requirement. Conserved material mass remains eight units. A seated unit is withheld from the existing cycle while anchored, and is released back into its normal cycle after extraction and free release.
-- **Same original motion.** Unbraced Pulse +0.28/tap, Absorb 0.72/sec, min/max radius 0.38 / 1.60, brace boundary and D2M pressure thresholds unchanged.
-- **Bounded locality.** Site position persists across Silt unmount/remount **in the same runtime**. No saved-game serialization, persistent storage, cross-region physical simulation, actual collision/force, fracture, or material chemistry.
-- **Not D2O trajectory memory.** An unseated grain presently returns to its scripted native cycle, *not* a new independent ballistic/native-attractor path. D2O is the isolated pass to address the user's longer-term North Star motion requirement.
+**Known edge:** The prior D2N1 observation showed seated grains extracted again within 0.42–0.90 seconds. This overlay intentionally **does not change extraction controls or add a re-grip cooldown**. A quick subsequent LT+A can still retrieve the grain. For the next test, allow the seat to settle, then move the Core away without pressing A again. If inadvertent re-extraction persists, diagnose it separately before changing input authority.
 
-## Manual acceptance / 2–3 minute field test
+## Manual field acceptance
 
-1. Load Silt after applying D2N1 over D2M. Start recorder **Alt+Shift+R**.
-2. Verify a held grain away from the plate still responds to X and RT exactly like D2M.
-3. Bring another valid grain into real plate contact; while LT holds the brace, Pulse twice. See pressure and gold imprint.
-4. Release **A** while still at the plate. The grain should **stay on the plate** as the Core moves away farther than the former tether radius; tether disappears but the gold seat remains.
-5. Return within 1.6, camera aim, press **LT+A**. The **same grain** should resume Core grip; its seat clears. RT withdraws it. Repeat one more time.
-6. While one grain is seated, test another grain elsewhere: it must continue circulating and remain manipulable. Deliberately try pressing a second grain onto the occupied plate; it must not replace the first or create an extra mass unit.
-7. Leave and revisit Silt in the same running game; check whether the seat retained its grain. Confirm standard Silt porous packet completion still works.
-8. Stop with **Alt+Shift+R**; export with **Alt+Shift+E** as `BLOB_LS1D1D2N1_OBSERVATION.json`. Upload JSON and describe whether release now feels like an intentional *placement*, not a snap.
-
-Expected recorded decisions: `silt-seat:plate-seated`, `silt-seat:plate-extracted`; `siltPlateSeat.occupied` and `unitId`; original eight material IDs/mass/ledger owner accounting. **Existing recorder contact `imprinted` may go false after Core grip releases because the retained occupancy is now in `siltPlateSeat`, not temporary `siltContact` pressure.**
+1. Install over D2N1. Record with **Alt+Shift+R**.
+2. Acquire a Silt grain with LT+A, establish Stabilized plate contact, then X Pulse twice to imprint.
+3. Release A or LT once. Check for a visible grain settling into a raised amber socket within half a second; the plate should remain visibly occupied while you move away farther than the original grip tether.
+4. **Wait 15 seconds** without re-acquiring it. Check the same grain remains present; observe the other free grains continue circulating.
+5. Return, aim at the seat, press LT+A once to extract the same grain. The pedestal, rim, and outline should turn off on extraction; RT / X behave normally.
+6. Repeat and try another material grain while the plate is occupied. The original occupant must not be displaced or cloned.
+7. Stop Alt+Shift+R and export Alt+Shift+E as `BLOB_LS1D1D2N1_OBSERVATION.json` (recorder still uses the existing D2N1 pass filename). Describe whether the grain *visibly remains on the plate*.
 
 ## Validation
 
-- 29 assertions: genuine original Silt grip, actual route release/reacquire, contact and visual retention, duplicate site rejection, independent unit pause, movement locks.
-- 41 assertions: Silt identity ledger, LS1B lifecycle and backward compatibility, recorder site-state publication, original contact pressure rules.
-- **70/70** assertions passed in isolated Node tests.
-- Four modified/new JS syntax checks passed; ZIP CRC and SHA-256 are included in the separate validation summary.
-- **NOT tested:** real Vite/browser/WebGL render, gamepad feel, visual visibility on the user's machine, persisted save/load, or D2O motion. Player field test required.
+- Two modified source files pass Node 22 syntax checks.
+- 75 targeted source-level assertions pass using a minimal Three.js presentation stub plus actual D2N1V route method bodies, authentic SiltPlateSeat and SiltLivingMaterialCycle classes. Includes three recorded contact points, 25s numeric retention, geometry marker cleanup, and independent material-cycle behavior.
+- This is **not** a Vite/browser/WebGL render test. Source-level checks do not prove the marker is visible through all environmental geometry or that the control feel is correct.
+- No automated test claims actual 3D physics, global persistence, or off-route material simulation.
 
-## Build pass rules
-
-**Mode:** convergence / implementation proof. **Purpose:** establish one reusable grammar example where Stabilize/Pulse pressure prepares a receiving site and deliberate release seats individually conserved matter. **Allowed:** Silt site relation, dual-withheld Silt cycle, visuals and receipts, companion matrix reference. **Forbidden:** rewriting movement/targeting, environmental cycle for other regions, owner schema, chemistry or progression. **Locks:** D2I/D2M, camera, Guide, ecology, Hub/Surface. **Delete/disable:** none. **Visual:** gold persistent plate and one retained visible grain. **Acceptance:** place, leave, return, extract; **regression:** eight IDs/mass, grip and nonseated native cycle, independent unrelated verbs and Silt completion.
+**Next intended phase:** only after visible seating is field-confirmed, test trajectory-memory design (D2O) as a separate motion-ownership milestone.

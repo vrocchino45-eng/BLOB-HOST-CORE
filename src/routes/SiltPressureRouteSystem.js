@@ -43,6 +43,11 @@ export class SiltPressureRouteSystem {
     this.siltContactMesh = null;
     this.siltContactEcho = null;
     this.siltContactIndent = null;
+    this.siltSeatSocketBase = null;
+    this.siltSeatSocketRim = null;
+    this.siltSeatHalo = null;
+    this.siltSeatVisualStartedAt = null;
+    this.siltSeatVisualFrom = null;
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
@@ -236,6 +241,11 @@ export class SiltPressureRouteSystem {
     this.siltAimCandidateId = null;
     this.siltAimLockedId = null;
     this.siltContact?.update({ dt: 0, heldId: null });
+    // A seat left behind finishes its cosmetic settle while this route is
+    // hidden. No simulation or material motion is added outside Silt.
+    if (this.siltPlateSeat.unitId && this.siltSeatVisualStartedAt !== null) {
+      this.siltSeatVisualStartedAt = this.elapsed - 1;
+    }
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
@@ -284,6 +294,7 @@ export class SiltPressureRouteSystem {
     });
     this.animateLivingMatter();
     this.updateSiltContact(dt, frameState);
+    this.updateSiltSeatVisuals();
     this.updateSiltAimMarker();
     this.applyDynamicPressure(frameState, sample);
     this.animate(frameState, sample);
@@ -1014,6 +1025,60 @@ export class SiltPressureRouteSystem {
     indent.userData.targetingSuppressed = true;
     this.siltContactIndent = indent;
     this.root.add(indent);
+    // D2N1V: the receiving site must remain physically readable after Core
+    // release. This socket supports the original grain mesh; it does not
+    // represent additional material, a collider, or a second target.
+    const socketMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
+      color: 0x9c7950, emissive: 0xc18e56, emissiveIntensity: 0.45,
+      roughness: 0.8, transparent: true, opacity: 0.92, depthWrite: false
+    }));
+    const socket = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.24, 0.18, 18), socketMaterial);
+    socket.name = 'silt_D2N1V_receiving_socket_not_material';
+    socket.visible = false;
+    socket.userData.targetingSuppressed = true;
+    this.siltSeatSocketBase = socket;
+    this.root.add(socket);
+    const rimMaterial = this.trackMaterial(new THREE.MeshBasicMaterial({
+      color: 0xffdf99, transparent: true, opacity: 0.78,
+      depthWrite: false, side: THREE.DoubleSide
+    }));
+    const rim = new THREE.Mesh(new THREE.RingGeometry(0.22, 0.32, 28), rimMaterial);
+    rim.name = 'silt_D2N1V_occupied_socket_contour_not_material';
+    rim.rotation.x = -Math.PI / 2;
+    rim.renderOrder = 18;
+    rim.visible = false;
+    rim.userData.targetingSuppressed = true;
+    this.siltSeatSocketRim = rim;
+    this.root.add(rim);
+    const haloMaterial = this.trackMaterial(new THREE.MeshBasicMaterial({
+      color: 0xffd79a, transparent: true, opacity: 0.65,
+      wireframe: true, depthWrite: false
+    }));
+    const halo = new THREE.Mesh(new THREE.IcosahedronGeometry(0.232, 1), haloMaterial);
+    halo.name = 'silt_D2N1V_seated_grain_outline_not_material';
+    halo.renderOrder = 18;
+    halo.visible = false;
+    halo.userData.targetingSuppressed = true;
+    this.siltSeatHalo = halo;
+    this.root.add(halo);
+  }
+
+  updateSiltSeatVisuals() {
+    const position = this.siltPlateSeat.position;
+    const occupied = Boolean(this.siltPlateSeat.unitId && position);
+    for (const shape of [this.siltSeatSocketBase, this.siltSeatSocketRim, this.siltSeatHalo]) {
+      if (shape) shape.visible = occupied;
+    }
+    if (!occupied || !this.siltContact) return;
+    const x = position[0], z = position[2];
+    const plateY = this.siltContact.position[1];
+    if (this.siltSeatSocketBase) this.siltSeatSocketBase.position.set(x, plateY - 0.04, z);
+    if (this.siltSeatSocketRim) this.siltSeatSocketRim.position.set(x, plateY + 0.055, z);
+    if (this.siltSeatHalo) {
+      this.siltSeatHalo.position.set(x, plateY + 0.22, z);
+      // Light, slow occupancy breathing, not permanent maximum-pressure flash.
+      this.siltSeatHalo.material.opacity = 0.56 + Math.sin(this.elapsed * 2.3) * 0.09;
+    }
   }
 
   updateSiltContact(dt, frameState) {
@@ -1144,11 +1209,16 @@ export class SiltPressureRouteSystem {
         if (!input.absorbHeld && this.siltContact?.heldId === held.id) {
           const receipt = this.siltPlateSeat.trySeat({
             unitId: held.id, heldPosition: this.siltGrip.position,
+            sitePosition: this.siltContact.position,
             isBraced: this.siltContact.braced,
             imprinted: this.siltContact.imprinted,
             actuallyTouching: this.siltContact.near(this.siltGrip.position)
           });
-          if (receipt) this.recordSiltDecision('silt-seat', receipt, frameState);
+          if (receipt) {
+            this.siltSeatVisualStartedAt = this.elapsed;
+            this.siltSeatVisualFrom = [...receipt.contactPosition];
+            this.recordSiltDecision('silt-seat', receipt, frameState);
+          }
         }
         this.flushHeldAbsorbMotion(frameState, 'grip-released');
         this.siltGrip.release();
@@ -1173,7 +1243,11 @@ export class SiltPressureRouteSystem {
         const wasSeated = this.siltPlateSeat.isSeated(best.unit.id);
         if (wasSeated) {
           const receipt = this.siltPlateSeat.tryExtract({ unitId: best.unit.id, gripAccepted: true });
-          if (receipt) this.recordSiltDecision('silt-seat', receipt, frameState);
+          if (receipt) {
+            this.siltSeatVisualStartedAt = null;
+            this.siltSeatVisualFrom = null;
+            this.recordSiltDecision('silt-seat', receipt, frameState);
+          }
         }
         // D2I: seat newly acquired matter inside the outer boundary so the
         // first Pulse can move it. Maintain its original direction and never
@@ -1444,6 +1518,14 @@ export class SiltPressureRouteSystem {
         // Physically distinct surface site, not a held Core tether. The unit
         // keeps its stable identity and one reused visual body.
         p.fromArray(this.siltPlateSeat.position);
+        // Visible positional settlement from actual contact to the socket.
+        // The site already holds the grain; only its presentation eases.
+        if (this.siltSeatVisualFrom && this.siltSeatVisualStartedAt !== null) {
+          const fraction = THREE.MathUtils.clamp(
+            (this.elapsed - this.siltSeatVisualStartedAt) / 0.42, 0, 1);
+          const eased = fraction * fraction * (3 - 2 * fraction);
+          p.lerpVectors(this.tempPointB.fromArray(this.siltSeatVisualFrom), p, eased);
+        }
         mesh.fragment.visible = true;
         mesh.bud.visible = false;
         mesh.body.visible = true;
@@ -2239,7 +2321,8 @@ export class SiltPressureRouteSystem {
       siltContact: this.siltContact?.snapshot() ?? null,
       siltPlateSeat: this.siltPlateSeat.snapshot(),
       interactionMatrix: {
-        pass: 'LS1D1D2N1', siteId: this.siltPlateSeat.siteId,
+        pass: 'LS1D1D2N1V', siteId: this.siltPlateSeat.siteId,
+        seatedPresentation: 'visible_socket_0.42s_settle_original_grain_mesh',
         implementedRecipe: 'stabilize-grip > touch > pulse-to-imprint > deliberate-release-to-seat > stabilize-grip-to-extract',
         seatedUnitId: this.siltPlateSeat.unitId,
         freeTrajectoryMemoryImplemented: false,
