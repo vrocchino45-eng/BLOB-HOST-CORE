@@ -82,6 +82,7 @@ export class WorldObjectCensusSystem {
     const motion = silt.heldMaterialMotion ?? {};
     const contact = silt.siltContact ?? {};
     const seat = silt.siltPlateSeat ?? {};
+    const trajectory = silt.siltTrajectory ?? {};
     return {
       pulseEventId: Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0,
       pulsePressed: !!input.pulsePressed,
@@ -113,6 +114,20 @@ export class WorldObjectCensusSystem {
         position: Array.isArray(seat.position) ? [...seat.position] : null,
         owner: seat.owner ?? 'environment',
         progressionCredit: !!seat.progressionCredit
+      },
+      siltTrajectory: {
+        pass: trajectory.pass ?? 'none',
+        releases: Number(trajectory.releases ?? 0),
+        reacquisitions: Number(trajectory.reacquisitions ?? 0),
+        freeCount: Number(trajectory.freeCount ?? 0),
+        sequence: Number(trajectory.sequence ?? 0),
+        lastEvent: trajectory.lastEvent ?? 'none',
+        units: Array.isArray(trajectory.units) ? trajectory.units.map(u => ({
+          unitId: u.unitId, position: u.position, velocity: u.velocity,
+          seconds: u.seconds, nearNative: u.nearNative, nativeError: u.nativeError
+        })) : [],
+        progressionCredit: !!trajectory.progressionCredit,
+        materialTransfer: !!trajectory.materialTransfer
       },
       siltContact: {
         patchId: contact.patchId ?? null,
@@ -217,6 +232,12 @@ export class WorldObjectCensusSystem {
           });
         }
       }
+      if (now.siltTrajectory.sequence > before.siltTrajectory.sequence) {
+        this.recordEvent('silt-trajectory-state-change', {
+          trajectory: now.siltTrajectory,
+          caveat: 'Route-local kinematic trail, not physical impulse, new mass or persisted save state.'
+        });
+      }
       if (now.siltPlateSeat.sequence > before.siltPlateSeat.sequence) {
         this.recordEvent('silt-site-relationship-changed', {
           site: now.siltPlateSeat, previous: before.siltPlateSeat,
@@ -268,6 +289,7 @@ export class WorldObjectCensusSystem {
     const routeDecisionCounts = {};
     const contactOutcomes = {};
     const seatOutcomes = {};
+    const trajectoryOutcomes = {};
     const heldMotion = { pulseOutward: 0, pulseAtBound: 0, pulseBraced: 0, absorbInward: 0, absorbAtBound: 0, totalPulseDisplacement: 0, totalAbsorbDisplacement: 0 };
     for (const e of this.captureEvents) {
       if (e.type !== 'silt-authoritative-route-decision') continue;
@@ -276,6 +298,9 @@ export class WorldObjectCensusSystem {
       routeDecisionCounts[key] = (routeDecisionCounts[key] ?? 0) + 1;
       if (d.kind === 'silt-contact') {
         contactOutcomes[d.outcome ?? 'unknown'] = (contactOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
+      }
+      if (d.kind === 'silt-trajectory') {
+        trajectoryOutcomes[d.outcome] = (trajectoryOutcomes[d.outcome] ?? 0) + 1;
       }
       if (d.kind === 'silt-seat') {
         seatOutcomes[d.outcome ?? 'unknown'] = (seatOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
@@ -313,6 +338,9 @@ export class WorldObjectCensusSystem {
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
       routeDecisionCounts, heldMaterialMotion: heldMotion,
+      siltTrajectory: { outcomes: trajectoryOutcomes,
+        finalState: this.authoritySnapshot().siltTrajectory,
+        proofLimit: 'Route-local world-position and velocity continuity for released unseated grain; LS1B remains native phase authority. No collision impulse, scene-wide ecology, save persistence, mass change or off-route simulation.' },
       siltPlateSeat: { outcomes: seatOutcomes,
         finalState: this.authoritySnapshot().siltPlateSeat,
         proofLimit: 'One route-local receiving site; environment remains ledger owner. No global persistent save or native-path motion rewrite.' },
@@ -402,13 +430,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2N1-INTERACTION-MATRIX-PLATE-SEATING', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2O1-NATIVE-PATH-TRAJECTORY-MEMORY', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled input plus bounded Silt route receipts. D2N1 retains one legitimately imprinted Silt grain at the authored receiving site on deliberate grip release; unseated grains retain D2M movement and native-cycle routes. One canonical site, no general save persistence or altered free-grain trajectories. No collision force, chemistry, Core intake, material transfer, or progression credit. Other subsystems and traversal remain unaudited.',
+      limitations: '150ms sampled input plus bounded Silt route receipts. D2O1 adds route-local kinematic trajectory memory only for deliberately released unseated grains, gently attracted to LS1B native phase paths. D2N1V plate-seated grains remain stationary and retain identity. No global save persistence, off-route simulation, collision force, chemistry, intake, material transfer, or progression credit. Other subsystems remain unaudited.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2N1_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2O1_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

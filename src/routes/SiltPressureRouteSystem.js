@@ -4,6 +4,7 @@ import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
 import { MaterialIdentityLedger } from "../ecology/MaterialIdentityLedger.js";
 import { SiltCompressionContact } from "../contact/SiltCompressionContact.js";
 import { SiltPlateSeat } from "../contact/SiltPlateSeat.js";
+import { SiltTrajectoryMemory } from "../contact/SiltTrajectoryMemory.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -40,6 +41,10 @@ export class SiltPressureRouteSystem {
     // The first specific instance of the reusable interaction matrix:
     // earned, deliberate surface seating after the pressure imprint.
     this.siltPlateSeat = new SiltPlateSeat();
+    // D2O1: independent native-path attraction for deliberately released
+    // unseated units. No new material and no mutation to the LS1B phase clock.
+    this.siltTrajectory = new SiltTrajectoryMemory();
+    this.siltTrajectoryTrails = [];
     this.siltContactMesh = null;
     this.siltContactEcho = null;
     this.siltContactIndent = null;
@@ -224,6 +229,13 @@ export class SiltPressureRouteSystem {
     // Flush the pending pull and restore any stranded grip owner first.
     this.flushHeldAbsorbMotion(frameState, 'silt-unmounted');
     const departingUnitId = this.siltGrip.heldId;
+    // Leaving the region releases an unseated grain without an authored-path
+    // teleport on the next mount. Off-route simulation stays paused.
+    if (departingUnitId && this.siltGrip.position) {
+      const receipt = this.siltTrajectory.release(departingUnitId, this.siltGrip.position,
+        { reason: 'region-hidden' });
+      if (receipt) this.recordSiltDecision('silt-trajectory', receipt, frameState);
+    }
     if (departingUnitId) this.materialIdentity?.transfer(departingUnitId, 'environment', 'individual');
     // Defensive repair is scoped to this Silt ledger only, never external
     // material. No new owners, mass, chemistry or progression are created.
@@ -292,7 +304,7 @@ export class SiltPressureRouteSystem {
       pulseEventId: frameState.input?.pulseEventId ?? frameState.frame,
       stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
     });
-    this.animateLivingMatter();
+    this.animateLivingMatter(dt);
     this.updateSiltContact(dt, frameState);
     this.updateSiltSeatVisuals();
     this.updateSiltAimMarker();
@@ -945,6 +957,19 @@ export class SiltPressureRouteSystem {
       body.add(fragment, bud);
       this.livingMatterGroup.add(body);
       this.livingMatterMeshes.push({ body, fragment, bud });
+      // Each existing identity gets a minimal *visual-only* directional wake.
+      // This is not another grain, pickup, contact, or targeting candidate.
+      const trailGeometry = new THREE.BufferGeometry();
+      trailGeometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(6), 3));
+      const trail = new THREE.Line(trailGeometry, this.trackMaterial(new THREE.LineBasicMaterial({
+        color: 0x91c5ab, transparent: true, opacity: 0.42, depthWrite: false
+      })));
+      trail.name = `silt_D2O1_${unit.id}_trajectory_wake_not_material`;
+      trail.userData.targetingSuppressed = true;
+      trail.renderOrder = 17;
+      trail.visible = false;
+      this.livingMatterGroup.add(trail);
+      this.siltTrajectoryTrails.push(trail);
     }
     this.livingMatterGroup.visible = false;
     this.root.add(this.livingMatterGroup);
@@ -1163,6 +1188,7 @@ export class SiltPressureRouteSystem {
     const units = this.livingCycle?.units ?? [];
     const eligible = new Set(["veins", "garden_transit", "settled"]);
     if (!this.livingCycle?.active) {
+      if (this.siltGrip.heldId) this.siltTrajectory.cancelHold(this.siltGrip.heldId);
       this.siltGrip.release();
       this.heldPulsePending = false;
       this.heldAbsorbId = null;
@@ -1206,6 +1232,7 @@ export class SiltPressureRouteSystem {
       if (input.interactPressed || !aiming) {
         // Intentional release of a proven imprint hands this specific grain
         // to the receiving site. RT withdrawal or an unpressed contact never seats.
+        let seatingReceipt = null;
         if (!input.absorbHeld && this.siltContact?.heldId === held.id) {
           const receipt = this.siltPlateSeat.trySeat({
             unitId: held.id, heldPosition: this.siltGrip.position,
@@ -1215,10 +1242,19 @@ export class SiltPressureRouteSystem {
             actuallyTouching: this.siltContact.near(this.siltGrip.position)
           });
           if (receipt) {
+            seatingReceipt = receipt;
             this.siltSeatVisualStartedAt = this.elapsed;
             this.siltSeatVisualFrom = [...receipt.contactPosition];
             this.recordSiltDecision('silt-seat', receipt, frameState);
           }
+        }
+        if (seatingReceipt) {
+          // The plate now owns the receiving *relationship*, not the grain.
+          // Seated material cannot also have a free trajectory.
+          this.siltTrajectory.cancelHold(held.id);
+        } else if (this.siltGrip.position) {
+          const trajectory = this.siltTrajectory.release(held.id, this.siltGrip.position);
+          if (trajectory) this.recordSiltDecision('silt-trajectory', trajectory, frameState);
         }
         this.flushHeldAbsorbMotion(frameState, 'grip-released');
         this.siltGrip.release();
@@ -1230,8 +1266,19 @@ export class SiltPressureRouteSystem {
         this.heldGripInitialRadius = null;
       } else {
         this.updateHeldMaterialMotion(dt, frameState);
+        if (this.siltGrip.position) {
+          const last = this.heldMotionLast;
+          const pulseMoved = input.pulsePressed && last?.verb === 'pulse'
+            && last?.pulseEventId === input.pulseEventId ? last.appliedDisplacement : 0;
+          this.siltTrajectory.sampleHeld(held.id, this.siltGrip.position, dt, {
+            pulseDirection: pulseMoved > 0 ? this.siltGripLocalOffset.toArray() : null,
+            pulseDisplacement: pulseMoved,
+            braced: Boolean(this.siltContact?.braced)
+          });
+        }
       }
     } else if (this.siltGrip.heldId) {
+      this.siltTrajectory.cancelHold(this.siltGrip.heldId);
       this.siltGrip.release();
       this.heldMotionFeedbackKind = 'none';
       this.heldGripInitialRadius = null;
@@ -1263,6 +1310,7 @@ export class SiltPressureRouteSystem {
           }
         }
         this.heldGripInitialRadius = Number(this.siltGripLocalOffset.length().toFixed(4));
+        this.siltTrajectory.beginHold(best.unit.id, this.siltGrip.position);
         this.recordSiltDecision('held-material-motion', {
           verb: 'grip', heldGrainId: best.unit.id,
           outcome: 'acquired-with-outward-headroom',
@@ -1494,7 +1542,7 @@ export class SiltPressureRouteSystem {
     }
   }
 
-  animateLivingMatter() {
+  animateLivingMatter(dt = 0) {
     const cycle = this.livingCycle;
     if (!cycle || !this.livingMatterGroup) return;
     this.livingMatterGroup.visible = cycle.active;
@@ -1509,6 +1557,8 @@ export class SiltPressureRouteSystem {
       const fraction = (index * 2.399963) % (2 * Math.PI);
       const small = 0.24 + (index % 3) * 0.15;
       const p = mesh.body.position;
+      const trail = this.siltTrajectoryTrails?.[index];
+      if (trail) trail.visible = false;
       if (unit.id === this.siltGrip.heldId && this.siltGrip.position) {
         p.fromArray(this.siltGrip.position);
         mesh.body.visible = true;
@@ -1549,6 +1599,25 @@ export class SiltPressureRouteSystem {
         p.copy(this.livingMatterV);
         p.y += 0.18 * Math.sin(alpha * Math.PI * 3 + fraction);
         p.x += 0.12 * Math.sin(alpha * 8 + fraction);
+      }
+      // The authored point above is the grain's North Star, not a hard reset.
+      // A disturbed free grain integrates from its real release position and
+      // can wander across native phase changes without instant relocation.
+      const remembered = this.siltTrajectory.advance(unit.id, dt, p.toArray());
+      if (remembered) {
+        p.fromArray(remembered.position);
+        if (trail && remembered.nativeError > 0.16) {
+          const v = remembered.velocity;
+          const magnitude = Math.hypot(...v);
+          if (magnitude > 0.07) {
+            const wake = Math.min(0.50, 0.20 + 0.12 * magnitude) / magnitude;
+            const coords = trail.geometry.getAttribute('position');
+            coords.setXYZ(0, p.x, p.y, p.z);
+            coords.setXYZ(1, p.x - v[0] * wake, p.y - v[1] * wake, p.z - v[2] * wake);
+            coords.needsUpdate = true;
+            trail.visible = true;
+          }
+        }
       }
       const growing = unit.phase === "growing" || unit.phase === "mature";
       const growth = unit.phase === "growing" ? Math.min(1, unit.age / 9) : 1;
@@ -2320,12 +2389,14 @@ export class SiltPressureRouteSystem {
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
       siltContact: this.siltContact?.snapshot() ?? null,
       siltPlateSeat: this.siltPlateSeat.snapshot(),
+      siltTrajectory: this.siltTrajectory.snapshot(),
       interactionMatrix: {
         pass: 'LS1D1D2N1V', siteId: this.siltPlateSeat.siteId,
         seatedPresentation: 'visible_socket_0.42s_settle_original_grain_mesh',
         implementedRecipe: 'stabilize-grip > touch > pulse-to-imprint > deliberate-release-to-seat > stabilize-grip-to-extract',
         seatedUnitId: this.siltPlateSeat.unitId,
-        freeTrajectoryMemoryImplemented: false,
+        freeTrajectoryMemoryImplemented: true,
+        freeTrajectoryScope: 'route-local-unseated-grains-native-path-attractor',
         otherRegionInteractionsImplemented: false
       },
       heldMaterialMotion: {
