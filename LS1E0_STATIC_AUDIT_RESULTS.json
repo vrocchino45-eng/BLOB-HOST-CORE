@@ -1,0 +1,292 @@
+{
+  "pass": "LS1E0",
+  "mode": "audit_no_gameplay_change",
+  "baseline": "LS1A + D2N1+D2N1V+D2O1+D2P1 selected latest file replacements + D2J/D0 missing imports",
+  "scope": "integration critical sources; no full 1600-file audit",
+  "filesWithJavascript": 145,
+  "relativeImportMissing": [],
+  "sourceAssertionsPassed": 13,
+  "sourceAssertionsTotal": 13,
+  "assertions": [
+    {
+      "check": "live runtime owners declared",
+      "path": "src/core/GameRuntime.js",
+      "passed": true,
+      "matches": {
+        "new CoreEngineSystem(": [
+          2031
+        ],
+        "new VascularRhythmRouteSystem(": [
+          2375
+        ],
+        "new GraveMemoryRouteSystem(": [
+          2336
+        ],
+        "new SiltPressureRouteSystem(": [
+          2381
+        ]
+      }
+    },
+    {
+      "check": "local region update scoped",
+      "path": "src/core/SystemRegistry.js",
+      "passed": true,
+      "matches": {
+        "shouldUpdate(id, options, frameState)": [
+          142,
+          301
+        ],
+        "options.runtimeScope !== \"active_region\"": [
+          303
+        ]
+      }
+    },
+    {
+      "check": "global route history writes",
+      "path": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "passed": true,
+      "matches": {
+        "commitHistory(recipe, frameState)": [
+          1145,
+          1160
+        ],
+        "frameState.act1RouteHistory": [
+          859,
+          873,
+          965,
+          1161
+        ]
+      }
+    },
+    {
+      "check": "return engine reads retained history",
+      "path": "src/routes/ReturnRegionEngineSystem.js",
+      "passed": true,
+      "matches": {
+        "frameState.act1RouteHistory": [
+          53,
+          142
+        ],
+        "unlockedPhaseCount": [
+          149,
+          157,
+          158
+        ]
+      }
+    },
+    {
+      "check": "world compositions named",
+      "path": "src/world/WorldCompositionRegistry.js",
+      "passed": true,
+      "matches": {
+        "silt_asp_34_micro": [
+          236,
+          237
+        ],
+        "vascular_psa_44_micro": [
+          181,
+          182
+        ],
+        "grave_sap_128_micro": [
+          285,
+          286
+        ]
+      }
+    },
+    {
+      "check": "Silt local free trajectory",
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "passed": true,
+      "matches": {
+        "this.siltTrajectory.advance(": [
+          1611
+        ],
+        "this.siltTrajectoryField.sample(": [
+          311
+        ],
+        "this.siltPlateSeat.snapshot()": [
+          2396
+        ]
+      }
+    },
+    {
+      "check": "Vascular actual relationship",
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "passed": true,
+      "matches": {
+        "relationshipSource: \"environmental_current\"": [
+          1440
+        ],
+        "progressionAuthority: true": [
+          1448
+        ]
+      }
+    },
+    {
+      "check": "Grave memory state",
+      "path": "src/routes/GraveMemoryRouteSystem.js",
+      "passed": true,
+      "matches": {
+        "graveMemoryImprintCommitted": [
+          86,
+          737,
+          1122,
+          1181
+        ],
+        "frameState.graveMemoryRoute =": [
+          1425
+        ]
+      }
+    },
+    {
+      "check": "Core engine 3/6/12",
+      "path": "src/player/CoreEngineSystem.js",
+      "passed": true,
+      "matches": {
+        "triadic_3": [
+          5
+        ],
+        "paired_6": [
+          12
+        ],
+        "continuous_12": [
+          19
+        ]
+      }
+    },
+    {
+      "check": "Core physiology",
+      "path": "src/player/CoreRadialPerformanceSystem.js",
+      "passed": true,
+      "matches": {
+        "deep_core:": [
+          2
+        ],
+        "inner_body:": [
+          10
+        ],
+        "membrane:": [
+          18,
+          113,
+          132,
+          181
+        ]
+      }
+    },
+    {
+      "check": "Host rhythm no gameplay authority",
+      "path": "src/world/HostRhythmSystem.js",
+      "passed": true,
+      "matches": {
+        "mechanicalAdvantageEnabled: false": [
+          43,
+          64
+        ],
+        "progressionAuthority: false": [
+          45,
+          66
+        ]
+      }
+    },
+    {
+      "check": "Embodiment only bounded ambient matter",
+      "path": "src/world/RegionalPhysicalEmbodimentSystem.js",
+      "passed": true,
+      "matches": {
+        "frameState.regionalPhysicalEmbodiment": [
+          22,
+          30,
+          43
+        ],
+        "routeAuthority: false": [
+          74,
+          105
+        ]
+      }
+    },
+    {
+      "check": "Grave consequence separate source",
+      "path": "src/combat/GraveRuptureConsequenceSystem.js",
+      "passed": true,
+      "matches": {
+        "graveRuptureHarvestSystem": [
+          15,
+          16,
+          17,
+          20
+        ],
+        "frameState.graveRuptureConsequence": [
+          112
+        ]
+      }
+    }
+  ],
+  "sourceManifest": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "fcf1cd7c2de31f10"
+    },
+    {
+      "path": "src/core/SystemRegistry.js",
+      "sha256": "0c983cdc9374e996"
+    },
+    {
+      "path": "src/core/RuntimeStateLedgerSystem.js",
+      "sha256": "27918e3665661f44"
+    },
+    {
+      "path": "src/player/CoreEngineSystem.js",
+      "sha256": "65121f0fe4b9eb4a"
+    },
+    {
+      "path": "src/player/CoreRadialPerformanceSystem.js",
+      "sha256": "5053fea4db9d3ca4"
+    },
+    {
+      "path": "src/world/HostRhythmSystem.js",
+      "sha256": "59756782241f5f10"
+    },
+    {
+      "path": "src/world/WorldCompositionRegistry.js",
+      "sha256": "22f7db358e3b0394"
+    },
+    {
+      "path": "src/world/RegionalPhysicalEmbodimentSystem.js",
+      "sha256": "544d2089f2edaa80"
+    },
+    {
+      "path": "src/world/CoreWorldResonanceSystem.js",
+      "sha256": "2e78be934a07f446"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "f4e17870edbbef08"
+    },
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "sha256": "7b60588688296a0b"
+    },
+    {
+      "path": "src/routes/GraveMemoryRouteSystem.js",
+      "sha256": "92732b5619e27bfc"
+    },
+    {
+      "path": "src/combat/GraveRuptureConsequenceSystem.js",
+      "sha256": "5d4a441ddd1de7a7"
+    },
+    {
+      "path": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "sha256": "d474229dc4be053e"
+    },
+    {
+      "path": "src/routes/ReturnRegionEngineSystem.js",
+      "sha256": "f44e68d5216aaa58"
+    },
+    {
+      "path": "src/world/TemporalHistorySystem.js",
+      "sha256": "01b03abfa8c1e32d"
+    }
+  ],
+  "browserAcceptance": "not_run",
+  "sourceChangedByE0": false
+}

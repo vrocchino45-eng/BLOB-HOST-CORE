@@ -1,0 +1,9 @@
+# LS1E0 Handoff / Source Inventory
+
+- Audit assembled locally from `BLOB-HOST-CORE-LS1A-Silt-Habitat-Foundation.zip` as the structural baseline, replacing changed files in the following order: D2N1, D2N1V, D2O1, D2P1. A D2J contact module and D0 MaterialIdentityLedger were added at their last source paths to resolve imports. This is **not** a new full runtime package and must not be applied as a build patch.
+- Staging path during audit: `ls1e0_audit/source` (not distributed).
+- Observational baseline: `1BLOB_LS1D1D2P1_OBSERVATION.json` (user uploaded). 8/8 grain histories reach three Silt local habitats, 70 classified crossings, 26 route `released-with-trajectory` receipts, 4 seats/3 extractions, final one occupant. This supports Silt locality only. Recorder initial interval incomplete after 2,500-event cap.
+- Source audit priority: `src/core/GameRuntime.js`, `src/core/SystemRegistry.js`, `src/core/RuntimeStateLedgerSystem.js`, `src/player/CoreEngineSystem.js`, `src/player/CoreRadialPerformanceSystem.js`, `src/world/HostRhythmSystem.js`, `src/world/WorldCompositionRegistry.js`, `src/world/RegionalPhysicalEmbodimentSystem.js`, `src/world/CoreWorldResonanceSystem.js`, `src/routes/SiltPressureRouteSystem.js`, `src/routes/VascularRhythmRouteSystem.js`, `src/routes/GraveMemoryRouteSystem.js`, `src/combat/GraveRuptureConsequenceSystem.js`, `src/morph/LocalCellBoundaryMorphSystem.js`, `src/routes/ReturnRegionEngineSystem.js`, `src/world/TemporalHistorySystem.js`.
+- E1 input: a real authoritative `silt-trajectory:released-with-trajectory` receipt (or carefully scoped equivalent). No routine simulated material possession in Vascular.
+- E1 output: bounded, deduplicated `source→cause` read-only record available at Vascular; no additional progress or movement authority. E2 will require a genuine receiving site with its own condition and proof.
+- No files retired or disabled. No gameplay or visuals altered by E0.
