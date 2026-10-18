@@ -2,13 +2,13 @@ import * as THREE from "three";
 import { SystemRegistry } from "./SystemRegistry.js";
 import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinator.js";
 import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
+import { HostConnectionReceiptLedger } from "./HostConnectionReceiptLedger.js";
 import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
 import { FrameTruthObserver } from "./FrameTruthObserver.js";
 import { buildBoundedSimulationSteps } from "./BoundedSimulationCatchUp.js";
 import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
 import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
 import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
-import { WorldObjectCensusSystem } from "../debug/WorldObjectCensusSystem.js";
 import { DebugAreaJumpSystem } from "../debug/DebugAreaJumpSystem.js";
 import { InputSystem } from "../input/InputSystem.js";
 import { DeliberateCommitmentSystem } from "../input/DeliberateCommitmentSystem.js";
@@ -213,6 +213,8 @@ export class GameRuntime {
     this.localCellBoundaryMorphSystem = null;
     this.runtimeStateLedgerSystem = null;
     this.sessionTelemetrySystem = null;
+    // LS1E1: independent, read-only provenance; not the material or route ledger.
+    this.hostConnectionReceiptLedger = new HostConnectionReceiptLedger();
     this.frameTruthObserver = new FrameTruthObserver();
     this.renderBudgetSystem = null;
 
@@ -2374,17 +2376,18 @@ export class GameRuntime {
       frameState: this.frameState
     });
     this.vascularRhythmRouteSystem = new VascularRhythmRouteSystem({
+      hostConnectionReceiptLedger: this.hostConnectionReceiptLedger,
       recipeDataSystem: this.recipeDataSystem,
       scene: this.scene,
       playerRoot: this.playerCore,
       frameState: this.frameState
     });
     this.siltPressureRouteSystem = new SiltPressureRouteSystem({
+      hostConnectionReceiptLedger: this.hostConnectionReceiptLedger,
       recipeDataSystem: this.recipeDataSystem,
       scene: this.scene,
       playerRoot: this.playerCore,
-      frameState: this.frameState,
-      camera: this.camera
+      frameState: this.frameState
     });
     this.combThresholdFoundationSystem = new CombThresholdFoundationSystem({
       recipeDataSystem: this.recipeDataSystem,
@@ -2486,8 +2489,6 @@ export class GameRuntime {
     this.debugDisplaySystem = new DebugDisplaySystem({
       frameState: this.frameState
     });
-    this.worldObjectCensusSystem = new WorldObjectCensusSystem({ scene: this.scene, frameState: this.frameState });
-    this.worldObjectCensusSystem.init();
 
     this.guidePromptSystem = new GuidePromptSystem({
       recipeDataSystem: this.recipeDataSystem,

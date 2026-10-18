@@ -9,6 +9,8 @@ export class WorldObjectCensusSystem {
     this.lastReport = null;
     this.captureActive = false;
     this.captureEvents = [];
+    this.captureAggregate = this.newCaptureAggregate();
+    this.lastHostConnectionSequence = 0;
     this.captureStartedAt = null;
     this.capturePullBaseline = null;
     this.captureTimer = null;
@@ -66,6 +68,66 @@ export class WorldObjectCensusSystem {
       }, 3500);
     } else {
       this.recIndicator.style.display = 'none';
+    }
+  }
+  // LS1E1: lifetime *observed* counters remain valid even when the bounded
+  // detailed event list rotates. Never call them full source truth if the
+  // 64-decision Silt ring itself skipped before sampling.
+  newCaptureAggregate() {
+    return { eventCounts: {}, routeDecisionCounts: {}, contactOutcomes: {},
+      seatOutcomes: {}, trajectoryOutcomes: {}, recordedEvents: 0, droppedDetails: 0,
+      routeDecisionsObserved: 0, decisionTraceGaps: 0,
+      heldMotion: { pulseOutward: 0, pulseAtBound: 0, pulseBraced: 0,
+        absorbInward: 0, absorbAtBound: 0, totalPulseDisplacement: 0, totalAbsorbDisplacement: 0 } };
+  }
+  captureCountEvent(event) {
+    const acc = this.captureAggregate;
+    acc.recordedEvents++;
+    acc.eventCounts[event.type] = (acc.eventCounts[event.type] ?? 0) + 1;
+    if (event.type === 'silt-decision-trace-gap') acc.decisionTraceGaps++;
+    if (event.type !== 'silt-authoritative-route-decision') return;
+    const d = event.decision ?? {};
+    acc.routeDecisionsObserved++;
+    const key = `${d.kind ?? 'unknown'}:${d.route ?? d.decision ?? d.outcome ?? 'unknown'}`;
+    acc.routeDecisionCounts[key] = (acc.routeDecisionCounts[key] ?? 0) + 1;
+    if (d.kind === 'silt-contact') {
+      const k = d.outcome ?? 'unknown';
+      acc.contactOutcomes[k] = (acc.contactOutcomes[k] ?? 0) + 1;
+    }
+    if (d.kind === 'silt-seat') {
+      const k = d.outcome ?? 'unknown';
+      acc.seatOutcomes[k] = (acc.seatOutcomes[k] ?? 0) + 1;
+    }
+    if (d.kind === 'silt-trajectory') {
+      const k = d.outcome ?? 'unknown';
+      acc.trajectoryOutcomes[k] = (acc.trajectoryOutcomes[k] ?? 0) + 1;
+    }
+    if (d.kind !== 'held-material-motion') return;
+    const motion = acc.heldMotion;
+    if (d.verb === 'pulse') {
+      if (d.outcome === 'stabilized-contact-resistance') motion.pulseBraced++;
+      else if (d.appliedDisplacement > 0) motion.pulseOutward++;
+      else motion.pulseAtBound++;
+      motion.totalPulseDisplacement += Number(d.appliedDisplacement ?? 0);
+    }
+    if (d.verb === 'absorb') {
+      if (d.appliedDisplacement > 0) motion.absorbInward++;
+      else motion.absorbAtBound++;
+      motion.totalAbsorbDisplacement += Number(d.appliedDisplacement ?? 0);
+    }
+  }
+  sampleHostConnections() {
+    const ledger = this.frameState?.hostConnections;
+    if (!ledger || !Number.isFinite(ledger.sequence)) return;
+    const fresh = (ledger.records ?? []).filter(r => r.sequence > this.lastHostConnectionSequence)
+      .sort((a,b) => a.sequence - b.sequence);
+    if (fresh.length && fresh[0].sequence > this.lastHostConnectionSequence + 1) {
+      this.recordEvent('host-connection-receipt-gap', {firstAvailableSequence:fresh[0].sequence, previousSequence:this.lastHostConnectionSequence});
+    }
+    for (const record of fresh) {
+      this.recordEvent('host-silt-cause-observed', {cause: record,
+        caveat: 'Silt release provenance only; Vascular has not received material or circulation force.'});
+      this.lastHostConnectionSequence = record.sequence;
     }
   }
   // These are *published game-state outcomes*, not guesses from controller buttons.
@@ -178,6 +240,8 @@ export class WorldObjectCensusSystem {
         lastReceipt: motion.lastReceipt ?? null,
         transferPerformed: !!motion.transferPerformed
       },
+      hostConnections: fs.hostConnections ?? null,
+      vascularHostObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null,
       visualVerbAuthority: {
         targetId: fs.verbVisualTargetAuthority?.targetId ?? "none",
         pulse: fs.verbVisualTargetAuthority?.pulse ?? "unpublished",
@@ -297,46 +361,21 @@ export class WorldObjectCensusSystem {
     }
   }
   timelineSummary() {
-    const counts = {};
+    const acc = this.captureAggregate;
+    // Lists are illustrative from retained details; numeric totals below are
+    // maintained as receipts arrive, independent of the 2,500-event window.
     const heldPulses = [];
     const heldAbsorbStarts = [];
     for (const event of this.captureEvents) {
-      counts[event.type] = (counts[event.type] ?? 0) + 1;
       if (event.type === 'game-pulse-event' && event.heldTargetAtSample) heldPulses.push({ time: event.time, unitId: event.heldTargetAtSample, pulseEventId: event.pulseEventId });
       if (event.type === 'game-absorb-started' && event.heldTargetAtSample) heldAbsorbStarts.push({ time: event.time, unitId: event.heldTargetAtSample });
     }
-    const routeDecisionCounts = {};
-    const contactOutcomes = {};
-    const seatOutcomes = {};
-    const trajectoryOutcomes = {};
-    const heldMotion = { pulseOutward: 0, pulseAtBound: 0, pulseBraced: 0, absorbInward: 0, absorbAtBound: 0, totalPulseDisplacement: 0, totalAbsorbDisplacement: 0 };
-    for (const e of this.captureEvents) {
-      if (e.type !== 'silt-authoritative-route-decision') continue;
-      const d = e.decision ?? {};
-      const key = `${d.kind ?? 'unknown'}:${d.route ?? d.decision ?? d.outcome ?? 'unknown'}`;
-      routeDecisionCounts[key] = (routeDecisionCounts[key] ?? 0) + 1;
-      if (d.kind === 'silt-contact') {
-        contactOutcomes[d.outcome ?? 'unknown'] = (contactOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
-      }
-      if (d.kind === 'silt-trajectory') {
-        trajectoryOutcomes[d.outcome] = (trajectoryOutcomes[d.outcome] ?? 0) + 1;
-      }
-      if (d.kind === 'silt-seat') {
-        seatOutcomes[d.outcome ?? 'unknown'] = (seatOutcomes[d.outcome ?? 'unknown'] ?? 0) + 1;
-      }
-      if (d.kind !== 'held-material-motion') continue;
-      if (d.verb === 'pulse') {
-        if (d.outcome === 'stabilized-contact-resistance') heldMotion.pulseBraced++;
-        else if (d.appliedDisplacement > 0) heldMotion.pulseOutward++;
-        else heldMotion.pulseAtBound++;
-        heldMotion.totalPulseDisplacement += d.appliedDisplacement ?? 0;
-      }
-      if (d.verb === 'absorb') {
-        if (d.appliedDisplacement > 0) heldMotion.absorbInward++;
-        else heldMotion.absorbAtBound++;
-        heldMotion.totalAbsorbDisplacement += d.appliedDisplacement ?? 0;
-      }
-    }
+    const counts = {...acc.eventCounts};
+    const routeDecisionCounts = {...acc.routeDecisionCounts};
+    const contactOutcomes = {...acc.contactOutcomes};
+    const seatOutcomes = {...acc.seatOutcomes};
+    const trajectoryOutcomes = {...acc.trajectoryOutcomes};
+    const heldMotion = {...acc.heldMotion};
     heldMotion.totalPulseDisplacement = Number(heldMotion.totalPulseDisplacement.toFixed(4));
     heldMotion.totalAbsorbDisplacement = Number(heldMotion.totalAbsorbDisplacement.toFixed(4));
     // The sampled trace may omit receipts (64-item Silt ring / 150ms recorder).
@@ -355,7 +394,15 @@ export class WorldObjectCensusSystem {
       ? null : Number(Math.abs(
         heldMotion.authoritativeSessionPullDistance - heldMotion.totalAbsorbDisplacement).toFixed(4));
     return {
-      eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
+      eventCounts: counts, routeDecisionsObserved: acc.routeDecisionsObserved,
+      captureRetention: { totalEventsObserved: acc.recordedEvents,
+        retainedDetails: this.captureEvents.length, droppedDetails: acc.droppedDetails,
+        siltSourceTraceGaps: acc.decisionTraceGaps,
+        lifetimeCountersSpanFullCapture: true,
+        detailedListsContainOnlyLast2500: true },
+      hostConnections: { finalState: this.authoritySnapshot().hostConnections,
+        vascularReadOnlyView: this.authoritySnapshot().vascularHostObservation,
+        proofLimit: 'Source Silt release observed; Vascular signal-only provenance, not transported matter or changed circulation.' },
       routeDecisionCounts, heldMaterialMotion: heldMotion,
       siltTrajectoryField: {
         finalState: this.authoritySnapshot().siltTrajectoryField,
@@ -413,13 +460,19 @@ export class WorldObjectCensusSystem {
   }
   recordEvent(type, details = {}) {
     if (!this.captureActive) return;
-    this.captureEvents.push({ time: new Date().toISOString(), type, ...details });
-    if (this.captureEvents.length > 2500) this.captureEvents.shift();
+    const entry = { time: new Date().toISOString(), type, ...details };
+    this.captureCountEvent(entry);
+    this.captureEvents.push(entry);
+    if (this.captureEvents.length > 2500) {
+      this.captureEvents.shift();
+      this.captureAggregate.droppedDetails++;
+    }
   }
   sampleState() {
     this.sampleInputs();
     this.sampleAuthority();
     this.sampleSiltDecisions();
+    this.sampleHostConnections();
     this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
@@ -444,7 +497,9 @@ export class WorldObjectCensusSystem {
       this.updateRecordIndicator('REC STOPPED · Alt+Shift+E export JSON');
       return;
     }
-    this.captureEvents = []; this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
+    this.captureEvents = []; this.captureAggregate = this.newCaptureAggregate();
+    this.lastHostConnectionSequence = this.frameState?.hostConnections?.sequence ?? 0;
+    this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
     this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
@@ -453,13 +508,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2P1-THREE-HABITAT-TRAJECTORY-PROOF', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1E1-HOST-CONNECTION-SILT-CAUSE-PROVENANCE', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: 'D2P1 only observes D2O1 free grain travel in the three existing Silt LS1A ellipsoid habitats. Between includes connecting tunnels and space outside ellipsoids. 250ms field samples, 150ms input samples; fast zone changes can be missed. No new collision, traversal, geometry, chemistry, ledger, site, or off-route motion authority.',
+      limitations: 'LS1E1 records verified Silt deliberate-release provenance visible in Vascular as signal only. No grain crosses route-cell boundaries. 150ms input sampling and bounded 64-entry Silt decision trace; lifetime capture counters survive 2500-entry detail rollover, but source trace gaps remain possible. No new material transfer, crossing, progression, chemistry, Grave memory, or save persistence.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2P1_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1E1_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
@@ -517,6 +572,7 @@ export class WorldObjectCensusSystem {
       selected: { legacyTarget: fs.targeting?.targetId ?? 'none', legacyLabel: fs.targeting?.targetLabel ?? 'none', legacySource: fs.targeting?.worldAttentionSource ?? 'none', siltGrip: silt.siltGrip ?? null },
       attentionCandidates: candidates.slice(0, 300),
       entityBridge: { materialTarget, entityFamilies, note: 'Diagnostic association only. No registration, target routing, or verb behavior modified.' },
+      hostConnections: { source: fs.hostConnections ?? null, vascularObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null },
       progression: { silt: { active: !!silt.active, completed: !!silt.completed, returnFoldReady: !!silt.returnFoldReady, pressureRead: !!silt.pressureRead, ribsReleased: !!silt.ribsReleased, safeMatterAbsorbed: !!silt.safeMatterAbsorbed, status: safe(silt.status) } },
       groups: [...groups.values()].sort((a,b) => b.count - a.count).slice(0, 250),
       caveat: 'Mesh grouping is diagnostic, not stable entity identity. Missing labels do not imply targetability.'
@@ -531,7 +587,9 @@ export class WorldObjectCensusSystem {
     panel.setAttribute('role', 'status');
     panel.style.cssText = 'position:fixed;top:12px;right:12px;z-index:99999;max-width:min(430px,90vw);max-height:75vh;overflow:auto;padding:14px;background:rgba(8,14,20,.94);color:#d9f5ee;border:1px solid #79a9a0;border-radius:8px;font:12px/1.5 monospace;pointer-events:none;white-space:pre-wrap';
     const preview = r.groups.slice(0, 16).map(g => `${g.owner}: ${g.count}${g.suppressed ? ' [suppressed '+g.suppressed+']' : ''}`).join('\n');
-    panel.textContent = `WORLD OBJECT CENSUS / LS1D1D2B\nF4 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
+    const signal = this.frameState?.vascularRhythmRoute?.hostConnectionObservation;
+    const signalText = signal?.observedCount > 0 ? `Silt cause: ${signal.mostRecentGrainId} / ${signal.observedCount}\nSignal-only · no material transfer` : `Silt cause: none`;
+    panel.textContent = `WORLD OBJECT CENSUS / LS1E1\nF4 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n${signalText}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
     document.body.appendChild(panel); this.panel = panel;
   }
   exportReport() {

@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import { HostConnectionReceiptLedger } from '../src/core/HostConnectionReceiptLedger.js';
+import { SiltPressureRouteSystem } from '../src/routes/SiltPressureRouteSystem.js';
+import { VascularRhythmRouteSystem } from '../src/routes/VascularRhythmRouteSystem.js';
+let assertions=0; const eq=(x,y)=>{assert.deepEqual(x,y);assertions++};
+const ledger = new HostConnectionReceiptLedger();
+const fs = { frame:1234, runtimeSeconds:70 };
+const silt = Object.create(SiltPressureRouteSystem.prototype);
+Object.assign(silt,{transactionSequence:0,transactionTrace:[],hostConnectionReceiptLedger:ledger,elapsed:70.456,siltGrip:{heldId:null},frameState:fs});
+const release = {outcome:'released-with-trajectory',unitId:'silt-grain-06',reason:'deliberate-release',noMaterialTransfer:true,progressionCredit:false,position:[-5,-1,-10],velocity:[1,0,-1]};
+silt.recordSiltDecision('pulse-route',{outcome:'retained-pressure-echo'},fs);eq(ledger.snapshot().acceptedTotal,0);
+silt.recordSiltDecision('silt-trajectory',{...release,reason:'region-hidden'},fs);eq(ledger.snapshot().acceptedTotal,0);
+silt.recordSiltDecision('silt-seat',{outcome:'plate-seated',unitId:'silt-grain-01'},fs);eq(ledger.snapshot().acceptedTotal,0);
+silt.recordSiltDecision('silt-trajectory',release,fs);eq(ledger.snapshot().acceptedTotal,1);eq(fs.hostConnections.records[0].sourceReceiptSequence,4);eq(fs.hostConnections.records[0].subjectId,'silt-grain-06');
+// Manual replay cannot create a duplicate receipt. (Source route increments normally.)
+eq(ledger.observeSiltRelease(silt.transactionTrace[3]),null);eq(ledger.snapshot().duplicateTotal,1);
+const vascular=Object.create(VascularRhythmRouteSystem.prototype);
+Object.assign(vascular,{hostConnectionReceiptLedger:ledger,hostCauseNotice:null,hostCauseNoticeText:''});
+const elements=[];
+globalThis.document={body:{appendChild:el=>elements.push(el)},createElement:()=>({style:{},setAttribute(){},textContent:''})};
+vascular.updateHostCauseNotice(true,ledger.forVascular());eq(elements.length,1);eq(elements[0].style.display,'block');eq(elements[0].textContent.includes('silt-grain-06'),true);eq(elements[0].textContent.includes('No grain arrival / no current change'),true);
+vascular.updateHostCauseNotice(false,ledger.forVascular());eq(elements[0].style.display,'none');
+vascular.updateHostCauseNotice(true,ledger.forVascular());eq(elements.length,1);eq(elements[0].style.display,'block');
+const v0=Object.create(VascularRhythmRouteSystem.prototype);Object.assign(v0,{hostCauseNotice:null,hostCauseNoticeText:''});
+v0.updateHostCauseNotice(true,new HostConnectionReceiptLedger().forVascular());eq(elements.length,1);
+eq(ledger.snapshot().acceptedTotal,1);eq(ledger.forVascular().materialArrived,false);
+console.log(`LS1E1 DIRECT SOURCE SMOKE ${assertions}/${assertions} PASSED`);

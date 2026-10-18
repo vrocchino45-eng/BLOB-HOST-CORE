@@ -12,7 +12,7 @@ const RECIPE_ID = "VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1";
  * completes an objective, or crosses a gate directly.
  */
 export class VascularRhythmRouteSystem {
-  constructor({ recipeDataSystem, scene, playerRoot, frameState }) {
+  constructor({ recipeDataSystem, scene, playerRoot, frameState, hostConnectionReceiptLedger = null }) {
     if (!recipeDataSystem) throw new Error("[VascularRhythmRouteSystem] recipeDataSystem is required.");
     if (!scene) throw new Error("[VascularRhythmRouteSystem] scene is required.");
     if (!playerRoot) throw new Error("[VascularRhythmRouteSystem] playerRoot is required.");
@@ -22,6 +22,9 @@ export class VascularRhythmRouteSystem {
     this.scene = scene;
     this.playerRoot = playerRoot;
     this.frameState = frameState;
+    this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
+    this.hostCauseNotice = null;
+    this.hostCauseNoticeText = '';
 
     this.recipe = null;
     this.root = null;
@@ -1392,7 +1395,11 @@ export class VascularRhythmRouteSystem {
     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
     const requiredReads = this.recipe?.cadence?.requiredReads ?? 3;
     const stage = this.stage();
+    // The Host may carry a prior Silt *cause*, not the grain itself.
+    // No Vascular route logic reads this to progress or change circulation.
+    const hostCause = this.hostConnectionReceiptLedger?.forVascular() ?? null;
     frameState.vascularRhythmRoute = {
+      hostConnectionObservation: hostCause,
       pass: "HC-031R",
       id: this.recipe?.id ?? RECIPE_ID,
       active: Boolean(active),
@@ -1579,6 +1586,31 @@ export class VascularRhythmRouteSystem {
       archivedCompatibilitySystemsActivated: 0,
       mountCount: this.mountCount
     };
+    this.updateHostCauseNotice(Boolean(active), hostCause);
+  }
+
+  // Small diagnostic only: a remote event was observed, not received as matter.
+  updateHostCauseNotice(active, cause) {
+    const shouldShow = active && cause?.observedCount > 0;
+    if (!shouldShow) {
+      if (this.hostCauseNotice) this.hostCauseNotice.style.display = 'none';
+      return;
+    }
+    if (typeof document === 'undefined' || !document.body) return;
+    if (!this.hostCauseNotice) {
+      const notice = document.createElement('div');
+      notice.setAttribute('role', 'status');
+      notice.setAttribute('aria-label', 'Vascular remote cause diagnostic');
+      notice.style.cssText = 'position:fixed;right:12px;bottom:16px;z-index:99980;pointer-events:none;max-width:min(370px,85vw);padding:8px 10px;background:rgba(8,16,22,.88);border:1px solid rgba(124,181,177,.56);border-radius:7px;color:#bde6da;font:11px/1.45 monospace;white-space:pre-wrap';
+      document.body.appendChild(notice);
+      this.hostCauseNotice = notice;
+    }
+    const label = `VASCULAR / REMOTE CAUSE · SIGNAL ONLY\nSILT: ${cause.mostRecentGrainId}  ·  ${cause.observedCount} event(s)\n${cause.mostRecentCauseId}\nNo grain arrival / no current change`;
+    if (this.hostCauseNoticeText !== label) {
+      this.hostCauseNoticeText = label;
+      this.hostCauseNotice.textContent = label;
+    }
+    this.hostCauseNotice.style.display = 'block';
   }
 
   setVisible(visible) {

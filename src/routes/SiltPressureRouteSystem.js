@@ -19,7 +19,7 @@ const RECIPE_ID = "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A";
  * player or mutates objective, gate, active-cell, or route-history truth.
  */
 export class SiltPressureRouteSystem {
-  constructor({ recipeDataSystem, scene, playerRoot, frameState, camera }) {
+  constructor({ recipeDataSystem, scene, playerRoot, frameState, camera, hostConnectionReceiptLedger = null }) {
     if (!recipeDataSystem) throw new Error("[SiltPressureRouteSystem] recipeDataSystem is required.");
     if (!scene) throw new Error("[SiltPressureRouteSystem] scene is required.");
     if (!playerRoot) throw new Error("[SiltPressureRouteSystem] playerRoot is required.");
@@ -30,6 +30,7 @@ export class SiltPressureRouteSystem {
     this.playerRoot = playerRoot;
     this.frameState = frameState;
     this.camera = camera;
+    this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
     this.siltAimCandidateId = null;
     this.siltAimLockedId = null;
     this.siltAimCameraPosition = new THREE.Vector3();
@@ -1790,6 +1791,15 @@ export class SiltPressureRouteSystem {
     };
     this.transactionTrace.push(entry);
     if (this.transactionTrace.length > 64) this.transactionTrace.shift();
+    // LS1E1: emit only *after* the authoritative route decision was recorded.
+    // Deliberate released matter creates provenance; it does not move to Vascular.
+    if (kind === 'silt-trajectory' && entry.outcome === 'released-with-trajectory'
+        && entry.reason === 'deliberate-release') {
+      const cause = this.hostConnectionReceiptLedger?.observeSiltRelease(entry);
+      if (cause && frameState) {
+        frameState.hostConnections = this.hostConnectionReceiptLedger.snapshot();
+      }
+    }
   }
 
   updatePlay(dt, frameState, sample) {
