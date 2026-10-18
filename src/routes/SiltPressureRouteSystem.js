@@ -5,6 +5,7 @@ import { MaterialIdentityLedger } from "../ecology/MaterialIdentityLedger.js";
 import { SiltCompressionContact } from "../contact/SiltCompressionContact.js";
 import { SiltPlateSeat } from "../contact/SiltPlateSeat.js";
 import { SiltTrajectoryMemory } from "../contact/SiltTrajectoryMemory.js";
+import { SiltTrajectoryFieldProbe } from "../contact/SiltTrajectoryFieldProbe.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -44,6 +45,8 @@ export class SiltPressureRouteSystem {
     // D2O1: independent native-path attraction for deliberately released
     // unseated units. No new material and no mutation to the LS1B phase clock.
     this.siltTrajectory = new SiltTrajectoryMemory();
+    // D2P1: read-only evidence for travel between existing Silt cavities.
+    this.siltTrajectoryField = new SiltTrajectoryFieldProbe();
     this.siltTrajectoryTrails = [];
     this.siltContactMesh = null;
     this.siltContactEcho = null;
@@ -305,6 +308,8 @@ export class SiltPressureRouteSystem {
       stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
     });
     this.animateLivingMatter(dt);
+    this.siltTrajectoryField.sample(dt, this.siltTrajectory.snapshot().units,
+      this.recipe?.habitatFoundation?.habitats ?? []);
     this.updateSiltContact(dt, frameState);
     this.updateSiltSeatVisuals();
     this.updateSiltAimMarker();
@@ -2390,6 +2395,7 @@ export class SiltPressureRouteSystem {
       siltContact: this.siltContact?.snapshot() ?? null,
       siltPlateSeat: this.siltPlateSeat.snapshot(),
       siltTrajectory: this.siltTrajectory.snapshot(),
+      siltTrajectoryField: this.siltTrajectoryField.snapshot(),
       interactionMatrix: {
         pass: 'LS1D1D2N1V', siteId: this.siltPlateSeat.siteId,
         seatedPresentation: 'visible_socket_0.42s_settle_original_grain_mesh',

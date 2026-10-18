@@ -83,6 +83,7 @@ export class WorldObjectCensusSystem {
     const contact = silt.siltContact ?? {};
     const seat = silt.siltPlateSeat ?? {};
     const trajectory = silt.siltTrajectory ?? {};
+    const field = silt.siltTrajectoryField ?? {};
     return {
       pulseEventId: Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0,
       pulsePressed: !!input.pulsePressed,
@@ -114,6 +115,20 @@ export class WorldObjectCensusSystem {
         position: Array.isArray(seat.position) ? [...seat.position] : null,
         owner: seat.owner ?? 'environment',
         progressionCredit: !!seat.progressionCredit
+      },
+      siltTrajectoryField: {
+        pass: field.pass ?? 'none',
+        sequence: Number(field.sequence ?? 0),
+        lastEvent: field.lastEvent ?? 'none',
+        habitatCrossings: Number(field.habitatCrossings ?? 0),
+        traveledThreeUnits: Number(field.traveledThreeUnits ?? 0),
+        records: Array.isArray(field.records) ? field.records.map(r=>({
+          unitId:r.unitId,firstHabitat:r.firstHabitat,currentHabitat:r.currentHabitat,
+          visitedHabitats:r.visitedHabitats,currentlyFree:!!r.currentlyFree,
+          enteredOtherHabitat:!!r.enteredOtherHabitat,
+          crossings:Number(r.crossings??0),maximumReleaseDistance:r.maximumReleaseDistance,
+          maximumNativeError:r.maximumNativeError,samples:r.samples
+        })) : []
       },
       siltTrajectory: {
         pass: trajectory.pass ?? 'none',
@@ -232,6 +247,10 @@ export class WorldObjectCensusSystem {
           });
         }
       }
+      if (now.siltTrajectoryField.sequence > before.siltTrajectoryField.sequence) {
+        this.recordEvent('silt-trajectory-field-change', { field: now.siltTrajectoryField,
+          caveat: 'Only existing Silt habitat ellipsoids are classified; passages are between. Read-only, no physics or off-route simulation.' });
+      }
       if (now.siltTrajectory.sequence > before.siltTrajectory.sequence) {
         this.recordEvent('silt-trajectory-state-change', {
           trajectory: now.siltTrajectory,
@@ -338,6 +357,10 @@ export class WorldObjectCensusSystem {
     return {
       eventCounts: counts, routeDecisionsObserved: this.captureEvents.filter(e => e.type === 'silt-authoritative-route-decision').length,
       routeDecisionCounts, heldMaterialMotion: heldMotion,
+      siltTrajectoryField: {
+        finalState: this.authoritySnapshot().siltTrajectoryField,
+        proofLimit: 'Silt route-local geometry labels only; between includes corridors, outside cavities and distant positions. No cross-region or off-route physics claim.'
+      },
       siltTrajectory: { outcomes: trajectoryOutcomes,
         finalState: this.authoritySnapshot().siltTrajectory,
         proofLimit: 'Route-local world-position and velocity continuity for released unseated grain; LS1B remains native phase authority. No collision impulse, scene-wide ecology, save persistence, mass change or off-route simulation.' },
@@ -430,13 +453,13 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1D1D2O1-NATIVE-PATH-TRAJECTORY-MEMORY', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1D1D2P1-THREE-HABITAT-TRAJECTORY-PROOF', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: '150ms sampled input plus bounded Silt route receipts. D2O1 adds route-local kinematic trajectory memory only for deliberately released unseated grains, gently attracted to LS1B native phase paths. D2N1V plate-seated grains remain stationary and retain identity. No global save persistence, off-route simulation, collision force, chemistry, intake, material transfer, or progression credit. Other subsystems remain unaudited.',
+      limitations: 'D2P1 only observes D2O1 free grain travel in the three existing Silt LS1A ellipsoid habitats. Between includes connecting tunnels and space outside ellipsoids. 250ms field samples, 150ms input samples; fast zone changes can be missed. No new collision, traversal, geometry, chemistry, ledger, site, or off-route motion authority.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2O1_OBSERVATION.json'; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1D1D2P1_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
