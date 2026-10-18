@@ -9,6 +9,7 @@ import { buildBoundedSimulationSteps } from "./BoundedSimulationCatchUp.js";
 import { LocalCellBoundaryMorphSystem } from "../morph/LocalCellBoundaryMorphSystem.js";
 import { RecipeDataSystem } from "../data/RecipeDataSystem.js";
 import { DebugDisplaySystem } from "../debug/DebugDisplaySystem.js";
+import { WorldObjectCensusSystem } from "../debug/WorldObjectCensusSystem.js";
 import { DebugAreaJumpSystem } from "../debug/DebugAreaJumpSystem.js";
 import { InputSystem } from "../input/InputSystem.js";
 import { DeliberateCommitmentSystem } from "../input/DeliberateCommitmentSystem.js";
@@ -172,6 +173,7 @@ export class GameRuntime {
     this.guideThresholdLayeredInteractionSystem = null;
     this.secondLocalCellMorphSystem = null;
     this.debugDisplaySystem = null;
+    this.worldObjectCensusSystem = null;
     this.cameraReadabilitySystem = null;
     this.inspectionCameraSystem = null;
     this.inspectionOcclusionSystem = null;
@@ -2486,6 +2488,11 @@ export class GameRuntime {
   }
 
   createDebugSystems() {
+    // LS1E1R: one runtime-owned observation recorder, independent of local-cell mounts.
+    this.worldObjectCensusSystem = new WorldObjectCensusSystem({
+      scene: this.scene,
+      frameState: this.frameState
+    });
     this.debugDisplaySystem = new DebugDisplaySystem({
       frameState: this.frameState
     });
@@ -2548,6 +2555,9 @@ export class GameRuntime {
     this.registry.register("modeController", this.modeController);
     this.registry.register("statusPageSystem", this.statusPageSystem, { allowUpdateError: true });
     this.registry.register("debugDisplaySystem", this.debugDisplaySystem, { allowUpdateError: true });
+    // Register eagerly so init() binds Alt+Shift+R/E and creates the REC badge.
+    // The recorder samples through its own 150ms timer while active; no frame update.
+    this.registry.register("worldObjectCensusSystem", this.worldObjectCensusSystem, { update: false });
 
     this.registry.register("chemObjectSystem", this.chemObjectSystem, regionScoped);
     this.registry.register("hostRhythmSystem", this.hostRhythmSystem, regionScopedSoft);

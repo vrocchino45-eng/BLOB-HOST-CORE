@@ -1,0 +1,59 @@
+{
+  "pass": "LS1E1R-RECORDER-HOTKEY-BOOT-REPAIR",
+  "cause": "Recorder implementation present but omitted from LS1E1 GameRuntime import, construction, and SystemRegistry registration.",
+  "files": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "bytes": 148125,
+      "sha256": "c0354527513c5457c7e2ee0695476cb777375f9f77b1b6fefd70ebc1acbeba53",
+      "previousSha256": "bac0455d51e2eb8279020bc43136046bb95d8483a0aacda6c2248bbaa5aac6e9"
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "bytes": 34524,
+      "sha256": "fcda45e4e7f9a2d6b80dd2d1dc1b391509af95564896cbf76c89dad9c7ca486e",
+      "previousSha256": "0c6af5d7e9d1b8e40a74a5ffa2fa54310d1d5808eb745a5cf764a9660aed6f8b"
+    },
+    {
+      "path": "scripts/validateRecorderRepair.mjs",
+      "bytes": 4411,
+      "sha256": "a0b655c81b4c368eab796fd558fa82f601f3f245137b6343030d7f14c0b26a9a",
+      "previousSha256": null
+    },
+    {
+      "path": "README.md",
+      "bytes": 3262,
+      "sha256": "6cffaabee9586427ba4f20f6451453576ed505be7947aa2fc1b6b5a37bfc2517",
+      "previousSha256": null
+    }
+  ],
+  "tests": {
+    "dedicatedNode": {
+      "passed": 21,
+      "total": 21
+    },
+    "LS1E1": {
+      "passed": 35,
+      "total": 35
+    },
+    "LS1E1DirectSmoke": {
+      "passed": 18,
+      "total": 18
+    },
+    "D2P1": {
+      "passed": 25,
+      "total": 25
+    },
+    "realChromiumIsolatedRecorder": {
+      "started": true,
+      "indicator": "\u25cf REC 00:00 \u00b7 Alt+Shift+R stop",
+      "stopped": true,
+      "download": "BLOB_LS1E1_OBSERVATION.json",
+      "pageErrors": 0
+    },
+    "syntax": {
+      "bothChangedJS": "passed"
+    }
+  },
+  "notProved": "Full Vite/WebGL game boot and controller traversal were not run. Isolated Chromium smoke validates browser recorder only."
+}

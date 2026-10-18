@@ -22,14 +22,16 @@ export class WorldObjectCensusSystem {
     this.recIndicator = null;
     this.recNoticeTimeout = null;
     this.keyHandler = event => {
-      if (event.altKey && event.shiftKey && event.code === 'KeyR') { event.preventDefault(); this.toggleCapture(); return; }
-      if (event.altKey && event.shiftKey && event.code === 'KeyE') { event.preventDefault(); this.exportTimeline(); return; }
+      if (event.altKey && event.shiftKey && event.code === 'KeyR') { event.preventDefault(); if (!event.repeat) this.toggleCapture(); return; }
+      if (event.altKey && event.shiftKey && event.code === 'KeyE') { event.preventDefault(); if (!event.repeat) this.exportTimeline(); return; }
       if (this.captureActive && !event.repeat) this.recordEvent('keyboard-down', { code: event.code, shift: event.shiftKey, alt: event.altKey, ctrl: event.ctrlKey, target: this.materialContext() });
       if (event.code === 'F4') { event.preventDefault(); this.toggle(); }
       if (event.code === 'F5' && this.visible) { event.preventDefault(); this.exportReport(); }
     };
   }
   init() {
+    if (this.recorderInitialized) return;
+    this.recorderInitialized = true;
     window.addEventListener('keydown', this.keyHandler);
     this.keyUpHandler = event => {
       if (this.captureActive) this.recordEvent('keyboard-up', { code: event.code, target: this.materialContext() });
