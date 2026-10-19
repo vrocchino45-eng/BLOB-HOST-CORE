@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
 
 const ROUTE_CELL_ID = "CELL_VASCULAR_RHYTHM_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -23,6 +24,7 @@ export class VascularRhythmRouteSystem {
     this.playerRoot = playerRoot;
     this.frameState = frameState;
     this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
+    this.siltSignalReceiver = new VascularSiltSignalReceiver();
     this.hostCauseNotice = null;
     this.hostCauseNoticeText = '';
 
@@ -193,6 +195,10 @@ export class VascularRhythmRouteSystem {
       return;
     }
     if (!this.active) this.onRuntimeMount(frameState);
+
+    // LS1E2: Only the mounted Vascular system can accept a verified remote cause.
+    this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);
+    this.siltSignalReceiver.update(dt);
 
     this.elapsed += dt;
     this.pulseFlashAge += dt;
@@ -1005,7 +1011,8 @@ export class VascularRhythmRouteSystem {
       * (1 + this.traversalPulseWake * 0.22)
       * (1 - this.traversalAbsorbShear * 0.16)
       * (1 - this.traversalStabilizeCalm * 0.34)
-      * worldRhythmFlowScale;
+      * worldRhythmFlowScale
+      * this.siltSignalReceiver.flowScale;
     const swirl = this.turbulence * 0.20
       * (1 + this.traversalPulseWake * 0.28)
       * (1 - this.traversalAbsorbShear * 0.18)
@@ -1048,6 +1055,8 @@ export class VascularRhythmRouteSystem {
         absorbShear: this.traversalAbsorbShear,
         stabilizeCalm: this.traversalStabilizeCalm,
         worldRhythmFlowScale,
+        remoteSiltMembraneLoad: this.siltSignalReceiver.membraneLoad,
+        remoteSiltDirectionalFlowScale: this.siltSignalReceiver.flowScale,
         worldRhythmBeat: worldComposition.active ? worldComposition.beatNumber ?? 0 : 0,
         worldRhythmFunction: worldComposition.active ? worldComposition.currentFunction ?? "none" : "none",
         condition: this.completed
@@ -1103,11 +1112,14 @@ export class VascularRhythmRouteSystem {
           ? visual.readyColor ?? 0xffd9b8
           : visual.signalColor ?? 0x78e3ff;
 
+    const remoteSiltLoad = this.siltSignalReceiver.membraneLoad;
     if (this.vesselEnvelope?.material) {
       this.vesselEnvelope.material.emissiveIntensity = 0.12
         + this.contractionIntensity * 0.16
-        + this.synchronization * 0.08;
-      this.vesselEnvelope.material.opacity = 0.1 + this.synchronization * 0.07;
+        + this.synchronization * 0.08
+        + remoteSiltLoad * (0.17 + 0.075 * Math.sin(t * 2.1));
+      this.vesselEnvelope.material.opacity = 0.1 + this.synchronization * 0.07
+        + remoteSiltLoad * 0.048;
       if (this.grammarReinforcementStrength > 0.01) {
         this.vesselEnvelope.material.emissiveIntensity += this.grammarReinforcementStrength * 0.08;
         this.vesselEnvelope.material.opacity += this.grammarReinforcementStrength * 0.025;
@@ -1116,7 +1128,8 @@ export class VascularRhythmRouteSystem {
     for (const [index, tube] of this.braidTubes.entries()) {
       tube.material.emissiveIntensity = 0.16
         + this.contractionIntensity * (0.08 + index * 0.015)
-        + this.turbulence * 0.18;
+        + this.turbulence * 0.18
+        + remoteSiltLoad * (0.12 + 0.035 * Math.sin(t * 2.1 + index * 0.9));
       tube.material.opacity = 0.38 + this.synchronization * 0.2;
     }
 
@@ -1134,11 +1147,16 @@ export class VascularRhythmRouteSystem {
         1
       );
       const memory = Math.max(retained * 0.45, readCoverage * 0.65);
-      fold.scale.y = (baseScale?.y ?? (0.78 + (index % 2) * 0.14)) * (1 + memory * 0.08);
+      // Authored Vascular tissue translates its local receiver state into a
+      // subtle swelling/relaxing wave, not a diagnostic overlay or new mesh.
+      const siltWave = remoteSiltLoad * (0.07 + 0.045 * Math.sin(t * 2.1 - index * 0.42));
+      fold.scale.y = (baseScale?.y ?? (0.78 + (index % 2) * 0.14))
+        * (1 + memory * 0.08 + siltWave);
       fold.rotation.z += Math.sin(index * 1.17) * memory * 0.002;
       if (fold.material) {
-        fold.material.opacity = 0.24 + memory * 0.10;
-        fold.material.emissiveIntensity = 0.11 + memory * (this.completed ? 0.20 : 0.11);
+        fold.material.opacity = 0.24 + memory * 0.10 + remoteSiltLoad * 0.09;
+        fold.material.emissiveIntensity = 0.11 + memory * (this.completed ? 0.20 : 0.11)
+          + remoteSiltLoad * 0.22;
       }
       if (this.grammarReinforcementMode === "phase_strain_contraction") {
         const unsettled = this.grammarReinforcementStrength * (1 - this.traversalStabilizeCalm * 0.88);
@@ -1228,7 +1246,8 @@ export class VascularRhythmRouteSystem {
       const currentSpeed = (0.055 + this.synchronization * 0.025)
         * (1 + this.traversalPulseWake * 0.42)
         * (1 - this.traversalStabilizeCalm * 0.38)
-        * worldMoteSpeedScale;
+        * worldMoteSpeedScale
+        * this.siltSignalReceiver.flowScale;
       let progress = (mote.userData.baseProgress + direction * t * currentSpeed) % 1;
       if (progress < 0) progress += 1;
       mote.position.copy(this.pathCurve.getPointAt(progress));
@@ -1291,7 +1310,8 @@ export class VascularRhythmRouteSystem {
         + this.contractionIntensity * 0.18
         + this.traversalPulseWake * 0.18
         + this.traversalStabilizeCalm * 0.08
-        + this.grammarReinforcementStrength * 0.09;
+        + this.grammarReinforcementStrength * 0.09
+        + remoteSiltLoad * 0.18;
     }
 
     if (this.returnFold) {
@@ -1400,6 +1420,8 @@ export class VascularRhythmRouteSystem {
     const hostCause = this.hostConnectionReceiptLedger?.forVascular() ?? null;
     frameState.vascularRhythmRoute = {
       hostConnectionObservation: hostCause,
+      // LS1E2: receiver state belongs to Vascular; Silt receipts stay immutable.
+      siltSignalResponse: this.siltSignalReceiver.snapshot(),
       pass: "HC-031R",
       id: this.recipe?.id ?? RECIPE_ID,
       active: Boolean(active),
@@ -1589,8 +1611,9 @@ export class VascularRhythmRouteSystem {
     this.updateHostCauseNotice(Boolean(active), hostCause);
   }
 
-  // Small diagnostic only: a remote event was observed, not received as matter.
+  // Diagnostic reflects verified Vascular-local response, not transported matter.
   updateHostCauseNotice(active, cause) {
+    const receiver = this.siltSignalReceiver.snapshot();
     const shouldShow = active && cause?.observedCount > 0;
     if (!shouldShow) {
       if (this.hostCauseNotice) this.hostCauseNotice.style.display = 'none';
@@ -1605,7 +1628,9 @@ export class VascularRhythmRouteSystem {
       document.body.appendChild(notice);
       this.hostCauseNotice = notice;
     }
-    const label = `VASCULAR / REMOTE CAUSE · SIGNAL ONLY\nSILT: ${cause.mostRecentGrainId}  ·  ${cause.observedCount} event(s)\n${cause.mostRecentCauseId}\nNo grain arrival / no current change`;
+    const label = receiver?.receivedTotal > 0
+      ? `VASCULAR / SILT SIGNAL RECEIVED · LOCAL RESPONSE\nSILT: ${receiver.lastSubjectId} · ${receiver.receivedTotal} receipt(s)\nMembrane load: ${receiver.membraneLoad.toFixed(3)} · current ×${receiver.directionalFlowScale.toFixed(3)}\nNo grain arrival / no progression credit`
+      : `VASCULAR / REMOTE CAUSE · SIGNAL ONLY\nSILT: ${cause.mostRecentGrainId}  ·  ${cause.observedCount} event(s)\n${cause.mostRecentCauseId}\nNo grain arrival / no current change`;
     if (this.hostCauseNoticeText !== label) {
       this.hostCauseNoticeText = label;
       this.hostCauseNotice.textContent = label;

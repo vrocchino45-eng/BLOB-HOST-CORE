@@ -132,6 +132,26 @@ export class WorldObjectCensusSystem {
       this.lastHostConnectionSequence = record.sequence;
     }
   }
+  sampleVascularSiltResponse() {
+    const receiver = this.frameState?.vascularRhythmRoute?.siltSignalResponse;
+    if (!receiver || !Number.isSafeInteger(receiver.receivedTotal)) return;
+    const previous = this.lastVascularReceivedSequence ?? 0;
+    const fresh = (receiver.recentReceipts ?? []).filter(r => r.sequence > previous)
+      .sort((a,b) => a.sequence - b.sequence);
+    if (fresh.length && fresh[0].sequence > previous + 1) {
+      this.recordEvent('vascular-receiver-receipt-gap', {
+        previousSequence: previous, firstAvailableSequence: fresh[0].sequence
+      });
+    }
+    for (const record of fresh) {
+      this.recordEvent('vascular-silt-signal-received', {
+        receipt: record,
+        receiverCellId: receiver.receiverCellId,
+        caveat: 'Vascular-local membrane and directional-current adjustment only; no matter, route credit, or off-route simulation.'
+      });
+      this.lastVascularReceivedSequence = record.sequence;
+    }
+  }
   // These are *published game-state outcomes*, not guesses from controller buttons.
   // None of these fields proves that a specific held grain received Pulse force
   // or an Absorb mass transfer. Record context for correlation only.
@@ -244,6 +264,7 @@ export class WorldObjectCensusSystem {
       },
       hostConnections: fs.hostConnections ?? null,
       vascularHostObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null,
+      vascularSiltSignalResponse: fs.vascularRhythmRoute?.siltSignalResponse ?? null,
       visualVerbAuthority: {
         targetId: fs.verbVisualTargetAuthority?.targetId ?? "none",
         pulse: fs.verbVisualTargetAuthority?.pulse ?? "unpublished",
@@ -404,7 +425,8 @@ export class WorldObjectCensusSystem {
         detailedListsContainOnlyLast2500: true },
       hostConnections: { finalState: this.authoritySnapshot().hostConnections,
         vascularReadOnlyView: this.authoritySnapshot().vascularHostObservation,
-        proofLimit: 'Source Silt release observed; Vascular signal-only provenance, not transported matter or changed circulation.' },
+        vascularLocalResponse: this.authoritySnapshot().vascularSiltSignalResponse,
+        proofLimit: 'Verified Silt release creates provenance only. LS1E2 Vascular consumes signal receipts into its own bounded membrane state and directional current; no grain arrival, chemistry transfer or progression credit.' },
       routeDecisionCounts, heldMaterialMotion: heldMotion,
       siltTrajectoryField: {
         finalState: this.authoritySnapshot().siltTrajectoryField,
@@ -475,6 +497,7 @@ export class WorldObjectCensusSystem {
     this.sampleAuthority();
     this.sampleSiltDecisions();
     this.sampleHostConnections();
+    this.sampleVascularSiltResponse();
     this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
@@ -501,6 +524,7 @@ export class WorldObjectCensusSystem {
     }
     this.captureEvents = []; this.captureAggregate = this.newCaptureAggregate();
     this.lastHostConnectionSequence = this.frameState?.hostConnections?.sequence ?? 0;
+    this.lastVascularReceivedSequence = this.frameState?.vascularRhythmRoute?.siltSignalResponse?.receivedTotal ?? 0;
     this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
     this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
@@ -510,9 +534,9 @@ export class WorldObjectCensusSystem {
   exportTimeline() {
     if (this.captureActive) this.sampleState();
     const report = {
-      pass: 'LS1E1-HOST-CONNECTION-SILT-CAUSE-PROVENANCE', captureStartedAt: this.captureStartedAt,
+      pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', captureStartedAt: this.captureStartedAt,
       exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: 'LS1E1 records verified Silt deliberate-release provenance visible in Vascular as signal only. No grain crosses route-cell boundaries. 150ms input sampling and bounded 64-entry Silt decision trace; lifetime capture counters survive 2500-entry detail rollover, but source trace gaps remain possible. No new material transfer, crossing, progression, chemistry, Grave memory, or save persistence.',
+      limitations: 'LS1E2 adds Vascular-owned bounded receiving membrane load and modest directional-current modulation from authenticated Silt release signals. No grain transport, progression, chemistry, Grave memory, save persistence or off-route cell update. 150ms input sampling, 64-entry Silt source trace and 2500 retained details; counters survive rollover.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
@@ -574,7 +598,7 @@ export class WorldObjectCensusSystem {
       selected: { legacyTarget: fs.targeting?.targetId ?? 'none', legacyLabel: fs.targeting?.targetLabel ?? 'none', legacySource: fs.targeting?.worldAttentionSource ?? 'none', siltGrip: silt.siltGrip ?? null },
       attentionCandidates: candidates.slice(0, 300),
       entityBridge: { materialTarget, entityFamilies, note: 'Diagnostic association only. No registration, target routing, or verb behavior modified.' },
-      hostConnections: { source: fs.hostConnections ?? null, vascularObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null },
+      hostConnections: { source: fs.hostConnections ?? null, vascularObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null, vascularLocalResponse: fs.vascularRhythmRoute?.siltSignalResponse ?? null },
       progression: { silt: { active: !!silt.active, completed: !!silt.completed, returnFoldReady: !!silt.returnFoldReady, pressureRead: !!silt.pressureRead, ribsReleased: !!silt.ribsReleased, safeMatterAbsorbed: !!silt.safeMatterAbsorbed, status: safe(silt.status) } },
       groups: [...groups.values()].sort((a,b) => b.count - a.count).slice(0, 250),
       caveat: 'Mesh grouping is diagnostic, not stable entity identity. Missing labels do not imply targetability.'
@@ -590,7 +614,10 @@ export class WorldObjectCensusSystem {
     panel.style.cssText = 'position:fixed;top:12px;right:12px;z-index:99999;max-width:min(430px,90vw);max-height:75vh;overflow:auto;padding:14px;background:rgba(8,14,20,.94);color:#d9f5ee;border:1px solid #79a9a0;border-radius:8px;font:12px/1.5 monospace;pointer-events:none;white-space:pre-wrap';
     const preview = r.groups.slice(0, 16).map(g => `${g.owner}: ${g.count}${g.suppressed ? ' [suppressed '+g.suppressed+']' : ''}`).join('\n');
     const signal = this.frameState?.vascularRhythmRoute?.hostConnectionObservation;
-    const signalText = signal?.observedCount > 0 ? `Silt cause: ${signal.mostRecentGrainId} / ${signal.observedCount}\nSignal-only · no material transfer` : `Silt cause: none`;
+    const response = this.frameState?.vascularRhythmRoute?.siltSignalResponse;
+    const signalText = response?.receivedTotal > 0
+      ? `Silt: ${response.lastSubjectId} / ${response.receivedTotal} received\nVascular membrane: ${response.membraneLoad.toFixed(3)}, flow: ×${response.directionalFlowScale.toFixed(3)}\nNo grain transfer / no route credit`
+      : signal?.observedCount > 0 ? `Silt cause: ${signal.mostRecentGrainId} / ${signal.observedCount}\nSignal-only · no material transfer` : `Silt cause: none`;
     panel.textContent = `WORLD OBJECT CENSUS / LS1E1\nF4 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n${signalText}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
     document.body.appendChild(panel); this.panel = panel;
   }
