@@ -1,34 +1,29 @@
-# BLOB HOST CORE — LS1E1R: Restore Observation Recording Hotkeys
+# BLOB HOST CORE — LS1E1T Targeting/ Stabilize Camera Wiring Repair
 
-**Apply OVER LS1E1**. This is a narrow changed-files-only overlay, not a whole game.
+**Apply over LS1E1R**. This overlay has **one changed gameplay source file** (`src/core/GameRuntime.js`) plus a source regression checker and README. Do not replace the full project or delete any files.
 
-## Root cause
+## Player-observed failure / verified cause
 
-The LS1E1 `src/debug/WorldObjectCensusSystem.js` still implements Alt+Shift+R, Alt+Shift+E, and the top-left recording indicator. But the shipped LS1E1 `GameRuntime.js` never imports, constructs, or registers that class. Without `init()`, no keyboard listener or REC element exists. Existing observation JSONs from D2P1 do not prove that the new LS1E1 runtime actually binds the recorder.
+The LS1E1 observation capture reports 22 Stabilize starts but no candidate or locked Silt grain, no contact/grips, and no free grain releases. Environmental Silt pressure and porous-packet actions still function.
 
-## Changed files
+LS1E1 / LS1E1R constructed `SiltPressureRouteSystem` without its `camera` dependency. In `SiltPressureRouteSystem.update...`, grain candidate selection is explicitly gated on `aiming && this.camera`; with undefined camera it can never select a candidate or display an aim marker. This makes the LT+A grip impossible even when gamepad events arrive. **Stabilize the world and Stabilize a held grain are distinct paths.**
 
-- `src/core/GameRuntime.js` — imports `WorldObjectCensusSystem`, constructs one shared instance in `createDebugSystems()` using the live scene and frameState, registers it eagerly in `registerRuntimeSystems()` with `{update:false}`. This is global (no region scope or lazy initialization), independent of Silt/Vascular/Grave mount state.
-- `src/debug/WorldObjectCensusSystem.js` — guards `init()` against repeated listener registration; ignores auto-repeated Alt+Shift+R/E events to prevent accidental double toggling/export. Recording, aggregation, Host provenance, Silt accounting and output JSON format are otherwise unchanged.
-- `scripts/validateRecorderRepair.mjs` — stand-alone minimal DOM/keyboard smoke and source wiring assertions (not needed by game at runtime).
+## Change
 
-Do not delete or replace existing `HostConnectionReceiptLedger.js`, Silt/Grave/Vascular route files, or any earlier LS overlays.
+- `src/core/GameRuntime.js`: restores **`camera: this.camera`** to the one `new SiltPressureRouteSystem({ ... })` registration, matching the previously working camera-targeting contract.
+- No targeting thresholds, distances, motion response, Silt ownership ledger, trajectories, plate, Vascular/Host bridge, recorder, Core controls, or other behavior changed.
 
-## Playtest
+## Install and prove
 
-1. Copy the `src/` paths into the same paths in your **LS1E1** project. Restart Vite or hard reload the game page to ensure the new GameRuntime module is loaded.
-2. Click inside the game window. Press **Alt+Shift+R once**: top-left red-bounded badge should show `● REC 00:00` and count up. Press again to stop: a `REC STOPPED` notice should briefly appear.
-3. Press **Alt+Shift+E**: browser should download `BLOB_LS1E1_OBSERVATION.json`. You may also export while REC is active.
-4. Run a normal Silt release → Vascular signal-only check. Ensure the new Host connection and existing material ownership rules remain unchanged.
+1. Extract the ZIP over the current **LS1E1R** project folder, preserving `src/core/GameRuntime.js` path.
+2. Hard-refresh browser (or restart Vite). Ensure no old module remains cached.
+3. In Silt, aim the camera at a nearby eligible grain while holding **LT / Stabilize**. It should show the target marker and a non-null candidate ID.
+4. While still aiming, press **A** to grip. Release deliberately with **A** or by letting go of LT; observe independent trajectory. Previously proven plate interaction should still work.
+5. Press **Alt+Shift+R** for REC, test the area, stop with the same shortcut, and export via **Alt+Shift+E**. Upload `BLOB_LS1E1_OBSERVATION.json`.
+6. Review recording: expect non-null candidate, owner changes into grip, Silt release events and Host receipt; Silt-to-Vascular signal is the next verification, not proven by this patch.
 
-If the shortcut still fails, check the browser DevTools console for startup exceptions and verify that `src/core/GameRuntime.js` actually contains `worldObjectCensusSystem` registration. In Chrome, focus the game tab before triggering the shortcut; browser/system shortcuts or extensions can intercept combinations before the app receives them.
+## Source checks and limitations
 
-## Validation / limitations
+Run `node scripts/validateLS1E1T.mjs` from project root. The checker isolates Silt wiring, ensures camera guards remain in the Silt route, verifies essential Host/recorder wiring remains, and verifies camera object created before route initialization.
 
-- 21/21 dedicated Node assertions including real recorder class under fake DOM and key dispatch.
-- 35/35 LS1E1 source validations, 18/18 source-to-Vascular smoke assertions, 25/25 D2P1 regressions.
-- Actual headless Chromium **isolated recorder DOM**: Alt+Shift+R shows `REC`, stops; Alt+Shift+E downloads expected JSON; no page exceptions.
-- Both changed JS source files pass `node --check`.
-- **Not tested:** full Vite/WebGL game playthrough with complete dependency installation. Chromium proof exercises recorder in a focused page, not entire game.
-
-**No other behavior changes:** Core controls, material identity, native trajectories, seat visual, geography, three-function grammar, Vascular response, Grave memory, progression, Host ledger, or audio.
+**Not claimed:** complete Vite/WebGL/browser game runtime test or player-visible acquisition. Those still require the above field test. This fixes the confirmed constructor dependency regression only.
