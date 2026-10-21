@@ -1,0 +1,40 @@
+{
+  "pass": "C0C3",
+  "mode": "CONVERGENCE",
+  "status": "OFFLINE_PARITY_PASS_LIVE_BROWSER_PENDING",
+  "base": "LS1E2 + C0C-REC1 + C0C2",
+  "baseline_owner_sha256": "416cef704a7727277fa2983fd68bfde47741204e01648a06df6187bdbc7e1be2",
+  "operations": [
+    {
+      "operation": "MODIFY",
+      "path": "src/contact/SiltCompressionContact.js",
+      "purpose": "C01 accepted pressure add / owned recover only"
+    },
+    {
+      "operation": "CREATE",
+      "path": "scripts/validateC0C3Silt.mjs",
+      "purpose": "parity/regression replay"
+    },
+    {
+      "operation": "CREATE",
+      "path": "scripts/fixtures/C0C3_SiltCompressionContact_D2M_REFERENCE.mjs",
+      "purpose": "test-only untouched D2M reference"
+    }
+  ],
+  "deleted_files": [],
+  "modified_unrelated_gameplay_files": [],
+  "tests": {
+    "c0c3_parity_assertions": 36450,
+    "owner_update_calls": 12144,
+    "c0c2_parity_assertions": 24234,
+    "browser_gameplay": "PENDING"
+  },
+  "existing_required_unmodified": "src/hostCircuit/BoundedAccumulatorBehavior.js",
+  "file_sha256": {
+    "README_C0C3.md": "647491ae28dd8084a8dec8ec919f55b0c18d222d7efb48316fe087b4144e1eee",
+    "C0C3_PASS_REPORT.md": "af40c967d22998ab2946c8c624120a603888b1935722717e0fbc0c57fd56b31f",
+    "scripts/validateC0C3Silt.mjs": "b38ce9e165c5c30d8c36c51ee9a8e761a948957820ca505d03dff198cbcde1fb",
+    "src/contact/SiltCompressionContact.js": "eb6dc1be7b75f522e13ef1f12ac51af428252e5f761f9fba71ea9c905ab7be65",
+    "scripts/fixtures/C0C3_SiltCompressionContact_D2M_REFERENCE.mjs": "416cef704a7727277fa2983fd68bfde47741204e01648a06df6187bdbc7e1be2"
+  }
+}

@@ -1,3 +1,5 @@
+import { boundedAdd, boundedRecovery } from "../hostCircuit/BoundedAccumulatorBehavior.js";
+
 /**
  * LS1D1D2J — one reversible, spatial Silt-to-Silt contact relationship.
  * Pure state machine. Does not acquire targets, collide, transfer matter,
@@ -181,7 +183,8 @@ export class SiltCompressionContact {
         : validMove ? 'approach' : validResistance ? 'tether-resistance' : 'none';
       this.lastPulseMode = mode;
       if (touching && !absorbHeld && mode !== 'none') {
-        this.pressure = Math.min(1, this.pressure + this.pressurePerPulse);
+        // C0C3: same accepted Pulse, bounded C01 math; Silt still owns eligibility.
+        this.pressure = boundedAdd(this.pressure, this.pressurePerPulse, { lower: 0, upper: 1 });
         this.presses++;
         this.echoSeconds = Math.max(this.echoSeconds, 0.45);
         this.pressFeedbackSeconds = 0.6;
@@ -221,7 +224,11 @@ export class SiltCompressionContact {
       }
     }
     if (this.pressure > 0 && (!this.braced || absorbHeld)) {
-      this.pressure = Math.max(0, this.pressure - seconds * (absorbHeld ? 1.4 : 0.8));
+      // C0C3: use the same already-capped seconds and owner-selected rate.
+      this.pressure = boundedRecovery(this.pressure, {
+        dt: seconds, rate: absorbHeld ? 1.4 : 0.8,
+        law: 'linear', maxStepSeconds: 0.1, lower: 0, upper: 1
+      });
       if (this.imprinted && this.pressure < 0.15) {
         this.imprinted = false;
         this.echoSeconds = Math.max(this.echoSeconds, 0.8);
