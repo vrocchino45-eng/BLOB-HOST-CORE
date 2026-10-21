@@ -1,0 +1,32 @@
+{
+  "pass": "C0C5-A1",
+  "overlayType": "new-test-files-only",
+  "changedGameplayFiles": 0,
+  "deletedFiles": 0,
+  "newFiles": [
+    {
+      "relativePath": "scripts/analyzeC0C5Recording.mjs",
+      "sha256": "05bd267023e9b0c0399e631b7d17c174839627c5b1029c87463a23877fef0fdb",
+      "bytes": 15302
+    },
+    {
+      "relativePath": "scripts/testC0C5RecordingAudit.mjs",
+      "sha256": "2bb75d21a0b1d894db221172d96f7f704e1e3618191563f7d3ed2763a76ca767",
+      "bytes": 4036
+    },
+    {
+      "relativePath": "scripts/runC0C5Checks.mjs",
+      "sha256": "eef3ee9feb4709f4ddb589fdb0a7cae7148b39fbb18af7b591f759d813ad6506",
+      "bytes": 2388
+    }
+  ],
+  "dependency": [
+    "C0C2",
+    "C0C3",
+    "C0C4",
+    "REC1"
+  ],
+  "fieldAcceptance": "PENDING_USER_C0C4_PLAYTEST",
+  "validation": "OFFLINE_RUNNER_AND_HISTORICAL_SAMPLE_PASS",
+  "limitations": "Read-only REC1 observations do not attest source/build revision or visual response."
+}
