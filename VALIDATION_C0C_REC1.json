@@ -1,0 +1,29 @@
+{
+  "pass": "C0C-REC1",
+  "baseline": "LS1E2/WorldObjectCensusSystem.js",
+  "testCount": 5,
+  "passed": 5,
+  "tests": [
+    {
+      "name": "full chronology is retained beyond 2500 details (4592 actual-field scale)",
+      "pass": true
+    },
+    {
+      "name": "the current 2500-detail rollover has been removed",
+      "pass": true
+    },
+    {
+      "name": "material and receiver receipts can be paired across an uninterrupted session",
+      "pass": true
+    },
+    {
+      "name": "25-minute-scale capture continues without silent truncation or invented source facts",
+      "pass": true
+    },
+    {
+      "name": "compact export is complete, parseable, and correctly labeled",
+      "pass": true
+    }
+  ],
+  "proofLimit": "Offline functional unit checks, not full Vite/browser field playback. The 64-entry Silt source trace and 150ms sampling are unchanged."
+}

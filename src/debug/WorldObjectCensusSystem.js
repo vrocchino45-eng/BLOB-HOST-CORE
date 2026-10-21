@@ -12,6 +12,7 @@ export class WorldObjectCensusSystem {
     this.captureAggregate = this.newCaptureAggregate();
     this.lastHostConnectionSequence = 0;
     this.captureStartedAt = null;
+    this.captureStoppedAt = null;
     this.capturePullBaseline = null;
     this.captureTimer = null;
     this.capturePrevious = null;
@@ -57,7 +58,11 @@ export class WorldObjectCensusSystem {
       const elapsed = this.captureStartedAt ? Math.floor(Math.max(0, Date.now() - Date.parse(this.captureStartedAt)) / 1000) : 0;
       const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
       const seconds = String(elapsed % 60).padStart(2, '0');
-      this.recIndicator.textContent = `● REC ${minutes}:${seconds}  ·  Alt+Shift+R stop`;
+      // C0C-REC1: show that details are retained from the start of the capture.
+      // Long sessions may create larger files; they do NOT silently roll over.
+      const eventLabel = this.captureEvents.length.toLocaleString('en-US');
+      const sizeHint = this.captureEvents.length >= 10000 ? '  ·  LARGE FILE' : '';
+      this.recIndicator.textContent = `● REC ${minutes}:${seconds}  ·  ${eventLabel} events  ·  FULL${sizeHint}  ·  Alt+Shift+R stop`;
       this.recIndicator.style.display = 'block';
       return;
     }
@@ -72,9 +77,9 @@ export class WorldObjectCensusSystem {
       this.recIndicator.style.display = 'none';
     }
   }
-  // LS1E1: lifetime *observed* counters remain valid even when the bounded
-  // detailed event list rotates. Never call them full source truth if the
-  // 64-decision Silt ring itself skipped before sampling.
+  // C0C-REC1: observed counters and detailed event chronology now span the
+  // whole capture. The 64-decision Silt source ring and 150ms sampling may
+  // still miss *source* events; this recorder cannot reconstruct such gaps.
   newCaptureAggregate() {
     return { eventCounts: {}, routeDecisionCounts: {}, contactOutcomes: {},
       seatOutcomes: {}, trajectoryOutcomes: {}, recordedEvents: 0, droppedDetails: 0,
@@ -385,8 +390,8 @@ export class WorldObjectCensusSystem {
   }
   timelineSummary() {
     const acc = this.captureAggregate;
-    // Lists are illustrative from retained details; numeric totals below are
-    // maintained as receipts arrive, independent of the 2,500-event window.
+    // Lists derive from full recorder-observed detail history; source-level
+    // 64-item decision rings may still skip unpublished/intervening events.
     const heldPulses = [];
     const heldAbsorbStarts = [];
     for (const event of this.captureEvents) {
@@ -422,7 +427,10 @@ export class WorldObjectCensusSystem {
         retainedDetails: this.captureEvents.length, droppedDetails: acc.droppedDetails,
         siltSourceTraceGaps: acc.decisionTraceGaps,
         lifetimeCountersSpanFullCapture: true,
-        detailedListsContainOnlyLast2500: true },
+        fullSessionRecorderDetailsRetained: this.captureEvents.length === acc.recordedEvents,
+        detailedListsContainOnlyLast2500: false,
+        retentionPolicy: 'append_only_for_current_capture_no_2500_event_rollover',
+        caveat: 'Full recorder history does not guarantee source truth if a producer 64-entry ring overflows between 150ms samples.' },
       hostConnections: { finalState: this.authoritySnapshot().hostConnections,
         vascularReadOnlyView: this.authoritySnapshot().vascularHostObservation,
         vascularLocalResponse: this.authoritySnapshot().vascularSiltSignalResponse,
@@ -484,13 +492,12 @@ export class WorldObjectCensusSystem {
   }
   recordEvent(type, details = {}) {
     if (!this.captureActive) return;
-    const entry = { time: new Date().toISOString(), type, ...details };
+    const entry = { time: new Date().toISOString(), type, ...details,
+      recorderEventOrdinal: this.captureAggregate.recordedEvents + 1 };
     this.captureCountEvent(entry);
+    // Append-only for the current capture: no silent removal of earlier events.
+    // Typical 25-minute field tests fit comfortably in a compact JSON export.
     this.captureEvents.push(entry);
-    if (this.captureEvents.length > 2500) {
-      this.captureEvents.shift();
-      this.captureAggregate.droppedDetails++;
-    }
   }
   sampleState() {
     this.sampleInputs();
@@ -519,28 +526,37 @@ export class WorldObjectCensusSystem {
       this.sampleState();
       clearInterval(this.captureTimer); this.captureTimer = null;
       this.recordEvent('capture-stopped'); this.captureActive = false;
-      this.updateRecordIndicator('REC STOPPED · Alt+Shift+E export JSON');
+      this.captureStoppedAt = new Date().toISOString();
+      this.updateRecordIndicator(`REC STOPPED · ${this.captureEvents.length.toLocaleString('en-US')} events saved · Alt+Shift+E export`);
       return;
     }
     this.captureEvents = []; this.captureAggregate = this.newCaptureAggregate();
     this.lastHostConnectionSequence = this.frameState?.hostConnections?.sequence ?? 0;
     this.lastVascularReceivedSequence = this.frameState?.vascularRhythmRoute?.siltSignalResponse?.receivedTotal ?? 0;
     this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
-    this.captureStartedAt = new Date().toISOString(); this.captureActive = true;
+    this.captureStartedAt = new Date().toISOString(); this.captureStoppedAt = null; this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
     this.captureTimer = setInterval(() => this.sampleState(), 150);
   }
   exportTimeline() {
     if (this.captureActive) this.sampleState();
+    const exportedAt = new Date().toISOString();
+    const endAt = this.captureStoppedAt ?? exportedAt;
     const report = {
-      pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', captureStartedAt: this.captureStartedAt,
-      exportedAt: new Date().toISOString(), captureActive: this.captureActive,
-      limitations: 'LS1E2 adds Vascular-owned bounded receiving membrane load and modest directional-current modulation from authenticated Silt release signals. No grain transport, progression, chemistry, Grave memory, save persistence or off-route cell update. 150ms input sampling, 64-entry Silt source trace and 2500 retained details; counters survive rollover.',
+      pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', recorderRevision: 'C0C-REC1',
+      recorderSchemaVersion: 2,
+      captureStartedAt: this.captureStartedAt, captureStoppedAt: this.captureStoppedAt,
+      captureDurationSeconds: this.captureStartedAt
+        ? Number(((Date.parse(endAt) - Date.parse(this.captureStartedAt)) / 1000).toFixed(3)) : null,
+      exportedAt, captureActive: this.captureActive,
+      limitations: 'C0C-REC1 retains all recorder-observed event details for the active session. Source 64-entry Silt ring and 150ms sampling may still hide source events. LS1E2 Vascular local response receives Silt provenance only: no grain transport, new material, progression, chemistry, Grave memory, save persistence or off-route simulation.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
-    const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
-    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1E1_OBSERVATION.json'; a.click();
+    // Compact JSON: no chronology lost, substantially less disk space than
+    // pretty-printing 1000s of high-frequency telemetry records.
+    const url = URL.createObjectURL(new Blob([JSON.stringify(report)], { type: 'application/json' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'BLOB_LS1E2_C0C_REC1_OBSERVATION.json'; a.click();
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
