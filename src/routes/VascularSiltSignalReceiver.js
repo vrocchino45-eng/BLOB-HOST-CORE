@@ -1,3 +1,5 @@
+import { boundedAdd, boundedRecovery } from '../hostCircuit/BoundedAccumulatorBehavior.js';
+
 /**
  * LS1E2 — Vascular-owned receiver for verified Host/Silt disturbance receipts.
  * The Host ledger remains the sole provenance authority; this is a *local*
@@ -47,7 +49,7 @@ export class VascularSiltSignalReceiver {
       // Signal amplitude is finite and capped, derived from a verified release.
       const speed = Math.hypot(...receipt.releaseVelocity);
       const increment = 0.14 + 0.055 * clamp(speed / 2.5, 0, 1);
-      this.membraneLoad = clamp(this.membraneLoad + increment, 0, 0.85);
+      this.membraneLoad = boundedAdd(this.membraneLoad, increment, { lower: 0, upper: 0.85 });
       this.receivedTotal += 1;
       this.lastReceiptId = receipt.id;
       this.lastSubjectId = receipt.subjectId;
@@ -61,8 +63,10 @@ export class VascularSiltSignalReceiver {
   update(dt) {
     if (Number.isFinite(dt) && dt > 0) {
       // Relax only while Vascular is mounted. This is not hidden-cell physics.
-      this.membraneLoad = clamp(this.membraneLoad * Math.exp(-Math.min(dt, 0.25) * 0.018), 0, 0.85);
-      if (this.membraneLoad < 0.0001) this.membraneLoad = 0;
+      this.membraneLoad = boundedRecovery(this.membraneLoad, {
+        dt, rate: 0.018, law: 'exponential', maxStepSeconds: 0.25,
+        lower: 0, upper: 0.85, cutoff: 0.0001
+      });
     }
   }
 
