@@ -1,0 +1,249 @@
+{
+  "pass": "C0C-TRACE1-A",
+  "result": "OBSERVED_CHAIN",
+  "verifiedBy": "REC1 exported observation (not independent simulation)",
+  "capture": {
+    "durationSeconds": 289.661,
+    "totalEvents": 1989,
+    "ordinalsConsecutive": true,
+    "recorderComplete": true
+  },
+  "counts": {
+    "siltRelease": 5,
+    "hostCause": 5,
+    "vascularReceipt": 5,
+    "traces": 5
+  },
+  "ownerFinal": {
+    "receivedTotal": 5,
+    "sourceReceiptGaps": 0,
+    "membraneLoad": 0.1528,
+    "directionalFlowScale": 0.987,
+    "maximumLoad": 0.85
+  },
+  "recovery": {
+    "latestAcceptedLoad": 0.85,
+    "finalOwnerLoad": 0.1528,
+    "delta": 0.6972,
+    "receded": true,
+    "caveat": "Only point-in-time receipt loads and final owner snapshot; no per-frame decay curve captured."
+  },
+  "traces": [
+    {
+      "receiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:110",
+      "subjectId": "silt-grain-03",
+      "sourceReleaseSequence": 110,
+      "hostCauseSequence": 1,
+      "receiverSequence": 1,
+      "phases": {
+        "siltRelease": {
+          "atSeconds": 38.64,
+          "eventOrdinal": 433,
+          "velocity": [
+            1.5073,
+            0.6987,
+            -0.2455
+          ],
+          "unitId": "silt-grain-03"
+        },
+        "hostCause": {
+          "atSeconds": 38.64,
+          "eventOrdinal": 434,
+          "effectType": "observed_only",
+          "materialTransfer": false,
+          "routeCredit": false
+        },
+        "vascularReceipt": {
+          "atSeconds": 198.09,
+          "eventOrdinal": 1543,
+          "loadAfter": 0.1769
+        },
+        "theoreticalCurrentMultiplier": 0.985,
+        "worldPresentationObservation": null
+      },
+      "traceStatus": "OBSERVED_AUTHENTICATED_CHAIN",
+      "issues": []
+    },
+    {
+      "receiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:142",
+      "subjectId": "silt-grain-03",
+      "sourceReleaseSequence": 142,
+      "hostCauseSequence": 2,
+      "receiverSequence": 2,
+      "phases": {
+        "siltRelease": {
+          "atSeconds": 48.19,
+          "eventOrdinal": 503,
+          "velocity": [
+            -0.2752,
+            0.6097,
+            1.1924
+          ],
+          "unitId": "silt-grain-03"
+        },
+        "hostCause": {
+          "atSeconds": 48.19,
+          "eventOrdinal": 504,
+          "effectType": "observed_only",
+          "materialTransfer": false,
+          "routeCredit": false
+        },
+        "vascularReceipt": {
+          "atSeconds": 198.09,
+          "eventOrdinal": 1544,
+          "loadAfter": 0.347
+        },
+        "theoreticalCurrentMultiplier": 0.9705,
+        "worldPresentationObservation": null
+      },
+      "traceStatus": "OBSERVED_AUTHENTICATED_CHAIN",
+      "issues": []
+    },
+    {
+      "receiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:149",
+      "subjectId": "silt-grain-03",
+      "sourceReleaseSequence": 149,
+      "hostCauseSequence": 3,
+      "receiverSequence": 3,
+      "phases": {
+        "siltRelease": {
+          "atSeconds": 60.99,
+          "eventOrdinal": 563,
+          "velocity": [
+            0.3211,
+            -0.5343,
+            -0.9735
+          ],
+          "unitId": "silt-grain-03"
+        },
+        "hostCause": {
+          "atSeconds": 60.99,
+          "eventOrdinal": 565,
+          "effectType": "observed_only",
+          "materialTransfer": false,
+          "routeCredit": false
+        },
+        "vascularReceipt": {
+          "atSeconds": 198.09,
+          "eventOrdinal": 1545,
+          "loadAfter": 0.5125
+        },
+        "theoreticalCurrentMultiplier": 0.9564,
+        "worldPresentationObservation": null
+      },
+      "traceStatus": "OBSERVED_AUTHENTICATED_CHAIN",
+      "issues": []
+    },
+    {
+      "receiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:152",
+      "subjectId": "silt-grain-07",
+      "sourceReleaseSequence": 152,
+      "hostCauseSequence": 4,
+      "receiverSequence": 4,
+      "phases": {
+        "siltRelease": {
+          "atSeconds": 67.84,
+          "eventOrdinal": 607,
+          "velocity": [
+            1.7472,
+            -0.7428,
+            0.7972
+          ],
+          "unitId": "silt-grain-07"
+        },
+        "hostCause": {
+          "atSeconds": 67.84,
+          "eventOrdinal": 608,
+          "effectType": "observed_only",
+          "materialTransfer": false,
+          "routeCredit": false
+        },
+        "vascularReceipt": {
+          "atSeconds": 198.09,
+          "eventOrdinal": 1546,
+          "loadAfter": 0.6978
+        },
+        "theoreticalCurrentMultiplier": 0.9407,
+        "worldPresentationObservation": null
+      },
+      "traceStatus": "OBSERVED_AUTHENTICATED_CHAIN",
+      "issues": []
+    },
+    {
+      "receiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:176",
+      "subjectId": "silt-grain-07",
+      "sourceReleaseSequence": 176,
+      "hostCauseSequence": 5,
+      "receiverSequence": 5,
+      "phases": {
+        "siltRelease": {
+          "atSeconds": 88.23,
+          "eventOrdinal": 712,
+          "velocity": [
+            -1.0831,
+            -0.369,
+            -0.4113
+          ],
+          "unitId": "silt-grain-07"
+        },
+        "hostCause": {
+          "atSeconds": 88.23,
+          "eventOrdinal": 713,
+          "effectType": "observed_only",
+          "materialTransfer": false,
+          "routeCredit": false
+        },
+        "vascularReceipt": {
+          "atSeconds": 198.09,
+          "eventOrdinal": 1547,
+          "loadAfter": 0.85
+        },
+        "theoreticalCurrentMultiplier": 0.9277,
+        "worldPresentationObservation": null
+      },
+      "traceStatus": "OBSERVED_AUTHENTICATED_CHAIN",
+      "issues": []
+    }
+  ],
+  "presentationWiring": {
+    "status": "SOURCE_SIGNALS_FOUND",
+    "message": "Static source presence only; no browser pixels, camera visibility, sound, or perceived response attested",
+    "endpoints": [
+      {
+        "id": "directional-flow",
+        "meaning": "Physical current force on Core",
+        "status": "FOUND"
+      },
+      {
+        "id": "current-mote-motion",
+        "meaning": "Moving visual current-mote speed",
+        "status": "FOUND"
+      },
+      {
+        "id": "membrane-emissive",
+        "meaning": "Vessel surface emissive intensity",
+        "status": "FOUND"
+      },
+      {
+        "id": "membrane-opacity",
+        "meaning": "Vessel opacity",
+        "status": "FOUND"
+      },
+      {
+        "id": "braid-emissive",
+        "meaning": "Braid/tube emissive intensity",
+        "status": "FOUND"
+      },
+      {
+        "id": "diagnostic",
+        "meaning": "Developer readout; not an in-world presentation",
+        "status": "FOUND"
+      }
+    ]
+  },
+  "visualFeelProof": "NOT_ESTABLISHED_BY_JSON",
+  "materialTransportProof": "NOT_CLAIMED",
+  "progressionEffectProof": "NOT_CLAIMED",
+  "issues": [],
+  "nextGate": "TRACE1-B: timestamped authoritative owner state / presentation parameters in runtime; VIS1: player-perceived change"
+}
