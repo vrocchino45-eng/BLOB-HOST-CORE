@@ -1,0 +1,46 @@
+{
+  "pass": "C0C-TRACE1-B",
+  "version": 1,
+  "targets": [
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "expectedBeforeSha256": "0ed9698e90625401e14d86f2f8da970590aed0d0bff7a6f6a44c194d98a9dfbe",
+      "expectedAfterSha256": "0399843208349c4a6315d4b339f3bc71de859594c0dc07b376a0f6f89cac385d",
+      "operations": [
+        {
+          "before": "  publish(frameState, active) {",
+          "after": "  // C0C-TRACE1-B: passive readings of already-applied presentation parameters.\n  // Called only after animate() and applyHostRhythmVisual() finish. No controls,\n  // material ownership, movement, route progression, or scene graph changes.\n  readPresentationTelemetry(frameState, active) {\n    if (!active) return null;\n    const finite = value => Number.isFinite(value) ? Number(value.toFixed(5)) : null;\n    const mean = (items, read) => {\n      const values = items.map(read).filter(Number.isFinite);\n      return values.length ? finite(values.reduce((sum, value) => sum + value, 0) / values.length) : null;\n    };\n    const mat = (mesh, name) => finite(mesh?.material?.[name]);\n    const receiver = this.siltSignalReceiver.snapshot();\n    const remoteLoad = receiver.membraneLoad;\n    const spatial = frameState.physicalFeel?.spatialFeel ?? {};\n    const vector = frameState.physicalFeel?.flowVector ?? {};\n    const currentMagnitude = [vector.x, vector.y, vector.z].every(Number.isFinite)\n      ? Math.hypot(vector.x, vector.y, vector.z) : null;\n    const folds = this.wallFolds.filter(Boolean);\n    const braids = this.braidTubes.filter(Boolean);\n    const motes = this.currentMotes.filter(Boolean);\n    const firstMote = motes[0]?.position;\n    return {\n      revision: 'C0C-TRACE1-B',\n      measurement: 'applied_object_values_after_visual_updates',\n      localSeconds: finite(this.elapsed),\n      receiptCount: receiver.receivedTotal,\n      membraneLoad: finite(remoteLoad),\n      directionalFlowScale: finite(receiver.directionalFlowScale),\n      actualFlowStrength: finite(spatial.flowStrength),\n      actualFlowMagnitude: finite(currentMagnitude),\n      sourceContribution: {\n        vesselOpacity: finite(remoteLoad * 0.048),\n        foldScaleYFractionMin: finite(remoteLoad * 0.025),\n        foldScaleYFractionMax: finite(remoteLoad * 0.115),\n        foldOpacity: finite(remoteLoad * 0.09),\n        foldEmissive: finite(remoteLoad * 0.22),\n        moteEmissive: finite(remoteLoad * 0.18)\n      },\n      applied: {\n        vesselEmissive: mat(this.vesselEnvelope, 'emissiveIntensity'),\n        vesselOpacity: mat(this.vesselEnvelope, 'opacity'),\n        braidCount: braids.length,\n        braidMeanEmissive: mean(braids, x => x.material?.emissiveIntensity),\n        foldCount: folds.length,\n        foldMeanYScaleRatio: mean(folds, x => x.userData?.baseScale?.y\n          ? x.scale.y / x.userData.baseScale.y : Number.NaN),\n        foldMeanEmissive: mean(folds, x => x.material?.emissiveIntensity),\n        foldMeanOpacity: mean(folds, x => x.material?.opacity),\n        moteCount: motes.length,\n        moteMeanEmissive: mean(motes, x => x.material?.emissiveIntensity),\n        moteMeanOpacity: mean(motes, x => x.material?.opacity),\n        firstMotePosition: firstMote ? {\n          x: finite(firstMote.x), y: finite(firstMote.y), z: finite(firstMote.z)\n        } : null\n      },\n      otherDrivers: {\n        contraction: finite(this.contractionIntensity),\n        synchronization: finite(this.synchronization),\n        turbulence: finite(this.turbulence),\n        pulseWake: finite(this.traversalPulseWake),\n        absorbShear: finite(this.traversalAbsorbShear),\n        stabilizeCalm: finite(this.traversalStabilizeCalm),\n        grammarStrength: finite(this.grammarReinforcementStrength),\n        hostRhythmActive: Boolean(frameState.hostRhythm?.active)\n      },\n      caveat: 'Measured object values have multiple drivers; not proof of visible pixel change, player perception, or physical matter transfer.'\n    };\n  }\n\n  publish(frameState, active) {"
+        },
+        {
+          "before": "      siltSignalResponse: this.siltSignalReceiver.snapshot(),\n      pass: \"HC-031R\",",
+          "after": "      siltSignalResponse: this.siltSignalReceiver.snapshot(),\n      presentationTrace: this.readPresentationTelemetry(frameState, active),\n      pass: \"HC-031R\","
+        }
+      ],
+      "addedOnly": true
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "expectedBeforeSha256": "05d8eea702871d844b046917b10717ce1512156c31c48d5fcf200958efc93844",
+      "expectedAfterSha256": "2a3e0c4b7a62eeba28ca75b23287ebada3d8068526210a41314fe0675b365d42",
+      "operations": [
+        {
+          "before": "    this.lastSiltDecisionSequence = null;\n    this.recIndicator = null;",
+          "after": "    this.lastSiltDecisionSequence = null;\n    this.lastVascularPresentationSampleMs = null;\n    this.recIndicator = null;"
+        },
+        {
+          "before": "  // These are *published game-state outcomes*, not guesses from controller buttons.",
+          "after": "  // C0C-TRACE1-B: low-frequency post-render-object-value capture.\n  sampleVascularPresentation() {\n    const trace = this.frameState?.vascularRhythmRoute?.presentationTrace;\n    if (!trace || trace.revision !== 'C0C-TRACE1-B') return;\n    const now = Date.now();\n    if (this.lastVascularPresentationSampleMs !== null\n        && now - this.lastVascularPresentationSampleMs < 500) return;\n    this.lastVascularPresentationSampleMs = now;\n    this.recordEvent('vascular-presentation-sample', { presentation: trace });\n  }\n  // These are *published game-state outcomes*, not guesses from controller buttons."
+        },
+        {
+          "before": "    this.sampleVascularSiltResponse();\n    this.updateRecordIndicator();",
+          "after": "    this.sampleVascularSiltResponse();\n    this.sampleVascularPresentation();\n    this.updateRecordIndicator();"
+        },
+        {
+          "before": "    this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;",
+          "after": "    this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;\n    this.lastVascularPresentationSampleMs = null;"
+        }
+      ],
+      "addedOnly": true
+    }
+  ]
+}
