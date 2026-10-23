@@ -20,6 +20,7 @@ export class WorldObjectCensusSystem {
     this.captureTick = 0;
     this.authorityPrevious = null;
     this.lastSiltDecisionSequence = null;
+    this.lastVascularPresentationSampleMs = null;
     this.recIndicator = null;
     this.recNoticeTimeout = null;
     this.keyHandler = event => {
@@ -156,6 +157,16 @@ export class WorldObjectCensusSystem {
       });
       this.lastVascularReceivedSequence = record.sequence;
     }
+  }
+  // C0C-TRACE1-B: low-frequency post-render-object-value capture.
+  sampleVascularPresentation() {
+    const trace = this.frameState?.vascularRhythmRoute?.presentationTrace;
+    if (!trace || trace.revision !== 'C0C-TRACE1-B') return;
+    const now = Date.now();
+    if (this.lastVascularPresentationSampleMs !== null
+        && now - this.lastVascularPresentationSampleMs < 500) return;
+    this.lastVascularPresentationSampleMs = now;
+    this.recordEvent('vascular-presentation-sample', { presentation: trace });
   }
   // These are *published game-state outcomes*, not guesses from controller buttons.
   // None of these fields proves that a specific held grain received Pulse force
@@ -505,6 +516,7 @@ export class WorldObjectCensusSystem {
     this.sampleSiltDecisions();
     this.sampleHostConnections();
     this.sampleVascularSiltResponse();
+    this.sampleVascularPresentation();
     this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
@@ -534,6 +546,7 @@ export class WorldObjectCensusSystem {
     this.lastHostConnectionSequence = this.frameState?.hostConnections?.sequence ?? 0;
     this.lastVascularReceivedSequence = this.frameState?.vascularRhythmRoute?.siltSignalResponse?.receivedTotal ?? 0;
     this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
+    this.lastVascularPresentationSampleMs = null;
     this.captureStartedAt = new Date().toISOString(); this.captureStoppedAt = null; this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();

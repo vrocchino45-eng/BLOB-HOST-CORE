@@ -1,0 +1,37 @@
+{
+  "passId": "C0C-VIS1-A",
+  "version": 1,
+  "targets": [
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "expectedBeforeSha256": "0399843208349c4a6315d4b339f3bc71de859594c0dc07b376a0f6f89cac385d",
+      "expectedAfterSha256": "fb2c6897ea68b02b3cfe6f4f37b7e6ff11d5a80bf0da08a42f2eb18d250b9cbb",
+      "operations": [
+        {
+          "before": "    // HC018D: retained anatomical consequence presentation only.\n    this.retainedSynchronizationStrength = 0;\n",
+          "after": "    // HC018D: retained anatomical consequence presentation only.\n    this.retainedSynchronizationStrength = 0;\n\n    // C0C-VIS1-A: Vascular owns a visual response, never remote material.\n    // Age belongs to the local receiving animation, not the Host ledger.\n    this.vis1LastReceiptTotal = 0;\n    this.vis1WaveAge = 30;\n    this.vis1Applied = null;\n"
+        },
+        {
+          "before": "    this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);\n    this.siltSignalReceiver.update(dt);",
+          "after": "    this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);\n    this.siltSignalReceiver.update(dt);\n    // Record the newly received *signal*, not a material transfer or new route event.\n    const visualReceiptTotal = this.siltSignalReceiver.receivedTotal;\n    if (visualReceiptTotal > this.vis1LastReceiptTotal) this.vis1WaveAge = 0;\n    this.vis1LastReceiptTotal = visualReceiptTotal;\n    this.vis1WaveAge = Math.min(30, this.vis1WaveAge + Math.max(0, Math.min(dt, 0.25)));\n"
+        },
+        {
+          "before": "    this.animate(dt, frameState, sample);\n    this.applyHostRhythmVisual(frameState);\n    this.publish(frameState, true);",
+          "after": "    this.animate(dt, frameState, sample);\n    this.applyHostRhythmVisual(frameState);\n    // Post-composition, bounded anatomical expression: never a gameplay input.\n    this.applySiltPressureAnatomy();\n    this.publish(frameState, true);"
+        },
+        {
+          "before": "  // C0C-TRACE1-B: passive readings of already-applied presentation parameters.",
+          "after": "  // C0C-VIS1-A: one load-driven, 3D anatomical pressure wave along EXISTING\n  // membrane folds. Called after other presentation drivers finish each frame.\n  // Zero load is a strict no-op for meshes; no new lights, geometry or controls.\n  applySiltPressureAnatomy() {\n    const load = THREE.MathUtils.clamp(this.siltSignalReceiver.membraneLoad, 0, 0.85);\n    const age = this.vis1WaveAge;\n    let peakCompression = 0;\n    let sumCompression = 0;\n    let sumExpansion = 0;\n    let strongestArrival = 0;\n    let modified = 0;\n    if (load > 0) {\n      // The persistent component reads as tissue under changing pressure.\n      // A short local wave rolls from fold 1 to fold 9 on newly received receipts.\n      for (const [index, fold] of this.wallFolds.entries()) {\n        if (!fold) continue;\n        const traveling = 0.5 + 0.5 * Math.sin(this.elapsed * 2.4 - index * 0.82);\n        const arrival = age < 5\n          ? Math.max(0, 1 - Math.abs(index - age * 2.15) / 1.35) * (1 - age / 5)\n          : 0;\n        const compression = Math.min(0.26, load * (0.11 + 0.29 * traveling) + arrival * load * 0.24);\n        const expansion = Math.min(0.33, load * (0.16 + 0.22 * traveling) + arrival * load * 0.12);\n        fold.scale.x *= 1 - compression;\n        fold.scale.z *= 1 - compression * 0.74;\n        fold.scale.y *= 1 + expansion;\n        if (fold.material) {\n          fold.material.emissiveIntensity += load * (0.10 + 0.18 * traveling) + arrival * load * 0.17;\n          fold.material.opacity = Math.min(0.48,\n            fold.material.opacity + load * (0.035 + 0.05 * traveling) + arrival * load * 0.035);\n        }\n        peakCompression = Math.max(peakCompression, compression);\n        strongestArrival = Math.max(strongestArrival, arrival);\n        sumCompression += compression;\n        sumExpansion += expansion;\n        modified += 1;\n      }\n      // Braids serve as accompanying tissue, not competing flashing overlays.\n      for (const [index, braid] of this.braidTubes.entries()) {\n        if (!braid?.material) continue;\n        const wave = 0.5 + 0.5 * Math.sin(this.elapsed * 2.4 - index * 2.5);\n        braid.material.emissiveIntensity += load * (0.035 + 0.065 * wave);\n      }\n      if (this.vesselEnvelope?.material) {\n        this.vesselEnvelope.material.emissiveIntensity += load * 0.075;\n        this.vesselEnvelope.material.opacity = Math.min(0.32,\n          this.vesselEnvelope.material.opacity + load * 0.035);\n      }\n    }\n    // Observability uses state applied this frame, not a desired target parameter.\n    this.vis1Applied = {\n      revision: 'C0C-VIS1-A',\n      mode: load > 0 ? 'load_driven_anatomical_pressure' : 'unloaded_no_op',\n      membraneLoad: Number(load.toFixed(5)),\n      receiptWaveAgeSeconds: Number(age.toFixed(3)),\n      foldCount: modified,\n      peakRadialCompression: Number(peakCompression.toFixed(5)),\n      meanRadialCompression: Number((modified ? sumCompression / modified : 0).toFixed(5)),\n      meanYExpansion: Number((modified ? sumExpansion / modified : 0).toFixed(5)),\n      receiptArrivalStrength: Number(strongestArrival.toFixed(5)),\n      presentationOnly: true,\n      altersCurrentOrProgress: false\n    };\n  }\n\n  // C0C-TRACE1-B: passive readings of already-applied presentation parameters."
+        },
+        {
+          "before": "        foldMeanYScaleRatio: mean(folds, x => x.userData?.baseScale?.y\n          ? x.scale.y / x.userData.baseScale.y : Number.NaN),",
+          "after": "        foldMeanYScaleRatio: mean(folds, x => x.userData?.baseScale?.y\n          ? x.scale.y / x.userData.baseScale.y : Number.NaN),\n        foldMeanXScaleRatio: mean(folds, x => x.userData?.baseScale?.x\n          ? x.scale.x / x.userData.baseScale.x : Number.NaN),\n        foldMeanZScaleRatio: mean(folds, x => x.userData?.baseScale?.z\n          ? x.scale.z / x.userData.baseScale.z : Number.NaN),"
+        },
+        {
+          "before": "      otherDrivers: {\n        contraction: finite(this.contractionIntensity),",
+          "after": "      vis1: this.vis1Applied ? { ...this.vis1Applied } : null,\n      otherDrivers: {\n        contraction: finite(this.contractionIntensity),"
+        }
+      ]
+    }
+  ]
+}

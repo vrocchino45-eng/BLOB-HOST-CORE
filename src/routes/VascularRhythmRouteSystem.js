@@ -1411,6 +1411,75 @@ export class VascularRhythmRouteSystem {
     return "Ride to the next valve and hold Stabilize to establish a relationship with the current.";
   }
 
+  // C0C-TRACE1-B: passive readings of already-applied presentation parameters.
+  // Called only after animate() and applyHostRhythmVisual() finish. No controls,
+  // material ownership, movement, route progression, or scene graph changes.
+  readPresentationTelemetry(frameState, active) {
+    if (!active) return null;
+    const finite = value => Number.isFinite(value) ? Number(value.toFixed(5)) : null;
+    const mean = (items, read) => {
+      const values = items.map(read).filter(Number.isFinite);
+      return values.length ? finite(values.reduce((sum, value) => sum + value, 0) / values.length) : null;
+    };
+    const mat = (mesh, name) => finite(mesh?.material?.[name]);
+    const receiver = this.siltSignalReceiver.snapshot();
+    const remoteLoad = receiver.membraneLoad;
+    const spatial = frameState.physicalFeel?.spatialFeel ?? {};
+    const vector = frameState.physicalFeel?.flowVector ?? {};
+    const currentMagnitude = [vector.x, vector.y, vector.z].every(Number.isFinite)
+      ? Math.hypot(vector.x, vector.y, vector.z) : null;
+    const folds = this.wallFolds.filter(Boolean);
+    const braids = this.braidTubes.filter(Boolean);
+    const motes = this.currentMotes.filter(Boolean);
+    const firstMote = motes[0]?.position;
+    return {
+      revision: 'C0C-TRACE1-B',
+      measurement: 'applied_object_values_after_visual_updates',
+      localSeconds: finite(this.elapsed),
+      receiptCount: receiver.receivedTotal,
+      membraneLoad: finite(remoteLoad),
+      directionalFlowScale: finite(receiver.directionalFlowScale),
+      actualFlowStrength: finite(spatial.flowStrength),
+      actualFlowMagnitude: finite(currentMagnitude),
+      sourceContribution: {
+        vesselOpacity: finite(remoteLoad * 0.048),
+        foldScaleYFractionMin: finite(remoteLoad * 0.025),
+        foldScaleYFractionMax: finite(remoteLoad * 0.115),
+        foldOpacity: finite(remoteLoad * 0.09),
+        foldEmissive: finite(remoteLoad * 0.22),
+        moteEmissive: finite(remoteLoad * 0.18)
+      },
+      applied: {
+        vesselEmissive: mat(this.vesselEnvelope, 'emissiveIntensity'),
+        vesselOpacity: mat(this.vesselEnvelope, 'opacity'),
+        braidCount: braids.length,
+        braidMeanEmissive: mean(braids, x => x.material?.emissiveIntensity),
+        foldCount: folds.length,
+        foldMeanYScaleRatio: mean(folds, x => x.userData?.baseScale?.y
+          ? x.scale.y / x.userData.baseScale.y : Number.NaN),
+        foldMeanEmissive: mean(folds, x => x.material?.emissiveIntensity),
+        foldMeanOpacity: mean(folds, x => x.material?.opacity),
+        moteCount: motes.length,
+        moteMeanEmissive: mean(motes, x => x.material?.emissiveIntensity),
+        moteMeanOpacity: mean(motes, x => x.material?.opacity),
+        firstMotePosition: firstMote ? {
+          x: finite(firstMote.x), y: finite(firstMote.y), z: finite(firstMote.z)
+        } : null
+      },
+      otherDrivers: {
+        contraction: finite(this.contractionIntensity),
+        synchronization: finite(this.synchronization),
+        turbulence: finite(this.turbulence),
+        pulseWake: finite(this.traversalPulseWake),
+        absorbShear: finite(this.traversalAbsorbShear),
+        stabilizeCalm: finite(this.traversalStabilizeCalm),
+        grammarStrength: finite(this.grammarReinforcementStrength),
+        hostRhythmActive: Boolean(frameState.hostRhythm?.active)
+      },
+      caveat: 'Measured object values have multiple drivers; not proof of visible pixel change, player perception, or physical matter transfer.'
+    };
+  }
+
   publish(frameState, active) {
     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
     const requiredReads = this.recipe?.cadence?.requiredReads ?? 3;
@@ -1422,6 +1491,7 @@ export class VascularRhythmRouteSystem {
       hostConnectionObservation: hostCause,
       // LS1E2: receiver state belongs to Vascular; Silt receipts stay immutable.
       siltSignalResponse: this.siltSignalReceiver.snapshot(),
+      presentationTrace: this.readPresentationTelemetry(frameState, active),
       pass: "HC-031R",
       id: this.recipe?.id ?? RECIPE_ID,
       active: Boolean(active),
