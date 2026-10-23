@@ -1,0 +1,47 @@
+{
+  "schema": "BLOB.C0D1.contract-draft.v0.1",
+  "status": "PROPOSED_NOT_IMPLEMENTED",
+  "baseline": "C0C-VIS1-B",
+  "edge": "Silt release -> Vascular applied local response -> Grave I retained consequence",
+  "sourceExisting": {
+    "owner": "SiltPressureRouteSystem",
+    "eventKind": "silt_material_disturbance_observed",
+    "hostChannel": "LS1E1_SILT_PROVENANCE",
+    "transport": false
+  },
+  "proposedVascularEvent": {
+    "owner": "VascularSiltSignalReceiver",
+    "kind": "vascular_membrane_load_change_applied",
+    "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+    "parent": "immutable_verified_silt_release_receipt_id",
+    "localSequence": "strictly_monotonic_integer",
+    "membraneLoadBefore": "finite_number_0_to_0.85",
+    "membraneLoadAfter": "finite_number_0_to_0.85",
+    "appliedDelta": "after_minus_before_positive_for_applied_event",
+    "condition": "valid_receipt_and_actual_local_load_increase_while_mounted",
+    "sameSourceDedupe": true
+  },
+  "proposedHostRelay": {
+    "owner": "HostConnectionReceiptLedger",
+    "channel": "INDEPENDENT_VASCULAR_APPLIED_EFFECT_CHANNEL",
+    "mustValidateParentFromSiltChannel": true,
+    "mustNotAlterSiltSnapshotSchema": true,
+    "boundedHistory": true,
+    "offRouteSimulation": false,
+    "persistsAcrossReload": false
+  },
+  "proposedGraveConsumer": {
+    "owner": "GraveMemoryRouteSystem",
+    "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "phase": "Grave_I_first_visit",
+    "readOn": "mounted_local_update_only",
+    "dedupe": "last_seen_vascular_event_sequence",
+    "behaviorTarget": "first_bounded_retained_local_state_only_no_objective_credit",
+    "GraveIIUntouched": true
+  },
+  "forbidden": [
+    "material_arrival", "silt_mass_transfer", "new_controls", "off_route_tick",
+    "progression_credit", "direct_vascular_to_grave_method_call",
+    "deforming_existing_VIS1B", "generic_global_circuit_update_loop"
+  ]
+}

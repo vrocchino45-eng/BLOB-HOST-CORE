@@ -1425,58 +1425,83 @@ export class VascularRhythmRouteSystem {
     return "Ride to the next valve and hold Stabilize to establish a relationship with the current.";
   }
 
-  // C0C-VIS1-A: one load-driven, 3D anatomical pressure wave along EXISTING
-  // membrane folds. Called after other presentation drivers finish each frame.
-  // Zero load is a strict no-op for meshes; no new lights, geometry or controls.
+  // C0C-VIS1-B: a *visible* pressure band through the existing nine folds.
+  // Changes only Vascular presentation. The received Silt load is read-only;
+  // this method never changes the receiver, transport, current or progression.
+  // The narrow sweeping band is a LOCAL circulation cue, not fresh receipts.
   applySiltPressureAnatomy() {
     const load = THREE.MathUtils.clamp(this.siltSignalReceiver.membraneLoad, 0, 0.85);
     const age = this.vis1WaveAge;
+    const justRecovered = load === 0 && (this.vis1Applied?.membraneLoad ?? 0) > 0;
     let peakCompression = 0;
     let sumCompression = 0;
     let sumExpansion = 0;
     let strongestArrival = 0;
+    let strongestBand = 0;
     let modified = 0;
     if (load > 0) {
-      // The persistent component reads as tissue under changing pressure.
-      // A short local wave rolls from fold 1 to fold 9 on newly received receipts.
+      // The old broad sine wave hit the 26% compression limit on several folds
+      // at once; this bounded, narrow traveling band makes direction legible.
       for (const [index, fold] of this.wallFolds.entries()) {
         if (!fold) continue;
-        const traveling = 0.5 + 0.5 * Math.sin(this.elapsed * 2.4 - index * 0.82);
+        const band = Math.pow(0.5 + 0.5 * Math.cos(this.elapsed * 2.05 - index * 0.62), 3);
         const arrival = age < 5
           ? Math.max(0, 1 - Math.abs(index - age * 2.15) / 1.35) * (1 - age / 5)
           : 0;
-        const compression = Math.min(0.26, load * (0.11 + 0.29 * traveling) + arrival * load * 0.24);
-        const expansion = Math.min(0.33, load * (0.16 + 0.22 * traveling) + arrival * load * 0.12);
+        const compression = Math.min(0.26, load * (0.07 + 0.23 * band) + arrival * load * 0.20);
+        const expansion = Math.min(0.33, load * (0.11 + 0.23 * band) + arrival * load * 0.15);
         fold.scale.x *= 1 - compression;
         fold.scale.z *= 1 - compression * 0.74;
         fold.scale.y *= 1 + expansion;
         if (fold.material) {
-          fold.material.emissiveIntensity += load * (0.10 + 0.18 * traveling) + arrival * load * 0.17;
-          fold.material.opacity = Math.min(0.48,
-            fold.material.opacity + load * (0.035 + 0.05 * traveling) + arrival * load * 0.035);
+          // Loaded folds lead with pale living cyan, separate from the gold
+          // route marker. Unloaded/restored folds keep their authored palette.
+          const colorPressure = load / 0.85 * (0.38 + 0.62 * band);
+          fold.material.emissive?.setRGB?.(
+            0.1255 + colorPressure * 0.16,
+            0.2314 + colorPressure * 0.49,
+            0.3333 + colorPressure * 0.42
+          );
+          fold.material.emissiveIntensity = Math.min(1.15,
+            fold.material.emissiveIntensity + load * (0.36 + 0.49 * band) + arrival * load * 0.17);
+          fold.material.opacity = Math.min(0.83,
+            fold.material.opacity + load * (0.16 + 0.32 * band) + arrival * load * 0.07);
         }
         peakCompression = Math.max(peakCompression, compression);
         strongestArrival = Math.max(strongestArrival, arrival);
+        strongestBand = Math.max(strongestBand, band);
         sumCompression += compression;
         sumExpansion += expansion;
         modified += 1;
       }
-      // Braids serve as accompanying tissue, not competing flashing overlays.
+      // Braids support the same local pressure wave rather than flashing on
+      // receipt count. They remain the original authored meshes/materials.
       for (const [index, braid] of this.braidTubes.entries()) {
         if (!braid?.material) continue;
-        const wave = 0.5 + 0.5 * Math.sin(this.elapsed * 2.4 - index * 2.5);
-        braid.material.emissiveIntensity += load * (0.035 + 0.065 * wave);
+        const band = Math.pow(0.5 + 0.5 * Math.cos(this.elapsed * 2.05 - index * 1.86), 3);
+        braid.material.emissiveIntensity += load * (0.09 + 0.13 * band);
       }
       if (this.vesselEnvelope?.material) {
-        this.vesselEnvelope.material.emissiveIntensity += load * 0.075;
-        this.vesselEnvelope.material.opacity = Math.min(0.32,
-          this.vesselEnvelope.material.opacity + load * 0.035);
+        // Loaded tissue must be REVEALED, not hidden by a thickening shell.
+        // Retain a minimum silhouette and preserve normal zero-load opacity.
+        this.vesselEnvelope.material.emissiveIntensity += load * 0.035;
+        this.vesselEnvelope.material.opacity = Math.max(0.065,
+          this.vesselEnvelope.material.opacity - load * 0.15);
       }
+    } else if (justRecovered) {
+      // Reset the presentation-only hue after the last load dissipates.
+      // At a never-loaded zero state this remains a strict mesh no-op.
+      for (const fold of this.wallFolds) fold?.material?.emissive?.setHex?.(0x203b55);
     }
-    // Observability uses state applied this frame, not a desired target parameter.
+    // The three states are observational labels for existing load and receipt
+    // age; they are never read back by gameplay or a progress/route gate.
+    const tissueState = load === 0 ? 'resting'
+      : age < 5 ? 'receipt_onset'
+      : load >= 0.65 ? 'loaded_pressure' : 'recovering_pressure';
     this.vis1Applied = {
-      revision: 'C0C-VIS1-A',
-      mode: load > 0 ? 'load_driven_anatomical_pressure' : 'unloaded_no_op',
+      revision: 'C0C-VIS1-B',
+      mode: load > 0 ? 'local_pressure_band_and_envelope_reveal' : 'unloaded_no_op',
+      tissueState,
       membraneLoad: Number(load.toFixed(5)),
       receiptWaveAgeSeconds: Number(age.toFixed(3)),
       foldCount: modified,
@@ -1484,6 +1509,8 @@ export class VascularRhythmRouteSystem {
       meanRadialCompression: Number((modified ? sumCompression / modified : 0).toFixed(5)),
       meanYExpansion: Number((modified ? sumExpansion / modified : 0).toFixed(5)),
       receiptArrivalStrength: Number(strongestArrival.toFixed(5)),
+      circulatingBandPeak: Number(strongestBand.toFixed(5)),
+      envelopeOpacityApplied: Number((this.vesselEnvelope?.material?.opacity ?? 0).toFixed(5)),
       presentationOnly: true,
       altersCurrentOrProgress: false
     };

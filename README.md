@@ -1,7 +1,8 @@
-# BLOB C0C1 — Design-only planning pack
+# C0D0 Audit Handoff (Documentation Only)
 
-Open `BLOB_C0C1_TWO_REGION_TRANSLATION_LOCK_v0_1.md` first.
+Contains the **read-only functional audit** and a **proposed** downstream Vascular→Grave contract. No gameplay source files, modified runtime, installer, or replacement project are included.
 
-The JSON is an **offline proposed component fixture**, not a gameplay file. `validateC0C1.mjs` runs with Node alone (`node validateC0C1.mjs`) and verifies 12 small source-equation and contract sanity cases. **These checks are not integrated gameplay regression tests.**
+- `C0D0_FUNCTIONAL_CIRCUIT_AUDIT.md` — verified owners, missing edge, pass locks, test results, recommended C0D1-A→C0D4 sequence
+- `C0D1_CONTRACT_DRAFT.json` — design fixture; NOT registered in the runtime
 
-No files in this pack should overwrite `src/`, `GameRuntime`, or the current LS1E2 working install. The chosen Silt implementation (`SiltCompressionContact.js`) is present in the LS1D1D2M overlay even though absent in the partial assembled LS1E2 analysis worktree. Reconcile the actual install tree before a C0C2 code extraction.
+Keep current installed C0C-VIS1-B working branch as the baseline. Next gameplay implementation is C0D1-A only after its bounded-event parity tests.
