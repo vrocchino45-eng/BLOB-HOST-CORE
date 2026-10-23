@@ -21,6 +21,11 @@ export class VascularSiltSignalReceiver {
     this.lastReceiptId = null;
     this.lastSubjectId = null;
     this.recentReceipts = [];
+    // C0D1-A: local Vascular applied-effect observations, distinct from Silt provenance.
+    // Bounded and append-only for this runtime owner; no Host or Grave publication here.
+    this.appliedEffectSequence = 0;
+    this.appliedEffects = [];
+    this.prunedAppliedEffects = 0;
   }
 
   // Only called by the Vascular route while mounted. No off-route updates.
@@ -49,7 +54,37 @@ export class VascularSiltSignalReceiver {
       // Signal amplitude is finite and capped, derived from a verified release.
       const speed = Math.hypot(...receipt.releaseVelocity);
       const increment = 0.14 + 0.055 * clamp(speed / 2.5, 0, 1);
+      const membraneLoadBefore = this.membraneLoad;
       this.membraneLoad = boundedAdd(this.membraneLoad, increment, { lower: 0, upper: 0.85 });
+      // Accepted Silt receipts are not automatically Vascular effects: saturation
+      // can make appliedDelta zero. The event carries measured, not claimed, load.
+      const appliedDelta = this.membraneLoad - membraneLoadBefore;
+      if (appliedDelta > 0) {
+        const sequence = ++this.appliedEffectSequence;
+        const event = Object.freeze({
+          schemaVersion: 1,
+          id: `${VASCULAR_CELL}:membrane-load-applied:${sequence}`,
+          sequence,
+          kind: 'vascular_membrane_load_change_applied',
+          sourceCellId: VASCULAR_CELL,
+          sourceSystem: 'VascularSiltSignalReceiver',
+          parentSiltReceiptId: receipt.id,
+          parentSiltReceiptSequence: receipt.sequence,
+          parentSiltDecisionSequence: receipt.sourceReceiptSequence,
+          subjectId: receipt.subjectId,
+          membraneLoadBefore,
+          membraneLoadAfter: this.membraneLoad,
+          appliedDelta,
+          materialTransfer: false,
+          routeCredit: false,
+          offRouteSimulation: false
+        });
+        this.appliedEffects.push(event);
+        if (this.appliedEffects.length > 64) {
+          this.appliedEffects.shift();
+          this.prunedAppliedEffects++;
+        }
+      }
       this.receivedTotal += 1;
       this.lastReceiptId = receipt.id;
       this.lastSubjectId = receipt.subjectId;
@@ -68,6 +103,28 @@ export class VascularSiltSignalReceiver {
         lower: 0, upper: 0.85, cutoff: 0.0001
       });
     }
+  }
+
+  /** C0D1-A: independent read-only stream of *applied* Vascular effects.
+   *  C0D1-B will authenticate lineage against Host's accepted Silt channel.
+   *  This method does not emit, relay, credit, or tick another region.
+   */
+  appliedEffectSnapshot({ afterSequence = 0 } = {}) {
+    const cursor = Number.isSafeInteger(afterSequence) && afterSequence >= 0
+      ? afterSequence : 0;
+    return {
+      pass: 'C0D1-A', schemaVersion: 1,
+      owner: 'VascularSiltSignalReceiver',
+      sourceCellId: VASCULAR_CELL,
+      lastAppliedEffectSequence: this.appliedEffectSequence,
+      prunedEffects: this.prunedAppliedEffects,
+      retainedCount: this.appliedEffects.length,
+      records: this.appliedEffects.filter(event => event.sequence > cursor),
+      materialTransfer: false,
+      routeCredit: false,
+      offRouteSimulation: false,
+      persistsAcrossReload: false
+    };
   }
 
   get flowScale() {

@@ -1,0 +1,33 @@
+{
+  "pass": "C0D1-B",
+  "mode": "Host Independent Vascular Applied-Effect Relay",
+  "baseline": "C0C-VIS1-B + C0D1-A",
+  "changedGameplayFiles": [
+    "src/core/HostConnectionReceiptLedger.js",
+    "src/routes/VascularRhythmRouteSystem.js"
+  ],
+  "sourceBeforeSha256": {
+    "src/core/HostConnectionReceiptLedger.js": "e649324324addbd8b009fb70355fe3aa1ecaf0950374ae3cdad3324138503c5e",
+    "src/routes/VascularRhythmRouteSystem.js": "5359815d616ada933c925dc1740a97a768b68e5c6dc5b56bae27a8e181c192b4"
+  },
+  "sourceAfterSha256": {
+    "src/core/HostConnectionReceiptLedger.js": "2b235c0eed8abc74f3009632430e0ea2bf5c92234de124267eb6ad5849143aa0",
+    "src/routes/VascularRhythmRouteSystem.js": "75296671c35f10a011488efd72415fa482f5ef466188c286a66d9c916e8c3d35"
+  },
+  "requiredUnmodifiedDependency": {
+    "src/routes/VascularSiltSignalReceiver.js": "59f3d12d06ff80f9d00d7c056c792b611807a78d74a89c89341dc551c18dfcf4"
+  },
+  "locks": [
+    "Silt provenance",
+    "Grave I/II",
+    "Vascular load and current",
+    "VIS1-B visual",
+    "movement",
+    "controller",
+    "Core",
+    "chemistry",
+    "progression",
+    "saves"
+  ],
+  "note": "No Grave state consumed in C0D1-B, no browser proof; no cross-region matter or off-route simulation"
+}

@@ -1,0 +1,5 @@
+{
+  "path": "src/routes/VascularRhythmRouteSystem.js",
+  "find": "    this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);\n    this.siltSignalReceiver.update(dt);",
+  "replace": "    this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);\n    // C0D1-B: relay only the local positive effects Vascular has already\n    // applied. Host authenticates parent lineage; this does not tick Grave.\n    if (this.hostConnectionReceiptLedger) {\n      const cursor = this.hostConnectionReceiptLedger.vascularEffectSnapshot({withRecords: false}).lastSourceEventSequence;\n      const applied = this.siltSignalReceiver.appliedEffectSnapshot({afterSequence: cursor});\n      for (const effect of applied.records) {\n        this.hostConnectionReceiptLedger.observeVascularAppliedEffect(effect);\n      }\n    }\n    this.siltSignalReceiver.update(dt);"
+}
