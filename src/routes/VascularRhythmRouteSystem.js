@@ -132,6 +132,12 @@ export class VascularRhythmRouteSystem {
 
     // HC018D: retained anatomical consequence presentation only.
     this.retainedSynchronizationStrength = 0;
+
+    // C0C-VIS1-A: Vascular owns a visual response, never remote material.
+    // Age belongs to the local receiving animation, not the Host ledger.
+    this.vis1LastReceiptTotal = 0;
+    this.vis1WaveAge = 30;
+    this.vis1Applied = null;
   }
 
   init() {
@@ -199,6 +205,12 @@ export class VascularRhythmRouteSystem {
     // LS1E2: Only the mounted Vascular system can accept a verified remote cause.
     this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);
     this.siltSignalReceiver.update(dt);
+    // Record the newly received *signal*, not a material transfer or new route event.
+    const visualReceiptTotal = this.siltSignalReceiver.receivedTotal;
+    if (visualReceiptTotal > this.vis1LastReceiptTotal) this.vis1WaveAge = 0;
+    this.vis1LastReceiptTotal = visualReceiptTotal;
+    this.vis1WaveAge = Math.min(30, this.vis1WaveAge + Math.max(0, Math.min(dt, 0.25)));
+
 
     this.elapsed += dt;
     this.pulseFlashAge += dt;
@@ -212,6 +224,8 @@ export class VascularRhythmRouteSystem {
     this.applyDynamicCurrent(frameState, sample);
     this.animate(dt, frameState, sample);
     this.applyHostRhythmVisual(frameState);
+    // Post-composition, bounded anatomical expression: never a gameplay input.
+    this.applySiltPressureAnatomy();
     this.publish(frameState, true);
   }
 
@@ -1411,6 +1425,70 @@ export class VascularRhythmRouteSystem {
     return "Ride to the next valve and hold Stabilize to establish a relationship with the current.";
   }
 
+  // C0C-VIS1-A: one load-driven, 3D anatomical pressure wave along EXISTING
+  // membrane folds. Called after other presentation drivers finish each frame.
+  // Zero load is a strict no-op for meshes; no new lights, geometry or controls.
+  applySiltPressureAnatomy() {
+    const load = THREE.MathUtils.clamp(this.siltSignalReceiver.membraneLoad, 0, 0.85);
+    const age = this.vis1WaveAge;
+    let peakCompression = 0;
+    let sumCompression = 0;
+    let sumExpansion = 0;
+    let strongestArrival = 0;
+    let modified = 0;
+    if (load > 0) {
+      // The persistent component reads as tissue under changing pressure.
+      // A short local wave rolls from fold 1 to fold 9 on newly received receipts.
+      for (const [index, fold] of this.wallFolds.entries()) {
+        if (!fold) continue;
+        const traveling = 0.5 + 0.5 * Math.sin(this.elapsed * 2.4 - index * 0.82);
+        const arrival = age < 5
+          ? Math.max(0, 1 - Math.abs(index - age * 2.15) / 1.35) * (1 - age / 5)
+          : 0;
+        const compression = Math.min(0.26, load * (0.11 + 0.29 * traveling) + arrival * load * 0.24);
+        const expansion = Math.min(0.33, load * (0.16 + 0.22 * traveling) + arrival * load * 0.12);
+        fold.scale.x *= 1 - compression;
+        fold.scale.z *= 1 - compression * 0.74;
+        fold.scale.y *= 1 + expansion;
+        if (fold.material) {
+          fold.material.emissiveIntensity += load * (0.10 + 0.18 * traveling) + arrival * load * 0.17;
+          fold.material.opacity = Math.min(0.48,
+            fold.material.opacity + load * (0.035 + 0.05 * traveling) + arrival * load * 0.035);
+        }
+        peakCompression = Math.max(peakCompression, compression);
+        strongestArrival = Math.max(strongestArrival, arrival);
+        sumCompression += compression;
+        sumExpansion += expansion;
+        modified += 1;
+      }
+      // Braids serve as accompanying tissue, not competing flashing overlays.
+      for (const [index, braid] of this.braidTubes.entries()) {
+        if (!braid?.material) continue;
+        const wave = 0.5 + 0.5 * Math.sin(this.elapsed * 2.4 - index * 2.5);
+        braid.material.emissiveIntensity += load * (0.035 + 0.065 * wave);
+      }
+      if (this.vesselEnvelope?.material) {
+        this.vesselEnvelope.material.emissiveIntensity += load * 0.075;
+        this.vesselEnvelope.material.opacity = Math.min(0.32,
+          this.vesselEnvelope.material.opacity + load * 0.035);
+      }
+    }
+    // Observability uses state applied this frame, not a desired target parameter.
+    this.vis1Applied = {
+      revision: 'C0C-VIS1-A',
+      mode: load > 0 ? 'load_driven_anatomical_pressure' : 'unloaded_no_op',
+      membraneLoad: Number(load.toFixed(5)),
+      receiptWaveAgeSeconds: Number(age.toFixed(3)),
+      foldCount: modified,
+      peakRadialCompression: Number(peakCompression.toFixed(5)),
+      meanRadialCompression: Number((modified ? sumCompression / modified : 0).toFixed(5)),
+      meanYExpansion: Number((modified ? sumExpansion / modified : 0).toFixed(5)),
+      receiptArrivalStrength: Number(strongestArrival.toFixed(5)),
+      presentationOnly: true,
+      altersCurrentOrProgress: false
+    };
+  }
+
   // C0C-TRACE1-B: passive readings of already-applied presentation parameters.
   // Called only after animate() and applyHostRhythmVisual() finish. No controls,
   // material ownership, movement, route progression, or scene graph changes.
@@ -1457,6 +1535,10 @@ export class VascularRhythmRouteSystem {
         foldCount: folds.length,
         foldMeanYScaleRatio: mean(folds, x => x.userData?.baseScale?.y
           ? x.scale.y / x.userData.baseScale.y : Number.NaN),
+        foldMeanXScaleRatio: mean(folds, x => x.userData?.baseScale?.x
+          ? x.scale.x / x.userData.baseScale.x : Number.NaN),
+        foldMeanZScaleRatio: mean(folds, x => x.userData?.baseScale?.z
+          ? x.scale.z / x.userData.baseScale.z : Number.NaN),
         foldMeanEmissive: mean(folds, x => x.material?.emissiveIntensity),
         foldMeanOpacity: mean(folds, x => x.material?.opacity),
         moteCount: motes.length,
@@ -1466,6 +1548,7 @@ export class VascularRhythmRouteSystem {
           x: finite(firstMote.x), y: finite(firstMote.y), z: finite(firstMote.z)
         } : null
       },
+      vis1: this.vis1Applied ? { ...this.vis1Applied } : null,
       otherDrivers: {
         contraction: finite(this.contractionIntensity),
         synchronization: finite(this.synchronization),

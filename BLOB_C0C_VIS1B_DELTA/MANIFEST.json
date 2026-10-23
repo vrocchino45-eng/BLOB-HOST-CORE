@@ -1,0 +1,29 @@
+{
+  "pass": "C0C-VIS1-B",
+  "mode": "Visual Lock / Convergence",
+  "changedGameplayFiles": [
+    "src/routes/VascularRhythmRouteSystem.js"
+  ],
+  "sourceBeforeSha256": "fb2c6897ea68b02b3cfe6f4f37b7e6ff11d5a80bf0da08a42f2eb18d250b9cbb",
+  "sourceAfterSha256": "5359815d616ada933c925dc1740a97a768b68e5c6dc5b56bae27a8e181c192b4",
+  "modification": "Replaces only applySiltPressureAnatomy in the Vascular owner",
+  "locks": [
+    "Silt",
+    "Host ledger",
+    "Vascular receiver",
+    "circulation/current",
+    "movement",
+    "targeting",
+    "verbs",
+    "camera",
+    "chemistry",
+    "progression",
+    "save"
+  ],
+  "acceptancePending": [
+    "Windows build",
+    "browser pixel readability",
+    "control feel",
+    "unloaded/loaded comparison"
+  ]
+}
