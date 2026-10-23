@@ -1,0 +1,27 @@
+{
+  "pass": "C0D1-A",
+  "mode": "Owner Local Applied Effect Capture",
+  "baseline": "C0C-VIS1-B",
+  "changedGameplayFiles": [
+    "src/routes/VascularSiltSignalReceiver.js"
+  ],
+  "sourceBeforeSha256": "618828692cc1d49248aa48275fa35c4ff948d6e91ba0730c8f56185da5805bf9",
+  "sourceAfterSha256": "59f3d12d06ff80f9d00d7c056c792b611807a78d74a89c89341dc551c18dfcf4",
+  "mechanics": "Existing Silt receipt handling and Vascular flow/recovery unchanged; separate read-only bounded applied-effect stream",
+  "hostRelay": false,
+  "graveConsumer": false,
+  "runtimeBrowserProof": false,
+  "locked": [
+    "Silt source",
+    "Host ledger LS1E1",
+    "VascularRhythmRouteSystem VIS1-B",
+    "Vascular flow/decay",
+    "Grave I/II",
+    "Core",
+    "controller",
+    "movement",
+    "progression",
+    "chemistry",
+    "save"
+  ]
+}
