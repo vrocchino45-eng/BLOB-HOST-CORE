@@ -1,0 +1,29 @@
+{
+  "pass": "C0C-VIS1-A",
+  "delivery": "one owner delta with hash-guarded installer",
+  "changedGameplayFiles": [
+    "src/routes/VascularRhythmRouteSystem.js"
+  ],
+  "sourceBeforeSha256": "0399843208349c4a6315d4b339f3bc71de859594c0dc07b376a0f6f89cac385d",
+  "sourceAfterSha256": "fb2c6897ea68b02b3cfe6f4f37b7e6ff11d5a80bf0da08a42f2eb18d250b9cbb",
+  "offlineChecks": {
+    "C0C2": "PASS 24,234",
+    "C0C3": "PASS",
+    "C0C4": "PASS",
+    "REC1": "PASS 5/5",
+    "VIS1-A": "PASS 3,034"
+  },
+  "notVerified": [
+    "Three.js smoke because node_modules missing",
+    "Vite build",
+    "browser/controller",
+    "perceptual visibility"
+  ],
+  "locked": [
+    "Silt",
+    "Host ledger",
+    "Vascular receiver",
+    "movement/targeting",
+    "chemistry/progression"
+  ]
+}
