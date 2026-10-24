@@ -2339,6 +2339,7 @@ export class GameRuntime {
       frameState: this.frameState
     });
     this.graveMemoryRouteSystem = new GraveMemoryRouteSystem({
+      hostConnectionReceiptLedger: this.hostConnectionReceiptLedger,
       recipeDataSystem: this.recipeDataSystem,
       chemObjectSystem: this.chemObjectSystem,
       scene: this.scene,

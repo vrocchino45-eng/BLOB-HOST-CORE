@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { GraveVascularEffectMemory } from "./GraveVascularEffectMemory.js";
 
 const ROUTE_CELL_ID = "CELL_GRAVE_MEMORY_RESIDUE_BED_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -26,7 +27,8 @@ export class GraveMemoryRouteSystem {
     chemObjectSystem,
     scene,
     playerRoot,
-    frameState
+    frameState,
+    hostConnectionReceiptLedger = null
   }) {
     if (!recipeDataSystem) throw new Error("[GraveMemoryRouteSystem] recipeDataSystem is required.");
     if (!chemObjectSystem) throw new Error("[GraveMemoryRouteSystem] chemObjectSystem is required.");
@@ -39,6 +41,9 @@ export class GraveMemoryRouteSystem {
     this.scene = scene;
     this.playerRoot = playerRoot;
     this.frameState = frameState;
+    // C0D1-C: Grave I owns retained Vascular-effect memory; not Grave II.
+    this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
+    this.vascularEffectMemory = new GraveVascularEffectMemory();
 
     this.recipe = null;
     this.cellRecipe = null;
@@ -172,6 +177,8 @@ export class GraveMemoryRouteSystem {
     }
     if (!this.active) this.onRuntimeMount(frameState);
 
+    // Only mounted Grave I can read the Host relay. No remote-cell ticking.
+    this.vascularEffectMemory.receiveFromHost(this.hostConnectionReceiptLedger);
     this.elapsed += dt;
     this.applyPhysicalFeel(frameState);
     this.updateInteractions(dt, frameState);
@@ -1422,6 +1429,8 @@ export class GraveMemoryRouteSystem {
         && entry.visualLockStatus === "replaced_by_recipe_composition"
       ));
 
+    // Independent sidecar preserves every existing Grave I objective field.
+    frameState.graveVascularEffectMemory = this.vascularEffectMemory.snapshot({active});
     frameState.graveMemoryRoute = {
       pass: this.circuitEnabled ? "HC-010F" : "HC-010A",
       id: this.recipe?.id ?? (this.circuitEnabled ? CIRCUIT_RECIPE_ID : PREVIEW_RECIPE_ID),

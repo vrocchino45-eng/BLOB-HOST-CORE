@@ -1,0 +1,22 @@
+{
+  "patches": {
+    "src/routes/GraveMemoryRouteSystem.js": [
+      {
+        "find": "import { GraveVascularEffectMemory } from \"./GraveVascularEffectMemory.js\";",
+        "replace": "import { GraveVascularEffectMemory } from \"./GraveVascularEffectMemory.js\";\nimport { graveRecoveryCoupling } from \"./GraveRecoveryCoupling.js\";"
+      },
+      {
+        "find": "    this.vascularEffectMemory = new GraveVascularEffectMemory();",
+        "replace": "    this.vascularEffectMemory = new GraveVascularEffectMemory();\n    this.c0d2AssistedRecoveryTicks = 0;\n    this.c0d2AssistedRecoverySeconds = 0;"
+      },
+      {
+        "find": "        const recoveryRate = this.recipe?.interaction?.recoveryPerSecond ?? 0.42;\n        const integrityRate = this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3;\n        this.residueRecoilRisk = Math.max(0, this.residueRecoilRisk - dt * recoveryRate);\n        this.traceIntegrity = Math.min(1, this.traceIntegrity + dt * integrityRate);\n        this.recoverySeconds += dt;",
+        "replace": "        // C0D2: only authenticated, Grave-owned memory affects existing\n        // Stabilize recovery. No change to damage, objectives or safe thresholds.\n        const coupling = graveRecoveryCoupling(this.vascularEffectMemory);\n        const recoveryRate = (this.recipe?.interaction?.recoveryPerSecond ?? 0.42) * coupling.multiplier;\n        const integrityRate = (this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3) * coupling.multiplier;\n        this.residueRecoilRisk = Math.max(0, this.residueRecoilRisk - dt * recoveryRate);\n        this.traceIntegrity = Math.min(1, this.traceIntegrity + dt * integrityRate);\n        if (coupling.assisted && dt > 0) {\n          this.c0d2AssistedRecoveryTicks = Math.min(1000000, this.c0d2AssistedRecoveryTicks + 1);\n          this.c0d2AssistedRecoverySeconds = Math.min(3600, this.c0d2AssistedRecoverySeconds + dt);\n        }\n        this.recoverySeconds += dt;"
+      },
+      {
+        "find": "    // Independent sidecar preserves every existing Grave I objective field.\n    frameState.graveVascularEffectMemory = this.vascularEffectMemory.snapshot({active});",
+        "replace": "    // C0D2 consequence stays in the Grave-owned sidecar. Legacy Grave\n    // objectives/stages and Host/Vascular snapshots remain unchanged.\n    const coupling = graveRecoveryCoupling(this.vascularEffectMemory);\n    frameState.graveVascularEffectMemory = {\n      ...this.vascularEffectMemory.snapshot({active}),\n      gameplayConsequenceApplied: this.c0d2AssistedRecoveryTicks > 0,\n      recoveryCoupling: {\n        pass: \"C0D2\", owner: \"GraveMemoryRouteSystem\",\n        mode: \"stabilize_recoil_and_trace_recovery_only\",\n        multiplier: coupling.multiplier,\n        assistedRecoveryTicks: this.c0d2AssistedRecoveryTicks,\n        assistedRecoverySeconds: this.c0d2AssistedRecoverySeconds,\n        eligibleNow: Boolean(active && this.circuitEnabled && this.siltRead\n          && this.siltStabilized && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)\n          && coupling.assisted)\n      }\n    };"
+      }
+    ]
+  }
+}

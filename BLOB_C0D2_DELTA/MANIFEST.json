@@ -1,0 +1,35 @@
+{
+  "pass": "C0D2",
+  "mode": "First physical feedback from 3-owner circuit into existing Grave I Stabilize recovery",
+  "baseline": "C0D1-C installed over C0D1-B, A and VIS1-B",
+  "existingChangedFiles": [
+    "src/routes/GraveMemoryRouteSystem.js"
+  ],
+  "newGameplayFile": "src/routes/GraveRecoveryCoupling.js",
+  "beforeSha256": {
+    "src/routes/GraveMemoryRouteSystem.js": "0c5ccabe05d333fd2b2c0ba49b48cdbda21c843adadd266451e6fb759c8673fa"
+  },
+  "afterSha256": {
+    "src/routes/GraveMemoryRouteSystem.js": "b650faa559601256051fb06bc2208e066f82ef04b2a63bdb6406957b838505b1",
+    "src/routes/GraveRecoveryCoupling.js": "0d2e7e9b96ecc7bf605d569a14c95d0133255be5b03050fc7529d56c70da3794"
+  },
+  "lockedDependencies": {
+    "src/core/HostConnectionReceiptLedger.js": "2b235c0eed8abc74f3009632430e0ea2bf5c92234de124267eb6ad5849143aa0",
+    "src/routes/VascularRhythmRouteSystem.js": "75296671c35f10a011488efd72415fa482f5ef466188c286a66d9c916e8c3d35",
+    "src/routes/VascularSiltSignalReceiver.js": "59f3d12d06ff80f9d00d7c056c792b611807a78d74a89c89341dc551c18dfcf4",
+    "src/routes/GraveVascularEffectMemory.js": "da97ec58916282fd9103a542486cdee2b1c467b087108143b8f89f956e952028",
+    "src/core/GameRuntime.js": "44f6108b52f3ecd04dfd81ca27860460e97c7acfff282d40e83cd1037cc70cf7"
+  },
+  "law": "r_effective=r_base*(1+0.15*clamp(authenticatedGraveMemoryPressure,0,1))",
+  "scope": "Grave I Stabilize recoil risk and trace integrity recovery rates only; sidecar telemetry",
+  "locked": [
+    "Silt",
+    "Vascular",
+    "Host",
+    "Grave effect memory receipt",
+    "Grave II",
+    "Grave objective, safe thresholds, player input",
+    "Movement, camera, chemistry, material, saves"
+  ],
+  "validationBoundary": "Offline headless owner integration tests; user Windows browser still required"
+}
