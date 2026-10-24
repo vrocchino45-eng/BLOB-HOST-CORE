@@ -6,6 +6,8 @@
  */
 const SILT_CELL = 'CELL_SILT_PRESSURE_ROUTE_001';
 const VASCULAR_CELL = 'CELL_VASCULAR_RHYTHM_ROUTE_001';
+const GRAVE_CELL = 'CELL_GRAVE_MEMORY_RESIDUE_BED_001';
+const VASCULAR_EFFECT = 'vascular_membrane_load_change_applied';
 const round = value => Number(Number(value).toFixed(3));
 const validId = id => typeof id === 'string' && /^silt-grain-0[1-8]$/.test(id);
 const finiteVector = point => Array.isArray(point) && point.length === 3 && point.every(Number.isFinite);
@@ -22,6 +24,17 @@ export class HostConnectionReceiptLedger {
     this.rejectedTotal = 0;
     this.duplicateTotal = 0;
     this.prunedTotal = 0;
+    // C0D1-B: independent Host provenance for an effect Vascular actually applied.
+    // This cannot change or append to the existing LS1E1 Silt snapshot.
+    this.vascularEffectRecords = [];
+    this.vascularEffectSequence = 0;
+    this.lastVascularSourceSequence = 0;
+    this.lastVascularParentSiltSequence = 0;
+    this.vascularEffectAcceptedTotal = 0;
+    this.vascularEffectRejectedTotal = 0;
+    this.vascularEffectDuplicateTotal = 0;
+    this.vascularEffectGapRejectedTotal = 0;
+    this.vascularEffectPrunedTotal = 0;
   }
 
   observeSiltRelease(sourceDecision) {
@@ -73,6 +86,128 @@ export class HostConnectionReceiptLedger {
     }
     // Monotonic receipt dedupe survives bounded record-buffer rollover.
     return record;
+  }
+
+  /** C0D1-B: authenticate a Vascular-owned *applied* effect against the
+   *  accepted, still-retained Silt parent. Not a second Silt disturbance.
+   *  Fail closed if the parent rolled out of the bounded Silt history.
+   */
+  observeVascularAppliedEffect(event) {
+    const e = event ?? {};
+    if (!Number.isSafeInteger(e.sequence) || e.sequence < 1 ||
+        e.schemaVersion !== 1 || e.kind !== VASCULAR_EFFECT ||
+        e.sourceCellId !== VASCULAR_CELL ||
+        e.sourceSystem !== 'VascularSiltSignalReceiver' ||
+        e.id !== `${VASCULAR_CELL}:membrane-load-applied:${e.sequence}` ||
+        e.materialTransfer !== false || e.routeCredit !== false ||
+        e.offRouteSimulation !== false ||
+        !Number.isSafeInteger(e.parentSiltReceiptSequence) || e.parentSiltReceiptSequence < 1 ||
+        !Number.isSafeInteger(e.parentSiltDecisionSequence) || e.parentSiltDecisionSequence < 1 ||
+        !validId(e.subjectId) ||
+        !Number.isFinite(e.membraneLoadBefore) ||
+        !Number.isFinite(e.membraneLoadAfter) || !Number.isFinite(e.appliedDelta) ||
+        e.membraneLoadBefore < 0 || e.membraneLoadBefore >= 0.85 ||
+        e.membraneLoadAfter > 0.85 || e.membraneLoadAfter <= e.membraneLoadBefore ||
+        e.appliedDelta <= 0 || e.appliedDelta > 0.19500001 ||
+        Math.abs((e.membraneLoadAfter - e.membraneLoadBefore) - e.appliedDelta) > 1e-10) {
+      this.vascularEffectRejectedTotal++;
+      return null;
+    }
+    if (e.sequence <= this.lastVascularSourceSequence) {
+      this.vascularEffectDuplicateTotal++;
+      return null;
+    }
+    if (e.sequence !== this.lastVascularSourceSequence + 1) {
+      // A silent lost source event would destroy lineage; do not skip ahead.
+      this.vascularEffectGapRejectedTotal++;
+      return null;
+    }
+    const parent = this.records.find(record =>
+      record.sequence === e.parentSiltReceiptSequence && record.id === e.parentSiltReceiptId);
+    if (!parent || parent.sourceReceiptSequence !== e.parentSiltDecisionSequence ||
+        parent.subjectId !== e.subjectId || parent.sourceCellId !== SILT_CELL ||
+        parent.kind !== 'silt_material_disturbance_observed') {
+      this.vascularEffectRejectedTotal++;
+      return null;
+    }
+    // Enforce one effect per parent for the entire runtime, even after the
+    // bounded Vascular history rolls over (no unbounded dedupe Set).
+    if (parent.sequence <= this.lastVascularParentSiltSequence) {
+      this.vascularEffectRejectedTotal++;
+      return null;
+    }
+    // Parent speed fixes the maximum permitted positive local increment.
+    // The Host verifies the stated load delta is compatible with that cause,
+    // without computing or advancing any remote state itself.
+    const speed = Math.hypot(...parent.releaseVelocity);
+    const expectedIncrement = 0.14 + 0.055 * Math.max(0, Math.min(1, speed / 2.5));
+    const expectedAfter = Math.min(0.85, e.membraneLoadBefore + expectedIncrement);
+    if (Math.abs(e.membraneLoadAfter - expectedAfter) > 1e-10) {
+      this.vascularEffectRejectedTotal++;
+      return null;
+    }
+    const record = Object.freeze({
+      schemaVersion: 1,
+      id: e.id,
+      sequence: ++this.vascularEffectSequence,
+      kind: VASCULAR_EFFECT,
+      sourceCellId: VASCULAR_CELL,
+      sourceSystem: 'VascularSiltSignalReceiver',
+      sourceEventSequence: e.sequence,
+      parentSiltReceiptId: parent.id,
+      parentSiltReceiptSequence: parent.sequence,
+      parentSiltDecisionSequence: parent.sourceReceiptSequence,
+      subjectId: parent.subjectId,
+      membraneLoadBefore: e.membraneLoadBefore,
+      membraneLoadAfter: e.membraneLoadAfter,
+      appliedDelta: e.appliedDelta,
+      materialTransfer: false,
+      routeCredit: false,
+      offRouteSimulation: false
+    });
+    this.lastVascularSourceSequence = e.sequence;
+    this.lastVascularParentSiltSequence = parent.sequence;
+    this.vascularEffectRecords.push(record);
+    this.vascularEffectAcceptedTotal++;
+    if (this.vascularEffectRecords.length > this.limit) {
+      this.vascularEffectRecords.shift();
+      this.vascularEffectPrunedTotal++;
+    }
+    return record;
+  }
+
+  vascularEffectSnapshot({ withRecords = true, afterSequence = 0 } = {}) {
+    const cursor = Number.isSafeInteger(afterSequence) && afterSequence >= 0 ? afterSequence : 0;
+    const last = this.vascularEffectRecords.at(-1) ?? null;
+    return {
+      pass: 'C0D1-B', schemaVersion: 1,
+      sourceCellId: VASCULAR_CELL,
+      sequence: this.vascularEffectSequence,
+      lastSourceEventSequence: this.lastVascularSourceSequence,
+      lastParentSiltReceiptSequence: this.lastVascularParentSiltSequence,
+      acceptedTotal: this.vascularEffectAcceptedTotal,
+      rejectedTotal: this.vascularEffectRejectedTotal,
+      duplicateTotal: this.vascularEffectDuplicateTotal,
+      gapRejectedTotal: this.vascularEffectGapRejectedTotal,
+      prunedTotal: this.vascularEffectPrunedTotal,
+      retainedCount: this.vascularEffectRecords.length,
+      lastReceiptId: last?.id ?? null,
+      records: withRecords ? this.vascularEffectRecords.filter(e => e.sequence > cursor) : [],
+      materialTransfer: false, routeCredit: false, offRouteSimulation: false,
+      persistentAcrossCellsInRuntime: true, persistsAcrossReload: false
+    };
+  }
+
+  /** A read-only downstream view; no Grave state is changed in C0D1-B. */
+  forGrave() {
+    const channel = this.vascularEffectSnapshot();
+    return {
+      ...channel,
+      inspectedAtCellId: GRAVE_CELL,
+      mode: 'authenticated_vascular_applied_effects_read_only',
+      graveReceived: false,
+      graveStateChanged: false
+    };
   }
 
   snapshot({ withRecords = true } = {}) {

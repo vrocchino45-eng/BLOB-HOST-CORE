@@ -1,0 +1,32 @@
+{
+  "patches": {
+    "src/routes/GraveMemoryRouteSystem.js": [
+      {
+        "find": "import * as THREE from \"three\";",
+        "replace": "import * as THREE from \"three\";\nimport { GraveVascularEffectMemory } from \"./GraveVascularEffectMemory.js\";"
+      },
+      {
+        "find": "    playerRoot,\n    frameState\n  }) {",
+        "replace": "    playerRoot,\n    frameState,\n    hostConnectionReceiptLedger = null\n  }) {"
+      },
+      {
+        "find": "    this.frameState = frameState;",
+        "replace": "    this.frameState = frameState;\n    // C0D1-C: Grave I owns retained Vascular-effect memory; not Grave II.\n    this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;\n    this.vascularEffectMemory = new GraveVascularEffectMemory();"
+      },
+      {
+        "find": "    this.elapsed += dt;\n    this.applyPhysicalFeel(frameState);",
+        "replace": "    // Only mounted Grave I can read the Host relay. No remote-cell ticking.\n    this.vascularEffectMemory.receiveFromHost(this.hostConnectionReceiptLedger);\n    this.elapsed += dt;\n    this.applyPhysicalFeel(frameState);"
+      },
+      {
+        "find": "    frameState.graveMemoryRoute = {",
+        "replace": "    // Independent sidecar preserves every existing Grave I objective field.\n    frameState.graveVascularEffectMemory = this.vascularEffectMemory.snapshot({active});\n    frameState.graveMemoryRoute = {"
+      }
+    ],
+    "src/core/GameRuntime.js": [
+      {
+        "find": "    this.graveMemoryRouteSystem = new GraveMemoryRouteSystem({\n      recipeDataSystem: this.recipeDataSystem,",
+        "replace": "    this.graveMemoryRouteSystem = new GraveMemoryRouteSystem({\n      hostConnectionReceiptLedger: this.hostConnectionReceiptLedger,\n      recipeDataSystem: this.recipeDataSystem,"
+      }
+    ]
+  }
+}

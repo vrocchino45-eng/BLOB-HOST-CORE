@@ -204,6 +204,15 @@ export class VascularRhythmRouteSystem {
 
     // LS1E2: Only the mounted Vascular system can accept a verified remote cause.
     this.siltSignalReceiver.receive(this.hostConnectionReceiptLedger?.snapshot() ?? null);
+    // C0D1-B: relay only the local positive effects Vascular has already
+    // applied. Host authenticates parent lineage; this does not tick Grave.
+    if (this.hostConnectionReceiptLedger) {
+      const cursor = this.hostConnectionReceiptLedger.vascularEffectSnapshot({withRecords: false}).lastSourceEventSequence;
+      const applied = this.siltSignalReceiver.appliedEffectSnapshot({afterSequence: cursor});
+      for (const effect of applied.records) {
+        this.hostConnectionReceiptLedger.observeVascularAppliedEffect(effect);
+      }
+    }
     this.siltSignalReceiver.update(dt);
     // Record the newly received *signal*, not a material transfer or new route event.
     const visualReceiptTotal = this.siltSignalReceiver.receivedTotal;

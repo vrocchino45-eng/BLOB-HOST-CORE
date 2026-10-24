@@ -1,0 +1,51 @@
+{
+  "pass": "C0D1-C",
+  "mode": "Grave I mounted Vascular-effect memory consumer",
+  "baseline": "C0D1-B applied over C0D1-A and VIS1-B",
+  "changedGameplayFiles": [
+    "src/routes/GraveMemoryRouteSystem.js",
+    "src/core/GameRuntime.js",
+    "src/routes/GraveVascularEffectMemory.js"
+  ],
+  "existingChangedFiles": [
+    "src/routes/GraveMemoryRouteSystem.js",
+    "src/core/GameRuntime.js"
+  ],
+  "newGameplayFile": "src/routes/GraveVascularEffectMemory.js",
+  "beforeSha256": {
+    "src/routes/GraveMemoryRouteSystem.js": "92732b5619e27bfc5b4d15e1a677bfb6b64b1ddf114c97ef4cb724517faedd13",
+    "src/core/GameRuntime.js": "3f3e7f74de7070083bc39257b21736da5134aa20d41d4b0fc8510e1029649642"
+  },
+  "afterSha256": {
+    "src/routes/GraveMemoryRouteSystem.js": "0c5ccabe05d333fd2b2c0ba49b48cdbda21c843adadd266451e6fb759c8673fa",
+    "src/core/GameRuntime.js": "44f6108b52f3ecd04dfd81ca27860460e97c7acfff282d40e83cd1037cc70cf7",
+    "src/routes/GraveVascularEffectMemory.js": "da97ec58916282fd9103a542486cdee2b1c467b087108143b8f89f956e952028"
+  },
+  "lockedDependencySha256": {
+    "src/core/HostConnectionReceiptLedger.js": "2b235c0eed8abc74f3009632430e0ea2bf5c92234de124267eb6ad5849143aa0",
+    "src/routes/VascularRhythmRouteSystem.js": "75296671c35f10a011488efd72415fa482f5ef466188c286a66d9c916e8c3d35",
+    "src/routes/VascularSiltSignalReceiver.js": "59f3d12d06ff80f9d00d7c056c792b611807a78d74a89c89341dc551c18dfcf4"
+  },
+  "locks": [
+    "Grave I objectives and risk/recovery rules",
+    "Grave II resonance",
+    "C0D1-A/B Host/vascular source",
+    "Silt motion and release",
+    "3->6->12",
+    "movement and targeting",
+    "chemistry, saves and progression"
+  ],
+  "negativeControls": [
+    "no cause",
+    "Silt-only",
+    "no Vascular visit",
+    "replay",
+    "forged parent",
+    "invalid amount",
+    "gap",
+    "off-route",
+    "Grave remount",
+    "buffer cap"
+  ],
+  "note": "Adds Grave-owned retained memory only. Later C0D2 makes one eligible Grave action depend on memory; no old behavior change now."
+}
