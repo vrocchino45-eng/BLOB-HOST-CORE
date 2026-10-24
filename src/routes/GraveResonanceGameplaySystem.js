@@ -48,13 +48,15 @@ const round = (value) => Number((Number.isFinite(value) ? value : 0).toFixed(3))
  * an exact hidden combo sequence. It owns no target selection or route crossing.
  */
 export class GraveResonanceGameplaySystem {
-  constructor({ frameState, chemObjectSystem, graveReturnRegionSystem }) {
+  constructor({ frameState, chemObjectSystem, graveReturnRegionSystem, hostConnectionReceiptLedger = null }) {
     if (!frameState || !chemObjectSystem || !graveReturnRegionSystem) {
       throw new Error("[GraveResonanceGameplaySystem] frameState, chemObjectSystem and graveReturnRegionSystem are required.");
     }
     this.frameState = frameState;
     this.chemObjectSystem = chemObjectSystem;
     this.graveReturnRegionSystem = graveReturnRegionSystem;
+    // C0D3-B: publish the real Grave II completion to Host, once.
+    this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
     this.nodes = new Map();
     this.active = false;
     this.wasActive = false;
@@ -305,6 +307,11 @@ export class GraveResonanceGameplaySystem {
       source: "GraveResonanceGameplaySystem",
       frame: frameState.frame ?? 0
     };
+    // Host only observes this completed Grave-owned event. The original
+    // return-region credit path remains unchanged and consumes it next frame.
+    this.hostConnectionReceiptLedger?.observeGraveIIResolution(
+      frameState.returnRegionCompletionEvent, { source: this, frameState }
+    );
   }
 
   applyPresentation(dt, metrics, frameState) {

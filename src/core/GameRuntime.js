@@ -2358,7 +2358,8 @@ export class GameRuntime {
     this.graveResonanceGameplaySystem = new GraveResonanceGameplaySystem({
       frameState: this.frameState,
       chemObjectSystem: this.chemObjectSystem,
-      graveReturnRegionSystem: this.graveReturnRegionSystem
+      graveReturnRegionSystem: this.graveReturnRegionSystem,
+      hostConnectionReceiptLedger: this.hostConnectionReceiptLedger
     });
     this.graveRuptureHarvestSystem = new GraveRuptureHarvestSystem({
       scene: this.scene,

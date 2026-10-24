@@ -1,0 +1,16 @@
+{
+  "passId": "C0D3-C",
+  "requiredBaseline": "C0D3-B installed atop C0D3-A and C0D2",
+  "changedGameplayFiles": [
+    "src/routes/SiltPressureRouteSystem.js"
+  ],
+  "expectedFiles": {
+    "src/routes/SiltPressureRouteSystem.js": {
+      "beforeSha256": "37eaf11695933ace8b20c2b42374af01567c5ad9478409f1cb3830b71f7053cc",
+      "afterSha256": "b28b8b0fa6e00f5c7e88fa4d7a1969ad3ab3c33dde391d17bb95d37178224e50"
+    }
+  },
+  "scope": "Single-use authenticated Grave II completed outcome -> Silt-owned existing post-completion compression settle target; no progression, physics, material, other region, or global changes",
+  "runtimeBuild": "pending_user_windows",
+  "browserAcceptance": "pending"
+}

@@ -35,6 +35,15 @@ export class HostConnectionReceiptLedger {
     this.vascularEffectDuplicateTotal = 0;
     this.vascularEffectGapRejectedTotal = 0;
     this.vascularEffectPrunedTotal = 0;
+    // C0D3-B: a separate, bounded history of genuine Grave II resolution.
+    // No Grave progress is awarded here and no downstream Silt state is mutated.
+    this.graveIIResolutionRecords = [];
+    this.graveIIResolutionSequence = 0;
+    this.lastGraveIICompletionSourceSequence = 0;
+    this.graveIIResolutionAcceptedTotal = 0;
+    this.graveIIResolutionRejectedTotal = 0;
+    this.graveIIResolutionDuplicateTotal = 0;
+    this.graveIIResolutionPrunedTotal = 0;
   }
 
   observeSiltRelease(sourceDecision) {
@@ -174,6 +183,114 @@ export class HostConnectionReceiptLedger {
       this.vascularEffectPrunedTotal++;
     }
     return record;
+  }
+
+  /**
+   * C0D3-B: consume one completed, mounted Grave II resonance outcome.
+   * Called by the Grave II gameplay owner in the same update that it resolves.
+   * Owner instance / current-frame event / actual completion predicates are
+   * witnessed together; no event is inferred from return-layout transformation.
+   */
+  observeGraveIIResolution(event, { source, frameState } = {}) {
+    const e = event ?? {};
+    const history = frameState?.act1RouteHistory ?? {};
+    const graveHistory = history.routeStates?.grave_memory_route ?? {};
+    const onReturn = (graveHistory.entryCount ?? history.graveEntryCount ?? 0) >= 2
+      && Boolean(graveHistory.returned || history.graveReturned);
+    const correctSource = source?.constructor?.name === 'GraveResonanceGameplaySystem'
+      && source.frameState === frameState
+      && source.graveReturnRegionSystem?.frameState === frameState
+      && source.graveReturnRegionSystem?.active === true
+      && source.active === true && source.completed === true
+      && source.wasActive === true && source.resolutionHold >= 1.65
+      && source.interactionCount >= 3 && source.touchedNodes?.size >= 2
+      && source.resolutionId === e.resolutionId
+      && source.completionSequence === e.sequence;
+    const validEvent = frameState?.returnRegionCompletionEvent === event
+      && frameState.activeCellId === GRAVE_CELL && onReturn
+      && frameState.graveReturnRegion?.active === true
+      && e.pass === 'HC-031B' && e.source === 'GraveResonanceGameplaySystem'
+      && e.key === 'grave:phase_2' && e.routeKey === 'grave' && e.phase === 2
+      && ['quiet_retention', 'shared_memory', 'held_contradiction'].includes(e.resolutionId)
+      && Number.isSafeInteger(e.frame) && e.frame >= 0
+      && e.frame === (frameState.frame ?? 0)
+      && Number.isSafeInteger(e.sequence) && e.sequence >= 1;
+    if (!correctSource || !validEvent) {
+      this.graveIIResolutionRejectedTotal++;
+      return null;
+    }
+    if (e.sequence <= this.lastGraveIICompletionSourceSequence) {
+      this.graveIIResolutionDuplicateTotal++;
+      return null;
+    }
+    // Grave II currently completes at most once in a runtime. Reject gaps,
+    // and do not reset the cursor if its bounded record is eventually pruned.
+    if (e.sequence !== this.lastGraveIICompletionSourceSequence + 1) {
+      this.graveIIResolutionRejectedTotal++;
+      return null;
+    }
+    const graveMemory = frameState.graveVascularEffectMemory ?? {};
+    const inherited = frameState.returnRegionEngine?.graveLayout?.inputs?.c0d3GraveIIHostMemory;
+    const linkedMemory = inherited?.applied === true
+      && graveMemory.active === true
+      && graveMemory.owner === 'GraveMemoryRouteSystem'
+      && graveMemory.cellId === GRAVE_CELL
+      && Number.isSafeInteger(graveMemory.receivedTotal)
+      && graveMemory.receivedTotal > 0
+      && Number.isFinite(graveMemory.memoryPressure)
+      && graveMemory.memoryPressure > 0
+      && graveMemory.memoryPressure <= 1
+      && this.vascularEffectAcceptedTotal >= graveMemory.receivedTotal;
+    // A parent is claimed only when its exact authenticated Host record is still
+    // retained. Never invent a parent when the bounded ring has rolled over.
+    const parentId = linkedMemory && this.vascularEffectRecords.some(
+      r => r.id === graveMemory.lastVascularEffectId)
+      ? graveMemory.lastVascularEffectId : null;
+    const record = Object.freeze({
+      schemaVersion: 1,
+      id: `${GRAVE_CELL}:grave-ii-resolved:${e.sequence}`,
+      sequence: ++this.graveIIResolutionSequence,
+      kind: 'grave_ii_regional_resonance_resolved',
+      sourceCellId: GRAVE_CELL,
+      sourceSystem: 'GraveResonanceGameplaySystem',
+      sourceCompletionSequence: e.sequence,
+      resolutionId: e.resolutionId,
+      completedAtFrame: e.frame,
+      parentVascularEffectId: parentId,
+      inheritedVascularMemory: Boolean(linkedMemory),
+      materialTransfer: false,
+      routeCredit: false,
+      progressionAuthority: false,
+      offRouteSimulation: false
+    });
+    this.graveIIResolutionRecords.push(record);
+    this.graveIIResolutionAcceptedTotal++;
+    this.lastGraveIICompletionSourceSequence = e.sequence;
+    if (this.graveIIResolutionRecords.length > this.limit) {
+      this.graveIIResolutionRecords.shift();
+      this.graveIIResolutionPrunedTotal++;
+    }
+    return record;
+  }
+
+  graveIIResolutionSnapshot({ withRecords = true, afterSequence = 0 } = {}) {
+    const cursor = Number.isSafeInteger(afterSequence) && afterSequence >= 0 ? afterSequence : 0;
+    const last = this.graveIIResolutionRecords.at(-1) ?? null;
+    return {
+      pass: 'C0D3-B', schemaVersion: 1,
+      sourceCellId: GRAVE_CELL, sequence: this.graveIIResolutionSequence,
+      lastSourceCompletionSequence: this.lastGraveIICompletionSourceSequence,
+      acceptedTotal: this.graveIIResolutionAcceptedTotal,
+      rejectedTotal: this.graveIIResolutionRejectedTotal,
+      duplicateTotal: this.graveIIResolutionDuplicateTotal,
+      prunedTotal: this.graveIIResolutionPrunedTotal,
+      retainedCount: this.graveIIResolutionRecords.length,
+      lastReceiptId: last?.id ?? null,
+      records: withRecords ? this.graveIIResolutionRecords.filter(r => r.sequence > cursor) : [],
+      materialTransfer: false, routeCredit: false, progressionAuthority: false,
+      offRouteSimulation: false, persistentAcrossCellsInRuntime: true,
+      persistsAcrossReload: false
+    };
   }
 
   vascularEffectSnapshot({ withRecords = true, afterSequence = 0 } = {}) {
