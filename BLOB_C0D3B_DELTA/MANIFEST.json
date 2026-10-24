@@ -1,0 +1,26 @@
+{
+  "passId": "C0D3-B",
+  "requiredBaseline": "C0D3-A installed on top of C0D2",
+  "changedGameplayFiles": [
+    "src/core/HostConnectionReceiptLedger.js",
+    "src/routes/GraveResonanceGameplaySystem.js",
+    "src/core/GameRuntime.js"
+  ],
+  "expectedFiles": {
+    "src/core/HostConnectionReceiptLedger.js": {
+      "beforeSha256": "2b235c0eed8abc74f3009632430e0ea2bf5c92234de124267eb6ad5849143aa0",
+      "afterSha256": "13c95fd61ccec296ef1942bd7f7c912cfb43f89056b12e58925654162ed0dda6"
+    },
+    "src/routes/GraveResonanceGameplaySystem.js": {
+      "beforeSha256": "2b25cd171aed9f09ad170b9623347e912eba27a5a827f0c4e2ef33b868abab6e",
+      "afterSha256": "4d1f8579fd9ad11d0f9cfe73081534887052e66d520c962a42f9da8c18cc08ae"
+    },
+    "src/core/GameRuntime.js": {
+      "beforeSha256": "44f6108b52f3ecd04dfd81ca27860460e97c7acfff282d40e83cd1037cc70cf7",
+      "afterSha256": "314c751109bc5c45eebbce1d58fabccc9199eeaa587f04517ed3265b7844e3e6"
+    }
+  },
+  "scope": "Real Grave II resonance completion -> separate bounded Host outcome receipt. No Silt consumer, material transfer, new credit, regional layout change or progression bypass.",
+  "runtimeBuild": "pending_user_windows",
+  "browserAcceptance": "pending"
+}

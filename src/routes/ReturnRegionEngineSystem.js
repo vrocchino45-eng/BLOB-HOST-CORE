@@ -70,6 +70,26 @@ export class ReturnRegionEngineSystem {
     const entryCount = Math.max(1, routeState.entryCount ?? history.graveEntryCount ?? 1);
     const visitPhase = Math.max(1, Math.min(4, entryCount));
 
+    // C0D3-A: only a currently mounted, qualified Grave II return may
+    // interpret Grave I's already-authenticated Vascular memory. This changes
+    // the existing return-layout resonance; it does not grant credits, start
+    // Grave II, or advance a remote region.
+    const graveMemory = frameState.graveVascularEffectMemory ?? null;
+    const memoryEligible = routeKey === "grave"
+      && visitPhase >= 2
+      && Boolean(routeState.returned || history.graveReturned)
+      && frameState.activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+      && graveMemory?.active === true
+      && graveMemory?.owner === "GraveMemoryRouteSystem"
+      && graveMemory?.cellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+      && graveMemory?.mode === "bounded_retained_vascular_effect_memory"
+      && Number.isSafeInteger(graveMemory.receivedTotal)
+      && graveMemory.receivedTotal > 0
+      && Number.isFinite(graveMemory.memoryPressure)
+      && typeof graveMemory.lastVascularEffectId === "string"
+      && graveMemory.lastVascularEffectId.startsWith("CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:");
+    const inheritedPressure01 = memoryEligible ? clamp01(graveMemory.memoryPressure) : 0;
+
     // Return regions are octave expressions, not regenerated rooms. The regional
     // fundamental stays fixed while each return doubles structural resolution.
     const octaveRatio = 2 ** Math.max(0, visitPhase - 1);
@@ -83,6 +103,7 @@ export class ReturnRegionEngineSystem {
       + traceIntegrity * 0.18
       + topologyBalance * 0.18
       - riskPressure * 0.08
+      + inheritedPressure01 * 0.15
     );
 
     // A second visit must be spatially legible. HC031A's <=16% depth change was
@@ -114,7 +135,13 @@ export class ReturnRegionEngineSystem {
         reactivePressure: round(reactivePressure),
         traceIntegrity: round(traceIntegrity),
         riskPressure: round(riskPressure),
-        chord
+        chord,
+        c0d3GraveIIHostMemory: {
+          applied: memoryEligible,
+          inheritedPressure01: round(inheritedPressure01),
+          resonanceContribution01: round(inheritedPressure01 * 0.15),
+          mode: "authentic_vascular_memory_to_grave_ii_existing_resonance_only"
+        }
       },
       octave: {
         fundamentalPhaseCount,
