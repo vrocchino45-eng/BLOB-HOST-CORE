@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GraveVascularEffectMemory } from "./GraveVascularEffectMemory.js";
+import { graveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
 
 const ROUTE_CELL_ID = "CELL_GRAVE_MEMORY_RESIDUE_BED_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -44,6 +45,8 @@ export class GraveMemoryRouteSystem {
     // C0D1-C: Grave I owns retained Vascular-effect memory; not Grave II.
     this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
     this.vascularEffectMemory = new GraveVascularEffectMemory();
+    this.c0d2AssistedRecoveryTicks = 0;
+    this.c0d2AssistedRecoverySeconds = 0;
 
     this.recipe = null;
     this.cellRecipe = null;
@@ -685,10 +688,17 @@ export class GraveMemoryRouteSystem {
         this.circuitEnabled
         && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)
       ) {
-        const recoveryRate = this.recipe?.interaction?.recoveryPerSecond ?? 0.42;
-        const integrityRate = this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3;
+        // C0D2: only authenticated, Grave-owned memory affects existing
+        // Stabilize recovery. No change to damage, objectives or safe thresholds.
+        const coupling = graveRecoveryCoupling(this.vascularEffectMemory);
+        const recoveryRate = (this.recipe?.interaction?.recoveryPerSecond ?? 0.42) * coupling.multiplier;
+        const integrityRate = (this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3) * coupling.multiplier;
         this.residueRecoilRisk = Math.max(0, this.residueRecoilRisk - dt * recoveryRate);
         this.traceIntegrity = Math.min(1, this.traceIntegrity + dt * integrityRate);
+        if (coupling.assisted && dt > 0) {
+          this.c0d2AssistedRecoveryTicks = Math.min(1000000, this.c0d2AssistedRecoveryTicks + 1);
+          this.c0d2AssistedRecoverySeconds = Math.min(3600, this.c0d2AssistedRecoverySeconds + dt);
+        }
         this.recoverySeconds += dt;
         this.lastInteraction = "stabilize_rebinding_scattered_memory_trace";
         this.warning = "residue_recoil_recovering";
@@ -1429,8 +1439,23 @@ export class GraveMemoryRouteSystem {
         && entry.visualLockStatus === "replaced_by_recipe_composition"
       ));
 
-    // Independent sidecar preserves every existing Grave I objective field.
-    frameState.graveVascularEffectMemory = this.vascularEffectMemory.snapshot({active});
+    // C0D2 consequence stays in the Grave-owned sidecar. Legacy Grave
+    // objectives/stages and Host/Vascular snapshots remain unchanged.
+    const coupling = graveRecoveryCoupling(this.vascularEffectMemory);
+    frameState.graveVascularEffectMemory = {
+      ...this.vascularEffectMemory.snapshot({active}),
+      gameplayConsequenceApplied: this.c0d2AssistedRecoveryTicks > 0,
+      recoveryCoupling: {
+        pass: "C0D2", owner: "GraveMemoryRouteSystem",
+        mode: "stabilize_recoil_and_trace_recovery_only",
+        multiplier: coupling.multiplier,
+        assistedRecoveryTicks: this.c0d2AssistedRecoveryTicks,
+        assistedRecoverySeconds: this.c0d2AssistedRecoverySeconds,
+        eligibleNow: Boolean(active && this.circuitEnabled && this.siltRead
+          && this.siltStabilized && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)
+          && coupling.assisted)
+      }
+    };
     frameState.graveMemoryRoute = {
       pass: this.circuitEnabled ? "HC-010F" : "HC-010A",
       id: this.recipe?.id ?? (this.circuitEnabled ? CIRCUIT_RECIPE_ID : PREVIEW_RECIPE_ID),
