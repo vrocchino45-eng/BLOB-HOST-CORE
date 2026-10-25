@@ -1,0 +1,25 @@
+{
+  "pass": "C0D4-OBS1",
+  "delivery": "guarded changed-files-only delta",
+  "requires": "C0D3-C installed over C0D3-B; no custom owner edits",
+  "changedFiles": [
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "beforeSha256": "2a3e0c4b7a62eeba28ca75b23287ebada3d8068526210a41314fe0675b365d42",
+      "afterSha256": "00036f89104b3fb6e9048268c2f92690a2048623aa2113b5543f7942353b32a8",
+      "bytes": 44803
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "beforeSha256": "314c751109bc5c45eebbce1d58fabccc9199eeaa587f04517ed3265b7844e3e6",
+      "afterSha256": "bac8d38cb5b1ca1ef61bf43118048c6e03c4e4d96377e47cb0d968365fd8abfb",
+      "bytes": 148359
+    }
+  ],
+  "scope": "read-only REC1 observation plus GameRuntime ledger injection",
+  "locks": [
+    "no Silt/Grave/Vascular/Host behavior changes",
+    "no progression/credits, camera, audio, controls, physics, chemistry changes",
+    "legacy C0C-REC1 schema2 and filename retained"
+  ]
+}

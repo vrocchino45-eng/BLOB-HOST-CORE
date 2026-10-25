@@ -31,6 +31,13 @@ export class SiltPressureRouteSystem {
     this.frameState = frameState;
     this.camera = camera;
     this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
+    // C0D3-C — Silt alone owns the return pressure echo from a *completed* Grave II.
+    // Host owns provenance; no second event, mass, progression, or off-route tick.
+    this.graveIIConsumedSequence = 0;
+    this.graveIIReceiptId = null;
+    this.graveIIResolutionId = null;
+    this.graveIIInheritedVascularMemory = false;
+    this.graveIIPressureEcho = 0;
     this.siltAimCandidateId = null;
     this.siltAimLockedId = null;
     this.siltAimCameraPosition = new THREE.Vector3();
@@ -284,6 +291,8 @@ export class SiltPressureRouteSystem {
     }
     if (!this.active) this.onRuntimeMount(frameState);
 
+    // Receives once on a mounted Silt frame, never while this cell is hidden.
+    this.receiveGraveIIHostOutcome();
     this.elapsed += dt;
     this.pulseFlashAge += dt;
     this.failureFlashAge += dt;
@@ -322,6 +331,52 @@ export class SiltPressureRouteSystem {
   }
 
 
+
+  /** Shared Silt pressure target, unchanged before a verified Grave II outcome. */
+  pressureSettlingTarget() {
+    return this.completed ? 0.1 - this.graveIIPressureEcho : this.ribsReleased ? 0.28 : 0.62;
+  }
+
+  /**
+   * C0D3-C — One authenticated Grave II result is a retained pressure echo.
+   * Only the existing Silt settling rule interprets it. This is neither a
+   * virtual material movement nor another Grave II completion. The consumed
+   * cursor survives unmount/remount and never rewinds if Host prunes records.
+   */
+  receiveGraveIIHostOutcome() {
+    if (!this.active || this.frameState?.activeCellId !== ROUTE_CELL_ID
+        || this.graveIIConsumedSequence > 0) return false;
+    const view = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({
+      withRecords: true, afterSequence: this.graveIIConsumedSequence
+    });
+    if (view?.pass !== 'C0D3-B' || view.sourceCellId !== 'CELL_GRAVE_MEMORY_RESIDUE_BED_001'
+        || !Number.isSafeInteger(view.sequence) || view.sequence < 1
+        || !Number.isSafeInteger(view.acceptedTotal) || view.acceptedTotal < 1
+        || !Array.isArray(view.records)) return false;
+    const weights = { quiet_retention: 0.018, shared_memory: 0.028, held_contradiction: 0.04 };
+    for (const event of view.records) {
+      if (event?.schemaVersion !== 1 || event.kind !== 'grave_ii_regional_resonance_resolved'
+          || event.sourceCellId !== view.sourceCellId
+          || event.sourceSystem !== 'GraveResonanceGameplaySystem'
+          || !Number.isSafeInteger(event.sequence) || event.sequence <= 0
+          || event.sequence <= this.graveIIConsumedSequence || event.sequence > view.sequence
+          || event.id !== `${view.sourceCellId}:grave-ii-resolved:${event.sequence}`
+          || !Object.hasOwn(weights, event.resolutionId)
+          || event.materialTransfer !== false || event.routeCredit !== false
+          || event.progressionAuthority !== false || event.offRouteSimulation !== false
+          || !Number.isSafeInteger(event.sourceCompletionSequence)
+          || event.sourceCompletionSequence < 1) continue;
+      // Single-use per runtime. The category fixes a bounded anatomical
+      // response; additional frames or remounts cannot accumulate it.
+      this.graveIIConsumedSequence = event.sequence;
+      this.graveIIReceiptId = event.id;
+      this.graveIIResolutionId = event.resolutionId;
+      this.graveIIInheritedVascularMemory = event.inheritedVascularMemory === true;
+      this.graveIIPressureEcho = weights[event.resolutionId];
+      return true;
+    }
+    return false;
+  }
 
   applyHostRhythmVisual(frameState) {
     const host = frameState.hostRhythm ?? {};
@@ -1976,7 +2031,10 @@ export class SiltPressureRouteSystem {
     }
     this.previousAbsorbHeld = this.absorbHeld;
 
-    const targetCompression = this.completed ? 0.1 : this.ribsReleased ? 0.28 : 0.62;
+    // A returned, already-released Silt passage settles against the memory of
+    // Grave II's genuine resolution. Incomplete Silt and failed compression keep
+    // their existing targets; no interaction requirement or progress changes.
+    const targetCompression = this.pressureSettlingTarget();
     if (!this.compressionFailure && !this.stabilizing) {
       const settleRate = 1 - Math.exp(-dt * 1.7);
       this.compression += (targetCompression - this.compression) * settleRate;
@@ -2365,6 +2423,16 @@ export class SiltPressureRouteSystem {
       maxDepthProgress: this.maxDepthProgress,
       pathDistance: active ? this.pathDistance : 0,
       compression: this.compression,
+      graveIIPressureFeedback: {
+        pass: 'C0D3-C', active: Boolean(active && this.graveIIConsumedSequence),
+        receiptId: this.graveIIReceiptId, sourceSequence: this.graveIIConsumedSequence,
+        resolutionId: this.graveIIResolutionId,
+        upstreamVascularMemory: this.graveIIInheritedVascularMemory,
+        echo: this.graveIIPressureEcho,
+        targetCompressionWhenCompleted: 0.1 - this.graveIIPressureEcho,
+        materialTransfer: false, progressionCredit: false,
+        persistsAcrossRemount: true, persistsAcrossReload: false
+      },
       compressionFailure: this.compressionFailure,
       failureCount: this.failureCount,
       failureRecovered: this.failureRecovered,
