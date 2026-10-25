@@ -2494,7 +2494,8 @@ export class GameRuntime {
     // LS1E1R: one runtime-owned observation recorder, independent of local-cell mounts.
     this.worldObjectCensusSystem = new WorldObjectCensusSystem({
       scene: this.scene,
-      frameState: this.frameState
+      frameState: this.frameState,
+      hostConnectionReceiptLedger: this.hostConnectionReceiptLedger
     });
     this.debugDisplaySystem = new DebugDisplaySystem({
       frameState: this.frameState

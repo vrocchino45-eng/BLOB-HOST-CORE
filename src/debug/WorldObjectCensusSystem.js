@@ -1,9 +1,11 @@
 // LS1D1D2B: read-only identity bridge diagnostic. Does not register targets or alter progression.
 const safe = value => String(value ?? 'none').slice(0, 100);
 export class WorldObjectCensusSystem {
-  constructor({ scene, frameState }) {
+  constructor({ scene, frameState, hostConnectionReceiptLedger = null }) {
     this.scene = scene;
     this.frameState = frameState;
+    // C0D4: read-only access to Host-owned channels; does not publish or consume.
+    this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
     this.panel = null;
     this.visible = false;
     this.lastReport = null;
@@ -21,6 +23,9 @@ export class WorldObjectCensusSystem {
     this.authorityPrevious = null;
     this.lastSiltDecisionSequence = null;
     this.lastVascularPresentationSampleMs = null;
+    this.lastCircuitState = null;
+    this.lastCircuitVascularSequence = 0;
+    this.lastCircuitGraveSequence = 0;
     this.recIndicator = null;
     this.recNoticeTimeout = null;
     this.keyHandler = event => {
@@ -167,6 +172,116 @@ export class WorldObjectCensusSystem {
         && now - this.lastVascularPresentationSampleMs < 500) return;
     this.lastVascularPresentationSampleMs = now;
     this.recordEvent('vascular-presentation-sample', { presentation: trace });
+  }
+  // C0D4-OBS1: event-triggered snapshots of already-published owner state.
+  // No gameplay methods, simulation clocks or progression writers are called.
+  circuitSnapshot() {
+    const fs = this.frameState ?? {};
+    const host = this.hostConnectionReceiptLedger;
+    const g = fs.graveMemoryRoute ?? {};
+    const m = fs.graveVascularEffectMemory ?? {};
+    const r = fs.graveReturnRegion ?? {};
+    const q = fs.graveResonanceGameplay ?? {};
+    const e = fs.returnRegionEngine ?? {};
+    const f = fs.siltPressureRoute?.graveIIPressureFeedback ?? {};
+    const inherited = e.graveLayout?.inputs?.c0d3GraveIIHostMemory ?? {};
+    const latched = r.layoutInputs?.c0d3GraveIIHostMemory ?? {};
+    return {
+      cell: { activeCellId: fs.activeCellId ?? null },
+      graveI: {
+        active: g.active === true, stage: g.stage ?? null,
+        completed: g.completed === true, returnFoldReady: g.returnFoldReady === true,
+        readCount: g.readCount ?? 0, memorySiltStabilized: g.memorySiltStabilized === true,
+        safeMemoryTransferComplete: g.safeMemoryTransferComplete === true,
+        graveMemoryImprintCommitted: g.graveMemoryImprintCommitted === true,
+        riskEventCount: g.riskEventCount ?? 0,
+      },
+      graveMemory: {
+        active: m.active === true, receivedTotal: m.receivedTotal ?? 0,
+        lastHostSequence: m.lastHostSequence ?? 0,
+        lastVascularEffectId: m.lastVascularEffectId ?? null,
+        lastParentSiltReceiptId: m.lastParentSiltReceiptId ?? null,
+        memoryPressure: m.memoryPressure ?? 0,
+        gapRejectedTotal: m.gapRejectedTotal ?? 0,
+        gameplayConsequenceApplied: m.gameplayConsequenceApplied === true,
+        recoveryMultiplier: m.recoveryCoupling?.multiplier ?? 1,
+        assistedRecoveryObserved: (m.recoveryCoupling?.assistedRecoveryTicks ?? 0) > 0
+      },
+      graveII: {
+        active: r.active === true, completed: r.completed === true,
+        phase: r.phase ?? null, layoutEquationId: r.layoutEquationId ?? null,
+        layoutMemoryApplied: latched.applied === true,
+        layoutMemoryPressure: latched.inheritedPressure01 ?? null,
+        liveEquationMemoryApplied: inherited.applied === true,
+        resonanceActive: q.active === true,
+        interactionCount: q.interactionCount ?? 0,
+        touchedNodeCount: q.touchedNodeCount ?? 0,
+        resolutionCandidate: q.regional?.candidateResolution ?? null,
+        resolved: q.completed === true, resolutionId: q.resolutionId ?? null,
+        returnCredit: e.phase2?.grave === true,
+      },
+      siltReturn: {
+        active: fs.siltPressureRoute?.active === true,
+        completed: fs.siltPressureRoute?.completed === true,
+        receiptId: f.receiptId ?? null,
+        sourceSequence: f.sourceSequence ?? 0,
+        resolutionId: f.resolutionId ?? null,
+        upstreamVascularMemory: f.upstreamVascularMemory === true,
+        echo: f.echo ?? 0,
+        targetCompression: f.targetCompressionWhenCompleted ?? 0.1
+      },
+      // Keep full records out of state-change comparisons. Each new record is
+      // journaled separately by its authoritative monotonic Host sequence.
+      hostVascular: host?.vascularEffectSnapshot?.({withRecords:false}) ?? null,
+      hostGraveII: host?.graveIIResolutionSnapshot?.({withRecords:false}) ?? null
+    };
+  }
+
+  sampleCircuit() {
+    const now = this.circuitSnapshot();
+    const host = this.hostConnectionReceiptLedger;
+    const channels = [
+      ['vascular', host?.vascularEffectSnapshot?.({withRecords:true,afterSequence:this.lastCircuitVascularSequence}), 'c0d4-host-vascular-effect', 'lastCircuitVascularSequence'],
+      ['grave-ii', host?.graveIIResolutionSnapshot?.({withRecords:true,afterSequence:this.lastCircuitGraveSequence}), 'c0d4-host-grave-ii-outcome', 'lastCircuitGraveSequence'],
+    ];
+    for (const [channel, view, type, cursorKey] of channels) {
+      if (!view || !Number.isSafeInteger(view.sequence)) continue;
+      const cursor = this[cursorKey];
+      const fresh = (view.records ?? []).filter(r => Number.isSafeInteger(r.sequence) && r.sequence > cursor)
+        .sort((a,b) => a.sequence - b.sequence);
+      if (view.sequence > cursor && (!fresh.length || fresh[0].sequence > cursor + 1)) {
+        this.recordEvent('c0d4-host-receipt-gap', {
+          channel, priorSequence: cursor, currentSequence: view.sequence,
+          firstAvailableSequence: fresh[0]?.sequence ?? null
+        });
+      }
+      for (const receipt of fresh) {
+        this.recordEvent(type, {receipt});
+        this[cursorKey] = receipt.sequence;
+      }
+      // An unavailable pruned record cannot be reconstructed. Keep cursor
+      // monotonic after reporting the gap; never masquerade as a receipt.
+      if (view.sequence > this[cursorKey]) this[cursorKey] = view.sequence;
+    }
+    if (this.lastCircuitState === null) {
+      this.recordEvent('c0d4-circuit-baseline', {state: now});
+    } else {
+      const families = [
+        ['cell', 'c0d4-active-cell-change'],
+        ['graveI', 'c0d4-grave-i-change'],
+        ['graveMemory', 'c0d4-grave-memory-change'],
+        ['graveII', 'c0d4-grave-ii-change'],
+        ['siltReturn', 'c0d4-silt-feedback-change'],
+        ['hostVascular', 'c0d4-host-vascular-channel-change'],
+        ['hostGraveII', 'c0d4-host-grave-channel-change']
+      ];
+      for (const [name,type] of families) {
+        if (JSON.stringify(now[name]) !== JSON.stringify(this.lastCircuitState[name])) {
+          this.recordEvent(type, {before: this.lastCircuitState[name], after: now[name]});
+        }
+      }
+    }
+    this.lastCircuitState = now;
   }
   // These are *published game-state outcomes*, not guesses from controller buttons.
   // None of these fields proves that a specific held grain received Pulse force
@@ -442,6 +557,8 @@ export class WorldObjectCensusSystem {
         detailedListsContainOnlyLast2500: false,
         retentionPolicy: 'append_only_for_current_capture_no_2500_event_rollover',
         caveat: 'Full recorder history does not guarantee source truth if a producer 64-entry ring overflows between 150ms samples.' },
+      circuit: {revision: "C0D4-OBS1", finalState: this.circuitSnapshot(),
+        observationOnly: true, browserCircuitAcceptance: "not_inferred_from_recording_alone"},
       hostConnections: { finalState: this.authoritySnapshot().hostConnections,
         vascularReadOnlyView: this.authoritySnapshot().vascularHostObservation,
         vascularLocalResponse: this.authoritySnapshot().vascularSiltSignalResponse,
@@ -517,6 +634,7 @@ export class WorldObjectCensusSystem {
     this.sampleHostConnections();
     this.sampleVascularSiltResponse();
     this.sampleVascularPresentation();
+    this.sampleCircuit();
     this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
@@ -547,6 +665,9 @@ export class WorldObjectCensusSystem {
     this.lastVascularReceivedSequence = this.frameState?.vascularRhythmRoute?.siltSignalResponse?.receivedTotal ?? 0;
     this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
     this.lastVascularPresentationSampleMs = null;
+    this.lastCircuitVascularSequence = this.hostConnectionReceiptLedger?.vascularEffectSnapshot?.({withRecords:false})?.sequence ?? 0;
+    this.lastCircuitGraveSequence = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({withRecords:false})?.sequence ?? 0;
+    this.lastCircuitState = null;
     this.captureStartedAt = new Date().toISOString(); this.captureStoppedAt = null; this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
@@ -558,12 +679,12 @@ export class WorldObjectCensusSystem {
     const endAt = this.captureStoppedAt ?? exportedAt;
     const report = {
       pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', recorderRevision: 'C0C-REC1',
-      recorderSchemaVersion: 2,
+      recorderSchemaVersion: 2, circuitObservationRevision: 'C0D4-OBS1',
       captureStartedAt: this.captureStartedAt, captureStoppedAt: this.captureStoppedAt,
       captureDurationSeconds: this.captureStartedAt
         ? Number(((Date.parse(endAt) - Date.parse(this.captureStartedAt)) / 1000).toFixed(3)) : null,
       exportedAt, captureActive: this.captureActive,
-      limitations: 'C0C-REC1 retains all recorder-observed event details for the active session. Source 64-entry Silt ring and 150ms sampling may still hide source events. LS1E2 Vascular local response receives Silt provenance only: no grain transport, new material, progression, chemistry, Grave memory, save persistence or off-route simulation.',
+      limitations: 'C0D4-OBS1 appends Grave I, Grave II, Host effect/outcome, and Silt-return observations to REC1 without new gameplay. Events between 150ms polls or pruned from a producer ring may be missed. Owner state is retained across mounts, not browser reloads. No physical material transfer or off-route simulation is implied.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     // Compact JSON: no chronology lost, substantially less disk space than

@@ -1,0 +1,23 @@
+{
+  "pass": "C0D4-MOB1",
+  "requires": "C0D4-OBS1 (exact source)",
+  "purpose": "Read-only movement authority, environmental-force and action owner follow-up REC1 observations",
+  "changedFiles": [
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "beforeSha256": "00036f89104b3fb6e9048268c2f92690a2048623aa2113b5543f7942353b32a8",
+      "afterSha256": "78064e1611834cbc2c43749e5954801820828eb5d75922e4eb685ff18ed8ee1b"
+    }
+  ],
+  "preserves": [
+    "no changes to movement calculations or environmental current",
+    "no target/interaction dispatch changes",
+    "no circuit/Host/Grave/Silt/Vascular gameplay changes",
+    "REC1 legacy schema2 and export filename unchanged"
+  ],
+  "limits": [
+    "diagnostic classifications are not proof of collision or action rejection",
+    "raw controller edges and sampled owner state cannot prove dispatch",
+    "Windows Vite build and live browser acceptance pending"
+  ]
+}
