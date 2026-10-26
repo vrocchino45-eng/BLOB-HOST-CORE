@@ -1,0 +1,63 @@
+{
+  "pass": "C0E2",
+  "baseline": "C0E1_INSTALLED",
+  "scope": "Connected anatomical travel pockets + session-local experimental persistence + REC1 additive observation",
+  "gameplayFiles": [
+    "src/world/RegionalTerritoryDefinitions.js",
+    "src/world/RegionalTerritoryVolume.js",
+    "src/world/RegionalTerritoryExpansion.js",
+    "src/player/PlayerMovementController.js",
+    "src/debug/WorldObjectCensusSystem.js"
+  ],
+  "locked": [
+    "C0D1\u2013C0D3 Host circuit",
+    "Silt/Vascular/Grave route gameplay",
+    "Grave II completion",
+    "Hub route commitments",
+    "Existing controller mappings and return transitions"
+  ],
+  "files": [
+    {
+      "path": "src/world/RegionalTerritoryDefinitions.js",
+      "before": null,
+      "after": "30c4275945ff9beefd12e4960cd3bc3e7aaff48b24fe23ee2c38076113f00c1d",
+      "sizeBytes": 2280
+    },
+    {
+      "path": "src/world/RegionalTerritoryVolume.js",
+      "before": null,
+      "after": "fd2069c723558b580286103f8d45f1d80077b7d809622608402dd00cd433cc66",
+      "sizeBytes": 3501
+    },
+    {
+      "path": "src/world/RegionalTerritoryExpansion.js",
+      "before": "9b3f3392dcdc5ec60074bc3a5b47436c28ff07c874a6ae31e864aef8c6d855d5",
+      "after": "68301de7247879376cccd7eb758c9683f3a2198480b7d9f285d5ccba77f580d2",
+      "sizeBytes": 17839
+    },
+    {
+      "path": "src/player/PlayerMovementController.js",
+      "before": "9c0542b4606fdfa3e9ef35e4bb8b6eafb4b1c86845a3ed594caed629fc913f4b",
+      "after": "0ecfd902afacd878055ab3aa8b55146e5ef7622cc6b5cb10f38a0bc44f5a9c97",
+      "sizeBytes": 89027
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "before": "7ba712e12f20efc5199601e4ca6dca1581684e67a176cdc6aea464feea54656b",
+      "after": "fe920be239fc7afb798681c9b0814d76147abeeb96d95a390d726f61b6d864cc",
+      "sizeBytes": 56968
+    },
+    {
+      "path": "scripts/validateC0E1CompoundTerritories.mjs",
+      "before": "eff6bd10524d04a6e275912049c4e5f0d55bf76d30f27f0d37bb07cefb66a30a",
+      "after": "75d11bba0ac64ff56e73de83875811d2035e68ade88704d7ce90f9c687ac5fcf",
+      "sizeBytes": 8925
+    },
+    {
+      "path": "scripts/validateC0E2CompoundSpatial.mjs",
+      "before": null,
+      "after": "dace792ce7b198204a5df86d55594b05219e51f9bb2621968dd333ae2da96256",
+      "sizeBytes": 10276
+    }
+  ]
+}

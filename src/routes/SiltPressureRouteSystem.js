@@ -6,6 +6,7 @@ import { SiltCompressionContact } from "../contact/SiltCompressionContact.js";
 import { SiltPlateSeat } from "../contact/SiltPlateSeat.js";
 import { SiltTrajectoryMemory } from "../contact/SiltTrajectoryMemory.js";
 import { SiltTrajectoryFieldProbe } from "../contact/SiltTrajectoryFieldProbe.js";
+import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -327,6 +328,9 @@ export class SiltPressureRouteSystem {
     this.animate(frameState, sample);
     this.animateHabitatFoundation(frameState);
     this.applyHostRhythmVisual(frameState);
+    this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
+      input: frameState.input, signal01: territorySignal("silt", {siltPressureEcho: this.graveIIPressureEcho}),
+      circuitStatus: this.graveIIReceiptId ? "grave_ii_outcome_consumed" : "no_return_outcome_yet", frameState});
     this.publish(frameState, true);
   }
 
@@ -593,6 +597,7 @@ export class SiltPressureRouteSystem {
     this.createSiltContactPatch();
     this.createDeepOrgan();
     this.createReturnFold();
+    this.territoryExpansion = new RegionalTerritoryExpansion({kind: "silt", parent: this.root});
     this.scene.add(this.root);
   }
 

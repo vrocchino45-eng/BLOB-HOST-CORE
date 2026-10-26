@@ -33,6 +33,8 @@ export class WorldObjectCensusSystem {
     this.mobLastSampleMs = null;
     this.mobLastActionSignature = null;
     this.mobPendingActions = [];
+    this.territoryVisitKeys = new Set();
+    this.territoryLastReadKey = null;
     this.recIndicator = null;
     this.recNoticeTimeout = null;
     this.keyHandler = event => {
@@ -753,6 +755,32 @@ export class WorldObjectCensusSystem {
     }
     this.mobPrevious={at:now,owner:current};
   }
+  // C0E1: snapshot-only territory provenance; experimental reads do not
+  // consume buttons, mint Host receipts, alter objectives or transfer material.
+  sampleTerritoryExploration() {
+    const current = this.frameState?.territoryExploration;
+    if (current?.pass !== 'C0E1' || !current.active) return;
+    if (current.owner !== `${current.region}:RegionalTerritoryExpansion`) return;
+    const siteId = current.nearestSiteId;
+    if (siteId) {
+      const key = `${current.region}:${siteId}`;
+      if (!this.territoryVisitKeys.has(key)) {
+        this.territoryVisitKeys.add(key);
+        this.recordEvent('c0e1-territory-discovered', {
+          region: current.region, siteId, distance: current.nearestSiteDistance,
+          circuitStatus: current.circuitStatus, signal01: current.signal01,
+          note: 'Proximity read, not independent progression or objective credit.'
+        });
+      }
+    }
+    const read = this.frameState?.territoryExplorationLastRead;
+    if (read?.kind !== 'c0e1_local_exploratory_read' || !Number.isSafeInteger(read.localSequence)) return;
+    const key = `${read.region}:${read.localSequence}`;
+    if (key !== this.territoryLastReadKey) {
+      this.territoryLastReadKey = key;
+      this.recordEvent('c0e1-territory-verb-read', { read });
+    }
+  }
   sampleInputs() {
     // Raw browser gamepad button/axis telemetry, not inferred game verbs.
     const pads = typeof navigator !== 'undefined' && navigator.getGamepads ? Array.from(navigator.getGamepads()).filter(Boolean) : [];
@@ -795,6 +823,7 @@ export class WorldObjectCensusSystem {
     this.sampleVascularSiltResponse();
     this.sampleVascularPresentation();
     this.sampleCircuit();
+    this.sampleTerritoryExploration();
     this.updateRecordIndicator();
     const fs = this.frameState ?? {};
     const aim = fs.siltMaterialAim ?? {};
@@ -831,6 +860,10 @@ export class WorldObjectCensusSystem {
     this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
     this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;
     this.mobPendingActions=[];
+    this.territoryVisitKeys = new Set();
+    const initialRead = this.frameState?.territoryExplorationLastRead;
+    this.territoryLastReadKey = initialRead?.localSequence
+      ? `${initialRead.region}:${initialRead.localSequence}` : null;
     this.captureStartedAt = new Date().toISOString(); this.captureStoppedAt = null; this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
@@ -843,13 +876,14 @@ export class WorldObjectCensusSystem {
     const report = {
       pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', recorderRevision: 'C0C-REC1',
       recorderSchemaVersion: 2, circuitObservationRevision: 'C0D4-OBS1',
-      mobilityObservationRevision: 'C0D4-MOB1',
+      mobilityObservationRevision: 'C0D4-MOB1', territoryObservationRevision: 'C0E1',
       captureStartedAt: this.captureStartedAt, captureStoppedAt: this.captureStoppedAt,
       captureDurationSeconds: this.captureStartedAt
         ? Number(((Date.parse(endAt) - Date.parse(this.captureStartedAt)) / 1000).toFixed(3)) : null,
       exportedAt, captureActive: this.captureActive,
       limitations: 'C0D4-MOB1 adds read-only movement and button-owner context; action acceptance remains unknown without gameplay-owner acknowledgement. C0D4-OBS1 appends Grave I, Grave II, Host effect/outcome, and Silt-return observations to REC1 without new gameplay. Events between 150ms polls or pruned from a producer ring may be missed. Owner state is retained across mounts, not browser reloads. No physical material transfer or off-route simulation is implied.',
-      summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
+      summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(),
+      finalTerritoryObservation: this.frameState?.territoryExploration ?? null, finalCensus: this.snapshot(),
     };
     // Compact JSON: no chronology lost, substantially less disk space than
     // pretty-printing 1000s of high-frequency telemetry records.

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
 
 const ROUTE_CELL_ID = "CELL_VASCULAR_RHYTHM_ROUTE_001";
@@ -235,6 +236,9 @@ export class VascularRhythmRouteSystem {
     this.applyHostRhythmVisual(frameState);
     // Post-composition, bounded anatomical expression: never a gameplay input.
     this.applySiltPressureAnatomy();
+    this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
+      input: frameState.input, signal01: territorySignal("vascular", {membraneLoad: this.siltSignalReceiver.membraneLoad}),
+      circuitStatus: this.siltSignalReceiver.receivedTotal > 0 ? "silt_cause_received" : "awaiting_silt_cause", frameState});
     this.publish(frameState, true);
   }
 
@@ -455,6 +459,7 @@ export class VascularRhythmRouteSystem {
     this.createCurrentMotes();
     this.createCharge();
     this.createReturnFold();
+    this.territoryExpansion = new RegionalTerritoryExpansion({kind: "vascular", parent: this.root});
     this.scene.add(this.root);
   }
 

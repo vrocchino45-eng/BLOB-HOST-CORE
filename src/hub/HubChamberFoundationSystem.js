@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 
 const RECIPE_ID = "HUB_CHAMBER_PRESENTATION_LOCK_HC006JA";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -269,6 +270,12 @@ export class HubChamberFoundationSystem {
     this.updateInheritedLivingState(frameState);
     this.animate(dt, frameState.runtimeSeconds ?? 0, routeIdentityReady, frameState);
     this.updateCoreSpatialMirror(frameState, dt, frameState.runtimeSeconds ?? 0);
+    this.territoryExpansion?.update({dt, time: frameState.runtimeSeconds ?? 0, playerPosition: this.playerRoot.position,
+      input: frameState.input, signal01: territorySignal("hub", {
+        siltReceived: frameState.hostConnections?.acceptedTotal ?? 0,
+        vascularReceived: frameState.vascularRhythmRoute?.siltSignalResponse?.receivedTotal ?? 0,
+        graveResolved: frameState.graveResonanceGameplay?.completed ? 1 : 0}),
+      circuitStatus: "junction_read_only", frameState});
 
     this.spatialReadabilityRefreshAge += Math.max(0, dt);
     const spatialReadabilityRefreshDue = !Number.isFinite(this.spatialReadabilityRefreshAge)
@@ -371,6 +378,7 @@ export class HubChamberFoundationSystem {
     this.createThreeRouteConvergenceVisuals();
     this.createMemoryFragment();
     this.createPlayerTrail();
+    this.territoryExpansion = new RegionalTerritoryExpansion({kind: "hub", parent: this.root, offset: position.toArray()});
   }
 
   createDepthArchitecture(center, visual) {

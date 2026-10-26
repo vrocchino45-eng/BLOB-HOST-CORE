@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GraveVascularEffectMemory } from "./GraveVascularEffectMemory.js";
 import { graveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
+import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 
 const ROUTE_CELL_ID = "CELL_GRAVE_MEMORY_RESIDUE_BED_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -187,6 +188,9 @@ export class GraveMemoryRouteSystem {
     this.updateInteractions(dt, frameState);
     this.updateVisualResponse(dt, frameState);
     this.applyHostRhythmVisual(frameState);
+    this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
+      input: frameState.input, signal01: territorySignal("grave", {memoryPressure: this.vascularEffectMemory.memoryPressure}),
+      circuitStatus: this.vascularEffectMemory.receivedTotal > 0 ? "vascular_history_retained" : "no_history_yet", frameState});
     this.publish(frameState, true);
   }
 
@@ -458,6 +462,7 @@ export class GraveMemoryRouteSystem {
 
     this.createMemoryThread();
     this.createConsequenceVisuals();
+    this.territoryExpansion = new RegionalTerritoryExpansion({kind: "grave", parent: this.root});
 
     this.scene.add(this.root);
   }
