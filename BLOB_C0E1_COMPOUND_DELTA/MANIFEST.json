@@ -1,0 +1,80 @@
+{
+  "pass": "C0E1",
+  "name": "Compound Host Territories / 3-6-12 Exploration Layer",
+  "requires": "C0D4-MOB1 exact owner baselines",
+  "readyLabel": "C0D4_MOB1_READY",
+  "installedLabel": "C0E1_INSTALLED",
+  "files": [
+    {
+      "path": "src/world/RegionalTerritoryExpansion.js",
+      "before": null,
+      "after": "9b3f3392dcdc5ec60074bc3a5b47436c28ff07c874a6ae31e864aef8c6d855d5",
+      "bytes": 14857,
+      "status": "new"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "before": "b28b8b0fa6e00f5c7e88fa4d7a1969ad3ab3c33dde391d17bb95d37178224e50",
+      "after": "891f597320d5a380b2e5a35b08cbf84a67d3298edfb70f2df5a4e97d6c392e6f",
+      "bytes": 120277,
+      "status": "modified"
+    },
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "before": "75296671c35f10a011488efd72415fa482f5ef466188c286a66d9c916e8c3d35",
+      "after": "ff986332b69ad75f8d555b822450d988a7c8ee1dab1e27a823a35ab784714986",
+      "bytes": 83842,
+      "status": "modified"
+    },
+    {
+      "path": "src/routes/GraveMemoryRouteSystem.js",
+      "before": "b650faa559601256051fb06bc2208e066f82ef04b2a63bdb6406957b838505b1",
+      "after": "e9c1ff01d057e3fc185aa67def9dd890ab7156feb75cc49b7ff02064e8965e93",
+      "bytes": 68920,
+      "status": "modified"
+    },
+    {
+      "path": "src/hub/HubChamberFoundationSystem.js",
+      "before": "d9a8d4c18af73c853381f63cf4d5a6954fe7039a7f17a6630bc95df6d95ec842",
+      "after": "22b172c338b12154bb9088ec429d09e4603fd1b19ad0ece4d87527dc3ef600f8",
+      "bytes": 148293,
+      "status": "modified"
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "before": "78064e1611834cbc2c43749e5954801820828eb5d75922e4eb685ff18ed8ee1b",
+      "after": "7ba712e12f20efc5199601e4ca6dca1581684e67a176cdc6aea464feea54656b",
+      "bytes": 56388,
+      "status": "modified"
+    },
+    {
+      "path": "scripts/validateC0E1CompoundTerritories.mjs",
+      "before": null,
+      "after": "eff6bd10524d04a6e275912049c4e5f0d55bf76d30f27f0d37bb07cefb66a30a",
+      "bytes": 8152,
+      "status": "new"
+    }
+  ],
+  "gameplayAuthorityChanged": false,
+  "content": {
+    "regionOwners": [
+      "Silt",
+      "Vascular",
+      "Grave",
+      "Hub"
+    ],
+    "sites": 12,
+    "grammar": "3-6-12",
+    "readOnlyCircuitPresentation": true,
+    "newRecEvents": [
+      "c0e1-territory-discovered",
+      "c0e1-territory-verb-read"
+    ]
+  },
+  "limitations": [
+    "new tissue and observational interactions stay inside existing region bounds",
+    "no new gates or physical collision spaces",
+    "does not solve Hub movement-boundary handoff",
+    "real Three.js Vite browser test pending"
+  ]
+}

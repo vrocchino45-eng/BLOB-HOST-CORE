@@ -26,6 +26,13 @@ export class WorldObjectCensusSystem {
     this.lastCircuitState = null;
     this.lastCircuitVascularSequence = 0;
     this.lastCircuitGraveSequence = 0;
+    // C0D4-MOB1: observer only. All locomotion/input ownership stays external.
+    this.mobPrevious = null;
+    this.mobBlockSinceMs = null;
+    this.mobBlockReported = null;
+    this.mobLastSampleMs = null;
+    this.mobLastActionSignature = null;
+    this.mobPendingActions = [];
     this.recIndicator = null;
     this.recNoticeTimeout = null;
     this.keyHandler = event => {
@@ -595,6 +602,157 @@ export class WorldObjectCensusSystem {
       legacyTargetId: fs.targeting?.targetId ?? null,
     };
   }
+  // C0D4-MOB1: sample already-published kinematics and interaction owners.
+  // A button edge is input evidence, not evidence that the owner accepted an action.
+  mobilityOwnerSnapshot() {
+    const fs = this.frameState ?? {};
+    const kin = fs.playerKinematics ?? {};
+    const attachment = fs.playerAttachment ?? {};
+    const flight = fs.hubRouteCommitFlight ?? {};
+    const hub = fs.hubInvestigationGameplay ?? {};
+    const chorus = fs.signalChorusLayeredInteraction ?? {};
+    const grave = fs.graveMemoryRoute ?? {};
+    const resonance = fs.graveResonanceGameplay ?? {};
+    const commit = fs.hubRouteCommit ?? {};
+    const target = fs.targeting ?? {};
+    const input = fs.input ?? {};
+    const vec = v => ({
+      x: Number.isFinite(v?.x) ? Number(v.x.toFixed(3)) : 0,
+      y: Number.isFinite(v?.y) ? Number(v.y.toFixed(3)) : 0,
+      z: Number.isFinite(v?.z) ? Number(v.z.toFixed(3)) : 0
+    });
+    return {
+      cellId: fs.activeCellId ?? 'none',
+      input: {moveX: Number(input.moveX ?? 0), moveY: Number(input.moveY ?? 0),
+        moveZ: Number(input.moveZ ?? 0), interactPressed: !!input.interactPressed,
+        pulsePressed: !!input.pulsePressed, pulseEventId: input.pulseEventId ?? null,
+        absorbHeld: !!input.absorbHeld, stabilizeHeld: !!input.stabilizeHeld,
+        boostHeld: !!input.boostHeld},
+      motion: {position: vec(kin.position), velocity: vec(kin.velocity),
+        intendedAcceleration: vec(kin.desiredMoveVector), environmentalAcceleration: vec(kin.environmentalForceVector),
+        flowVector: vec(kin.flowVector), speed: Number(kin.speed ?? 0),
+        inputMagnitude: Number(kin.inputMagnitude ?? 0), activeSpeedLimit: Number(kin.activeSpeedLimit ?? 0),
+        locomotionMode: kin.locomotionMode ?? 'unknown',
+        boundaryPressure: Number(kin.boundaryPressure ?? 0),
+        boundaryMode: kin.movementBoundary?.mode ?? 'unknown',
+        boundaryRegionId: kin.movementBoundary?.regionId ?? 'unknown',
+        directionalFlowAlignment: Number(kin.directionalFlowAlignment ?? 0),
+        directTendrilPullActive: kin.tendrilSurfaceLocomotion?.active === true,
+        convergenceReachabilityActive: kin.convergenceReachabilityActive === true},
+      attachment: {active: attachment.active === true, state: attachment.state ?? 'none',
+        authority: attachment.authority ?? 'none', peelIntent01: Number(attachment.peelIntent01 ?? 0),
+        reacquireBlocked: attachment.reacquireBlocked === true, surfaceId: attachment.ownerSurfaceId ?? 'none',
+        supportCount: Number(attachment.tendrilSupportCount ?? 0)},
+      guidedHub: {active: flight.active === true, owner: flight.owner ?? 'none',
+        routeId: flight.routeId ?? 'none', progress: Number(flight.progress ?? 0)},
+      interaction: {targetId: target.targetId ?? null, targetReason: target.attentionReason ?? null,
+        hubLastAction: hub.lastAction ?? null, hubNearestRouteId: hub.nearestRouteId ?? null,
+        hubNearestRouteDistance: Number.isFinite(hub.nearestRouteDistance) ? Number(hub.nearestRouteDistance.toFixed(3)) : null,
+        hubCommitStatus: commit.status ?? null, chorusStage: chorus.stage ?? null,
+        chorusLastInteraction: chorus.lastInteraction ?? null,
+        chorusNextAction: chorus.nextAction ?? null, graveStage: grave.stage ?? null,
+        graveLastInteraction: grave.lastInteraction ?? null,
+        resonanceInteractions: Number(resonance.interactionCount ?? 0),
+        resonanceCandidate: resonance.resolutionCandidate ?? null}
+    };
+  }
+  mobilityActionEdge(pad, buttonIndex) {
+    if (![0, 2, 6, 7].includes(buttonIndex)) return;
+    const owner = this.mobilityOwnerSnapshot();
+    this.mobPendingActions.push({at:Date.now(),padIndex:pad.index,buttonIndex,owner});
+    if (this.mobPendingActions.length > 24) this.mobPendingActions.shift();
+    this.recordEvent('c0d4-mob1-action-context', {
+      padIndex: pad.index, buttonIndex, owner,
+      acceptance: 'unknown',
+      caveat: 'Raw button-down with same-sample owner state. Does not establish dispatch, consumed action, or accepted target.'
+    });
+  }
+  sampleMobility() {
+    if (!this.captureActive) return;
+    const current = this.mobilityOwnerSnapshot();
+    const now = Date.now();
+    const pending = [];
+    for (const action of this.mobPendingActions ?? []) {
+      if (now-action.at < 350) {pending.push(action);continue;}
+      const before = action.owner.interaction;
+      const after = current.interaction;
+      this.recordEvent('c0d4-mob1-action-followup', {
+        padIndex:action.padIndex, buttonIndex:action.buttonIndex,
+        elapsedMs:now-action.at, cellAtPress:action.owner.cellId,
+        cellAtFollowup:current.cellId,
+        stateChanged:JSON.stringify(before)!==JSON.stringify(after),
+        before, after,
+        acceptance:'not_proven',
+        caveat:'Owner snapshot comparison after button press; not proof of consumption, rejection, or causation.'
+      });
+    }
+    this.mobPendingActions=pending;
+    const prev = this.mobPrevious;
+    const m = current.motion;
+    const guided = current.guidedHub.active;
+    const intended = m.intendedAcceleration;
+    const env = m.environmentalAcceleration;
+    const input = current.input;
+    const rawMagnitude = Math.hypot(input.moveX, input.moveY, input.moveZ);
+    const intentionMagnitude = Math.hypot(intended.x, intended.y, intended.z);
+    const envMagnitude = Math.hypot(env.x, env.y, env.z);
+    const norm = Math.max(0.000001, intentionMagnitude);
+    const opposition = intentionMagnitude > 0.01 && envMagnitude > 0.01
+      ? (intended.x*env.x + intended.y*env.y + intended.z*env.z) / (norm*envMagnitude)
+      : 0;
+    const elapsed = prev && now > prev.at ? (now-prev.at)/1000 : 0;
+    const displacement = prev && prev.owner.cellId === current.cellId
+      ? {x:m.position.x-prev.owner.motion.position.x,
+        y:m.position.y-prev.owner.motion.position.y,
+        z:m.position.z-prev.owner.motion.position.z} : null;
+    const motionAlongIntent = displacement && intentionMagnitude > 0.01 && elapsed > 0
+      ? (displacement.x*intended.x + displacement.y*intended.y + displacement.z*intended.z) / (norm*elapsed)
+      : null;
+    const requestActive = rawMagnitude >= 0.55 || m.inputMagnitude >= 0.55;
+    const lowProgress = guided ? rawMagnitude >= 0.55
+      : requestActive && (motionAlongIntent !== null && motionAlongIntent < 0.08);
+    let reason = 'unclassified_low_progress';
+    if (guided) reason = 'guided_hub_motion_owns_translation';
+    else if (m.boundaryPressure > 0.004) reason = 'boundary_correction_candidate';
+    else if (current.attachment.active) reason = 'surface_traction_or_attachment_candidate';
+    else if (intentionMagnitude < 0.01) reason = 'intent_not_reaching_movement_controller';
+    else if (opposition < -0.5 && envMagnitude > intentionMagnitude*0.3) reason = 'opposing_environmental_force_candidate';
+    else reason = 'low_forward_progress_cause_unresolved';
+    // Report a sustained phenomenon, not a per-frame estimate of a collision.
+    if (lowProgress && prev && prev.owner.cellId === current.cellId) {
+      if (this.mobBlockSinceMs === null || this.mobBlockReason !== reason) {
+        this.mobBlockSinceMs = now; this.mobBlockReason = reason; this.mobBlockReported = null;
+      }
+      if (now-this.mobBlockSinceMs >= 750 && this.mobBlockReported !== reason) {
+        this.mobBlockReported = reason;
+        this.recordEvent('c0d4-mob1-sustained-low-progress', {
+          candidateReason: reason, observedForSeconds: Number(((now-this.mobBlockSinceMs)/1000).toFixed(2)),
+          estimatedForwardSpeed: motionAlongIntent === null ? null : Number(motionAlongIntent.toFixed(3)),
+          forceOppositionCosine: Number(opposition.toFixed(3)),
+          playerInputMagnitude: Number(rawMagnitude.toFixed(3)), owner: current,
+          caveat: 'Diagnostic candidate, not a collision, physical cause, or input-dispatch proof.'
+        });
+      }
+    } else { this.mobBlockSinceMs=null; this.mobBlockReported=null; this.mobBlockReason=null; }
+    // Low-frequency numeric context allows comparing movement while holding
+    // deliberate input, even if no threshold is crossed.
+    if (requestActive && (this.mobLastSampleMs === null || now-this.mobLastSampleMs >= 900)) {
+      this.mobLastSampleMs=now;
+      this.recordEvent('c0d4-mob1-movement-sample', {
+        owner:current,
+        forwardSpeed:motionAlongIntent === null ? null : Number(motionAlongIntent.toFixed(3)),
+        forceOppositionCosine:Number(opposition.toFixed(3)),
+        caveat:'150ms poll of published state. Force and velocity are separate; a sample alone does not prove obstruction.'
+      });
+    }
+    // Track route-guidance changes even when there is no movement request.
+    const guidedSignature = `${current.cellId}|${guided}|${current.guidedHub.routeId}`;
+    if (this.mobLastGuidedSignature !== guidedSignature) {
+      this.mobLastGuidedSignature=guidedSignature;
+      this.recordEvent('c0d4-mob1-guidance-state-change', {owner:current});
+    }
+    this.mobPrevious={at:now,owner:current};
+  }
   sampleInputs() {
     // Raw browser gamepad button/axis telemetry, not inferred game verbs.
     const pads = typeof navigator !== 'undefined' && navigator.getGamepads ? Array.from(navigator.getGamepads()).filter(Boolean) : [];
@@ -610,6 +768,7 @@ export class WorldObjectCensusSystem {
         if (pad.buttons[i] !== (old?.buttons[i] ?? false)) {
           this.recordEvent('gamepad-button-edge', { padIndex: pad.index, buttonIndex: i,
             pressed: pad.buttons[i], target: this.materialContext() });
+          if (pad.buttons[i]) this.mobilityActionEdge(pad, i);
         }
       }
       if (!old || pad.axes.some((x, i) => Math.abs(x - (old.axes[i] ?? 0)) >= 0.4)) {
@@ -629,6 +788,7 @@ export class WorldObjectCensusSystem {
   }
   sampleState() {
     this.sampleInputs();
+    this.sampleMobility();
     this.sampleAuthority();
     this.sampleSiltDecisions();
     this.sampleHostConnections();
@@ -668,6 +828,9 @@ export class WorldObjectCensusSystem {
     this.lastCircuitVascularSequence = this.hostConnectionReceiptLedger?.vascularEffectSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitGraveSequence = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitState = null;
+    this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
+    this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;
+    this.mobPendingActions=[];
     this.captureStartedAt = new Date().toISOString(); this.captureStoppedAt = null; this.captureActive = true;
     this.capturePullBaseline = this.authoritySnapshot().heldMaterialMotion.cumulativePullDistance;
     this.recordEvent('capture-started'); this.sampleState(); this.updateRecordIndicator();
@@ -680,11 +843,12 @@ export class WorldObjectCensusSystem {
     const report = {
       pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', recorderRevision: 'C0C-REC1',
       recorderSchemaVersion: 2, circuitObservationRevision: 'C0D4-OBS1',
+      mobilityObservationRevision: 'C0D4-MOB1',
       captureStartedAt: this.captureStartedAt, captureStoppedAt: this.captureStoppedAt,
       captureDurationSeconds: this.captureStartedAt
         ? Number(((Date.parse(endAt) - Date.parse(this.captureStartedAt)) / 1000).toFixed(3)) : null,
       exportedAt, captureActive: this.captureActive,
-      limitations: 'C0D4-OBS1 appends Grave I, Grave II, Host effect/outcome, and Silt-return observations to REC1 without new gameplay. Events between 150ms polls or pruned from a producer ring may be missed. Owner state is retained across mounts, not browser reloads. No physical material transfer or off-route simulation is implied.',
+      limitations: 'C0D4-MOB1 adds read-only movement and button-owner context; action acceptance remains unknown without gameplay-owner acknowledgement. C0D4-OBS1 appends Grave I, Grave II, Host effect/outcome, and Silt-return observations to REC1 without new gameplay. Events between 150ms polls or pruned from a producer ring may be missed. Owner state is retained across mounts, not browser reloads. No physical material transfer or off-route simulation is implied.',
       summary: this.timelineSummary(), events: this.captureEvents, finalAuthority: this.authoritySnapshot(), finalCensus: this.snapshot(),
     };
     // Compact JSON: no chronology lost, substantially less disk space than
