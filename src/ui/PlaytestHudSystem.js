@@ -1,3 +1,4 @@
+import { readHostLanguage } from '../language/HostLanguageGrammar.js';
 export class PlaytestHudSystem {
   constructor({ recipeDataSystem, frameState }) {
     if (!recipeDataSystem) throw new Error("[PlaytestHudSystem] recipeDataSystem is required.");
@@ -225,6 +226,10 @@ export class PlaytestHudSystem {
       ? `SURF ${surfaceCapabilityAudit.authoredSurfaceCount ?? 0} · ${surfaceCapabilityAudit.nearestValid ? `${surfaceCapabilityAudit.nearestProfileId ?? "unknown"}@${auditDistance(surfaceCapabilityAudit.nearestDistance)}` : "NONE"} · ${surfaceCapabilityAudit.findingCode ?? "audit_pending"}`
       : "";
     const auditLine = [targetingAuditLine, surfaceAuditLine].filter(Boolean).join("\n");
+    // One player-facing vocabulary shared across Silt, Vascular, Grave and Hub.
+    // This readout does not act as an input owner or progress/receipt signal.
+    const languageRead = readHostLanguage(frameState);
+    const languageLine = languageRead?.lines?.join("\n") ?? "";
 
     const selectedChemistry = coreWorkManipulation.selectedChemistry ?? spatialCoreChemistry.selectedPlacement ?? null;
     const topology = coreWorkManipulation.topology ?? spatialCoreChemistry.topology ?? null;
@@ -444,7 +449,8 @@ export class PlaytestHudSystem {
       actionHint,
       primaryInstruction,
       statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
-      auditLine,
+      auditLine: [auditLine, languageLine].filter(Boolean).join("\n"),
+      languageRead,
       controlLine: testPlatformToast ? `${this.controlLine(frameState)} · Shift+1..8 test platforms` : this.controlLine(frameState),
       technicalIdsPlayerFacing: false,
       onePrimaryInstruction: true,
