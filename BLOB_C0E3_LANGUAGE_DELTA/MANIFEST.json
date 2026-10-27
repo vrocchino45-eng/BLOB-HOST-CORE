@@ -1,0 +1,26 @@
+{
+  "pass": "C0E3-LANG1",
+  "baseline": "C0E3_INSTALLED",
+  "scope": "one minimal HUD owner and read-only source, no changed regional systems",
+  "anchor": {
+    "path": "src/world/RegionalTerritoryDynamics.js",
+    "sha256": "ea45208e34009352b9fbfea5140c59b74ad9ff60e76d68d0fb4f609a1907ceee"
+  },
+  "files": [
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "before": "9e1bafc9a6cb37b3349295ba0e0a0f63daf3ca8b1174ae9207641880738b6d55",
+      "after": "8411b8b7fd6ffeb66ce36e4c5986da8d12c99f190f8dd3a36e5f9a03a0d04623"
+    },
+    {
+      "path": "src/language/HostLanguageGrammar.js",
+      "before": null,
+      "after": "3ba847265311d450087258480177e0ec09559aacc7e3bb1c9a57f01f60f8a7e8"
+    },
+    {
+      "path": "scripts/validateC0E3LanguageHud.mjs",
+      "before": null,
+      "after": "70d15b3af665ae80a12c4220455b19238420eaca9b0ce8984054b96da8863a57"
+    }
+  ]
+}

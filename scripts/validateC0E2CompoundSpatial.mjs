@@ -37,9 +37,16 @@ class Mat {constructor(options={}) { Object.assign(this, options); }}
 class Mesh extends Obj { constructor(geometry,material) {super();this.geometry=geometry;this.material=material;} }
 class IMesh extends Mesh { constructor(g,m,count) {super(g,m);this.count=count;this.instanceMatrix={needsUpdate:false};this.matrices=[];} setMatrixAt(i,m){this.matrices[i]=m;} }
 class Geometry {constructor(...args){this.args=args;}}
+class Curve extends Geometry {
+  getPoint(t) {
+    const points=this.args[0], k=Math.max(0,Math.min(1,t))*(points.length-1);
+    const index=Math.min(points.length-2,Math.floor(k));
+    return points[index].clone().lerp(points[index+1],k-index);
+  }
+}
 const THREE={Group:Obj,Object3D:Obj,Vector3:Vec,Mesh,InstancedMesh:IMesh,
   DodecahedronGeometry:Geometry,IcosahedronGeometry:Geometry,CapsuleGeometry:Geometry,
-  SphereGeometry:Geometry,TubeGeometry:Geometry,TorusGeometry:Geometry,CatmullRomCurve3:Geometry,
+  SphereGeometry:Geometry,TubeGeometry:Geometry,TorusGeometry:Geometry,CatmullRomCurve3:Curve,
   MeshStandardMaterial:Mat,MeshBasicMaterial:Mat,DoubleSide:2};
 let defs=load('src/world/RegionalTerritoryDefinitions.js').replace(/^export /gm, '');
 const context={THREE,Math,Number,Object,Set,Array,Error,console};context.globalThis=context;
@@ -50,7 +57,10 @@ volumes=volumes.replace(/^import \{ territoryDefinition \} from '.\/RegionalTerr
 vm.runInNewContext(volumes,context,{filename:'RegionalTerritoryVolume.js'});
 let coupling=load('src/world/RegionalTerritoryCoupling.js').replace(/^export (const|function) /gm,'$1 ');
 vm.runInNewContext(coupling,context,{filename:'RegionalTerritoryCoupling.js'});
+let dynamics=load('src/world/RegionalTerritoryDynamics.js').replace(/^export (const|function) /gm,'$1 ');
+vm.runInNewContext(dynamics,context,{filename:'RegionalTerritoryDynamics.js'});
 let body=load('src/world/RegionalTerritoryExpansion.js');
+body=body.replace(/^import \{ C0E3_PHYSIOLOGY, c0e3ApplyPressureRelief, c0e3AdvancePacket, c0e3CreatePackets \} from '.\/RegionalTerritoryDynamics.js';\n/m,'');
 body=body.replace(/^import \* as THREE from 'three';\n/m, '')
   .replace(/^import \{ c0e2bApplyLocalCoupling \} from '.\/RegionalTerritoryCoupling.js';\n/m,'')
   .replace(/^import \{ c0e2TerritoryPockets \} from '.\/RegionalTerritoryVolume.js';\n/m, '')

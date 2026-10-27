@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { c0e2TerritoryPockets } from './RegionalTerritoryVolume.js';
 import { territoryDefinition } from './RegionalTerritoryDefinitions.js';
 import { c0e2bApplyLocalCoupling } from './RegionalTerritoryCoupling.js';
+import { C0E3_PHYSIOLOGY, c0e3ApplyPressureRelief, c0e3AdvancePacket, c0e3CreatePackets } from './RegionalTerritoryDynamics.js';
 export { territoryDefinition } from './RegionalTerritoryDefinitions.js';
 
 // C0E1: spatial interpretation of existing regional state, not a new Host owner.
@@ -56,6 +57,10 @@ export class RegionalTerritoryExpansion {
     this.lastPulseEventId = null;
     this.lastLocalExperiment = null;
     this.lastLocalCircuit = null;
+    this.lastLivingResponse = null;
+    this.c0e3WavesCompleted = 0;
+    this.c0e3DissipationCount = 0;
+    this.c0e3ReliefCount = 0;
     this.experiments = [];
     this.experimentSequence = 0;
     this.observationCount = { pulse: 0, stabilize: 0, absorb: 0 };
@@ -156,6 +161,7 @@ export class RegionalTerritoryExpansion {
       this.sites.push({ ...site, point, group, body, shelves, ribs, flecks,
         baseMaterial, accentMaterial, fleckMaterial, nerveMaterial, response: 0,
         observations: 0, lastVerb: 'none', imprint: 0, strain: 0, void: 0,
+        c0e3Cooldown:0, c0e3ReliefFlash:0,
         pocketVisited: false, pocketBody: null, passage: null });
     });
     // C0E2-B: three local site pairs, each with two directed tissue strands.
@@ -167,11 +173,23 @@ export class RegionalTerritoryExpansion {
         const bend=from.clone().lerp(to,0.5);
         bend.y += direction[0]<direction[1] ? 0.24 : -0.24;
         const linkMaterial=this.register(mkMat(spec.palette[direction[0]], 0.085));
-        const linkGeometry=new THREE.TubeGeometry(new THREE.CatmullRomCurve3([from.clone(),bend,to.clone()],false,'centripetal'),18,0.028,5,false);
+        const curve=new THREE.CatmullRomCurve3([from.clone(),bend,to.clone()],false,'centripetal');
+        const linkGeometry=new THREE.TubeGeometry(curve,24,kind==='vascular'?0.055:kind==='hub'?0.042:0.032,6,false);
         const link=new THREE.Mesh(linkGeometry,linkMaterial);
         link.name=`${this.sites[direction[0]].id}_to_${this.sites[direction[1]].id}_c0e2b_local_link`;
         this.root.add(link);this.geometries.push(linkGeometry);
-        this.localLinks.push({from:direction[0],to:direction[1],material:linkMaterial,response:0});
+        // One bounded luminous propagator per directed connection; the mesh
+        // is reused, never allocated on each button press. Entirely untargetable.
+        const packetMaterial=this.register(new THREE.MeshBasicMaterial({
+          color:spec.palette[direction[0]],transparent:true,opacity:0,depthWrite:false}));
+        const packetGeometry=new THREE.IcosahedronGeometry(kind==='vascular'?0.17:0.14,1);
+        this.geometries.push(packetGeometry);
+        const packetMarker=new THREE.Mesh(packetGeometry,packetMaterial);
+        packetMarker.name=`${link.name}_c0e3_traveling_response`;
+        packetMarker.visible=false;
+        this.root.add(packetMarker);
+        this.localLinks.push({from:direction[0],to:direction[1],material:linkMaterial,
+          response:0,curve,packetMaterial,packetMarker,packet:null});
       }
     }
     // C0E2: three REAL movement pockets are supplied by the PlayerMovementController.
@@ -226,6 +244,11 @@ export class RegionalTerritoryExpansion {
     const step = Math.max(0, Math.min(0.12, safeNumber(dt)));
     this.elapsed += step;
     const signal = territoryClamp01(signal01);
+    const physiology=C0E3_PHYSIOLOGY[this.kind];
+    for(const site of this.sites){
+      site.c0e3Cooldown=Math.max(0,site.c0e3Cooldown-step);
+      site.c0e3ReliefFlash=Math.max(0,site.c0e3ReliefFlash-step*0.9);
+    }
     // Local coordinates are relative to the entry-anchored parent and our offset.
     const worldPoint = playerPosition?.isVector3 ? playerPosition : null;
     const localPosition = worldPoint ? this.root.worldToLocal(worldPoint.clone()) : null;
@@ -263,8 +286,18 @@ export class RegionalTerritoryExpansion {
       const nearby = localPosition ? territoryClamp01(1 - Math.min(
         site.point.distanceTo(localPosition), site.pocketLocal?.distanceTo(localPosition) ?? Infinity) / 3.3) : 0;
       const breath = Math.sin(phase) * 0.045;
-      site.body.scale.y = (this.kind === 'vascular' ? 1.05 : this.kind === 'hub' ? 1.35 : this.kind === 'grave' ? 0.19 : 0.29)
-        * (1 + signal * 0.08 + nearby * 0.07 + breath + site.response * 0.14);
+      // C0E3: a distinct physical language for each local physiology.
+      // All deformation is presentation-only, with bounded amplitudes.
+      const nativeHeight=this.kind === 'vascular' ? 1.05 : this.kind === 'hub' ? 1.35 : this.kind === 'grave' ? 0.19 : 0.29;
+      const wave=Math.sin(this.elapsed*physiology.cadence+index*2.094);
+      const regionalShape=this.kind==='silt'
+        ? -site.strain*0.17+site.imprint*0.08+site.c0e3ReliefFlash*0.14
+        : this.kind==='vascular' ? site.strain*0.15+wave*0.095
+        : this.kind==='grave' ? site.imprint*0.11-site.void*0.08+site.c0e3ReliefFlash*0.18
+        : site.imprint*0.07+wave*0.075+site.c0e3ReliefFlash*0.1;
+      site.body.scale.y = nativeHeight * (1 + signal * 0.08 + nearby * 0.07 + breath + site.response * 0.14 + regionalShape);
+      if(this.kind==='vascular') site.body.scale.x=0.7*(1+site.strain*0.14+wave*0.04);
+      if(this.kind==='grave') site.shelves.forEach((plate,i)=>{plate.position.y=(i-1)*0.18+site.imprint*0.07-site.void*0.08;});
       site.group.rotation.y = Math.sin(phase * 0.34) * 0.045;
       site.baseMaterial.emissiveIntensity = 0.045 + signal * 0.17 + nearby * 0.055 + site.response * 0.32;
       site.accentMaterial.emissiveIntensity = 0.06 + signal * 0.11 + site.response * 0.29;
@@ -274,7 +307,7 @@ export class RegionalTerritoryExpansion {
       // decay removes a successful local experiment between two encounters.
       site.group.scale.y = 1 + site.imprint * 0.22 - site.strain * 0.11;
       site.group.scale.x = 1 + site.strain * 0.13 - site.void * 0.08;
-      site.baseMaterial.emissiveIntensity += site.imprint * 0.13;
+      site.baseMaterial.emissiveIntensity += site.imprint * 0.13+site.c0e3ReliefFlash*0.37;
       site.pocketMaterial.opacity = 0.10 + site.imprint * 0.10 + site.strain * 0.045;
       site.passageMaterial.opacity = 0.19 + signal * 0.1 + site.imprint * 0.16;
       site.apertureMaterial.emissiveIntensity = 0.08 + site.strain * 0.25 + site.imprint * 0.13;
@@ -294,6 +327,22 @@ export class RegionalTerritoryExpansion {
       const source=this.sites[link.from], receiver=this.sites[link.to];
       link.material.opacity=0.085 + Math.min(0.18,(source.strain+receiver.imprint+receiver.void)*0.032) + link.response*0.32;
       link.material.emissiveIntensity=0.07+link.response*0.41+receiver.imprint*0.08;
+      if(link.packet){
+        const packet=c0e3AdvancePacket(link.packet,step);
+        link.packet=packet.complete?null:packet;
+        if(packet.complete){
+          this.c0e3WavesCompleted++;
+          if(packet.delivered) receiver.response=Math.min(1,receiver.response+0.23);
+        }
+        link.packetMarker.visible=!packet.complete;
+        if(!packet.complete){
+          link.packetMarker.position.copy(link.curve.getPoint(packet.progress));
+          link.packetMarker.scale.setScalar(0.8+packet.intensity*0.5);
+          link.packetMaterial.opacity=Math.min(0.93,packet.intensity*0.8);
+          link.material.emissiveIntensity+=packet.intensity*0.68;
+          link.material.opacity+=packet.intensity*0.14;
+        }
+      } else link.packetMarker.visible=false;
     }
     if (frameState) frameState.territoryExploration = this.snapshot({signal01: signal, circuitStatus,
       nearestDistance, localPosition});
@@ -307,12 +356,28 @@ export class RegionalTerritoryExpansion {
     const before = {imprint: site.imprint, strain: site.strain, void: site.void};
     const sourceIndex=this.sites.indexOf(site);
     const result=c0e2bApplyLocalCoupling(this.kind,this.sites,sourceIndex,verb);
-    this.lastLocalCircuit=result;
-    for(const transmission of result.transfer) {
-      const link=this.localLinks.find(item=>item.from===transmission.from && item.to===transmission.to);
-      if(link) link.response=Math.min(1,link.response+transmission.amount*3.6);
-      this.sites[transmission.to].response=Math.min(1,this.sites[transmission.to].response+transmission.amount*1.6);
+    const relief=c0e3ApplyPressureRelief(this.kind,this.sites,sourceIndex,result);
+    if(relief.applied) this.c0e3ReliefCount++;
+    const packets=c0e3CreatePackets(this.kind,sourceIndex,result);
+    for(const packet of packets){
+      const link=this.localLinks.find(item=>item.from===packet.from&&item.to===packet.to);
+      if(link){
+        link.response=Math.min(1,link.response+(packet.kind==='transmission'?0.42:0.24));
+        // Rapid consecutive presses must not reset a signal that is already
+        // traveling. Keep its leading edge and bound the amplitude; no queue.
+        if(!link.packet || (link.packet.kind==='dissipation'&&packet.kind==='transmission')){
+          link.packet=packet;
+        }else if(link.packet.kind==='transmission'&&packet.kind==='transmission'){
+          link.packet.amount=Math.min(1,link.packet.amount+packet.amount);
+        }
+      }
+      if(packet.kind==='dissipation') this.c0e3DissipationCount++;
     }
+    this.lastLivingResponse={mode:C0E3_PHYSIOLOGY[this.kind].name,relief,
+      emittedPackets:packets.map(({from,to,kind,amount,duration})=>({
+        fromSiteId:this.sites[from].id,toSiteId:this.sites[to].id,kind,amount,duration})),
+      noHostReceipt:true,noMaterialTransfer:true,noProgressionCredit:true};
+    this.lastLocalCircuit=result;
     this.observationCount[verb] += 1;
     const event = {
       kind: 'c0e1_local_exploratory_read', region: this.kind, siteId: site.id,
@@ -320,7 +385,9 @@ export class RegionalTerritoryExpansion {
       question: site.question, noHostReceipt: true, noMatterTransfer: true,
       noProgressionCredit: true, localConsequence: true, retainedDuringSession: true,
       before, after: {imprint: site.imprint, strain: site.strain, void: site.void},
-      localCircuit: { ...result, siteStates:result.siteStates.map(({index,before,after})=>({siteId:this.sites[index].id,before,after})),
+      livingCircuit:this.lastLivingResponse,
+      localCircuit: { ...result, siteStates:result.siteStates.map(({index,before})=>({siteId:this.sites[index].id,before,
+        after:{imprint:this.sites[index].imprint,strain:this.sites[index].strain,void:this.sites[index].void}})),
         transfer:result.transfer.map(row=>({...row,fromSiteId:this.sites[row.from].id,toSiteId:this.sites[row.to].id})) }
     };
     this.lastLocalExperiment = event;
@@ -352,6 +419,13 @@ export class RegionalTerritoryExpansion {
         lastVerb: site.lastVerb, pocketVisited: site.pocketVisited,
         imprint: Number(site.imprint.toFixed(3)), strain: Number(site.strain.toFixed(3)),
         void: Number(site.void.toFixed(3)) })),
+      c0e3: {pass:'C0E3',mode:C0E3_PHYSIOLOGY[this.kind].name,
+        activeTravelingPackets:this.localLinks.filter(link=>link.packet).length,
+        completedWaves:this.c0e3WavesCompleted,
+        shortDissipationPackets:this.c0e3DissipationCount,
+        deliberateCapacityReliefs:this.c0e3ReliefCount,
+        lastLivingResponse:this.lastLivingResponse,
+        visualOnly:true,originalHostCircuitUnchanged:true},
       c0e2bNearestUnvisitedPocket: nearestUnvisited
         ? {siteId:nearestUnvisited.siteId,distance:Number(nearestUnvisited.distance.toFixed(2))} : null,
       pocketCount: 3, pocketsVisited: this.sites.filter(site => site.pocketVisited).length,
