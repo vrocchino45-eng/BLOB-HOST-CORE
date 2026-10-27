@@ -48,8 +48,11 @@ let volumes=load('src/world/RegionalTerritoryVolume.js');
 volumes=volumes.replace(/^import \{ territoryDefinition \} from '.\/RegionalTerritoryDefinitions.js';\n/m,'')
   .replace(/^export (const|function) /gm, '$1 ');
 vm.runInNewContext(volumes,context,{filename:'RegionalTerritoryVolume.js'});
+let coupling=load('src/world/RegionalTerritoryCoupling.js').replace(/^export (const|function) /gm,'$1 ');
+vm.runInNewContext(coupling,context,{filename:'RegionalTerritoryCoupling.js'});
 let body=load('src/world/RegionalTerritoryExpansion.js');
 body=body.replace(/^import \* as THREE from 'three';\n/m, '')
+  .replace(/^import \{ c0e2bApplyLocalCoupling \} from '.\/RegionalTerritoryCoupling.js';\n/m,'')
   .replace(/^import \{ c0e2TerritoryPockets \} from '.\/RegionalTerritoryVolume.js';\n/m, '')
   .replace(/^import \{ territoryDefinition \} from '.\/RegionalTerritoryDefinitions.js';\n/m, '')
   .replace(/^export \{ territoryDefinition \} from '.\/RegionalTerritoryDefinitions.js';\n/m, '')

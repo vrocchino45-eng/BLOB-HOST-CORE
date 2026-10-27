@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { c0e2TerritoryPockets } from './RegionalTerritoryVolume.js';
 import { territoryDefinition } from './RegionalTerritoryDefinitions.js';
+import { c0e2bApplyLocalCoupling } from './RegionalTerritoryCoupling.js';
 export { territoryDefinition } from './RegionalTerritoryDefinitions.js';
 
 // C0E1: spatial interpretation of existing regional state, not a new Host owner.
@@ -54,6 +55,7 @@ export class RegionalTerritoryExpansion {
     this.elapsed = 0;
     this.lastPulseEventId = null;
     this.lastLocalExperiment = null;
+    this.lastLocalCircuit = null;
     this.experiments = [];
     this.experimentSequence = 0;
     this.observationCount = { pulse: 0, stabilize: 0, absorb: 0 };
@@ -156,6 +158,22 @@ export class RegionalTerritoryExpansion {
         observations: 0, lastVerb: 'none', imprint: 0, strain: 0, void: 0,
         pocketVisited: false, pocketBody: null, passage: null });
     });
+    // C0E2-B: three local site pairs, each with two directed tissue strands.
+    // The six directions represent bounded local coupling, NOT Host signal flow.
+    this.localLinks = [];
+    for (let a=0; a<3; a++) for (let b=a+1; b<3; b++) {
+      for (const direction of [[a,b],[b,a]]) {
+        const from=this.sites[direction[0]].point, to=this.sites[direction[1]].point;
+        const bend=from.clone().lerp(to,0.5);
+        bend.y += direction[0]<direction[1] ? 0.24 : -0.24;
+        const linkMaterial=this.register(mkMat(spec.palette[direction[0]], 0.085));
+        const linkGeometry=new THREE.TubeGeometry(new THREE.CatmullRomCurve3([from.clone(),bend,to.clone()],false,'centripetal'),18,0.028,5,false);
+        const link=new THREE.Mesh(linkGeometry,linkMaterial);
+        link.name=`${this.sites[direction[0]].id}_to_${this.sites[direction[1]].id}_c0e2b_local_link`;
+        this.root.add(link);this.geometries.push(linkGeometry);
+        this.localLinks.push({from:direction[0],to:direction[1],material:linkMaterial,response:0});
+      }
+    }
     // C0E2: three REAL movement pockets are supplied by the PlayerMovementController.
     // This geometry describes their approach and anatomy; it is intentionally
     // transparent and non-solid, not a pretend collider or interaction owner.
@@ -260,6 +278,8 @@ export class RegionalTerritoryExpansion {
       site.pocketMaterial.opacity = 0.10 + site.imprint * 0.10 + site.strain * 0.045;
       site.passageMaterial.opacity = 0.19 + signal * 0.1 + site.imprint * 0.16;
       site.apertureMaterial.emissiveIntensity = 0.08 + site.strain * 0.25 + site.imprint * 0.13;
+      // Local response takes its identity from actual retained states, not a timer.
+      site.pocketBody.scale.y = site.pocket.radii.y * 0.66 * (1 + site.void*0.07 + site.imprint*0.09);
       const distalDistance = localPosition ? site.pocketLocal.distanceTo(localPosition) : Infinity;
       if (distalDistance <= 2.4 && !site.pocketVisited) {
         site.pocketVisited = true;
@@ -269,8 +289,14 @@ export class RegionalTerritoryExpansion {
         };
       }
     }
+    for (const link of this.localLinks) {
+      link.response = Math.max(0, link.response-step*0.42);
+      const source=this.sites[link.from], receiver=this.sites[link.to];
+      link.material.opacity=0.085 + Math.min(0.18,(source.strain+receiver.imprint+receiver.void)*0.032) + link.response*0.32;
+      link.material.emissiveIntensity=0.07+link.response*0.41+receiver.imprint*0.08;
+    }
     if (frameState) frameState.territoryExploration = this.snapshot({signal01: signal, circuitStatus,
-      nearestDistance});
+      nearestDistance, localPosition});
   }
 
   observe(site, verb, signal, frameState) {
@@ -279,22 +305,23 @@ export class RegionalTerritoryExpansion {
     site.lastVerb = verb;
     site.response = Math.min(1, site.response + (verb === 'pulse' ? 0.8 : 0.5));
     const before = {imprint: site.imprint, strain: site.strain, void: site.void};
-    const delta = {
-      silt: {pulse: [0, 0.25, 0], stabilize: [0.22, -0.13, 0], absorb: [0, -0.08, 0.15]},
-      vascular: {pulse: [0, 0.19, 0], stabilize: [0.19, -0.15, 0], absorb: [0, -0.1, 0.17]},
-      grave: {pulse: [0, 0.23, 0], stabilize: [0.25, -0.06, 0], absorb: [0.05, -0.04, 0.15]},
-      hub: {pulse: [0, 0.14, 0], stabilize: [0.22, -0.11, 0], absorb: [0, -0.05, 0.18]}
-    }[this.kind][verb];
-    site.imprint = territoryClamp01(site.imprint + delta[0]);
-    site.strain = territoryClamp01(site.strain + delta[1]);
-    site.void = territoryClamp01(site.void + delta[2]);
+    const sourceIndex=this.sites.indexOf(site);
+    const result=c0e2bApplyLocalCoupling(this.kind,this.sites,sourceIndex,verb);
+    this.lastLocalCircuit=result;
+    for(const transmission of result.transfer) {
+      const link=this.localLinks.find(item=>item.from===transmission.from && item.to===transmission.to);
+      if(link) link.response=Math.min(1,link.response+transmission.amount*3.6);
+      this.sites[transmission.to].response=Math.min(1,this.sites[transmission.to].response+transmission.amount*1.6);
+    }
     this.observationCount[verb] += 1;
     const event = {
       kind: 'c0e1_local_exploratory_read', region: this.kind, siteId: site.id,
       verb, localSequence: ++this.experimentSequence, signal01: Number(signal.toFixed(3)),
       question: site.question, noHostReceipt: true, noMatterTransfer: true,
       noProgressionCredit: true, localConsequence: true, retainedDuringSession: true,
-      before, after: {imprint: site.imprint, strain: site.strain, void: site.void}
+      before, after: {imprint: site.imprint, strain: site.strain, void: site.void},
+      localCircuit: { ...result, siteStates:result.siteStates.map(({index,before,after})=>({siteId:this.sites[index].id,before,after})),
+        transfer:result.transfer.map(row=>({...row,fromSiteId:this.sites[row.from].id,toSiteId:this.sites[row.to].id})) }
     };
     this.lastLocalExperiment = event;
     this.experiments.push(event);
@@ -302,7 +329,12 @@ export class RegionalTerritoryExpansion {
     if (frameState) frameState.territoryExplorationLastRead = event;
   }
 
-  snapshot({ signal01 = 0, circuitStatus = 'local', nearestDistance = Infinity } = {}) {
+  snapshot({ signal01 = 0, circuitStatus = 'local', nearestDistance = Infinity, localPosition = null } = {}) {
+    const remaining=this.sites.filter(site=>!site.pocketVisited && site.pocketLocal);
+    const nearestUnvisited=localPosition && remaining.length
+      ? remaining.map(site=>({siteId:site.id, distance:site.pocketLocal.distanceTo(localPosition)}))
+        .sort((a,b)=>a.distance-b.distance)[0]
+      : null;
     return {
       pass: 'C0E1', owner: `${this.kind}:RegionalTerritoryExpansion`,
       region: this.kind, active: true, circuitStatus, signal01,
@@ -311,10 +343,17 @@ export class RegionalTerritoryExpansion {
       nearestSiteDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(2)) : null,
       observations: { ...this.observationCount },
       lastRead: this.lastLocalExperiment,
+      c0e2b: {pass:'C0E2-B', links:this.localLinks.length, mechanism:'bounded_local_three_node_coupling',
+        lastResponse:this.lastLocalCircuit?.localResponse ?? 'none',
+        lastTransmitted:this.lastLocalCircuit?.transmitted ?? 0,
+        lastDissipated:this.lastLocalCircuit?.dissipated ?? 0,
+        noHostReceipt:true, noProgressionCredit:true},
       siteStates: this.sites.map(site => ({ id: site.id, reads: site.observations,
         lastVerb: site.lastVerb, pocketVisited: site.pocketVisited,
         imprint: Number(site.imprint.toFixed(3)), strain: Number(site.strain.toFixed(3)),
         void: Number(site.void.toFixed(3)) })),
+      c0e2bNearestUnvisitedPocket: nearestUnvisited
+        ? {siteId:nearestUnvisited.siteId,distance:Number(nearestUnvisited.distance.toFixed(2))} : null,
       pocketCount: 3, pocketsVisited: this.sites.filter(site => site.pocketVisited).length,
       localStateRetainedDuringSession: true, c0e2MovementVolumeOwner: 'PlayerMovementController',
       newPhysics: true, movementBoundaryChanged: true, routeProgressionChanged: false,

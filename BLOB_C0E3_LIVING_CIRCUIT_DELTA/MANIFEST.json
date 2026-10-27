@@ -1,0 +1,56 @@
+{
+  "pass": "C0E3",
+  "baseline": "C0E2B_INSTALLED",
+  "date": "2026-10-26",
+  "scope": "C0E3 local visual propagation, bounded user-triggered saturation relief, and upgraded numerical/mock scene regressions",
+  "changedGameplayFiles": [
+    "src/world/RegionalTerritoryExpansion.js",
+    "src/world/RegionalTerritoryDynamics.js"
+  ],
+  "changedTestFiles": [
+    "scripts/validateC0E1CompoundTerritories.mjs",
+    "scripts/validateC0E2CompoundSpatial.mjs",
+    "scripts/validateC0E3LivingRegionalCircuit.mjs"
+  ],
+  "originalCircuitLocked": true,
+  "locked": [
+    "Silt/Vascular/Grave and Hub progression owners",
+    "C0D1-C0D3 authenticated Host event/receipt lineage",
+    "C0E2-B bounded triad maths and 3\u21926\u219212 structure",
+    "PlayerMovementController and side pockets",
+    "REC1 export and input mappings",
+    "No mass/chemistry transfer, no new route gates"
+  ],
+  "files": [
+    {
+      "path": "src/world/RegionalTerritoryExpansion.js",
+      "before": "c0497af426e845adc95ce12f0bd371098bda2f009610a944bbf431921b87fd87",
+      "after": "0362439d44a44b8d6004bf96fd67cf32bc31d464b4d7e52f17537e5553e18a34",
+      "sizeBytes": 25052
+    },
+    {
+      "path": "src/world/RegionalTerritoryDynamics.js",
+      "before": null,
+      "after": "ea45208e34009352b9fbfea5140c59b74ad9ff60e76d68d0fb4f609a1907ceee",
+      "sizeBytes": 3756
+    },
+    {
+      "path": "scripts/validateC0E1CompoundTerritories.mjs",
+      "before": "c4783cfbf984e65ec89544a03e28c30482009274410b670aba5737fe28520e4f",
+      "after": "12ad98c4fe4f375456d4978cd23f61a917af287dee4e1894359814c89acd0f35",
+      "sizeBytes": 9805
+    },
+    {
+      "path": "scripts/validateC0E2CompoundSpatial.mjs",
+      "before": "2b5f76789ddfa9dd948e7a8f0473262b6ee4491deb6fc56bb19e58a9b0ba27ac",
+      "after": "a22489735929f7e7b675cd85fba607cc5a2380f324181bb66e00afb681f75130",
+      "sizeBytes": 11156
+    },
+    {
+      "path": "scripts/validateC0E3LivingRegionalCircuit.mjs",
+      "before": null,
+      "after": "d40a53118e3c726d2e8ec206b2be9ff430dd4f528e53a1c2fda5a1cfd70b93ca",
+      "sizeBytes": 10800
+    }
+  ]
+}

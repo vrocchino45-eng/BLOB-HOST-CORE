@@ -31,6 +31,8 @@ export class WorldObjectCensusSystem {
     this.mobBlockSinceMs = null;
     this.mobBlockReported = null;
     this.mobLastSampleMs = null;
+    this.c0e2bLastVolumeSignature = null;
+    this.c0e2bLastApproachMs = null;
     this.mobLastActionSignature = null;
     this.mobPendingActions = [];
     this.territoryVisitKeys = new Set();
@@ -638,6 +640,12 @@ export class WorldObjectCensusSystem {
         boundaryPressure: Number(kin.boundaryPressure ?? 0),
         boundaryMode: kin.movementBoundary?.mode ?? 'unknown',
         boundaryRegionId: kin.movementBoundary?.regionId ?? 'unknown',
+        // Existing movement owner already publishes its union selection.
+        // Recorder only observes it; no boundary maths or authority changes.
+        c0e2bActiveVolumeId: kin.movementBoundary?.c0e2?.activePocketId ?? 'legacy',
+        c0e2bVolumeActive: kin.movementBoundary?.c0e2?.active === true,
+        c0e2bNormalizedBoundaryDistance: Number.isFinite(kin.movementBoundary?.normalizedDistance)
+          ? Number(kin.movementBoundary.normalizedDistance.toFixed(3)) : null,
         directionalFlowAlignment: Number(kin.directionalFlowAlignment ?? 0),
         directTendrilPullActive: kin.tendrilSurfaceLocomotion?.active === true,
         convergenceReachabilityActive: kin.convergenceReachabilityActive === true},
@@ -691,6 +699,19 @@ export class WorldObjectCensusSystem {
     this.mobPendingActions=pending;
     const prev = this.mobPrevious;
     const m = current.motion;
+    if (current.motion.c0e2bVolumeActive) {
+      const signature=`${current.cellId}|${current.motion.c0e2bActiveVolumeId}`;
+      if (signature!==this.c0e2bLastVolumeSignature) {
+        this.recordEvent('c0e2b-movement-volume-change', {
+          from:this.c0e2bLastVolumeSignature, to:signature,
+          regionCellId:current.cellId,
+          activeVolumeId:current.motion.c0e2bActiveVolumeId,
+          normalizedDistance:current.motion.c0e2bNormalizedBoundaryDistance,
+          noMovementChange:true, caveat:'Existing C0E2 volume-owner selection only; does not prove rendered path or interaction range.'
+        });
+        this.c0e2bLastVolumeSignature=signature;
+      }
+    }
     const guided = current.guidedHub.active;
     const intended = m.intendedAcceleration;
     const env = m.environmentalAcceleration;
@@ -761,6 +782,17 @@ export class WorldObjectCensusSystem {
     const current = this.frameState?.territoryExploration;
     if (current?.pass !== 'C0E1' || !current.active) return;
     if (current.owner !== `${current.region}:RegionalTerritoryExpansion`) return;
+    const now=Date.now();
+    const approach=current.c0e2bNearestUnvisitedPocket;
+    if (approach && (this.c0e2bLastApproachMs === null || now-this.c0e2bLastApproachMs >= 5000)) {
+      this.c0e2bLastApproachMs=now;
+      this.recordEvent('c0e2b-nearest-unvisited-pocket', {
+        region:current.region, siteId:approach.siteId,
+        distance:approach.distance,
+        activeMovementVolumeId:this.frameState?.playerKinematics?.movementBoundary?.c0e2?.activePocketId ?? 'legacy',
+        caveat:'Distance-only observation. Not proof of a blocked passage or a failure to reach the pocket.'
+      });
+    }
     const siteId = current.nearestSiteId;
     if (siteId) {
       const key = `${current.region}:${siteId}`;
@@ -868,6 +900,7 @@ export class WorldObjectCensusSystem {
     this.lastCircuitGraveSequence = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitState = null;
     this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
+    this.c0e2bLastVolumeSignature=null;this.c0e2bLastApproachMs=null;
     this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;
     this.mobPendingActions=[];
     this.territoryVisitKeys = new Set();
