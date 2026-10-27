@@ -39,13 +39,22 @@ class IMesh extends Mesh { constructor(g,m,count) {super(g,m);this.count=count;t
 class Geometry {constructor(...args){this.args=args;}}
 const THREE={Group:Obj,Object3D:Obj,Vector3:Vec,Mesh,InstancedMesh:IMesh,
   DodecahedronGeometry:Geometry,IcosahedronGeometry:Geometry,CapsuleGeometry:Geometry,
-  SphereGeometry:Geometry,TubeGeometry:Geometry,CatmullRomCurve3:Geometry,
+  SphereGeometry:Geometry,TubeGeometry:Geometry,TorusGeometry:Geometry,CatmullRomCurve3:Geometry,
   MeshStandardMaterial:Mat,MeshBasicMaterial:Mat,DoubleSide:2};
+let defs=load('src/world/RegionalTerritoryDefinitions.js').replace(/^export /gm, '');
+const context={THREE,Math,Number,Object,Set,Array,Error,console};context.globalThis=context;
+vm.runInNewContext(defs,context,{filename:'RegionalTerritoryDefinitions.js'});
+let volumes=load('src/world/RegionalTerritoryVolume.js');
+volumes=volumes.replace(/^import \{ territoryDefinition \} from '.\/RegionalTerritoryDefinitions.js';\n/m,'')
+  .replace(/^export (const|function) /gm, '$1 ');
+vm.runInNewContext(volumes,context,{filename:'RegionalTerritoryVolume.js'});
 let body=load('src/world/RegionalTerritoryExpansion.js');
 body=body.replace(/^import \* as THREE from 'three';\n/m, '')
+  .replace(/^import \{ c0e2TerritoryPockets \} from '.\/RegionalTerritoryVolume.js';\n/m, '')
+  .replace(/^import \{ territoryDefinition \} from '.\/RegionalTerritoryDefinitions.js';\n/m, '')
+  .replace(/^export \{ territoryDefinition \} from '.\/RegionalTerritoryDefinitions.js';\n/m, '')
   .replace(/^export (const|function|class) /gm, '$1 ');
 body+='\n;globalThis.__out={territoryDefinition,territoryClamp01,territorySignal,RegionalTerritoryExpansion};';
-const context={THREE,Math,Number,Object,Set,Array,Error,console};context.globalThis=context;
 vm.runInNewContext(body,context,{filename:'RegionalTerritoryExpansion.js'});
 const {territoryDefinition,territoryClamp01,territorySignal,RegionalTerritoryExpansion}=context.__out;
 for(const [kind,center] of Object.entries({silt:[0,0,0],vascular:[0,0,0],grave:[0,0,0],hub:[0,0,0]})){

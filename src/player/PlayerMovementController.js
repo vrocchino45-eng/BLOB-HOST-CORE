@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { c0e2TerritoryPockets, c0e2SelectVolume } from "../world/RegionalTerritoryVolume.js";
 
 export class PlayerMovementController {
   constructor({ playerRoot, camera, frameState, localCellRecipe }) {
@@ -187,6 +188,9 @@ export class PlayerMovementController {
     this.boundaryTuningOwner = "default_first_slice_membrane";
     this.boundaryRegionId = "shared_first_slice";
     this.boundaryMode = "world_origin_ellipsoid";
+    this.c0e2BaseBoundary = null;
+    this.c0e2Pockets = [];
+    this.c0e2ActivePocketId = null;
   }
 
   update(dt, frameState) {
@@ -647,6 +651,10 @@ export class PlayerMovementController {
           z: this.boundary.z
         },
         normalizedDistance: this.boundaryNormalizedDistance,
+        c0e2: {pass: 'C0E2', active: this.c0e2Pockets.length > 0,
+          pocketCount: this.c0e2Pockets.filter(p => !p.bridge).length, activePocketId: this.c0e2ActivePocketId,
+          envelope: 'connected_union_of_legacy_and_three_site_pockets',
+          routeCreditChanged: false, inputOwnerChanged: false},
         pressure: boundaryPressure,
         proximity: this.boundaryProximity,
         radialSpeed: this.boundaryRadialSpeed,
@@ -856,6 +864,14 @@ export class PlayerMovementController {
 
   sampleMembraneBoundaryTelemetry() {
     const p = this.playerRoot.position;
+    if (this.c0e2BaseBoundary && this.c0e2Pockets.length) {
+      const selected = c0e2SelectVolume(p, this.c0e2BaseBoundary, this.c0e2Pockets);
+      this.boundaryCenter.set(selected.center.x, selected.center.y, selected.center.z);
+      this.boundary.x = selected.radii.x;
+      this.boundary.y = selected.radii.y;
+      this.boundary.z = selected.radii.z;
+      this.c0e2ActivePocketId = selected.source === 'pocket' ? selected.id : null;
+    }
     const dx = p.x - this.boundaryCenter.x;
     const dy = p.y - this.boundaryCenter.y;
     const dz = p.z - this.boundaryCenter.z;
@@ -1697,6 +1713,7 @@ export class PlayerMovementController {
         ?? frameState.currentMode?.regionId
         ?? "active_region";
       this.boundaryMode = authored.mode ?? "entry_anchored_ellipsoid";
+      this.configureC0E2Territory(frameState);
       return;
     }
 
@@ -1708,6 +1725,17 @@ export class PlayerMovementController {
     this.boundaryTuningOwner = "default_first_slice_membrane";
     this.boundaryRegionId = "shared_first_slice";
     this.boundaryMode = "world_origin_ellipsoid";
+    this.configureC0E2Territory(frameState);
+  }
+
+  configureC0E2Territory(frameState) {
+    this.c0e2BaseBoundary = {
+      id: 'original_envelope', center: {x: this.boundaryCenter.x, y: this.boundaryCenter.y, z: this.boundaryCenter.z},
+      radii: {...this.boundary}
+    };
+    this.c0e2Pockets = c0e2TerritoryPockets(frameState.activeCellId,
+      this.c0e2BaseBoundary.center).flatMap(pocket => [pocket, ...pocket.bridges]);
+    this.c0e2ActivePocketId = null;
   }
 
   resolveContactSurfaceCoverage() {

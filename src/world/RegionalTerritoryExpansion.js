@@ -1,36 +1,11 @@
 import * as THREE from 'three';
+import { c0e2TerritoryPockets } from './RegionalTerritoryVolume.js';
+import { territoryDefinition } from './RegionalTerritoryDefinitions.js';
+export { territoryDefinition } from './RegionalTerritoryDefinitions.js';
 
 // C0E1: spatial interpretation of existing regional state, not a new Host owner.
 // Coordinates are LOCAL to the established region/Hub root. Every site lies
 // within the existing authored traversal volume; no crossing or physics changes.
-const SPECS = Object.freeze({
-  silt: { cell: 'CELL_SILT_PRESSURE_ROUTE_001', palette: [0x8c6943, 0xb68b52, 0xe1b980],
-    sites: [
-      { id: 'silt_porosity_shelf', name: 'Porosity Shelf', point: [-2.45, -0.72, -5.8], question: 'How does loosened matter settle?' },
-      { id: 'silt_catchment_bowl', name: 'Catchment Bowl', point: [2.65, -0.9, -10.45], question: 'Can pressure leave a persistent shape?' },
-      { id: 'silt_deep_reservoir', name: 'Deep Reservoir', point: [-2.35, -0.6, -15.35], question: 'Which material returns after release?' }
-    ] },
-  vascular: { cell: 'CELL_VASCULAR_RHYTHM_ROUTE_001', palette: [0x468db4, 0x6dc2d0, 0xb0d7ef],
-    sites: [
-      { id: 'vascular_intake_branch', name: 'Intake Branch', point: [2.65, 0.35, -4.7], question: 'What pressure reaches the membrane?' },
-      { id: 'vascular_exchange_fork', name: 'Exchange Fork', point: [-2.75, 0.42, -10.35], question: 'How is load redistributed?' },
-      { id: 'vascular_return_capillary', name: 'Return Capillary', point: [2.75, -0.38, -17.25], question: 'How does the vessel recover?' }
-    ] },
-  grave: { cell: 'CELL_GRAVE_MEMORY_RESIDUE_BED_001', palette: [0x875871, 0xb18aa3, 0xd1abb8],
-    sites: [
-      { id: 'grave_first_imprint', name: 'First Imprint', point: [-3.65, -0.3, -5.15], question: 'Which disturbance is retained?' },
-      { id: 'grave_contradiction_terrace', name: 'Contradiction Terrace', point: [3.55, -0.25, -10.75], question: 'Which histories resist alignment?' },
-      { id: 'grave_inheritance_vault', name: 'Inheritance Vault', point: [-2.65, 0.26, -15.15], question: 'What persists on return?' }
-    ] },
-  hub: { cell: 'CELL_SIGNAL_CHORUS_NERVE_001', palette: [0x9c7647, 0x57a9c6, 0xae779d],
-    sites: [
-      { id: 'hub_silt_root', name: 'Sediment Root', point: [-3.7, -1.15, -5.15], question: 'Where did this material signal originate?' },
-      { id: 'hub_vascular_root', name: 'Transmission Root', point: [0.35, 1.75, -7.0], question: 'What was applied, not merely observed?' },
-      { id: 'hub_grave_root', name: 'Memory Root', point: [3.55, -0.62, -5.75], question: 'Which consequence can return?' }
-    ] }
-});
-
-export const territoryDefinition = (kind) => SPECS[kind] ?? null;
 export const territoryClamp01 = (value) => Math.min(1, Math.max(0, Number.isFinite(value) ? value : 0));
 export function territorySignal(kind, state = {}) {
   if (kind === 'silt') return territoryClamp01(Number(state.siltPressureEcho ?? 0) / 0.04);
@@ -178,8 +153,50 @@ export class RegionalTerritoryExpansion {
       this.geometries.push(nerveGeometry);
       this.sites.push({ ...site, point, group, body, shelves, ribs, flecks,
         baseMaterial, accentMaterial, fleckMaterial, nerveMaterial, response: 0,
-        observations: 0, lastVerb: 'none' });
+        observations: 0, lastVerb: 'none', imprint: 0, strain: 0, void: 0,
+        pocketVisited: false, pocketBody: null, passage: null });
     });
+    // C0E2: three REAL movement pockets are supplied by the PlayerMovementController.
+    // This geometry describes their approach and anatomy; it is intentionally
+    // transparent and non-solid, not a pretend collider or interaction owner.
+    const pockets = c0e2TerritoryPockets(spec.cell, {x:0,y:0,z:0});
+    for (const [index, pocket] of pockets.entries()) {
+      const site = this.sites[index];
+      const end = new THREE.Vector3(pocket.center.x - this.root.position.x,
+        pocket.center.y - this.root.position.y, pocket.center.z - this.root.position.z);
+      const midpoint = site.point.clone().lerp(end, 0.52);
+      midpoint.y += kind === 'vascular' ? 0.42 : kind === 'grave' ? 0.55 : -0.22;
+      const curve = new THREE.CatmullRomCurve3([site.point.clone(), midpoint, end], false, 'centripetal');
+      const connectiveMaterial = this.register(mkMat(spec.palette[index], kind === 'hub' ? 0.18 : 0.24));
+      const connective = new THREE.Mesh(new THREE.TubeGeometry(curve, 28,
+        kind === 'silt' ? 0.65 : kind === 'vascular' ? 0.48 : 0.53, 8, false), connectiveMaterial);
+      connective.name = `${site.id}_c0e2_traversable_tissue_guide`;
+      this.root.add(connective);
+      this.geometries.push(connective.geometry);
+      // Side pocket is a visual chamber within the authored physical union.
+      const membraneMaterial = this.register(mkMat(spec.palette[(index + 1) % 3], 0.13));
+      const pocketBody = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 12), membraneMaterial);
+      pocketBody.name = `${site.id}_c0e2_distal_pocket`;
+      pocketBody.position.copy(end);
+      pocketBody.scale.set(pocket.radii.x * 0.72, pocket.radii.y * 0.66, pocket.radii.z * 0.68);
+      this.root.add(pocketBody);
+      this.geometries.push(pocketBody.geometry);
+      const apertureMaterial = this.register(mkMat(spec.palette[index], 0.38));
+      const aperture = new THREE.Mesh(new THREE.TorusGeometry(0.93, 0.058, 6, 28), apertureMaterial);
+      aperture.name = `${site.id}_c0e2_distal_rim`;
+      aperture.position.copy(end);
+      aperture.rotation.set(0.2, 0.3, index * 0.8);
+      aperture.scale.set(1.3, 0.86, 1);
+      this.root.add(aperture);
+      this.geometries.push(aperture.geometry);
+      site.pocket = pocket;
+      site.pocketLocal = end;
+      site.pocketBody = pocketBody;
+      site.passage = connective;
+      site.pocketMaterial = membraneMaterial;
+      site.passageMaterial = connectiveMaterial;
+      site.apertureMaterial = apertureMaterial;
+    }
     suppress(this.root, kind);
     parent.add(this.root);
   }
@@ -196,7 +213,8 @@ export class RegionalTerritoryExpansion {
     const localPosition = worldPoint ? this.root.worldToLocal(worldPoint.clone()) : null;
     let nearest = null; let nearestDistance = Infinity;
     for (const site of this.sites) {
-      const distance = localPosition ? site.point.distanceTo(localPosition) : Infinity;
+      const distance = localPosition ? Math.min(site.point.distanceTo(localPosition),
+        site.pocketLocal?.distanceTo(localPosition) ?? Infinity) : Infinity;
       if (distance < nearestDistance) { nearest = site; nearestDistance = distance; }
     }
     const eligible = Boolean(nearest && nearestDistance <= 2.4);
@@ -224,7 +242,8 @@ export class RegionalTerritoryExpansion {
     for (const [index, site] of this.sites.entries()) {
       const phase = this.elapsed * (this.kind === 'vascular' ? 1.24 : 0.64) + index * 2.094;
       site.response = Math.max(0, site.response - step * 0.48);
-      const nearby = localPosition ? territoryClamp01(1 - site.point.distanceTo(localPosition) / 3.3) : 0;
+      const nearby = localPosition ? territoryClamp01(1 - Math.min(
+        site.point.distanceTo(localPosition), site.pocketLocal?.distanceTo(localPosition) ?? Infinity) / 3.3) : 0;
       const breath = Math.sin(phase) * 0.045;
       site.body.scale.y = (this.kind === 'vascular' ? 1.05 : this.kind === 'hub' ? 1.35 : this.kind === 'grave' ? 0.19 : 0.29)
         * (1 + signal * 0.08 + nearby * 0.07 + breath + site.response * 0.14);
@@ -233,6 +252,22 @@ export class RegionalTerritoryExpansion {
       site.accentMaterial.emissiveIntensity = 0.06 + signal * 0.11 + site.response * 0.29;
       site.fleckMaterial.opacity = 0.2 + signal * 0.19 + nearby * 0.13 + site.response * 0.28;
       site.nerveMaterial.opacity = 0.20 + signal * 0.27 + nearby * 0.1;
+      // Persist during the session, including return visits. No automatic
+      // decay removes a successful local experiment between two encounters.
+      site.group.scale.y = 1 + site.imprint * 0.22 - site.strain * 0.11;
+      site.group.scale.x = 1 + site.strain * 0.13 - site.void * 0.08;
+      site.baseMaterial.emissiveIntensity += site.imprint * 0.13;
+      site.pocketMaterial.opacity = 0.10 + site.imprint * 0.10 + site.strain * 0.045;
+      site.passageMaterial.opacity = 0.19 + signal * 0.1 + site.imprint * 0.16;
+      site.apertureMaterial.emissiveIntensity = 0.08 + site.strain * 0.25 + site.imprint * 0.13;
+      const distalDistance = localPosition ? site.pocketLocal.distanceTo(localPosition) : Infinity;
+      if (distalDistance <= 2.4 && !site.pocketVisited) {
+        site.pocketVisited = true;
+        if (frameState) frameState.territoryExplorationLastPocket = {
+          kind: 'c0e2_pocket_discovered', region: this.kind, siteId: site.id,
+          pocketId: site.id, noProgressionCredit: true, noHostReceipt: true
+        };
+      }
     }
     if (frameState) frameState.territoryExploration = this.snapshot({signal01: signal, circuitStatus,
       nearestDistance});
@@ -243,12 +278,23 @@ export class RegionalTerritoryExpansion {
     site.observations += 1;
     site.lastVerb = verb;
     site.response = Math.min(1, site.response + (verb === 'pulse' ? 0.8 : 0.5));
+    const before = {imprint: site.imprint, strain: site.strain, void: site.void};
+    const delta = {
+      silt: {pulse: [0, 0.25, 0], stabilize: [0.22, -0.13, 0], absorb: [0, -0.08, 0.15]},
+      vascular: {pulse: [0, 0.19, 0], stabilize: [0.19, -0.15, 0], absorb: [0, -0.1, 0.17]},
+      grave: {pulse: [0, 0.23, 0], stabilize: [0.25, -0.06, 0], absorb: [0.05, -0.04, 0.15]},
+      hub: {pulse: [0, 0.14, 0], stabilize: [0.22, -0.11, 0], absorb: [0, -0.05, 0.18]}
+    }[this.kind][verb];
+    site.imprint = territoryClamp01(site.imprint + delta[0]);
+    site.strain = territoryClamp01(site.strain + delta[1]);
+    site.void = territoryClamp01(site.void + delta[2]);
     this.observationCount[verb] += 1;
     const event = {
       kind: 'c0e1_local_exploratory_read', region: this.kind, siteId: site.id,
       verb, localSequence: ++this.experimentSequence, signal01: Number(signal.toFixed(3)),
       question: site.question, noHostReceipt: true, noMatterTransfer: true,
-      noProgressionCredit: true
+      noProgressionCredit: true, localConsequence: true, retainedDuringSession: true,
+      before, after: {imprint: site.imprint, strain: site.strain, void: site.void}
     };
     this.lastLocalExperiment = event;
     this.experiments.push(event);
@@ -265,8 +311,13 @@ export class RegionalTerritoryExpansion {
       nearestSiteDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(2)) : null,
       observations: { ...this.observationCount },
       lastRead: this.lastLocalExperiment,
-      siteStates: this.sites.map(site => ({ id: site.id, reads: site.observations, lastVerb: site.lastVerb })),
-      newPhysics: false, movementBoundaryChanged: false, routeProgressionChanged: false,
+      siteStates: this.sites.map(site => ({ id: site.id, reads: site.observations,
+        lastVerb: site.lastVerb, pocketVisited: site.pocketVisited,
+        imprint: Number(site.imprint.toFixed(3)), strain: Number(site.strain.toFixed(3)),
+        void: Number(site.void.toFixed(3)) })),
+      pocketCount: 3, pocketsVisited: this.sites.filter(site => site.pocketVisited).length,
+      localStateRetainedDuringSession: true, c0e2MovementVolumeOwner: 'PlayerMovementController',
+      newPhysics: true, movementBoundaryChanged: true, routeProgressionChanged: false,
       hostReceiptChanged: false, materialTransferred: false
     };
   }

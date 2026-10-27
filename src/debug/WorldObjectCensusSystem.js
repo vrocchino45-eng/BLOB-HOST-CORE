@@ -773,6 +773,16 @@ export class WorldObjectCensusSystem {
         });
       }
     }
+    const pocket = this.frameState?.territoryExplorationLastPocket;
+    if (pocket?.kind === 'c0e2_pocket_discovered') {
+      const pocketKey = `${pocket.region}:${pocket.pocketId}`;
+      this.c0e2PocketVisitKeys ??= new Set();
+      if (!this.c0e2PocketVisitKeys.has(pocketKey)) {
+        this.c0e2PocketVisitKeys.add(pocketKey);
+        this.recordEvent('c0e2-pocket-discovered', { ...pocket,
+          note: 'Physically approached an extended local envelope; no objective credit.' });
+      }
+    }
     const read = this.frameState?.territoryExplorationLastRead;
     if (read?.kind !== 'c0e1_local_exploratory_read' || !Number.isSafeInteger(read.localSequence)) return;
     const key = `${read.region}:${read.localSequence}`;
@@ -861,6 +871,7 @@ export class WorldObjectCensusSystem {
     this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;
     this.mobPendingActions=[];
     this.territoryVisitKeys = new Set();
+    this.c0e2PocketVisitKeys = new Set();
     const initialRead = this.frameState?.territoryExplorationLastRead;
     this.territoryLastReadKey = initialRead?.localSequence
       ? `${initialRead.region}:${initialRead.localSequence}` : null;
@@ -876,7 +887,7 @@ export class WorldObjectCensusSystem {
     const report = {
       pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', recorderRevision: 'C0C-REC1',
       recorderSchemaVersion: 2, circuitObservationRevision: 'C0D4-OBS1',
-      mobilityObservationRevision: 'C0D4-MOB1', territoryObservationRevision: 'C0E1',
+      mobilityObservationRevision: 'C0D4-MOB1', territoryObservationRevision: 'C0E1', territorySpatialRevision: 'C0E2',
       captureStartedAt: this.captureStartedAt, captureStoppedAt: this.captureStoppedAt,
       captureDurationSeconds: this.captureStartedAt
         ? Number(((Date.parse(endAt) - Date.parse(this.captureStartedAt)) / 1000).toFixed(3)) : null,

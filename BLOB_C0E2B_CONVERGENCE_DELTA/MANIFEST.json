@@ -1,0 +1,59 @@
+{
+  "pass": "C0E2-B",
+  "baseline": "C0E2_INSTALLED",
+  "date": "2026-10-26",
+  "scope": "Three-site regional coupling, saturation redistribution, additive movement volume and unvisited pocket observation",
+  "changedGameplayFiles": [
+    "src/world/RegionalTerritoryExpansion.js",
+    "src/world/RegionalTerritoryCoupling.js"
+  ],
+  "recorderChanged": [
+    "src/debug/WorldObjectCensusSystem.js"
+  ],
+  "locked": [
+    "Original C0D1-C0D3 authenticated Host circuit",
+    "Silt/Vascular/Grave objectives and progression",
+    "Grave II resonance and Hub route commits",
+    "PlayerMovementController and C0E2 movement volumes",
+    "Existing controller mapping",
+    "No physical material transfer"
+  ],
+  "files": [
+    {
+      "path": "src/world/RegionalTerritoryExpansion.js",
+      "before": "68301de7247879376cccd7eb758c9683f3a2198480b7d9f285d5ccba77f580d2",
+      "after": "c0497af426e845adc95ce12f0bd371098bda2f009610a944bbf431921b87fd87",
+      "sizeBytes": 20636
+    },
+    {
+      "path": "src/world/RegionalTerritoryCoupling.js",
+      "before": null,
+      "after": "84ed773d53f6b24cc493254fd6f48d55629901baa2707072df08ac13dae23c52",
+      "sizeBytes": 3644
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "before": "fe920be239fc7afb798681c9b0814d76147abeeb96d95a390d726f61b6d864cc",
+      "after": "ab35b64b779537a0bc7d25e154f31d4d0493ecf50434a2d6ed2fbe19ee5f8a1b",
+      "sizeBytes": 58901
+    },
+    {
+      "path": "scripts/validateC0E1CompoundTerritories.mjs",
+      "before": "75d11bba0ac64ff56e73de83875811d2035e68ade88704d7ce90f9c687ac5fcf",
+      "after": "c4783cfbf984e65ec89544a03e28c30482009274410b670aba5737fe28520e4f",
+      "sizeBytes": 9209
+    },
+    {
+      "path": "scripts/validateC0E2CompoundSpatial.mjs",
+      "before": "dace792ce7b198204a5df86d55594b05219e51f9bb2621968dd333ae2da96256",
+      "after": "2b5f76789ddfa9dd948e7a8f0473262b6ee4491deb6fc56bb19e58a9b0ba27ac",
+      "sizeBytes": 10560
+    },
+    {
+      "path": "scripts/validateC0E2BTerritoryConvergence.mjs",
+      "before": null,
+      "after": "a091cf189cad54b2050a3d43b4dd9dc452f7ce44ce5fdd43f1bdde3dbd73823f",
+      "sizeBytes": 4799
+    }
+  ]
+}
