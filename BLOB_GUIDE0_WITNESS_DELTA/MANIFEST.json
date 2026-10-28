@@ -1,0 +1,26 @@
+{
+  "pass": "GUIDE0-W",
+  "baseline": "BOT1-D",
+  "mode": "read-only Guide/Watcher/prompt telemetry; no gameplay or input policy changes",
+  "locked": [
+    "Movement, camera and normal inputs",
+    "Watcher packet distance and material acceptance",
+    "Orbiter animation and GuidePrompt selection",
+    "Silt/Vascular/Grave/Host receipts",
+    "Core work, 3/6/12, and region progression"
+  ],
+  "files": [
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "before": "4ebdaeea86623bc8c04665a4f858e06f9f895e5b77fcb7ea98d8abc5f0bbe866",
+      "after": "4fc24c700d74375efe8759169432c6cf047152c46ae8029302117b1c79965ec5",
+      "sizeBytes": 67975
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_guide0.py",
+      "before": null,
+      "after": "e54ab7ec8c37f42816c1991677228705ddfcddea84234058dba447f9e3f6f85b",
+      "sizeBytes": 6277
+    }
+  ]
+}
