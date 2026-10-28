@@ -24,6 +24,8 @@ export class WorldObjectCensusSystem {
     this.lastSiltDecisionSequence = null;
     this.lastVascularPresentationSampleMs = null;
     this.lastCircuitState = null;
+    this.bot1cLastWitnessSignature = null;
+    this.bot1cLastNurserySignature = null;
     this.lastCircuitVascularSequence = 0;
     this.lastCircuitGraveSequence = 0;
     // C0D4-MOB1: observer only. All locomotion/input ownership stays external.
@@ -415,7 +417,38 @@ export class WorldObjectCensusSystem {
       },
     };
   }
+  sampleBot1cWatcherOwner() {
+    const fs = this.frameState ?? {};
+    const witness = fs.bot1cWatcherPulseWitness;
+    const witnessSignature = witness?.revision === 'BOT1-C' && Number.isSafeInteger(witness.pulseEventId)
+      ? `${witness.pulseEventId}:${witness.reason}:${witness.packetPulseReadAccepted}` : null;
+    if (witnessSignature && witnessSignature !== this.bot1cLastWitnessSignature) {
+      this.bot1cLastWitnessSignature = witnessSignature;
+      this.recordEvent('bot1c-watcher-pulse-owner-result', { witness,
+        caveat:'Owner-authored per-Pulse proximity result; recorder samples a retained read-only witness. No fabricated receipt.' });
+    }
+    const circuit = fs.nurseryCircuit ?? {};
+    if (!circuit.active || circuit.owner !== 'SurfaceWakeGameplaySystem') return;
+    const snapshot = {
+      active: Boolean(circuit.packetActive), sequence: circuit.sequence ?? 0,
+      packetIdentified: Boolean(circuit.packetIdentified),
+      packetPulseRead: Boolean(circuit.packetPulseRead),
+      resolvedCycleCount: circuit.resolvedCycleCount ?? 0,
+      playerAuthoredCycleCount: circuit.playerAuthoredCycleCount ?? 0,
+      agencyProven: Boolean(circuit.agencyProven),
+      foldInvitation: Boolean(circuit.foldInvitation),
+      lastOutcomeSequence: circuit.lastOutcomeSequence ?? 0,
+      lastOutcome: circuit.lastOutcome ?? 'none'
+    };
+    const signature = JSON.stringify(snapshot);
+    if (signature === this.bot1cLastNurserySignature) return;
+    this.bot1cLastNurserySignature = signature;
+    this.recordEvent('bot1c-watcher-owner-state-change', {
+      state: snapshot, caveat:'Poll-time owner snapshot; transient phases between polls may be missed.'
+    });
+  }
   sampleAuthority() {
+    this.sampleBot1cWatcherOwner();
     const now = this.authoritySnapshot();
     const before = this.authorityPrevious;
     const target = this.materialContext();

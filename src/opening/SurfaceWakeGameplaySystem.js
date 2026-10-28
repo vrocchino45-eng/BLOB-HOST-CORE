@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { classifyWatcherPulse } from "./BOT1CWatcherWitness.js";
 
 const RECIPE_ID = "SURFACE_WAKE_GAMEPLAY_FILL_HC007A";
 const CIRCUIT_RECIPE_ID = "SURFACE_WAKE_LIVING_NURSERY_CIRCUIT_HC009C";
@@ -62,6 +63,7 @@ export class SurfaceWakeGameplaySystem {
     this.circuitRestSeconds = 0;
     this.circuitSequence = 0;
     this.lastCircuitPulseEventId = 0;
+    this.bot1cLastObservedPulseEventId = 0; // Read-only diagnostic deduplication; not gameplay authority.
     this.resolvedCycleCount = 0;
     this.successfulCycleCount = 0;
     this.failedCycleCount = 0;
@@ -431,8 +433,26 @@ export class SurfaceWakeGameplaySystem {
     }
   }
 
+  observeBot1cWatcherPulse(frameState, packetActiveThisUpdate, packetDistance) {
+    const pulseEventId = frameState.input?.pulseEventId ?? 0;
+    if (!frameState.input?.pulsePressed || pulseEventId <= 0 || pulseEventId === this.bot1cLastObservedPulseEventId) return;
+    this.bot1cLastObservedPulseEventId = pulseEventId;
+    // Owner-only observation; no decision or target is supplied to the bot controller.
+    frameState.bot1cWatcherPulseWitness = classifyWatcherPulse({
+      pulseEventId,
+      packetActive:packetActiveThisUpdate,
+      packetDistance,
+      readRange:this.circuitRecipe.cycle?.packetReadRange ?? 3.4,
+      lastAcceptedPulseEventId:this.lastCircuitPulseEventId,
+      packetSequence:this.circuitSequence,
+      packetIdentifiedBefore:this.packetIdentified
+    });
+  }
+
   updateLivingCircuit(dt, frameState, t) {
     if (!this.packetActive) {
+      // Read-only record BEFORE possible cycle start: this frame did not process a packet read.
+      this.observeBot1cWatcherPulse(frameState, false, null);
       this.circuitRestSeconds = Math.max(0, this.circuitRestSeconds - dt);
       if (this.circuitRestSeconds <= 0) this.beginCircuitCycle();
       frameState.nurseryCircuit = this.createCircuitState(true);
@@ -448,6 +468,8 @@ export class SurfaceWakeGameplaySystem {
     this.packetRoot.lookAt(this.packetPosition.clone().add(this.packetTangent));
     this.packetRoot.rotation.z += dt * 0.34;
     this.packetDistance = this.playerRoot.position.distanceTo(this.packetPosition);
+    // Sample the SAME packet position and range used by the owner's existing acceptance branch.
+    this.observeBot1cWatcherPulse(frameState, true, this.packetDistance);
 
     const pulseEventId = frameState.input?.pulseEventId ?? 0;
     if (
@@ -456,6 +478,15 @@ export class SurfaceWakeGameplaySystem {
       && pulseEventId !== this.lastCircuitPulseEventId
       && this.packetDistance <= (cycle.packetReadRange ?? 3.4)
     ) {
+      // In case one held Pulse becomes eligible later in its input window,
+      // record the actual owner-accepted branch as the authoritative result.
+      frameState.bot1cWatcherPulseWitness = classifyWatcherPulse({
+        pulseEventId, packetActive:true, packetDistance:this.packetDistance,
+        readRange:cycle.packetReadRange ?? 3.4,
+        lastAcceptedPulseEventId:this.lastCircuitPulseEventId,
+        packetSequence:this.circuitSequence,
+        packetIdentifiedBefore:this.packetIdentified
+      });
       this.lastCircuitPulseEventId = pulseEventId;
       const previouslySeen = this.familySeenTypes.has(this.packetMatterType);
       this.packetIdentified = true;
