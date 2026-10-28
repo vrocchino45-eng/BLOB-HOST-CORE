@@ -1,0 +1,32 @@
+{
+  "pass": "BOT1-D",
+  "baseline": "BOT1-C_WATCHER",
+  "mode": "read-only REC1 Fold observer; visible-HUD ordinary-input navigation bot; no gameplay owner changes",
+  "locked": [
+    "World mechanics and completion thresholds",
+    "Movement and camera",
+    "Player targeting and Pulse/Absorb/Stabilize",
+    "Host receipts and material progression",
+    "3/6/12 and all regional logic"
+  ],
+  "files": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d.py",
+      "before": null,
+      "after": "d50e6a4687725eea5e41535663c70a220bf989ed38a86808236571ee53ef011f",
+      "sizeBytes": 5138
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d_browser.py",
+      "before": null,
+      "after": "4e93e288f3ccd2217d089f237a6a65dc7682e310ed21df356b68f58800a48484",
+      "sizeBytes": 9914
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "before": "b25230480531785c2923dbe717e93d7b5daecd2c866a81466d8d43cc764e4435",
+      "after": "4ebdaeea86623bc8c04665a4f858e06f9f895e5b77fcb7ea98d8abc5f0bbe866",
+      "sizeBytes": 62527
+    }
+  ]
+}
