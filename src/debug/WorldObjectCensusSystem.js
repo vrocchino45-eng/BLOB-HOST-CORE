@@ -27,6 +27,11 @@ export class WorldObjectCensusSystem {
     this.bot1cLastWitnessSignature = null;
     this.bot1cLastNurserySignature = null;
     this.bot1dLastFoldSignature = null;
+    // GUIDE0-W: read-only cross-owner audit; never used by an input policy.
+    this.guide0LastSignature = null;
+    this.guide0LastCheckpointMs = null;
+    this.guide0LastPulseId = null;
+    this.guide0LastOutcomeSequence = null;
     this.lastCircuitVascularSequence = 0;
     this.lastCircuitGraveSequence = 0;
     // C0D4-MOB1: observer only. All locomotion/input ownership stays external.
@@ -481,6 +486,107 @@ export class WorldObjectCensusSystem {
       proofLimit: 'Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.'
     });
   }
+  // GUIDE0-W: observation only. These facts are published by their respective
+  // gameplay, prompt, and orbiter owners. A Guide pose is NOT a gameplay receipt.
+  guide0Snapshot() {
+    const fs = this.frameState ?? {};
+    const g = fs.orbiterState ?? {};
+    const p = fs.guidePrompt ?? {};
+    const life = fs.promptLifecycle ?? {};
+    const n = fs.nurseryCircuit ?? {};
+    const fold = fs.surfaceWakeLayeredInteraction ?? {};
+    const coreWork = fs.coreWorkManipulation ?? {};
+    const focus = fs.guideFocus ?? {};
+    const numberOrNull = value => Number.isFinite(value) ? Number(value.toFixed(3)) : null;
+    return {
+      activeCellId: fs.activeCellId ?? 'none',
+      guide: {
+        present: g.guideState !== undefined && g.guideState !== 'not_spawned',
+        state: g.guideState ?? 'unpublished',
+        target: g.guideTarget ?? 'none',
+        distanceFromCore: numberOrNull(g.guideDistance),
+        lastReaction: g.lastReaction ?? 'none',
+        shimmerActive: Boolean(g.shimmerActive),
+        silhouetteLane: g.silhouetteLane ?? 'unpublished',
+        coreWorkPoseActive: Boolean(g.coreWorkPoseActive),
+        coreWorkPieceHeld: Boolean(g.coreWorkPieceHeld),
+        selectedCorePiece: g.coreWorkTarget ?? coreWork.selectedPieceId ?? 'none',
+        inspectionHoned: Boolean(g.inspectionHoned ?? focus.honed),
+      },
+      prompt: {
+        id: p.id ?? 'none',
+        guideLine: p.guideLine ?? null,
+        objectiveLine: p.objectiveLine ?? null,
+        contentOwner: p.contentOwner ?? life.contentOwner ?? 'unpublished',
+        selectionOwner: p.selectionOwner ?? life.selectionOwner ?? 'unpublished',
+        regionPromptEpoch: p.regionPromptEpoch ?? life.regionPromptEpoch ?? null,
+        activeRegionId: p.activeRegionId ?? life.activeRegionId ?? null,
+        presentationDelegatedTo: p.presentationDelegatedTo ?? 'unpublished',
+      },
+      owner: {
+        currentChemTarget: fs.currentChemTarget ?? null,
+        scarSelectionActive: fs.currentChemTarget === 'scar_contamination_plate_001',
+        nurseryActive: Boolean(n.active),
+        packetActive: Boolean(n.packetActive),
+        visualReadState: n.visualReadState ?? 'unpublished',
+        outcomeSequence: Number.isSafeInteger(n.lastOutcomeSequence) ? n.lastOutcomeSequence : null,
+        lastOutcome: n.lastOutcome ?? 'none',
+        agencyProven: Boolean(n.agencyProven),
+        foldInvitation: Boolean(n.foldInvitation),
+        foldStage: fold.stage ?? 'unpublished',
+      },
+      proofScope: 'Guide posture / prompt / nursery outcome are independent owners; no assistance, awareness, or cause inferred.'
+    };
+  }
+  sampleGuide0Witness() {
+    if (!this.captureActive) return;
+    const fs = this.frameState ?? {};
+    const snapshot = this.guide0Snapshot();
+    const nowMs = Date.now();
+    const signature = JSON.stringify(snapshot);
+    const changed = signature !== this.guide0LastSignature;
+    const periodic = this.guide0LastCheckpointMs === null || nowMs - this.guide0LastCheckpointMs >= 5000;
+    if (changed || periodic) {
+      this.recordEvent('guide0-core-guide-state', {
+        state: snapshot,
+        sampleKind: this.guide0LastSignature === null ? 'baseline' : changed ? 'change' : 'checkpoint',
+        caveat: '150ms recorder observation; not proof that Guide state caused a gameplay result.'
+      });
+      this.guide0LastSignature = signature;
+      this.guide0LastCheckpointMs = nowMs;
+    }
+    // Associate the latest exact-Pulse owner witness with the *contemporary*
+    // Guide/prompt snapshot. The recipient is diagnostics only, never the bot.
+    const w = fs.bot1cWatcherPulseWitness;
+    if (w?.revision === 'BOT1-C' && Number.isSafeInteger(w.pulseEventId)
+        && w.pulseEventId !== this.guide0LastPulseId) {
+      this.guide0LastPulseId = w.pulseEventId;
+      this.recordEvent('guide0-pulse-owner-pair', {
+        pulseEventId: w.pulseEventId,
+        owner: {
+          packetSequence: w.packetSequence ?? null,
+          packetActive: Boolean(w.packetActive),
+          distance: Number.isFinite(w.packetDistance) ? Number(w.packetDistance.toFixed(3)) : null,
+          readRange: Number.isFinite(w.readRange) ? Number(w.readRange.toFixed(3)) : null,
+          accepted: w.packetPulseReadAccepted === true,
+          reason: w.reason ?? 'unknown',
+        },
+        guide: snapshot.guide,
+        prompt: snapshot.prompt,
+        nursery: snapshot.owner,
+        caveat: 'Observed at REC1 poll; orbiter reaction may lag or be a response to input rather than packet acceptance.'
+      });
+    }
+    const seq = snapshot.owner.outcomeSequence;
+    if (seq !== null && seq !== this.guide0LastOutcomeSequence) {
+      this.guide0LastOutcomeSequence = seq;
+      if (seq > 0) this.recordEvent('guide0-nursery-outcome-pair', {
+        outcomeSequence: seq, outcome: snapshot.owner.lastOutcome,
+        guide: snapshot.guide, prompt: snapshot.prompt,
+        caveat: 'Outcome is authoritative nursery owner state; Guide and prompt are sampled independently.'
+      });
+    }
+  }
   sampleAuthority() {
     this.sampleBot1cWatcherOwner();
     this.sampleBot1dFoldOwner();
@@ -928,6 +1034,7 @@ export class WorldObjectCensusSystem {
     this.sampleInputs();
     this.sampleMobility();
     this.sampleAuthority();
+    this.sampleGuide0Witness();
     this.sampleSiltDecisions();
     this.sampleHostConnections();
     this.sampleVascularSiltResponse();
@@ -968,6 +1075,10 @@ export class WorldObjectCensusSystem {
     this.lastCircuitGraveSequence = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitState = null;
     this.bot1dLastFoldSignature = null;
+    this.guide0LastSignature = null;
+    this.guide0LastCheckpointMs = null;
+    this.guide0LastPulseId = null;
+    this.guide0LastOutcomeSequence = null;
     this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
     this.c0e2bLastVolumeSignature=null;this.c0e2bLastApproachMs=null;
     this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;

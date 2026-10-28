@@ -1,0 +1,80 @@
+{
+  "revision": "GUIDE0-W",
+  "evidenceKind": "READ_ONLY_CROSS_OWNER_REC1",
+  "runs": [
+    {
+      "folder": "BOT1D_20261028T054649Z_fold_reader_s11",
+      "grade": "GUIDE0_NOT_INSTALLED_OR_NO_SAMPLES",
+      "captureSeconds": 111.376,
+      "rec1Events": 438,
+      "captureDropped": 0,
+      "ownerPulseWitnesses": 80,
+      "guidePulsePairs": 0,
+      "pairsAccepted": 0,
+      "pairsRejected": 0,
+      "guideStateSamples": 0,
+      "nurseryOutcomePairs": 0,
+      "scarOutcomes": 0,
+      "scarWarningsAtOutcome": 0,
+      "guideAnsweringDuringRejectedPulse": 0,
+      "pulseReasons": {},
+      "guideStates": {},
+      "guideReactions": {},
+      "promptOwners": {},
+      "samplesMissingPromptObjective": 0,
+      "staleNurseryOwnerOnDifferentCellSamples": 0,
+      "acceptedPairEvidence": [],
+      "scarOutcomeEvidence": [],
+      "limits": [
+        "Pulse input and Guide answering animation are not Watcher acceptance.",
+        "A currentChemTarget scar warning is not necessarily a traveling scar packet warning.",
+        "150ms REC1 sampling may miss or misorder short Guide visual states.",
+        "A Core Work physically_holding string is a pose claim, not force or owned grip.",
+        "The bot sees HUD only, not Guide owner state or packet material class.",
+        "No game/HUD change or authored mechanic pass is claimed by this analysis."
+      ]
+    },
+    {
+      "folder": "BOT1D_20261028T061420Z_fold_reader_s11",
+      "grade": "GUIDE_SAMPLED_WITH_OWNER_PAIR",
+      "captureSeconds": 111.343,
+      "rec1Events": 1224,
+      "captureDropped": 0,
+      "ownerPulseWitnesses": 80,
+      "guidePulsePairs": 80,
+      "pairsAccepted": 0,
+      "pairsRejected": 80,
+      "guideStateSamples": 696,
+      "nurseryOutcomePairs": 10,
+      "scarOutcomes": 0,
+      "scarWarningsAtOutcome": 0,
+      "guideAnsweringDuringRejectedPulse": 80,
+      "pulseReasons": {
+        "no_active_packet": 18,
+        "packet_out_of_read_range": 62
+      },
+      "guideStates": {
+        "observing_with_player": 264,
+        "answering_player_pulse": 432
+      },
+      "guideReactions": {
+        "guide_waited_for_world_response": 696
+      },
+      "promptOwners": {
+        "SurfaceWakeGameplaySystem": 696
+      },
+      "samplesMissingPromptObjective": 0,
+      "staleNurseryOwnerOnDifferentCellSamples": 0,
+      "acceptedPairEvidence": [],
+      "scarOutcomeEvidence": [],
+      "limits": [
+        "Pulse input and Guide answering animation are not Watcher acceptance.",
+        "A currentChemTarget scar warning is not necessarily a traveling scar packet warning.",
+        "150ms REC1 sampling may miss or misorder short Guide visual states.",
+        "A Core Work physically_holding string is a pose claim, not force or owned grip.",
+        "The bot sees HUD only, not Guide owner state or packet material class.",
+        "No game/HUD change or authored mechanic pass is claimed by this analysis."
+      ]
+    }
+  ]
+}
