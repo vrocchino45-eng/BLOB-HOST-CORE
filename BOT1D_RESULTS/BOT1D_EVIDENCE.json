@@ -1,0 +1,47 @@
+{
+  "revision": "BOT1-D",
+  "kind": "INDEPENDENT_OWNER_EVIDENCE",
+  "runs": [
+    {
+      "folder": "BOT1D_20261028T054649Z_fold_reader_s11",
+      "grade": "WATCHER_READ_ONLY",
+      "captureStatus": "CAPTURED",
+      "captureDurationSeconds": 111.376,
+      "events": 438,
+      "droppedRecorderEvents": 0,
+      "visibleHudInvitationDetected": false,
+      "watcherOwnerAcceptedPulseReads": 1,
+      "watcherFoldInvited": false,
+      "pulseInputsObserved": 80,
+      "foldOwnerStageSnapshots": 1,
+      "foldMaxAuthoredStageIndex": 0,
+      "foldCompletedByOwner": false,
+      "lastFoldOwnerState": {
+        "activeCellId": "CELL_MEMBRANE_NURSERY_001",
+        "owner": "SurfaceWakeLayeredInteractionSystem",
+        "active": true,
+        "foldAvailable": false,
+        "stage": "nursery_agency_pending",
+        "stageIndex": 0,
+        "progress": 0,
+        "completed": false,
+        "inApproach": false,
+        "focusReady": false,
+        "focusDistance": 0,
+        "expectsPulse": false,
+        "expectsHold": false,
+        "expectsRelease": false,
+        "lastInteraction": "none",
+        "nurseryAgencyProven": false,
+        "nurseryFoldInvitation": false
+      },
+      "botActionCounts": {
+        "move": 27,
+        "pulse": 80,
+        "scan": 27
+      },
+      "pageErrors": [],
+      "note": "No accepted input is inferred from a HUD instruction. A Fold stage advance is sourced exclusively from SurfaceWakeLayeredInteractionSystem published state."
+    }
+  ]
+}

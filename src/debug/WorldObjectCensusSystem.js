@@ -26,6 +26,7 @@ export class WorldObjectCensusSystem {
     this.lastCircuitState = null;
     this.bot1cLastWitnessSignature = null;
     this.bot1cLastNurserySignature = null;
+    this.bot1dLastFoldSignature = null;
     this.lastCircuitVascularSequence = 0;
     this.lastCircuitGraveSequence = 0;
     // C0D4-MOB1: observer only. All locomotion/input ownership stays external.
@@ -447,8 +448,42 @@ export class WorldObjectCensusSystem {
       state: snapshot, caveat:'Poll-time owner snapshot; transient phases between polls may be missed.'
     });
   }
+  // BOT1-D: read-only adjudication of the authored Listening Fold stages.
+  // Never used by the bot action policy and never influences gameplay owners.
+  sampleBot1dFoldOwner() {
+    const fs = this.frameState ?? {};
+    const fold = fs.surfaceWakeLayeredInteraction ?? {};
+    const nursery = fs.nurseryCircuit ?? {};
+    const snapshot = {
+      activeCellId: fs.activeCellId ?? 'none',
+      owner: 'SurfaceWakeLayeredInteractionSystem',
+      active: Boolean(fold.active),
+      foldAvailable: Boolean(fold.foldAvailable),
+      stage: fold.stage ?? 'unreported',
+      stageIndex: Number.isInteger(fold.stageIndex) ? fold.stageIndex : null,
+      progress: Number.isFinite(fold.progress) ? Number(fold.progress.toFixed(3)) : null,
+      completed: Boolean(fold.completed),
+      inApproach: Boolean(fold.ready),
+      focusReady: Boolean(fold.focusReady),
+      focusDistance: Number.isFinite(fold.focusDistance) ? Number(fold.focusDistance.toFixed(3)) : null,
+      expectsPulse: Boolean(fold.expectsPulse),
+      expectsHold: Boolean(fold.expectsHold),
+      expectsRelease: Boolean(fold.expectsRelease),
+      lastInteraction: fold.lastInteraction ?? 'none',
+      nurseryAgencyProven: Boolean(nursery.agencyProven),
+      nurseryFoldInvitation: Boolean(nursery.foldInvitation)
+    };
+    const signature = JSON.stringify(snapshot);
+    if (signature === this.bot1dLastFoldSignature) return;
+    this.bot1dLastFoldSignature = signature;
+    this.recordEvent('bot1d-listening-fold-owner-state', {
+      state: snapshot,
+      proofLimit: 'Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.'
+    });
+  }
   sampleAuthority() {
     this.sampleBot1cWatcherOwner();
+    this.sampleBot1dFoldOwner();
     const now = this.authoritySnapshot();
     const before = this.authorityPrevious;
     const target = this.materialContext();
@@ -932,6 +967,7 @@ export class WorldObjectCensusSystem {
     this.lastCircuitVascularSequence = this.hostConnectionReceiptLedger?.vascularEffectSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitGraveSequence = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitState = null;
+    this.bot1dLastFoldSignature = null;
     this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
     this.c0e2bLastVolumeSignature=null;this.c0e2bLastApproachMs=null;
     this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;
