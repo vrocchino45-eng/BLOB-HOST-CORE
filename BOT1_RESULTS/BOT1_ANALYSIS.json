@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-10-27T04:24:32.594201+00:00",
+  "gate": "G1 BOT1: NOT FULLY ACCEPTED until real browser replay, ≥3x3 matrix, normal route, screenshots and HUD owner checks",
+  "runs": [
+    {
+      "runId": "BOT1_20261027T041854Z_first_slice_reader_s11",
+      "status": "CAPTURED",
+      "evidenceKind": "REAL_GAME_BROWSER",
+      "recording": "PASS",
+      "controlPath": "browser keyboard + mouse (existing InputSystem)",
+      "hudComprehension": "UNEXERCISED: HUD text was read, but no language understanding or 3D vision was measured",
+      "visualReadability": "UNEXERCISED: requires screenshot/video review",
+      "movement": "PASS: movement and cells sampled",
+      "hostReceiptIntegrity": "UNEXERCISED (no Host receipts during this scenario)",
+      "abilityAcceptance": "UNEXERCISED",
+      "rec1Events": 111,
+      "rec1DurationSeconds": 25.92,
+      "rec1Retention": {
+        "totalEventsObserved": 111,
+        "retainedDetails": 111,
+        "droppedDetails": 0,
+        "siltSourceTraceGaps": 0,
+        "lifetimeCountersSpanFullCapture": true,
+        "fullSessionRecorderDetailsRetained": true,
+        "detailedListsContainOnlyLast2500": false,
+        "retentionPolicy": "append_only_for_current_capture_no_2500_event_rollover",
+        "caveat": "Full recorder history does not guarantee source truth if a producer 64-entry ring overflows between 150ms samples."
+      },
+      "ownerEvidence": {
+        "game-pulse-event": 0,
+        "game-absorb-started": 0,
+        "game-stabilize-started": 7,
+        "silt-pressure-read-committed": 0,
+        "silt-porous-absorb-committed": 0,
+        "silt-completion-committed": 0,
+        "silt-trajectory:released-with-trajectory": 0,
+        "host-silt-cause-observed": 0,
+        "vascular-silt-signal-received": 0,
+        "c0d4-host-vascular-effect": 0,
+        "c0e1-territory-verb-read": 0,
+        "c0e2-pocket-discovered": 0,
+        "c0d4-active-cell-change": 0
+      },
+      "sitesDiscovered": [],
+      "pocketsDiscovered": [],
+      "localVerbsRecorded": {},
+      "regionsVisited": [
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "movementSamples": 16,
+      "movementPressureHigh": 2,
+      "stalledHighInputSamples": 0,
+      "sustainedLowProgressEvents": 0,
+      "sampledPathDisplacement": 2.535,
+      "sampledPathLength": 23.802,
+      "hostReceipts": {
+        "siltCauses": 0,
+        "vascularReceived": 0,
+        "siltHostSequences": [],
+        "vascularReceivedSequences": [],
+        "duplicateCauseOrSequence": false,
+        "duplicateReceiverSequence": false,
+        "sourceTraceGaps": 0,
+        "receiverGaps": 0
+      },
+      "hudSaysSuccessWithoutMatchingOwnerProof": "NOT ASSESSED — generic HUD strings cannot establish an accepted game owner outcome",
+      "limitations": [
+        "Headless bot makes HUD-informed or seeded exploratory decisions, not 3D-image decisions.",
+        "Movement samples are 150ms REC1 observations; snapshot cadence may miss transitions.",
+        "No owner receipt can be deduced from an input edge or a rendered packet.",
+        "Successful start/stop and active input do not prove completion of the intended route."
+      ]
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "rec1Recorded": 1,
+    "syntheticFixtures": 0,
+    "movementExercised": 1,
+    "hostReceiptIntegrityPassWhenExercised": 0,
+    "browserErrors": 0
+  }
+}
