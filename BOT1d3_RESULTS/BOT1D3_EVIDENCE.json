@@ -1,0 +1,133 @@
+[
+  {
+    "folder": "BOT1D3_20261028T074343Z_sweep_s11",
+    "status": "CAPTURED",
+    "issues": [
+      "Both clean and scar player-authored outcomes not observed in this run"
+    ],
+    "profile": "sweep",
+    "seed": 11,
+    "captureSeconds": 76.166,
+    "detailsRetained": 1130,
+    "detailsDropped": 0,
+    "inputPulseAttempts": 18,
+    "REC1PulseInputs": 18,
+    "ownerWitnessedPulseIds": 18,
+    "ownerAccepted": 1,
+    "ownerRejected": 17,
+    "rejectionReasons": {
+      "packet_out_of_read_range": 13,
+      "no_active_packet": 4
+    },
+    "closestRecordedPulseDistance": 2.5929829058415943,
+    "nearMissesWithinHalfUnit": 1,
+    "nearMissSamples": [
+      {
+        "pulseEventId": 10,
+        "distance": 3.860048364979544,
+        "readRange": 3.4
+      }
+    ],
+    "uncorrelatedInputPulseIds": [],
+    "actualGuideWitness": {
+      "guide0Present": true,
+      "pulsePairs": 18,
+      "pairsWithGuide": 18,
+      "guideLastReactions": {
+        "guide_waited_for_world_response": 446
+      },
+      "guidePoseStates": {
+        "observing_with_player": 341,
+        "answering_player_pulse": 105
+      },
+      "guideOutcomes": {
+        "tender_fed_clean_matter": 1,
+        "tender_strained_by_unread_contamination": 4,
+        "tender_passively_received_clean_matter": 1
+      },
+      "ownerAcceptedReads": 1,
+      "cleanPlayerOutcomeCount": 1,
+      "scarPlayerOutcomeCount": 0
+    },
+    "ownerFoldInvitation": true,
+    "invitationExplicitOwner": true,
+    "botObservedFoldInvitation": true,
+    "maxFoldStageIndex": 0,
+    "foldComplete": false,
+    "visualMotionSamples": 0,
+    "visualMotionCandidateFrames": 0,
+    "actionCounts": {
+      "observe": 2,
+      "move": 35,
+      "look": 31,
+      "pulse": 18,
+      "visible_invitation": 1
+    },
+    "pageErrors": []
+  },
+  {
+    "folder": "BOT1D3_20261028T074513Z_motion_s12",
+    "status": "CAPTURED",
+    "issues": [
+      "No owner-accepted packet read in this run",
+      "Both clean and scar player-authored outcomes not observed in this run"
+    ],
+    "profile": "motion",
+    "seed": 12,
+    "captureSeconds": 76.234,
+    "detailsRetained": 702,
+    "detailsDropped": 0,
+    "inputPulseAttempts": 15,
+    "REC1PulseInputs": 15,
+    "ownerWitnessedPulseIds": 15,
+    "ownerAccepted": 0,
+    "ownerRejected": 15,
+    "rejectionReasons": {
+      "packet_out_of_read_range": 11,
+      "no_active_packet": 4
+    },
+    "closestRecordedPulseDistance": 3.899363482286696,
+    "nearMissesWithinHalfUnit": 1,
+    "nearMissSamples": [
+      {
+        "pulseEventId": 15,
+        "distance": 3.899363482286696,
+        "readRange": 3.4
+      }
+    ],
+    "uncorrelatedInputPulseIds": [],
+    "actualGuideWitness": {
+      "guide0Present": true,
+      "pulsePairs": 15,
+      "pairsWithGuide": 15,
+      "guideLastReactions": {
+        "guide_waited_for_world_response": 497
+      },
+      "guidePoseStates": {
+        "observing_with_player": 406,
+        "answering_player_pulse": 91
+      },
+      "guideOutcomes": {
+        "tender_passively_received_clean_matter": 3,
+        "tender_strained_by_unread_contamination": 4
+      },
+      "ownerAcceptedReads": 0,
+      "cleanPlayerOutcomeCount": 0,
+      "scarPlayerOutcomeCount": 0
+    },
+    "ownerFoldInvitation": false,
+    "invitationExplicitOwner": false,
+    "botObservedFoldInvitation": false,
+    "maxFoldStageIndex": 0,
+    "foldComplete": false,
+    "visualMotionSamples": 20,
+    "visualMotionCandidateFrames": 20,
+    "actionCounts": {
+      "pulse": 15,
+      "move": 21,
+      "look": 16,
+      "observe": 6
+    },
+    "pageErrors": []
+  }
+]
