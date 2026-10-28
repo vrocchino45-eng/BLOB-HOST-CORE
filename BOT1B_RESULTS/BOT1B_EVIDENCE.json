@@ -1,0 +1,209 @@
+{
+  "revision": "BOT1-B",
+  "runs": [
+    {
+      "runId": "BOT1_20261028T043130Z_first_slice_reader_s11",
+      "status": "CAPTURED",
+      "evidenceKind": "REAL_GAME_BROWSER",
+      "firstHudDirective": "Pulse the moving matter so the Watcher can identify it.",
+      "totalActions": 57,
+      "inputAttemptsByVerb": {
+        "pulse": 7,
+        "absorb": 1,
+        "stabilize": 1
+      },
+      "rec1EventCounts": {
+        "pulse": 7,
+        "absorb": 1,
+        "stabilize": 1
+      },
+      "calibrationRecognized": {
+        "pulse": true,
+        "absorb": true,
+        "stabilize": true
+      },
+      "worldViewPulseDirectiveAttempts": 6,
+      "worldViewPulseRecorded": 6,
+      "ownerConsequenceObservations": {
+        "silt-pressure-read-committed": 0,
+        "silt-porous-absorb-committed": 0,
+        "c0e1-territory-verb-read": 0,
+        "chemistry-absorption-committed": 1,
+        "silt-completion-committed": 0,
+        "host-silt-cause-observed": 0
+      },
+      "hudTextChangedDuringRun": true,
+      "hudIsNotOwnerReceipt": true,
+      "goalAccepted": "NOT_PROVEN_FROM_HUD_OR_RAW_INPUT",
+      "evaluatedAbilityAttempts": [
+        {
+          "tick": 0,
+          "reason": "independent_input_calibration",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:00.965Z",
+              "recorderEventOrdinal": 11
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 1,
+          "reason": "independent_input_calibration",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "absorb",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-absorb-started",
+              "time": "2026-10-28T04:32:02.564Z",
+              "recorderEventOrdinal": 12
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 2,
+          "reason": "independent_input_calibration",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "stabilize",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-28T04:32:03.171Z",
+              "recorderEventOrdinal": 17
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 3,
+          "reason": "hud_directive_attempt",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:03.887Z",
+              "recorderEventOrdinal": 22
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 6,
+          "reason": "hud_directive_attempt",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:05.431Z",
+              "recorderEventOrdinal": 25
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 10,
+          "reason": "hud_directive_attempt",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:07.604Z",
+              "recorderEventOrdinal": 31
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 14,
+          "reason": "hud_directive_attempt",
+          "hudDirective": "Pulse the next packet to make a deliberate reading.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:10.004Z",
+              "recorderEventOrdinal": 37
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 18,
+          "reason": "hud_directive_attempt",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:12.270Z",
+              "recorderEventOrdinal": 43
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 22,
+          "reason": "hud_directive_attempt",
+          "hudDirective": "Pulse the moving matter so the Watcher can identify it.",
+          "verb": "pulse",
+          "viewMode": "world",
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-pulse-event",
+              "time": "2026-10-28T04:32:13.760Z",
+              "recorderEventOrdinal": 49
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        }
+      ],
+      "screenshots": {
+        "start.png": true,
+        "before_pulse.png": true,
+        "after_pulse.png": true,
+        "end.png": true
+      },
+      "retention": {
+        "totalEventsObserved": 79,
+        "retainedDetails": 79,
+        "droppedDetails": 0,
+        "siltSourceTraceGaps": 0,
+        "lifetimeCountersSpanFullCapture": true,
+        "fullSessionRecorderDetailsRetained": true,
+        "detailedListsContainOnlyLast2500": false,
+        "retentionPolicy": "append_only_for_current_capture_no_2500_event_rollover",
+        "caveat": "Full recorder history does not guarantee source truth if a producer 64-entry ring overflows between 150ms samples."
+      },
+      "limitations": [
+        "REC1 polls at intervals and might miss brief actions; correlate cautiously.",
+        "Owner consequences may be caused by distinct overlapping actions; count separately.",
+        "Visual aiming and objective completion require scene or owner evidence, not HUD strings."
+      ]
+    }
+  ],
+  "evaluation": "input, view and objective linkage; NO fabricated gameplay acceptance"
+}

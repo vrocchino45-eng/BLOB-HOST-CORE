@@ -1,0 +1,175 @@
+{
+  "revision": "BOT1-B",
+  "runs": [
+    {
+      "runId": "BOT1_20261027T041854Z_first_slice_reader_s11",
+      "status": "CAPTURED",
+      "evidenceKind": "REAL_GAME_BROWSER",
+      "firstHudDirective": null,
+      "totalActions": 31,
+      "inputAttemptsByVerb": {
+        "stabilize": 7
+      },
+      "rec1EventCounts": {
+        "pulse": 0,
+        "absorb": 0,
+        "stabilize": 7
+      },
+      "calibrationRecognized": {
+        "pulse": false,
+        "absorb": false,
+        "stabilize": false
+      },
+      "worldViewPulseDirectiveAttempts": 0,
+      "worldViewPulseRecorded": 0,
+      "ownerConsequenceObservations": {
+        "silt-pressure-read-committed": 0,
+        "silt-porous-absorb-committed": 0,
+        "c0e1-territory-verb-read": 0,
+        "chemistry-absorption-committed": 0,
+        "silt-completion-committed": 0,
+        "host-silt-cause-observed": 0
+      },
+      "hudTextChangedDuringRun": true,
+      "hudIsNotOwnerReceipt": true,
+      "goalAccepted": "NOT_PROVEN_FROM_HUD_OR_RAW_INPUT",
+      "evaluatedAbilityAttempts": [
+        {
+          "tick": 1,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:22.704Z",
+              "recorderEventOrdinal": 12
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 5,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:25.643Z",
+              "recorderEventOrdinal": 26
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 9,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:28.661Z",
+              "recorderEventOrdinal": 38
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 13,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:32.615Z",
+              "recorderEventOrdinal": 51
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 17,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:36.015Z",
+              "recorderEventOrdinal": 64
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 25,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:42.968Z",
+              "recorderEventOrdinal": 91
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        },
+        {
+          "tick": 29,
+          "reason": null,
+          "hudDirective": null,
+          "verb": "stabilize",
+          "viewMode": null,
+          "inputStatus": "OBSERVED_CANONICAL_EVENT",
+          "correlatedEvents": [
+            {
+              "type": "game-stabilize-started",
+              "time": "2026-10-27T04:19:46.280Z",
+              "recorderEventOrdinal": 103
+            }
+          ],
+          "targetOwnerAcceptance": "NOT_ESTABLISHED_BY_INPUT"
+        }
+      ],
+      "screenshots": {
+        "start.png": true,
+        "before_pulse.png": false,
+        "after_pulse.png": false,
+        "end.png": true
+      },
+      "retention": {
+        "totalEventsObserved": 111,
+        "retainedDetails": 111,
+        "droppedDetails": 0,
+        "siltSourceTraceGaps": 0,
+        "lifetimeCountersSpanFullCapture": true,
+        "fullSessionRecorderDetailsRetained": true,
+        "detailedListsContainOnlyLast2500": false,
+        "retentionPolicy": "append_only_for_current_capture_no_2500_event_rollover",
+        "caveat": "Full recorder history does not guarantee source truth if a producer 64-entry ring overflows between 150ms samples."
+      },
+      "limitations": [
+        "REC1 polls at intervals and might miss brief actions; correlate cautiously.",
+        "Owner consequences may be caused by distinct overlapping actions; count separately.",
+        "Visual aiming and objective completion require scene or owner evidence, not HUD strings."
+      ]
+    }
+  ],
+  "evaluation": "input, view and objective linkage; NO fabricated gameplay acceptance"
+}

@@ -13,6 +13,9 @@ except ImportError:
     sys.exit('Python Playwright is required: py -m pip install playwright')
 
 PROFILES = ('explorer', 'reader', 'stress')
+
+# BOT1-B: infer directives from on-screen HUD prose only. Never inspect owners to decide actions.
+ABILITY_EVENTS = {'pulse': 'game-pulse-event', 'absorb': 'game-absorb-started', 'stabilize': 'game-stabilize-started'}
 MOVE_KEYS = ('w', 'a', 's', 'd', 'c', 'z')
 
 
@@ -59,37 +62,90 @@ def log_action(actions, tick, op, **kwargs):
     actions.append({'tick': tick, 'time': utc(), 'op': op, **kwargs})
 
 
-def choose_plan(profile, rnd, tick, hud):
-    """Select human-bound controls from visible HUD + fixed-seed policy; NO world truth.
+def parse_objective(hud):
+    """Read only the leading directive, NOT the hotkey legend or incidental ability words.
 
-    Reader is HUD-responsive only; without scene pixels this is not vision-guided navigation.
+    The first BOT1-A error was spotting 'stabilize' in the legend instead of
+    obeying 'Pulse the moving matter'. Keep this parser conservative.
     """
-    hud_l = hud.lower()
+    raw = compact_text(hud, 2400)
+    before_legend = re.split(r'(?:Reading:|WASD move|Controls:|Mouse/IJKL camera)', raw, maxsplit=1, flags=re.I)[0]
+    mode = ('core_work' if 'CORE WORK' in before_legend.upper() else
+            'core_inspection' if 'CORE INSPECTION' in before_legend.upper() else
+            'world')
+    candidates = list(re.finditer(r'\b(Pulse|Absorb|Stabilize)\s+(?:the|a|an|moving|nearby|loose|unstable)\b[^.!?]{0,160}[.!?]?',before_legend,re.I))
+    match = candidates[0] if candidates else None
+    if not match:
+        return {'mode': mode, 'verb': None, 'directive': None, 'recognized': False}
+    directive = match.group(0).strip()
+    return {'mode': mode, 'verb': match.group(1).lower(), 'directive': directive, 'recognized': True}
+
+
+class ReaderPolicy:
+    """Conservative objective-first policy; only visible HUD influences decisions.
+
+    First calibrate the actual three inputs separately, while world view is
+    verified. Then attempt the requested verb; scan in small seeded steps if
+    there is no change. No hidden target IDs or physics/position access.
+    """
+    def __init__(self, seed):
+        self.rng = random.Random(seed)
+        self.step = 0
+        self.world_view_retries = 0
+        self.calibration = 0
+        self.directive_attempts = 0
+        self.scan_step = 0
+        self.last_objective = None
+        self.max_directive_attempts = 6
+        self.issued_directive_attempts = 0
+
+    def decide(self, hud):
+        objective = parse_objective(hud)
+        if objective['mode'] != 'world':
+            if self.world_view_retries < 2:
+                self.world_view_retries += 1
+                return ('key','f',.12), objective, 'return_to_world_for_world_objective'
+            return ('observe',None,.32), objective, 'world_view_unverified_stop_input'
+        self.world_view_retries = 0
+        # Input calibration independently verifies each of the three canonical inputs.
+        calibration = [('pulse',('key','x',.12)),
+                       ('absorb',('right',None,.40)),
+                       ('stabilize',('holdkey','q',.42))]
+        if self.calibration < len(calibration):
+            verb, task = calibration[self.calibration]
+            self.calibration += 1
+            return task, {**objective, 'verb': verb}, 'independent_input_calibration'
+        if not objective['recognized']:
+            return ('observe',None,.45), objective, 'no_explicit_verb_directive'
+        # Give the first directive a real attempt immediately, then bounded probing.
+        verb=objective['verb']
+        self.directive_attempts += 1
+        if (self.directive_attempts == 1 or self.directive_attempts % 4 == 0) and self.issued_directive_attempts < self.max_directive_attempts:
+            self.issued_directive_attempts += 1
+            task = {'pulse':('key','x',.12), 'absorb':('right',None,.45),
+                    'stabilize':('holdkey','q',.45)}[verb]
+            return task, objective, 'hud_directive_attempt'
+        # Short, deterministic movement/camera probing, not imaginary target locks.
+        if self.directive_attempts % 4 == 1:
+            direction=['w','a','w','d','c','z'][self.scan_step%6]
+            self.scan_step+=1
+            return ('move',direction,.48), objective, 'uncertain_target_small_search'
+        # Mouse motion only changes viewpoint; a target is not assumed visible.
+        if self.issued_directive_attempts >= self.max_directive_attempts and self.directive_attempts % 4 == 2:
+            return ('observe',None,.65), objective, 'attempt_budget_exhausted_wait_for_visual_review'
+        sign = -1 if self.scan_step % 2 else 1
+        return ('look',sign*80,.16), objective, 'uncertain_target_camera_scan'
+
+
+def choose_plan(profile, rnd, tick, hud):
+    """Legacy explorer/stress policies retained; reader is now ReaderPolicy."""
     if profile == 'explorer':
-        # Early focus/observe, periodic wandering and reorientation.
         if tick % 13 == 0: return [('key', 'f', .12)]
         if tick % 17 == 7: return [('key', 'e', .12)]
         if tick % 11 == 5: return [('key', 'x', .12)]
         return [('move', rnd.choice(['w','w','w','a','d','c','z','s']), rnd.choice([.65, .8, 1.05]))]
     if profile == 'reader':
-        if tick % 7 == 0: return [('key', 'f', .12)]
-        if tick % 9 == 3: return [('key', 'e', .12)]
-        if tick % 4 == 1:
-            if 'stabiliz' in hud_l or 'brace' in hud_l or 'hold' in hud_l:
-                return [('holdkey', 'q', .55)]
-            if 'absorb' in hud_l or 'draw' in hud_l or 'pull' in hud_l:
-                return [('right', None, .55)]
-            return [('key', 'x', .11)]
-        if 'return' in hud_l or 'back' in hud_l:
-            move = rnd.choice(['s', 'a', 'd'])
-        elif 'above' in hud_l or 'rise' in hud_l:
-            move = 'c'
-        elif 'below' in hud_l or 'descend' in hud_l:
-            move = 'z'
-        else:
-            move = rnd.choice(['w','w','a','d','c','z'])
-        return [('move', move, rnd.choice([.65, 1.0]))]
-    # Stress behavior uses canonical real-input chords, no debug jumps.
+        raise RuntimeError('BOT1-B reader must use objective-aware ReaderPolicy')
     if tick % 7 == 0: return [('key', 'e', .11)]
     if tick % 6 == 0: return [('chord', 'qx', .4)]
     if tick % 6 == 1: return [('chord', 'qright', .48)]
@@ -100,7 +156,12 @@ def choose_plan(profile, rnd, tick, hud):
 
 def perform(page, task):
     op, key, seconds = task
-    if op == 'move' or op == 'holdkey':
+    if op == 'observe':
+        page.wait_for_timeout(round(seconds*1000))
+    elif op == 'look':
+        page.mouse.move(600 + int(key), 330, steps=5)
+        page.wait_for_timeout(round(seconds*1000))
+    elif op == 'move' or op == 'holdkey':
         page.keyboard.down(key)
         page.wait_for_timeout(round(seconds*1000))
         page.keyboard.up(key)
@@ -136,6 +197,7 @@ def run_one(browser, args, profile, seed, duration, label):
       'evidenceKind':'FIXTURE' if args.fixture_html else 'REAL_GAME_BROWSER',
       'controlPath':'Playwright browser keyboard/mouse events -> existing InputSystem',
       'cheatsOrWorldWrites':False,'status':'UNEXERCISED', 'actions':[], 'percepts':[],
+      'objectivePolicyRevision':'BOT1-B' if profile=='reader' else 'BOT1-A',
       'referee':[], 'errors':console_errors}
     started = time.monotonic()
     record_started=False
@@ -156,15 +218,34 @@ def run_one(browser, args, profile, seed, duration, label):
         record_started=True
         result['status']='RUNNING'
         rng=random.Random(seed)
-        tick=0; mark=set()
+        reader_policy=ReaderPolicy(seed) if profile=='reader' else None
+        tick=0; mark=set(); photographed_pulse=False
         deadline=time.monotonic()+duration
         while time.monotonic()<deadline:
             hud=get_percept(page)
             if not result['percepts'] or hud!=result['percepts'][-1]['hud']:
                 result['percepts'].append({'tick':tick,'time':utc(),'hud':hud})
-            tasks=choose_plan(profile,rng,tick,hud)
-            for task in tasks:
-                log_action(result['actions'],tick,task[0],value=task[1],holdSeconds=task[2]);perform(page,task)
+            if reader_policy:
+                task, directive, reason=reader_policy.decide(hud)
+                tasks=[(task,directive,reason)]
+            else:
+                tasks=[(task,parse_objective(hud),'legacy_seeded_policy') for task in choose_plan(profile,rng,tick,hud)]
+            for task,directive,reason in tasks:
+                is_pulse=profile=='reader' and task[:2]==('key','x')
+                if is_pulse and not photographed_pulse:
+                    page.screenshot(path=str(run_dir/'before_pulse.png'))
+                action={'tick':tick,'time':utc(),'op':task[0],'value':task[1],
+                    'holdSeconds':task[2],'objective':directive.get('directive'),
+                    'requestedVerb':directive.get('verb'),'viewMode':directive.get('mode'),
+                    'reason':reason,'predictedEvent':ABILITY_EVENTS.get(directive.get('verb')),
+                    'acceptance':'PENDING_REC1_EVALUATION'}
+                result['actions'].append(action)
+                perform(page,task)
+                action['completedAt']=utc()
+                if is_pulse and not photographed_pulse:
+                    page.wait_for_timeout(280)
+                    page.screenshot(path=str(run_dir/'after_pulse.png'))
+                    photographed_pulse=True
             if tick%4==0:
                 result['referee'].append({'tick':tick,'time':utc(),'state':get_referee(page)})
             fraction=(time.monotonic()-(deadline-duration))/duration
