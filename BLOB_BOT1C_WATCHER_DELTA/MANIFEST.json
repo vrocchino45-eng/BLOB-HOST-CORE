@@ -1,0 +1,43 @@
+{
+  "pass": "BOT1-C",
+  "baseline": "C0E3_LANG1_BOT1B",
+  "scope": "Read-only Surface Wake owner witness, REC1 attribution, four normal-browser scenarios. No gameplay decisions changed.",
+  "locked": [
+    "World mechanics, three abilities and their acceptance thresholds",
+    "Movement, camera, targeting, 3/6/12 phase selection",
+    "Silt / Vascular / Grave / Hub and Host receipts",
+    "All objectives and progression"
+  ],
+  "files": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1c.py",
+      "before": null,
+      "after": "951e5261b74db2da3ef3f8efc87387c72cf49a592080f1c73ace7ca0845e3687",
+      "sizeBytes": 4865
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1c_browser.py",
+      "before": null,
+      "after": "7c95a69e541b2a28bfa20f997fc631d9403b2b2211d88d66cec43aea464cc6e4",
+      "sizeBytes": 7003
+    },
+    {
+      "path": "src/debug/WorldObjectCensusSystem.js",
+      "before": "ab35b64b779537a0bc7d25e154f31d4d0493ecf50434a2d6ed2fbe19ee5f8a1b",
+      "after": "b25230480531785c2923dbe717e93d7b5daecd2c866a81466d8d43cc764e4435",
+      "sizeBytes": 60721
+    },
+    {
+      "path": "src/opening/BOT1CWatcherWitness.js",
+      "before": null,
+      "after": "cd9349c54b39becf3ac5aba19dd33734be5b38751b2b0e783f681d5fd5f092d0",
+      "sizeBytes": 1452
+    },
+    {
+      "path": "src/opening/SurfaceWakeGameplaySystem.js",
+      "before": "6c9b8d6443a8c73c28851f71e7324770a2b83cc0f757800325b3ee5afba45df4",
+      "after": "f7a2f243570fb5cf527a50f3ef6261741e56d2e606b502030d2b248acc99875c",
+      "sizeBytes": 57069
+    }
+  ]
+}
