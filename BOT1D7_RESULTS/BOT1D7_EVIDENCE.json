@@ -1,0 +1,76 @@
+[
+  {
+    "revision": "BOT1-D7-REFEREE",
+    "status": "INVITED_NO_FOLD_STAGE",
+    "checkpointOnly": false,
+    "eventCount": 3272,
+    "captureStartedAt": "2026-10-29T03:18:40.189Z",
+    "captureActive": false,
+    "captureDurationSeconds": 251.259,
+    "droppedRecorderDetails": 0,
+    "foldMilestonesSeconds": {
+      "invitation": 16.09
+    },
+    "foldStagesObserved": [
+      "nursery_agency_pending",
+      "approach_listening_fold"
+    ],
+    "maxStageIndex": 0,
+    "maxProgress": 0.0,
+    "ownerCertifiedFoldComplete": false,
+    "minimumOwnerFocusDistanceWhenAvailable": 3.853,
+    "watcherWitnessedPulses": 3,
+    "watcherAcceptedReads": 1,
+    "watcherRejectReasons": {
+      "packet_out_of_read_range": 2
+    },
+    "nurseryOutcomeCounts": {
+      "tender_fed_clean_matter": 1,
+      "tender_strained_by_unread_contamination": 14,
+      "tender_passively_received_clean_matter": 7
+    },
+    "totalMovementSamples": 45,
+    "attachedMovementSamples": 0,
+    "postInvitationSamples": 41,
+    "postInvitationAttachedSamples": 0,
+    "lowProgressWarningCount": 0,
+    "guideSampleCount": 1458,
+    "guideReactionCounts": {
+      "guide_waited_for_world_response": 1458
+    },
+    "botActions": 32,
+    "visualWeakMoveCount": 0,
+    "botActionStageCounts": {
+      "packet_wait": 1,
+      "packet": 10,
+      "unknown": 1,
+      "fold_search": 20
+    },
+    "humanReferenceSeconds": {
+      "invitation": 32.99,
+      "first_fold_stage": 71.433,
+      "completed_fold": 79.371
+    },
+    "humanComparison": "Human reference labels are used OFFLINE only; no identical time/seed or comparable initial state guaranteed.",
+    "limitations": "Recorder owner events adjudicate observed progression; visual intelligibility, player intent, Guide assistance, and a complete Host circuit are not proven. Checkpoints while captureActive=true are cumulative partial captures.",
+    "folder": "BOT1D7_20261029T031829Z_visual_s11",
+    "visualSurveys": 20,
+    "candidateFrames": 20,
+    "ambiguousSurveys": 1,
+    "chosenHeadingCounts": {
+      "left": 1,
+      "right": 19
+    },
+    "appearanceChangedAboveAmbient": 20,
+    "policyProofLimit": "Visual novelty is not physical travel, direction to target, or Fold identification.",
+    "humanOwnerComparison": "Human owner completed Fold; independent reference, not controlled same-camera replay.",
+    "d6OwnerComparison": {
+      "D6_minFocusDistance": 5.592,
+      "D6_maxStageIndex": 0,
+      "D6_postInvitationAttachmentSamples": 0,
+      "D6_postInvitationStartEndDisplacementApprox": 0.5
+    },
+    "gameplayChanged": false,
+    "checkpointCount": 5
+  }
+]

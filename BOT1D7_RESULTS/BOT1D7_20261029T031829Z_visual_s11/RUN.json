@@ -1,0 +1,1704 @@
+{
+  "revision": "BOT1-D7",
+  "seed": 11,
+  "status": "CAPTURED",
+  "startedAt": "2026-10-29T03:18:31.090+00:00",
+  "profile": "visual_exploration",
+  "errors": [],
+  "actions": [
+    {
+      "step": 0,
+      "time": "2026-10-29T03:18:40.806+00:00",
+      "op": "stage_observed",
+      "stage": "packet_wait"
+    },
+    {
+      "step": 0,
+      "time": "2026-10-29T03:18:42.542+00:00",
+      "visibleStage": "packet_wait",
+      "op": "observe",
+      "key": null,
+      "durationSeconds": 0.85,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 1,
+      "time": "2026-10-29T03:18:42.600+00:00",
+      "op": "stage_observed",
+      "stage": "packet"
+    },
+    {
+      "step": 1,
+      "time": "2026-10-29T03:18:44.298+00:00",
+      "visibleStage": "packet",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 0.85,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 2,
+      "time": "2026-10-29T03:18:44.976+00:00",
+      "visibleStage": "packet",
+      "op": "look",
+      "key": "l",
+      "durationSeconds": 0.54,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 3,
+      "time": "2026-10-29T03:18:45.881+00:00",
+      "visibleStage": "packet",
+      "op": "move",
+      "key": "d",
+      "durationSeconds": 0.77,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 4,
+      "time": "2026-10-29T03:18:46.236+00:00",
+      "visibleStage": "packet",
+      "op": "observe",
+      "key": null,
+      "durationSeconds": 0.3,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 5,
+      "time": "2026-10-29T03:18:46.633+00:00",
+      "visibleStage": "packet",
+      "op": "pulse",
+      "key": null,
+      "durationSeconds": 0.28,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 6,
+      "time": "2026-10-29T03:18:47.596+00:00",
+      "visibleStage": "packet",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 0.85,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 7,
+      "time": "2026-10-29T03:18:48.111+00:00",
+      "visibleStage": "packet",
+      "op": "look",
+      "key": "j",
+      "durationSeconds": 0.4,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 8,
+      "time": "2026-10-29T03:18:48.523+00:00",
+      "visibleStage": "packet",
+      "op": "pulse",
+      "key": null,
+      "durationSeconds": 0.28,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 9,
+      "time": "2026-10-29T03:18:49.395+00:00",
+      "visibleStage": "packet",
+      "op": "move",
+      "key": "s",
+      "durationSeconds": 0.74,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 10,
+      "time": "2026-10-29T03:18:49.815+00:00",
+      "visibleStage": "packet",
+      "op": "pulse",
+      "key": null,
+      "durationSeconds": 0.28,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 11,
+      "time": "2026-10-29T03:18:50.938+00:00",
+      "op": "stage_observed",
+      "stage": "unknown"
+    },
+    {
+      "step": 11,
+      "time": "2026-10-29T03:18:57.891+00:00",
+      "visibleStage": "unknown",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 0.85,
+      "reason": "existing_D3_nursery_acquisition",
+      "ownerFree": true
+    },
+    {
+      "step": 12,
+      "time": "2026-10-29T03:18:58.588+00:00",
+      "op": "stage_observed",
+      "stage": "fold_search"
+    },
+    {
+      "step": 12,
+      "time": "2026-10-29T03:19:10.159+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "left",
+      "appearanceChange": 0.02125,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 13,
+      "time": "2026-10-29T03:19:20.163+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07356,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 14,
+      "time": "2026-10-29T03:19:35.355+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.08692,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 15,
+      "time": "2026-10-29T03:19:49.896+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07198,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 16,
+      "time": "2026-10-29T03:20:03.173+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07744,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 17,
+      "time": "2026-10-29T03:20:13.529+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.071,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 18,
+      "time": "2026-10-29T03:20:26.259+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.0764,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 19,
+      "time": "2026-10-29T03:20:36.871+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07956,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 20,
+      "time": "2026-10-29T03:20:48.611+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07858,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 21,
+      "time": "2026-10-29T03:20:58.936+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07567,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 22,
+      "time": "2026-10-29T03:21:12.105+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.0695,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 23,
+      "time": "2026-10-29T03:21:22.016+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07529,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 24,
+      "time": "2026-10-29T03:21:33.100+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.08375,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 25,
+      "time": "2026-10-29T03:21:42.726+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07296,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 26,
+      "time": "2026-10-29T03:21:53.980+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.06625,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 27,
+      "time": "2026-10-29T03:22:06.014+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.07521,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 28,
+      "time": "2026-10-29T03:22:17.302+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.08144,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 29,
+      "time": "2026-10-29T03:22:27.252+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.0665,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 30,
+      "time": "2026-10-29T03:22:38.916+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.04965,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    },
+    {
+      "step": 31,
+      "time": "2026-10-29T03:22:48.746+00:00",
+      "visibleStage": "fold_search",
+      "op": "move",
+      "key": "w",
+      "durationSeconds": 1.65,
+      "reason": "survey_viewpoint_novelty_exploration",
+      "selectedHeading": "right",
+      "appearanceChange": 0.08108,
+      "ownerFree": true,
+      "goalDirectionKnown": false
+    }
+  ],
+  "percepts": [
+    {
+      "time": "2026-10-29T03:18:40.806+00:00",
+      "visibleStage": "packet_wait",
+      "objective": "Watch the current mouth; matter is entering the nursery.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Watch the current mouth; matter is entering the nursery. Y inspects the Core / readable focus. Surface Wake: nursery breathing / Tender 72% · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:42.600+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Pulse the moving matter so the Watcher can identify it. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 72% · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:44.355+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Pulse the moving matter so the Watcher can identify it. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 72% · Contact brushing · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:45.024+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Pulse the moving matter so the Watcher can identify it. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 72% · Contact attached · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:45.922+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Pulse the moving matter so the Watcher can identify it. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 72% · Contact brushing · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:48.155+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Pulse the moving matter so the Watcher can identify it. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 72% · Contact attached · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:49.435+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Pulse the moving matter so the Watcher can identify it. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 72% · Contact releasing · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:18:50.938+00:00",
+      "visibleStage": "unknown",
+      "objective": "",
+      "hud": ""
+    },
+    {
+      "time": "2026-10-29T03:18:58.588+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 80% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:19:10.205+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 66% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:19:24.184+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 52% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:19:35.408+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 53% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:19:51.057+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 39% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:20:03.204+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: Fold revealed / Tender 27% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:20:15.698+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 13% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:20:26.278+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:20:37.554+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 2% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:20:48.769+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:21:12.135+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 2% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:21:22.724+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:21:33.129+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:21:43.402+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 2% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:21:55.514+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:22:17.407+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 2% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:22:28.226+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact attached · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "time": "2026-10-29T03:22:38.945+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hud": "BLOB // HOST CORE // SURFACE WAKE Follow the Watcher's turn toward the Listening Fold. Y inspects the Core / readable focus. Surface Wake: matter moving / Tender 0% · Contact brushing · Audio ON x0.82 · Binding Core — emerging · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    }
+  ],
+  "surveys": [
+    {
+      "selected": "left",
+      "scores": {
+        "left": 0.0,
+        "center": 0.0,
+        "right": 0.0
+      },
+      "ambiguous": true,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 12,
+      "at": "2026-10-29T03:19:10.159+00:00",
+      "chosenHeading": "left",
+      "initialCandidates": [
+        {
+          "screenX": 0.558,
+          "screenY": 0.733,
+          "areaPixels": 442,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.283,
+          "screenY": 0.81,
+          "areaPixels": 24,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 2,
+        "left": 3,
+        "right": 3
+      },
+      "ambientDelta": 0.00519,
+      "movement": {
+        "appearanceDelta": 0.02125,
+        "ambientDelta": 0.00519,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02658,
+        "center": 0.027,
+        "right": 0.06592
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 13,
+      "at": "2026-10-29T03:19:20.163+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.513,
+          "screenY": 0.68,
+          "areaPixels": 431,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.18,
+          "screenY": 0.861,
+          "areaPixels": 73,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.093,
+          "screenY": 0.79,
+          "areaPixels": 17,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.555,
+          "screenY": 0.366,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.134,
+          "screenY": 0.797,
+          "areaPixels": 10,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 4,
+        "right": 2
+      },
+      "ambientDelta": 0.0175,
+      "movement": {
+        "appearanceDelta": 0.07356,
+        "ambientDelta": 0.0175,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02181,
+        "center": 0.01954,
+        "right": 0.07285
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 14,
+      "at": "2026-10-29T03:19:35.355+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.619,
+          "screenY": 0.742,
+          "areaPixels": 416,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.378,
+          "screenY": 0.767,
+          "areaPixels": 35,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 2,
+        "left": 4,
+        "right": 4
+      },
+      "ambientDelta": 0.0091,
+      "movement": {
+        "appearanceDelta": 0.08692,
+        "ambientDelta": 0.0091,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03321,
+        "center": 0.00877,
+        "right": 0.06915
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 15,
+      "at": "2026-10-29T03:19:49.896+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.66,
+          "screenY": 0.749,
+          "areaPixels": 598,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.601,
+          "screenY": 0.49,
+          "areaPixels": 64,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.336,
+          "screenY": 0.262,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.314,
+          "screenY": 0.347,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.758,
+          "screenY": 0.435,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 3,
+        "right": 3
+      },
+      "ambientDelta": 0.01315,
+      "movement": {
+        "appearanceDelta": 0.07198,
+        "ambientDelta": 0.01315,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02258,
+        "center": 0.01792,
+        "right": 0.06519
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 16,
+      "at": "2026-10-29T03:20:03.172+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.62,
+          "screenY": 0.747,
+          "areaPixels": 426,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.357,
+          "screenY": 0.762,
+          "areaPixels": 31,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.227,
+          "screenY": 0.399,
+          "areaPixels": 9,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 3,
+        "left": 5,
+        "right": 4
+      },
+      "ambientDelta": 0.00688,
+      "movement": {
+        "appearanceDelta": 0.07744,
+        "ambientDelta": 0.00688,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03288,
+        "center": 0.00594,
+        "right": 0.06598
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 17,
+      "at": "2026-10-29T03:20:13.529+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.653,
+          "screenY": 0.757,
+          "areaPixels": 515,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.273,
+          "screenY": 0.823,
+          "areaPixels": 88,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.685,
+          "screenY": 0.471,
+          "areaPixels": 20,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.303,
+          "screenY": 0.284,
+          "areaPixels": 15,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.801,
+          "screenY": 0.509,
+          "areaPixels": 14,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 3,
+        "right": 2
+      },
+      "ambientDelta": 0.01063,
+      "movement": {
+        "appearanceDelta": 0.071,
+        "ambientDelta": 0.01063,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02623,
+        "center": 0.01802,
+        "right": 0.06827
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 18,
+      "at": "2026-10-29T03:20:26.259+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.634,
+          "screenY": 0.748,
+          "areaPixels": 428,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.404,
+          "screenY": 0.765,
+          "areaPixels": 38,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 2,
+        "left": 5,
+        "right": 2
+      },
+      "ambientDelta": 0.00815,
+      "movement": {
+        "appearanceDelta": 0.0764,
+        "ambientDelta": 0.00815,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.0311,
+        "center": 0.00821,
+        "right": 0.07298
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 19,
+      "at": "2026-10-29T03:20:36.871+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.685,
+          "screenY": 0.742,
+          "areaPixels": 468,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.343,
+          "screenY": 0.745,
+          "areaPixels": 63,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.727,
+          "screenY": 0.453,
+          "areaPixels": 25,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.475,
+          "screenY": 0.868,
+          "areaPixels": 20,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.324,
+          "screenY": 0.263,
+          "areaPixels": 13,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 3,
+        "right": 2
+      },
+      "ambientDelta": 0.01025,
+      "movement": {
+        "appearanceDelta": 0.07956,
+        "ambientDelta": 0.01025,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03325,
+        "center": 0.0164,
+        "right": 0.06492
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 20,
+      "at": "2026-10-29T03:20:48.611+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.742,
+          "screenY": 0.734,
+          "areaPixels": 479,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.48,
+          "screenY": 0.76,
+          "areaPixels": 63,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.362,
+          "screenY": 0.254,
+          "areaPixels": 13,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.783,
+          "screenY": 0.427,
+          "areaPixels": 9,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 4,
+        "left": 4,
+        "right": 2
+      },
+      "ambientDelta": 0.01146,
+      "movement": {
+        "appearanceDelta": 0.07858,
+        "ambientDelta": 0.01146,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02942,
+        "center": 0.01071,
+        "right": 0.07254
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 21,
+      "at": "2026-10-29T03:20:58.936+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.715,
+          "screenY": 0.738,
+          "areaPixels": 456,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.434,
+          "screenY": 0.803,
+          "areaPixels": 40,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.764,
+          "screenY": 0.45,
+          "areaPixels": 17,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.341,
+          "screenY": 0.271,
+          "areaPixels": 10,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.312,
+          "screenY": 0.346,
+          "areaPixels": 9,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 4,
+        "right": 3
+      },
+      "ambientDelta": 0.00446,
+      "movement": {
+        "appearanceDelta": 0.07567,
+        "ambientDelta": 0.00446,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02325,
+        "center": 0.01429,
+        "right": 0.07031
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 22,
+      "at": "2026-10-29T03:21:12.105+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.643,
+          "screenY": 0.763,
+          "areaPixels": 452,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.284,
+          "screenY": 0.322,
+          "areaPixels": 11,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.256,
+          "screenY": 0.399,
+          "areaPixels": 9,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 3,
+        "left": 3,
+        "right": 1
+      },
+      "ambientDelta": 0.00758,
+      "movement": {
+        "appearanceDelta": 0.0695,
+        "ambientDelta": 0.00758,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02819,
+        "center": 0.00627,
+        "right": 0.0661
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 23,
+      "at": "2026-10-29T03:21:22.016+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.665,
+          "screenY": 0.751,
+          "areaPixels": 466,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.381,
+          "screenY": 0.765,
+          "areaPixels": 44,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.68,
+          "screenY": 0.498,
+          "areaPixels": 42,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.793,
+          "screenY": 0.529,
+          "areaPixels": 18,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.31,
+          "screenY": 0.261,
+          "areaPixels": 13,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 4,
+        "right": 3
+      },
+      "ambientDelta": 0.00825,
+      "movement": {
+        "appearanceDelta": 0.07529,
+        "ambientDelta": 0.00825,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03183,
+        "center": 0.01044,
+        "right": 0.06869
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 24,
+      "at": "2026-10-29T03:21:33.100+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.637,
+          "screenY": 0.755,
+          "areaPixels": 561,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.734,
+          "screenY": 0.448,
+          "areaPixels": 13,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.324,
+          "screenY": 0.282,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.295,
+          "screenY": 0.352,
+          "areaPixels": 11,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 4,
+        "left": 3,
+        "right": 2
+      },
+      "ambientDelta": 0.01335,
+      "movement": {
+        "appearanceDelta": 0.08375,
+        "ambientDelta": 0.01335,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03219,
+        "center": 0.02029,
+        "right": 0.07154
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 25,
+      "at": "2026-10-29T03:21:42.726+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.739,
+          "screenY": 0.738,
+          "areaPixels": 496,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.46,
+          "screenY": 0.747,
+          "areaPixels": 53,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.795,
+          "screenY": 0.425,
+          "areaPixels": 25,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.37,
+          "screenY": 0.241,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 4,
+        "left": 5,
+        "right": 5
+      },
+      "ambientDelta": 0.01158,
+      "movement": {
+        "appearanceDelta": 0.07296,
+        "ambientDelta": 0.01158,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03496,
+        "center": 0.00788,
+        "right": 0.06277
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 26,
+      "at": "2026-10-29T03:21:53.980+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.689,
+          "screenY": 0.746,
+          "areaPixels": 451,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.356,
+          "screenY": 0.772,
+          "areaPixels": 59,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.74,
+          "screenY": 0.46,
+          "areaPixels": 20,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.318,
+          "screenY": 0.275,
+          "areaPixels": 12,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.3,
+          "screenY": 0.354,
+          "areaPixels": 10,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 5,
+        "left": 5,
+        "right": 3
+      },
+      "ambientDelta": 0.00558,
+      "movement": {
+        "appearanceDelta": 0.06625,
+        "ambientDelta": 0.00558,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02906,
+        "center": 0.01515,
+        "right": 0.07417
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 27,
+      "at": "2026-10-29T03:22:06.014+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.635,
+          "screenY": 0.754,
+          "areaPixels": 476,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.283,
+          "screenY": 0.309,
+          "areaPixels": 11,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.257,
+          "screenY": 0.391,
+          "areaPixels": 11,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 3,
+        "left": 4,
+        "right": 2
+      },
+      "ambientDelta": 0.00998,
+      "movement": {
+        "appearanceDelta": 0.07521,
+        "ambientDelta": 0.00998,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.02125,
+        "center": 0.00977,
+        "right": 0.08302
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 28,
+      "at": "2026-10-29T03:22:17.302+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.674,
+          "screenY": 0.745,
+          "areaPixels": 447,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.397,
+          "screenY": 0.807,
+          "areaPixels": 31,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.302,
+          "screenY": 0.28,
+          "areaPixels": 11,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 3,
+        "left": 4,
+        "right": 1
+      },
+      "ambientDelta": 0.00944,
+      "movement": {
+        "appearanceDelta": 0.08144,
+        "ambientDelta": 0.00944,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03362,
+        "center": 0.01877,
+        "right": 0.0715
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 29,
+      "at": "2026-10-29T03:22:27.252+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.663,
+          "screenY": 0.749,
+          "areaPixels": 614,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.796,
+          "screenY": 0.427,
+          "areaPixels": 27,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.367,
+          "screenY": 0.252,
+          "areaPixels": 10,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.341,
+          "screenY": 0.325,
+          "areaPixels": 10,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 4,
+        "left": 3,
+        "right": 2
+      },
+      "ambientDelta": 0.00875,
+      "movement": {
+        "appearanceDelta": 0.0665,
+        "ambientDelta": 0.00875,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03252,
+        "center": 0.0105,
+        "right": 0.05767
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 30,
+      "at": "2026-10-29T03:22:38.916+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.694,
+          "screenY": 0.744,
+          "areaPixels": 432,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.434,
+          "screenY": 0.75,
+          "areaPixels": 35,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.296,
+          "screenY": 0.365,
+          "areaPixels": 9,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 3,
+        "left": 5,
+        "right": 2
+      },
+      "ambientDelta": 0.00923,
+      "movement": {
+        "appearanceDelta": 0.04965,
+        "ambientDelta": 0.00923,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    },
+    {
+      "selected": "right",
+      "scores": {
+        "left": 0.03323,
+        "center": 0.00725,
+        "right": 0.08083
+      },
+      "ambiguous": false,
+      "basis": "viewpoint_appearance_novelty_and_heading_persistence",
+      "goalDirectionKnown": false,
+      "step": 31,
+      "at": "2026-10-29T03:22:48.746+00:00",
+      "chosenHeading": "right",
+      "initialCandidates": [
+        {
+          "screenX": 0.648,
+          "screenY": 0.746,
+          "areaPixels": 453,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.322,
+          "screenY": 0.819,
+          "areaPixels": 69,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.664,
+          "screenY": 0.488,
+          "areaPixels": 32,
+          "label": "cyan_material_candidate_not_fold"
+        },
+        {
+          "screenX": 0.288,
+          "screenY": 0.274,
+          "areaPixels": 14,
+          "label": "cyan_material_candidate_not_fold"
+        }
+      ],
+      "candidateCounts": {
+        "center": 4,
+        "left": 3,
+        "right": 1
+      },
+      "ambientDelta": 0.0095,
+      "movement": {
+        "appearanceDelta": 0.08108,
+        "ambientDelta": 0.0095,
+        "visualChangeAboveAmbient": true,
+        "worldDisplacementProven": false,
+        "FoldApproachProven": false
+      },
+      "reason": "survey_viewpoint_novelty_exploration",
+      "stalledSequence": 0
+    }
+  ],
+  "checkpoints": [
+    {
+      "name": "REC1_CHECKPOINT_0049s.json",
+      "events": 466,
+      "captureActive": true,
+      "atSeconds": 49.07
+    },
+    {
+      "name": "REC1_CHECKPOINT_0102s.json",
+      "events": 1094,
+      "captureActive": true,
+      "atSeconds": 102.44
+    },
+    {
+      "name": "REC1_CHECKPOINT_0147s.json",
+      "events": 1720,
+      "captureActive": true,
+      "atSeconds": 147.85
+    },
+    {
+      "name": "REC1_CHECKPOINT_0202s.json",
+      "events": 2477,
+      "captureActive": true,
+      "atSeconds": 202.89
+    },
+    {
+      "name": "REC1_CHECKPOINT_0257s.json",
+      "events": 3251,
+      "captureActive": true,
+      "atSeconds": 257.66
+    }
+  ],
+  "onlineInputs": [
+    "visible HUD objective",
+    "rendered PNG screenshot",
+    "appearance novelty",
+    "prior input history",
+    "elapsed time"
+  ],
+  "onlineForbidden": [
+    "REC1 or gameplay owner read",
+    "Fold world position / distance",
+    "hidden material or target IDs",
+    "Guide owner state / route state"
+  ],
+  "gameplayChanges": false,
+  "proofBoundary": "Appearance novelty is not movement distance; cyan candidates are NOT identified as Fold; owner progress assessed offline only.",
+  "rec1": {
+    "events": 3272,
+    "captureSeconds": 251.259,
+    "dropped": 0
+  },
+  "finishedAt": "2026-10-29T03:22:55.303+00:00",
+  "wallSeconds": 264.21
+}
