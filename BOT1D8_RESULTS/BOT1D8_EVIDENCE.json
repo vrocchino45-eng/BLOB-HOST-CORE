@@ -1,0 +1,94 @@
+[
+  {
+    "revision": "BOT1-D8-REFEREE",
+    "status": "INVITED_NO_FOLD_STAGE",
+    "checkpointOnly": false,
+    "eventCount": 3214,
+    "captureStartedAt": "2026-10-29T03:47:18.076Z",
+    "captureActive": false,
+    "captureDurationSeconds": 244.026,
+    "droppedRecorderDetails": 0,
+    "foldMilestonesSeconds": {
+      "invitation": 16.144
+    },
+    "foldStagesObserved": [
+      "nursery_agency_pending",
+      "approach_listening_fold"
+    ],
+    "maxStageIndex": 0,
+    "maxProgress": 0.0,
+    "ownerCertifiedFoldComplete": false,
+    "minimumOwnerFocusDistanceWhenAvailable": 5.052,
+    "watcherWitnessedPulses": 3,
+    "watcherAcceptedReads": 1,
+    "watcherRejectReasons": {
+      "packet_out_of_read_range": 2
+    },
+    "nurseryOutcomeCounts": {
+      "tender_fed_clean_matter": 1,
+      "tender_strained_by_unread_contamination": 14,
+      "tender_passively_received_clean_matter": 6
+    },
+    "totalMovementSamples": 53,
+    "attachedMovementSamples": 0,
+    "postInvitationSamples": 49,
+    "postInvitationAttachedSamples": 0,
+    "lowProgressWarningCount": 0,
+    "guideSampleCount": 1491,
+    "guideReactionCounts": {
+      "guide_waited_for_world_response": 1491
+    },
+    "botActions": 64,
+    "visualWeakMoveCount": 0,
+    "botActionStageCounts": {
+      "packet_wait": 1,
+      "packet": 10,
+      "unknown": 1,
+      "fold_search": 52
+    },
+    "humanReferenceSeconds": {
+      "invitation": 32.99,
+      "first_fold_stage": 71.433,
+      "completed_fold": 79.371
+    },
+    "humanComparison": "Human reference labels are used OFFLINE only; no identical time/seed or comparable initial state guaranteed.",
+    "limitations": "Recorder owner events adjudicate observed progression; visual intelligibility, player intent, Guide assistance, and a complete Host circuit are not proven. Checkpoints while captureActive=true are cumulative partial captures.",
+    "folder": "BOT1D8_20261029T034706Z_motion_s11",
+    "ownerMotion": {
+      "invitationSeconds": 16.144,
+      "postInvitationMovementSamples": 49,
+      "ownerPressurePositiveSamples": 39,
+      "ownerAtBoundaryWithPressureSamples": 39,
+      "ownerBoundaryRatio": 0.796,
+      "postInvitationAttachedSamples": 0,
+      "firstSamplePosition": [
+        1.585,
+        0.046,
+        -3.305
+      ],
+      "lastSamplePosition": [
+        3.165,
+        0.622,
+        -4.081
+      ],
+      "sampledStartEndDistance": 1.852,
+      "sampledCumulativeDistance": 59.743,
+      "minimumNormalizedBoundaryDistance": 0.732,
+      "sampleLimit": "Sparse owner samples; adjacent samples may reflect environmental flow, and distance is NOT target progress."
+    },
+    "motionProbeCount": 34,
+    "cameraOnlyProbeCount": 15,
+    "motionAboveAmbientCount": 23,
+    "visualRevisitCount": 21,
+    "policyHeadingCounts": {
+      "j": 10,
+      "l": 5
+    },
+    "recoveryCount": 7,
+    "checkpointCount": 5,
+    "gameplayChanged": false,
+    "provenOnlineSteering": "NO. Pixels and public HUD only; owner pressure assessed offline.",
+    "acceptance": "NOT_PASSED",
+    "d7Context": "D7: 40/41 post-invitation samples at normalized boundary >=.999 with positive pressure; 0 Fold stages. Not a controlled A/B."
+  }
+]
