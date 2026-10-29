@@ -1,0 +1,102 @@
+[
+  {
+    "folder": "BOT1D5_20261029T013309Z_probe_s11",
+    "status": "CAPTURED",
+    "issues": [
+      "Approach state not advanced; first Fold stage still open",
+      "Full Fold completion not owner-proven"
+    ],
+    "profile": "probe",
+    "seed": 11,
+    "captureSeconds": 149.666,
+    "detailsRetained": 1784,
+    "detailsDropped": 0,
+    "pulseInputs": 31,
+    "watcherWitnessed": 31,
+    "watcherAccepted": 3,
+    "cleanPlayerOutcomes": 1,
+    "scarPlayerOutcomes": 2,
+    "ownerInvitation": true,
+    "botSawInvitation": true,
+    "foldWitnessSamples": 448,
+    "availableFoldSamples": 447,
+    "ownerApproachWitnessed": false,
+    "ownerFocusReadyWitnessed": false,
+    "maxOwnerStageIndex": 0,
+    "ownerCompleted": false,
+    "firstAvailableFoldDistance": 5.982,
+    "closestFoldDistance": 5.13,
+    "lastFoldDistance": 9.325,
+    "stageWitnessChanges": [
+      {
+        "index": 0,
+        "stage": "approach_listening_fold",
+        "ready": false,
+        "focusReady": false,
+        "completed": false
+      }
+    ],
+    "actionCounts": {
+      "pulse": 31,
+      "move": 56,
+      "look": 21,
+      "observe": 10
+    },
+    "foldActionCounts": {
+      "move": 15,
+      "look": 1
+    },
+    "foldSearchKeys": {
+      "w": 6,
+      "a": 4,
+      "d": 4,
+      "s": 1
+    },
+    "foldStageHints": {
+      "fold_search": 16
+    },
+    "guideSamples": 915,
+    "guideLastReactions": {
+      "guide_waited_for_world_response": 915
+    },
+    "errors": [],
+    "revision": "BOT1-D5",
+    "invitationTimestamp": "2026-10-29T01:34:43.946Z",
+    "movementAll": {
+      "total": 57,
+      "attachedSamples": 2,
+      "freeSamples": 55,
+      "locomotionModes": {
+        "normal": 55,
+        "surface_tendril_pull": 2
+      },
+      "medianSpeedAttached": 0.296,
+      "medianSpeedFree": 0.984,
+      "medianForwardSpeedAttached": 0.045,
+      "medianForwardSpeedFree": 0.183
+    },
+    "movementAfterInvitation": {
+      "total": 16,
+      "attachedSamples": 2,
+      "freeSamples": 14,
+      "locomotionModes": {
+        "normal": 14,
+        "surface_tendril_pull": 2
+      },
+      "medianSpeedAttached": 0.296,
+      "medianSpeedFree": 1.233,
+      "medianForwardSpeedAttached": 0.045,
+      "medianForwardSpeedFree": 0.175
+    },
+    "lowProgressWarningsAll": 0,
+    "lowProgressWarningsAfterInvitation": 0,
+    "warningSurfaceIds": {},
+    "botMovementProbes": 15,
+    "botVisualMovementProbes": 15,
+    "botWeakVisualMovementProbes": 1,
+    "guidePhysicalReactionKinds": {
+      "guide_waited_for_world_response": 915
+    },
+    "manualBaseline": false
+  }
+]
