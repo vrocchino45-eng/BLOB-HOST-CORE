@@ -1,0 +1,62 @@
+[
+  {
+    "revision": "BOT1-D6-REFEREE",
+    "status": "INVITED_NO_FOLD_STAGE",
+    "checkpointOnly": false,
+    "eventCount": 2598,
+    "captureStartedAt": "2026-10-29T02:47:53.312Z",
+    "captureActive": false,
+    "captureDurationSeconds": 212.854,
+    "droppedRecorderDetails": 0,
+    "foldMilestonesSeconds": {
+      "invitation": 81.104
+    },
+    "foldStagesObserved": [
+      "nursery_agency_pending",
+      "approach_listening_fold"
+    ],
+    "maxStageIndex": 0,
+    "maxProgress": 0.0,
+    "ownerCertifiedFoldComplete": false,
+    "minimumOwnerFocusDistanceWhenAvailable": 5.592,
+    "watcherWitnessedPulses": 30,
+    "watcherAcceptedReads": 3,
+    "watcherRejectReasons": {
+      "packet_out_of_read_range": 23,
+      "no_active_packet": 4
+    },
+    "nurseryOutcomeCounts": {
+      "tender_passively_received_clean_matter": 6,
+      "tender_strained_by_unread_contamination": 10,
+      "tender_strained_scar_spread": 2,
+      "tender_fed_clean_matter": 1
+    },
+    "totalMovementSamples": 61,
+    "attachedMovementSamples": 0,
+    "postInvitationSamples": 20,
+    "postInvitationAttachedSamples": 0,
+    "lowProgressWarningCount": 0,
+    "guideSampleCount": 1291,
+    "guideReactionCounts": {
+      "guide_waited_for_world_response": 1291
+    },
+    "botActions": 146,
+    "visualWeakMoveCount": 2,
+    "botActionStageCounts": {
+      "packet_wait": 1,
+      "packet": 99,
+      "unknown": 3,
+      "fold_search": 43
+    },
+    "humanReferenceSeconds": {
+      "invitation": 32.99,
+      "first_fold_stage": 71.433,
+      "completed_fold": 79.371
+    },
+    "humanComparison": "Human reference labels are used OFFLINE only; no identical time/seed or comparable initial state guaranteed.",
+    "limitations": "Recorder owner events adjudicate observed progression; visual intelligibility, player intent, Guide assistance, and a complete Host circuit are not proven. Checkpoints while captureActive=true are cumulative partial captures.",
+    "folder": "BOT1D6_20261029T024741Z_reference_s11",
+    "checkpointCount": 4,
+    "browserStatus": "CAPTURED"
+  }
+]
