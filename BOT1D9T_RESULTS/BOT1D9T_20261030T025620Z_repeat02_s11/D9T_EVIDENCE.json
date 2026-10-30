@@ -1,0 +1,75 @@
+{
+  "revision": "BOT1-D9T-OFFLINE-REFEREE",
+  "repeat": 2,
+  "captureSource": "FINAL",
+  "status": "CAPTURED",
+  "verdict": "INVITED_NOT_APPROACHED",
+  "evidenceCompleteForReplication": true,
+  "courseTrialCount": 10,
+  "ownerFoldSamples": 360,
+  "rec1Events": 980,
+  "droppedDetails": 0,
+  "ownerInvitationProven": true,
+  "ownerApproachProven": false,
+  "ownerStage1Proven": false,
+  "ownerMaxStageIndex": 0,
+  "stage1TemporallyNearLeftTrial": false,
+  "fixedCourseReplicationProven": false,
+  "approachSeconds": null,
+  "stage1Seconds": null,
+  "firstStage1FocusDistance": null,
+  "guidePhysicalReactionNearStage1": [],
+  "guideInterpretingNearStage1": false,
+  "guideObservationCountNearStage1": 0,
+  "leftTrial": {
+    "ownerSamples": 3,
+    "startX": 3.55,
+    "endX": -0.753,
+    "positiveToNegativeCrossing": true,
+    "sampledXDelta": -4.303,
+    "attachedDuringTrial": false,
+    "samples": [
+      {
+        "time": "2026-10-30T02:57:42.344Z",
+        "xyz": [
+          3.55,
+          1.802,
+          -3.109
+        ],
+        "attached": false,
+        "pressure": 0.006491906268957237,
+        "moveX": -1
+      },
+      {
+        "time": "2026-10-30T02:57:43.284Z",
+        "xyz": [
+          1.717,
+          1.846,
+          -3.282
+        ],
+        "attached": false,
+        "pressure": 0,
+        "moveX": -1
+      },
+      {
+        "time": "2026-10-30T02:57:44.289Z",
+        "xyz": [
+          -0.753,
+          1.92,
+          -3.687
+        ],
+        "attached": false,
+        "pressure": 0,
+        "moveX": -1
+      }
+    ]
+  },
+  "limitations": [
+    "Stage progress is independently certified only by Fold owner; visible HUD text is not enough.",
+    "Same seed and fixed inputs repeat a trajectory, not a generalized learned visual-navigation policy.",
+    "Left-trial REC1 samples occur within the action window; cannot establish exact endpoint positions.",
+    "Guide state near Stage 1 is correlation, not proof the Guide caused approach or applied force.",
+    "Owner positions and Fold distance appear only in this offline report, never online decision inputs.",
+    "Single D9S success cannot prove repeatability until fresh-run results are obtained."
+  ]
+}

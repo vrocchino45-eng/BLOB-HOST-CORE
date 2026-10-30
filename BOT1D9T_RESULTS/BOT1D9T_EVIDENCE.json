@@ -1,0 +1,243 @@
+{
+  "revision": "BOT1-D9T",
+  "replicationsExpected": 3,
+  "replicationsFound": 3,
+  "completeReplications": 3,
+  "fixedCourseReplications": 1,
+  "ownerStage1Passes": 1,
+  "ownerApproachPasses": 2,
+  "replicationGate": "NOT_YET_REPLICABLE_ONE_SUCCESS",
+  "limits": "Not sufficient to claim Fold route planning, reliable landmark localization, or Guide causal assistance",
+  "runs": [
+    {
+      "revision": "BOT1-D9T-OFFLINE-REFEREE",
+      "repeat": 1,
+      "captureSource": "FINAL",
+      "status": "CAPTURED",
+      "verdict": "APPROACH_ONLY",
+      "evidenceCompleteForReplication": true,
+      "courseTrialCount": 10,
+      "ownerFoldSamples": 364,
+      "rec1Events": 990,
+      "droppedDetails": 0,
+      "ownerInvitationProven": true,
+      "ownerApproachProven": true,
+      "ownerStage1Proven": false,
+      "ownerMaxStageIndex": 0,
+      "stage1TemporallyNearLeftTrial": false,
+      "fixedCourseReplicationProven": false,
+      "approachSeconds": 68.39,
+      "stage1Seconds": null,
+      "firstStage1FocusDistance": null,
+      "guidePhysicalReactionNearStage1": [
+        "guide_waited_for_world_response"
+      ],
+      "guideInterpretingNearStage1": false,
+      "guideObservationCountNearStage1": 25,
+      "leftTrial": {
+        "ownerSamples": 3,
+        "startX": 3.538,
+        "endX": -1.384,
+        "positiveToNegativeCrossing": true,
+        "sampledXDelta": -4.922,
+        "attachedDuringTrial": false,
+        "samples": [
+          {
+            "time": "2026-10-30T02:56:08.831Z",
+            "xyz": [
+              3.538,
+              1.721,
+              -3.204
+            ],
+            "attached": false,
+            "pressure": 0.0026490621266370695,
+            "moveX": -1
+          },
+          {
+            "time": "2026-10-30T02:56:09.880Z",
+            "xyz": [
+              1.254,
+              1.77,
+              -3.335
+            ],
+            "attached": false,
+            "pressure": 0,
+            "moveX": -1
+          },
+          {
+            "time": "2026-10-30T02:56:10.900Z",
+            "xyz": [
+              -1.384,
+              1.835,
+              -3.583
+            ],
+            "attached": false,
+            "pressure": 0,
+            "moveX": -1
+          }
+        ]
+      },
+      "limitations": [
+        "Stage progress is independently certified only by Fold owner; visible HUD text is not enough.",
+        "Same seed and fixed inputs repeat a trajectory, not a generalized learned visual-navigation policy.",
+        "Left-trial REC1 samples occur within the action window; cannot establish exact endpoint positions.",
+        "Guide state near Stage 1 is correlation, not proof the Guide caused approach or applied force.",
+        "Owner positions and Fold distance appear only in this offline report, never online decision inputs.",
+        "Single D9S success cannot prove repeatability until fresh-run results are obtained."
+      ]
+    },
+    {
+      "revision": "BOT1-D9T-OFFLINE-REFEREE",
+      "repeat": 2,
+      "captureSource": "FINAL",
+      "status": "CAPTURED",
+      "verdict": "INVITED_NOT_APPROACHED",
+      "evidenceCompleteForReplication": true,
+      "courseTrialCount": 10,
+      "ownerFoldSamples": 360,
+      "rec1Events": 980,
+      "droppedDetails": 0,
+      "ownerInvitationProven": true,
+      "ownerApproachProven": false,
+      "ownerStage1Proven": false,
+      "ownerMaxStageIndex": 0,
+      "stage1TemporallyNearLeftTrial": false,
+      "fixedCourseReplicationProven": false,
+      "approachSeconds": null,
+      "stage1Seconds": null,
+      "firstStage1FocusDistance": null,
+      "guidePhysicalReactionNearStage1": [],
+      "guideInterpretingNearStage1": false,
+      "guideObservationCountNearStage1": 0,
+      "leftTrial": {
+        "ownerSamples": 3,
+        "startX": 3.55,
+        "endX": -0.753,
+        "positiveToNegativeCrossing": true,
+        "sampledXDelta": -4.303,
+        "attachedDuringTrial": false,
+        "samples": [
+          {
+            "time": "2026-10-30T02:57:42.344Z",
+            "xyz": [
+              3.55,
+              1.802,
+              -3.109
+            ],
+            "attached": false,
+            "pressure": 0.006491906268957237,
+            "moveX": -1
+          },
+          {
+            "time": "2026-10-30T02:57:43.284Z",
+            "xyz": [
+              1.717,
+              1.846,
+              -3.282
+            ],
+            "attached": false,
+            "pressure": 0,
+            "moveX": -1
+          },
+          {
+            "time": "2026-10-30T02:57:44.289Z",
+            "xyz": [
+              -0.753,
+              1.92,
+              -3.687
+            ],
+            "attached": false,
+            "pressure": 0,
+            "moveX": -1
+          }
+        ]
+      },
+      "limitations": [
+        "Stage progress is independently certified only by Fold owner; visible HUD text is not enough.",
+        "Same seed and fixed inputs repeat a trajectory, not a generalized learned visual-navigation policy.",
+        "Left-trial REC1 samples occur within the action window; cannot establish exact endpoint positions.",
+        "Guide state near Stage 1 is correlation, not proof the Guide caused approach or applied force.",
+        "Owner positions and Fold distance appear only in this offline report, never online decision inputs.",
+        "Single D9S success cannot prove repeatability until fresh-run results are obtained."
+      ]
+    },
+    {
+      "revision": "BOT1-D9T-OFFLINE-REFEREE",
+      "repeat": 3,
+      "captureSource": "FINAL",
+      "status": "CAPTURED",
+      "verdict": "STAGE1_OWNER_CERTIFIED",
+      "evidenceCompleteForReplication": true,
+      "courseTrialCount": 10,
+      "ownerFoldSamples": 355,
+      "rec1Events": 986,
+      "droppedDetails": 0,
+      "ownerInvitationProven": true,
+      "ownerApproachProven": true,
+      "ownerStage1Proven": true,
+      "ownerMaxStageIndex": 1,
+      "stage1TemporallyNearLeftTrial": true,
+      "fixedCourseReplicationProven": true,
+      "approachSeconds": 66.15,
+      "stage1Seconds": 66.55,
+      "firstStage1FocusDistance": 1.887,
+      "guidePhysicalReactionNearStage1": [
+        "guide_traced_answer_without_claiming_meaning",
+        "guide_waited_for_world_response"
+      ],
+      "guideInterpretingNearStage1": true,
+      "guideObservationCountNearStage1": 26,
+      "leftTrial": {
+        "ownerSamples": 3,
+        "startX": 3.551,
+        "endX": -1.391,
+        "positiveToNegativeCrossing": true,
+        "sampledXDelta": -4.942,
+        "attachedDuringTrial": false,
+        "samples": [
+          {
+            "time": "2026-10-30T02:59:13.925Z",
+            "xyz": [
+              3.551,
+              1.672,
+              -3.246
+            ],
+            "attached": false,
+            "pressure": 0.0006779793998230588,
+            "moveX": -1
+          },
+          {
+            "time": "2026-10-30T02:59:14.948Z",
+            "xyz": [
+              1.315,
+              1.72,
+              -3.37
+            ],
+            "attached": false,
+            "pressure": 0,
+            "moveX": -1
+          },
+          {
+            "time": "2026-10-30T02:59:15.955Z",
+            "xyz": [
+              -1.391,
+              1.77,
+              -3.418
+            ],
+            "attached": false,
+            "pressure": 0,
+            "moveX": -1
+          }
+        ]
+      },
+      "limitations": [
+        "Stage progress is independently certified only by Fold owner; visible HUD text is not enough.",
+        "Same seed and fixed inputs repeat a trajectory, not a generalized learned visual-navigation policy.",
+        "Left-trial REC1 samples occur within the action window; cannot establish exact endpoint positions.",
+        "Guide state near Stage 1 is correlation, not proof the Guide caused approach or applied force.",
+        "Owner positions and Fold distance appear only in this offline report, never online decision inputs.",
+        "Single D9S success cannot prove repeatability until fresh-run results are obtained."
+      ]
+    }
+  ]
+}
