@@ -1,0 +1,137 @@
+{
+  "revision": "BOT1-D9U",
+  "expectedRuns": 3,
+  "completeRuns": 3,
+  "ownerApproachCount": 3,
+  "ownerStage1Count": 3,
+  "publicAnswerCount": 3,
+  "stage1GatePasses": 3,
+  "gate": "STAGE1_REPLICATION_ALL_PASSED",
+  "nextSeedRequiredIfPass": true,
+  "runs": [
+    {
+      "revision": "BOT1-D9U-OFFLINE-REFEREE",
+      "repeat": 1,
+      "source": "FINAL",
+      "completeOwnerEvidence": true,
+      "rec1Events": 934,
+      "droppedREC1Details": 0,
+      "courseCount": 10,
+      "leftHoldSeconds": 2.2,
+      "correctionsCount": 0,
+      "publicAnswerSeen": true,
+      "ownerInvitation": true,
+      "ownerApproach": true,
+      "ownerStage1": true,
+      "ownerMaxStage": 1,
+      "ownerStage1NearArrival": true,
+      "stage1CertifiedForGate": true,
+      "maxSampledApproachSeconds": 4.252,
+      "maxSampledFocusReadySeconds": 3.094,
+      "leftTrial": {
+        "ownerSamples": 5,
+        "startX": 3.568,
+        "endX": -2.932,
+        "positiveToNegativeCrossing": true,
+        "sampledXDelta": -6.5,
+        "attachedDuringTrial": false
+      },
+      "guideReactionNearStage1": [
+        "guide_traced_answer_without_claiming_meaning",
+        "guide_waited_for_world_response"
+      ],
+      "guideInterpretingNearStage1": true,
+      "baseVerdict": "STAGE1_OWNER_CERTIFIED",
+      "limitations": [
+        "REC1 owner state and position are evaluated offline only, never as online steering input.",
+        "Visible HUD Fold-answer phrase is a public cue, not owner-certified Stage 1.",
+        "A fixed leftward course plus small corrections is not a general navigation policy.",
+        "Maximum approach/focus duration is estimated from periodic owner samples.",
+        "Guide reaction is correlated with stage; no physical guidance or causal claim."
+      ]
+    },
+    {
+      "revision": "BOT1-D9U-OFFLINE-REFEREE",
+      "repeat": 2,
+      "source": "FINAL",
+      "completeOwnerEvidence": true,
+      "rec1Events": 932,
+      "droppedREC1Details": 0,
+      "courseCount": 10,
+      "leftHoldSeconds": 2.2,
+      "correctionsCount": 0,
+      "publicAnswerSeen": true,
+      "ownerInvitation": true,
+      "ownerApproach": true,
+      "ownerStage1": true,
+      "ownerMaxStage": 1,
+      "ownerStage1NearArrival": true,
+      "stage1CertifiedForGate": true,
+      "maxSampledApproachSeconds": 3.879,
+      "maxSampledFocusReadySeconds": 3.499,
+      "leftTrial": {
+        "ownerSamples": 5,
+        "startX": 3.595,
+        "endX": -3.158,
+        "positiveToNegativeCrossing": true,
+        "sampledXDelta": -6.753,
+        "attachedDuringTrial": false
+      },
+      "guideReactionNearStage1": [
+        "guide_traced_answer_without_claiming_meaning",
+        "guide_waited_for_world_response"
+      ],
+      "guideInterpretingNearStage1": true,
+      "baseVerdict": "STAGE1_OWNER_CERTIFIED",
+      "limitations": [
+        "REC1 owner state and position are evaluated offline only, never as online steering input.",
+        "Visible HUD Fold-answer phrase is a public cue, not owner-certified Stage 1.",
+        "A fixed leftward course plus small corrections is not a general navigation policy.",
+        "Maximum approach/focus duration is estimated from periodic owner samples.",
+        "Guide reaction is correlated with stage; no physical guidance or causal claim."
+      ]
+    },
+    {
+      "revision": "BOT1-D9U-OFFLINE-REFEREE",
+      "repeat": 3,
+      "source": "FINAL",
+      "completeOwnerEvidence": true,
+      "rec1Events": 940,
+      "droppedREC1Details": 0,
+      "courseCount": 10,
+      "leftHoldSeconds": 2.2,
+      "correctionsCount": 0,
+      "publicAnswerSeen": true,
+      "ownerInvitation": true,
+      "ownerApproach": true,
+      "ownerStage1": true,
+      "ownerMaxStage": 1,
+      "ownerStage1NearArrival": true,
+      "stage1CertifiedForGate": true,
+      "maxSampledApproachSeconds": 3.797,
+      "maxSampledFocusReadySeconds": 3.366,
+      "leftTrial": {
+        "ownerSamples": 5,
+        "startX": 3.596,
+        "endX": -3.18,
+        "positiveToNegativeCrossing": true,
+        "sampledXDelta": -6.776,
+        "attachedDuringTrial": false
+      },
+      "guideReactionNearStage1": [
+        "guide_traced_answer_without_claiming_meaning",
+        "guide_waited_for_world_response"
+      ],
+      "guideInterpretingNearStage1": true,
+      "baseVerdict": "STAGE1_OWNER_CERTIFIED",
+      "limitations": [
+        "REC1 owner state and position are evaluated offline only, never as online steering input.",
+        "Visible HUD Fold-answer phrase is a public cue, not owner-certified Stage 1.",
+        "A fixed leftward course plus small corrections is not a general navigation policy.",
+        "Maximum approach/focus duration is estimated from periodic owner samples.",
+        "Guide reaction is correlated with stage; no physical guidance or causal claim."
+      ]
+    }
+  ],
+  "scope": "Owner-certified Stage 1 on complete runs; not Fold completion, learned route or Guide assistance"
+}

@@ -1,0 +1,13 @@
+{
+  "pass": "G1-D9U",
+  "name": "Controlled Fold arrival and settling",
+  "buildDate": "2026-10-29",
+  "basis": "BOT1-D9T three-run REC1, D9S fixed-course calibration, human G1-D6 REC1",
+  "changedFiles": ["bot1d9u_policy.py", "bot1d9u_browser.py", "analyze_bot1d9u.py", "test_bot1d9u.py"],
+  "requiredExistingScripts": ["bot1d9t_protocol.py", "bot1d9s_browser.py", "bot1d6_policy.py", "bot1d3_browser.py", "analyze_bot1d9t.py"],
+  "gameplayFilesChanged": 0,
+  "telemetryOwnerAccessDuringActionSelection": false,
+  "acceptance": "3/3 owner certified Stage 1 on complete fresh browser runs",
+  "offlineAssertions": 25,
+  "currentStatus": "OFFLINE_VALIDATED_REAL_BROWSER_PENDING"
+}
