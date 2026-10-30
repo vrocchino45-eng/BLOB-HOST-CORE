@@ -1,0 +1,257 @@
+[
+  {
+    "revision": "BOT1-D9-REFEREE",
+    "runStatus": "CAPTURED",
+    "checkpointOnly": false,
+    "eventCount": 1288,
+    "invitationSeconds": 16.111,
+    "maxFoldStageIndex": 0,
+    "foldApproachGate": "NOT_PASSED",
+    "minOwnerFoldFocusDistance": 4.107,
+    "calibrationComplete": true,
+    "gateA": "INSUFFICIENT_PAIRED_OWNER_SAMPLES",
+    "gateB": "NOT_TESTED_AS_ROUTE",
+    "gateC": "NOT_PASSED",
+    "probeCount": 16,
+    "ownerMovementSampleCount": 29,
+    "pairedSampleCount": 0,
+    "perKindOwnerBracketDeltas": {
+      "move": {
+        "count": 0,
+        "median": null
+      },
+      "look": {
+        "count": 0,
+        "median": null
+      }
+    },
+    "onlineSummary": {
+      "translationProbeCount": 12,
+      "lookOnlyProbeCount": 4,
+      "translationScreenMotionAboveAmbient": 7,
+      "lookScreenMotionAboveAmbient": 2,
+      "onlineWorldDisplacementProven": false,
+      "onlineFoldDirectionKnown": false
+    },
+    "returnView": {
+      "appearanceDistance": 0.05867,
+      "idleAppearanceDistance": 0.00483,
+      "descriptorSimilar": false,
+      "landmarkIdentityConfirmed": false,
+      "positionReturnConfirmed": false,
+      "interpretation": "appearance_similarity_can_reflect_repeated_geometry_or_camera"
+    },
+    "probes": [
+      {
+        "index": 0,
+        "heading": "center",
+        "kind": "move",
+        "key": "w",
+        "label": "matched_axis_w",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 1,
+        "heading": "center",
+        "kind": "move",
+        "key": "s",
+        "label": "matched_axis_s",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 2,
+        "heading": "center",
+        "kind": "move",
+        "key": "a",
+        "label": "matched_axis_a",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 3,
+        "heading": "center",
+        "kind": "move",
+        "key": "d",
+        "label": "matched_axis_d",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 4,
+        "heading": "left",
+        "kind": "look",
+        "key": "j",
+        "label": "enter_left_view",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 5,
+        "heading": "left",
+        "kind": "move",
+        "key": "w",
+        "label": "matched_axis_w",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 6,
+        "heading": "left",
+        "kind": "move",
+        "key": "s",
+        "label": "matched_axis_s",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 7,
+        "heading": "left",
+        "kind": "move",
+        "key": "a",
+        "label": "matched_axis_a",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 8,
+        "heading": "left",
+        "kind": "move",
+        "key": "d",
+        "label": "matched_axis_d",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 9,
+        "heading": "left",
+        "kind": "look",
+        "key": "l",
+        "label": "return_center_from_left",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 10,
+        "heading": "right",
+        "kind": "look",
+        "key": "l",
+        "label": "enter_right_view",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 11,
+        "heading": "right",
+        "kind": "move",
+        "key": "w",
+        "label": "matched_axis_w",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 12,
+        "heading": "right",
+        "kind": "move",
+        "key": "s",
+        "label": "matched_axis_s",
+        "visualAboveAmbient": true,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 13,
+        "heading": "right",
+        "kind": "move",
+        "key": "a",
+        "label": "matched_axis_a",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 14,
+        "heading": "right",
+        "kind": "move",
+        "key": "d",
+        "label": "matched_axis_d",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      },
+      {
+        "index": 15,
+        "heading": "right",
+        "kind": "look",
+        "key": "j",
+        "label": "return_center_from_right",
+        "visualAboveAmbient": false,
+        "semanticLandmarkKnown": false,
+        "owner": {
+          "coverage": "UNKNOWN_NO_BRACKET",
+          "proximityLimitSeconds": 1.35
+        }
+      }
+    ],
+    "limits": "Recorder owner events adjudicate observed progression; visual intelligibility, player intent, Guide assistance, and a complete Host circuit are not proven. Checkpoints while captureActive=true are cumulative partial captures. Bracketed world-position deltas include environmental drift. Calibration is not target bearing or navigational competency.",
+    "folder": "BOT1D9_20261029T041228Z_calibration_s11"
+  }
+]

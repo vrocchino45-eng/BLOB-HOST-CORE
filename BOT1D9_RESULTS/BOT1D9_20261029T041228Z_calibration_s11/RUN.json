@@ -1,0 +1,1078 @@
+{
+  "revision": "BOT1-D9",
+  "mode": "CALIBRATION_ONLY",
+  "seed": 11,
+  "startedAt": "2026-10-29T04:12:30.385+00:00",
+  "status": "CAPTURED",
+  "gameplayChanges": false,
+  "errors": [],
+  "percepts": [
+    {
+      "time": "2026-10-29T04:12:40.409+00:00",
+      "visibleStage": "packet_wait",
+      "objective": "Watch the current mouth; matter is entering the nursery."
+    },
+    {
+      "time": "2026-10-29T04:12:41.292+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:42.269+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:42.919+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:43.814+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:44.608+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:45.638+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:47.659+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-29T04:12:48.042+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-29T04:12:49.032+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-29T04:12:56.619+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    }
+  ],
+  "actions": [
+    {
+      "atStart": "2026-10-29T04:12:40.409+00:00",
+      "phase": "acquire",
+      "kind": "observe",
+      "key": null,
+      "duration": 0.85,
+      "visibleStage": "packet_wait"
+    },
+    {
+      "atStart": "2026-10-29T04:12:41.292+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "duration": 0.85,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:42.270+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "l",
+      "duration": 0.54,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:42.920+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "d",
+      "duration": 0.77,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:43.815+00:00",
+      "phase": "acquire",
+      "kind": "observe",
+      "key": null,
+      "duration": 0.3,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:44.172+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:44.608+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "duration": 0.85,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:45.638+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "j",
+      "duration": 0.4,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:46.242+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:46.751+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "s",
+      "duration": 0.74,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:47.659+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28,
+      "visibleStage": "packet"
+    },
+    {
+      "atStart": "2026-10-29T04:12:48.042+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "duration": 0.85,
+      "visibleStage": "unknown"
+    },
+    {
+      "atStart": "2026-10-29T04:12:49.032+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "l",
+      "duration": 0.54,
+      "visibleStage": "unknown"
+    }
+  ],
+  "probes": [
+    {
+      "index": 0,
+      "atStart": "2026-10-29T04:13:02.437+00:00",
+      "atEnd": "2026-10-29T04:13:03.833+00:00",
+      "heading": "center",
+      "kind": "move",
+      "key": "w",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_w",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 8,
+            "medianMotionPixels": 7.211,
+            "flowSpreadPixels": 3.65,
+            "medianVector": [
+              4.0,
+              -4.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 8,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              0.0,
+              0.0
+            ]
+          },
+          "appearanceDelta": 0.025,
+          "ambientAppearanceDelta": 0.00306,
+          "motionToAmbientRatio": 3.606,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 2,
+        "candidateCountAfter": 4,
+        "appearanceDelta": 0.025,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 1,
+      "atStart": "2026-10-29T04:13:07.676+00:00",
+      "atEnd": "2026-10-29T04:13:09.060+00:00",
+      "heading": "center",
+      "kind": "move",
+      "key": "s",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_s",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 4.472,
+            "flowSpreadPixels": 4.472,
+            "medianVector": [
+              -2,
+              -2
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              0.0,
+              2.0
+            ]
+          },
+          "appearanceDelta": 0.023,
+          "ambientAppearanceDelta": 0.01321,
+          "motionToAmbientRatio": 2.236,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 3,
+        "candidateCountAfter": 2,
+        "appearanceDelta": 0.023,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 2,
+      "atStart": "2026-10-29T04:13:12.521+00:00",
+      "atEnd": "2026-10-29T04:13:13.928+00:00",
+      "heading": "center",
+      "kind": "move",
+      "key": "a",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_a",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 6.162,
+            "flowSpreadPixels": 6.162,
+            "medianVector": [
+              0.0,
+              0.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              0,
+              0
+            ]
+          },
+          "appearanceDelta": 0.02448,
+          "ambientAppearanceDelta": 0.00523,
+          "motionToAmbientRatio": 3.081,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 1,
+        "candidateCountAfter": 1,
+        "appearanceDelta": 0.02448,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 3,
+      "atStart": "2026-10-29T04:13:18.620+00:00",
+      "atEnd": "2026-10-29T04:13:20.039+00:00",
+      "heading": "center",
+      "kind": "move",
+      "key": "d",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_d",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 8,
+            "medianMotionPixels": 6.768,
+            "flowSpreadPixels": 5.657,
+            "medianVector": [
+              -2.0,
+              -2.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 8,
+            "medianMotionPixels": 5.064,
+            "flowSpreadPixels": 2.618,
+            "medianVector": [
+              -4.0,
+              -1.0
+            ]
+          },
+          "appearanceDelta": 0.0259,
+          "ambientAppearanceDelta": 0.00765,
+          "motionToAmbientRatio": 1.336,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 2,
+        "candidateCountAfter": 3,
+        "appearanceDelta": 0.0259,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 4,
+      "atStart": "2026-10-29T04:13:24.625+00:00",
+      "atEnd": "2026-10-29T04:13:25.170+00:00",
+      "heading": "left",
+      "kind": "look",
+      "key": "j",
+      "durationSeconds": 0.48,
+      "label": "enter_left_view",
+      "signal": {
+        "visual": {
+          "actionKind": "look",
+          "screenFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 6.325,
+            "flowSpreadPixels": 5.657,
+            "medianVector": [
+              0,
+              -2
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 8,
+            "medianMotionPixels": 3.414,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              -2.0,
+              2.0
+            ]
+          },
+          "appearanceDelta": 0.02927,
+          "ambientAppearanceDelta": 0.00444,
+          "motionToAmbientRatio": 1.853,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": null,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 3,
+        "candidateCountAfter": 3,
+        "appearanceDelta": 0.02927,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 5,
+      "atStart": "2026-10-29T04:13:28.535+00:00",
+      "atEnd": "2026-10-29T04:13:29.926+00:00",
+      "heading": "left",
+      "kind": "move",
+      "key": "w",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_w",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 6.325,
+            "flowSpreadPixels": 5.162,
+            "medianVector": [
+              -6.0,
+              -2.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 5.398,
+            "flowSpreadPixels": 3.303,
+            "medianVector": [
+              -4.0,
+              3.0
+            ]
+          },
+          "appearanceDelta": 0.02185,
+          "ambientAppearanceDelta": 0.0151,
+          "motionToAmbientRatio": 1.172,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 2,
+        "candidateCountAfter": 4,
+        "appearanceDelta": 0.02185,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 6,
+      "atStart": "2026-10-29T04:13:33.263+00:00",
+      "atEnd": "2026-10-29T04:13:34.658+00:00",
+      "heading": "left",
+      "kind": "move",
+      "key": "s",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_s",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              0,
+              -2
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              -2,
+              0
+            ]
+          },
+          "appearanceDelta": 0.00444,
+          "ambientAppearanceDelta": 0.00277,
+          "motionToAmbientRatio": 1.0,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 3,
+        "candidateCountAfter": 4,
+        "appearanceDelta": 0.00444,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 7,
+      "atStart": "2026-10-29T04:13:38.138+00:00",
+      "atEnd": "2026-10-29T04:13:39.515+00:00",
+      "heading": "left",
+      "kind": "move",
+      "key": "a",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_a",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 4,
+            "medianMotionPixels": 5.842,
+            "flowSpreadPixels": 3.65,
+            "medianVector": [
+              -4.0,
+              2.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 1.0,
+            "medianVector": [
+              0.0,
+              1.0
+            ]
+          },
+          "appearanceDelta": 0.04931,
+          "ambientAppearanceDelta": 0.00206,
+          "motionToAmbientRatio": 2.921,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 3,
+        "candidateCountAfter": 1,
+        "appearanceDelta": 0.04931,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 8,
+      "atStart": "2026-10-29T04:13:42.955+00:00",
+      "atEnd": "2026-10-29T04:13:44.379+00:00",
+      "heading": "left",
+      "kind": "move",
+      "key": "d",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_d",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 9,
+            "medianMotionPixels": 7.211,
+            "flowSpreadPixels": 6.0,
+            "medianVector": [
+              -4,
+              -4
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 8,
+            "medianMotionPixels": 4.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              -4.0,
+              0.0
+            ]
+          },
+          "appearanceDelta": 0.03517,
+          "ambientAppearanceDelta": 0.00729,
+          "motionToAmbientRatio": 1.803,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 2,
+        "candidateCountAfter": 2,
+        "appearanceDelta": 0.03517,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 9,
+      "atStart": "2026-10-29T04:13:48.850+00:00",
+      "atEnd": "2026-10-29T04:13:49.403+00:00",
+      "heading": "left",
+      "kind": "look",
+      "key": "l",
+      "durationSeconds": 0.48,
+      "label": "return_center_from_left",
+      "signal": {
+        "visual": {
+          "actionKind": "look",
+          "screenFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 6.325,
+            "flowSpreadPixels": 7.211,
+            "medianVector": [
+              -4,
+              -2
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 2.828,
+            "flowSpreadPixels": 0.0,
+            "medianVector": [
+              -2,
+              -2
+            ]
+          },
+          "appearanceDelta": 0.03765,
+          "ambientAppearanceDelta": 0.00404,
+          "motionToAmbientRatio": 2.237,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": null,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 3,
+        "candidateCountAfter": 3,
+        "appearanceDelta": 0.03765,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 10,
+      "atStart": "2026-10-29T04:13:53.430+00:00",
+      "atEnd": "2026-10-29T04:13:54.471+00:00",
+      "heading": "right",
+      "kind": "look",
+      "key": "l",
+      "durationSeconds": 0.96,
+      "label": "enter_right_view",
+      "signal": {
+        "visual": {
+          "actionKind": "look",
+          "screenFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 6.162,
+            "flowSpreadPixels": 4.671,
+            "medianVector": [
+              3.0,
+              -1.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 9,
+            "medianMotionPixels": 5.657,
+            "flowSpreadPixels": 4.472,
+            "medianVector": [
+              0,
+              4
+            ]
+          },
+          "appearanceDelta": 0.04088,
+          "ambientAppearanceDelta": 0.02721,
+          "motionToAmbientRatio": 1.089,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": null,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 4,
+        "candidateCountAfter": 1,
+        "appearanceDelta": 0.04088,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 11,
+      "atStart": "2026-10-29T04:13:58.289+00:00",
+      "atEnd": "2026-10-29T04:13:59.705+00:00",
+      "heading": "right",
+      "kind": "move",
+      "key": "w",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_w",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 7,
+            "medianMotionPixels": 7.211,
+            "flowSpreadPixels": 4.0,
+            "medianVector": [
+              0,
+              6
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 4,
+            "medianMotionPixels": 4.162,
+            "flowSpreadPixels": 4.131,
+            "medianVector": [
+              1.0,
+              3.0
+            ]
+          },
+          "appearanceDelta": 0.0359,
+          "ambientAppearanceDelta": 0.03375,
+          "motionToAmbientRatio": 1.733,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 5,
+        "candidateCountAfter": 3,
+        "appearanceDelta": 0.0359,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 12,
+      "atStart": "2026-10-29T04:14:04.720+00:00",
+      "atEnd": "2026-10-29T04:14:06.117+00:00",
+      "heading": "right",
+      "kind": "move",
+      "key": "s",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_s",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 7.848,
+            "flowSpreadPixels": 5.162,
+            "medianVector": [
+              -6.0,
+              -2.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 6,
+            "medianMotionPixels": 6.162,
+            "flowSpreadPixels": 3.18,
+            "medianVector": [
+              -5.0,
+              2.0
+            ]
+          },
+          "appearanceDelta": 0.04419,
+          "ambientAppearanceDelta": 0.01977,
+          "motionToAmbientRatio": 1.274,
+          "imageMotionAboveAmbient": true,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 2,
+        "candidateCountAfter": 2,
+        "appearanceDelta": 0.04419,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 13,
+      "atStart": "2026-10-29T04:14:09.019+00:00",
+      "atEnd": "2026-10-29T04:14:10.403+00:00",
+      "heading": "right",
+      "kind": "move",
+      "key": "a",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_a",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 3,
+            "medianMotionPixels": 4.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              -4,
+              0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 2,
+            "medianMotionPixels": 2.0,
+            "flowSpreadPixels": 2.0,
+            "medianVector": [
+              -2.0,
+              0.0
+            ]
+          },
+          "appearanceDelta": 0.00862,
+          "ambientAppearanceDelta": 0.00271,
+          "motionToAmbientRatio": 2.0,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 1,
+        "candidateCountAfter": 2,
+        "appearanceDelta": 0.00862,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 14,
+      "atStart": "2026-10-29T04:14:13.251+00:00",
+      "atEnd": "2026-10-29T04:14:14.618+00:00",
+      "heading": "right",
+      "kind": "move",
+      "key": "d",
+      "durationSeconds": 1.32,
+      "label": "matched_axis_d",
+      "signal": {
+        "visual": {
+          "actionKind": "move",
+          "screenFlow": {
+            "trackedPatches": 4,
+            "medianMotionPixels": 5.236,
+            "flowSpreadPixels": 1.414,
+            "medianVector": [
+              5.0,
+              -1.0
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 4,
+            "medianMotionPixels": 4.0,
+            "flowSpreadPixels": 3.0,
+            "medianVector": [
+              -1.0,
+              0.0
+            ]
+          },
+          "appearanceDelta": 0.00277,
+          "ambientAppearanceDelta": 0.00417,
+          "motionToAmbientRatio": 1.309,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": false,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 2,
+        "candidateCountAfter": 5,
+        "appearanceDelta": 0.00277,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    },
+    {
+      "index": 15,
+      "atStart": "2026-10-29T04:14:17.277+00:00",
+      "atEnd": "2026-10-29T04:14:17.789+00:00",
+      "heading": "right",
+      "kind": "look",
+      "key": "j",
+      "durationSeconds": 0.48,
+      "label": "return_center_from_right",
+      "signal": {
+        "visual": {
+          "actionKind": "look",
+          "screenFlow": {
+            "trackedPatches": 3,
+            "medianMotionPixels": 6.325,
+            "flowSpreadPixels": 6.0,
+            "medianVector": [
+              0,
+              -2
+            ]
+          },
+          "ambientFlow": {
+            "trackedPatches": 3,
+            "medianMotionPixels": 0.0,
+            "flowSpreadPixels": 0.0,
+            "medianVector": [
+              0,
+              0
+            ]
+          },
+          "appearanceDelta": 0.01779,
+          "ambientAppearanceDelta": 0.00538,
+          "motionToAmbientRatio": 12.65,
+          "imageMotionAboveAmbient": false,
+          "sceneRevisited": false,
+          "cameraKeyDuringMove": null,
+          "worldDisplacementProven": false,
+          "boundaryPressureKnownOnline": false,
+          "FoldDirectionKnown": false,
+          "limitations": "Public screenshot movement can reflect animation, parallax or camera; REC1 referee is independent."
+        },
+        "candidateCountBefore": 4,
+        "candidateCountAfter": 2,
+        "appearanceDelta": 0.01779,
+        "semanticLandmarkKnown": false,
+        "cameraRotationMeasured": false,
+        "actualTranslationKnownOnline": false,
+        "FoldBearingKnown": false,
+        "interpretation": "screen_response_only_not_world_displacement"
+      },
+      "hudStageAfter": "fold_search",
+      "ownerFree": true
+    }
+  ],
+  "checkpoints": [
+    {
+      "name": "REC1_CHECKPOINT_0045s.json",
+      "events": 391,
+      "captureActive": true,
+      "atSeconds": 45.4
+    },
+    {
+      "name": "REC1_CHECKPOINT_0091s.json",
+      "events": 1022,
+      "captureActive": true,
+      "atSeconds": 91.61
+    }
+  ],
+  "onlineInputs": [
+    "public HUD",
+    "rendered screenshot",
+    "ordinary keyboard action",
+    "elapsed time"
+  ],
+  "onlineForbidden": [
+    "REC1 / world position / owner state",
+    "Fold coordinates or focusDistance",
+    "camera transforms or hidden object IDs",
+    "human REC1 used in real-time"
+  ],
+  "successScope": "Camera-vs-movement identifiability; no automatic Fold approach claim",
+  "visibleInvitation": {
+    "time": "2026-10-29T04:12:56.619+00:00",
+    "objective": "Follow the Watcher's turn toward the Listening Fold."
+  },
+  "calibrationStarted": true,
+  "calibrationStartAt": "2026-10-29T04:12:57.287+00:00",
+  "returnView": {
+    "appearanceDistance": 0.05867,
+    "idleAppearanceDistance": 0.00483,
+    "descriptorSimilar": false,
+    "landmarkIdentityConfirmed": false,
+    "positionReturnConfirmed": false,
+    "interpretation": "appearance_similarity_can_reflect_repeated_geometry_or_camera"
+  },
+  "onlineSummary": {
+    "translationProbeCount": 12,
+    "lookOnlyProbeCount": 4,
+    "translationScreenMotionAboveAmbient": 7,
+    "lookScreenMotionAboveAmbient": 2,
+    "onlineWorldDisplacementProven": false,
+    "onlineFoldDirectionKnown": false
+  },
+  "rec1": {
+    "events": 1288,
+    "captureSeconds": 100.594,
+    "dropped": 0
+  },
+  "finishedAt": "2026-10-29T04:14:22.265+00:00",
+  "wallSeconds": 111.88
+}

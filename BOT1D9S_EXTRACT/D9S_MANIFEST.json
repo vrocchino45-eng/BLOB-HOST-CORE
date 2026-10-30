@@ -1,0 +1,23 @@
+{
+  "revision": "G1-D9S",
+  "date": "2026-10-29",
+  "purpose": "Neutral input REC1 sampling for camera-only and free movement calibration",
+  "mode": "OBSERVER_AND_BOT_CALIBRATION",
+  "files": [
+    "install_bot1d9s_observer.py",
+    "bot1d9s_protocol.py",
+    "bot1d9s_browser.py",
+    "analyze_bot1d9s.py",
+    "test_bot1d9s.py",
+    "README_START_HERE_D9S.txt",
+    "D9S_MANIFEST.json"
+  ],
+  "modifiedWhenInstalled": ["src/debug/WorldObjectCensusSystem.js"],
+  "backup": "src/debug/WorldObjectCensusSystem.js.preD9S.bak",
+  "gameplaySimulationModified": false,
+  "ownerDataUsedInOnlineActions": false,
+  "offlineTestsPassed": 17,
+  "fullBrowserRunProven": false,
+  "acceptance": "2 free paired looks, 3 free paired idle, 2 free paired movement trials",
+  "missing": "Owner-yaw truth and semantic Fold bearing are not instrumented"
+}

@@ -906,6 +906,17 @@ export class WorldObjectCensusSystem {
       ? (displacement.x*intended.x + displacement.y*intended.y + displacement.z*intended.z) / (norm*elapsed)
       : null;
     const requestActive = rawMagnitude >= 0.55 || m.inputMagnitude >= 0.55;
+    // G1-D9S-NEUTRAL-REC1-v1: read-only neutral owner heartbeat for calibration.
+    // No movement, targeting, player or Fold state is changed by this observer.
+    if (!requestActive && (!Number.isFinite(this.mobD9SNeutralLastSampleMs) || now - this.mobD9SNeutralLastSampleMs >= 400)) {
+      this.mobD9SNeutralLastSampleMs = now;
+      this.recordEvent('g1d9s-neutral-movement-observation', {
+        owner: current,
+        observationOnly: true,
+        caveat: 'Read-only 400ms neutral sample for D9S; camera input may occur, ambient drift remains possible. Not a gameplay receipt.'
+      });
+    }
+
     const lowProgress = guided ? rawMagnitude >= 0.55
       : requestActive && (motionAlongIntent !== null && motionAlongIntent < 0.08);
     let reason = 'unclassified_low_progress';
@@ -1081,7 +1092,7 @@ export class WorldObjectCensusSystem {
     this.guide0LastOutcomeSequence = null;
     this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
     this.c0e2bLastVolumeSignature=null;this.c0e2bLastApproachMs=null;
-    this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobLastGuidedSignature=null;
+    this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobD9SNeutralLastSampleMs=null; this.mobLastGuidedSignature=null;
     this.mobPendingActions=[];
     this.territoryVisitKeys = new Set();
     this.c0e2PocketVisitKeys = new Set();
