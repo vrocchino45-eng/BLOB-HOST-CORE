@@ -1,0 +1,114 @@
+{
+  "revision": "BOT1-D9V",
+  "gate": "INCOMPLETE_EVIDENCE",
+  "expectedRuns": 3,
+  "completeRuns": 2,
+  "uniqueSeeds": [
+    11
+  ],
+  "ownerStage1Count": 2,
+  "ownerStage2Count": 2,
+  "stage2CertifiedCount": 2,
+  "runs": [
+    {
+      "revision": "BOT1-D9V-OFFLINE-REFEREE",
+      "run": 1,
+      "seed": 11,
+      "source": "FINAL",
+      "complete": true,
+      "rec1Events": 927,
+      "droppedREC1Details": 0,
+      "courseTrials": 10,
+      "ownerInvitation": true,
+      "ownerStage1": true,
+      "ownerStage1NearArrival": true,
+      "ownerStage2": true,
+      "ownerMaxStage": 2,
+      "stage2AfterRecordedPulse": true,
+      "pairedPulseEventId": 4,
+      "stage2Certified": true,
+      "publicCueSeen": true,
+      "onlinePulseAttempts": 2,
+      "firstOwnerStage1Seconds": 62.58,
+      "firstOwnerStage2Seconds": 63.02,
+      "guideReactionNearStage2": [
+        "guide_traced_answer_without_claiming_meaning",
+        "guide_waited_for_world_response"
+      ],
+      "finalStatus": "STAGE1_OWNER_CERTIFIED",
+      "proofLimits": [
+        "Stage 2 requires genuine REC1 owner progression after a recorded game Pulse near the bot action.",
+        "Repeated fixed-course behavior is not generalized Fold navigation.",
+        "One different seed is an initial variation check, not broad robustness.",
+        "No REC1, Fold XYZ, distance, focusReady, Guide owner state, or telemetry API is read by the live bot.",
+        "Guide reaction is independently observed, not demonstrated causal assistance."
+      ]
+    },
+    {
+      "revision": "BOT1-D9V-OFFLINE-REFEREE",
+      "run": 2,
+      "seed": 11,
+      "source": "FINAL",
+      "complete": true,
+      "rec1Events": 959,
+      "droppedREC1Details": 0,
+      "courseTrials": 10,
+      "ownerInvitation": true,
+      "ownerStage1": true,
+      "ownerStage1NearArrival": true,
+      "ownerStage2": true,
+      "ownerMaxStage": 2,
+      "stage2AfterRecordedPulse": true,
+      "pairedPulseEventId": 4,
+      "stage2Certified": true,
+      "publicCueSeen": true,
+      "onlinePulseAttempts": 2,
+      "firstOwnerStage1Seconds": 63.51,
+      "firstOwnerStage2Seconds": 63.72,
+      "guideReactionNearStage2": [
+        "guide_traced_answer_without_claiming_meaning",
+        "guide_waited_for_world_response"
+      ],
+      "finalStatus": "STAGE1_OWNER_CERTIFIED",
+      "proofLimits": [
+        "Stage 2 requires genuine REC1 owner progression after a recorded game Pulse near the bot action.",
+        "Repeated fixed-course behavior is not generalized Fold navigation.",
+        "One different seed is an initial variation check, not broad robustness.",
+        "No REC1, Fold XYZ, distance, focusReady, Guide owner state, or telemetry API is read by the live bot.",
+        "Guide reaction is independently observed, not demonstrated causal assistance."
+      ]
+    },
+    {
+      "revision": "BOT1-D9V-OFFLINE-REFEREE",
+      "run": 3,
+      "seed": 13,
+      "source": "FINAL",
+      "complete": false,
+      "rec1Events": 1862,
+      "droppedREC1Details": 0,
+      "courseTrials": 0,
+      "ownerInvitation": false,
+      "ownerStage1": false,
+      "ownerStage1NearArrival": false,
+      "ownerStage2": false,
+      "ownerMaxStage": 0,
+      "stage2AfterRecordedPulse": false,
+      "pairedPulseEventId": null,
+      "stage2Certified": false,
+      "publicCueSeen": false,
+      "onlinePulseAttempts": 0,
+      "firstOwnerStage1Seconds": null,
+      "firstOwnerStage2Seconds": null,
+      "guideReactionNearStage2": [],
+      "finalStatus": "INCOMPLETE_EVIDENCE",
+      "proofLimits": [
+        "Stage 2 requires genuine REC1 owner progression after a recorded game Pulse near the bot action.",
+        "Repeated fixed-course behavior is not generalized Fold navigation.",
+        "One different seed is an initial variation check, not broad robustness.",
+        "No REC1, Fold XYZ, distance, focusReady, Guide owner state, or telemetry API is read by the live bot.",
+        "Guide reaction is independently observed, not demonstrated causal assistance."
+      ]
+    }
+  ],
+  "scope": "First controlled varied-seed post-arrival Pulse test; not full Fold completion"
+}

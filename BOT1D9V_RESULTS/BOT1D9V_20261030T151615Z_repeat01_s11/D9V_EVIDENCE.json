@@ -1,0 +1,34 @@
+{
+  "revision": "BOT1-D9V-OFFLINE-REFEREE",
+  "run": 1,
+  "seed": 11,
+  "source": "FINAL",
+  "complete": true,
+  "rec1Events": 927,
+  "droppedREC1Details": 0,
+  "courseTrials": 10,
+  "ownerInvitation": true,
+  "ownerStage1": true,
+  "ownerStage1NearArrival": true,
+  "ownerStage2": true,
+  "ownerMaxStage": 2,
+  "stage2AfterRecordedPulse": true,
+  "pairedPulseEventId": 4,
+  "stage2Certified": true,
+  "publicCueSeen": true,
+  "onlinePulseAttempts": 2,
+  "firstOwnerStage1Seconds": 62.58,
+  "firstOwnerStage2Seconds": 63.02,
+  "guideReactionNearStage2": [
+    "guide_traced_answer_without_claiming_meaning",
+    "guide_waited_for_world_response"
+  ],
+  "finalStatus": "STAGE1_OWNER_CERTIFIED",
+  "proofLimits": [
+    "Stage 2 requires genuine REC1 owner progression after a recorded game Pulse near the bot action.",
+    "Repeated fixed-course behavior is not generalized Fold navigation.",
+    "One different seed is an initial variation check, not broad robustness.",
+    "No REC1, Fold XYZ, distance, focusReady, Guide owner state, or telemetry API is read by the live bot.",
+    "Guide reaction is independently observed, not demonstrated causal assistance."
+  ]
+}

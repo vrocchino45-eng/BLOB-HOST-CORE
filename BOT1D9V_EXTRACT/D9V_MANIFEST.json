@@ -1,0 +1,37 @@
+{
+  "revision": "BOT1-D9V",
+  "description": "Stage 1 arrival + immediate bounded public-cue Pulse, varied-seed Stage 2 evaluation",
+  "noGameplayChanges": true,
+  "dependsOn": [
+    "bot1d3_browser.py",
+    "bot1d6_browser.py",
+    "bot1d6_policy.py",
+    "bot1d9s_browser.py",
+    "bot1d9t_protocol.py",
+    "bot1d9u_policy.py",
+    "analyze_bot1d9t.py"
+  ],
+  "offlineTestsPassed": 27,
+  "files": [
+    {
+      "name": "bot1d9v_policy.py",
+      "sha256": "867c2fe1a20fbcfc2005389c5c9f4d8e3cfe1af1fa4eeff9979e9c7b8391f312"
+    },
+    {
+      "name": "bot1d9v_browser.py",
+      "sha256": "d0558169338c01afb4a55dfa6d864ac29bcfff6b08fe460f446999707dccf79f"
+    },
+    {
+      "name": "analyze_bot1d9v.py",
+      "sha256": "1378477a613104fb93f790ffb74fe22cc07c8b87d9e50b8480c60fb7c43de05c"
+    },
+    {
+      "name": "test_bot1d9v.py",
+      "sha256": "89fd9ece0ebc8053e895c0c85acbb35fdc41fbbf6af93e698bfe9f03046c9f80"
+    },
+    {
+      "name": "README_START_HERE_D9V.txt",
+      "sha256": "2efaddf16310a0ccec530958d192d0e201b0e3ca1a575d298195c8917f1d03f5"
+    }
+  ]
+}
