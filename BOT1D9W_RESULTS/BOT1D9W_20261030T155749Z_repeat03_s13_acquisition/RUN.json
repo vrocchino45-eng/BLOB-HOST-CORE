@@ -1,0 +1,169 @@
+{
+  "revision": "BOT1-D9W",
+  "repeat": 3,
+  "seed": 13,
+  "mode": "acquisition",
+  "startedAt": "2026-10-30T15:57:50.902+00:00",
+  "status": "CAPTURED",
+  "gameplayChanges": false,
+  "errors": [],
+  "actions": [
+    {
+      "atStart": "2026-10-30T15:57:59.728+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "a",
+      "duration": 0.78
+    },
+    {
+      "atStart": "2026-10-30T15:58:00.656+00:00",
+      "phase": "acquire",
+      "kind": "observe",
+      "key": null,
+      "duration": 0.32
+    },
+    {
+      "atStart": "2026-10-30T15:58:01.070+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "s",
+      "duration": 0.65
+    },
+    {
+      "atStart": "2026-10-30T15:58:01.898+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "j",
+      "duration": 0.36
+    },
+    {
+      "atStart": "2026-10-30T15:58:02.411+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28
+    },
+    {
+      "atStart": "2026-10-30T15:58:02.834+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28
+    },
+    {
+      "atStart": "2026-10-30T15:58:03.297+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "duration": 0.85
+    },
+    {
+      "atStart": "2026-10-30T15:58:04.302+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "j",
+      "duration": 0.4
+    },
+    {
+      "atStart": "2026-10-30T15:58:04.865+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28
+    },
+    {
+      "atStart": "2026-10-30T15:58:05.275+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "duration": 0.74
+    },
+    {
+      "atStart": "2026-10-30T15:58:06.200+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "duration": 0.28
+    },
+    {
+      "atStart": "2026-10-30T15:58:06.705+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "duration": 0.85
+    },
+    {
+      "atStart": "2026-10-30T15:58:07.758+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "a",
+      "duration": 0.78
+    }
+  ],
+  "percepts": [
+    {
+      "time": "2026-10-30T15:57:59.728+00:00",
+      "visibleStage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "time": "2026-10-30T15:58:02.834+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-30T15:58:04.865+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-30T15:58:06.199+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-30T15:58:06.705+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-30T15:58:07.758+00:00",
+      "visibleStage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "time": "2026-10-30T15:58:08.975+00:00",
+      "visibleStage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    }
+  ],
+  "probes": [],
+  "arrival": null,
+  "checkpoints": [],
+  "onlineInputs": [
+    "visible HUD objective",
+    "elapsed time",
+    "precommitted fixed course"
+  ],
+  "onlineForbidden": [
+    "REC1",
+    "Fold owner state",
+    "player XYZ",
+    "hidden Fold distance",
+    "telemetry API"
+  ],
+  "proofLimit": "Stage3: single public-cue Pulse then experimental Q hold; acquisition: public HUD sweep only. Owner proof offline.",
+  "visibleInvitation": {
+    "time": "2026-10-30T15:58:08.975+00:00",
+    "objective": "Follow the Watcher's turn toward the Listening Fold."
+  },
+  "courseStarted": false,
+  "courseStopReason": "Acquisition-only experiment; no Fold course by design",
+  "rec1": {
+    "events": 141,
+    "duration": 10.924,
+    "dropped": 0
+  },
+  "finishedAt": "2026-10-30T15:58:12.322+00:00",
+  "wallSeconds": 21.42
+}

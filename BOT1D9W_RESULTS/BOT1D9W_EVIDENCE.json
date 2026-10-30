@@ -1,0 +1,94 @@
+{
+  "revision": "BOT1-D9W",
+  "completeEvidence": true,
+  "expectedModes": [
+    "stage3",
+    "stage3",
+    "acquisition"
+  ],
+  "stage3": {
+    "certified": 2,
+    "attempts": 2,
+    "gate": "PASS"
+  },
+  "acquisition": {
+    "certified": 1,
+    "attempts": 1,
+    "gate": "PASS"
+  },
+  "runs": [
+    {
+      "revision": "BOT1-D9W-REFEREE",
+      "mode": "stage3",
+      "repeat": 1,
+      "seed": 11,
+      "rec1Complete": true,
+      "rec1Source": "FINAL",
+      "rec1Events": 984,
+      "droppedDetails": 0,
+      "certified": true,
+      "status": "CERTIFIED",
+      "ownerInvitation": true,
+      "ownerStage1": true,
+      "ownerStage2": true,
+      "stage2Certified": true,
+      "ownerStage3": true,
+      "holdPairedWithStabilize": true,
+      "stabilizeOwnerStartAt": "2026-10-30T15:56:05.781Z",
+      "stage3AfterStage2": true,
+      "ownerMaxStage": 5,
+      "firstStage3At": "2026-10-30T15:56:07.020Z",
+      "publicPulseCount": 1,
+      "experimentalHoldCount": 1,
+      "foldOwnerLastInteractionAtStage3": "watching_membrane_answer_travel"
+    },
+    {
+      "revision": "BOT1-D9W-REFEREE",
+      "mode": "stage3",
+      "repeat": 2,
+      "seed": 11,
+      "rec1Complete": true,
+      "rec1Source": "FINAL",
+      "rec1Events": 969,
+      "droppedDetails": 0,
+      "certified": true,
+      "status": "CERTIFIED",
+      "ownerInvitation": true,
+      "ownerStage1": true,
+      "ownerStage2": true,
+      "stage2Certified": true,
+      "ownerStage3": true,
+      "holdPairedWithStabilize": true,
+      "stabilizeOwnerStartAt": "2026-10-30T15:57:40.960Z",
+      "stage3AfterStage2": true,
+      "ownerMaxStage": 5,
+      "firstStage3At": "2026-10-30T15:57:42.255Z",
+      "publicPulseCount": 1,
+      "experimentalHoldCount": 1,
+      "foldOwnerLastInteractionAtStage3": "watching_membrane_answer_travel"
+    },
+    {
+      "revision": "BOT1-D9W-REFEREE",
+      "mode": "acquisition",
+      "repeat": 3,
+      "seed": 13,
+      "rec1Complete": true,
+      "rec1Source": "FINAL",
+      "rec1Events": 141,
+      "droppedDetails": 0,
+      "certified": true,
+      "status": "CERTIFIED",
+      "watcherPulsesWitnessed": 4,
+      "watcherAcceptedReads": 2,
+      "ownerInvitation": true,
+      "publicInvitation": true,
+      "noFoldCourseByDesign": true
+    }
+  ],
+  "proofLimits": [
+    "Stage 3 requires REC1 owner progression after a recorded Q Stabilize start and owner-certified Stage 2.",
+    "Acquisition requires owner-accepted packet reading and authentic invitation; visual HUD alone is insufficient.",
+    "Same-seed Stage 3 tests and single-seed acquisition are exploratory, not general performance estimates.",
+    "No gameplay or Guide changes; no hidden owner data enters decisions."
+  ]
+}

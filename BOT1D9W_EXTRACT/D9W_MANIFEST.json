@@ -1,0 +1,61 @@
+{
+  "pass": "G1-D9W",
+  "date": "2026-10-30",
+  "scope": "bot-only split Stage3 + Watcher acquisition",
+  "gameplayChanged": false,
+  "recorderSourceChanged": false,
+  "requiredInstalled": [
+    "bot1d9v_browser.py",
+    "bot1d9v_policy.py",
+    "analyze_bot1d9v.py",
+    "bot1d9u_policy.py",
+    "bot1d9s_browser.py",
+    "bot1d9t_protocol.py",
+    "bot1d6_policy.py",
+    "bot1d3_browser.py",
+    "test_bot1d9v.py"
+  ],
+  "files": [
+    {
+      "name": "bot1d9w_policy.py",
+      "bytes": 5602,
+      "sha256": "8450f63f376fde6c2e76ff7174f0c5993129cbef5a551207dc5af3bfb615a404"
+    },
+    {
+      "name": "bot1d9w_browser.py",
+      "bytes": 9861,
+      "sha256": "7cca7e1b455baba5d2f545d2de9ec74f89565e9fa47284769cc0954ce6f52e26"
+    },
+    {
+      "name": "analyze_bot1d9w.py",
+      "bytes": 7709,
+      "sha256": "997d8fe7f51a31f1426c0efd315157bb40754d9898cd3dc01ea20980d8c6d6f3"
+    },
+    {
+      "name": "test_bot1d9w.py",
+      "bytes": 7646,
+      "sha256": "d9782c60cfb027c7e02b2c2ea549688b7440849ec58f629df7fd26600bda3504"
+    },
+    {
+      "name": "README_START_HERE_D9W.txt",
+      "bytes": 2898,
+      "sha256": "b5682d84708806b37a66854db25507b74e7b9f6824b72bf7886c4598aa1a9cc2"
+    }
+  ],
+  "defaultRuns": [
+    {
+      "mode": "stage3",
+      "seed": 11
+    },
+    {
+      "mode": "stage3",
+      "seed": 11
+    },
+    {
+      "mode": "acquisition",
+      "seed": 13
+    }
+  ],
+  "offlineTestsPassing": 27,
+  "liveResult": "PENDING"
+}
