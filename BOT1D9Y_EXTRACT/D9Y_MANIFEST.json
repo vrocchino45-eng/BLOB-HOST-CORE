@@ -1,0 +1,43 @@
+{
+  "revision": "BOT1-D9Y",
+  "mode": "TEST_ONLY_NEW_FILES",
+  "noGameplayChanges": true,
+  "baseline": "BLOB-HOST-CORE-BLOB-BOT0.zip + D9X recorded telemetry",
+  "changedPaths": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/BOT1D9Y_REFERENCE.json",
+      "sha256": "6a32f343d26c11329625cc930b9fd837309686786e26db0bb8a5784b5c012de4",
+      "bytes": 4850
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/BOT1D9Y_UNIT_TEST_FIXTURE.json",
+      "sha256": "f5ae680fb2afe657611dfa790f40a11ce245a26c748e396807d9bb67b1d5ff81",
+      "bytes": 7689
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9y_policy.py",
+      "sha256": "5a8c4941d7e0996978f351838b0f12c949ec2d2ec5f69742005768082edf880d",
+      "bytes": 4154
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9y_browser.py",
+      "sha256": "d30ae33d0a53b2479042183320ee1f6a778ccad8a227838905bf8eee3248adb9",
+      "bytes": 15235
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d9y.py",
+      "sha256": "03522d8f9c2119881e1e49cffe9f31651d8e9727d6ee53e9b3376e78ec1de57d",
+      "bytes": 7338
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d9y.py",
+      "sha256": "df9501b2e909aa504052d75f389aabff73845a95e74d69d269c644a01a4dbdd1",
+      "bytes": 4833
+    }
+  ],
+  "reference": "D9X recorded bot input policies; not a human-run recording or world RNG",
+  "onlineControl": "public HUD + prerecorded input itinerary; independent REC1 assessed after capture",
+  "liveBrowserRun": "NOT_EXECUTED",
+  "offlineTests": "15 / 15 passed, both with full D9X source and self-contained unit fixture",
+  "fixtureDisclosure": "Unit fixture is a cropped subset of real D9X events used solely for test logic, NOT a complete captured run"
+}

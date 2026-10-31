@@ -1,0 +1,212 @@
+{
+  "fixturePurpose": "UNIT_TEST_ONLY_EXCERPT_NOT_FULL_REC1_PROOF",
+  "source": "1BOT1D9X_RESULTS.zip repeat01 Seed11, real event excerpts",
+  "rec": {
+    "captureActive": false,
+    "summary": {
+      "captureRetention": {
+        "droppedDetails": 0
+      }
+    },
+    "events": [
+      {
+        "time": "2026-10-31T03:17:44.964Z",
+        "type": "bot1c-watcher-pulse-owner-result",
+        "witness": {
+          "revision": "BOT1-C",
+          "owner": "SurfaceWakeGameplaySystem",
+          "pulseEventId": 4,
+          "packetSequence": 1,
+          "packetActive": true,
+          "packetDistance": 2.858154101504134,
+          "readRange": 3.4,
+          "packetIdentifiedBefore": false,
+          "packetPulseReadAccepted": true,
+          "reason": "packet_pulse_read_accepted",
+          "materialTransfer": false,
+          "hostReceipt": false,
+          "progressionCredit": false,
+          "caveat": "Exact SurfaceWakeGameplaySystem packet proximity rule; not a targeting-reticle hit, physical material transfer, or completed Listening Fold."
+        },
+        "caveat": "Owner-authored per-Pulse proximity result; recorder samples a retained read-only witness. No fabricated receipt.",
+        "recorderEventOrdinal": 103
+      },
+      {
+        "time": "2026-10-31T03:17:54.364Z",
+        "type": "bot1c-watcher-owner-state-change",
+        "state": {
+          "active": false,
+          "sequence": 1,
+          "packetIdentified": true,
+          "packetPulseRead": true,
+          "resolvedCycleCount": 1,
+          "playerAuthoredCycleCount": 1,
+          "agencyProven": true,
+          "foldInvitation": true,
+          "lastOutcomeSequence": 1,
+          "lastOutcome": "tender_fed_clean_matter"
+        },
+        "caveat": "Poll-time owner snapshot; transient phases between polls may be missed.",
+        "recorderEventOrdinal": 122
+      },
+      {
+        "time": "2026-10-31T03:18:49.457Z",
+        "type": "bot1d-listening-fold-owner-state",
+        "state": {
+          "activeCellId": "CELL_MEMBRANE_NURSERY_001",
+          "owner": "SurfaceWakeLayeredInteractionSystem",
+          "active": true,
+          "foldAvailable": true,
+          "stage": "observe_first_answer",
+          "stageIndex": 1,
+          "progress": 0.18,
+          "completed": false,
+          "inApproach": true,
+          "focusReady": true,
+          "focusDistance": 1.62,
+          "expectsPulse": true,
+          "expectsHold": false,
+          "expectsRelease": false,
+          "lastInteraction": "approach_read_complete",
+          "nurseryAgencyProven": true,
+          "nurseryFoldInvitation": true
+        },
+        "proofLimit": "Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.",
+        "recorderEventOrdinal": 945
+      },
+      {
+        "time": "2026-10-31T03:18:49.751Z",
+        "type": "bot1d-listening-fold-owner-state",
+        "state": {
+          "activeCellId": "CELL_MEMBRANE_NURSERY_001",
+          "owner": "SurfaceWakeLayeredInteractionSystem",
+          "active": true,
+          "foldAvailable": true,
+          "stage": "sustain_first_resonance",
+          "stageIndex": 2,
+          "progress": 0.2,
+          "completed": false,
+          "inApproach": true,
+          "focusReady": true,
+          "focusDistance": 1.626,
+          "expectsPulse": false,
+          "expectsHold": true,
+          "expectsRelease": false,
+          "lastInteraction": "surface_wake_observed",
+          "nurseryAgencyProven": true,
+          "nurseryFoldInvitation": true
+        },
+        "proofLimit": "Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.",
+        "recorderEventOrdinal": 953
+      },
+      {
+        "time": "2026-10-31T03:18:49.950Z",
+        "type": "game-stabilize-started",
+        "target": {
+          "candidateId": null,
+          "lockedId": null,
+          "heldId": null,
+          "gripStatus": null,
+          "legacyTargetId": "surface_wake_membrane_mote_002"
+        },
+        "recorderEventOrdinal": 959
+      },
+      {
+        "time": "2026-10-31T03:18:51.256Z",
+        "type": "bot1d-listening-fold-owner-state",
+        "state": {
+          "activeCellId": "CELL_MEMBRANE_NURSERY_001",
+          "owner": "SurfaceWakeLayeredInteractionSystem",
+          "active": true,
+          "foldAvailable": true,
+          "stage": "watch_tissue_response",
+          "stageIndex": 3,
+          "progress": 0.56,
+          "completed": false,
+          "inApproach": true,
+          "focusReady": true,
+          "focusDistance": 2.048,
+          "expectsPulse": false,
+          "expectsHold": false,
+          "expectsRelease": false,
+          "lastInteraction": "sustained_answer_visible",
+          "nurseryAgencyProven": true,
+          "nurseryFoldInvitation": true
+        },
+        "proofLimit": "Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.",
+        "recorderEventOrdinal": 981
+      },
+      {
+        "time": "2026-10-31T03:18:51.888Z",
+        "type": "bot1d-listening-fold-owner-state",
+        "state": {
+          "activeCellId": "CELL_MEMBRANE_NURSERY_001",
+          "owner": "SurfaceWakeLayeredInteractionSystem",
+          "active": true,
+          "foldAvailable": true,
+          "stage": "release_and_settle",
+          "stageIndex": 4,
+          "progress": 0.76,
+          "completed": false,
+          "inApproach": true,
+          "focusReady": true,
+          "focusDistance": 2.224,
+          "expectsPulse": false,
+          "expectsHold": false,
+          "expectsRelease": true,
+          "lastInteraction": "visible_response_complete_release_required",
+          "nurseryAgencyProven": true,
+          "nurseryFoldInvitation": true
+        },
+        "proofLimit": "Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.",
+        "recorderEventOrdinal": 992
+      },
+      {
+        "time": "2026-10-31T03:18:53.610Z",
+        "type": "bot1d-listening-fold-owner-state",
+        "state": {
+          "activeCellId": "CELL_MEMBRANE_NURSERY_001",
+          "owner": "SurfaceWakeLayeredInteractionSystem",
+          "active": true,
+          "foldAvailable": true,
+          "stage": "surface_wake_complete",
+          "stageIndex": 5,
+          "progress": 1,
+          "completed": true,
+          "inApproach": true,
+          "focusReady": false,
+          "focusDistance": 2.912,
+          "expectsPulse": false,
+          "expectsHold": false,
+          "expectsRelease": false,
+          "lastInteraction": "surface_wake_language_learned_safe_seed_readable",
+          "nurseryAgencyProven": true,
+          "nurseryFoldInvitation": true
+        },
+        "proofLimit": "Read-only gameplay owner snapshot. No bot access before action choice; progress is not a Host receipt or another region transition.",
+        "recorderEventOrdinal": 1009
+      }
+    ]
+  },
+  "run": {
+    "status": "CAPTURED",
+    "errors": [],
+    "courseStarted": true,
+    "profile": "golden",
+    "arrival": {
+      "holdActions": [
+        {
+          "atStart": "2026-10-31T03:18:49.855+00:00",
+          "key": "q",
+          "plannedSeconds": 1.5,
+          "reason": "bounded_stabilize_probe_after_public_pulse",
+          "publicPhaseAtStart": "fold_answer_visible",
+          "ownerStageUnknownOnline": true,
+          "atEnd": "2026-10-31T03:18:51.721+00:00",
+          "actualRequestedSeconds": 1.5
+        }
+      ],
+      "noOnlineOwnerCertification": true
+    }
+  }
+}

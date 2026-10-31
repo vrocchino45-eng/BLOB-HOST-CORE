@@ -1,0 +1,242 @@
+{
+  "revision": "BOT1-D9Y-REFERENCE-1",
+  "source": "1BOT1D9X_RESULTS.zip",
+  "basis": "recorded BOT1-D9X Seed 11 successful bot input policy; NOT a human-run movement recording",
+  "seedMeaning": "bot policy ID only, NOT world seed",
+  "allowedLiveUse": "recorded ordinary input itinerary + visible HUD stages. No world position, owner distance, REC1 or focusDistance consulted online.",
+  "acquisition": {
+    "11": [
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "w",
+        "seconds": 0.85
+      },
+      {
+        "kind": "look",
+        "key": "l",
+        "seconds": 0.54
+      },
+      {
+        "kind": "move",
+        "key": "d",
+        "seconds": 0.77
+      },
+      {
+        "kind": "observe",
+        "key": null,
+        "seconds": 0.3
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "w",
+        "seconds": 0.85
+      },
+      {
+        "kind": "look",
+        "key": "j",
+        "seconds": 0.4
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "s",
+        "seconds": 0.74
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "w",
+        "seconds": 0.85
+      },
+      {
+        "kind": "look",
+        "key": "l",
+        "seconds": 0.54
+      }
+    ],
+    "13": [
+      {
+        "kind": "move",
+        "key": "a",
+        "seconds": 0.78
+      },
+      {
+        "kind": "observe",
+        "key": null,
+        "seconds": 0.32
+      },
+      {
+        "kind": "move",
+        "key": "s",
+        "seconds": 0.65
+      },
+      {
+        "kind": "look",
+        "key": "j",
+        "seconds": 0.36
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "w",
+        "seconds": 0.85
+      },
+      {
+        "kind": "look",
+        "key": "j",
+        "seconds": 0.4
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "w",
+        "seconds": 0.74
+      },
+      {
+        "kind": "pulse",
+        "key": null,
+        "seconds": 0.28
+      },
+      {
+        "kind": "move",
+        "key": "w",
+        "seconds": 0.85
+      },
+      {
+        "kind": "move",
+        "key": "a",
+        "seconds": 0.78
+      }
+    ]
+  },
+  "calibrationCourse": [
+    {
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "label": "ambient_center"
+    },
+    {
+      "kind": "look",
+      "key": "j",
+      "seconds": 1.65,
+      "label": "look_left"
+    },
+    {
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "label": "ambient_left"
+    },
+    {
+      "kind": "look",
+      "key": "l",
+      "seconds": 1.65,
+      "label": "look_right"
+    },
+    {
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "label": "ambient_return"
+    },
+    {
+      "kind": "move",
+      "key": "w",
+      "seconds": 2.2,
+      "label": "travel_forward"
+    },
+    {
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "label": "ambient_after_forward"
+    },
+    {
+      "kind": "move",
+      "key": "s",
+      "seconds": 2.2,
+      "label": "travel_backward"
+    },
+    {
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "label": "ambient_after_backward"
+    }
+  ],
+  "arrival": {
+    "key": "a",
+    "seconds": 2.2,
+    "sliceSeconds": 0.2,
+    "stabilizeKey": "q",
+    "stabilizeSeconds": 1.5
+  },
+  "offlineWitness": {
+    "firstAcceptedPulseDistance": 2.858,
+    "watcherReadRange": 3.4,
+    "stageTimestamps": {
+      "1": {
+        "stageIndex": 1,
+        "stage": "observe_first_answer",
+        "at": "2026-10-31T03:18:49.457Z"
+      },
+      "2": {
+        "stageIndex": 2,
+        "stage": "sustain_first_resonance",
+        "at": "2026-10-31T03:18:49.751Z"
+      },
+      "3": {
+        "stageIndex": 3,
+        "stage": "watch_tissue_response",
+        "at": "2026-10-31T03:18:51.256Z"
+      },
+      "4": {
+        "stageIndex": 4,
+        "stage": "release_and_settle",
+        "at": "2026-10-31T03:18:51.888Z"
+      },
+      "5": {
+        "stageIndex": 5,
+        "stage": "surface_wake_complete",
+        "at": "2026-10-31T03:18:53.610Z"
+      }
+    }
+  },
+  "proofLimits": [
+    "Reference is a prior bot run, not a demonstration of human-like route discovery.",
+    "Replaying keys may fail from a different starting pose, drift or timing.",
+    "Stage 5 completion does not imply a material Host receipt."
+  ]
+}
