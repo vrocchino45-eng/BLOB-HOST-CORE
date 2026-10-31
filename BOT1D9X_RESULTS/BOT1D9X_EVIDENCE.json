@@ -1,0 +1,157 @@
+{
+  "revision": "BOT1-D9X",
+  "gate": "NO_CROSS_POLICY_STAGE5_PROOF",
+  "completeEvidence": true,
+  "seedMeaning": "runner_policy_only_not_world_rng",
+  "expectedSeeds": [
+    11,
+    13,
+    24
+  ],
+  "certifiedSeeds": [
+    11
+  ],
+  "twoDifferentSeedsCertified": false,
+  "runs": [
+    {
+      "revision": "BOT1-D9X-REFEREE",
+      "repeat": 1,
+      "mode": "stage5",
+      "seed": 11,
+      "rec1Complete": true,
+      "source": "FINAL",
+      "events": 1046,
+      "droppedDetails": 0,
+      "fixedCourseCompleted": true,
+      "watcherAcceptedReads": 1,
+      "watcherAcceptedBeforeFold": true,
+      "ownerInvitationBeforeFold": true,
+      "ownerStageNamesCorrect": true,
+      "ownerStagesStrictlyOrdered": true,
+      "ownerStageTimes": {
+        "1": "2026-10-31T03:18:49.457Z",
+        "2": "2026-10-31T03:18:49.751Z",
+        "3": "2026-10-31T03:18:51.256Z",
+        "4": "2026-10-31T03:18:51.888Z",
+        "5": "2026-10-31T03:18:53.610Z"
+      },
+      "ownerStage5Completed": true,
+      "stage2And3Paired": true,
+      "gameplayOwnerCertified": true,
+      "status": "CERTIFIED",
+      "publicCourseObjective": "PUBLIC_ANSWER_SEEN",
+      "postCourseObjective": "",
+      "hudMayLagOwner": false,
+      "guideOwnerObservations": 431,
+      "guidePulsePairs": 5,
+      "hostEventCounts": {
+        "c0d1-host-vascular-effect-observed": 0,
+        "c0d3-host-grave-resolution-observed": 0,
+        "host-silt-cause-observed": 0,
+        "vascular-silt-signal-received": 0
+      },
+      "hostCoreGuideCausality": "UNPROVEN_BY_THIS_PASS",
+      "limits": [
+        "Stage 5 certifies only the Listening Fold gameplay owner; not a Host material receipt.",
+        "Guide observer samples and Pulse pairs do not by themselves prove causal assistance.",
+        "Fixed scripted route is not independent scene-vision navigation.",
+        "The runner seed changes action policy only; it does not seed the game world.",
+        "No owner telemetry, REC1, hidden distance, or player XYZ used for action selection."
+      ]
+    },
+    {
+      "revision": "BOT1-D9X-REFEREE",
+      "repeat": 2,
+      "mode": "stage5",
+      "seed": 13,
+      "rec1Complete": true,
+      "source": "FINAL",
+      "events": 928,
+      "droppedDetails": 0,
+      "fixedCourseCompleted": true,
+      "watcherAcceptedReads": 2,
+      "watcherAcceptedBeforeFold": false,
+      "ownerInvitationBeforeFold": false,
+      "ownerStageNamesCorrect": false,
+      "ownerStagesStrictlyOrdered": false,
+      "ownerStageTimes": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null
+      },
+      "ownerStage5Completed": false,
+      "stage2And3Paired": false,
+      "gameplayOwnerCertified": false,
+      "status": "NOT_CERTIFIED",
+      "publicCourseObjective": "NO_PUBLIC_ANSWER",
+      "postCourseObjective": "Follow the Watcher's turn toward the Listening Fold.",
+      "hudMayLagOwner": false,
+      "guideOwnerObservations": 373,
+      "guidePulsePairs": 4,
+      "hostEventCounts": {
+        "c0d1-host-vascular-effect-observed": 0,
+        "c0d3-host-grave-resolution-observed": 0,
+        "host-silt-cause-observed": 0,
+        "vascular-silt-signal-received": 0
+      },
+      "hostCoreGuideCausality": "UNPROVEN_BY_THIS_PASS",
+      "limits": [
+        "Stage 5 certifies only the Listening Fold gameplay owner; not a Host material receipt.",
+        "Guide observer samples and Pulse pairs do not by themselves prove causal assistance.",
+        "Fixed scripted route is not independent scene-vision navigation.",
+        "The runner seed changes action policy only; it does not seed the game world.",
+        "No owner telemetry, REC1, hidden distance, or player XYZ used for action selection."
+      ]
+    },
+    {
+      "revision": "BOT1-D9X-REFEREE",
+      "repeat": 3,
+      "mode": "stage5",
+      "seed": 24,
+      "rec1Complete": true,
+      "source": "FINAL",
+      "events": 2110,
+      "droppedDetails": 0,
+      "fixedCourseCompleted": false,
+      "watcherAcceptedReads": 0,
+      "watcherAcceptedBeforeFold": false,
+      "ownerInvitationBeforeFold": false,
+      "ownerStageNamesCorrect": false,
+      "ownerStagesStrictlyOrdered": false,
+      "ownerStageTimes": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null
+      },
+      "ownerStage5Completed": false,
+      "stage2And3Paired": false,
+      "gameplayOwnerCertified": false,
+      "status": "NOT_CERTIFIED",
+      "publicCourseObjective": null,
+      "postCourseObjective": null,
+      "hudMayLagOwner": false,
+      "guideOwnerObservations": 1071,
+      "guidePulsePairs": 73,
+      "hostEventCounts": {
+        "c0d1-host-vascular-effect-observed": 0,
+        "c0d3-host-grave-resolution-observed": 0,
+        "host-silt-cause-observed": 0,
+        "vascular-silt-signal-received": 0
+      },
+      "hostCoreGuideCausality": "UNPROVEN_BY_THIS_PASS",
+      "limits": [
+        "Stage 5 certifies only the Listening Fold gameplay owner; not a Host material receipt.",
+        "Guide observer samples and Pulse pairs do not by themselves prove causal assistance.",
+        "Fixed scripted route is not independent scene-vision navigation.",
+        "The runner seed changes action policy only; it does not seed the game world.",
+        "No owner telemetry, REC1, hidden distance, or player XYZ used for action selection."
+      ]
+    }
+  ],
+  "hostCoreGuideCausality": "UNPROVEN_BY_THIS_PASS",
+  "worldSeedVariation": "NOT_TESTED"
+}

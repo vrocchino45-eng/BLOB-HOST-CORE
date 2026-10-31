@@ -1,0 +1,43 @@
+{
+  "pass": "BOT1-D9X",
+  "date": "2026-10-30",
+  "scope": "test-harness and offline referee only",
+  "sourceArchive": "BLOB-HOST-CORE-BLOB-BOT0.zip",
+  "sourceArchiveSHA256": "e321d6f90de5ae4e197b8d54cf932e9c2814e8c643da9660d1826903af0b41db",
+  "gameplayChanged": false,
+  "recorderChanged": false,
+  "liveBrowserD9X": "NOT_RUN",
+  "offlineTests": {
+    "passed": 19,
+    "failed": 0,
+    "skipped": 0
+  },
+  "seedMeaning": "input-policy seed; game world RNG unchanged",
+  "defaultPolicySeeds": [
+    11,
+    13,
+    24
+  ],
+  "files": [
+    {
+      "path": "README_START_HERE.md",
+      "size": 4820,
+      "sha256": "6bdb6fbe81e5992d60c6c2eb4596130a4d6376bc1e1d2bc607b277212d77524c"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9x_browser.py",
+      "size": 10027,
+      "sha256": "c9d629975034eefb1ab91d5103fb22487f2ac1030ac1badbfc6fc4412f0b621f"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d9x.py",
+      "size": 8795,
+      "sha256": "c157ceba5cc5bff36e21023e61dde68b3dd0c1e517416cef5af67ebf971e9a62"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d9x.py",
+      "size": 6240,
+      "sha256": "e741d3d587675c9b6eb2393644b77b6f8c253edcd3240336a16d52dd1083d6f0"
+    }
+  ]
+}
