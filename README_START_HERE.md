@@ -1,47 +1,73 @@
-# BLOB: HOST CORE — HC-031W2A Frame Truth Kit (no-source audit)
+# BLOB: HOST CORE — BOT1-D10A / Guided Target Closure
 
-**Purpose:** Find out whether browser animation-frame stalls correlate with the HC-031W1 slow-playback telemetry, without modifying the playable build. W2B visual changes are not included here.
+**Scope: TEST HARNESS ONLY.** This package contains only **four new Python files** and this README/manifest. No `src`, `public`, movement, camera, Fold, Watcher, Guide, chemistry, or LS1 runtime file is modified.
 
-## What's inside
+D9Z evidence: Golden and Recovery achieved owner-certified Listening Fold Stage 5; Guided earned the Watcher invitation but approached no closer than ~2.59 units against the authored 2.25 approach gate. D10A tests a bounded additional approach with only *public HUD cues* and regular keyboard inputs. The historical distance is used to design a fixed hypothesis; it is **never read by the live bot**.
 
-- `w2a_browser_profiler.js`: single paste-in Chrome/Edge DevTools **Sources → Snippets** script. Adds `window.BLOB_W2A`, a passive browser observer. No game source edits, no game-input interception, no overlay, no telemetry-schema changes, no network calls.
-- `w2a_compare.mjs`: optional Node.js console comparison of two JSON results; Node 18+.
-- `smoke_test.mjs`: synthetic browser environment smoke test. `smoke_unrecorded.json` is synthetic **only** and must never be treated as real game measurement.
+## Prerequisite
 
-## First experiment: 2-minute A/B, same route
+The existing D9Y and D9Z scripts must already be installed in the local project root `BLOB-HOST-CORE`. In particular the files below must exist:
 
-1. Open the actual HC-031W1 game in Chrome or Edge; use the same resolution, browser zoom, settings, and start/checkpoint for both runs. Do not add any extra debug HUD. In DevTools use **Sources → Snippets** to create a snippet containing the entire `w2a_browser_profiler.js`, and run it once. The Console should say `Installed`.
-2. At the intended starting point, open Console and enter:
-   ```js
-   BLOB_W2A.arm({label:'surface_unrecorded',route:'Surface Wake: same 2-minute path',recording:false,delaySeconds:8,durationSeconds:120});
-   ```
-   Close DevTools promptly within the 8-second arming delay, leave the game tab visible/foreground, and play the chosen ~2-minute path naturally. The monitor stops automatically. Reopen DevTools **after** the auto-stop and enter `BLOB_W2A.download()` to download its read-only report.
-3. Restore/reload the same starting state. Start video capture **before arming** the second run. Arm the same profiler with:
-   ```js
-   BLOB_W2A.arm({label:'surface_recorded',route:'Surface Wake: same 2-minute path',recording:true,delaySeconds:8,durationSeconds:120});
-   ```
-   Close DevTools promptly. Repeat the path with the same camera and approximate actions. After the monitor auto-stops, reopen DevTools and use `BLOB_W2A.download()` to save the second report. Stop recording once the run is complete. If practical, export the existing BLOB session telemetry for **each** run, not just video; it supplies internal simulation time which this browser observer cannot see.
-4. Upload both `BLOB_W2A_*.json` reports (and corresponding BLOB session telemetry if available). They are tiny compared with full gameplay captures.
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9z_browser.py`
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d9z.py`
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/BOT1D9Y_REFERENCE.json`
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/BOT1D9Y_UNIT_TEST_FIXTURE.json`
 
-Optional local comparison:
-```sh
-node w2a_compare.mjs BLOB_W2A_surface_unrecorded.json BLOB_W2A_surface_recorded.json
+Do **not** move them into the top-level `scripts` folder. You do not need to reinstall D9Y or D9Z if their tests already passed.
+
+## 1 — Install the delta
+
+Download `BLOB_BOT1_D10A_TEST_ONLY_DELTA.zip` to the local **C: GitHub project root** (not Google Drive), then in VS Code PowerShell, from `...\Documents\GitHub\BLOB-HOST-CORE`:
+
+```powershell
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D10A_TEST_ONLY_DELTA.zip' -DestinationPath '.' -Force
 ```
 
-If the Surface Wake A/B shows a large penalty, repeat later on one dense region (Hub/Comb) using the same method. Don't perform six long test runs at once; first learn whether capture is a factor.
+The ZIP preserves `BLOB_BOT1_REAL_INPUT_HARNESS\scripts\...` paths. There is **no extra wrapper folder** to move, and no JSON files to copy.
 
-## Interpretation: avoid an FPS false conclusion
+## 2 — Run the D10A offline checks
 
-- The profiler measures **independent browser `requestAnimationFrame` opportunities**, not BLOB's game update count, actual Canvas draw calls, simulation delta or recorded MP4 encoding FPS. Do not label `callbacksPerVisibleSecond` as game FPS.
-- Its p50/p95/max interval and 10-second windows help locate bad browser frame scheduling. `PerformanceObserver` long-task entries (when the API is supported) provide additional main-thread evidence.
-- The monitor tracks hidden and blurred time separately. A blurred window isn't necessarily throttled; hidden state usually matters more. An interval crossing hidden state is excluded from eligible visible samples.
-- If browser rAF stalls in the same intervals as gameplay, examine render/main-thread work, browser throttling or recorder contention. If browser rAF stays healthy while gameplay telemetry advances simulation too slowly, inspect the game loop, paused state, delta cap, frame/update ownership and telemetry timestamp logic in the **matching HC-031W1 source**.
-- Do **not** blindly remove the simulation dt cap: it may exist to protect numerical stability. Determine how dropped wall time is handled, especially during recording and background transitions.
+```powershell
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d10a.py
+```
 
-## Locked / out of scope
+Expected: `Ran 15 tests ... OK`. These simulate policy and referee behavior; they do **not** certify live gameplay.
 
-No modifications to movement rates, camera/input mappings, audio HC027D1 reference, surface acquisition, targeting ownership, region routes, ecology, or procedural anatomy. No new content and no speculative renderer deletions. W2A remains audit-only until matched source and a controlled test identify a cause.
+## 3 — Capture four browser runs
 
-## Limitations
+Start the usual game Vite server on `http://127.0.0.1:5173` in another terminal. Run this **D10A**, not the old D9Y/D9Z, browser script:
 
-Running DevTools while playing could itself hurt frame scheduling; the 8-second arm period is intended for closing it before data collection. A diagnostic file is created only when `BLOB_W2A.download()` is invoked. If the browser reloads/navigation occurs during a run, this in-page observer resets; report that as a failed test instead of merging sessions. Device/window and Canvas dimensions are recorded only to compare test conditions. The standalone observer cannot determine whether BLOB's own update loop is being skipped.
+```powershell
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d10a_browser.py --browser-channel chrome --headed --profiles golden,guided,recovery,recovery_control --seconds 145 --output BOT1D10A_RESULTS
+```
+
+Profiles:
+
+- **golden** — unchanged D9Z reference input itinerary; regression control.
+- **guided** — existing D9Y reference route, then bounded small left-approach probes and reversals, checking the visible Fold cue after each step; Pulse and Q only after public Fold-answer cue.
+- **recovery** — D9Z six-direction sweep, followed by the shared Recovery route and cue-aware closure.
+- **recovery_control** — same recovery acquisition, shared route, and cue-aware closure **without the sweep**. This is a one-run A/B diagnostic, not causal proof.
+
+All profiles use public HUD prompts, ordinary keys, precommitted movement, and elapsed time during the run; hidden owner state and REC1 are **not** inputs to targeting.
+
+## 4 — Referee and ZIP the returned evidence
+
+```powershell
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d10a.py BOT1D10A_RESULTS
+Compress-Archive -Path '.\BOT1D10A_RESULTS\*' -DestinationPath '.\BOT1D10A_RESULTS.zip' -Force
+```
+
+Upload `BOT1D10A_RESULTS.zip` for review. Verify that the console lists `golden`, `guided`, `recovery`, and `recovery_control`. The referee writes `BOT1D10A_EVIDENCE.json` and `.md` into the results folder.
+
+## Evidence and acceptance
+
+D10A succeeds as a convergence candidate only if:
+
+1. **Golden remains certified Stage 5**, including paired Q stabilize start and end.
+2. **Guided reaches owner Stage 1 and owner-certified Stage 5** (not merely invitation or a public prompt).
+3. **Both Recovery arms have complete REC1** and the A/B results document their distinct input sequences.
+4. Neither online policy inspects hidden positions, owner focus distance, surface attachment telemetry, or REC1 before capture ends.
+
+The independent offline referee checks owner stage order, accepted Watcher read, invitation, paired Q start/end, capture integrity and Host events. Fold completion is **not** counted as a Host material receipt. These are assisted scripted tests, not autonomous discovery, human discoverability, or world-RNG seed diversity.
+
+**If a bot fails Stage 5:** retain all REC1 and RUN logs. Do not change gameplay without isolating the cause.

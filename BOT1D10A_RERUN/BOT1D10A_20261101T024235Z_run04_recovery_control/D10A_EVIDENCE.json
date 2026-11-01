@@ -1,0 +1,154 @@
+{
+  "revision": "BOT1-D10A-OFFLINE-REFEREE",
+  "profile": "recovery_control",
+  "assistedScripted": true,
+  "status": "CERTIFIED_FOLD_STAGE5",
+  "certifiedFoldStage5": true,
+  "rec1Complete": true,
+  "rec1Events": 615,
+  "droppedDetails": 0,
+  "acceptedWatcherReads": 2,
+  "ownerInvitationObserved": true,
+  "acceptedReadPriorStage1": true,
+  "invitationPriorStage1": true,
+  "ownerStageTimes": {
+    "1": "2026-11-01T02:43:19.562Z",
+    "2": "2026-11-01T02:43:20.467Z",
+    "3": "2026-11-01T02:43:22.122Z",
+    "4": "2026-11-01T02:43:22.950Z",
+    "5": "2026-11-01T02:43:23.878Z"
+  },
+  "ownerStagesOrdered": true,
+  "ownerStageNamesCorrect": true,
+  "ownerStage5Completed": true,
+  "keyboardHoldPairedWithStabilizeOwner": true,
+  "guideObserverSamples": 257,
+  "hostEventCounts": {
+    "c0d1-host-vascular-effect-observed": 0,
+    "c0d3-host-grave-resolution-observed": 0,
+    "host-silt-cause-observed": 0,
+    "vascular-silt-signal-received": 0
+  },
+  "proofLimits": [
+    "Assisted scripted test, not proof of player discoverability or autonomous navigation.",
+    "Profile names are policies, not world RNG seeds.",
+    "Fold Stage5 does not certify Host material receipt or Guide causality.",
+    "REC1 used only after completion of the browser run.",
+    "Stabilize START and END are independently checked with recorded Q hold.",
+    "Attachment direction tests are precommitted and not guaranteed to peel.",
+    "A complete REC1 does not prove the player could naturally find the route."
+  ],
+  "orderedStabilizeEndPaired": true,
+  "attachmentOffline": {
+    "sampleCount": 77,
+    "attachedCount": 7,
+    "peelTrialCount": 0,
+    "postPeelSampleCount": 0,
+    "postPeelAttachedCount": 0,
+    "postPeelLastAttached": null,
+    "postPeelOwnerObservations": [],
+    "caveat": "Owner samples are sparse; no attachment state was used by the online bot."
+  },
+  "foldDistanceOffline": {
+    "invitedSamples": 192,
+    "first": 8.089,
+    "min": 0.447,
+    "last": 1.776,
+    "caveat": "Post-run diagnostic only; never a steering target."
+  },
+  "publicCueSeenOnline": true,
+  "publicCueFirstTime": "2026-11-01T02:43:19.519+00:00",
+  "recoveryDiagnosis": "NOT_APPLICABLE",
+  "refereeStatus": "CERTIFIED_FOLD_STAGE5",
+  "onlineClosure": {
+    "termination": "VISIBLE_FOLD_CUE",
+    "publicCueSeen": true,
+    "stateHistory": [
+      "INVITED",
+      "SEARCH_REFERENCE",
+      "REFERENCE_REAPPROACH",
+      "POST_REAPPROACH_CUE_WAIT",
+      "FOLD_CUE"
+    ],
+    "stepCounts": {
+      "route": 8,
+      "peel": 0,
+      "reapproach": 1,
+      "closure": 0
+    },
+    "keyHistory": [
+      {
+        "category": "route",
+        "key": null,
+        "duration": 1.5,
+        "label": "neutral_attachment_probe"
+      },
+      {
+        "category": "route",
+        "key": "j",
+        "duration": 1.65,
+        "label": "reference_look_left"
+      },
+      {
+        "category": "route",
+        "key": "l",
+        "duration": 1.65,
+        "label": "reference_look_right"
+      },
+      {
+        "category": "route",
+        "key": "w",
+        "duration": 2.2,
+        "label": "reference_forward"
+      },
+      {
+        "category": "route",
+        "key": null,
+        "duration": 0.5,
+        "label": "forward_settle"
+      },
+      {
+        "category": "route",
+        "key": "s",
+        "duration": 2.2,
+        "label": "reference_backward"
+      },
+      {
+        "category": "route",
+        "key": null,
+        "duration": 0.5,
+        "label": "backward_settle"
+      },
+      {
+        "category": "route",
+        "key": "a",
+        "duration": 2.2,
+        "label": "reference_left_arrival"
+      },
+      {
+        "category": "reapproach",
+        "key": "a",
+        "duration": 2.2,
+        "label": "shared_reference_left_reapproach"
+      }
+    ],
+    "ownerSteeringUsed": false
+  },
+  "offlineApproach": {
+    "minimumFocusDistance": 0.447,
+    "inApproachObserved": true,
+    "focusReadyObserved": true,
+    "stage1Reached": true,
+    "stage5Certified": true,
+    "warning": "Independent post-run evidence. Not available to the online bot."
+  },
+  "recoveryArm": {
+    "label": "no_sweep_control",
+    "actualPeelActions": 0,
+    "allAttachmentSamples": 77,
+    "attachedSamples": 7,
+    "identicalDownstreamPolicyName": "D10A_ROUTE_REAPPROACH_CLOSURE",
+    "notCausalProof": true
+  },
+  "evidenceBoundary": "Stabilize start/end, stage order and Host receipt evaluated offline from REC1. Public HUD only during browser navigation; no world-RNG seed varied."
+}

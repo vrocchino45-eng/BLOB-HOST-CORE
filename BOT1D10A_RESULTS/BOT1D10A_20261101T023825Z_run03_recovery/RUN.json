@@ -1,0 +1,49 @@
+{
+  "revision": "BOT1-D10A",
+  "profile": "recovery",
+  "startedAt": "2026-11-01T02:38:26.770+00:00",
+  "status": "ERROR",
+  "source": "D9Z certified Golden and Recovery, Guided approach shortfall",
+  "testKind": "ASSISTED_SCRIPTED_TARGET_CLOSURE_WITH_RECOVERY_AB_NOT_HUMAN_DISCOVERABILITY",
+  "gameplayChanges": false,
+  "errors": [
+    "TargetClosedError: Page.goto: Target page, context or browser has been closed\nCall log:\n  - navigating to \"http://127.0.0.1:5173/\", waiting until \"domcontentloaded\"\n",
+    "checkpoint: TargetClosedError('Keyboard.press: Target page, context or browser has been closed')"
+  ],
+  "actions": [],
+  "percepts": [],
+  "navigation": [],
+  "checkpoints": [],
+  "courseStarted": false,
+  "arrival": null,
+  "policyContract": {
+    "online": [
+      "HUD objective/stage",
+      "ordinary browser keyboard",
+      "precommitted input reference",
+      "time"
+    ],
+    "forbidden": [
+      "REC1 during actions",
+      "player XYZ",
+      "packetDistance",
+      "focusDistance",
+      "Fold owner stage",
+      "Guide owner state"
+    ],
+    "referenceIsBotTelemetry": true,
+    "worldSeedSet": false
+  },
+  "ownerProof": "OFFLINE_REC1_ONLY",
+  "livePolicyForbidden": [
+    "REC1 during actions",
+    "player XYZ",
+    "focusDistance",
+    "surface attachment owner telemetry",
+    "target position",
+    "Fold owner stage",
+    "game-world RNG seed"
+  ],
+  "finishedAt": "2026-11-01T02:38:27.015+00:00",
+  "wallSeconds": 0.24
+}
