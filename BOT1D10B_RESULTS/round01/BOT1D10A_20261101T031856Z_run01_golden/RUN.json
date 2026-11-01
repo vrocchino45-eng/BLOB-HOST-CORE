@@ -1,0 +1,519 @@
+{
+  "revision": "BOT1-D10A",
+  "profile": "golden",
+  "startedAt": "2026-11-01T03:18:57.827+00:00",
+  "status": "CAPTURED",
+  "source": "D9Z certified Golden and Recovery, Guided approach shortfall",
+  "testKind": "ASSISTED_SCRIPTED_TARGET_CLOSURE_WITH_RECOVERY_AB_NOT_HUMAN_DISCOVERABILITY",
+  "gameplayChanges": false,
+  "errors": [],
+  "actions": [
+    {
+      "atStart": "2026-11-01T03:19:10.176+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "seconds": 0.28,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:10.623+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:10.872+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "seconds": 0.85,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:11.820+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:11.959+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "l",
+      "seconds": 0.54,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:12.591+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:12.728+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "d",
+      "seconds": 0.77,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:13.574+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:13.736+00:00",
+      "phase": "acquire",
+      "kind": "observe",
+      "key": null,
+      "seconds": 0.3,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:14.043+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:14.178+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "seconds": 0.28,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:14.584+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:14.703+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "seconds": 0.85,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:15.652+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:15.806+00:00",
+      "phase": "acquire",
+      "kind": "look",
+      "key": "j",
+      "seconds": 0.4,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:16.290+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:16.427+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "seconds": 0.28,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:16.806+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:16.946+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "s",
+      "seconds": 0.74,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:17.773+00:00",
+      "publicStageAfter": "packet"
+    },
+    {
+      "atStart": "2026-11-01T03:19:17.900+00:00",
+      "phase": "acquire",
+      "kind": "pulse",
+      "key": null,
+      "seconds": 0.28,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:18.279+00:00",
+      "publicStageAfter": "unknown"
+    },
+    {
+      "atStart": "2026-11-01T03:19:18.492+00:00",
+      "phase": "acquire",
+      "kind": "move",
+      "key": "w",
+      "seconds": 0.85,
+      "cycle": 1,
+      "atEnd": "2026-11-01T03:19:26.083+00:00",
+      "publicStageAfter": "fold_search"
+    }
+  ],
+  "percepts": [
+    {
+      "at": "2026-11-01T03:19:10.770+00:00",
+      "stage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "at": "2026-11-01T03:19:11.912+00:00",
+      "stage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "at": "2026-11-01T03:19:12.684+00:00",
+      "stage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "at": "2026-11-01T03:19:13.687+00:00",
+      "stage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "at": "2026-11-01T03:19:17.856+00:00",
+      "stage": "packet",
+      "objective": "Pulse the moving matter so the Watcher can identify it."
+    },
+    {
+      "at": "2026-11-01T03:19:18.435+00:00",
+      "stage": "unknown",
+      "objective": "Let clean matter feed the Tender, or Absorb it into the Core."
+    },
+    {
+      "at": "2026-11-01T03:19:26.302+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:19:32.191+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:19:39.914+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:19:49.039+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:19:53.363+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:19:58.459+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:20:02.746+00:00",
+      "stage": "fold_search",
+      "objective": "Follow the Watcher's turn toward the Listening Fold."
+    },
+    {
+      "at": "2026-11-01T03:20:14.519+00:00",
+      "stage": "unknown",
+      "objective": "Let the fold's answer travel through the nursery."
+    },
+    {
+      "at": "2026-11-01T03:20:15.772+00:00",
+      "stage": "unknown",
+      "objective": "Accept the nourishment the Tender has presented."
+    }
+  ],
+  "navigation": [
+    {
+      "label": "ambient_center",
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "at": "2026-11-01T03:19:32.157+00:00"
+    },
+    {
+      "label": "look_left",
+      "kind": "look",
+      "key": "j",
+      "seconds": 1.65,
+      "at": "2026-11-01T03:19:35.864+00:00"
+    },
+    {
+      "label": "ambient_left",
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "at": "2026-11-01T03:19:39.875+00:00"
+    },
+    {
+      "label": "look_right",
+      "kind": "look",
+      "key": "l",
+      "seconds": 1.65,
+      "at": "2026-11-01T03:19:43.432+00:00"
+    },
+    {
+      "label": "ambient_return",
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "at": "2026-11-01T03:19:48.979+00:00"
+    },
+    {
+      "label": "travel_forward",
+      "kind": "move",
+      "key": "w",
+      "seconds": 2.2,
+      "at": "2026-11-01T03:19:53.300+00:00"
+    },
+    {
+      "label": "ambient_after_forward",
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "at": "2026-11-01T03:19:58.438+00:00"
+    },
+    {
+      "label": "travel_backward",
+      "kind": "move",
+      "key": "s",
+      "seconds": 2.2,
+      "at": "2026-11-01T03:20:02.690+00:00"
+    },
+    {
+      "label": "ambient_after_backward",
+      "kind": "idle",
+      "key": null,
+      "seconds": 2.2,
+      "at": "2026-11-01T03:20:06.750+00:00"
+    },
+    {
+      "label": "golden_arrival",
+      "at": "2026-11-01T03:20:14.467+00:00",
+      "result": "PUBLIC_ANSWER_SEEN"
+    }
+  ],
+  "checkpoints": [
+    {
+      "name": "REC1_CHECKPOINT_0045s.json",
+      "events": 396,
+      "captureActive": true,
+      "atSeconds": 45.61
+    }
+  ],
+  "courseStarted": true,
+  "arrival": {
+    "publicVerdict": "PUBLIC_ANSWER_SEEN",
+    "leftHoldSeconds": 2.2,
+    "corrections": [],
+    "pulseActions": [
+      {
+        "at": "2026-11-01T03:20:11.871+00:00",
+        "key": "x",
+        "reason": "visible_fold_answer",
+        "number": 1
+      }
+    ],
+    "holdActions": [
+      {
+        "atStart": "2026-11-01T03:20:12.098+00:00",
+        "key": "q",
+        "plannedSeconds": 1.5,
+        "reason": "bounded_stabilize_probe_after_public_pulse",
+        "publicPhaseAtStart": "fold_answer_visible",
+        "ownerStageUnknownOnline": true,
+        "atEnd": "2026-11-01T03:20:14.004+00:00",
+        "actualRequestedSeconds": 1.5
+      }
+    ],
+    "segments": [
+      {
+        "at": "2026-11-01T03:20:09.033+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:09.263+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:09.530+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:09.791+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:10.076+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:10.346+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:10.601+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:10.854+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:11.095+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:11.358+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_search",
+        "objective": "Follow the Watcher's turn toward the Listening Fold."
+      },
+      {
+        "at": "2026-11-01T03:20:11.611+00:00",
+        "label": "left_chunk",
+        "seconds": 0.2,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:11.696+00:00",
+        "label": "left_released",
+        "seconds": 0.0,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:11.826+00:00",
+        "label": "after_release",
+        "seconds": 0.09,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:11.871+00:00",
+        "label": "before_first_pulse",
+        "seconds": 0.0,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:12.098+00:00",
+        "label": "immediately_after_pulse",
+        "seconds": 0.1,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:12.421+00:00",
+        "label": "stabilize_held",
+        "seconds": 0.25,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:12.729+00:00",
+        "label": "stabilize_held",
+        "seconds": 0.25,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:13.021+00:00",
+        "label": "stabilize_held",
+        "seconds": 0.25,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:13.299+00:00",
+        "label": "stabilize_held",
+        "seconds": 0.25,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:13.633+00:00",
+        "label": "stabilize_held",
+        "seconds": 0.25,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:13.953+00:00",
+        "label": "stabilize_held",
+        "seconds": 0.25,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:14.394+00:00",
+        "label": "after_hold",
+        "seconds": 0.3,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      },
+      {
+        "at": "2026-11-01T03:20:14.466+00:00",
+        "label": "final_public_state",
+        "seconds": 0.0,
+        "publicPhase": "fold_answer_visible",
+        "objective": "Let the fold's answer travel through the nursery."
+      }
+    ],
+    "endVisiblePhase": "fold_answer_visible",
+    "noHiddenOwnerAccess": true,
+    "noOnlineOwnerCertification": true
+  },
+  "policyContract": {
+    "online": [
+      "HUD objective/stage",
+      "ordinary browser keyboard",
+      "precommitted input reference",
+      "time"
+    ],
+    "forbidden": [
+      "REC1 during actions",
+      "player XYZ",
+      "packetDistance",
+      "focusDistance",
+      "Fold owner stage",
+      "Guide owner state"
+    ],
+    "referenceIsBotTelemetry": true,
+    "worldSeedSet": false
+  },
+  "ownerProof": "OFFLINE_REC1_ONLY",
+  "livePolicyForbidden": [
+    "REC1 during actions",
+    "player XYZ",
+    "focusDistance",
+    "surface attachment owner telemetry",
+    "target position",
+    "Fold owner stage",
+    "game-world RNG seed"
+  ],
+  "visibleInvitation": {
+    "time": "2026-11-01T03:19:27.249+00:00",
+    "objective": "Follow the Watcher's turn toward the Listening Fold."
+  },
+  "postCourseObjective": "Let the fold's answer travel through the nursery.",
+  "rec1": {
+    "events": 874,
+    "droppedDetails": 0,
+    "durationSeconds": 66.526
+  },
+  "finishedAt": "2026-11-01T03:20:22.368+00:00",
+  "wallSeconds": 84.54
+}

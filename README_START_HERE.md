@@ -1,73 +1,70 @@
-# BLOB: HOST CORE — BOT1-D10A / Guided Target Closure
+# BLOB: HOST CORE — BOT1-D10B repeatability smoke gate
 
-**Scope: TEST HARNESS ONLY.** This package contains only **four new Python files** and this README/manifest. No `src`, `public`, movement, camera, Fold, Watcher, Guide, chemistry, or LS1 runtime file is modified.
+**Mode:** diagnostic-only / test-harness-only. **The D10A browser runner, game code, LS1 drivetrain, Fold and Watcher logic are not changed.**
 
-D9Z evidence: Golden and Recovery achieved owner-certified Listening Fold Stage 5; Guided earned the Watcher invitation but approached no closer than ~2.59 units against the authored 2.25 approach gate. D10A tests a bounded additional approach with only *public HUD cues* and regular keyboard inputs. The historical distance is used to design a fixed hypothesis; it is **never read by the live bot**.
+## Why this pass exists
 
-## Prerequisite
+D10A first batch: Golden and Guided missed Watcher acquisition. D10A rerun: both reached owner-certified Stage 5. One successful rerun is not a reliable regression baseline. D10B repeats the **unchanged** D10A Golden and Guided policies to see whether they acquire the Watcher and finish the Fold consistently, under new browser sessions.
 
-The existing D9Y and D9Z scripts must already be installed in the local project root `BLOB-HOST-CORE`. In particular the files below must exist:
+## Package contents (all new files)
 
-- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9z_browser.py`
-- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d9z.py`
-- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/BOT1D9Y_REFERENCE.json`
-- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/BOT1D9Y_UNIT_TEST_FIXTURE.json`
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d10b_repeat.py` — orchestrates the existing D10A browser runner; alternating order, fresh browser per round, no overwrite of earlier results.
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d10b.py` — reads exported REC1 offline; classifies each failure as capture, acquisition, approach or Fold interaction.
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d10b.py` — 17 offline tests.
+- `D10B_MANIFEST.json` — file hashes and boundaries.
+- This README.
 
-Do **not** move them into the top-level `scripts` folder. You do not need to reinstall D9Y or D9Z if their tests already passed.
+**Dependencies already installed in your project:** prior D9Y/D9Z/D10A harness scripts and `BOT1D9Y_REFERENCE.json` inside `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/`.
 
-## 1 — Install the delta
+## Install — local Windows PowerShell, from BLOB-HOST-CORE root
 
-Download `BLOB_BOT1_D10A_TEST_ONLY_DELTA.zip` to the local **C: GitHub project root** (not Google Drive), then in VS Code PowerShell, from `...\Documents\GitHub\BLOB-HOST-CORE`:
-
-```powershell
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D10A_TEST_ONLY_DELTA.zip' -DestinationPath '.' -Force
-```
-
-The ZIP preserves `BLOB_BOT1_REAL_INPUT_HARNESS\scripts\...` paths. There is **no extra wrapper folder** to move, and no JSON files to copy.
-
-## 2 — Run the D10A offline checks
+Place `BLOB_BOT1_D10B_TEST_ONLY_DELTA.zip` in your **local GitHub BLOB-HOST-CORE folder** (not the separate Google Drive copy).
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d10a.py
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D10B_TEST_ONLY_DELTA.zip' -DestinationPath '.' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d10b.py
 ```
 
-Expected: `Ran 15 tests ... OK`. These simulate policy and referee behavior; they do **not** certify live gameplay.
+Expected local tests: `Ran 17 tests` and `OK`. There are no JSON fixtures to copy into new locations.
 
-## 3 — Capture four browser runs
+## Run the new live repeatability gate
 
-Start the usual game Vite server on `http://127.0.0.1:5173` in another terminal. Run this **D10A**, not the old D9Y/D9Z, browser script:
+Start your normal Vite game at `http://127.0.0.1:5173`. Then:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d10a_browser.py --browser-channel chrome --headed --profiles golden,guided,recovery,recovery_control --seconds 145 --output BOT1D10A_RESULTS
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d10b_repeat.py --browser-channel chrome --headed --rounds 3 --seconds 145 --output BOT1D10B_RESULTS
 ```
 
-Profiles:
+This launches six attempts using **unchanged D10A policies**:
 
-- **golden** — unchanged D9Z reference input itinerary; regression control.
-- **guided** — existing D9Y reference route, then bounded small left-approach probes and reversals, checking the visible Fold cue after each step; Pulse and Q only after public Fold-answer cue.
-- **recovery** — D9Z six-direction sweep, followed by the shared Recovery route and cue-aware closure.
-- **recovery_control** — same recovery acquisition, shared route, and cue-aware closure **without the sweep**. This is a one-run A/B diagnostic, not causal proof.
+| Round | First | Second |
+|---|---|---|
+| 1 | Golden | Guided |
+| 2 | Guided | Golden |
+| 3 | Golden | Guided |
 
-All profiles use public HUD prompts, ordinary keys, precommitted movement, and elapsed time during the run; hidden owner state and REC1 are **not** inputs to targeting.
+Every run uses a new isolated browser context; each round starts a fresh browser process. These are repeats of input policies, **not** alternate game-world RNG seeds. The default six attempts are a smoke gate, not a statistical reliability estimate.
 
-## 4 — Referee and ZIP the returned evidence
+**Don't rerun the command into the same nonempty directory.** If all previously recorded rounds are complete, `--resume` can skip them. If a round is partial, use a new `--output BOT1D10B_RETRY` to preserve it rather than overwrite evidence.
+
+## Score and package the results
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d10a.py BOT1D10A_RESULTS
-Compress-Archive -Path '.\BOT1D10A_RESULTS\*' -DestinationPath '.\BOT1D10A_RESULTS.zip' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d10b.py BOT1D10B_RESULTS
+Compress-Archive -Path '.\BOT1D10B_RESULTS\*' -DestinationPath '.\BOT1D10B_RESULTS.zip' -Force
 ```
 
-Upload `BOT1D10A_RESULTS.zip` for review. Verify that the console lists `golden`, `guided`, `recovery`, and `recovery_control`. The referee writes `BOT1D10A_EVIDENCE.json` and `.md` into the results folder.
+Upload `BOT1D10B_RESULTS.zip`. The analyzer writes `BOT1D10B_EVIDENCE.json` and `BOT1D10B_EVIDENCE.md` at the results root, plus per-attempt D10B evidence files.
 
-## Evidence and acceptance
+**Note:** The analyzer returns a nonzero command status if the repeatability gate fails, even when it successfully writes the report. That is a test verdict, not necessarily a Python crash. Read the printed classification and the generated report.
 
-D10A succeeds as a convergence candidate only if:
+## Success and decision boundaries
 
-1. **Golden remains certified Stage 5**, including paired Q stabilize start and end.
-2. **Guided reaches owner Stage 1 and owner-certified Stage 5** (not merely invitation or a public prompt).
-3. **Both Recovery arms have complete REC1** and the A/B results document their distinct input sequences.
-4. Neither online policy inspects hidden positions, owner focus distance, surface attachment telemetry, or REC1 before capture ends.
+Proposed smoke pass: all six attempts must have complete REC1 (`droppedDetails=0`, no runner errors), an owner-accepted Watcher read and invitation, Stage 1, and independently owner-certified Fold Stage 5 with paired Stabilize end events. Anything less identifies the failure layer. The gate will not silently pass an incomplete run set.
 
-The independent offline referee checks owner stage order, accepted Watcher read, invitation, paired Q start/end, capture integrity and Host events. Fold completion is **not** counted as a Host material receipt. These are assisted scripted tests, not autonomous discovery, human discoverability, or world-RNG seed diversity.
+- **Golden succeeds, Guided fails:** investigate Guided's acquisition, approach or handoff using the specified failure category.
+- **Both acquire Watcher but miss Fold:** inspect public cues, bounded approach, and interaction timing; no gameplay fix implied yet.
+- **Both pass six attempts:** lock the scripted Fold smoke baseline *provisionally*, then shift test effort to LS1 Silt connection and surface traversal instead of tuning this Fold again.
+- **Capture/REC1 incomplete:** repair the harness or rerun isolated captures before interpreting game behavior.
 
-**If a bot fails Stage 5:** retain all REC1 and RUN logs. Do not change gameplay without isolating the cause.
+No hidden owner position/REC1 data enters the live bot's decision process. REC1 is an independent offline referee. Stage 5 does not establish a Host receipt or complete Core–Host–Guide causality. No game-world seed was controlled and no human discoverability was measured.

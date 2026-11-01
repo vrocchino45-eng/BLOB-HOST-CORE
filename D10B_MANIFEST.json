@@ -1,0 +1,43 @@
+{
+  "revision": "BOT1-D10B",
+  "createdOn": "2026-10-31",
+  "packageType": "NEW_FILES_ONLY_TEST_HARNESS",
+  "base": "Existing D10A/D9Z/D9Y installed and normal Vite runtime",
+  "gameplayFilesChanged": false,
+  "previousBotPolicyChanged": false,
+  "browserRunsDone": false,
+  "offlineUnitTestsPassed": 17,
+  "d10aRegressionTestsPassed": 15,
+  "d9zRegressionTestsPassed": 15,
+  "d9yRegressionTestsPassed": 15,
+  "actualHistoricD10ABatchesRefereed": 2,
+  "files": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d10b.py",
+      "sha256": "ab26be23a175837bbf44374998eb97a00c6460442b9304dd2bb99618e14ae1ac",
+      "bytes": 8957
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d10b_repeat.py",
+      "sha256": "21d38ff385f500b330d83e121e764d72ac0dacbd8dbc563456ca4dba35b61382",
+      "bytes": 5656
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d10b.py",
+      "sha256": "b0edc6eb7ccb293968248bfc01ae6987270539b5334fc42239869a0a75ca8a9e",
+      "bytes": 5930
+    },
+    {
+      "path": "README_START_HERE.md",
+      "sha256": "3deff42bc18beed83cad2a017acff8368df10a77dc7862c749bbfeff1e21f2fb",
+      "bytes": 4547
+    }
+  ],
+  "constraints": [
+    "REC1 offline only",
+    "No world RNG seed variation",
+    "Alternating Golden/Guided",
+    "No changes to live input policies",
+    "No guarantees from small sample"
+  ]
+}
