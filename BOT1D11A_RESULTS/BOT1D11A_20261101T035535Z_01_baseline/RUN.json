@@ -1,0 +1,112 @@
+{
+  "revision": "BOT1-D11A",
+  "profile": "baseline",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-01T03:55:37.963+00:00",
+  "mode": "DEBUG_ONLY_SILT_MOBILITY_DIAGNOSTIC",
+  "requestedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+  "entryShortcut": "Shift+6",
+  "liveOwnerStateSteering": false,
+  "worldSeedSet": false,
+  "gameplayChanges": false,
+  "actions": [
+    {
+      "label": "neutral_entry",
+      "key": null,
+      "plannedSeconds": 2.0,
+      "startedAt": "2026-11-01T03:56:03.832+00:00",
+      "stateUnknownOnline": true,
+      "endedAt": "2026-11-01T03:56:05.842+00:00"
+    },
+    {
+      "label": "forward",
+      "key": "w",
+      "plannedSeconds": 3.2,
+      "startedAt": "2026-11-01T03:56:05.867+00:00",
+      "stateUnknownOnline": true,
+      "endedAt": "2026-11-01T03:56:09.183+00:00"
+    },
+    {
+      "label": "coast",
+      "key": null,
+      "plannedSeconds": 1.4,
+      "startedAt": "2026-11-01T03:56:09.184+00:00",
+      "stateUnknownOnline": true,
+      "endedAt": "2026-11-01T03:56:10.603+00:00"
+    },
+    {
+      "label": "return",
+      "key": "s",
+      "plannedSeconds": 3.2,
+      "startedAt": "2026-11-01T03:56:11.693+00:00",
+      "stateUnknownOnline": true,
+      "endedAt": "2026-11-01T03:56:14.976+00:00"
+    },
+    {
+      "label": "settle",
+      "key": null,
+      "plannedSeconds": 1.5,
+      "startedAt": "2026-11-01T03:56:14.976+00:00",
+      "stateUnknownOnline": true,
+      "endedAt": "2026-11-01T03:56:16.486+00:00"
+    }
+  ],
+  "visibleHud": [
+    {
+      "at": "2026-11-01T03:55:56.200+00:00",
+      "label": "at_launch",
+      "text": "BLOB // HOST CORE // SURFACE WAKE Watch the current mouth; matter is entering the nursery. Y inspects the Core / readable focus. Surface Wake: nursery breathing / Tender 72% · Audio ON x0.82 · Seed Core · Reading: Dense matter WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+    },
+    {
+      "at": "2026-11-01T03:56:02.212+00:00",
+      "label": "after_debug_entry",
+      "text": "BLOB // HOST CORE // SILT PRESSURE Move between the first low ribs and hold Stabilize to establish the pressure relationship. TEST 6/8 · Pressure / Silt Intake · ~60s · next Shift+7 · Silt Pressure: compression unread / 6% · Audio ON x0.82 · Seed Core · Reading: World ▽ PULSE·PROJECT △ ABSORB·DRAW ◇ STABILIZE·HOLD MODE OBSERVE · SILT · COMPACTION / SHEDDING · LOCAL READ OUT OF RANGE BETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief WASD move · Mouse/IJKL camera · F inspect Core · E intera"
+    },
+    {
+      "at": "2026-11-01T03:56:05.842+00:00",
+      "label": "neutral_entry",
+      "text": "BLOB // HOST CORE // SILT PRESSURE Move between the first low ribs and hold Stabilize to establish the pressure relationship. Silt Pressure: compression unread / 7% · Audio ON x0.82 · Seed Core · Reading: World ▽ PULSE·PROJECT △ ABSORB·DRAW ◇ STABILIZE·HOLD MODE OBSERVE · SILT · COMPACTION / SHEDDING · LOCAL READ OUT OF RANGE BETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q sta"
+    },
+    {
+      "at": "2026-11-01T03:56:11.637+00:00",
+      "label": "coast",
+      "text": "BLOB // HOST CORE // SILT PRESSURE Move between the first low ribs and hold Stabilize to establish the pressure relationship. Silt Pressure: compression unread / 16% · Audio ON x0.82 · Seed Core · Reading: World ▽ PULSE·PROJECT △ ABSORB·DRAW ◇ STABILIZE·HOLD MODE OBSERVE · SILT · COMPACTION / SHEDDING · LOCAL READ OUT OF RANGE BETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q st"
+    },
+    {
+      "at": "2026-11-01T03:56:16.486+00:00",
+      "label": "settle",
+      "text": "BLOB // HOST CORE // SILT PRESSURE Move between the first low ribs and hold Stabilize to establish the pressure relationship. Silt Pressure: compression unread / 16% · Audio ON x0.82 · Seed Core · Reading: World ▽ PULSE·PROJECT △ ABSORB·DRAW ◇ STABILIZE·HOLD MODE OBSERVE · SILT · COMPACTION / SHEDDING · LOCAL READ OUT OF RANGE BETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q st"
+    }
+  ],
+  "errors": [],
+  "policyContract": {
+    "revision": "BOT1-D11A",
+    "testEntry": "Shift+6 existing HC027G1 debug platform",
+    "requestedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "sameInterventionPrefix": true,
+    "sameInterventionSuffix": true,
+    "interventionDurationSeconds": 6.6,
+    "controlDurationSeconds": 6.6,
+    "inputsOnly": "keyboard + public HUD snapshots + elapsed time",
+    "ownerStateForLiveControl": false,
+    "gameplayChanges": false,
+    "contactNormalVisibleOnline": false,
+    "attachmentGuaranteed": false,
+    "limits": [
+      "Different browser runs are not identical physics states or world seeds.",
+      "A directional sweep is not a contact-normal-aligned peel instruction.",
+      "Stage/Host receipt/route achievement require independent owner proof."
+    ]
+  },
+  "testVerdict": "OFFLINE_REC1_ONLY",
+  "recordingStarted": "2026-11-01T03:55:56.200+00:00",
+  "debugEntryPressedAt": "2026-11-01T03:55:56.319+00:00",
+  "debugEntrySettledAt": "2026-11-01T03:56:02.212+00:00",
+  "rec1": {
+    "events": 158,
+    "droppedDetails": 0,
+    "captureDurationSeconds": 22.557
+  },
+  "finishedAt": "2026-11-01T03:56:21.088+00:00",
+  "wallSeconds": 43.13
+}

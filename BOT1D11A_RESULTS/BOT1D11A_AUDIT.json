@@ -1,0 +1,627 @@
+{
+  "revision": "BOT1-D11A",
+  "status": "DIAGNOSTIC_NOT_GAMEPLAY_CERTIFICATION",
+  "profilesRequested": [
+    "baseline",
+    "contact",
+    "release_sweep",
+    "release_control"
+  ],
+  "runs": [
+    {
+      "revision": "BOT1-D11A",
+      "profile": "baseline",
+      "verdict": "SILT_DIAGNOSTIC_CAPTURED",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "siltSampleCount": 31,
+      "motionSamples": 8,
+      "neutralSamples": 22,
+      "startPosition": {
+        "x": -0.007,
+        "y": -0.013,
+        "z": -0.029
+      },
+      "endPosition": {
+        "x": -0.459,
+        "y": -1.153,
+        "z": -1.636
+      },
+      "netDisplacement": 2.021,
+      "attachmentVerdict": "NOT_EXERCISED_NO_ATTACHMENT_OBSERVED",
+      "attachedSamples": 0,
+      "attachmentTransitions": [],
+      "surfaceIds": [],
+      "volumeIds": [],
+      "locomotionModes": {
+        "normal": 31
+      },
+      "maxBoundaryPressure": 0.0,
+      "maxPeelIntent": 0.0,
+      "sustainedLowProgressCandidates": [],
+      "movementWindows": [
+        {
+          "label": "neutral_entry",
+          "key": null,
+          "duration": 2.0,
+          "mobilitySamples": 4,
+          "observedDisplacement": 0.171,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "forward",
+          "key": "w",
+          "duration": 3.2,
+          "mobilitySamples": 4,
+          "observedDisplacement": 5.912,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "coast",
+          "key": null,
+          "duration": 1.4,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.333,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "return",
+          "key": "s",
+          "duration": 3.2,
+          "mobilitySamples": 4,
+          "observedDisplacement": 5.27,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "settle",
+          "key": null,
+          "duration": 1.5,
+          "mobilitySamples": 4,
+          "observedDisplacement": 0.03,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        }
+      ],
+      "rec1Events": 158,
+      "droppedDetails": 0,
+      "contactNormalRecorded": false,
+      "liveOwnerSteering": false,
+      "limits": [
+        "Recorder time sampling can miss brief attachment transitions.",
+        "Debug platform establishes entry, not a natural player route.",
+        "Detachment is a state observation; individual key causation is not proved."
+      ]
+    },
+    {
+      "revision": "BOT1-D11A",
+      "profile": "contact",
+      "verdict": "SILT_DIAGNOSTIC_CAPTURED",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "siltSampleCount": 38,
+      "motionSamples": 17,
+      "neutralSamples": 20,
+      "startPosition": {
+        "x": -0.007,
+        "y": -0.012,
+        "z": -0.027
+      },
+      "endPosition": {
+        "x": -2.22,
+        "y": -5.326,
+        "z": -13.343
+      },
+      "netDisplacement": 14.507,
+      "attachmentVerdict": "NOT_EXERCISED_NO_ATTACHMENT_OBSERVED",
+      "attachedSamples": 0,
+      "attachmentTransitions": [],
+      "surfaceIds": [],
+      "volumeIds": [],
+      "locomotionModes": {
+        "normal": 38
+      },
+      "maxBoundaryPressure": 0.017,
+      "maxPeelIntent": 0.0,
+      "sustainedLowProgressCandidates": [],
+      "movementWindows": [
+        {
+          "label": "neutral_entry",
+          "key": null,
+          "duration": 1.2,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.106,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_forward",
+          "key": "w",
+          "duration": 3.2,
+          "mobilitySamples": 4,
+          "observedDisplacement": 6.586,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_left",
+          "key": "a",
+          "duration": 2.0,
+          "mobilitySamples": 2,
+          "observedDisplacement": 2.336,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_forward_more",
+          "key": "w",
+          "duration": 2.6,
+          "mobilitySamples": 2,
+          "observedDisplacement": 2.225,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_right",
+          "key": "d",
+          "duration": 1.4,
+          "mobilitySamples": 2,
+          "observedDisplacement": 1.912,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.001
+        },
+        {
+          "label": "before_intervention",
+          "key": null,
+          "duration": 1.2,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.355,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "probe_vertical_up",
+          "key": "c",
+          "duration": 2.1,
+          "mobilitySamples": 3,
+          "observedDisplacement": 3.6,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "probe_vertical_down",
+          "key": "z",
+          "duration": 2.1,
+          "mobilitySamples": 2,
+          "observedDisplacement": 2.025,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "probe_forward",
+          "key": "w",
+          "duration": 2.0,
+          "mobilitySamples": 2,
+          "observedDisplacement": 0.181,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.017
+        },
+        {
+          "label": "settle",
+          "key": null,
+          "duration": 2.2,
+          "mobilitySamples": 5,
+          "observedDisplacement": 0.113,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.015
+        }
+      ],
+      "rec1Events": 235,
+      "droppedDetails": 0,
+      "contactNormalRecorded": false,
+      "liveOwnerSteering": false,
+      "limits": [
+        "Recorder time sampling can miss brief attachment transitions.",
+        "Debug platform establishes entry, not a natural player route.",
+        "Detachment is a state observation; individual key causation is not proved."
+      ]
+    },
+    {
+      "revision": "BOT1-D11A",
+      "profile": "release_sweep",
+      "verdict": "SILT_DIAGNOSTIC_CAPTURED",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "siltSampleCount": 47,
+      "motionSamples": 21,
+      "neutralSamples": 25,
+      "startPosition": {
+        "x": -0.007,
+        "y": -0.012,
+        "z": -0.028
+      },
+      "endPosition": {
+        "x": -1.571,
+        "y": -3.807,
+        "z": -8.301
+      },
+      "netDisplacement": 9.235,
+      "attachmentVerdict": "NOT_EXERCISED_NO_ATTACHMENT_OBSERVED",
+      "attachedSamples": 0,
+      "attachmentTransitions": [],
+      "surfaceIds": [],
+      "volumeIds": [],
+      "locomotionModes": {
+        "normal": 46,
+        "boost": 1
+      },
+      "maxBoundaryPressure": 0.008,
+      "maxPeelIntent": 0.0,
+      "sustainedLowProgressCandidates": [],
+      "movementWindows": [
+        {
+          "label": "neutral_entry",
+          "key": null,
+          "duration": 1.2,
+          "mobilitySamples": 2,
+          "observedDisplacement": 0.052,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_forward",
+          "key": "w",
+          "duration": 3.2,
+          "mobilitySamples": 4,
+          "observedDisplacement": 6.729,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_left",
+          "key": "a",
+          "duration": 2.0,
+          "mobilitySamples": 2,
+          "observedDisplacement": 2.186,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_forward_more",
+          "key": "w",
+          "duration": 2.6,
+          "mobilitySamples": 2,
+          "observedDisplacement": 2.218,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_right",
+          "key": "d",
+          "duration": 1.4,
+          "mobilitySamples": 2,
+          "observedDisplacement": 1.989,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.008
+        },
+        {
+          "label": "before_intervention",
+          "key": null,
+          "duration": 1.2,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.323,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "peel_up",
+          "key": "c",
+          "duration": 1.1,
+          "mobilitySamples": 2,
+          "observedDisplacement": 1.613,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "peel_down",
+          "key": "z",
+          "duration": 1.1,
+          "mobilitySamples": 1,
+          "observedDisplacement": 0.0,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "peel_back",
+          "key": "s",
+          "duration": 1.1,
+          "mobilitySamples": 1,
+          "observedDisplacement": 0.0,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "peel_forward",
+          "key": "w",
+          "duration": 1.1,
+          "mobilitySamples": 1,
+          "observedDisplacement": 0.0,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "peel_right",
+          "key": "d",
+          "duration": 1.1,
+          "mobilitySamples": 2,
+          "observedDisplacement": 1.697,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "peel_left",
+          "key": "a",
+          "duration": 1.1,
+          "mobilitySamples": 1,
+          "observedDisplacement": 0.0,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "post_intervention",
+          "key": null,
+          "duration": 1.4,
+          "mobilitySamples": 4,
+          "observedDisplacement": 0.354,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.001
+        },
+        {
+          "label": "return_backward",
+          "key": "s",
+          "duration": 2.6,
+          "mobilitySamples": 3,
+          "observedDisplacement": 3.822,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "final_neutral",
+          "key": null,
+          "duration": 1.6,
+          "mobilitySamples": 4,
+          "observedDisplacement": 0.138,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        }
+      ],
+      "rec1Events": 283,
+      "droppedDetails": 0,
+      "contactNormalRecorded": false,
+      "liveOwnerSteering": false,
+      "limits": [
+        "Recorder time sampling can miss brief attachment transitions.",
+        "Debug platform establishes entry, not a natural player route.",
+        "Detachment is a state observation; individual key causation is not proved."
+      ]
+    },
+    {
+      "revision": "BOT1-D11A",
+      "profile": "release_control",
+      "verdict": "SILT_DIAGNOSTIC_CAPTURED",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "siltSampleCount": 50,
+      "motionSamples": 13,
+      "neutralSamples": 36,
+      "startPosition": {
+        "x": -0.005,
+        "y": -0.009,
+        "z": -0.02
+      },
+      "endPosition": {
+        "x": -1.917,
+        "y": -3.853,
+        "z": -7.772
+      },
+      "netDisplacement": 8.861,
+      "attachmentVerdict": "NOT_EXERCISED_NO_ATTACHMENT_OBSERVED",
+      "attachedSamples": 0,
+      "attachmentTransitions": [],
+      "surfaceIds": [],
+      "volumeIds": [],
+      "locomotionModes": {
+        "normal": 49,
+        "boost": 1
+      },
+      "maxBoundaryPressure": 0.001,
+      "maxPeelIntent": 0.0,
+      "sustainedLowProgressCandidates": [],
+      "movementWindows": [
+        {
+          "label": "neutral_entry",
+          "key": null,
+          "duration": 1.2,
+          "mobilitySamples": 2,
+          "observedDisplacement": 0.058,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_forward",
+          "key": "w",
+          "duration": 3.2,
+          "mobilitySamples": 4,
+          "observedDisplacement": 6.072,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_left",
+          "key": "a",
+          "duration": 2.0,
+          "mobilitySamples": 2,
+          "observedDisplacement": 2.252,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_forward_more",
+          "key": "w",
+          "duration": 2.6,
+          "mobilitySamples": 3,
+          "observedDisplacement": 4.212,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "approach_right",
+          "key": "d",
+          "duration": 1.4,
+          "mobilitySamples": 1,
+          "observedDisplacement": 0.0,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "before_intervention",
+          "key": null,
+          "duration": 1.2,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.356,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "matched_neutral_1",
+          "key": null,
+          "duration": 1.1,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.128,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "matched_neutral_2",
+          "key": null,
+          "duration": 1.1,
+          "mobilitySamples": 2,
+          "observedDisplacement": 0.053,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "matched_neutral_3",
+          "key": null,
+          "duration": 1.1,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.11,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "matched_neutral_4",
+          "key": null,
+          "duration": 1.1,
+          "mobilitySamples": 2,
+          "observedDisplacement": 0.037,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.001
+        },
+        {
+          "label": "matched_neutral_5",
+          "key": null,
+          "duration": 1.1,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.067,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.001
+        },
+        {
+          "label": "matched_neutral_6",
+          "key": null,
+          "duration": 1.1,
+          "mobilitySamples": 2,
+          "observedDisplacement": 0.037,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.001
+        },
+        {
+          "label": "post_intervention",
+          "key": null,
+          "duration": 1.4,
+          "mobilitySamples": 3,
+          "observedDisplacement": 0.066,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0.001
+        },
+        {
+          "label": "return_backward",
+          "key": "s",
+          "duration": 2.6,
+          "mobilitySamples": 3,
+          "observedDisplacement": 4.07,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        },
+        {
+          "label": "final_neutral",
+          "key": null,
+          "duration": 1.6,
+          "mobilitySamples": 4,
+          "observedDisplacement": 0.122,
+          "attachmentSamples": 0,
+          "maxBoundaryPressure": 0
+        }
+      ],
+      "rec1Events": 278,
+      "droppedDetails": 0,
+      "contactNormalRecorded": false,
+      "liveOwnerSteering": false,
+      "limits": [
+        "Recorder time sampling can miss brief attachment transitions.",
+        "Debug platform establishes entry, not a natural player route.",
+        "Detachment is a state observation; individual key causation is not proved."
+      ]
+    }
+  ],
+  "abComparison": {
+    "verdict": "NO_ATTACHMENT_IN_EITHER_ARM",
+    "sweepAttachmentVerdict": "NOT_EXERCISED_NO_ATTACHMENT_OBSERVED",
+    "controlAttachmentVerdict": "NOT_EXERCISED_NO_ATTACHMENT_OBSERVED",
+    "sweepBoundaryPressure": 0.008,
+    "controlBoundaryPressure": 0.001,
+    "contract": {
+      "revision": "BOT1-D11A",
+      "testEntry": "Shift+6 existing HC027G1 debug platform",
+      "requestedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "sameInterventionPrefix": true,
+      "sameInterventionSuffix": true,
+      "interventionDurationSeconds": 6.6,
+      "controlDurationSeconds": 6.6,
+      "inputsOnly": "keyboard + public HUD snapshots + elapsed time",
+      "ownerStateForLiveControl": false,
+      "gameplayChanges": false,
+      "contactNormalVisibleOnline": false,
+      "attachmentGuaranteed": false,
+      "limits": [
+        "Different browser runs are not identical physics states or world seeds.",
+        "A directional sweep is not a contact-normal-aligned peel instruction.",
+        "Stage/Host receipt/route achievement require independent owner proof."
+      ]
+    },
+    "caveat": "Fresh browser contexts are not identical world states; normal and geometry unknown."
+  },
+  "noHostReceiptOrLS1LockInferred": true
+}

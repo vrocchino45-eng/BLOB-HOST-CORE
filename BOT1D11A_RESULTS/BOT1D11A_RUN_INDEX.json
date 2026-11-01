@@ -1,0 +1,64 @@
+{
+  "revision": "BOT1-D11A",
+  "createdAt": "2026-11-01T03:58:43.692+00:00",
+  "profilesRequested": [
+    "baseline",
+    "contact",
+    "release_sweep",
+    "release_control"
+  ],
+  "testKind": "DIAGNOSTIC_ONLY",
+  "debugEntry": "Shift+6",
+  "noGameplayChanges": true,
+  "noOwnerStateUsedOnline": true,
+  "worldSeedSet": false,
+  "contract": {
+    "revision": "BOT1-D11A",
+    "testEntry": "Shift+6 existing HC027G1 debug platform",
+    "requestedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "sameInterventionPrefix": true,
+    "sameInterventionSuffix": true,
+    "interventionDurationSeconds": 6.6,
+    "controlDurationSeconds": 6.6,
+    "inputsOnly": "keyboard + public HUD snapshots + elapsed time",
+    "ownerStateForLiveControl": false,
+    "gameplayChanges": false,
+    "contactNormalVisibleOnline": false,
+    "attachmentGuaranteed": false,
+    "limits": [
+      "Different browser runs are not identical physics states or world seeds.",
+      "A directional sweep is not a contact-normal-aligned peel instruction.",
+      "Stage/Host receipt/route achievement require independent owner proof."
+    ]
+  },
+  "runs": [
+    {
+      "folder": "BOT1D11A_20261101T035535Z_01_baseline",
+      "profile": "baseline",
+      "status": "CAPTURED",
+      "events": 158,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11A_20261101T035621Z_02_contact",
+      "profile": "contact",
+      "status": "CAPTURED",
+      "events": 235,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11A_20261101T035705Z_03_release_sweep",
+      "profile": "release_sweep",
+      "status": "CAPTURED",
+      "events": 283,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11A_20261101T035755Z_04_release_control",
+      "profile": "release_control",
+      "status": "CAPTURED",
+      "events": 278,
+      "errors": []
+    }
+  ]
+}
