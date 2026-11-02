@@ -413,5 +413,31 @@
     "colliders": false,
     "targetingAuthority": false,
     "newAbilities": false
+  },
+  "hcCrawlableSurfaceProof": {
+    "pass": "BOT1D11B",
+    "status": "experimental_positive_control_not_locked",
+    "authority": "SiltPressureRouteSystem_authored_ecological_contact_mesh",
+    "originalLS1AHabitatFoundationRemainsVisualOnly": true,
+    "noMovementPhysicsChanges": true,
+    "surfaces": [
+      {
+        "id": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profileId": "residue_weak",
+        "position": [
+          -0.18,
+          -0.75,
+          -2.65
+        ],
+        "scale": [
+          1.35,
+          0.24,
+          0.95
+        ],
+        "contactPriority": 0.08,
+        "color": 9203019,
+        "role": "deliberate_near_entry_crawlable_contact_proof"
+      }
+    ]
   }
 }

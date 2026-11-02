@@ -1,0 +1,417 @@
+{
+  "id": "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A",
+  "pass": "HC-012A",
+  "sourceAuthority": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "referenceContract": "ACT1_THREE_ROUTE_RUNTIME_CONTRACT_HC010G",
+  "routeId": "silt_burrow_route",
+  "runtimeCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+  "entryGateId": "hub_to_silt_burrow_route",
+  "returnGateId": "silt_burrow_route_to_hub_chamber",
+  "objectiveId": "silt_route_playable_circuit",
+  "gameplayOwner": "SiltPressureRouteSystem",
+  "presentationOwner": "SiltPressureRouteSystem",
+  "movementBoundaryOwner": "PlayerMovementController",
+  "crossingOwner": "GateSystem",
+  "objectiveOwner": "ObjectiveSystem",
+  "premise": "Read the direction of compression with Pulse, brace living ribs with Stabilize, selectively Absorb porous nourishment, and recover if packed residue closes the route.",
+  "anatomy": {
+    "pathPoints": [
+      [
+        0.0,
+        -0.04,
+        0.45
+      ],
+      [
+        -0.7,
+        -0.22,
+        -2.35
+      ],
+      [
+        0.95,
+        -0.68,
+        -5.15
+      ],
+      [
+        -1.35,
+        -1.02,
+        -7.95
+      ],
+      [
+        1.55,
+        -0.62,
+        -10.85
+      ],
+      [
+        2.15,
+        -0.18,
+        -13.3
+      ],
+      [
+        -1.1,
+        -0.48,
+        -16.25
+      ],
+      [
+        0.05,
+        -0.34,
+        -19.35
+      ]
+    ],
+    "passageRadius": 1.22,
+    "ribProgress": [
+      0.14,
+      0.29,
+      0.43,
+      0.68,
+      0.83
+    ],
+    "siltMoteCount": 46,
+    "deepOrganProgress": 0.91
+  },
+  "pressure": {
+    "readProgressMin": 0.08,
+    "readProgressMax": 0.46,
+    "pulseReadRangeFromPassage": 1.55,
+    "requiredBraceSeconds": 1.05,
+    "braceReleasePerSecond": 0.28,
+    "earnedReadIrreversible": true,
+    "earnedBraceIrreversible": true
+  },
+  "appetite": {
+    "chamberProgress": 0.6,
+    "safeOffset": [
+      1.75,
+      0.28,
+      0.05
+    ],
+    "denseOffsets": [
+      [
+        -1.7,
+        -0.16,
+        0.12
+      ],
+      [
+        0.25,
+        1.45,
+        -0.28
+      ]
+    ],
+    "safeAbsorbRange": 0.92,
+    "denseRiskRange": 0.9,
+    "selectionDistanceAdvantage": 0.08,
+    "requiredSafeAbsorbSeconds": 0.68,
+    "greedyFailureSeconds": 0.38,
+    "safeMatter": "porous_nutrient",
+    "unsafeMatter": "packed_residue",
+    "protectedDenseMatterConsumed": false
+  },
+  "recovery": {
+    "stabilizeRangeFromPassage": 1.9,
+    "compressionRecoveryPerSecond": 0.5,
+    "recoveredCompressionThreshold": 0.22,
+    "maximumWorstStateRecoverySeconds": 2.5,
+    "failureErasesPressureRead": false,
+    "failureErasesBrace": false,
+    "death": false,
+    "forcedRestart": false
+  },
+  "completion": {
+    "minimumDeepProgress": 0.82,
+    "maximumSettledCompression": 0.34,
+    "pressureReadRequired": true,
+    "ribsReleasedRequired": true,
+    "selectiveAbsorbRequired": true,
+    "packedResidueMustRemain": true,
+    "failureMustRemainRecoverable": true,
+    "cleanRunMayCompleteWithoutFailure": true,
+    "pressureRelationshipReadIsCanonical": true,
+    "pulseAloneCanReadPressure": false
+  },
+  "returnFold": {
+    "position": [
+      0.0,
+      -0.04,
+      0.62
+    ],
+    "interactionRange": 1.35,
+    "formsAfterDeepPressureRelease": true,
+    "siltBreathReversesTowardHub": true,
+    "input": "interact"
+  },
+  "visual": {
+    "siltColor": 5719087,
+    "deepColor": 2432283,
+    "porousNutrientColor": 13802059,
+    "packedResidueColor": 3880006,
+    "failureColor": 10566189,
+    "recoveryColor": 9555238,
+    "returnColor": 13210965,
+    "motionLanguages": [
+      "asymmetric rib compression",
+      "pressure-reading echo",
+      "selective porous draw",
+      "greedy packed-residue collapse",
+      "stabilized passage reopening",
+      "outward silt return breath"
+    ],
+    "genericRings": 0,
+    "triggerMarkers": 0,
+    "permanentHalos": 0
+  },
+  "constraints": {
+    "newAbilities": 0,
+    "newEntities": 0,
+    "combat": false,
+    "death": false,
+    "forcedRestart": false,
+    "forcedPlayerRelocation": false,
+    "permanentClass": false,
+    "directObjectiveMutation": false,
+    "directGateMutation": false,
+    "directActiveCellMutation": false,
+    "directRouteHistoryMutation": false,
+    "vascularGameplayMutation": false,
+    "graveGameplayMutation": false,
+    "archivedCompatibilitySystemsActivated": 0
+  },
+  "spatialExpansion": {
+    "pass": "HC-016V",
+    "sourceAudit": "HC-016S",
+    "coreScaleChanged": false,
+    "gameplayRulesChanged": false,
+    "previousPathLength": 7.453,
+    "expandedPathLength": 24.204,
+    "targetPrimaryPathLength": 20.0,
+    "decisionPocketApproxBreadth": 5.0,
+    "grammar": [
+      "compressed entry throat",
+      "pressure-reading approach",
+      "rib-brace corridor",
+      "widening porous-choice pocket",
+      "recompressed deep passage",
+      "deep pressure-release organ",
+      "reverse silt breath to return fold"
+    ],
+    "identity": "tight-to-open-to-tight, sedimentary, compressive, selective",
+    "rule": "space is inserted between existing mechanics; pressure read, brace, selective absorb, recoverable failure, deep release, and return remain the same gameplay contract"
+  },
+  "currentizationPass": "HC-031S",
+  "currentization": {
+    "relationshipSource": "environmental_pressure",
+    "stabilizeEstablishesRelationship": true,
+    "pulseProjectsThroughRelationship": true,
+    "pulseAloneCanReadPressure": false,
+    "minimumRelationshipHoldSeconds": 0.18,
+    "relationshipReleaseRate": 3.6,
+    "appetiteSelectionMode": "spatial_body_choice",
+    "appetiteSelectionAuthority": "player_spatial_approach",
+    "nounTargetingAuthorityChanged": false,
+    "aimChoosesTargetForTargetableNouns": true,
+    "environmentalPressureMayBeRelatedWithoutNounTarget": true,
+    "packedResidueFailureRecoverable": true
+  },
+  "habitatFoundation": {
+    "pass": "LS1A",
+    "scope": "spatial_foundation_only_no_new_material_instances_or_spawns",
+    "topology": "three_lateral_lobes_connected_to_original_silt_pressure_throat",
+    "playerSpace": "active_route_entry_anchored_movement_envelope",
+    "visualOnlyAnatomy": true,
+    "addsContactSurfaces": false,
+    "authoritativeCompletion": "SiltPressureRouteSystem_original_route",
+    "habitats": [
+      {
+        "id": "reservoir",
+        "role": "compression_and_porosity",
+        "center": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "radii": [
+          3.35,
+          2.0,
+          3.4
+        ],
+        "color": 7688499,
+        "emissive": 6043938,
+        "relief": 0.64,
+        "phase": 0
+      },
+      {
+        "id": "garden",
+        "role": "sediment_catchment_future_nursery",
+        "center": [
+          -5.35,
+          -0.74,
+          -10.4
+        ],
+        "radii": [
+          3.15,
+          2.35,
+          3.3
+        ],
+        "color": 7103056,
+        "emissive": 4077864,
+        "relief": 0.94,
+        "phase": 1.8
+      },
+      {
+        "id": "veins",
+        "role": "exchange_and_return_flow",
+        "center": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "radii": [
+          2.85,
+          2.2,
+          3.25
+        ],
+        "color": 4874584,
+        "emissive": 2506042,
+        "relief": 0.9,
+        "phase": 3.2
+      }
+    ],
+    "connections": [
+      {
+        "id": "throat_to_reservoir",
+        "from": [
+          0.55,
+          -0.36,
+          -8.5
+        ],
+        "to": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "bend": [
+          1.3,
+          -0.56,
+          -10.3
+        ]
+      },
+      {
+        "id": "reservoir_to_garden",
+        "from": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "to": [
+          -5.35,
+          -0.74,
+          -10.4
+        ],
+        "bend": [
+          -1.8,
+          -0.83,
+          -12.7
+        ]
+      },
+      {
+        "id": "reservoir_to_veins",
+        "from": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "to": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "bend": [
+          3.85,
+          -0.8,
+          -13.35
+        ]
+      },
+      {
+        "id": "veins_to_deep_throat",
+        "from": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "to": [
+          -0.15,
+          -0.48,
+          -18.25
+        ],
+        "bend": [
+          3.15,
+          -0.8,
+          -18.45
+        ]
+      }
+    ],
+    "noNewVerbs": true,
+    "noNewProgression": true,
+    "noRenewableMatterYet": false,
+    "purpose": "Three reachable contiguous habitats now; LS1B creates one conserved material lifecycle."
+  },
+  "geologicMedium": {
+    "pass": "LS1A2",
+    "scope": "local_contiguous_sediment_and_stone_presentation_only",
+    "topology": "single_stratified_porous_host_body_three_connected_cavities",
+    "cavityWallScale": 1.16,
+    "wallOpacity": 0.59,
+    "channelOpacity": 0.49,
+    "stoneColor": 5062968,
+    "stoneEmissive": 2170395,
+    "sedimentColor": 6705469,
+    "sedimentEmissive": 3155742,
+    "bedColor": 7691332,
+    "channelColor": 5327936,
+    "channelRadii": [
+      1.37,
+      1.68,
+      1.5,
+      1.43
+    ],
+    "driftColor": 10717800,
+    "driftGrainCount": 96,
+    "collisionAuthority": "unchanged_PlayerMovementController_entry_anchored_ellipsoid",
+    "addsColliders": false,
+    "addsContactSurfaces": false,
+    "addsMatter": false,
+    "newProgression": false,
+    "feeling": "microorganism_inside_bounded_seep_caverns_and_sedimentary_stone",
+    "spinalWallRadius": 2.06,
+    "spinalWallOpacity": 0.34
+  },
+  "livingMaterialCycle": {
+    "pass": "LS1B",
+    "scope": "silt_closed_bounded_reservoir_matter_only",
+    "authority": "SiltLivingMaterialCycle",
+    "firstTrigger": "existing_safeMatterAbsorbed_once_not_repeatable_reward",
+    "unitCount": 8,
+    "unitMass": 1,
+    "maximumActiveTransport": 3,
+    "releaseIntervalSeconds": 5.6,
+    "minimumSettleSeconds": 5.0,
+    "flowBoostSeconds": 7,
+    "flowBoostMultiplier": 1.55,
+    "gardenStabilizeMultiplier": 1.6,
+    "lifecycle": [
+      "reservoir",
+      "veins",
+      "garden_transit",
+      "settled",
+      "growing",
+      "mature",
+      "returning"
+    ],
+    "regeneration": "conserved_mass_returns_to_reservoir_without_resetting_original_porous_packet",
+    "simulation": "active_cell_only_no_offscreen_elapsed_pretence",
+    "playerEffects": "Pulse_near_reservoir_or_veins_accelerates_flow_Stabilize_in_garden_accelerates_bud_growth",
+    "progressionAuthority": false,
+    "nutrientGrant": false,
+    "colliders": false,
+    "targetingAuthority": false,
+    "newAbilities": false
+  }
+}

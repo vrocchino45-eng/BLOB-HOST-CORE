@@ -1,58 +1,72 @@
-# BLOB BOT1-D11A — LS1 Silt Mobility Diagnostics (TEST ONLY)
+# BLOB — BOT1-D11B-LIVE — Controlled Attachment Proof
 
-**Source basis:** `BLOB-HOST-CORE-BLOB-BOT0.zip` + previously installed D9Y/D9Z/D10A/D10B harness. D10B's six-run Fold baseline is frozen. **No JS, physics, region, chemistry, targeting, or gameplay changes.** Four new Python files only.
+**Purpose:** Finish D11B's live evidence gate before any LS1 surface-network expansion. This package adds *only four new Python scripts* under the existing `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/` directory. It does **not** modify the game or rerun `D11B_APPLY.py`.
 
-## Important scope
+## Current source / evidence baseline
 
-This is an **initial diagnostic**, not an automated proof that the Silt connective geometry is fully crawlable. The active source has a supported debug entry `Shift+6` for `CELL_SILT_PRESSURE_ROUTE_001`. The active movement observation stream (`C0D4-MOB1`, `G1-D9S`) records position/velocity, attachment state, regional boundary context, movement intent, and surface ID where published.
+- Your last screenshots show the D11B authored surface validator **PASS** and both Silt LS1A validators **PASS**.
+- The old HC031F1B validator fails on a historical `root.name` string from an earlier version; it is **not** evidence that D11B attachment fails. Do not mutate gameplay to satisfy it.
+- The new shelf's authored center is `(-0.18, -0.75, -2.65)`, debug entry is `Shift+6` at `(0,0,0)`, and `CoreSurfaceTruthSystem` publishes `mechanicalEligible` only at a sampled hit distance <= 0.78. The contact probe extends 1.28 units.
+- D11A was recorded before the new shelf existed. When the new referee is run on those old records it finds **zero target latches in all four runs**, as expected. A player approaching the shelf's future location without the surface does not prove anything about the patched runtime.
 
-Source inspection found `applyCrawlableSurfaceMetadata` used in `HostContactShelfSystem` and `GatheringGroundAliveSystem`, not directly in `SiltPressureRouteSystem`. Therefore **Silt attachment is not guaranteed**. These tests deliberately say `NOT_EXERCISED_NO_ATTACHMENT_OBSERVED` if no mechanical contact occurs, rather than claiming the release action passed.
+## Install — in local `BLOB-HOST-CORE` (C: GitHub root)
 
-## Install to the LOCAL game folder
-
-Open the **local GitHub working copy** of `BLOB-HOST-CORE` in VS Code, not the Google Drive extracted archive. Put `BLOB_BOT1_D11A_TEST_ONLY_DELTA.zip` in that root. From its PowerShell terminal:
-
-```powershell
-Get-Location
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D11A_TEST_ONLY_DELTA.zip' -DestinationPath '.' -Force
-Test-Path '.\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11a_browser.py'
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11a.py
-```
-
-Expected: `True`, then `Ran 18 tests ... OK`. This ZIP contains no external reference JSON files and overwrites no older D10B scripts.
-
-## Run four diagnostic profiles
-
-Start Vite normally at `http://127.0.0.1:5173`. In a separate PowerShell terminal in the same game root:
+Place `BLOB_BOT1_D11B_LIVE_PROOF_TEST_ONLY_DELTA.zip` in the local project root. Open VS Code PowerShell *in that root*:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11a_browser.py --browser-channel chrome --headed --profiles baseline,contact,release_sweep,release_control --seconds 90 --output BOT1D11A_RESULTS
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D11B_LIVE_PROOF_TEST_ONLY_DELTA.zip' -DestinationPath '.' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11b_live.py
 ```
 
-- `baseline`: neutral movement + forward/backward return probe
-- `contact`: authored Silt platform + a bounded lateral/vertical approach search
-- `release_sweep`: repeated approach prefix then six ordinary directional movements
-- `release_control`: **same prefix and suffix** but six equivalent neutral holds rather than movement
+Expected: `Ran 15 tests` / `OK`.
 
-Each run opens a fresh browser context, starts REC1, presses existing debug shortcut `Shift+6`, uses only standard keyboard input (W/A/S/D/C/Z), stops REC1, and saves the unmodified session JSON. REC1 is **never consulted to steer actions live**.
+**Do not** run `D11B_APPLY.py --apply` again. The patch is already installed. No JSON reference files or manual copy operations are needed.
 
-The two release runs are a descriptive A/B probe, **not randomized, state-matched, or proof of causality**. No contact normal is supplied to the bot. If neither run attaches, the proper conclusion is that attachment was not exercised.
+## Live capture
 
-## Analyze and return
+With your Vite server running at `http://127.0.0.1:5173`, run:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11a.py BOT1D11A_RESULTS
-Compress-Archive -Path '.\BOT1D11A_RESULTS\*' -DestinationPath '.\BOT1D11A_RESULTS.zip' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11b_live_browser.py --browser-channel chrome --headed --profiles host_positive,silt_short,silt_slow,silt_return --seconds 75 --output BOT1D11B_LIVE_RESULTS
 ```
 
-Upload `BOT1D11A_RESULTS.zip` including `BOT1D11A_AUDIT.md` and `BOT1D11A_AUDIT.json`. The report separates diagnostic validity, Silt entry, mobility samples, attachment state changes, per-step displacement, boundary pressure, and route/volume IDs.
+The profiles use only existing debug shortcuts and normal keyboard input:
 
-## Conditions for choosing the next pass
+| Profile | Debug entry | Intent |
+|---|---|---|
+| `host_positive` | `Shift+1` | Known HC Host Contact Shelf as a positive-control attempt; short forward, settle, reverse |
+| `silt_short` | `Shift+6` | Short forward approach to new shelf, neutral settle, reverse |
+| `silt_slow` | `Shift+6` | Two shorter approach increments with a pause, neutral settle, reverse |
+| `silt_return` | `Shift+6` | Longer approach, settle, reverse |
 
-1. **No Silt attachment**: audit/author contact-eligible Silt surfaces first. Do not keep inventing peel sequences.
-2. **Attachment but no detachment**: inspect recorded position, state and boundary pressure; compare intended direction with source-owned normal if future telemetry exposes it. Do not change movement based on one bot trajectory.
-3. **Detachment plus sustained free movement**: repeat from controlled starts and verify route return/reattachment before locking.
-4. **Silt entry fails**: investigate debug platform entry and current build source identity, not the gameplay drivetrain.
-5. **Any future movement code change**: rerun the existing D10B Golden/Guided Fold smoke gate (do not merge the result into D11A).
+**These are probes, not guaranteed attachment trajectories.** The old scripted paths overshot the shelf. This group deliberately uses shorter input windows. No bot consults hidden owner state during the run.
 
-The baseline D10B test remains separately frozen. D11A does not prove Host receipt, player discoverability, or long-term drivetrain reliability.
+## Offline referee + upload
+
+```powershell
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11b_live.py BOT1D11B_LIVE_RESULTS
+Compress-Archive -Path '.\BOT1D11B_LIVE_RESULTS\*' -DestinationPath '.\BOT1D11B_LIVE_RESULTS.zip' -Force
+```
+
+Upload `BOT1D11B_LIVE_RESULTS.zip`.
+
+The report uses `playerAttachment.active` + matching `ownerSurfaceId` in independently recorded REC1 owner samples. It treats the following outcomes differently:
+
+1. `SAMPLED_TARGET_LATCH_AND_RELEASE` — matching surface attached then released in sampled owner records. Good evidence for this controlled route, but not proof a particular key caused release.
+2. `SAMPLED_TARGET_LATCH_RELEASE_UNVERIFIED` — matching latch, no sampled release.
+3. `TARGET_LATCH_NOT_OBSERVED_IN_SAMPLES` — **inconclusive for the mechanics**, not a release failure. Sampling and/or trajectory may have missed contact.
+4. `EXPECTED_CELL_UNVERIFIED` / `CAPTURE_INCOMPLETE` — invalid evidence; repair capture first.
+
+The independent Host control must be judged separately from Silt. A positive Host latch does **not** establish a Silt latch. The HUD phrase `Contact attached` is visual-contact language, never a substitute for a mechanical owner attachment.
+
+### If all scripted Silt approaches remain inconclusive
+
+Do **one** focused manual entry (use `Shift+6`), navigate gently around the **new authored sediment shelf**, wait on contact, then try moving deliberately away. Record REC1 with `Alt+Shift+R` to start/stop, and `Alt+Shift+E` to export. A 1–3 minute focused recording is enough. It may expose view-direction/targeting issues that a fixed bot route cannot resolve. Do not add more global colliders or change the movement controller without that evidence.
+
+## Ownership and non-goals
+
+- **Locked:** `PlayerMovementController`, `CoreSurfaceTruthSystem`, HC material profiles, LS1A visual-only geology, LS1B chemistry, Fold/Watcher, and D10B reference policies.
+- **Changed:** New test-only Python files, no runtime source changes.
+- **Not proven by this tool:** real-time contact-normal alignment; arbitrary-surface recovery; causal effect of reverse input; natural Hub→Silt traversal; long-term reliability; Host receipt progression.
+
+Only when a true D11B `false → true → false` owner sequence is independently verified should the project plan larger authored connective surfaces for Silt's Reservoir, Garden, and Veins.

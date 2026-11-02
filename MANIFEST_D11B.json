@@ -1,0 +1,27 @@
+{
+  "pass": "BOT1-D11B",
+  "mode": "experimental_minimal_silt_authored_surface_proof",
+  "basis": "BLOB-HOST-CORE-BLOB-BOT0.zip and D11A REC1 audit",
+  "patcher": "D11B_APPLY.py",
+  "validator": "scripts/validateBOT1D11BSiltSurface.mjs",
+  "runtimeFilesTouchedAfterApplying": [
+    "src/routes/SiltPressureRouteSystem.js",
+    "public/data/routes/siltPressureRouteCircuit_HC012A.json"
+  ],
+  "lockedUntouched": [
+    "src/player/PlayerMovementController.js",
+    "src/player/CoreSurfaceTruthSystem.js",
+    "src/world/CrawlableSurfaceRegistry.js",
+    "src/world/HostContactShelfSystem.js",
+    "Core chemistry, input mapping, Guide, Fold, HC historical archive"
+  ],
+  "authoredSurfaceCount": 1,
+  "surfaceProfile": "residue_weak",
+  "noNewGameplayVerbs": true,
+  "notCertified": [
+    "real_latch",
+    "real_release",
+    "human_readability",
+    "long_term_reliability"
+  ]
+}

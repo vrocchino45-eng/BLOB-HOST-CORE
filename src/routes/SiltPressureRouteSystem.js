@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
+import { applyCrawlableSurfaceMetadata } from "../world/CrawlableSurfaceRegistry.js";
 import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
 import { MaterialIdentityLedger } from "../ecology/MaterialIdentityLedger.js";
 import { SiltCompressionContact } from "../contact/SiltCompressionContact.js";
@@ -58,6 +59,7 @@ export class SiltPressureRouteSystem {
     this.siltTrajectoryField = new SiltTrajectoryFieldProbe();
     this.siltTrajectoryTrails = [];
     this.siltContactMesh = null;
+    this.hcCrawlableSurfaceMeshes = [];
     this.siltContactEcho = null;
     this.siltContactIndent = null;
     this.siltSeatSocketBase = null;
@@ -595,6 +597,7 @@ export class SiltPressureRouteSystem {
     this.createHabitatFoundation();
     this.createLivingMaterialCycle();
     this.createSiltContactPatch();
+    this.createHCCrawlableSurfaces();
     this.createDeepOrgan();
     this.createReturnFold();
     this.territoryExpansion = new RegionalTerritoryExpansion({kind: "silt", parent: this.root});
@@ -1064,6 +1067,41 @@ export class SiltPressureRouteSystem {
     this.siltGripTether.visible = false;
     this.siltGripTether.renderOrder = 19;
     this.root.add(this.siltGripTether);
+  }
+
+  // BOT1D11B: a single explicit HC-profile contact proof on a *new* Silt
+  // sediment shelf. Existing LS1A caverns, geologic walls and material-contact
+  // patches remain visual-only / separately owned; never wholesale-tag them.
+  // Root anchoring and current cell visibility are owned by this route.
+  createHCCrawlableSurfaces() {
+    const proof = this.recipe?.hcCrawlableSurfaceProof;
+    if (proof?.pass !== "BOT1D11B") return;
+    for (const definition of proof.surfaces ?? []) {
+      const material = this.trackMaterial(new THREE.MeshStandardMaterial({
+        color: definition.color ?? 0x88684c,
+        emissive: 0x32251b,
+        emissiveIntensity: 0.15,
+        roughness: 0.96,
+        transparent: true,
+        opacity: 0.75,
+        depthWrite: false
+      }));
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 14), material);
+      mesh.name = `silt_crawlable_${definition.id.toLowerCase()}`;
+      mesh.position.fromArray(definition.position);
+      mesh.scale.fromArray(definition.scale);
+      applyCrawlableSurfaceMetadata(mesh, {
+        surfaceId: definition.id,
+        profileId: definition.profileId,
+        cellId: ROUTE_CELL_ID,
+        contactPriority: definition.contactPriority ?? 0.08,
+        regionalRole: "silt_entry_sediment_contact_proof"
+      });
+      mesh.userData.siltCrawlableProofPass = "BOT1D11B";
+      mesh.userData.siltGeometryOwnership = "new_authored_contact_surface_not_original_visual_only_geology";
+      this.root.add(mesh);
+      this.hcCrawlableSurfaceMeshes.push(mesh);
+    }
   }
 
   // D2J: the one deliberately contactable *Silt sediment* patch, located

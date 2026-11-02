@@ -1,0 +1,110 @@
+{
+  "revision": "BOT1-D11B-LIVE-1",
+  "status": "OFFLINE_DIAGNOSTIC_ONLY",
+  "runs": [
+    {
+      "revision": "BOT1-D11B-LIVE-1",
+      "profile": "host_positive",
+      "verdict": "TARGET_LATCH_NOT_OBSERVED_IN_SAMPLES",
+      "expectedCell": "CELL_MEMBRANE_NURSERY_001",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "sampleCount": 26,
+      "targetAttachedSamples": 0,
+      "otherAttachedSamples": 4,
+      "attachedSurfaceIds": [
+        "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "HOST_CONTACT_CONTINUATION_MEMBRANE_02"
+      ],
+      "sampledTransitions": [],
+      "nearestPlayerToSiltShelfCenter": null,
+      "dropDetails": 0,
+      "rec1Events": 118,
+      "claimLimits": [
+        "Only sampled owner records can certify a latch/release sequence.",
+        "Sparse telemetry may miss brief transitions.",
+        "Surface-center proximity is not surface-raycast or eligibility proof.",
+        "Observed release after an input does not prove that input caused it.",
+        "No latch observed means release was not exercised."
+      ]
+    },
+    {
+      "revision": "BOT1-D11B-LIVE-1",
+      "profile": "silt_short",
+      "verdict": "TARGET_LATCH_NOT_OBSERVED_IN_SAMPLES",
+      "expectedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "sampleCount": 24,
+      "targetAttachedSamples": 0,
+      "otherAttachedSamples": 0,
+      "attachedSurfaceIds": [],
+      "sampledTransitions": [],
+      "nearestPlayerToSiltShelfCenter": 0.444,
+      "dropDetails": 0,
+      "rec1Events": 127,
+      "claimLimits": [
+        "Only sampled owner records can certify a latch/release sequence.",
+        "Sparse telemetry may miss brief transitions.",
+        "Surface-center proximity is not surface-raycast or eligibility proof.",
+        "Observed release after an input does not prove that input caused it.",
+        "No latch observed means release was not exercised."
+      ]
+    },
+    {
+      "revision": "BOT1-D11B-LIVE-1",
+      "profile": "silt_slow",
+      "verdict": "TARGET_LATCH_NOT_OBSERVED_IN_SAMPLES",
+      "expectedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "sampleCount": 24,
+      "targetAttachedSamples": 0,
+      "otherAttachedSamples": 0,
+      "attachedSurfaceIds": [],
+      "sampledTransitions": [],
+      "nearestPlayerToSiltShelfCenter": 0.435,
+      "dropDetails": 0,
+      "rec1Events": 131,
+      "claimLimits": [
+        "Only sampled owner records can certify a latch/release sequence.",
+        "Sparse telemetry may miss brief transitions.",
+        "Surface-center proximity is not surface-raycast or eligibility proof.",
+        "Observed release after an input does not prove that input caused it.",
+        "No latch observed means release was not exercised."
+      ]
+    },
+    {
+      "revision": "BOT1-D11B-LIVE-1",
+      "profile": "silt_return",
+      "verdict": "TARGET_LATCH_NOT_OBSERVED_IN_SAMPLES",
+      "expectedCell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "observedCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "sampleCount": 23,
+      "targetAttachedSamples": 0,
+      "otherAttachedSamples": 0,
+      "attachedSurfaceIds": [],
+      "sampledTransitions": [],
+      "nearestPlayerToSiltShelfCenter": 0.553,
+      "dropDetails": 0,
+      "rec1Events": 129,
+      "claimLimits": [
+        "Only sampled owner records can certify a latch/release sequence.",
+        "Sparse telemetry may miss brief transitions.",
+        "Surface-center proximity is not surface-raycast or eligibility proof.",
+        "Observed release after an input does not prove that input caused it.",
+        "No latch observed means release was not exercised."
+      ]
+    }
+  ],
+  "positiveControlIsNotSiltProof": true,
+  "noHostReceiptOrFullLS1ProofInferred": true
+}

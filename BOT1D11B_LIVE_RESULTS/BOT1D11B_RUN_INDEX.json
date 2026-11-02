@@ -1,0 +1,59 @@
+{
+  "revision": "BOT1-D11B-LIVE-1",
+  "createdAt": "2026-11-01T04:47:54.687+00:00",
+  "requestedProfiles": [
+    "host_positive",
+    "silt_short",
+    "silt_slow",
+    "silt_return"
+  ],
+  "testKind": "DIAGNOSTIC_NOT_CERTIFICATION",
+  "noGameplayChanges": true,
+  "noOwnerStateUsedOnline": true,
+  "contract": {
+    "revision": "BOT1-D11B-LIVE-1",
+    "ownerStateForLiveSteering": false,
+    "liveInputs": "ordinary W/S keyboard, existing Shift+1 or Shift+6 debug entries",
+    "offlineEvidence": "recorded REC1 owner snapshots, not HUD Contact attached",
+    "siltTargetSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+    "sourceChangeRequired": "D11B authored shelf patch already applied",
+    "limitations": [
+      "Short scripted inputs do not guarantee an eligible contact approach.",
+      "No contact normal is available in existing REC1 mobility snapshots.",
+      "If attachment is never observed, release is not tested.",
+      "An observed release after S does not prove S caused the release.",
+      "A missing sampled transition cannot rule out a brief unsampled event.",
+      "Host positive-control debug start is not a natural gameplay path."
+    ]
+  },
+  "runs": [
+    {
+      "folder": "BOT1D11B_20261101T044612Z_01_host_positive",
+      "profile": "host_positive",
+      "status": "CAPTURED",
+      "events": 118,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11B_20261101T044638Z_02_silt_short",
+      "profile": "silt_short",
+      "status": "CAPTURED",
+      "events": 127,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11B_20261101T044704Z_03_silt_slow",
+      "profile": "silt_slow",
+      "status": "CAPTURED",
+      "events": 131,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11B_20261101T044728Z_04_silt_return",
+      "profile": "silt_return",
+      "status": "CAPTURED",
+      "events": 129,
+      "errors": []
+    }
+  ]
+}
