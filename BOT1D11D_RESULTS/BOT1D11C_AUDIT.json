@@ -1,0 +1,583 @@
+{
+  "revision": "BOT1-D11C-1",
+  "type": "DIAGNOSTIC_NOT_CERTIFICATION",
+  "completeMatrix": true,
+  "missingProfiles": [],
+  "runs": [
+    {
+      "classification": "HC_POSITIVE_ATTACHMENT_OBSERVED",
+      "samples": 60,
+      "visibleShelfSamples": 0,
+      "shelfInCandidateCoverageSamples": 0,
+      "targetTruthSamples": 0,
+      "targetEligibleSamples": 0,
+      "contactBrushingOrAttachedSamples": 43,
+      "targetContactTruthSamples": 0,
+      "eligibleContactStateSamples": 0,
+      "targetSealedSamples": 0,
+      "targetSupportPlaneSamples": 0,
+      "targetMechanicalAttachmentSamples": 0,
+      "maxConsecutiveTargetAttachmentSamples": 0,
+      "anyReleaseSample": true,
+      "anyMechanicalAttachmentSamples": 13,
+      "anySealedSamples": 34,
+      "anySupportSamples": 33,
+      "anyRaycastSamples": 60,
+      "attachedSurfaceIds": [
+        "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+      ],
+      "contactStateCounts": {
+        "suspended": 14,
+        "brushing": 12,
+        "attached": 31,
+        "releasing": 3
+      },
+      "coreContactLanguageStateCounts": {
+        "suspended": 14,
+        "brushing": 12,
+        "attached": 31,
+        "releasing": 3
+      },
+      "firstTruth": null,
+      "firstEligible": null,
+      "firstAttached": null,
+      "intervention": [
+        {
+          "kind": "marker",
+          "label": "start:host_neutral",
+          "ms": 1133
+        },
+        {
+          "kind": "marker",
+          "label": "end:host_neutral",
+          "ms": 2690
+        },
+        {
+          "kind": "marker",
+          "label": "start:host_forward",
+          "ms": 2767
+        },
+        {
+          "kind": "marker",
+          "label": "end:host_forward",
+          "ms": 3622
+        },
+        {
+          "kind": "marker",
+          "label": "start:host_settle",
+          "ms": 3725
+        },
+        {
+          "kind": "marker",
+          "label": "end:host_settle",
+          "ms": 5368
+        },
+        {
+          "kind": "marker",
+          "label": "start:host_side",
+          "ms": 5440
+        },
+        {
+          "kind": "marker",
+          "label": "end:host_side",
+          "ms": 6053
+        },
+        {
+          "kind": "marker",
+          "label": "start:host_pause",
+          "ms": 6122
+        },
+        {
+          "kind": "marker",
+          "label": "end:host_pause",
+          "ms": 7736
+        }
+      ],
+      "note": "Snapshot transitions are not causal proof; controlledStart is debug relocation, not navigability.",
+      "profile": "host_positive",
+      "status": "CAPTURED",
+      "errors": [],
+      "rec1": {
+        "events": 105,
+        "droppedDetails": 0
+      },
+      "controlledDebugStart": false
+    },
+    {
+      "classification": "ATTACHMENT_OBSERVED",
+      "samples": 105,
+      "visibleShelfSamples": 105,
+      "shelfInCandidateCoverageSamples": 105,
+      "targetTruthSamples": 8,
+      "targetEligibleSamples": 6,
+      "contactBrushingOrAttachedSamples": 5,
+      "targetContactTruthSamples": 6,
+      "eligibleContactStateSamples": 3,
+      "targetSealedSamples": 0,
+      "targetSupportPlaneSamples": 0,
+      "targetMechanicalAttachmentSamples": 3,
+      "maxConsecutiveTargetAttachmentSamples": 3,
+      "anyReleaseSample": true,
+      "anyMechanicalAttachmentSamples": 3,
+      "anySealedSamples": 1,
+      "anySupportSamples": 0,
+      "anyRaycastSamples": 8,
+      "attachedSurfaceIds": [
+        "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+      ],
+      "contactStateCounts": {
+        "suspended": 96,
+        "brushing": 2,
+        "attached": 3,
+        "releasing": 4
+      },
+      "coreContactLanguageStateCounts": {
+        "suspended": 96,
+        "brushing": 2,
+        "attached": 3,
+        "releasing": 4
+      },
+      "firstTruth": {
+        "valid": true,
+        "eligible": false,
+        "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profile": "residue_weak",
+        "distance": 0.7865,
+        "reason": "none",
+        "point": {
+          "x": -0.1701,
+          "y": -0.5698,
+          "z": -2.0292
+        },
+        "normal": {
+          "x": 0.0227,
+          "y": 0.9693,
+          "z": 0.2449
+        },
+        "candidateCount": 1,
+        "probeCandidates": 1
+      },
+      "firstEligible": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profile": "residue_weak",
+        "distance": 0.3913,
+        "reason": "none",
+        "point": {
+          "x": -0.1852,
+          "y": -0.6452,
+          "z": -1.7963
+        },
+        "normal": {
+          "x": -0.0345,
+          "y": 0.9273,
+          "z": 0.3728
+        },
+        "candidateCount": 1,
+        "probeCandidates": 1
+      },
+      "firstAttached": {
+        "ms": 2917,
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": true,
+          "supportCount": 0
+        }
+      },
+      "intervention": [
+        {
+          "kind": "marker",
+          "label": "start:spawn_neutral",
+          "ms": 854
+        },
+        {
+          "kind": "marker",
+          "label": "end:spawn_neutral",
+          "ms": 1704
+        },
+        {
+          "kind": "marker",
+          "label": "start:approach_1",
+          "ms": 1763
+        },
+        {
+          "kind": "marker",
+          "label": "end:approach_1",
+          "ms": 2510
+        },
+        {
+          "kind": "marker",
+          "label": "start:pause_1",
+          "ms": 2579
+        },
+        {
+          "kind": "marker",
+          "label": "end:pause_1",
+          "ms": 3280
+        },
+        {
+          "kind": "marker",
+          "label": "start:approach_2",
+          "ms": 3334
+        },
+        {
+          "kind": "marker",
+          "label": "end:approach_2",
+          "ms": 3877
+        },
+        {
+          "kind": "marker",
+          "label": "start:approach_settle",
+          "ms": 3933
+        },
+        {
+          "kind": "marker",
+          "label": "end:approach_settle",
+          "ms": 5782
+        },
+        {
+          "kind": "marker",
+          "label": "start:tangent",
+          "ms": 5831
+        },
+        {
+          "kind": "marker",
+          "label": "end:tangent",
+          "ms": 6260
+        },
+        {
+          "kind": "marker",
+          "label": "start:end_neutral",
+          "ms": 6303
+        },
+        {
+          "kind": "marker",
+          "label": "end:end_neutral",
+          "ms": 7827
+        }
+      ],
+      "note": "Snapshot transitions are not causal proof; controlledStart is debug relocation, not navigability.",
+      "profile": "silt_natural",
+      "status": "CAPTURED",
+      "errors": [],
+      "rec1": {
+        "events": 132,
+        "droppedDetails": 0
+      },
+      "controlledDebugStart": false
+    },
+    {
+      "classification": "ATTACHMENT_OBSERVED",
+      "samples": 63,
+      "visibleShelfSamples": 63,
+      "shelfInCandidateCoverageSamples": 63,
+      "targetTruthSamples": 54,
+      "targetEligibleSamples": 54,
+      "contactBrushingOrAttachedSamples": 54,
+      "targetContactTruthSamples": 54,
+      "eligibleContactStateSamples": 54,
+      "targetSealedSamples": 49,
+      "targetSupportPlaneSamples": 50,
+      "targetMechanicalAttachmentSamples": 53,
+      "maxConsecutiveTargetAttachmentSamples": 53,
+      "anyReleaseSample": false,
+      "anyMechanicalAttachmentSamples": 53,
+      "anySealedSamples": 49,
+      "anySupportSamples": 50,
+      "anyRaycastSamples": 54,
+      "attachedSurfaceIds": [
+        "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+      ],
+      "contactStateCounts": {
+        "suspended": 9,
+        "brushing": 1,
+        "attached": 53,
+        "releasing": 0
+      },
+      "coreContactLanguageStateCounts": {
+        "suspended": 9,
+        "brushing": 1,
+        "attached": 53,
+        "releasing": 0
+      },
+      "firstTruth": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profile": "residue_weak",
+        "distance": 0.3383,
+        "reason": "none",
+        "point": {
+          "x": -0.1782,
+          "y": -0.5101,
+          "z": -2.653
+        },
+        "normal": {
+          "x": 0.0077,
+          "y": 0.9996,
+          "z": -0.0265
+        },
+        "candidateCount": 1,
+        "probeCandidates": 1
+      },
+      "firstEligible": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profile": "residue_weak",
+        "distance": 0.3383,
+        "reason": "none",
+        "point": {
+          "x": -0.1782,
+          "y": -0.5101,
+          "z": -2.653
+        },
+        "normal": {
+          "x": 0.0077,
+          "y": 0.9996,
+          "z": -0.0265
+        },
+        "candidateCount": 1,
+        "probeCandidates": 1
+      },
+      "firstAttached": {
+        "ms": 1252,
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 1
+        }
+      },
+      "intervention": [
+        {
+          "kind": "controlled_start",
+          "ms": 974,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "position": {
+            "x": -0.18,
+            "y": -0.17,
+            "z": -2.65
+          },
+          "reason": "debug_mechanical_pose_not_a_navigation_success"
+        },
+        {
+          "kind": "marker",
+          "label": "start:controlled_settle",
+          "ms": 1119
+        },
+        {
+          "kind": "marker",
+          "label": "end:controlled_settle",
+          "ms": 3243
+        },
+        {
+          "kind": "marker",
+          "label": "start:tangential_a",
+          "ms": 3298
+        },
+        {
+          "kind": "marker",
+          "label": "end:tangential_a",
+          "ms": 3800
+        },
+        {
+          "kind": "marker",
+          "label": "start:post_tangent",
+          "ms": 3853
+        },
+        {
+          "kind": "marker",
+          "label": "end:post_tangent",
+          "ms": 5591
+        }
+      ],
+      "note": "Snapshot transitions are not causal proof; controlledStart is debug relocation, not navigability.",
+      "profile": "silt_controlled",
+      "status": "CAPTURED",
+      "errors": [],
+      "rec1": {
+        "events": 102,
+        "droppedDetails": 0
+      },
+      "controlledDebugStart": true
+    },
+    {
+      "classification": "ATTACHMENT_OBSERVED",
+      "samples": 95,
+      "visibleShelfSamples": 95,
+      "shelfInCandidateCoverageSamples": 95,
+      "targetTruthSamples": 41,
+      "targetEligibleSamples": 37,
+      "contactBrushingOrAttachedSamples": 34,
+      "targetContactTruthSamples": 37,
+      "eligibleContactStateSamples": 34,
+      "targetSealedSamples": 31,
+      "targetSupportPlaneSamples": 30,
+      "targetMechanicalAttachmentSamples": 32,
+      "maxConsecutiveTargetAttachmentSamples": 32,
+      "anyReleaseSample": true,
+      "anyMechanicalAttachmentSamples": 32,
+      "anySealedSamples": 31,
+      "anySupportSamples": 30,
+      "anyRaycastSamples": 41,
+      "attachedSurfaceIds": [
+        "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+      ],
+      "contactStateCounts": {
+        "suspended": 57,
+        "brushing": 2,
+        "attached": 32,
+        "releasing": 4
+      },
+      "coreContactLanguageStateCounts": {
+        "suspended": 56,
+        "brushing": 2,
+        "attached": 32,
+        "releasing": 5
+      },
+      "firstTruth": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profile": "residue_weak",
+        "distance": 0.3398,
+        "reason": "none",
+        "point": {
+          "x": -0.1798,
+          "y": -0.51,
+          "z": -2.6504
+        },
+        "normal": {
+          "x": 0.0077,
+          "y": 0.9996,
+          "z": -0.0265
+        },
+        "candidateCount": 1,
+        "probeCandidates": 1
+      },
+      "firstEligible": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "profile": "residue_weak",
+        "distance": 0.3398,
+        "reason": "none",
+        "point": {
+          "x": -0.1798,
+          "y": -0.51,
+          "z": -2.6504
+        },
+        "normal": {
+          "x": 0.0077,
+          "y": 0.9996,
+          "z": -0.0265
+        },
+        "candidateCount": 1,
+        "probeCandidates": 1
+      },
+      "firstAttached": {
+        "ms": 1262,
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": true,
+          "supportCount": 0
+        }
+      },
+      "intervention": [
+        {
+          "kind": "controlled_start",
+          "ms": 921,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "position": {
+            "x": -0.18,
+            "y": -0.17,
+            "z": -2.65
+          },
+          "reason": "debug_mechanical_pose_not_a_navigation_success"
+        },
+        {
+          "kind": "marker",
+          "label": "start:controlled_settle",
+          "ms": 1071
+        },
+        {
+          "kind": "marker",
+          "label": "end:controlled_settle",
+          "ms": 3330
+        },
+        {
+          "kind": "marker",
+          "label": "start:tangential_a",
+          "ms": 3386
+        },
+        {
+          "kind": "marker",
+          "label": "end:tangential_a",
+          "ms": 3829
+        },
+        {
+          "kind": "marker",
+          "label": "start:post_tangent",
+          "ms": 3881
+        },
+        {
+          "kind": "marker",
+          "label": "end:post_tangent",
+          "ms": 4524
+        },
+        {
+          "kind": "marker",
+          "label": "start:away_vertical",
+          "ms": 4579
+        },
+        {
+          "kind": "marker",
+          "label": "end:away_vertical",
+          "ms": 5904
+        },
+        {
+          "kind": "marker",
+          "label": "start:post_away",
+          "ms": 5959
+        },
+        {
+          "kind": "marker",
+          "label": "end:post_away",
+          "ms": 7615
+        }
+      ],
+      "note": "Snapshot transitions are not causal proof; controlledStart is debug relocation, not navigability.",
+      "profile": "silt_controlled_peel",
+      "status": "CAPTURED",
+      "errors": [],
+      "rec1": {
+        "events": 122,
+        "droppedDetails": 0
+      },
+      "controlledDebugStart": true
+    }
+  ],
+  "interpretationRules": {
+    "surfaceTruthNotEnoughForLatch": true,
+    "visualContactNotMechanical": true,
+    "debugControlledStartNotAPlayerRoute": true,
+    "releaseAfterInputNotCausalProof": true
+  }
+}

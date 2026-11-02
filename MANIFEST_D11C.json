@@ -1,0 +1,19 @@
+{
+  "revision": "BOT1-D11C-1",
+  "mode": "test_only_dev_instrumentation",
+  "baseline": "D11B Silt shelf authored and D11B live results, D10B Fold frozen regression",
+  "changesExistingSource": ["src/main.js: conditional, dev-only dynamic diagnostic import"],
+  "newFiles": [
+    "D11C_APPLY.py",
+    "src/debug/BOT1D11CDiagnosticProbe.js",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11c_policy.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11c_browser.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11c.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d11c.py",
+    "README_START_HERE.md"
+  ],
+  "runtimeChanges": "No physics or game systems modified; diagnostic-controlled debug placement deliberately changes player position in designated profiles",
+  "rollback": "py D11C_APPLY.py --undo",
+  "limitations": ["No live runtime exercise completed in this environment", "Controlled pose is not a natural route"],
+  "fileShipment": "changed files only"
+}

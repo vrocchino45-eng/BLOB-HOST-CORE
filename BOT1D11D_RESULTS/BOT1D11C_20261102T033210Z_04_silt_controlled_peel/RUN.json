@@ -1,0 +1,68 @@
+{
+  "revision": "BOT1-D11C-1",
+  "profile": "silt_controlled_peel",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-02T03:32:12.903+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": true,
+  "mode": "DEV_QUERY_DIAGNOSTIC_ONLY",
+  "gameplayChanged": false,
+  "naturalRunReadsOwnerDuringSteering": false,
+  "actions": [
+    {
+      "label": "controlled_settle",
+      "key": null,
+      "plannedSeconds": 2.2,
+      "startedAt": "2026-11-02T03:32:23.858+00:00",
+      "endedAt": "2026-11-02T03:32:26.119+00:00"
+    },
+    {
+      "label": "tangential_a",
+      "key": "a",
+      "plannedSeconds": 0.3,
+      "startedAt": "2026-11-02T03:32:26.159+00:00",
+      "endedAt": "2026-11-02T03:32:26.600+00:00"
+    },
+    {
+      "label": "post_tangent",
+      "key": null,
+      "plannedSeconds": 0.6,
+      "startedAt": "2026-11-02T03:32:26.657+00:00",
+      "endedAt": "2026-11-02T03:32:27.322+00:00"
+    },
+    {
+      "label": "away_vertical",
+      "key": "c",
+      "plannedSeconds": 1.15,
+      "startedAt": "2026-11-02T03:32:27.352+00:00",
+      "endedAt": "2026-11-02T03:32:28.674+00:00"
+    },
+    {
+      "label": "post_away",
+      "key": null,
+      "plannedSeconds": 1.6,
+      "startedAt": "2026-11-02T03:32:28.733+00:00",
+      "endedAt": "2026-11-02T03:32:30.399+00:00"
+    }
+  ],
+  "errors": [],
+  "debugEntrySettledAt": "2026-11-02T03:32:22.829+00:00",
+  "controlledIntervention": {
+    "kind": "controlled_start",
+    "ms": 921,
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "position": {
+      "x": -0.18,
+      "y": -0.17,
+      "z": -2.65
+    },
+    "reason": "debug_mechanical_pose_not_a_navigation_success"
+  },
+  "rec1": {
+    "events": 122,
+    "droppedDetails": 0
+  },
+  "samples": 95,
+  "finishedAt": "2026-11-02T03:32:33.615+00:00",
+  "wallSeconds": 20.71
+}

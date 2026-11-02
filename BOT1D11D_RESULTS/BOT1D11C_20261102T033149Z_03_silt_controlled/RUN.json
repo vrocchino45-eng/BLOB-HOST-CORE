@@ -1,0 +1,54 @@
+{
+  "revision": "BOT1-D11C-1",
+  "profile": "silt_controlled",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-02T03:31:51.373+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": true,
+  "mode": "DEV_QUERY_DIAGNOSTIC_ONLY",
+  "gameplayChanged": false,
+  "naturalRunReadsOwnerDuringSteering": false,
+  "actions": [
+    {
+      "label": "controlled_settle",
+      "key": null,
+      "plannedSeconds": 2.1,
+      "startedAt": "2026-11-02T03:32:03.211+00:00",
+      "endedAt": "2026-11-02T03:32:05.358+00:00"
+    },
+    {
+      "label": "tangential_a",
+      "key": "a",
+      "plannedSeconds": 0.32,
+      "startedAt": "2026-11-02T03:32:05.371+00:00",
+      "endedAt": "2026-11-02T03:32:05.867+00:00"
+    },
+    {
+      "label": "post_tangent",
+      "key": null,
+      "plannedSeconds": 1.7,
+      "startedAt": "2026-11-02T03:32:05.928+00:00",
+      "endedAt": "2026-11-02T03:32:07.701+00:00"
+    }
+  ],
+  "errors": [],
+  "debugEntrySettledAt": "2026-11-02T03:32:02.129+00:00",
+  "controlledIntervention": {
+    "kind": "controlled_start",
+    "ms": 974,
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "position": {
+      "x": -0.18,
+      "y": -0.17,
+      "z": -2.65
+    },
+    "reason": "debug_mechanical_pose_not_a_navigation_success"
+  },
+  "rec1": {
+    "events": 102,
+    "droppedDetails": 0
+  },
+  "samples": 63,
+  "finishedAt": "2026-11-02T03:32:10.775+00:00",
+  "wallSeconds": 19.4
+}

@@ -1,0 +1,14 @@
+{
+  "pass": "BOT1-D11D",
+  "mode": "scoped experimental contact-state bootstrap",
+  "source_evidence": "D11C Silt controlled eligibility ~0.339; contact suspended; no anchors/support/attachment",
+  "existing_file_modified": "src/player/CoreEmbodimentSystem.js",
+  "new": [
+    "src/player/CoreAuthoredContactBootstrap.js",
+    "scripts/testBOT1D11DAuthoredContactBootstrap.mjs"
+  ],
+  "test_only": false,
+  "live_verified": false,
+  "no_movement_physics_edit": true,
+  "rollback": "py D11D_APPLY.py --undo"
+}

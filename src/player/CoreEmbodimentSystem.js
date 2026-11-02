@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { canBeginAuthoredSurfaceBrush } from "./CoreAuthoredContactBootstrap.js";
 
 const FORWARD_AXIS = new THREE.Vector3(0, 0, -1);
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
@@ -2651,6 +2652,15 @@ export class CoreEmbodimentSystem {
 
     const physicalAttachment = frameState.playerAttachment ?? {};
     const physicalAttachmentActive = physicalAttachment.active === true;
+    // BOT1-D11D: this is only first-touch brushing, not a mechanical latch.
+    // A registered surface must be close and the Core must not be peeling away.
+    // Tendril sealing -> support plane -> movement attachment keep their owners.
+    const authoredSurfaceBrushReady = canBeginAuthoredSurfaceBrush({
+      surfaceTruth,
+      kinematics,
+      physicalAttachment,
+      coreWorkActive
+    });
     const physicalAttachmentReleasing = physicalAttachment.state === "releasing";
 
     let nextState = this.coreContactState;
@@ -2676,6 +2686,10 @@ export class CoreEmbodimentSystem {
       } else if (settledAtBoundary) {
         nextState = "attached";
       } else if (grazingBoundary) {
+        nextState = "brushing";
+      } else if (authoredSurfaceBrushReady) {
+        // Registered, near contact can initiate the first reaching tendril.
+        // The visual "attached" state remains reserved for physicalAttachment.
         nextState = "brushing";
       } else if (this.coreContactState === "releasing" && this.coreContactReleaseAge < 0.46) {
         nextState = "releasing";

@@ -16,7 +16,13 @@ const runtime = new GameRuntime({
   buildLabel: "Stabilized Aim + Local Contact Proof"
 });
 
-runtime.start().catch((error) => {
+// BOT1D11C: test-only, opt-in diagnostic. Normal gameplay boot remains unchanged.
+runtime.start().then(async () => {
+  if (import.meta.env.DEV && new URLSearchParams(window.location.search).get("bot1d11c") === "1") {
+    const { installBOT1D11CProbe } = await import("./debug/BOT1D11CDiagnosticProbe.js");
+    installBOT1D11CProbe(runtime);
+  }
+}).catch((error) => {
   console.error("[BLOB BOOT] Failed to start runtime:", error);
 
   const errorPanel = document.createElement("pre");
