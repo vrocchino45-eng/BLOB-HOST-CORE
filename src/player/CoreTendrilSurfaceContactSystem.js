@@ -343,7 +343,10 @@ export class CoreTendrilSurfaceContactSystem {
     // Ties remain deterministic by beginning the scan at stepCursor.
     this.stepCandidateIndex = -1;
     let bestStridePressure = 1.0;
-    if (contactState === "attached" && !stepClaimed) {
+    // D11G: no fresh foothold may be committed from the movement ellipsoid.
+    // Keep already-sealed world anchors through a short authored-raycast gap;
+    // only current authored truth may authorize a new step.
+    if (contactState === "attached" && this.surfaceTruthActive && !stepClaimed) {
       for (let offset = 0; offset < 3; offset += 1) {
         const index = (this.stepCursor + offset) % 3;
         const tendril = this.tendrils[index];
@@ -371,7 +374,7 @@ export class CoreTendrilSurfaceContactSystem {
       const ideal = idealAnchors[tendril.index];
       tendril.lastIdealAnchor.copy(ideal);
 
-      if (desired && staggerReady && tendril.phase === "retracted") {
+      if (desired && staggerReady && tendril.phase === "retracted" && this.surfaceTruthActive) {
         this.beginReach(tendril, ideal);
       }
 
@@ -379,7 +382,19 @@ export class CoreTendrilSurfaceContactSystem {
         this.beginPeel(tendril);
       }
 
-      if (desired && tendril.phase === "sealed" && !stepClaimed && tendril.index === this.stepCandidateIndex) {
+      // D11G: short visibility gaps retain a planted anchor, not infinite reach.
+      // When no new authored truth exists and body-to-anchor exceeds the
+      // conservative reach envelope, peel without fabricating a replacement.
+      if (desired && tendril.phase === "sealed" && !this.surfaceTruthActive
+          && tendril.anchorSurface?.valid && tendril.phaseAge >= 0.22
+          && this.computeStartWorld(tendril.index, this.tempA)
+            .distanceTo(tendril.anchorWorld) > Math.max(1.2, this.maxStretch * 2.2)) {
+        this.beginPeel(tendril);
+        stepClaimed = true;
+      }
+
+      if (desired && tendril.phase === "sealed" && this.surfaceTruthActive
+          && !stepClaimed && tendril.index === this.stepCandidateIndex) {
         // Predict the next planted point slightly ahead in the tangent frame.
         // The destination is frozen when the peel begins, so the body moves over
         // a world-planted support rather than chasing a target attached to itself.
@@ -541,36 +556,42 @@ export class CoreTendrilSurfaceContactSystem {
       .addScaledVector(this.tangentSide, Math.sin(angle) * this.coreRootSpread);
   }
 
-  beginReach(tendril, targetAnchor) {
+  beginReach(tendril, targetAnchor, fromAuthorizedPending = false) {
+    // D11G: relation and position must have the SAME authored origin.
+    // An old surface ID is never proof that a new ellipsoid foothold is on it.
+    const pendingAuthorized = Boolean(
+      fromAuthorizedPending && tendril.pendingAnchorValid && tendril.pendingSurface?.valid
+    );
+    if (!pendingAuthorized && !this.surfaceTruthActive) return false;
+    if (pendingAuthorized) {
+      this.copySurfaceRelation(tendril.reachSurface, tendril.pendingSurface);
+    } else if (!this.captureCurrentSurfaceRelation(tendril.reachSurface)) {
+      return false;
+    }
     tendril.phase = "reaching";
     tendril.phaseAge = 0;
     tendril.reachFrom.copy(this.computeStartWorld(tendril.index, this.tempB));
     tendril.reachTo.copy(targetAnchor);
     tendril.anchorWorld.copy(targetAnchor);
-
-    // HC031H2: SurfaceTruth authorizes the relationship when a reach is planted.
-    // From then until peel/release, the anchor carries that authored identity.
-    // A stride handoff inherits the prior sealed anchor identity if same-frame
-    // SurfaceTruth has already moved on.
-    if (!this.captureCurrentSurfaceRelation(tendril.reachSurface)) {
-      if (!this.copySurfaceRelation(tendril.reachSurface, tendril.pendingSurface)) {
-        this.copySurfaceRelation(tendril.reachSurface, tendril.anchorSurface);
-      }
-    }
+    tendril.reachOrigin = pendingAuthorized ? "authored_truth_predicted_step" : "live_authored_surface_truth";
     this.clearSurfaceRelation(tendril.pendingSurface);
     tendril.pendingAnchorValid = false;
     tendril.seal = 0;
+    return true;
   }
 
   beginPeel(tendril, nextAnchor = null) {
     tendril.phase = "peeling";
     tendril.phaseAge = 0;
     tendril.reachFrom.copy(tendril.anchorWorld);
-    if (nextAnchor) {
+    // D11G: predicted replacement is legal only when LIVE authored truth
+    // authorizes that exact foothold. Never inherit an old ID for a fallback.
+    const authoredStep = Boolean(nextAnchor && this.surfaceTruthActive
+      && nextAnchor.distanceTo(this.surfacePoint) <= 0.85);
+    if (authoredStep && this.captureCurrentSurfaceRelation(tendril.pendingSurface)) {
       tendril.reachTo.copy(nextAnchor);
       tendril.pendingAnchorWorld.copy(nextAnchor);
       tendril.pendingAnchorValid = true;
-      this.copySurfaceRelation(tendril.pendingSurface, tendril.anchorSurface);
     } else {
       tendril.reachTo.copy(this.computeStartWorld(tendril.index, this.tempB));
       tendril.pendingAnchorValid = false;
@@ -628,13 +649,19 @@ export class CoreTendrilSurfaceContactSystem {
       tendril.reveal = 1 - u * 0.58;
 
       if (u >= 1) {
-        if (desired) {
-          this.beginReach(tendril, tendril.pendingAnchorValid ? tendril.pendingAnchorWorld : ideal);
-        } else {
+        const authorizedPending = Boolean(tendril.pendingAnchorValid && tendril.pendingSurface?.valid);
+        const planted = desired && (authorizedPending || this.surfaceTruthActive)
+          && this.beginReach(
+            tendril,
+            authorizedPending ? tendril.pendingAnchorWorld : ideal,
+            authorizedPending
+          );
+        if (!planted) {
           tendril.phase = "retracted";
           tendril.phaseAge = 0;
           tendril.reveal = 0;
           tendril.seal = 0;
+          tendril.pendingAnchorValid = false;
           this.clearSurfaceRelation(tendril.anchorSurface);
           this.clearSurfaceRelation(tendril.reachSurface);
           this.clearSurfaceRelation(tendril.pendingSurface);
@@ -806,6 +833,7 @@ export class CoreTendrilSurfaceContactSystem {
       seal: Number(THREE.MathUtils.clamp(tendril.seal, 0, 1).toFixed(3)),
       stretch: Number(tendril.stretch.toFixed(3)),
       stridePressure: Number((tendril.stridePressure ?? 0).toFixed(3)),
+      reachOrigin: tendril.reachOrigin ?? "none",
       anchorWorld: {
         x: Number(tendril.anchorWorld.x.toFixed(4)),
         y: Number(tendril.anchorWorld.y.toFixed(4)),
@@ -844,7 +872,7 @@ export class CoreTendrilSurfaceContactSystem {
       surfaceTruthLoadTolerance: Number(this.surfaceTruthLoadTolerance.toFixed(3)),
       surfaceTruthCompliance: Number(this.surfaceTruthCompliance.toFixed(3)),
       surfaceTruthVerbTransmission: { ...this.surfaceTruthVerbTransmission },
-      surfaceSource: this.surfaceTruthActive ? "authored_crawlable_surface_raycast" : "trusted_authored_movement_boundary_fallback",
+      surfaceSource: this.surfaceTruthActive ? "authored_crawlable_surface_raycast" : "existing_world_fixed_anchor_only_no_new_boundary_footholds",
       movementAuthority: "PlayerMovementController",
       anchorAuthority: "CoreTendrilSurfaceContactSystem",
       visualAuthority: "CoreTendrilSurfaceContactSystem",
@@ -870,7 +898,7 @@ export class CoreTendrilSurfaceContactSystem {
       carriedSurfaceLoadTolerance: mechanicalContactEligible ? Number(carriedSurface.loadTolerance.toFixed(3)) : 0,
       carriedSurfaceCompliance: mechanicalContactEligible ? Number(carriedSurface.compliance.toFixed(3)) : 0,
       carriedSurfaceVerbTransmission: mechanicalContactEligible ? { ...carriedSurface.verbTransmission } : { pulse: 0, absorb: 0, stabilize: 0 },
-      physicalContactLaw: "surface_truth_authorizes_seal_then_anchor_carries_surface_identity_until_peel_release",
+      physicalContactLaw: "authored_truth_authorizes_every_new_foothold_retained_world_anchor_survives_brief_gap",
       surfaceLocomotion: {
         active: mechanicalContactEligible,
         mode: handoffActive ? "anchor_handoff" : sealedCount >= 2 ? "supported_pull" : "single_anchor_pull",
@@ -893,7 +921,7 @@ export class CoreTendrilSurfaceContactSystem {
         anchorCarriesAuthoredSurfaceIdentity: true,
         currentSurfaceTruthRequiredAfterSeal: false,
         surfaceEligibilityAuthorityAtSeal: "CoreSurfaceTruthSystem",
-        plantedContactPolicy: "world_fixed_with_surface_identity_until_stride_pressure_requires_replant",
+        plantedContactPolicy: "authored_origin_required_for_new_reach_retained_anchor_until_peel_or_replant",
         stepSelectionPolicy: "highest_stride_pressure_deterministic_tie_break",
         stepCandidateIndex: this.stepCandidateIndex,
         predictedFootholdInSurfaceTangentFrame: true

@@ -1,0 +1,90 @@
+{
+  "revision": "BOT1-D11F-1",
+  "frozenInputPolicy": "BOT1-D11E-1",
+  "profile": "natural_feather",
+  "round": 2,
+  "status": "CAPTURED",
+  "startedAt": "2026-11-02T05:08:12.997+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": false,
+  "debugCellEntryUsed": true,
+  "gameplayChanged": false,
+  "policyFrozen": true,
+  "ownerDataUsedForSteering": false,
+  "mode": "D11F_READ_ONLY_GEOMETRY_AND_REAL_KEY_INPUT",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-02T05:08:24.102+00:00",
+      "endedAt": "2026-11-02T05:08:24.957+00:00"
+    },
+    {
+      "label": "approach_1",
+      "key": "w",
+      "plannedSeconds": 0.36,
+      "startedAt": "2026-11-02T05:08:25.001+00:00",
+      "endedAt": "2026-11-02T05:08:25.497+00:00"
+    },
+    {
+      "label": "coast_1",
+      "key": null,
+      "plannedSeconds": 0.35,
+      "startedAt": "2026-11-02T05:08:25.537+00:00",
+      "endedAt": "2026-11-02T05:08:25.946+00:00"
+    },
+    {
+      "label": "approach_2",
+      "key": "w",
+      "plannedSeconds": 0.18,
+      "startedAt": "2026-11-02T05:08:25.969+00:00",
+      "endedAt": "2026-11-02T05:08:26.266+00:00"
+    },
+    {
+      "label": "approach_settle",
+      "key": null,
+      "plannedSeconds": 2.0,
+      "startedAt": "2026-11-02T05:08:26.315+00:00",
+      "endedAt": "2026-11-02T05:08:28.384+00:00"
+    },
+    {
+      "label": "tangential",
+      "key": "a",
+      "plannedSeconds": 0.45,
+      "startedAt": "2026-11-02T05:08:28.410+00:00",
+      "endedAt": "2026-11-02T05:08:28.969+00:00"
+    },
+    {
+      "label": "post_tangent",
+      "key": null,
+      "plannedSeconds": 0.7,
+      "startedAt": "2026-11-02T05:08:29.012+00:00",
+      "endedAt": "2026-11-02T05:08:29.765+00:00"
+    },
+    {
+      "label": "away_vertical",
+      "key": "c",
+      "plannedSeconds": 1.15,
+      "startedAt": "2026-11-02T05:08:29.797+00:00",
+      "endedAt": "2026-11-02T05:08:31.068+00:00"
+    },
+    {
+      "label": "post_away",
+      "key": null,
+      "plannedSeconds": 1.3,
+      "startedAt": "2026-11-02T05:08:31.109+00:00",
+      "endedAt": "2026-11-02T05:08:32.472+00:00"
+    }
+  ],
+  "errors": [],
+  "debugEntrySettledAt": "2026-11-02T05:08:23.291+00:00",
+  "rec1": {
+    "events": 148,
+    "droppedDetails": 0
+  },
+  "samples": 141,
+  "continuitySamples": 141,
+  "finishedAt": "2026-11-02T05:08:36.326+00:00",
+  "wallSeconds": 23.33
+}

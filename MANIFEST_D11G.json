@@ -1,0 +1,25 @@
+{
+  "pass": "BOT1-D11G",
+  "mode": "single-owner experimental repair",
+  "status": "offline_checked_live_pending",
+  "source_authority": "BLOB-HOST-CORE-BLOB-BOT0.zip plus D11F live results",
+  "modified_existing_source": ["src/player/CoreTendrilSurfaceContactSystem.js"],
+  "new_package_files": [
+    "D11G_APPLY.py", "D11G_PATCH_OPERATIONS.json", "scripts/testBOT1D11GAnchorProvenance.mjs", "README_START_HERE.md", "MANIFEST_D11G.json"
+  ],
+  "protected": [
+    "src/player/PlayerMovementController.js",
+    "src/player/CoreEmbodimentSystem.js",
+    "src/player/CoreTendrilSupportPlaneSystem.js",
+    "Silt geometry and composition",
+    "D11D authored-contact bootstrap",
+    "D10B Fold regression"
+  ],
+  "offline_owner_tests_passed": 10,
+  "historic_d11f_referee_tests_passed": 19,
+  "historic_d11e_referee_tests_passed": 31,
+  "live_test_matrix": "11 D11F policy runs (3 each of Reference/Feather/Brake plus HC Positive and Away)",
+  "live_test_result": "not_run",
+  "rollback": "D11G_APPLY.py --undo; exact source SHA verified",
+  "notes": "Physical triangle-level geometry validation still requires live D11F inspector; no gameplay success assumed."
+}

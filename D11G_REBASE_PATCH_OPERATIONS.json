@@ -1,0 +1,64 @@
+{
+  "source": "src/player/CoreTendrilSurfaceContactSystem.js",
+  "source_sha256": "510ca8a4b114530001d5b4f5948a65d6e4c0aa1462bc989c0091d4448068c6a8",
+  "patched_sha256": "236c4f8d819df78aff50bcacb2ca0b0e2a7eb658df35709528458a1769b0399f",
+  "operations": [
+    {
+      "label": "do not stride without current authored surface",
+      "before": "    if (contactState === \"attached\" && !stepClaimed) {\n      for (let offset = 0; offset < 3; offset += 1) {",
+      "after": "    // D11G: no fresh foothold may be committed from the movement ellipsoid.\n    // Keep already-sealed world anchors through a short authored-raycast gap;\n    // only current authored truth may authorize a new step.\n    if (contactState === \"attached\" && this.surfaceTruthActive && !stepClaimed) {\n      for (let offset = 0; offset < 3; offset += 1) {"
+    },
+    {
+      "label": "retracted reaches need authored truth",
+      "before": "      if (desired && staggerReady && tendril.phase === \"retracted\") {\n        this.beginReach(tendril, ideal);\n      }",
+      "after": "      if (desired && staggerReady && tendril.phase === \"retracted\" && this.surfaceTruthActive) {\n        this.beginReach(tendril, ideal);\n      }"
+    },
+    {
+      "label": "expire impossible out-of-range anchors without truth",
+      "before": "      if (!desired && tendril.phase !== \"retracted\" && tendril.phase !== \"peeling\") {\n        this.beginPeel(tendril);\n      }\n\n      if (desired && tendril.phase === \"sealed\"",
+      "after": "      if (!desired && tendril.phase !== \"retracted\" && tendril.phase !== \"peeling\") {\n        this.beginPeel(tendril);\n      }\n\n      // D11G: short visibility gaps retain a planted anchor, not infinite reach.\n      // When no new authored truth exists and body-to-anchor exceeds the\n      // conservative reach envelope, peel without fabricating a replacement.\n      if (desired && tendril.phase === \"sealed\" && !this.surfaceTruthActive\n          && tendril.anchorSurface?.valid && tendril.phaseAge >= 0.22\n          && this.computeStartWorld(tendril.index, this.tempA)\n            .distanceTo(tendril.anchorWorld) > Math.max(1.2, this.maxStretch * 2.2)) {\n        this.beginPeel(tendril);\n        stepClaimed = true;\n      }\n\n      if (desired && tendril.phase === \"sealed\""
+    },
+    {
+      "label": "step proposal restricted to live truth",
+      "before": "      if (desired && tendril.phase === \"sealed\" && !stepClaimed && tendril.index === this.stepCandidateIndex) {",
+      "after": "      if (desired && tendril.phase === \"sealed\" && this.surfaceTruthActive\n          && !stepClaimed && tendril.index === this.stepCandidateIndex) {"
+    },
+    {
+      "label": "beginReach validates live or pending provenance",
+      "before": "  beginReach(tendril, targetAnchor) {\n    tendril.phase = \"reaching\";\n    tendril.phaseAge = 0;\n    tendril.reachFrom.copy(this.computeStartWorld(tendril.index, this.tempB));\n    tendril.reachTo.copy(targetAnchor);\n    tendril.anchorWorld.copy(targetAnchor);\n\n    // HC031H2: SurfaceTruth authorizes the relationship when a reach is planted.\n    // From then until peel/release, the anchor carries that authored identity.\n    // A stride handoff inherits the prior sealed anchor identity if same-frame\n    // SurfaceTruth has already moved on.\n    if (!this.captureCurrentSurfaceRelation(tendril.reachSurface)) {\n      if (!this.copySurfaceRelation(tendril.reachSurface, tendril.pendingSurface)) {\n        this.copySurfaceRelation(tendril.reachSurface, tendril.anchorSurface);\n      }\n    }\n    this.clearSurfaceRelation(tendril.pendingSurface);\n    tendril.pendingAnchorValid = false;\n    tendril.seal = 0;\n  }",
+      "after": "  beginReach(tendril, targetAnchor, fromAuthorizedPending = false) {\n    // D11G: relation and position must have the SAME authored origin.\n    // An old surface ID is never proof that a new ellipsoid foothold is on it.\n    const pendingAuthorized = Boolean(\n      fromAuthorizedPending && tendril.pendingAnchorValid && tendril.pendingSurface?.valid\n    );\n    if (!pendingAuthorized && !this.surfaceTruthActive) return false;\n    if (pendingAuthorized) {\n      this.copySurfaceRelation(tendril.reachSurface, tendril.pendingSurface);\n    } else if (!this.captureCurrentSurfaceRelation(tendril.reachSurface)) {\n      return false;\n    }\n    tendril.phase = \"reaching\";\n    tendril.phaseAge = 0;\n    tendril.reachFrom.copy(this.computeStartWorld(tendril.index, this.tempB));\n    tendril.reachTo.copy(targetAnchor);\n    tendril.anchorWorld.copy(targetAnchor);\n    tendril.reachOrigin = pendingAuthorized ? \"authored_truth_predicted_step\" : \"live_authored_surface_truth\";\n    this.clearSurfaceRelation(tendril.pendingSurface);\n    tendril.pendingAnchorValid = false;\n    tendril.seal = 0;\n    return true;\n  }"
+    },
+    {
+      "label": "beginPeel does not copy stale identity into new predicted anchor",
+      "before": "    if (nextAnchor) {\n      tendril.reachTo.copy(nextAnchor);\n      tendril.pendingAnchorWorld.copy(nextAnchor);\n      tendril.pendingAnchorValid = true;\n      this.copySurfaceRelation(tendril.pendingSurface, tendril.anchorSurface);\n    } else {\n      tendril.reachTo.copy(this.computeStartWorld(tendril.index, this.tempB));\n      tendril.pendingAnchorValid = false;\n      this.clearSurfaceRelation(tendril.pendingSurface);\n    }",
+      "after": "    // D11G: predicted replacement is legal only when LIVE authored truth\n    // authorizes that exact foothold. Never inherit an old ID for a fallback.\n    const authoredStep = Boolean(nextAnchor && this.surfaceTruthActive\n      && nextAnchor.distanceTo(this.surfacePoint) <= 0.85);\n    if (authoredStep && this.captureCurrentSurfaceRelation(tendril.pendingSurface)) {\n      tendril.reachTo.copy(nextAnchor);\n      tendril.pendingAnchorWorld.copy(nextAnchor);\n      tendril.pendingAnchorValid = true;\n    } else {\n      tendril.reachTo.copy(this.computeStartWorld(tendril.index, this.tempB));\n      tendril.pendingAnchorValid = false;\n      this.clearSurfaceRelation(tendril.pendingSurface);\n    }"
+    },
+    {
+      "label": "end of peel requires provenance or live truth",
+      "before": "      if (u >= 1) {\n        if (desired) {\n          this.beginReach(tendril, tendril.pendingAnchorValid ? tendril.pendingAnchorWorld : ideal);\n        } else {\n          tendril.phase = \"retracted\";\n          tendril.phaseAge = 0;\n          tendril.reveal = 0;\n          tendril.seal = 0;\n          this.clearSurfaceRelation(tendril.anchorSurface);\n          this.clearSurfaceRelation(tendril.reachSurface);\n          this.clearSurfaceRelation(tendril.pendingSurface);\n        }\n      }",
+      "after": "      if (u >= 1) {\n        const authorizedPending = Boolean(tendril.pendingAnchorValid && tendril.pendingSurface?.valid);\n        const planted = desired && (authorizedPending || this.surfaceTruthActive)\n          && this.beginReach(\n            tendril,\n            authorizedPending ? tendril.pendingAnchorWorld : ideal,\n            authorizedPending\n          );\n        if (!planted) {\n          tendril.phase = \"retracted\";\n          tendril.phaseAge = 0;\n          tendril.reveal = 0;\n          tendril.seal = 0;\n          tendril.pendingAnchorValid = false;\n          this.clearSurfaceRelation(tendril.anchorSurface);\n          this.clearSurfaceRelation(tendril.reachSurface);\n          this.clearSurfaceRelation(tendril.pendingSurface);\n        }\n      }"
+    },
+    {
+      "label": "publish authoritative foothold source for forensics",
+      "before": "      anchorWorld: {\n        x: Number(tendril.anchorWorld.x.toFixed(4)),",
+      "after": "      reachOrigin: tendril.reachOrigin ?? \"none\",\n      anchorWorld: {\n        x: Number(tendril.anchorWorld.x.toFixed(4)),"
+    },
+    {
+      "label": "surface-source telemetry explains no fallback new anchors",
+      "before": "      surfaceSource: this.surfaceTruthActive ? \"authored_crawlable_surface_raycast\" : \"trusted_authored_movement_boundary_fallback\",",
+      "after": "      surfaceSource: this.surfaceTruthActive ? \"authored_crawlable_surface_raycast\" : \"existing_world_fixed_anchor_only_no_new_boundary_footholds\","
+    },
+    {
+      "label": "adjust stated physical law",
+      "before": "      physicalContactLaw: \"surface_truth_authorizes_seal_then_anchor_carries_surface_identity_until_peel_release\",",
+      "after": "      physicalContactLaw: \"authored_truth_authorizes_every_new_foothold_retained_world_anchor_survives_brief_gap\","
+    },
+    {
+      "label": "correct telemetry policy of planned step",
+      "before": "        plantedContactPolicy: \"world_fixed_with_surface_identity_until_stride_pressure_requires_replant\",",
+      "after": "        plantedContactPolicy: \"authored_origin_required_for_new_reach_retained_anchor_until_peel_or_replant\","
+    }
+  ],
+  "source_eol": "CRLF",
+  "patch_revision": "D11G-REBASE-CRLF-20261102"
+}
