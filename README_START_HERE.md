@@ -1,89 +1,89 @@
-# BLOB: HOST CORE — BOT1-D11E Natural Silt Attachment Convergence
+# BLOB: HOST CORE — BOT1-D11F Anchor Continuity Validation
 
-**Status:** Test-only delta, offline checked. Live browser runs **not yet performed**.
+**Mode:** experimental, diagnostic-only, no gameplay changes.  
+**Baseline:** D11E natural attachment passed its limited sequence gate, but HC anchor spatial continuity remains unverified.
 
-## Why this pass exists
+## Why D11F exists
 
-D11D proved the HC tendril / support-plane / physical-attachment chain can work on the authored Silt shelf from an explicitly controlled debug pose. It also gave a **brief natural latch** near the leading edge with **zero supported samples**, followed by `sustained_contact_loss`.
+D11E had three natural Silt attachment/release sequences. In Reference and Feather, the Core continued reporting the isolated `SILT_ENTRY_SEDIMENT_SHELF_D11B` surface identity even after moving several world units away and losing current surface eligibility. Surface ID retention may be valid over brief raycast gaps, but ID alone does not demonstrate an anchor is still on its mesh or within useful tether distance.
 
-D11E investigates *approach speed and timing* without changing gameplay or replacing the existing shelf. This is a diagnostic comparison, not a general attachment certification.
+The existing D11C probe does **not** record actual `anchorWorld` positions; old D11E recordings cannot be retro-certified for this criterion.
 
-## Prerequisites — don't reinstall or reapply the old patches
+## What this delta installs
 
-- Work from the **local GitHub checkout** project root containing `src`, `public`, and `BLOB_BOT1_REAL_INPUT_HARNESS`.
-- The D11B Silt shelf and the D11D `CoreEmbodimentSystem` bootstrap must **still be installed**.
-- The D11C dev-only diagnostic probe must **still be enabled** (its patched `src/main.js` and `src/debug/BOT1D11CDiagnosticProbe.js`). This runner adds `?bot1d11c=1` itself.
-- The earlier BOT1 real-input harness, Playwright/Chrome, and standard Vite dev server (`http://127.0.0.1:5173`) must work.
-- If you ran `py .\D11C_APPLY.py --undo`, the diagnostic hook is absent. **Do not blindly reapply**: first inspect `src/main.js` and the D11C README for the existing patch state.
+- `src/debug/BOT1D11FAnchorGeometryInspector.js`: read-only, world-space, triangle-level nearest-point distances from each sealed anchor to its ID-matched authored mesh, plus Core-to-anchor and Core-to-carried-mesh distances.
+- `D11F_APPLY.py`: safe, reversible insertion of one D11F diagnostic field into the **existing opt-in D11C debug probe only**; backs up that file and guards rollback with hashes.
+- `bot1d11f_browser.py`: replays the **unchanged D11E** HC-positive, Natural Reference, Natural Feather, Natural Brake, and Away Control policies over three rounds (HC and Away only once). This uses ordinary keyboard input, debug *cell entry* but no debug repositioning, and never steers with owner data.
+- `analyze_bot1d11f.py`: independent offline evidence audit; warns on sustained off-mesh anchors, extreme Core-to-anchor reach, continued attachment far from the carried mesh, missing geometry, and unexpected Away attachment. Thresholds are diagnostic, **not** changes to gameplay physics.
+- `test_bot1d11f.py`: simulated-data regression checks.
 
-## What the five profiles do
+**No changes to** `PlayerMovementController.js`, `CoreTendrilSurfaceContactSystem.js`, `CoreEmbodimentSystem.js`, world chemistry, surface registration, or the D10B Fold test.
 
-| Profile | Entry | Behavior | Intended evidence |
-|---|---|---|---|
-| `host_positive` | Shift+1 | Prior HC contact route | Existing mechanical contact control |
-| `natural_reference` | Shift+6 | D11D's original normal input route, plus tangent/peel trial | Regression comparison for brief natural latch |
-| `natural_feather` | Shift+6 | Short separated forward pulses | Does gentler arrival improve anchor support? |
-| `natural_brake` | Shift+6 | Forward then a brief counter-input | Does reduced entry momentum change contact retention? |
-| `away_control` | Shift+6 | Move upward/sideways without approaching shelf | Rule out accidental sticky attachment |
+## Requirements
 
-**No D11E profile calls `controlledStart()` or moves the Core through debug code.** Shift+6 is still a *debug cell entry*, not a natural full-game route from awakening.
+Use your local **BLOB-HOST-CORE** root (where `src/` and `BLOB_BOT1_REAL_INPUT_HARNESS/` live). Keep these existing changes installed while testing:
 
-D11E uses player-equivalent keyboard actions during each course. The D11C probe collects mechanics telemetry but **does not steer the bot**; `REC1` remains independent corroborating evidence.
+1. D11B Silt shelf.
+2. D11D contact bootstrap.
+3. D11C diagnostic hook (`?bot1d11c=1`) and `src/debug/BOT1D11CDiagnosticProbe.js`.
+4. D11E test policy (`bot1d11e_policy.py`) and established Playwright harness.
 
-## Install and check (PowerShell)
+If D11C's probe has been edited since the supplied D11C package, the installer **stops** instead of making an unsafe edit.
 
-Put `BLOB_BOT1_D11E_NATURAL_ATTACHMENT_TEST_ONLY_DELTA.zip` in your local `BLOB-HOST-CORE` project root. Run:
+## 1 — Install and verify
 
-```powershell
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D11E_NATURAL_ATTACHMENT_TEST_ONLY_DELTA.zip' -DestinationPath '.' -Force
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11e.py
-```
-
-Expected: `Ran 31 tests` / `OK`. These are simulated policy and referee tests, **not live gameplay proof**.
-
-**No patch installer, JSON reference data, or replacement of `src/` is included.** There are four new Python files under the existing harness `scripts` directory.
-
-## Run five test profiles
-
-Start Vite with your normal command, then use a separate PowerShell terminal at the project root:
+Place `BLOB_BOT1_D11F_ANCHOR_CONTINUITY_TEST_DELTA.zip` in your local project root. In VS Code PowerShell:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11e_browser.py --browser-channel chrome --headed --profiles host_positive,natural_reference,natural_feather,natural_brake,away_control --rounds 1 --seconds 75 --output BOT1D11E_RESULTS
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D11F_ANCHOR_CONTINUITY_TEST_DELTA.zip' -DestinationPath '.' -Force
+py .\D11F_APPLY.py --check
+py .\D11F_APPLY.py --apply
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11f.py
 ```
 
-For additional repeatability later, use `--rounds 2` or `--rounds 3` with a **new output folder**. Controls run once; only the three natural approaches repeat. The code intentionally refuses to overwrite a nonempty output folder.
+Expected unit test output: `Ran 19 tests` and `OK`. The package was also checked against D11E tests (50 combined offline tests).
 
-## Analyze and export
+## 2 — Live measurements (11 captures)
+
+Run your usual Vite server at `http://127.0.0.1:5173`, then:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11e.py BOT1D11E_RESULTS
-Compress-Archive -Path '.\BOT1D11E_RESULTS\*' -DestinationPath '.\BOT1D11E_RESULTS.zip' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11f_browser.py --browser-channel chrome --headed --rounds 3 --seconds 75 --output BOT1D11F_RESULTS
 ```
 
-Upload `BOT1D11E_RESULTS.zip`. The result directory contains the full trace, REC1, screenshots, per-run action records, and two readable/referee reports: `BOT1D11E_AUDIT.md` and `.json`.
+The schedule alternates policy order by round; HC Positive and Away Control run once, each Natural policy runs three times. The instrumented trace remains `D11C_TRACE.json` but each new sample has `continuity.revision = BOT1-D11F-1`.
 
-## Exact evidence threshold
+**Do not use a normal game URL for the measurement**: the runner automatically appends `?bot1d11c=1`, and D11F extends that opt-in diagnostic.
 
-Natural profiles are **not** certified by a brief `attached` state, visible contact, shelf eligibility, or HUD text.
+## 3 — Analyze and package
 
-A full sequence requires **all** of these, with the expected Silt surface ID:
+```powershell
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11f.py BOT1D11F_RESULTS
+Compress-Archive -Path '.\BOT1D11F_RESULTS\*' -DestinationPath '.\BOT1D11F_RESULTS.zip' -Force
+```
 
-1. Eligible authored Silt surface recognized.
-2. At least one sealed tendril, same-surface support plane, and physical attachment simultaneously.
-3. A sampled supported interval of **at least 0.8 s, with at least five samples**; gaps greater than 450 ms break continuity.
-4. Tangential displacement of at least 0.04 world units, projected into the sampled support plane, while attachment and support are present during the labeled lateral-input action.
-5. Owner-recorded `deliberate_away_input` release within the marked upward-input window (or 450 ms after), followed by a sampled `free` state.
-6. The HC positive control must still attach; the away control must not attach/seal on the Silt shelf.
+Upload `BOT1D11F_RESULTS.zip` for review. The audit writes `BOT1D11F_RESULTS\BOT1D11F_AUDIT.json`. The analyzer reports **warning classifications**, not an automatic geometry repair or a gameplay lock.
 
-These are **test acceptance thresholds**, not claims about desired player tuning. A passing *single* run is still not proof of universal reliability. Repeated rounds are required to estimate consistency.
+## Interpretation rules
 
-If all three natural approaches fail, **do not change global movement physics**. Inspect the first failing stage, especially leading-edge geometry, approach normal, travel speed, and reach/seal time, and plan at most a narrowly authored shelf placement/slope experiment.
+- **Candidate invalid anchor:** anchor whose carried surface ID has no matching visible eligible mesh, or whose world-space distance from that mesh is unusually large. Off-mesh warning threshold `0.35` units is exploratory, not a physics rule.
+- **Candidate impossible tether:** Core-to-anchor distance over `1.2` units while the Core is still far from the carried mesh (`>1.0` units); this is a conservative signal to inspect against the contact subsystem's much shorter nominal reach.
+- **Brief raycast gaps:** permitted; losing the current raycast alone is **not** a failure.
+- **Geometric evidence unavailable:** explicit missing/unsupported classification; no pass may be inferred from a surface ID alone.
+- **Lateral movement:** preserve the D11E claim of small supported displacement but do **not** relabel it extended traversal.
 
-## Build boundaries
+## D11F exit criterion
 
-- Allowed here: new test-only policy, browser runner, offline referee, unit tests and report.
-- Locked: LS1 movement physics, D11B `residue_weak` shelf identity/profile, D11D contact threshold, Core chemistry, Guide/Host runtime, D10B Fold regression test.
-- No new Silt surface network until natural supported contact and release work.
-- The old D10B Fold milestone remains the separate regression checkpoint. After a gameplay patch is proposed, run a compact Fold smoke check; D11E alone does not provide that evidence.
+Review the nine natural run traces plus HC/Away controls. We need evidence that anchors remain on their authored geometry *and* the Core stays within plausible support reach, including through replanting and release. If this fails, the next change should be a narrow anchor-placement or identity-contract repair, **not** global adhesion, movement, or new Silt walls. If it passes repeatedly, we can design the first real network of connected Silt surfaces.
 
-**Do not undo D11C or D11D before collecting D11E live evidence.** This package itself has no changes to undo: deleting its four `bot1d11e_*`/`analyze_bot1d11e.py`/`test_bot1d11e.py` files leaves gameplay untouched.
+## Uninstall diagnostic only
+
+After exporting results:
+
+```powershell
+py .\D11F_APPLY.py --undo
+```
+
+This restores the original D11C diagnostic probe byte-for-byte, and **does not** remove D11B, D11D, or D11C's main.js hook.
+
+**Verification done here:** offline synthetic analyzer tests, archived D11E non-certification check, JavaScript syntax, safe D11F patch application and byte-identical rollback. **Not performed here:** Vite runtime, Playwright gameplay, or physical anchor continuity confirmation.

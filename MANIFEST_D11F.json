@@ -1,0 +1,35 @@
+{
+  "revision": "BOT1-D11F-1",
+  "mode": "read_only_diagnostic_and_repeated_real_input",
+  "baseline": "D11E limited natural Silt attachment",
+  "requires": [
+    "D11B shelf",
+    "D11D bootstrap",
+    "D11C opt-in probe",
+    "D11E policy"
+  ],
+  "gameplayOwnerChanges": false,
+  "diagnosticPatchTarget": "src/debug/BOT1D11CDiagnosticProbe.js",
+  "controlRuns": {
+    "host_positive": 1,
+    "away_control": 1
+  },
+  "naturalRuns": {
+    "natural_reference": 3,
+    "natural_feather": 3,
+    "natural_brake": 3
+  },
+  "knownLimitations": [
+    "No live D11F run in this environment",
+    "Diagnostic offsets are warnings, not physics rules"
+  ],
+  "files": [
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11f.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11f_browser.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d11f.py",
+    "D11F_APPLY.py",
+    "MANIFEST_D11F.json",
+    "README_START_HERE.md",
+    "src/debug/BOT1D11FAnchorGeometryInspector.js"
+  ]
+}

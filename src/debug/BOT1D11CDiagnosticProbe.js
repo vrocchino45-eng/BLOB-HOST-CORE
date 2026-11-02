@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { inspectBOT1D11FAnchorContinuity } from "./BOT1D11FAnchorGeometryInspector.js";
 
 // BOT1-D11C: DEV + explicit URL flag only. Instrumentation owns no gameplay updates.
 // The ONLY mutating operation is an explicit controlled mechanical test placement.
@@ -62,6 +63,7 @@ export function installBOT1D11CProbe(runtime) {
         detachReason: val(attachment.detachReason, 'none'), releaseArmed: Boolean(attachment.releaseArmed),
         peelIntent: val(attachment.peelIntent01, 0), contactGap: Boolean(attachment.contactGapActive),
         supportCount: val(attachment.tendrilSupportCount, 0) },
+      continuity: inspectBOT1D11FAnchorContinuity(runtime),
       coreContactLanguage: { state: val(f.coreContactLanguage?.state, 'none') }
     };
   }

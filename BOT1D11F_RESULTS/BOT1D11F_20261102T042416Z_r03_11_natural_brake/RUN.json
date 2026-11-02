@@ -1,0 +1,83 @@
+{
+  "revision": "BOT1-D11F-1",
+  "frozenInputPolicy": "BOT1-D11E-1",
+  "profile": "natural_brake",
+  "round": 3,
+  "status": "CAPTURED",
+  "startedAt": "2026-11-02T04:24:18.741+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": false,
+  "debugCellEntryUsed": true,
+  "gameplayChanged": false,
+  "policyFrozen": true,
+  "ownerDataUsedForSteering": false,
+  "mode": "D11F_READ_ONLY_GEOMETRY_AND_REAL_KEY_INPUT",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-02T04:24:30.741+00:00",
+      "endedAt": "2026-11-02T04:24:31.641+00:00"
+    },
+    {
+      "label": "approach_1",
+      "key": "w",
+      "plannedSeconds": 0.52,
+      "startedAt": "2026-11-02T04:24:31.690+00:00",
+      "endedAt": "2026-11-02T04:24:32.452+00:00"
+    },
+    {
+      "label": "counter_momentum",
+      "key": "s",
+      "plannedSeconds": 0.16,
+      "startedAt": "2026-11-02T04:24:32.513+00:00",
+      "endedAt": "2026-11-02T04:24:32.828+00:00"
+    },
+    {
+      "label": "approach_settle",
+      "key": null,
+      "plannedSeconds": 2.0,
+      "startedAt": "2026-11-02T04:24:32.895+00:00",
+      "endedAt": "2026-11-02T04:24:34.969+00:00"
+    },
+    {
+      "label": "tangential",
+      "key": "a",
+      "plannedSeconds": 0.45,
+      "startedAt": "2026-11-02T04:24:34.998+00:00",
+      "endedAt": "2026-11-02T04:24:35.676+00:00"
+    },
+    {
+      "label": "post_tangent",
+      "key": null,
+      "plannedSeconds": 0.7,
+      "startedAt": "2026-11-02T04:24:35.750+00:00",
+      "endedAt": "2026-11-02T04:24:36.516+00:00"
+    },
+    {
+      "label": "away_vertical",
+      "key": "c",
+      "plannedSeconds": 1.15,
+      "startedAt": "2026-11-02T04:24:36.581+00:00",
+      "endedAt": "2026-11-02T04:24:37.889+00:00"
+    },
+    {
+      "label": "post_away",
+      "key": null,
+      "plannedSeconds": 1.3,
+      "startedAt": "2026-11-02T04:24:37.936+00:00",
+      "endedAt": "2026-11-02T04:24:39.304+00:00"
+    }
+  ],
+  "errors": [],
+  "debugEntrySettledAt": "2026-11-02T04:24:29.705+00:00",
+  "rec1": {
+    "events": 144,
+    "droppedDetails": 0
+  },
+  "samples": 93,
+  "continuitySamples": 93,
+  "finishedAt": "2026-11-02T04:24:43.403+00:00",
+  "wallSeconds": 24.66
+}
