@@ -1,0 +1,19 @@
+{
+  "revision": "BOT1-D11H-1",
+  "mode": "FIRST_FOOTHOLD_TIMING_DIAGNOSTIC_ONLY",
+  "basedOn": "D11G rebased: 3/9 natural supported; D11F geometric offsets eliminated",
+  "requires": ["D11B shelf", "D11D bootstrap", "D11G rebased owner", "D11C/D11F debug probes"],
+  "modifiedByInstaller": ["src/debug/BOT1D11CDiagnosticProbe.js"],
+  "newFiles": [
+    "D11H_APPLY.py",
+    "src/debug/BOT1D11HFirstFootholdTimeline.js",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11h.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d11h.py",
+    "README_START_HERE.md",
+    "MANIFEST_D11H.json"
+  ],
+  "forbiddenGameplayEdits": ["PlayerMovementController.js", "CoreTendrilSurfaceContactSystem.js", "CoreEmbodimentSystem.js", "SiltPressureRouteSystem.js"],
+  "steering": "precommitted D11E/D11F ordinary-key policies; no hidden owner steering",
+  "ownerInstrumentation": "read-only 25ms phase snapshots (not interception of rejected method calls)",
+  "validation": {"D11H": "15/15", "D11F": "19/19", "D11E": "31/31", "installer": "byte-identical rollback and safe reapply", "runtime": "pending"}
+}
