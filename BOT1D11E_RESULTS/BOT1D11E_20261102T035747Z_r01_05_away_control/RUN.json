@@ -1,0 +1,60 @@
+{
+  "revision": "BOT1-D11E-1",
+  "profile": "away_control",
+  "round": 1,
+  "status": "CAPTURED",
+  "startedAt": "2026-11-02T03:57:50.371+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": false,
+  "debugCellEntryUsed": true,
+  "gameplayChanged": false,
+  "policyFrozen": true,
+  "ownerDataUsedForSteering": false,
+  "mode": "D11C_READ_ONLY_PROBE_AND_REAL_KEY_INPUT",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-02T03:58:03.351+00:00",
+      "endedAt": "2026-11-02T03:58:04.230+00:00"
+    },
+    {
+      "label": "move_away",
+      "key": "c",
+      "plannedSeconds": 1.1,
+      "startedAt": "2026-11-02T03:58:04.273+00:00",
+      "endedAt": "2026-11-02T03:58:05.594+00:00"
+    },
+    {
+      "label": "away_observe",
+      "key": null,
+      "plannedSeconds": 2.1,
+      "startedAt": "2026-11-02T03:58:05.659+00:00",
+      "endedAt": "2026-11-02T03:58:07.846+00:00"
+    },
+    {
+      "label": "move_side",
+      "key": "d",
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-02T03:58:07.866+00:00",
+      "endedAt": "2026-11-02T03:58:08.415+00:00"
+    },
+    {
+      "label": "end_observe",
+      "key": null,
+      "plannedSeconds": 1.0,
+      "startedAt": "2026-11-02T03:58:08.469+00:00",
+      "endedAt": "2026-11-02T03:58:09.549+00:00"
+    }
+  ],
+  "errors": [],
+  "debugEntrySettledAt": "2026-11-02T03:58:02.132+00:00",
+  "rec1": {
+    "events": 116,
+    "droppedDetails": 0
+  },
+  "samples": 65,
+  "finishedAt": "2026-11-02T03:58:12.908+00:00",
+  "wallSeconds": 22.54
+}

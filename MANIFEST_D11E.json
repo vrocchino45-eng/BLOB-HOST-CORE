@@ -1,0 +1,40 @@
+{
+  "revision": "BOT1-D11E-1",
+  "scope": "TEST_ONLY_NEW_FILES",
+  "gameplayFilesChanged": [],
+  "prerequisites": [
+    "D11B shelf installed",
+    "D11D contact bootstrap installed",
+    "D11C debug probe present",
+    "Playwright/Chrome, Vite and BOT1 harness"
+  ],
+  "files": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11e.py",
+      "sha256": "401c12ac7610b6af2c080554c8fe05e7856de333e5453531c0e38e44e2e612f2",
+      "bytes": 14268
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11e_browser.py",
+      "sha256": "8eb18b7099a45a57ff20e8db7684e02002db97b83fd98bab28c0c505a3f19f5b",
+      "bytes": 7167
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11e_policy.py",
+      "sha256": "a16d7371fabc38db0f03883af0ff3f28289c058b6dd2b39d1d8958a70e0e56af",
+      "bytes": 2621
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d11e.py",
+      "sha256": "f6fd3712c032784e21bd8dd2a5b9c33441539bfe97499681d6584d1b53420b2f",
+      "bytes": 10395
+    },
+    {
+      "path": "README_START_HERE.md",
+      "sha256": "6ba06bc357f4300267909a69346b20031645a0ceec7d34b30decd546df3cc40b",
+      "bytes": 6241
+    }
+  ],
+  "liveStatus": "NOT_RUN",
+  "offlineTestStatus": "31 / 31 PASS"
+}

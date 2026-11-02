@@ -1,0 +1,5195 @@
+{
+  "revision": "BOT1-D11C-1",
+  "target": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+  "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+  "intervalMs": 50,
+  "maxSamples": 2400,
+  "samples": [
+    {
+      "ms": 1,
+      "frame": 26,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.1905,
+        "y": -0.3267,
+        "z": -1.5056
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_SHELF_MEMBRANE",
+        "profile": "membrane_stable",
+        "distance": 0.5775,
+        "reason": "none",
+        "point": {
+          "x": 4.178,
+          "y": -0.9054,
+          "z": -1.4921
+        },
+        "normal": {
+          "x": 0.0119,
+          "y": 0.98,
+          "z": -0.1984
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_SHELF_MEMBRANE",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 214,
+      "frame": 28,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.2601,
+        "y": -0.3198,
+        "z": -1.583
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_SHELF_SCAR_BRACE",
+        "profile": "scar_brace",
+        "distance": 0.6047,
+        "reason": "none",
+        "point": {
+          "x": 4.2489,
+          "y": -0.3209,
+          "z": -0.9656
+        },
+        "normal": {
+          "x": -0.5498,
+          "y": -0.6049,
+          "z": -0.576
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_SHELF_SCAR_BRACE",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 435,
+      "frame": 30,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.3217,
+        "y": -0.3133,
+        "z": -1.6536
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_SHELF_SCAR_BRACE",
+        "profile": "scar_brace",
+        "distance": 0.6306,
+        "reason": "none",
+        "point": {
+          "x": 4.3116,
+          "y": -0.3143,
+          "z": -1.0113
+        },
+        "normal": {
+          "x": -0.2793,
+          "y": -0.7284,
+          "z": -0.6256
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_SHELF_SCAR_BRACE",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 661,
+      "frame": 32,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.3855,
+        "y": -0.3064,
+        "z": -1.7276
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_SHELF_SCAR_BRACE",
+        "profile": "scar_brace",
+        "distance": 0.6733,
+        "reason": "none",
+        "point": {
+          "x": 4.375,
+          "y": -0.3075,
+          "z": -1.0421
+        },
+        "normal": {
+          "x": -0.2211,
+          "y": -0.49,
+          "z": -0.8432
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_SHELF_SCAR_BRACE",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 880,
+      "frame": 34,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.4471,
+        "y": -0.2997,
+        "z": -1.7995
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.536,
+        "reason": "none",
+        "point": {
+          "x": 4.4364,
+          "y": -0.8368,
+          "z": -1.7869
+        },
+        "normal": {
+          "x": 0.0509,
+          "y": 0.9918,
+          "z": 0.1175
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 1118,
+      "frame": 36,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.5049,
+        "y": -0.2934,
+        "z": -1.8669
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.5402,
+        "reason": "none",
+        "point": {
+          "x": 4.4946,
+          "y": -0.8347,
+          "z": -1.8549
+        },
+        "normal": {
+          "x": 0.0687,
+          "y": 0.9943,
+          "z": 0.081
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 1343,
+      "frame": 38,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.568,
+        "y": -0.2865,
+        "z": -1.9405
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.5483,
+        "reason": "none",
+        "point": {
+          "x": 4.5581,
+          "y": -0.8359,
+          "z": -1.929
+        },
+        "normal": {
+          "x": 0.0825,
+          "y": 0.9958,
+          "z": 0.0396
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 1572,
+      "frame": 40,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.6286,
+        "y": -0.2799,
+        "z": -2.0113
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.5596,
+        "reason": "none",
+        "point": {
+          "x": 4.6189,
+          "y": -0.8406,
+          "z": -2
+        },
+        "normal": {
+          "x": 0.0914,
+          "y": 0.9958,
+          "z": -0.0043
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 1758,
+      "frame": 42,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.688,
+        "y": -0.2734,
+        "z": -2.0807
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.5742,
+        "reason": "none",
+        "point": {
+          "x": 4.6749,
+          "y": -0.849,
+          "z": -2.0654
+        },
+        "normal": {
+          "x": 0.1467,
+          "y": 0.9864,
+          "z": -0.074
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 1898,
+      "frame": 43,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.7191,
+        "y": -0.27,
+        "z": -2.117
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.5859,
+        "reason": "none",
+        "point": {
+          "x": 4.7087,
+          "y": -0.857,
+          "z": -2.1049
+        },
+        "normal": {
+          "x": 0.1467,
+          "y": 0.9864,
+          "z": -0.074
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "suspended",
+        "requested": "suspended",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "suspended"
+      }
+    },
+    {
+      "ms": 2091,
+      "frame": 45,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.7757,
+        "y": -0.2638,
+        "z": -2.1831
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.6051,
+        "reason": "none",
+        "point": {
+          "x": 4.7623,
+          "y": -0.8704,
+          "z": -2.1675
+        },
+        "normal": {
+          "x": 0.1428,
+          "y": 0.9803,
+          "z": -0.1362
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "brushing",
+        "requested": "brushing",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "brushing"
+      }
+    },
+    {
+      "ms": 2251,
+      "frame": 47,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.8225,
+        "y": -0.2587,
+        "z": -2.2378
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.631,
+        "reason": "none",
+        "point": {
+          "x": 4.8121,
+          "y": -0.8908,
+          "z": -2.2256
+        },
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        },
+        "candidateCount": 10,
+        "probeCandidates": 7
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "brushing",
+        "requested": "brushing",
+        "suppressed": false,
+        "sealed": 1,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": false,
+        "state": "free",
+        "surfaceId": "none",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "brushing"
+      }
+    },
+    {
+      "ms": 2434,
+      "frame": 49,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.8295,
+        "y": -0.4894,
+        "z": -2.2549
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.4286,
+        "reason": "none",
+        "point": {
+          "x": 4.8194,
+          "y": -0.896,
+          "z": -2.2423
+        },
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 0,
+        "reaching": 2,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": false,
+        "supportCount": 0,
+        "carriedSurfaceId": "none",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "none"
+          },
+          {
+            "phase": "retracted",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": false,
+        "supportCount": 0,
+        "surfaceId": "none",
+        "reason": "no_sealed_anchor_with_carried_surface_identity",
+        "quality": 0,
+        "normal": null
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": true,
+        "supportCount": 0
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 2619,
+      "frame": 51,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.8751,
+        "y": -0.5101,
+        "z": -2.3086
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.4043,
+        "reason": "none",
+        "point": {
+          "x": 4.8619,
+          "y": -0.9172,
+          "z": -2.2936
+        },
+        "normal": {
+          "x": 0.3248,
+          "y": 0.8936,
+          "z": -0.3098
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 1,
+        "reaching": 2,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "none"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.249,
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 2786,
+      "frame": 53,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.8954,
+        "y": -0.5425,
+        "z": -2.3341
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.4029,
+        "reason": "none",
+        "point": {
+          "x": 4.8909,
+          "y": -0.9399,
+          "z": -2.3285
+        },
+        "normal": {
+          "x": 0.3248,
+          "y": 0.8936,
+          "z": -0.3098
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.529,
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 2967,
+      "frame": 55,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.914,
+        "y": -0.555,
+        "z": -2.3565
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.4036,
+        "reason": "none",
+        "point": {
+          "x": 4.9095,
+          "y": -0.9562,
+          "z": -2.3511
+        },
+        "normal": {
+          "x": 0.2883,
+          "y": 0.8612,
+          "z": -0.4185
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.529,
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 3165,
+      "frame": 56,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.9259,
+        "y": -0.5609,
+        "z": -2.3708
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "profile": "membrane_stable",
+        "distance": 0.4181,
+        "reason": "none",
+        "point": {
+          "x": 4.9219,
+          "y": -0.9771,
+          "z": -2.366
+        },
+        "normal": {
+          "x": 0.441,
+          "y": 0.629,
+          "z": -0.6402
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.529,
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 3393,
+      "frame": 57,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 4.9868,
+        "y": -0.5847,
+        "z": -2.4546
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.5971,
+        "reason": "none",
+        "point": {
+          "x": 4.9601,
+          "y": -0.5769,
+          "z": -3.0145
+        },
+        "normal": {
+          "x": -0.4391,
+          "y": -0.5019,
+          "z": 0.7451
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.529,
+        "normal": {
+          "x": 0.2525,
+          "y": 0.9155,
+          "z": -0.3131
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 3580,
+      "frame": 58,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.0694,
+        "y": -0.6374,
+        "z": -2.5703
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.463,
+        "reason": "none",
+        "point": {
+          "x": 5.0411,
+          "y": -0.6174,
+          "z": -2.9941
+        },
+        "normal": {
+          "x": -0.4391,
+          "y": -0.5019,
+          "z": 0.7451
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.529,
+        "normal": {
+          "x": 0.2525,
+          "y": 0.9155,
+          "z": -0.3131
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 3773,
+      "frame": 59,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.1518,
+        "y": -0.6958,
+        "z": -2.6773
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.3349,
+        "reason": "none",
+        "point": {
+          "x": 5.1298,
+          "y": -0.6802,
+          "z": -2.9841
+        },
+        "normal": {
+          "x": -0.4391,
+          "y": -0.5019,
+          "z": 0.7451
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 3,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.529,
+        "normal": {
+          "x": 0.2525,
+          "y": 0.9155,
+          "z": -0.3131
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 4152,
+      "frame": 61,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.0456,
+        "y": -0.7483,
+        "z": -2.5653
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.4311,
+        "reason": "none",
+        "point": {
+          "x": 5.0782,
+          "y": -0.6862,
+          "z": -3.0344
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "reason": "none",
+        "quality": 0.249,
+        "normal": {
+          "x": 0.2129,
+          "y": 0.9558,
+          "z": -0.203
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 4560,
+      "frame": 63,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.047,
+        "y": -0.729,
+        "z": -2.4474
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.6386,
+        "reason": "none",
+        "point": {
+          "x": 5.0457,
+          "y": -0.7133,
+          "z": -3.0982
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 4752,
+      "frame": 64,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.0599,
+        "y": -0.7819,
+        "z": -2.3291
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "profile": "scar_brace",
+        "distance": 0.5926,
+        "reason": "none",
+        "point": {
+          "x": 5.4466,
+          "y": -1.0167,
+          "z": -2.7423
+        },
+        "normal": {
+          "x": 0.1974,
+          "y": 0,
+          "z": 0.9803
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 4951,
+      "frame": 65,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.1269,
+        "y": -0.7648,
+        "z": -2.4066
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.6608,
+        "reason": "none",
+        "point": {
+          "x": 5.1234,
+          "y": -0.7461,
+          "z": -3.0717
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 5132,
+      "frame": 66,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.1811,
+        "y": -0.7853,
+        "z": -2.3225
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+        "profile": "residue_weak",
+        "distance": 0.6794,
+        "reason": "none",
+        "point": {
+          "x": 5.6313,
+          "y": -1.0816,
+          "z": -2.746
+        },
+        "normal": {
+          "x": 0.3161,
+          "y": 0.6546,
+          "z": 0.6867
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 5314,
+      "frame": 67,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2268,
+        "y": -0.8057,
+        "z": -2.3466
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.715,
+        "reason": "none",
+        "point": {
+          "x": 5.214,
+          "y": -0.7949,
+          "z": -3.0543
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 3,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_02"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 5622,
+      "frame": 69,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.1815,
+        "y": -0.8872,
+        "z": -2.3098
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7528,
+        "reason": "none",
+        "point": {
+          "x": 5.2137,
+          "y": -0.8096,
+          "z": -3.0851
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.8265,
+          "z": 0.2986
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_MEMBRANE_02"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 5851,
+      "frame": 71,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2454,
+        "y": -0.8536,
+        "z": -2.3698
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": false,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.8272,
+        "reason": "none",
+        "point": {
+          "x": 5.2143,
+          "y": -0.8428,
+          "z": -3.1759
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.8265,
+          "z": 0.2986
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_detected_outside_mechanical_range",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": false,
+        "truthSurfaceId": "none",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 6058,
+      "frame": 73,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2552,
+        "y": -0.8115,
+        "z": -2.3448
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.6941,
+        "reason": "none",
+        "point": {
+          "x": 5.25,
+          "y": -0.8092,
+          "z": -3.0408
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 6357,
+      "frame": 76,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2779,
+        "y": -0.8226,
+        "z": -2.3335
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7007,
+        "reason": "none",
+        "point": {
+          "x": 5.2721,
+          "y": -0.8205,
+          "z": -3.0359
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 6529,
+      "frame": 78,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2909,
+        "y": -0.8286,
+        "z": -2.3287
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7005,
+        "reason": "none",
+        "point": {
+          "x": 5.2888,
+          "y": -0.8275,
+          "z": -3.0301
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 3,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 6786,
+      "frame": 81,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2494,
+        "y": -0.8032,
+        "z": -2.3303
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7043,
+        "reason": "none",
+        "point": {
+          "x": 5.2491,
+          "y": -0.8036,
+          "z": -3.0344
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 6971,
+      "frame": 83,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2338,
+        "y": -0.8424,
+        "z": -2.3105
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7023,
+        "reason": "none",
+        "point": {
+          "x": 5.2541,
+          "y": -0.8047,
+          "z": -3.0314
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.673,
+        "normal": {
+          "x": -0.4817,
+          "y": -0.7679,
+          "z": 0.4222
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 7141,
+      "frame": 85,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2742,
+        "y": -0.838,
+        "z": -2.3014
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "profile": "scar_brace",
+        "distance": 0.4552,
+        "reason": "none",
+        "point": {
+          "x": 5.2639,
+          "y": -0.9372,
+          "z": -2.7914
+        },
+        "normal": {
+          "x": 0.0688,
+          "y": 0.9372,
+          "z": 0.3418
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 7287,
+      "frame": 87,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2744,
+        "y": -0.8031,
+        "z": -2.3029
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7131,
+        "reason": "none",
+        "point": {
+          "x": 5.2709,
+          "y": -0.8039,
+          "z": -3.0154
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 3,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 7566,
+      "frame": 89,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2697,
+        "y": -0.7915,
+        "z": -2.2968
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7054,
+        "reason": "none",
+        "point": {
+          "x": 5.2662,
+          "y": -0.7909,
+          "z": -3.0028
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "anchors": [
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": 0,
+          "y": 0.5906,
+          "z": 0.807
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 7771,
+      "frame": 91,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2636,
+        "y": -0.8324,
+        "z": -2.2744
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7025,
+        "reason": "none",
+        "point": {
+          "x": 5.2829,
+          "y": -0.7966,
+          "z": -2.9953
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.673,
+        "normal": {
+          "x": -0.4817,
+          "y": -0.7679,
+          "z": 0.4222
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 7967,
+      "frame": 93,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2908,
+        "y": -0.8194,
+        "z": -2.3058
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7163,
+        "reason": "none",
+        "point": {
+          "x": 5.2879,
+          "y": -0.8182,
+          "z": -3.0188
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8043,
+      "frame": 94,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2969,
+        "y": -0.8258,
+        "z": -2.3128
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7093,
+        "reason": "none",
+        "point": {
+          "x": 5.2939,
+          "y": -0.8222,
+          "z": -3.0187
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8201,
+      "frame": 96,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.3059,
+        "y": -0.8392,
+        "z": -2.3237
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7062,
+        "reason": "none",
+        "point": {
+          "x": 5.3037,
+          "y": -0.8356,
+          "z": -3.0273
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8380,
+      "frame": 98,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2739,
+        "y": -0.9321,
+        "z": -2.3102
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7101,
+        "reason": "none",
+        "point": {
+          "x": 5.314,
+          "y": -0.8526,
+          "z": -3.0436
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.8265,
+          "z": 0.2986
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 1,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 1,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.26,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 1
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8531,
+      "frame": 100,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.3028,
+        "y": -0.8504,
+        "z": -2.3513
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.69,
+        "reason": "none",
+        "point": {
+          "x": 5.3025,
+          "y": -0.845,
+          "z": -3.0411
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.8265,
+          "z": 0.2986
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.673,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8677,
+      "frame": 102,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.3094,
+        "y": -0.8667,
+        "z": -2.3591
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7266,
+        "reason": "none",
+        "point": {
+          "x": 5.3075,
+          "y": -0.8632,
+          "z": -3.0834
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.8265,
+          "z": 0.2986
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.552,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8829,
+      "frame": 104,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.3175,
+        "y": -0.8803,
+        "z": -2.3689
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "profile": "scar_brace",
+        "distance": 0.7423,
+        "reason": "none",
+        "point": {
+          "x": 5.3154,
+          "y": -0.8768,
+          "z": -3.1086
+        },
+        "normal": {
+          "x": -0.4772,
+          "y": -0.8265,
+          "z": 0.2986
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.552,
+        "normal": {
+          "x": -0.4772,
+          "y": -0.695,
+          "z": 0.5378
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 8986,
+      "frame": 106,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.29,
+        "y": -0.951,
+        "z": -2.35
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "profile": "scar_brace",
+        "distance": 0.4617,
+        "reason": "none",
+        "point": {
+          "x": 5.2982,
+          "y": -0.9302,
+          "z": -2.8177
+        },
+        "normal": {
+          "x": 0.0688,
+          "y": 0.9372,
+          "z": 0.3418
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.552,
+        "normal": {
+          "x": -0.4817,
+          "y": -0.7679,
+          "z": 0.4222
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 9160,
+      "frame": 108,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.289,
+        "y": -0.9818,
+        "z": -2.3546
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "profile": "scar_brace",
+        "distance": 0.3844,
+        "reason": "none",
+        "point": {
+          "x": 5.2873,
+          "y": -0.9765,
+          "z": -2.736
+        },
+        "normal": {
+          "x": 0.1581,
+          "y": 0.5989,
+          "z": 0.7851
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 1,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "reaching",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.552,
+        "normal": {
+          "x": -0.4817,
+          "y": -0.7679,
+          "z": 0.4222
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 9353,
+      "frame": 110,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.2996,
+        "y": -0.9997,
+        "z": -2.3706
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "profile": "scar_brace",
+        "distance": 0.3573,
+        "reason": "none",
+        "point": {
+          "x": 5.2966,
+          "y": -0.9953,
+          "z": -2.7235
+        },
+        "normal": {
+          "x": 0.1581,
+          "y": 0.5989,
+          "z": 0.7851
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 3,
+        "reaching": 0,
+        "peeling": 0,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.552,
+        "normal": {
+          "x": -0.4817,
+          "y": -0.7679,
+          "z": 0.4222
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    },
+    {
+      "ms": 9530,
+      "frame": 111,
+      "cell": "CELL_MEMBRANE_NURSERY_001",
+      "player": {
+        "x": 5.3051,
+        "y": -1.0078,
+        "z": -2.3787
+      },
+      "shelf": {
+        "present": false,
+        "visible": false,
+        "center": null,
+        "scale": null
+      },
+      "surface": {
+        "valid": true,
+        "eligible": true,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "profile": "scar_brace",
+        "distance": 0.3436,
+        "reason": "none",
+        "point": {
+          "x": 5.3023,
+          "y": -1.0038,
+          "z": -2.7182
+        },
+        "normal": {
+          "x": 0.1581,
+          "y": 0.5989,
+          "z": 0.7851
+        },
+        "candidateCount": 10,
+        "probeCandidates": 8
+      },
+      "capability": {
+        "authoredCount": 10,
+        "surfaceIds": [
+          "HOST_CONTACT_SHELF_MEMBRANE",
+          "HOST_CONTACT_SHELF_SOFT_SLOPE",
+          "HOST_CONTACT_SHELF_SCAR_BRACE",
+          "HOST_CONTACT_SHELF_RESIDUE_PATCH",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_01",
+          "HOST_CONTACT_CONTINUATION_MEMBRANE_02",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+          "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_01",
+          "HOST_CONTACT_CONTINUATION_RESIDUE_02"
+        ],
+        "finding": "authored_surface_mechanically_reachable",
+        "nearestValid": true
+      },
+      "contact": {
+        "state": "attached",
+        "requested": "attached",
+        "suppressed": false,
+        "sealed": 2,
+        "reaching": 0,
+        "peeling": 1,
+        "truthActive": true,
+        "truthSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02",
+        "locomotionActive": true,
+        "supportCount": 2,
+        "carriedSurfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "anchors": [
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "sealed",
+            "sealed": true,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01"
+          },
+          {
+            "phase": "peeling",
+            "sealed": false,
+            "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_02"
+          }
+        ]
+      },
+      "plane": {
+        "active": true,
+        "supportCount": 2,
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "reason": "none",
+        "quality": 0.552,
+        "normal": {
+          "x": -0.4817,
+          "y": -0.7679,
+          "z": 0.4222
+        }
+      },
+      "attachment": {
+        "active": true,
+        "state": "attached",
+        "surfaceId": "HOST_CONTACT_CONTINUATION_SCAR_BRACE_01",
+        "detachReason": "none",
+        "releaseArmed": false,
+        "peelIntent": 0,
+        "contactGap": false,
+        "supportCount": 2
+      },
+      "coreContactLanguage": {
+        "state": "attached"
+      }
+    }
+  ],
+  "interventions": [
+    {
+      "kind": "marker",
+      "label": "start:host_neutral",
+      "ms": 1344
+    },
+    {
+      "kind": "marker",
+      "label": "end:host_neutral",
+      "ms": 2968
+    },
+    {
+      "kind": "marker",
+      "label": "start:host_forward",
+      "ms": 3163
+    },
+    {
+      "kind": "marker",
+      "label": "end:host_forward",
+      "ms": 4154
+    },
+    {
+      "kind": "marker",
+      "label": "start:host_settle",
+      "ms": 4359
+    },
+    {
+      "kind": "marker",
+      "label": "end:host_settle",
+      "ms": 6065
+    },
+    {
+      "kind": "marker",
+      "label": "start:host_side",
+      "ms": 6166
+    },
+    {
+      "kind": "marker",
+      "label": "end:host_side",
+      "ms": 6787
+    },
+    {
+      "kind": "marker",
+      "label": "start:host_pause",
+      "ms": 6878
+    },
+    {
+      "kind": "marker",
+      "label": "end:host_pause",
+      "ms": 8452
+    }
+  ],
+  "lastCell": "CELL_MEMBRANE_NURSERY_001",
+  "exportedAt": "2026-11-02T03:56:19.398Z"
+}

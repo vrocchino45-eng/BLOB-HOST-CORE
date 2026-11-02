@@ -1,0 +1,85 @@
+{
+  "revision": "BOT1-D11E-1",
+  "createdAt": "2026-11-02T03:58:15.698+00:00",
+  "requestedProfiles": [
+    "host_positive",
+    "natural_reference",
+    "natural_feather",
+    "natural_brake",
+    "away_control"
+  ],
+  "rounds": 1,
+  "schedule": [
+    [
+      1,
+      "host_positive"
+    ],
+    [
+      1,
+      "natural_reference"
+    ],
+    [
+      1,
+      "natural_feather"
+    ],
+    [
+      1,
+      "natural_brake"
+    ],
+    [
+      1,
+      "away_control"
+    ]
+  ],
+  "testKind": "NATURAL_ATTACHMENT_DIAGNOSTIC",
+  "ownerDataUsedForNavigation": false,
+  "controlledDebugPoseUsed": false,
+  "debugEntryUsed": true,
+  "runs": [
+    {
+      "folder": "BOT1D11E_20261102T035554Z_r01_01_host_positive",
+      "profile": "host_positive",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 100,
+      "samples": 48,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11E_20261102T035622Z_r01_02_natural_reference",
+      "profile": "natural_reference",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 158,
+      "samples": 97,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11E_20261102T035653Z_r01_03_natural_feather",
+      "profile": "natural_feather",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 149,
+      "samples": 108,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11E_20261102T035721Z_r01_04_natural_brake",
+      "profile": "natural_brake",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 144,
+      "samples": 94,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11E_20261102T035747Z_r01_05_away_control",
+      "profile": "away_control",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 116,
+      "samples": 65,
+      "errors": []
+    }
+  ]
+}
