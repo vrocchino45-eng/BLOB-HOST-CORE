@@ -1,0 +1,62 @@
+{
+  "revision": "BOT1-D11L-1",
+  "round": 1,
+  "profile": "host_positive",
+  "arm": "baseline",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-03T03:49:50.357+00:00",
+  "entry": "Shift+1",
+  "controlledDebugStart": false,
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "debugEntryUsed": true,
+  "mode": "OWNER_RELEASE_GATE_INSTRUMENTED_FIXED_KEY_COMPARISON",
+  "actions": [
+    {
+      "label": "host_neutral",
+      "key": null,
+      "plannedSeconds": 1.5,
+      "startedAt": "2026-11-03T03:50:04.320+00:00",
+      "endedAt": "2026-11-03T03:50:05.861+00:00"
+    },
+    {
+      "label": "host_forward",
+      "key": "w",
+      "plannedSeconds": 0.6,
+      "startedAt": "2026-11-03T03:50:05.951+00:00",
+      "endedAt": "2026-11-03T03:50:06.753+00:00"
+    },
+    {
+      "label": "host_settle",
+      "key": null,
+      "plannedSeconds": 1.6,
+      "startedAt": "2026-11-03T03:50:06.843+00:00",
+      "endedAt": "2026-11-03T03:50:08.539+00:00"
+    },
+    {
+      "label": "host_side",
+      "key": "a",
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-03T03:50:08.580+00:00",
+      "endedAt": "2026-11-03T03:50:09.203+00:00"
+    },
+    {
+      "label": "host_pause",
+      "key": null,
+      "plannedSeconds": 1.5,
+      "startedAt": "2026-11-03T03:50:09.286+00:00",
+      "endedAt": "2026-11-03T03:50:10.884+00:00"
+    }
+  ],
+  "errors": [],
+  "rec1": {
+    "events": 117,
+    "droppedDetails": 0
+  },
+  "samples": 60,
+  "ownerEvents": 103,
+  "releaseGateFrames": 222,
+  "releaseModelVerified": true,
+  "finishedAt": "2026-11-03T03:50:16.365+00:00",
+  "wallSeconds": 26.01
+}

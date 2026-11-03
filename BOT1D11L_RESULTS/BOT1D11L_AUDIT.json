@@ -1,0 +1,3009 @@
+{
+  "revision": "BOT1-D11L-1",
+  "matrixComplete": true,
+  "capturesComplete": true,
+  "runsCaptured": 16,
+  "modelVerifiedRuns": 16,
+  "earlySoloPressurePeelCount": 0,
+  "brakeComparison": {
+    "baseline": {
+      "runs": 2,
+      "attached": 1,
+      "released": 1,
+      "interpretations": {
+        "ACQUISITION_NOT_ATTACHED": 1,
+        "DELIBERATE_RELEASE_CONFIRMED": 1
+      }
+    },
+    "brake_no_counter": {
+      "runs": 2,
+      "attached": 2,
+      "released": 2,
+      "interpretations": {
+        "DELIBERATE_RELEASE_CONFIRMED": 2
+      }
+    },
+    "release_c_extended": {
+      "runs": 2,
+      "attached": 0,
+      "released": 0,
+      "interpretations": {
+        "ACQUISITION_NOT_ATTACHED": 2
+      }
+    },
+    "release_forward_w": {
+      "runs": 2,
+      "attached": 0,
+      "released": 0,
+      "interpretations": {
+        "ACQUISITION_NOT_ATTACHED": 2
+      }
+    },
+    "release_backward_s": {
+      "runs": 2,
+      "attached": 0,
+      "released": 0,
+      "interpretations": {
+        "ACQUISITION_NOT_ATTACHED": 2
+      }
+    }
+  },
+  "rows": [
+    {
+      "folder": "BOT1D11L_20261103T034948Z_r01_01_host_positive_baseline",
+      "round": 1,
+      "profile": "host_positive",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "CONTROL_GEOMETRY_PASS",
+      "ownerGate": {
+        "classification": "CONTROL_ONLY",
+        "releaseStartMs": null,
+        "releaseEndMs": null,
+        "framesAll": 222,
+        "framesInRelease": 0,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035016Z_r01_02_away_control_baseline",
+      "round": 1,
+      "profile": "away_control",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "AWAY_CONTROL_CLEAR",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "CONTROL_GEOMETRY_PASS",
+      "ownerGate": {
+        "classification": "CONTROL_ONLY",
+        "releaseStartMs": null,
+        "releaseEndMs": null,
+        "framesAll": 204,
+        "framesInRelease": 0,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035044Z_r01_03_natural_reference_baseline",
+      "round": 1,
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 7511,
+        "releaseEndMs": 8804,
+        "framesAll": 336,
+        "framesInRelease": 36,
+        "attachedFramesInRelease": 7,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.83455,
+        "maxOwnerPeelHoldAge": 0.1072,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 7517,
+          "dt": 0.02845,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0345,
+              "y": 0.92727,
+              "z": 0.37279
+            },
+            "tendril": {
+              "x": -0.0345,
+              "y": 0.92727,
+              "z": 0.37279
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.28367,
+              "y": -0.90939,
+              "z": -0.3042
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 7677,
+          "dt": 0.0266,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0345,
+              "y": 0.92727,
+              "z": 0.37279
+            },
+            "tendril": {
+              "x": -0.0345,
+              "y": 0.92727,
+              "z": 0.37279
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.30644,
+              "y": -0.89316,
+              "z": -0.32919
+            }
+          },
+          "candidateDots": {
+            "owner": 0.83454,
+            "tendril": 0.83454,
+            "surface": 0.83843,
+            "boundary": -0.80384
+          },
+          "ownerAwayIntent": 0.83455,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 7517,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "tendril": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.28367,
+                "y": -0.90939,
+                "z": -0.3042
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7524,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "tendril": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.28434,
+                "y": -0.90898,
+                "z": -0.3048
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7569,
+            "ownerComputedAwayIntent": 0.83455,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "tendril": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.28499,
+                "y": -0.90859,
+                "z": -0.30537
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83454,
+              "tendril": 0.83454,
+              "surface": 0.83843,
+              "boundary": -0.81773
+            }
+          },
+          {
+            "ms": 7622,
+            "ownerComputedAwayIntent": 0.83455,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "tendril": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.29183,
+                "y": -0.90386,
+                "z": -0.31285
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83454,
+              "tendril": 0.83454,
+              "surface": 0.83843,
+              "boundary": -0.81347
+            }
+          },
+          {
+            "ms": 7631,
+            "ownerComputedAwayIntent": 0.83455,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "tendril": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.29822,
+                "y": -0.89927,
+                "z": -0.31997
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83454,
+              "tendril": 0.83454,
+              "surface": 0.83843,
+              "boundary": -0.80934
+            }
+          },
+          {
+            "ms": 7677,
+            "ownerComputedAwayIntent": 0.83455,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "tendril": {
+                "x": -0.0345,
+                "y": 0.92727,
+                "z": 0.37279
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.30644,
+                "y": -0.89316,
+                "z": -0.32919
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83454,
+              "tendril": 0.83454,
+              "surface": 0.83843,
+              "boundary": -0.80384
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035112Z_r01_04_natural_feather_baseline",
+      "round": 1,
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 6738,
+        "releaseEndMs": 8028,
+        "framesAll": 296,
+        "framesInRelease": 36,
+        "attachedFramesInRelease": 6,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.80838,
+        "maxOwnerPeelHoldAge": 0.1229,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 6742,
+          "dt": 0.0439,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": 0.0994,
+              "y": 0.8982,
+              "z": 0.4282
+            },
+            "tendril": {
+              "x": 0.0994,
+              "y": 0.8982,
+              "z": 0.4282
+            },
+            "surface": {
+              "x": -0.15958,
+              "y": -0.96317,
+              "z": -0.21642
+            },
+            "boundary": {
+              "x": -0.15958,
+              "y": -0.96317,
+              "z": -0.21642
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.694,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 3,
+          "modeledReleaseThreshold": 0.55552,
+          "modeledHoldThreshold": 0.13429,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 6901,
+          "dt": 0.0253,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": 0.0994,
+              "y": 0.8982,
+              "z": 0.4282
+            },
+            "tendril": {
+              "x": 0.0994,
+              "y": 0.8982,
+              "z": 0.4282
+            },
+            "surface": {
+              "x": -0.17545,
+              "y": -0.95497,
+              "z": -0.23925
+            },
+            "boundary": {
+              "x": -0.17545,
+              "y": -0.95497,
+              "z": -0.23925
+            }
+          },
+          "candidateDots": {
+            "owner": 0.80838,
+            "tendril": 0.80838,
+            "surface": -0.85947,
+            "boundary": -0.85947
+          },
+          "ownerAwayIntent": 0.80838,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.694,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 3,
+          "modeledReleaseThreshold": 0.55552,
+          "modeledHoldThreshold": 0.13429,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 6742,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "tendril": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "surface": {
+                "x": -0.15958,
+                "y": -0.96317,
+                "z": -0.21642
+              },
+              "boundary": {
+                "x": -0.15958,
+                "y": -0.96317,
+                "z": -0.21642
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 6789,
+            "ownerComputedAwayIntent": 0.80838,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "tendril": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "surface": {
+                "x": -0.16003,
+                "y": -0.96297,
+                "z": -0.21696
+              },
+              "boundary": {
+                "x": -0.16003,
+                "y": -0.96297,
+                "z": -0.21696
+              }
+            },
+            "candidateDots": {
+              "owner": 0.80838,
+              "tendril": 0.80838,
+              "surface": -0.86667,
+              "boundary": -0.86667
+            }
+          },
+          {
+            "ms": 6840,
+            "ownerComputedAwayIntent": 0.80838,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "tendril": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "surface": {
+                "x": -0.16344,
+                "y": -0.96128,
+                "z": -0.22186
+              },
+              "boundary": {
+                "x": -0.16344,
+                "y": -0.96128,
+                "z": -0.22186
+              }
+            },
+            "candidateDots": {
+              "owner": 0.80838,
+              "tendril": 0.80838,
+              "surface": -0.86515,
+              "boundary": -0.86515
+            }
+          },
+          {
+            "ms": 6847,
+            "ownerComputedAwayIntent": 0.80838,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "tendril": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "surface": {
+                "x": -0.16652,
+                "y": -0.95972,
+                "z": -0.22631
+              },
+              "boundary": {
+                "x": -0.16652,
+                "y": -0.95972,
+                "z": -0.22631
+              }
+            },
+            "candidateDots": {
+              "owner": 0.80838,
+              "tendril": 0.80838,
+              "surface": -0.86375,
+              "boundary": -0.86375
+            }
+          },
+          {
+            "ms": 6891,
+            "ownerComputedAwayIntent": 0.80838,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "tendril": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "surface": {
+                "x": -0.17062,
+                "y": -0.95758,
+                "z": -0.23223
+              },
+              "boundary": {
+                "x": -0.17062,
+                "y": -0.95758,
+                "z": -0.23223
+              }
+            },
+            "candidateDots": {
+              "owner": 0.80838,
+              "tendril": 0.80838,
+              "surface": -0.86182,
+              "boundary": -0.86182
+            }
+          },
+          {
+            "ms": 6901,
+            "ownerComputedAwayIntent": 0.80838,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "tendril": {
+                "x": 0.0994,
+                "y": 0.8982,
+                "z": 0.4282
+              },
+              "surface": {
+                "x": -0.17545,
+                "y": -0.95497,
+                "z": -0.23925
+              },
+              "boundary": {
+                "x": -0.17545,
+                "y": -0.95497,
+                "z": -0.23925
+              }
+            },
+            "candidateDots": {
+              "owner": 0.80838,
+              "tendril": 0.80838,
+              "surface": -0.85947,
+              "boundary": -0.85947
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035140Z_r01_05_natural_brake_baseline",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6490,
+        "releaseEndMs": 7785,
+        "framesAll": 265,
+        "framesInRelease": 33,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035207Z_r01_06_natural_brake_brake_no_counter",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "brake_no_counter",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 6509,
+        "releaseEndMs": 7808,
+        "framesAll": 291,
+        "framesInRelease": 36,
+        "attachedFramesInRelease": 7,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.87236,
+        "maxOwnerPeelHoldAge": 0.1229,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 6516,
+          "dt": 0.0302,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0287,
+              "y": 0.95044,
+              "z": 0.30958
+            },
+            "tendril": {
+              "x": -0.0287,
+              "y": 0.95044,
+              "z": 0.30958
+            },
+            "surface": {
+              "x": -0.24717,
+              "y": -0.93416,
+              "z": -0.25741
+            },
+            "boundary": {
+              "x": -0.24717,
+              "y": -0.93416,
+              "z": -0.25741
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 6692,
+          "dt": 0.02615,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0227,
+              "y": 0.96928,
+              "z": 0.2449
+            },
+            "tendril": {
+              "x": -0.0227,
+              "y": 0.96928,
+              "z": 0.2449
+            },
+            "surface": {
+              "x": -0.25429,
+              "y": 0.41749,
+              "z": 0.87238
+            },
+            "boundary": {
+              "x": -0.28031,
+              "y": -0.9161,
+              "z": -0.28668
+            }
+          },
+          "candidateDots": {
+            "owner": 0.87235,
+            "tendril": 0.87235,
+            "surface": 0.37574,
+            "boundary": -0.82449
+          },
+          "ownerAwayIntent": 0.87236,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.62733,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 1,
+          "modeledReleaseThreshold": 0.55019,
+          "modeledHoldThreshold": 0.13196,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 6516,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0287,
+                "y": 0.95044,
+                "z": 0.30958
+              },
+              "tendril": {
+                "x": -0.0287,
+                "y": 0.95044,
+                "z": 0.30958
+              },
+              "surface": {
+                "x": -0.24717,
+                "y": -0.93416,
+                "z": -0.25741
+              },
+              "boundary": {
+                "x": -0.24717,
+                "y": -0.93416,
+                "z": -0.25741
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 6524,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0287,
+                "y": 0.95044,
+                "z": 0.30958
+              },
+              "tendril": {
+                "x": -0.0287,
+                "y": 0.95044,
+                "z": 0.30958
+              },
+              "surface": {
+                "x": -0.0843,
+                "y": 0.40591,
+                "z": 0.91002
+              },
+              "boundary": {
+                "x": -0.24765,
+                "y": -0.93391,
+                "z": -0.25784
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 6577,
+            "ownerComputedAwayIntent": 0.87236,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "tendril": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "surface": {
+                "x": -0.0843,
+                "y": 0.40591,
+                "z": 0.91002
+              },
+              "boundary": {
+                "x": -0.24813,
+                "y": -0.93367,
+                "z": -0.25827
+              }
+            },
+            "candidateDots": {
+              "owner": 0.87235,
+              "tendril": 0.87235,
+              "surface": 0.36532,
+              "boundary": -0.8403
+            }
+          },
+          {
+            "ms": 6636,
+            "ownerComputedAwayIntent": 0.87236,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "tendril": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "surface": {
+                "x": -0.25429,
+                "y": 0.41749,
+                "z": 0.87238
+              },
+              "boundary": {
+                "x": -0.25917,
+                "y": -0.92805,
+                "z": -0.2675
+              }
+            },
+            "candidateDots": {
+              "owner": 0.87235,
+              "tendril": 0.87235,
+              "surface": 0.37574,
+              "boundary": -0.83525
+            }
+          },
+          {
+            "ms": 6643,
+            "ownerComputedAwayIntent": 0.87236,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "tendril": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "surface": {
+                "x": -0.25429,
+                "y": 0.41749,
+                "z": 0.87238
+              },
+              "boundary": {
+                "x": -0.26854,
+                "y": -0.92293,
+                "z": -0.27584
+              }
+            },
+            "candidateDots": {
+              "owner": 0.87235,
+              "tendril": 0.87235,
+              "surface": 0.37574,
+              "boundary": -0.83064
+            }
+          },
+          {
+            "ms": 6692,
+            "ownerComputedAwayIntent": 0.87236,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "tendril": {
+                "x": -0.0227,
+                "y": 0.96928,
+                "z": 0.2449
+              },
+              "surface": {
+                "x": -0.25429,
+                "y": 0.41749,
+                "z": 0.87238
+              },
+              "boundary": {
+                "x": -0.28031,
+                "y": -0.9161,
+                "z": -0.28668
+              }
+            },
+            "candidateDots": {
+              "owner": 0.87235,
+              "tendril": 0.87235,
+              "surface": 0.37574,
+              "boundary": -0.82449
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035234Z_r01_07_natural_brake_release_c_extended",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "release_c_extended",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6415,
+        "releaseEndMs": 8298,
+        "framesAll": 276,
+        "framesInRelease": 46,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035302Z_r01_08_natural_brake_release_forward_w",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "release_forward_w",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6436,
+        "releaseEndMs": 7747,
+        "framesAll": 272,
+        "framesInRelease": 41,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035328Z_r01_09_natural_brake_release_backward_s",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "release_backward_s",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6507,
+        "releaseEndMs": 7764,
+        "framesAll": 265,
+        "framesInRelease": 30,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035357Z_r02_10_natural_brake_release_backward_s",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "release_backward_s",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6412,
+        "releaseEndMs": 7702,
+        "framesAll": 250,
+        "framesInRelease": 33,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035424Z_r02_11_natural_brake_release_forward_w",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "release_forward_w",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6433,
+        "releaseEndMs": 7709,
+        "framesAll": 252,
+        "framesInRelease": 32,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035451Z_r02_12_natural_brake_release_c_extended",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "release_c_extended",
+      "captureValid": true,
+      "geometryGatePassed": false,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": false,
+      "priorInterpretation": "ACQUISITION_NO_ATTACHMENT",
+      "ownerGate": {
+        "classification": "ACQUISITION_NOT_ATTACHED",
+        "releaseStartMs": 6564,
+        "releaseEndMs": 8443,
+        "framesAll": 284,
+        "framesInRelease": 47,
+        "attachedFramesInRelease": 0,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": null,
+        "maxOwnerPeelHoldAge": null,
+        "modeledAwayGateReached": false,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": false,
+        "firstAttachedFrame": null,
+        "lastAttachedFrame": null,
+        "sampledNormalCandidates": [],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035519Z_r02_13_natural_brake_brake_no_counter",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "brake_no_counter",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 7031,
+        "releaseEndMs": 8341,
+        "framesAll": 294,
+        "framesInRelease": 36,
+        "attachedFramesInRelease": 7,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.83843,
+        "maxOwnerPeelHoldAge": 0.1216,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 7036,
+          "dt": 0.03025,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "tendril": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.32012,
+              "y": -0.8865,
+              "z": -0.33412
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 7220,
+          "dt": 0.02735,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "tendril": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.31728,
+              "y": -0.88604,
+              "z": -0.33804
+            }
+          },
+          "candidateDots": {
+            "owner": 0.83843,
+            "tendril": 0.83843,
+            "surface": 0.83843,
+            "boundary": -0.79744
+          },
+          "ownerAwayIntent": 0.83843,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 7036,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.32012,
+                "y": -0.8865,
+                "z": -0.33412
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7046,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.30191,
+                "y": -0.89889,
+                "z": -0.31756
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7098,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.29149,
+                "y": -0.90562,
+                "z": -0.30803
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.81506
+            }
+          },
+          {
+            "ms": 7159,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.29953,
+                "y": -0.89978,
+                "z": -0.31728
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.8098
+            }
+          },
+          {
+            "ms": 7167,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.30722,
+                "y": -0.89397,
+                "z": -0.32625
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.80457
+            }
+          },
+          {
+            "ms": 7220,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.31728,
+                "y": -0.88604,
+                "z": -0.33804
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.79744
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035548Z_r02_14_natural_brake_baseline",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 6673,
+        "releaseEndMs": 7983,
+        "framesAll": 285,
+        "framesInRelease": 36,
+        "attachedFramesInRelease": 7,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.88368,
+        "maxOwnerPeelHoldAge": 0.1124,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 6682,
+          "dt": 0.0259,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0266,
+              "y": 0.98187,
+              "z": 0.18769
+            },
+            "tendril": {
+              "x": -0.0266,
+              "y": 0.98187,
+              "z": 0.18769
+            },
+            "surface": {
+              "x": -0.30399,
+              "y": -0.93142,
+              "z": -0.2001
+            },
+            "boundary": {
+              "x": -0.30399,
+              "y": -0.93142,
+              "z": -0.2001
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.694,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 3,
+          "modeledReleaseThreshold": 0.55552,
+          "modeledHoldThreshold": 0.13429,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 6845,
+          "dt": 0.02555,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0266,
+              "y": 0.98187,
+              "z": 0.18769
+            },
+            "tendril": {
+              "x": -0.0266,
+              "y": 0.98187,
+              "z": 0.18769
+            },
+            "surface": {
+              "x": -0.32508,
+              "y": -0.92057,
+              "z": -0.2165
+            },
+            "boundary": {
+              "x": -0.32508,
+              "y": -0.92057,
+              "z": -0.2165
+            }
+          },
+          "candidateDots": {
+            "owner": 0.88368,
+            "tendril": 0.88368,
+            "surface": -0.82851,
+            "boundary": -0.82851
+          },
+          "ownerAwayIntent": 0.88368,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.694,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 3,
+          "modeledReleaseThreshold": 0.55552,
+          "modeledHoldThreshold": 0.13429,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 6682,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "tendril": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "surface": {
+                "x": -0.30399,
+                "y": -0.93142,
+                "z": -0.2001
+              },
+              "boundary": {
+                "x": -0.30399,
+                "y": -0.93142,
+                "z": -0.2001
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 6688,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "tendril": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "surface": {
+                "x": -0.30432,
+                "y": -0.93126,
+                "z": -0.20036
+              },
+              "boundary": {
+                "x": -0.30432,
+                "y": -0.93126,
+                "z": -0.20036
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 6736,
+            "ownerComputedAwayIntent": 0.88368,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "tendril": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "surface": {
+                "x": -0.30464,
+                "y": -0.9311,
+                "z": -0.20061
+              },
+              "boundary": {
+                "x": -0.30464,
+                "y": -0.9311,
+                "z": -0.20061
+              }
+            },
+            "candidateDots": {
+              "owner": 0.88368,
+              "tendril": 0.88368,
+              "surface": -0.83799,
+              "boundary": -0.83799
+            }
+          },
+          {
+            "ms": 6792,
+            "ownerComputedAwayIntent": 0.88368,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "tendril": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "surface": {
+                "x": -0.31126,
+                "y": -0.92779,
+                "z": -0.20574
+              },
+              "boundary": {
+                "x": -0.31126,
+                "y": -0.92779,
+                "z": -0.20574
+              }
+            },
+            "candidateDots": {
+              "owner": 0.88368,
+              "tendril": 0.88368,
+              "surface": -0.83501,
+              "boundary": -0.83501
+            }
+          },
+          {
+            "ms": 6799,
+            "ownerComputedAwayIntent": 0.88368,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "tendril": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "surface": {
+                "x": -0.31732,
+                "y": -0.92467,
+                "z": -0.21045
+              },
+              "boundary": {
+                "x": -0.31732,
+                "y": -0.92467,
+                "z": -0.21045
+              }
+            },
+            "candidateDots": {
+              "owner": 0.88368,
+              "tendril": 0.88368,
+              "surface": -0.8322,
+              "boundary": -0.8322
+            }
+          },
+          {
+            "ms": 6845,
+            "ownerComputedAwayIntent": 0.88368,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "tendril": {
+                "x": -0.0266,
+                "y": 0.98187,
+                "z": 0.18769
+              },
+              "surface": {
+                "x": -0.32508,
+                "y": -0.92057,
+                "z": -0.2165
+              },
+              "boundary": {
+                "x": -0.32508,
+                "y": -0.92057,
+                "z": -0.2165
+              }
+            },
+            "candidateDots": {
+              "owner": 0.88368,
+              "tendril": 0.88368,
+              "surface": -0.82851,
+              "boundary": -0.82851
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035615Z_r02_15_natural_feather_baseline",
+      "round": 2,
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 6942,
+        "releaseEndMs": 8249,
+        "framesAll": 306,
+        "framesInRelease": 37,
+        "attachedFramesInRelease": 7,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.83843,
+        "maxOwnerPeelHoldAge": 0.1159,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 6947,
+          "dt": 0.0274,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "tendril": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.30568,
+              "y": -0.89633,
+              "z": -0.32118
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 7115,
+          "dt": 0.0257,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "tendril": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.3106,
+              "y": -0.89086,
+              "z": -0.3315
+            }
+          },
+          "candidateDots": {
+            "owner": 0.83843,
+            "tendril": 0.83843,
+            "surface": 0.83843,
+            "boundary": -0.80177
+          },
+          "ownerAwayIntent": 0.83843,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 6947,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.30568,
+                "y": -0.89633,
+                "z": -0.32118
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 6954,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.29412,
+                "y": -0.90389,
+                "z": -0.31062
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7003,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.28707,
+                "y": -0.90834,
+                "z": -0.30415
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.81751
+            }
+          },
+          {
+            "ms": 7063,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.29371,
+                "y": -0.90363,
+                "z": -0.31175
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.81327
+            }
+          },
+          {
+            "ms": 7070,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.30099,
+                "y": -0.89826,
+                "z": -0.32022
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.80843
+            }
+          },
+          {
+            "ms": 7115,
+            "ownerComputedAwayIntent": 0.83843,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "tendril": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.3106,
+                "y": -0.89086,
+                "z": -0.3315
+              }
+            },
+            "candidateDots": {
+              "owner": 0.83843,
+              "tendril": 0.83843,
+              "surface": 0.83843,
+              "boundary": -0.80177
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    },
+    {
+      "folder": "BOT1D11L_20261103T035643Z_r02_16_natural_reference_baseline",
+      "round": 2,
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "captureValid": true,
+      "geometryGatePassed": true,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "earlySoloPressurePeels": 0,
+      "acquired": true,
+      "priorInterpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "ownerGate": {
+        "classification": "DELIBERATE_RELEASE_CONFIRMED",
+        "releaseStartMs": 7455,
+        "releaseEndMs": 8756,
+        "framesAll": 326,
+        "framesInRelease": 36,
+        "attachedFramesInRelease": 7,
+        "sourceSignatureModelVerified": true,
+        "maxOwnerComputedAwayIntent": 0.85739,
+        "maxOwnerPeelHoldAge": 0.1101,
+        "modeledAwayGateReached": true,
+        "modeledBothGatesReachedSameFrame": false,
+        "ownerReleaseArmedSeen": false,
+        "ownerDeliberateReleaseEvent": true,
+        "firstAttachedFrame": {
+          "ms": 7462,
+          "dt": 0.02695,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": true,
+          "detachReason": "none",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 0,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "intentMagnitude": 0,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0623,
+              "y": 0.95265,
+              "z": 0.29762
+            },
+            "tendril": {
+              "x": -0.0623,
+              "y": 0.95265,
+              "z": 0.29762
+            },
+            "surface": {
+              "x": -0.1017,
+              "y": 0.93159,
+              "z": 0.349
+            },
+            "boundary": {
+              "x": -0.41757,
+              "y": -0.82351,
+              "z": -0.38402
+            }
+          },
+          "candidateDots": {
+            "owner": 0,
+            "tendril": 0,
+            "surface": 0,
+            "boundary": 0
+          },
+          "ownerAwayIntent": 0,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": false,
+          "modeledHoldGateMet": false
+        },
+        "lastAttachedFrame": {
+          "ms": 7624,
+          "dt": 0.0267,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "preActive": true,
+          "postActive": false,
+          "detachReason": "deliberate_away_input",
+          "ownerAuthority": "authored_suction_support",
+          "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "input": {
+            "moveX": 0,
+            "moveY": 1,
+            "moveZ": 0,
+            "boostHeld": false,
+            "pulseHeld": false,
+            "absorbHeld": false,
+            "stabilizeHeld": false
+          },
+          "intent": {
+            "x": 0,
+            "y": 0.9,
+            "z": 0
+          },
+          "intentMagnitude": 0.9,
+          "candidateNormals": {
+            "owner": {
+              "x": -0.0623,
+              "y": 0.95265,
+              "z": 0.29762
+            },
+            "tendril": {
+              "x": -0.0623,
+              "y": 0.95265,
+              "z": 0.29762
+            },
+            "surface": {
+              "x": -0.0666,
+              "y": 0.97124,
+              "z": 0.22861
+            },
+            "boundary": {
+              "x": -0.45626,
+              "y": -0.78346,
+              "z": -0.42193
+            }
+          },
+          "candidateDots": {
+            "owner": 0.85739,
+            "tendril": 0.85739,
+            "surface": 0.87412,
+            "boundary": -0.70511
+          },
+          "ownerAwayIntent": 0.85739,
+          "ownerPeelHoldAge": 0,
+          "ownerPeelIntent": 0,
+          "ownerReleaseArmed": false,
+          "ownerAttachmentStrength": 0.66067,
+          "ownerContactGapAge": 0,
+          "ownerContactGapActive": false,
+          "ownerSupportCount": 2,
+          "modeledReleaseThreshold": 0.55285,
+          "modeledHoldThreshold": 0.13312,
+          "modeledAwayGateMet": true,
+          "modeledHoldGateMet": false
+        },
+        "sampledNormalCandidates": [
+          {
+            "ms": 7462,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "tendril": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.41757,
+                "y": -0.82351,
+                "z": -0.38402
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7470,
+            "ownerComputedAwayIntent": 0,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "tendril": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.42121,
+                "y": -0.82022,
+                "z": -0.38706
+              }
+            },
+            "candidateDots": {
+              "owner": 0,
+              "tendril": 0,
+              "surface": 0,
+              "boundary": 0
+            }
+          },
+          {
+            "ms": 7516,
+            "ownerComputedAwayIntent": 0.85739,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "tendril": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.42389,
+                "y": -0.81779,
+                "z": -0.38929
+              }
+            },
+            "candidateDots": {
+              "owner": 0.85739,
+              "tendril": 0.85739,
+              "surface": 0.83843,
+              "boundary": -0.73601
+            }
+          },
+          {
+            "ms": 7570,
+            "ownerComputedAwayIntent": 0.85739,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "tendril": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.4339,
+                "y": -0.80768,
+                "z": -0.39924
+              }
+            },
+            "candidateDots": {
+              "owner": 0.85739,
+              "tendril": 0.85739,
+              "surface": 0.83843,
+              "boundary": -0.72691
+            }
+          },
+          {
+            "ms": 7579,
+            "ownerComputedAwayIntent": 0.85739,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "tendril": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "surface": {
+                "x": -0.1017,
+                "y": 0.93159,
+                "z": 0.349
+              },
+              "boundary": {
+                "x": -0.44369,
+                "y": -0.79733,
+                "z": -0.40914
+              }
+            },
+            "candidateDots": {
+              "owner": 0.85739,
+              "tendril": 0.85739,
+              "surface": 0.83843,
+              "boundary": -0.7176
+            }
+          },
+          {
+            "ms": 7624,
+            "ownerComputedAwayIntent": 0.85739,
+            "normalizedIntent": {
+              "x": 0,
+              "y": 0.9,
+              "z": 0
+            },
+            "normalCandidates": {
+              "owner": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "tendril": {
+                "x": -0.0623,
+                "y": 0.95265,
+                "z": 0.29762
+              },
+              "surface": {
+                "x": -0.0666,
+                "y": 0.97124,
+                "z": 0.22861
+              },
+              "boundary": {
+                "x": -0.45626,
+                "y": -0.78346,
+                "z": -0.42193
+              }
+            },
+            "candidateDots": {
+              "owner": 0.85739,
+              "tendril": 0.85739,
+              "surface": 0.87412,
+              "boundary": -0.70511
+            }
+          }
+        ],
+        "note": "Actual release gate scalar and intent from movement owner; normal candidates and model gates are derived, never owner-issued refusal reasons."
+      }
+    }
+  ],
+  "decision": "OWNER_GATE_DIAGNOSIS_COMPLETE_REVIEW",
+  "notALock": "D11L is diagnostic only. No automatic gameplay change or cross-region lock.",
+  "caveat": "Expected threshold values are matched to live owner source signature, not guessed from the trace. Owner away-intent is exact owner scalar; active normal is not independently exposed as local variable."
+}

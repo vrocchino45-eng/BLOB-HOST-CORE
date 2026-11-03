@@ -1,60 +1,57 @@
-# BLOB: HOST CORE — BOT1-D11K Brake Acquisition & Release-Axis Diagnosis
+# BLOB — BOT1-D11L Release Gate & Input Ownership (diagnostic-only)
 
-**Pass mode:** audit / diagnostic convergence. **Game physics modifications: NONE.**
+This pass **does not** change PlayerMovementController, CoreTendrilSurfaceContactSystem, adhesion, authored geometry, or bot steering.
 
-## Why
+## Prerequisites
 
-D11J live return: Reference 3/3, Feather 3/3, Brake 1/3, HC + Away controls 2/2; no D11F mesh anchor warnings or observed premature sole-anchor pressure peels. Brake round 2 attached but the `C`-key release did not register; round 3 brushed/reached but did not seal. D11J remains **experimental**, not locked.
+Existing installed BOT1-D11C + D11F + D11H + D11I diagnostics, D11K test harness (including its D11E/D11F dependencies), D11G anchor-provenance repair and D11J handoff owner. Vite / Playwright Chrome setup remains as before.
 
-D11K tests input-caused hypotheses separately. No assumptions that `C` is always the outward surface direction. Source `ControlMap.js`: `C` ascend (+Y input), `W` forward (-Z), `S` back (+Z). **These keyboard input axes are not guaranteed to match contacted surface normals after camera/world transforms.** Surface normals and `peelIntent` are scored **after the run only**. No automatic steering or repositioning.
+## What D11L records
 
-## Controlled matrix, default 16 captures
+- The **actual owner's** per-update computed `attachmentReleaseTension` (outward intent), `attachmentPeelHoldAge`, `attachmentReleaseArmed`, attachment strength/authority, and detachment reason.
+- The owner's normalized camera-relative `intent` vector and raw movement input.
+- The movement owner's candidate surface/owner/tendril/boundary normals and their derived dot products. **These candidates do not prove which normal the owner selected for each update**, because `activeContactNormal` is local inside the owner method. The actual owner-computed away-intent scalar remains definitive.
+- A runtime signature check for the expected release threshold `0.50 + strength * 0.08` and required hold `0.11 + strength * 0.035`. Model explanation is enabled only when these strings and related semantics match the live method. Signature confirmation is NOT byte-hash verification.
+- D11K's existing owner events and D11F true-mesh anchor measurements.
 
-- HC positive and Away negative, once each.
-- Natural Reference frozen ×2 and Feather frozen ×2.
-- Brake original frozen (`S` 0.16s brake then `C` 1.15s release) ×2.
-- Brake **no counter**: replace the 0.16s `S` input with an **equal-duration neutral period**, otherwise identical ×2.
-- Brake **C extended**: `C` held 1.75s; **duration intentionally differs** ×2.
-- Brake **W forward**: replace `C` release with `W` 1.15s ×2.
-- Brake **S backward**: replace `C` release with `S` 1.15s ×2.
+Observer attaches only when the D11C probe is enabled using `?bot1d11c=1` in development, wraps the owner's method without altering its return value, arguments or gameplay state, and restores the original wrapper when stopped.
 
-Round 2 reverses experiment ordering to reduce systematic sequence effects. **Do not mix the unequal duration C test into a same-duration axis causal comparison.** If a run never attaches, release is **not testable** and is NOT a release failure. The baseline is a small sample; this is exploratory, not certification.
-
-## Dependencies
-
-Existing local project containing D11B Silt shelf, D11D contact bootstrap, D11G rebased owner provenance fix, D11J owner guard, read-only D11C/D11F/D11H/D11I probes, and the BOT1 real-input harness. The D11K ZIP itself is only four test-harness Python scripts and its docs. It does not modify or install core runtime files.
-
-## Install from VS Code PowerShell in the BLOB-HOST-CORE root
+## Install in repository root
 
 ```powershell
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D11K_BRAKE_RELEASE_DIAGNOSTIC_DELTA.zip' -DestinationPath '.' -Force
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11k.py
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D11L_RELEASE_GATE_DIAGNOSTIC_DELTA.zip' -DestinationPath '.' -Force
+py .\D11L_APPLY.py --check
+py .\D11L_APPLY.py --apply
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11l.py
+node .\scripts\testBOT1D11LOwnerProbe.mjs
 ```
 
-If this test cannot import `bot1d11e_policy` or `analyze_bot1d11f`, the earlier harness setup is incomplete; preserve the error, do not reinstall the engine.
+If the probe version differs from D11I, the installer refuses to patch. **Do not force the install.** A backup + checksummed manifest are created. Undo before other edits with `py .\D11L_APPLY.py --undo`. Other diagnostic patch installers may refuse to undo out of order.
 
-## Run with Vite open on 127.0.0.1:5173
+## Source-owner identity check
+
+The source used to derive the model in the D11K audit is a historical extracted `PlayerMovementController.js`. It is **not** claimed to match your live working tree. The D11L observer performs a limited runtime method-signature check and sets `modelVerified=false` if it no longer recognizes the expected release rule. For manual verification:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11k_browser.py --browser-channel chrome --headed --rounds 2 --seconds 75 --output BOT1D11K_RESULTS
+Get-FileHash .\src\player\PlayerMovementController.js -Algorithm SHA256
 ```
 
-Uses `Shift+1` HC positive, `Shift+6` Silt; debug entry only, **not** world-route completion. Runs use real keyboard events, never owner telemetry to steer. Captures per run: `RUN.json`, `D11C_TRACE.json`, `REC1.json`, start/end screenshots. Event hook presence, D11F geometry and D11H trace samples are checked. If probes are absent, the run records an error instead of producing a false pass.
+Compare against any source you intentionally identify as current; do not overwrite the owner simply to match an older hash.
 
-## Analyze then upload
+## Run Vite at http://127.0.0.1:5173 then run
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11k.py BOT1D11K_RESULTS
-Compress-Archive -Path '.\BOT1D11K_RESULTS\*' -DestinationPath '.\BOT1D11K_RESULTS.zip' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11l_browser.py --browser-channel chrome --headed --rounds 2 --seconds 75 --output BOT1D11L_RESULTS
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11l.py BOT1D11L_RESULTS
+Compress-Archive -Path '.\BOT1D11L_RESULTS\*' -DestinationPath '.\BOT1D11L_RESULTS.zip' -Force
 ```
 
-Upload `BOT1D11K_RESULTS.zip`, even if the analyzer says `INCOMPLETE_D11K_EVIDENCE`. The audit includes per-run geometric measurements from the D11F triangle-mesh inspector, owner first-foot events, contact/release observations, support-plane normal snapshots, and sampled peak peel intent.
+Upload `BOT1D11L_RESULTS.zip` for comparison. D11L reuses D11K's **16 fixed-input test routes** (including HC and Away), not a surface-normal driven bot. Reference / Feather remain unchanged. Nonattached trials do not count as release successes/failures. A full D10B Fold regression is still required before LS1 lock.
 
-## What we decide next
+## Constraints and interpretation
 
-1. **Brake acquisition:** Does replacing 0.16s counter-input with matched neutral change seal/support frequency without sacrificing geometric truth?
-2. **Release:** With valid attachment at input start, which fixed direction (if any) produces an engine-observed `deliberate_away_input` transition and a following free state? Does extended `C` matter independently of input direction?
-3. **Integrity:** Any D11G off-mesh warnings or D11J sole-foot pressure peel must stop promotion.
-4. **Lock:** D11K diagnosis is **not** D11M acceptance. Full matrix of 9 natural passes + HC/Away + Fold D10B regression is still required before LS1 convergence lock.
-
-**No gameplay source rollback needed**. Remove only these `*d11k*.py` files if desired. Original historical HC labels and LS1 version indexing remain unchanged.
+- **Real events:** D11I owner reach/seal/attachment events; D11L owner-method computed away-intent/peel age; D11F mesh geometry.
+- **Derived interpretations:** D11L modeled threshold categories, candidate-normal dot products, D11I brushing gate guesses. Do not conflate diagnostic categories with code-issued refusal reasons.
+- The recorder limits frames to 9,500 per run and **explicitly invalidates** the test if overflow occurs. Do not silently drop records.
+- If the owner's function signature doesn't match known semantics, the analyzer reports an unverified model instead of assuming thresholds. In that case use source inspection; do not tune physics based on guesses.
+- D11G and D11J remain experimental; zero geometry warnings and clean owner traces are necessary but not sufficient for cross-region lock.

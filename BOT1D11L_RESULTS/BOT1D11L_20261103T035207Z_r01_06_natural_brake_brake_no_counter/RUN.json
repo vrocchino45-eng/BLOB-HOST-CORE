@@ -1,0 +1,83 @@
+{
+  "revision": "BOT1-D11L-1",
+  "round": 1,
+  "profile": "natural_brake",
+  "arm": "brake_no_counter",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-03T03:52:09.832+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": false,
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "debugEntryUsed": true,
+  "mode": "OWNER_RELEASE_GATE_INSTRUMENTED_FIXED_KEY_COMPARISON",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-03T03:52:19.746+00:00",
+      "endedAt": "2026-11-03T03:52:20.598+00:00"
+    },
+    {
+      "label": "approach_1",
+      "key": "w",
+      "plannedSeconds": 0.52,
+      "startedAt": "2026-11-03T03:52:20.664+00:00",
+      "endedAt": "2026-11-03T03:52:21.320+00:00"
+    },
+    {
+      "label": "counter_momentum_neutral_control",
+      "key": null,
+      "plannedSeconds": 0.16,
+      "startedAt": "2026-11-03T03:52:21.387+00:00",
+      "endedAt": "2026-11-03T03:52:21.618+00:00"
+    },
+    {
+      "label": "approach_settle",
+      "key": null,
+      "plannedSeconds": 2.0,
+      "startedAt": "2026-11-03T03:52:21.640+00:00",
+      "endedAt": "2026-11-03T03:52:23.736+00:00"
+    },
+    {
+      "label": "tangential",
+      "key": "a",
+      "plannedSeconds": 0.45,
+      "startedAt": "2026-11-03T03:52:23.758+00:00",
+      "endedAt": "2026-11-03T03:52:24.344+00:00"
+    },
+    {
+      "label": "post_tangent",
+      "key": null,
+      "plannedSeconds": 0.7,
+      "startedAt": "2026-11-03T03:52:24.405+00:00",
+      "endedAt": "2026-11-03T03:52:25.180+00:00"
+    },
+    {
+      "label": "away_vertical",
+      "key": "c",
+      "plannedSeconds": 1.15,
+      "startedAt": "2026-11-03T03:52:25.233+00:00",
+      "endedAt": "2026-11-03T03:52:26.546+00:00"
+    },
+    {
+      "label": "post_away",
+      "key": null,
+      "plannedSeconds": 1.3,
+      "startedAt": "2026-11-03T03:52:26.593+00:00",
+      "endedAt": "2026-11-03T03:52:27.948+00:00"
+    }
+  ],
+  "errors": [],
+  "rec1": {
+    "events": 159,
+    "droppedDetails": 0
+  },
+  "samples": 110,
+  "ownerEvents": 33,
+  "releaseGateFrames": 291,
+  "releaseModelVerified": true,
+  "finishedAt": "2026-11-03T03:52:34.213+00:00",
+  "wallSeconds": 24.38
+}
