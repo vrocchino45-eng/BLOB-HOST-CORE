@@ -1,70 +1,60 @@
-# BLOB: HOST CORE — BOT1-D11J Support-Preserving First Foothold
+# BLOB: HOST CORE — BOT1-D11K Brake Acquisition & Release-Axis Diagnosis
 
-**Mode:** guarded experimental single-owner patch + conservative live referee.  
-**Baseline:** D11G *rebased* tendril owner (CRLF). D11D contact bootstrap, D11B Silt shelf, D11F geometry probe, and D11I event observer remain installed.  
-**Scope:** only `src/player/CoreTendrilSurfaceContactSystem.js` is modified by the installer. No movement-controller, chemistry, material, surface geometry, or bot steering changes.
+**Pass mode:** audit / diagnostic convergence. **Game physics modifications: NONE.**
 
-## Why this exists
+## Why
 
-D11I showed that all 12 natural tests reached/sealed an initial Silt anchor, then a pressure-driven peel began ~2–3 ms after attachment. Four runs lost support before a replacement anchor was ready. D11G previously eliminated false geometry-boundary footholds; that protection must remain in place.
+D11J live return: Reference 3/3, Feather 3/3, Brake 1/3, HC + Away controls 2/2; no D11F mesh anchor warnings or observed premature sole-anchor pressure peels. Brake round 2 attached but the `C`-key release did not register; round 3 brushed/reached but did not seal. D11J remains **experimental**, not locked.
 
-D11J guards **ordinary pressure-driven stepping** so a valid sealed support is not peeled before *another* sealed, authored, locally reachable support exists. Reaching/peeling tendrils do not count as replacement support. Normal outward-input release, contact-state release, and D11G no-truth overextension release are untouched. The alternate-support check is a conservative **owner-state and reach-envelope check**; the independent D11F mesh audit is still required to prove geometry.
+D11K tests input-caused hypotheses separately. No assumptions that `C` is always the outward surface direction. Source `ControlMap.js`: `C` ascend (+Y input), `W` forward (-Z), `S` back (+Z). **These keyboard input axes are not guaranteed to match contacted surface normals after camera/world transforms.** Surface normals and `peelIntent` are scored **after the run only**. No automatic steering or repositioning.
 
-## Installation (project root, PowerShell)
+## Controlled matrix, default 16 captures
 
-Put the ZIP in the project root (same folder as `src` and `BLOB_BOT1_REAL_INPUT_HARNESS`).
+- HC positive and Away negative, once each.
+- Natural Reference frozen ×2 and Feather frozen ×2.
+- Brake original frozen (`S` 0.16s brake then `C` 1.15s release) ×2.
+- Brake **no counter**: replace the 0.16s `S` input with an **equal-duration neutral period**, otherwise identical ×2.
+- Brake **C extended**: `C` held 1.75s; **duration intentionally differs** ×2.
+- Brake **W forward**: replace `C` release with `W` 1.15s ×2.
+- Brake **S backward**: replace `C` release with `S` 1.15s ×2.
 
-```powershell
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D11J_FIRST_FOOTHOLD_HANDOFF_DELTA.zip' -DestinationPath '.' -Force
+Round 2 reverses experiment ordering to reduce systematic sequence effects. **Do not mix the unequal duration C test into a same-duration axis causal comparison.** If a run never attaches, release is **not testable** and is NOT a release failure. The baseline is a small sample; this is exploratory, not certification.
 
-py .\D11J_APPLY.py --check
-py .\D11J_APPLY.py --apply
-node .\scripts\testBOT1D11JSupportHandoff.mjs
-node .\scripts\testBOT1D11GAnchorProvenance.mjs
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_analyze_bot1d11j.py
-```
+## Dependencies
 
-The installer verifies the **exact** D11G rebased owner SHA-256 and the patched output SHA. If your current file has changed, it **stops**. Do not bypass it or replace the owner with an old HC source. Upload the current owner to rebase.
+Existing local project containing D11B Silt shelf, D11D contact bootstrap, D11G rebased owner provenance fix, D11J owner guard, read-only D11C/D11F/D11H/D11I probes, and the BOT1 real-input harness. The D11K ZIP itself is only four test-harness Python scripts and its docs. It does not modify or install core runtime files.
 
-`D11J_BACKUP_ORIGINALS/` contains the prepatch byte-identical source plus an install record. A second apply is harmless and reports already installed. Older HC historical validator failures from hardcoded build names are not addressed by D11J.
-
-## Live mobility test
-
-Keep the D11B surface, D11D bootstrap, D11C hook, D11F geometric inspector, D11H first-foothold probe and D11I owner-event observer installed. The live referee needs both geometry and owner events. Start Vite at `http://127.0.0.1:5173`.
-
-Reuse the frozen input policies from D11F (no new bot navigation logic):
+## Install from VS Code PowerShell in the BLOB-HOST-CORE root
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11f_browser.py --browser-channel chrome --headed --rounds 3 --seconds 75 --output BOT1D11J_RESULTS
-
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11f.py BOT1D11J_RESULTS
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11h.py BOT1D11J_RESULTS
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11j.py BOT1D11J_RESULTS
-
-Compress-Archive -Path '.\BOT1D11J_RESULTS\*' -DestinationPath '.\BOT1D11J_RESULTS.zip' -Force
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D11K_BRAKE_RELEASE_DIAGNOSTIC_DELTA.zip' -DestinationPath '.' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11k.py
 ```
 
-**Upload `BOT1D11J_RESULTS.zip`.** The analyzer will intentionally report a nonzero exit code if the full live acceptance gate fails; keep the results and upload them anyway.
+If this test cannot import `bot1d11e_policy` or `analyze_bot1d11f`, the earlier harness setup is incomplete; preserve the error, do not reinstall the engine.
 
-The planned live matrix is 11 independent runs: Reference, Feather, and Brake (3 each), plus one HC Positive and one Away Control. The D11J referee expects `D11C_TRACE.json` with `firstFootholdEvents` revision `BOT1-D11I-1`, plus a D11F audit. It checks for any early solo pressure peel, real owner attachment/release, and the independent geometric support gate. If the event hook is missing, it refuses to pass the run rather than assuming no peel occurred.
-
-**The pass is not certified until these live results arrive.** The temporary repair could reduce contact loss or expose a different bottleneck; do not expand Silt surfaces yet. D10B Fold regression must be preserved before promotion to a stable checkpoint.
-
-## Undo (before making other edits to the owner)
+## Run with Vite open on 127.0.0.1:5173
 
 ```powershell
-py .\D11J_APPLY.py --undo
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11k_browser.py --browser-channel chrome --headed --rounds 2 --seconds 75 --output BOT1D11K_RESULTS
 ```
 
-Undo is guarded. If the owner has been edited since D11J installation, rollback refuses to overwrite the newer work. The installer does **not** remove D11G, D11D, or the instrumentation.
+Uses `Shift+1` HC positive, `Shift+6` Silt; debug entry only, **not** world-route completion. Runs use real keyboard events, never owner telemetry to steer. Captures per run: `RUN.json`, `D11C_TRACE.json`, `REC1.json`, start/end screenshots. Event hook presence, D11F geometry and D11H trace samples are checked. If probes are absent, the run records an error instead of producing a false pass.
 
-## Package contents
+## Analyze then upload
 
-- `D11J_APPLY.py` — guarded CRLF-preserving single-owner installer and rollback
-- `D11J_PATCH_OPERATIONS.json` — exact source/target hashes and three scoped edits
-- `scripts/testBOT1D11JSupportHandoff.mjs` — 15 deterministic owner-level tests
-- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11j.py` — conservative live referee
-- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_analyze_bot1d11j.py` — 7 referee tests
-- `MANIFEST_D11J.json` — source and verification manifest
+```powershell
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11k.py BOT1D11K_RESULTS
+Compress-Archive -Path '.\BOT1D11K_RESULTS\*' -DestinationPath '.\BOT1D11K_RESULTS.zip' -Force
+```
 
-No full 1500+ file snapshot. No game binaries or gameplay data changes.
+Upload `BOT1D11K_RESULTS.zip`, even if the analyzer says `INCOMPLETE_D11K_EVIDENCE`. The audit includes per-run geometric measurements from the D11F triangle-mesh inspector, owner first-foot events, contact/release observations, support-plane normal snapshots, and sampled peak peel intent.
+
+## What we decide next
+
+1. **Brake acquisition:** Does replacing 0.16s counter-input with matched neutral change seal/support frequency without sacrificing geometric truth?
+2. **Release:** With valid attachment at input start, which fixed direction (if any) produces an engine-observed `deliberate_away_input` transition and a following free state? Does extended `C` matter independently of input direction?
+3. **Integrity:** Any D11G off-mesh warnings or D11J sole-foot pressure peel must stop promotion.
+4. **Lock:** D11K diagnosis is **not** D11M acceptance. Full matrix of 9 natural passes + HC/Away + Fold D10B regression is still required before LS1 convergence lock.
+
+**No gameplay source rollback needed**. Remove only these `*d11k*.py` files if desired. Original historical HC labels and LS1 version indexing remain unchanged.

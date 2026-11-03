@@ -1,0 +1,34 @@
+{
+  "revision": "BOT1-D11K-1",
+  "mode": "read_only_test_harness",
+  "modifiesGameplay": false,
+  "dependsOn": [
+    "D11E policy",
+    "D11F geometry",
+    "D11H first foothold",
+    "D11I owner events",
+    "D11J current owner"
+  ],
+  "files": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11k.py",
+      "sha256": "d4c99608e7cb599ef4455a9418a6138419a3164b7c9abc9c0f6f734a5cb1f5b0"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11k_browser.py",
+      "sha256": "ce8701e4f6741b5574c54d0a5c794532d70b0f3d986a8dd47a01c799a269dbcc"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11k_policy.py",
+      "sha256": "f064e4ffac12fd9cecf6b9c51495b78875c553c9ad1e18ca717f6b8e91368e8d"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d11k.py",
+      "sha256": "875deb2d51661cc173c5a2a33af5c23a2d7351106bccad4282b954c56a1a936d"
+    },
+    {
+      "path": "README_START_HERE.md",
+      "sha256": "dc88f7df7aaa0bbe2f8456ebf0565e04249d52be872181e7c453c82d0ee7d36b"
+    }
+  ]
+}

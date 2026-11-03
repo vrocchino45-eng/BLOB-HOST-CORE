@@ -1,0 +1,890 @@
+{
+  "revision": "BOT1-D11K-1",
+  "matrixComplete": true,
+  "captureValid": true,
+  "runsCaptured": 16,
+  "roundsObserved": 2,
+  "brakeComparison": {
+    "baseline": {
+      "runs": 2,
+      "acquired": 2,
+      "releaseTestable": 2,
+      "deliberateAndFree": 2,
+      "geometryWarnings": 0
+    },
+    "brake_no_counter": {
+      "runs": 2,
+      "acquired": 2,
+      "releaseTestable": 2,
+      "deliberateAndFree": 1,
+      "geometryWarnings": 0
+    },
+    "release_c_extended": {
+      "runs": 2,
+      "acquired": 1,
+      "releaseTestable": 1,
+      "deliberateAndFree": 0,
+      "geometryWarnings": 0
+    },
+    "release_forward_w": {
+      "runs": 2,
+      "acquired": 2,
+      "releaseTestable": 2,
+      "deliberateAndFree": 0,
+      "geometryWarnings": 0
+    },
+    "release_backward_s": {
+      "runs": 2,
+      "acquired": 0,
+      "releaseTestable": 0,
+      "deliberateAndFree": 0,
+      "geometryWarnings": 0
+    }
+  },
+  "referenceCaptured": 4,
+  "controlCaptured": 2,
+  "earlySoloPressurePeelCount": 0,
+  "rows": [
+    {
+      "profile": "host_positive",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "CONTROL_GEOMETRY_PASS",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.2193,
+      "supportedAttachmentSamples": 40,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 74,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": null,
+        "brushOwner": 2091,
+        "reachOwner": 2091,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": 2287
+      },
+      "gateReasonCandidates": {
+        "different_surface": 2,
+        "already_attached": 2,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": null,
+        "endMs": null,
+        "attachedNearInput": false,
+        "attachedSamplesDuringInput": 0,
+        "maxSampledPeelIntent": null,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": null,
+        "lastActiveSupportNormalDuringInput": null
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031231Z_r01_01_host_positive_baseline"
+    },
+    {
+      "profile": "away_control",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "CONTROL_GEOMETRY_PASS",
+      "geometryClassification": "AWAY_CONTROL_CLEAR",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 2,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": null,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 1
+      },
+      "release": {
+        "startMs": null,
+        "endMs": null,
+        "attachedNearInput": false,
+        "attachedSamplesDuringInput": 0,
+        "maxSampledPeelIntent": null,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": null,
+        "lastActiveSupportNormalDuringInput": null
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031258Z_r01_02_away_control_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0709,
+      "supportedAttachmentSamples": 49,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 72,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2655,
+        "brushOwner": 2675,
+        "reachOwner": 2677,
+        "sealOwner": 2859,
+        "supportOwner": 2908,
+        "attachedOwner": 2925
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 7423,
+        "endMs": 8711,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 2,
+        "maxSampledPeelIntent": 1,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031325Z_r01_03_natural_reference_baseline"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1075,
+      "supportedAttachmentSamples": 30,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 45,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 3292,
+        "brushOwner": 3307,
+        "reachOwner": 3310,
+        "sealOwner": 3459,
+        "supportOwner": 3468,
+        "attachedOwner": 3476
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 6902,
+        "endMs": 8195,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 1,
+        "maxSampledPeelIntent": 1,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.1169,
+          "y": 0.8302,
+          "z": 0.5451
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.1169,
+          "y": 0.8302,
+          "z": 0.5451
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031352Z_r01_04_natural_feather_baseline"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0309,
+      "supportedAttachmentSamples": 15,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 31,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2674,
+        "brushOwner": 4881,
+        "reachOwner": 4883,
+        "sealOwner": 5027,
+        "supportOwner": 5071,
+        "attachedOwner": 5087
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 6428,
+        "endMs": 7700,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 1,
+        "maxSampledPeelIntent": 1,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031421Z_r01_05_natural_brake_baseline"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "brake_no_counter",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0633,
+      "supportedAttachmentSamples": 31,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 36,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2750,
+        "brushOwner": 2827,
+        "reachOwner": 2829,
+        "sealOwner": 3034,
+        "supportOwner": 3045,
+        "attachedOwner": 3053
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 6572,
+        "endMs": 7875,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 1,
+        "maxSampledPeelIntent": 0.856,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.1923,
+          "y": 0.662,
+          "z": 0.7244
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.1923,
+          "y": 0.662,
+          "z": 0.7244
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031448Z_r01_06_natural_brake_brake_no_counter"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "release_c_extended",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ATTACHED_NO_DELIBERATE_RELEASE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.2047,
+      "supportedAttachmentSamples": 62,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 55,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2789,
+        "brushOwner": 4715,
+        "reachOwner": 4717,
+        "sealOwner": 4888,
+        "supportOwner": 4940,
+        "attachedOwner": 4955
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "release": {
+        "startMs": 6571,
+        "endMs": 8458,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 19,
+        "maxSampledPeelIntent": 0.614,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.1748,
+          "y": 0.499,
+          "z": 0.8488
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.2688,
+          "y": 0.654,
+          "z": 0.7072
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031513Z_r01_07_natural_brake_release_c_extended"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "release_forward_w",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ATTACHED_NO_DELIBERATE_RELEASE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0615,
+      "supportedAttachmentSamples": 10,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 26,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2704,
+        "brushOwner": 6645,
+        "reachOwner": 6647,
+        "sealOwner": 6843,
+        "supportOwner": 6851,
+        "attachedOwner": 6904
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 6431,
+        "endMs": 7720,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 11,
+        "maxSampledPeelIntent": 0,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.5959,
+          "y": 0.472,
+          "z": 0.6498
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.5959,
+          "y": 0.472,
+          "z": 0.6498
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031540Z_r01_08_natural_brake_release_forward_w"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "release_backward_s",
+      "round": 1,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ACQUISITION_NO_ATTACHMENT",
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 6,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2761,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2
+      },
+      "release": {
+        "startMs": 6558,
+        "endMs": 7850,
+        "attachedNearInput": false,
+        "attachedSamplesDuringInput": 0,
+        "maxSampledPeelIntent": 0,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": null,
+        "lastActiveSupportNormalDuringInput": null
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031606Z_r01_09_natural_brake_release_backward_s"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "release_backward_s",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ACQUISITION_NO_ATTACHMENT",
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 6,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 4745,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2
+      },
+      "release": {
+        "startMs": 6416,
+        "endMs": 7705,
+        "attachedNearInput": false,
+        "attachedSamplesDuringInput": 0,
+        "maxSampledPeelIntent": 0,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": null,
+        "lastActiveSupportNormalDuringInput": null
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031632Z_r02_10_natural_brake_release_backward_s"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "release_forward_w",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ATTACHED_NO_DELIBERATE_RELEASE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0887,
+      "supportedAttachmentSamples": 58,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 57,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2672,
+        "brushOwner": 4477,
+        "reachOwner": 4478,
+        "sealOwner": 4646,
+        "supportOwner": 4653,
+        "attachedOwner": 4702
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "release": {
+        "startMs": 6456,
+        "endMs": 7741,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 14,
+        "maxSampledPeelIntent": 0,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": {
+          "x": 0.0183,
+          "y": 0.9595,
+          "z": 0.2811
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": 0.0538,
+          "y": 0.9572,
+          "z": 0.2843
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031659Z_r02_11_natural_brake_release_forward_w"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "release_c_extended",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ACQUISITION_NO_ATTACHMENT",
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 6,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2748,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2
+      },
+      "release": {
+        "startMs": 6554,
+        "endMs": 8426,
+        "attachedNearInput": false,
+        "attachedSamplesDuringInput": 0,
+        "maxSampledPeelIntent": 0,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": null,
+        "lastActiveSupportNormalDuringInput": null
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031725Z_r02_12_natural_brake_release_c_extended"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "brake_no_counter",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "ATTACHED_NO_DELIBERATE_RELEASE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.131,
+      "supportedAttachmentSamples": 60,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 29,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2760,
+        "brushOwner": 2838,
+        "reachOwner": 2840,
+        "sealOwner": 3023,
+        "supportOwner": 3039,
+        "attachedOwner": 3047
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "release": {
+        "startMs": 6810,
+        "endMs": 8163,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 11,
+        "maxSampledPeelIntent": 0.703,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": false,
+        "freeAfterDeliberateTransition": false,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.2219,
+          "y": 0.5913,
+          "z": 0.7754
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.2991,
+          "y": 0.5418,
+          "z": 0.7855
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031754Z_r02_13_natural_brake_brake_no_counter"
+    },
+    {
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0322,
+      "supportedAttachmentSamples": 18,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 31,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2965,
+        "brushOwner": 5331,
+        "reachOwner": 5335,
+        "sealOwner": 5504,
+        "supportOwner": 5513,
+        "attachedOwner": 5569
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 6754,
+        "endMs": 8018,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 3,
+        "maxSampledPeelIntent": 1,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031821Z_r02_14_natural_brake_baseline"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0465,
+      "supportedAttachmentSamples": 43,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 36,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 3410,
+        "brushOwner": 3354,
+        "reachOwner": 3356,
+        "sealOwner": 3487,
+        "supportOwner": 3537,
+        "attachedOwner": 3554
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 6978,
+        "endMs": 8257,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 2,
+        "maxSampledPeelIntent": 1,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.0145,
+          "y": 0.9875,
+          "z": 0.1568
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.0145,
+          "y": 0.9875,
+          "z": 0.1568
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031848Z_r02_15_natural_feather_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "round": 2,
+      "status": "CAPTURED",
+      "captureValid": true,
+      "interpretation": "DELIBERATE_RELEASE_AND_FREE_OBSERVED",
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1025,
+      "supportedAttachmentSamples": 47,
+      "earlySoloPressurePeels": [],
+      "ownerEventCount": 72,
+      "ownerEventDrops": 0,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2640,
+        "brushOwner": 2723,
+        "reachOwner": 2726,
+        "sealOwner": 2856,
+        "supportOwner": 2904,
+        "attachedOwner": 2922
+      },
+      "gateReasonCandidates": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "release": {
+        "startMs": 7526,
+        "endMs": 8812,
+        "attachedNearInput": true,
+        "attachedSamplesDuringInput": 1,
+        "maxSampledPeelIntent": 1,
+        "releaseArmedSampleCount": 0,
+        "deliberateOwnerTransition": true,
+        "freeAfterDeliberateTransition": true,
+        "firstActiveSupportNormalDuringInput": {
+          "x": -0.1017,
+          "y": 0.9316,
+          "z": 0.349
+        },
+        "lastActiveSupportNormalDuringInput": {
+          "x": -0.1017,
+          "y": 0.9316,
+          "z": 0.349
+        }
+      },
+      "notes": [
+        "Owner events are actual method/state observations; brush reasons are inferred diagnostic labels.",
+        "Release direction is a FIXED KEY, not computed from surface normal; normals are read-only evidence.",
+        "An unattached run cannot prove or disprove a release direction."
+      ],
+      "folder": "BOT1D11K_20261103T031914Z_r02_16_natural_reference_baseline"
+    }
+  ],
+  "decision": "REVIEW_D11K_BRAKE_CAUSES",
+  "notALock": "D11K is diagnosis only. Do not change runtime or lock LS1 from this exploratory matrix.",
+  "caveat": "A no-counter input is a duration-matched intervention; release key comparisons are FIXED AXIS tests, not physically normal-aligned steering. Controls and geometry must be reviewed."
+}

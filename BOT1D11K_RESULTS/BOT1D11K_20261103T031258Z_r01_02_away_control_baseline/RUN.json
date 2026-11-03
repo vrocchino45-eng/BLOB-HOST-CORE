@@ -1,0 +1,60 @@
+{
+  "revision": "BOT1-D11K-1",
+  "round": 1,
+  "profile": "away_control",
+  "arm": "baseline",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-03T03:13:00.955+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": false,
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "debugEntryUsed": true,
+  "mode": "FIXED_KEY_BRAKE_ACQUISITION_AND_RELEASE_DIRECTION_DIAGNOSTIC",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-03T03:13:14.227+00:00",
+      "endedAt": "2026-11-03T03:13:15.079+00:00"
+    },
+    {
+      "label": "move_away",
+      "key": "c",
+      "plannedSeconds": 1.1,
+      "startedAt": "2026-11-03T03:13:15.106+00:00",
+      "endedAt": "2026-11-03T03:13:16.332+00:00"
+    },
+    {
+      "label": "away_observe",
+      "key": null,
+      "plannedSeconds": 2.1,
+      "startedAt": "2026-11-03T03:13:16.379+00:00",
+      "endedAt": "2026-11-03T03:13:18.528+00:00"
+    },
+    {
+      "label": "move_side",
+      "key": "d",
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-03T03:13:18.567+00:00",
+      "endedAt": "2026-11-03T03:13:19.117+00:00"
+    },
+    {
+      "label": "end_observe",
+      "key": null,
+      "plannedSeconds": 1.0,
+      "startedAt": "2026-11-03T03:13:19.172+00:00",
+      "endedAt": "2026-11-03T03:13:20.232+00:00"
+    }
+  ],
+  "errors": [],
+  "rec1": {
+    "events": 132,
+    "droppedDetails": 0
+  },
+  "samples": 103,
+  "ownerEvents": 2,
+  "finishedAt": "2026-11-03T03:13:24.926+00:00",
+  "wallSeconds": 23.97
+}
