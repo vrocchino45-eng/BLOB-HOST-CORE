@@ -1,0 +1,523 @@
+{
+  "revision": "BOT1-D11I-1",
+  "captureMatrixComplete": true,
+  "roundsObserved": [
+    1,
+    2
+  ],
+  "matchedDelaySeconds": 0.7,
+  "eventVersion": "BOT1-D11I-1",
+  "armSummary": {
+    "baseline": {
+      "runs": 4,
+      "passed": 2,
+      "byProfile": {
+        "natural_reference": {
+          "runs": 2,
+          "passed": 1
+        },
+        "natural_feather": {
+          "runs": 2,
+          "passed": 1
+        }
+      }
+    },
+    "contact_dwell": {
+      "runs": 4,
+      "passed": 4,
+      "byProfile": {
+        "natural_reference": {
+          "runs": 2,
+          "passed": 2
+        },
+        "natural_feather": {
+          "runs": 2,
+          "passed": 2
+        }
+      }
+    },
+    "timing_control": {
+      "runs": 4,
+      "passed": 2,
+      "byProfile": {
+        "natural_reference": {
+          "runs": 2,
+          "passed": 1
+        },
+        "natural_feather": {
+          "runs": 2,
+          "passed": 1
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "profile": "host_positive",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "HOST_CONTROL_GEOMETRY_ONLY",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.188,
+      "eventCount": 99,
+      "eventDrops": 0,
+      "classification": "CONTROL_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 2233,
+        "reach": null,
+        "seal": null,
+        "support": null,
+        "attached": 2472,
+        "deliberateRelease": null
+      },
+      "candidateGateReasons": {
+        "different_surface": 2,
+        "already_attached": 2,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [],
+      "folder": "BOT1D11I_20261102T231702Z_r01_01_host_positive_baseline"
+    },
+    {
+      "profile": "away_control",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "AWAY_CONTROL_CLEAR",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": null,
+      "eventCount": 2,
+      "eventDrops": 0,
+      "classification": "CONTROL_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": null,
+        "reach": null,
+        "seal": null,
+        "support": null,
+        "attached": null,
+        "deliberateRelease": null
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 1
+      },
+      "notes": [],
+      "folder": "BOT1D11I_20261102T231730Z_r01_02_away_control_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "SEALED_WITHOUT_SUPPORT",
+      "geometryGatePassed": false,
+      "sustainedGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "eventCount": 28,
+      "eventDrops": 0,
+      "classification": "INCOMPLETE_GEOMETRY_SUPPORTED_TRAVEL_OR_RELEASE",
+      "gatePassed": false,
+      "eventMilestones": {
+        "brush": 2642,
+        "reach": 2644,
+        "seal": 2789,
+        "support": 2833,
+        "attached": 2847,
+        "deliberateRelease": null
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T231755Z_r01_03_natural_reference_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "contact_dwell",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0876,
+      "eventCount": 88,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 2664,
+        "reach": 2668,
+        "seal": 2848,
+        "support": 2857,
+        "attached": 2917,
+        "deliberateRelease": 8503
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T231822Z_r01_04_natural_reference_contact_dwell"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "timing_control",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "SEALED_WITHOUT_SUPPORT",
+      "geometryGatePassed": false,
+      "sustainedGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "eventCount": 28,
+      "eventDrops": 0,
+      "classification": "INCOMPLETE_GEOMETRY_SUPPORTED_TRAVEL_OR_RELEASE",
+      "gatePassed": false,
+      "eventMilestones": {
+        "brush": 3524,
+        "reach": 3527,
+        "seal": 3673,
+        "support": 3719,
+        "attached": 3733,
+        "deliberateRelease": null
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T231850Z_r01_05_natural_reference_timing_control"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.2178,
+      "eventCount": 39,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 3283,
+        "reach": 3285,
+        "seal": 3453,
+        "support": 3461,
+        "attached": 3528,
+        "deliberateRelease": 7056
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T231918Z_r01_06_natural_feather_baseline"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "contact_dwell",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1295,
+      "eventCount": 52,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 3199,
+        "reach": 3201,
+        "seal": 3342,
+        "support": 3389,
+        "attached": 3404,
+        "deliberateRelease": 7871
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T231944Z_r01_07_natural_feather_contact_dwell"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "timing_control",
+      "round": 1,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1967,
+      "eventCount": 39,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 3817,
+        "reach": 3820,
+        "seal": 4003,
+        "support": 4060,
+        "attached": 4076,
+        "deliberateRelease": 7760
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232012Z_r01_08_natural_feather_timing_control"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "timing_control",
+      "round": 2,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_WITH_GEOMETRY_OR_CAPTURE_WARNING",
+      "geometryGatePassed": false,
+      "sustainedGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "eventCount": 28,
+      "eventDrops": 0,
+      "classification": "INCOMPLETE_GEOMETRY_SUPPORTED_TRAVEL_OR_RELEASE",
+      "gatePassed": false,
+      "eventMilestones": {
+        "brush": 3961,
+        "reach": 3962,
+        "seal": 4138,
+        "support": 4146,
+        "attached": 4203,
+        "deliberateRelease": null
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232041Z_r02_09_natural_feather_timing_control"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "contact_dwell",
+      "round": 2,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1251,
+      "eventCount": 52,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 3293,
+        "reach": 3294,
+        "seal": 3476,
+        "support": 3524,
+        "attached": 3538,
+        "deliberateRelease": 7874
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232108Z_r02_10_natural_feather_contact_dwell"
+    },
+    {
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "round": 2,
+      "status": "CAPTURED",
+      "d11hClassification": "REACH_WITHOUT_SEAL",
+      "geometryGatePassed": false,
+      "sustainedGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "eventCount": 28,
+      "eventDrops": 0,
+      "classification": "INCOMPLETE_GEOMETRY_SUPPORTED_TRAVEL_OR_RELEASE",
+      "gatePassed": false,
+      "eventMilestones": {
+        "brush": 3239,
+        "reach": 3240,
+        "seal": 3420,
+        "support": 3429,
+        "attached": 3483,
+        "deliberateRelease": null
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232135Z_r02_11_natural_feather_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "timing_control",
+      "round": 2,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.2021,
+      "eventCount": 78,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 3451,
+        "reach": 3452,
+        "seal": 3587,
+        "support": 3631,
+        "attached": 3646,
+        "deliberateRelease": 8486
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232201Z_r02_12_natural_reference_timing_control"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "contact_dwell",
+      "round": 2,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.088,
+      "eventCount": 86,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 2704,
+        "reach": 2705,
+        "seal": 2881,
+        "support": 2892,
+        "attached": 2942,
+        "deliberateRelease": 8367
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232229Z_r02_13_natural_reference_contact_dwell"
+    },
+    {
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "round": 2,
+      "status": "CAPTURED",
+      "d11hClassification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "geometryGatePassed": true,
+      "sustainedGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0854,
+      "eventCount": 79,
+      "eventDrops": 0,
+      "classification": "OWNER_SEAL_AND_D11H_SUSTAINED_GATE_PASS",
+      "gatePassed": true,
+      "eventMilestones": {
+        "brush": 2660,
+        "reach": 2662,
+        "seal": 2854,
+        "support": 2864,
+        "attached": 2914,
+        "deliberateRelease": 7524
+      },
+      "candidateGateReasons": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "notes": [
+        "D11D gate reasons are diagnostic derivations, not owner-issued rejection codes.",
+        "A single owner seal or plane event does not satisfy sustained geometry-supported locomotion."
+      ],
+      "folder": "BOT1D11I_20261102T232257Z_r02_14_natural_reference_baseline"
+    }
+  ],
+  "interpretation": "Exploratory fixed-input comparison. Equal added pause before vs at contact; no causal claims from small n.",
+  "decision": "REVIEW_FIRST_FOOTHOLD_REASON_AND_DWELL",
+  "warning": "Do not lock LS1 attachment or edit mechanics from this report alone; examine failure reasons and geometry."
+}

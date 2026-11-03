@@ -1,0 +1,526 @@
+{
+  "revision": "BOT1-D11H-1",
+  "matrixComplete": false,
+  "captureValid": false,
+  "runCounts": {
+    "host_positive": 1,
+    "natural_reference": 6,
+    "natural_feather": 6,
+    "natural_brake": 0,
+    "away_control": 1
+  },
+  "naturalPasses": 8,
+  "naturalRequired": 9,
+  "controlsPassed": true,
+  "runs": [
+    {
+      "profile": "host_positive",
+      "round": 1,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.188,
+      "supportedAttachmentSamples": 34,
+      "highFrequencySampleCount": 62,
+      "classification": "HOST_CONTROL_GEOMETRY_ONLY",
+      "gatePassed": true,
+      "notes": [],
+      "milestonesMs": {
+        "eligible": null,
+        "brushing": 2290,
+        "reaching": null,
+        "sealed": null,
+        "supportPlane": 2893,
+        "attached": 2558,
+        "peeling": 2558,
+        "deliberateRelease": null,
+        "contactLoss": null
+      },
+      "folder": "BOT1D11I_20261102T231702Z_r01_01_host_positive_baseline"
+    },
+    {
+      "profile": "away_control",
+      "round": 1,
+      "geometryClassification": "AWAY_CONTROL_CLEAR",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "highFrequencySampleCount": 118,
+      "classification": "AWAY_CONTROL_CLEAR",
+      "gatePassed": true,
+      "notes": [],
+      "milestonesMs": {
+        "eligible": null,
+        "brushing": null,
+        "reaching": null,
+        "sealed": null,
+        "supportPlane": null,
+        "attached": null,
+        "peeling": null,
+        "deliberateRelease": null,
+        "contactLoss": null
+      },
+      "folder": "BOT1D11I_20261102T231730Z_r01_02_away_control_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "round": 1,
+      "geometryClassification": "NO_SUPPORTED_ATTACHMENT",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "highFrequencySampleCount": 165,
+      "classification": "SEALED_WITHOUT_SUPPORT",
+      "gatePassed": false,
+      "notes": [
+        "Observed Silt-labeled seal but no effective support plane.",
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 2629,
+        "brushing": 2699,
+        "reaching": 2699,
+        "sealed": 2825,
+        "supportPlane": null,
+        "attached": 2964,
+        "peeling": 2964,
+        "deliberateRelease": null,
+        "contactLoss": 3200
+      },
+      "firstEligibleWindowMs": 335,
+      "eligibleSampleCount": 18,
+      "firstEligibleDistance": 0.521,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T231755Z_r01_03_natural_reference_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "round": 1,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0876,
+      "supportedAttachmentSamples": 55,
+      "highFrequencySampleCount": 154,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 2590,
+        "brushing": 2716,
+        "reaching": 2716,
+        "sealed": 3189,
+        "supportPlane": 3313,
+        "attached": 2974,
+        "peeling": 2974,
+        "deliberateRelease": 8552,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 494,
+      "eligibleSampleCount": 63,
+      "firstEligibleDistance": 0.7472,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T231822Z_r01_04_natural_reference_contact_dwell"
+    },
+    {
+      "profile": "natural_reference",
+      "round": 1,
+      "geometryClassification": "NO_SUPPORTED_ATTACHMENT",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "highFrequencySampleCount": 161,
+      "classification": "SEALED_WITHOUT_SUPPORT",
+      "gatePassed": false,
+      "notes": [
+        "Observed Silt-labeled seal but no effective support plane.",
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3514,
+        "brushing": 3598,
+        "reaching": 3598,
+        "sealed": 3711,
+        "supportPlane": null,
+        "attached": 3838,
+        "peeling": 3838,
+        "deliberateRelease": null,
+        "contactLoss": 4178
+      },
+      "firstEligibleWindowMs": 324,
+      "eligibleSampleCount": 16,
+      "firstEligibleDistance": 0.5049,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T231850Z_r01_05_natural_reference_timing_control"
+    },
+    {
+      "profile": "natural_feather",
+      "round": 1,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.2178,
+      "supportedAttachmentSamples": 31,
+      "highFrequencySampleCount": 125,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3272,
+        "brushing": 3391,
+        "reaching": 3391,
+        "sealed": 3509,
+        "supportPlane": 3509,
+        "attached": 3639,
+        "peeling": 3639,
+        "deliberateRelease": 7156,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 367,
+      "eligibleSampleCount": 4,
+      "firstEligibleDistance": 0.463,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T231918Z_r01_06_natural_feather_baseline"
+    },
+    {
+      "profile": "natural_feather",
+      "round": 1,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1295,
+      "supportedAttachmentSamples": 37,
+      "highFrequencySampleCount": 146,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3185,
+        "brushing": 3322,
+        "reaching": 3322,
+        "sealed": 3740,
+        "supportPlane": 3740,
+        "attached": 3446,
+        "peeling": 3446,
+        "deliberateRelease": 7921,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 387,
+      "eligibleSampleCount": 18,
+      "firstEligibleDistance": 0.5501,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T231944Z_r01_07_natural_feather_contact_dwell"
+    },
+    {
+      "profile": "natural_feather",
+      "round": 1,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1967,
+      "supportedAttachmentSamples": 34,
+      "highFrequencySampleCount": 145,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3748,
+        "brushing": 3926,
+        "reaching": 3926,
+        "sealed": 4048,
+        "supportPlane": 4396,
+        "attached": 4169,
+        "peeling": 4169,
+        "deliberateRelease": 7810,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 536,
+      "eligibleSampleCount": 8,
+      "firstEligibleDistance": 0.6842,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232012Z_r01_08_natural_feather_timing_control"
+    },
+    {
+      "profile": "natural_feather",
+      "round": 2,
+      "geometryClassification": "NO_SUPPORTED_ATTACHMENT",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "highFrequencySampleCount": 152,
+      "classification": "SUPPORTED_WITH_GEOMETRY_OR_CAPTURE_WARNING",
+      "gatePassed": false,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3852,
+        "brushing": 4080,
+        "reaching": 4080,
+        "sealed": 4187,
+        "supportPlane": 4187,
+        "attached": 4306,
+        "peeling": 4306,
+        "deliberateRelease": null,
+        "contactLoss": 4524
+      },
+      "firstEligibleWindowMs": 335,
+      "eligibleSampleCount": 4,
+      "firstEligibleDistance": 0.7349,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232041Z_r02_09_natural_feather_timing_control"
+    },
+    {
+      "profile": "natural_feather",
+      "round": 2,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.1251,
+      "supportedAttachmentSamples": 47,
+      "highFrequencySampleCount": 144,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3267,
+        "brushing": 3397,
+        "reaching": 3397,
+        "sealed": 3510,
+        "supportPlane": 3866,
+        "attached": 3637,
+        "peeling": 3637,
+        "deliberateRelease": 7979,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 370,
+      "eligibleSampleCount": 24,
+      "firstEligibleDistance": 0.5713,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232108Z_r02_10_natural_feather_contact_dwell"
+    },
+    {
+      "profile": "natural_feather",
+      "round": 2,
+      "geometryClassification": "NO_SUPPORTED_ATTACHMENT",
+      "geometryGatePassed": false,
+      "maxAnchorToCarriedMesh": null,
+      "supportedAttachmentSamples": 0,
+      "highFrequencySampleCount": 144,
+      "classification": "REACH_WITHOUT_SEAL",
+      "gatePassed": false,
+      "notes": [
+        "Observed reach but no completed seal; loss of truth/phase timing needs scrutiny.",
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3153,
+        "brushing": 3285,
+        "reaching": 3285,
+        "sealed": null,
+        "supportPlane": null,
+        "attached": 3540,
+        "peeling": 3540,
+        "deliberateRelease": null,
+        "contactLoss": 3828
+      },
+      "firstEligibleWindowMs": 387,
+      "eligibleSampleCount": 4,
+      "firstEligibleDistance": 0.7179,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232135Z_r02_11_natural_feather_baseline"
+    },
+    {
+      "profile": "natural_reference",
+      "round": 2,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.2021,
+      "supportedAttachmentSamples": 44,
+      "highFrequencySampleCount": 147,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 3437,
+        "brushing": 3567,
+        "reaching": 3567,
+        "sealed": 3926,
+        "supportPlane": 3988,
+        "attached": 3689,
+        "peeling": 3689,
+        "deliberateRelease": 8660,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 252,
+      "eligibleSampleCount": 41,
+      "firstEligibleDistance": 0.4796,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232201Z_r02_12_natural_reference_timing_control"
+    },
+    {
+      "profile": "natural_reference",
+      "round": 2,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.088,
+      "supportedAttachmentSamples": 59,
+      "highFrequencySampleCount": 159,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 2642,
+        "brushing": 2762,
+        "reaching": 2762,
+        "sealed": 2933,
+        "supportPlane": 2933,
+        "attached": 3008,
+        "peeling": 3008,
+        "deliberateRelease": 8459,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 487,
+      "eligibleSampleCount": 67,
+      "firstEligibleDistance": 0.7313,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232229Z_r02_13_natural_reference_contact_dwell"
+    },
+    {
+      "profile": "natural_reference",
+      "round": 2,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "maxAnchorToCarriedMesh": 0.0854,
+      "supportedAttachmentSamples": 43,
+      "highFrequencySampleCount": 148,
+      "classification": "SUPPORTED_GEOMETRICALLY_VALID_RELEASED",
+      "gatePassed": true,
+      "notes": [
+        "Milestones inferred by 25ms sampled state; rejected calls before a phase transition are not directly logged."
+      ],
+      "milestonesMs": {
+        "eligible": 2578,
+        "brushing": 2710,
+        "reaching": 2710,
+        "sealed": 3204,
+        "supportPlane": 3329,
+        "attached": 2975,
+        "peeling": 2975,
+        "deliberateRelease": 7565,
+        "contactLoss": null
+      },
+      "firstEligibleWindowMs": 517,
+      "eligibleSampleCount": 49,
+      "firstEligibleDistance": 0.7568,
+      "reachSnapshot": {
+        "eligible": true,
+        "coreState": "brushing",
+        "contactState": "brushing",
+        "surfaceReason": "none",
+        "reachOrigins": [
+          "live_authored_surface_truth"
+        ]
+      },
+      "folder": "BOT1D11I_20261102T232257Z_r02_14_natural_reference_baseline"
+    }
+  ],
+  "caveat": "Timing snapshots are read-only and sampled; classification suggests where to inspect, not a causal proof or a pass of gameplay physics.",
+  "decision": "DIAGNOSE_FIRST_FOOTHOLD"
+}

@@ -1,0 +1,23 @@
+{
+  "revision": "BOT1-D11I-1",
+  "mode": "test-only owner-call observation and matched-neutral-dwell comparison",
+  "changes": [
+    "D11I_APPLY.py",
+    "src/debug/BOT1D11IEventReasonRecorder.js",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11i_policy.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d11i_browser.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11i.py",
+    "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d11i.py"
+  ],
+  "installerModifiesOnly": ["src/debug/BOT1D11CDiagnosticProbe.js"],
+  "runtimeOwnersChanged": false,
+  "requires": ["D11B shelf", "D11D bootstrap", "D11G rebased repair", "D11C/D11F/D11H probe chain"],
+  "reversible": true,
+  "evidenceRestrictions": [
+    "Owner calls and phase transitions observed directly through debug-only method wrappers",
+    "D11D brush rejection reasons are derived candidate gate classifications",
+    "No hidden-state navigation or debug teleportation",
+    "Single transition is not a certified sustained attachment",
+    "No runtime certification before live browser evidence"
+  ]
+}

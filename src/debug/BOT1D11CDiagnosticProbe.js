@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { inspectBOT1D11FAnchorContinuity } from "./BOT1D11FAnchorGeometryInspector.js";
 import { installBOT1D11HFirstFootholdTimeline } from "./BOT1D11HFirstFootholdTimeline.js";
+import { installBOT1D11IEventReasonRecorder } from "./BOT1D11IEventReasonRecorder.js";
 
 // BOT1-D11C: DEV + explicit URL flag only. Instrumentation owns no gameplay updates.
 // The ONLY mutating operation is an explicit controlled mechanical test placement.
@@ -13,6 +14,7 @@ const val = (v, fallback = null) => v ?? fallback;
 export function installBOT1D11CProbe(runtime) {
   if (window.__BLOB_D11C_PROBE__) return;
   const d11h = installBOT1D11HFirstFootholdTimeline(runtime);
+  const d11i = installBOT1D11IEventReasonRecorder(runtime);
   const samples = [];
   const interventions = [];
   let running = true;
@@ -99,13 +101,13 @@ export function installBOT1D11CProbe(runtime) {
   }
   window.__BLOB_D11C_PROBE__ = Object.freeze({
     version: 'BOT1-D11C-1', snapshot,
-    reset() { samples.length = 0; interventions.length = 0; t0 = performance.now(); running = true; d11h.reset(); collect(); },
+    reset() { samples.length = 0; interventions.length = 0; t0 = performance.now(); running = true; d11h.reset(); d11i.reset(); collect(); },
     mark(label) { interventions.push({ kind: 'marker', label: String(label).slice(0, 80), ms: Math.round(performance.now() - t0) }); },
     controlledStart: placeAboveSiltShelf,
     dump() { collect(); return { revision: 'BOT1-D11C-1', target: TARGET, cell: CELL,
       intervalMs: 50, maxSamples: 2400, samples: samples.slice(), interventions: interventions.slice(),
-      lastCell, firstFoothold: d11h.dump(), exportedAt: new Date().toISOString() }; },
-    stop() { running = false; clearInterval(interval); d11h.stop(); }
+      lastCell, firstFoothold: d11h.dump(), firstFootholdEvents: d11i.dump(), exportedAt: new Date().toISOString() }; },
+    stop() { running = false; clearInterval(interval); d11h.stop(); d11i.stop(); }
   });
   collect();
 }
