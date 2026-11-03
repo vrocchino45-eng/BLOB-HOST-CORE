@@ -1,0 +1,24 @@
+{
+  "revision": "BOT1-D11J-1",
+  "source": "src/player/CoreTendrilSurfaceContactSystem.js",
+  "source_sha256": "236c4f8d819df78aff50bcacb2ca0b0e2a7eb658df35709528458a1769b0399f",
+  "patched_sha256": "6524d3abd7e76629bd168a6d27803ba2f24cd6b09df138d56fa723dfea078807",
+  "eol": "CRLF",
+  "operations": [
+    {
+      "label": "guard candidate against sole valid sealed support",
+      "before": "        if (!tendril || tendril.phase !== \"sealed\") continue;\n        const ideal = idealAnchors[index];",
+      "after": "        if (!tendril || tendril.phase !== \"sealed\") continue;\n        // D11J: ordinary stride must never remove the sole grounded foothold.\n        // A second valid sealed anchor, not a reaching or peeling tendril,\n        // is required before a pressure-driven handoff may start.\n        if (tendril.anchorSurface?.valid && !this.hasIndependentSealedSupport(tendril)) continue;\n        const ideal = idealAnchors[index];"
+    },
+    {
+      "label": "recheck support immediately before pressure peel",
+      "before": "      if (desired && tendril.phase === \"sealed\" && this.surfaceTruthActive\n          && !stepClaimed && tendril.index === this.stepCandidateIndex) {",
+      "after": "      if (desired && tendril.phase === \"sealed\" && this.surfaceTruthActive\n          && !stepClaimed && tendril.index === this.stepCandidateIndex\n          && (!tendril.anchorSurface?.valid || this.hasIndependentSealedSupport(tendril))) {"
+    },
+    {
+      "label": "add conservative alternate support predicate",
+      "before": "  computePredictedStepAnchor(index, ideal, out) {",
+      "after": "  // D11J: only a different sealed, authored, locally reachable foothold\n  // can take load when an ordinary stride peels the current anchor.\n  // D11G remains responsible for surface provenance. This is a handoff guard,\n  // not a substitute for mesh-distance validation or deliberate release.\n  hasIndependentSealedSupport(candidate) {\n    const reachEnvelope = Math.max(1.2, this.maxStretch * 2.2);\n    return this.tendrils.some((other) => {\n      if (other === candidate || other?.index === candidate?.index\n          || other?.phase !== \"sealed\" || !other.anchorSurface?.valid\n          || !other.anchorSurface.surfaceId || other.anchorSurface.surfaceId === \"none\"\n          || !other.anchorWorld || !Number.isFinite(other.anchorWorld.x)\n          || !Number.isFinite(other.anchorWorld.y) || !Number.isFinite(other.anchorWorld.z)) {\n        return false;\n      }\n      return this.computeStartWorld(other.index, this.tempB)\n        .distanceTo(other.anchorWorld) <= reachEnvelope;\n    });\n  }\n\n  computePredictedStepAnchor(index, ideal, out) {"
+    }
+  ]
+}

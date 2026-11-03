@@ -1,0 +1,163 @@
+{
+  "revision": "BOT1-D11F-1",
+  "createdAt": "2026-11-03T01:51:32.061+00:00",
+  "requestedProfiles": [
+    "host_positive",
+    "natural_reference",
+    "natural_feather",
+    "natural_brake",
+    "away_control"
+  ],
+  "rounds": 3,
+  "schedule": [
+    [
+      1,
+      "host_positive"
+    ],
+    [
+      1,
+      "natural_reference"
+    ],
+    [
+      1,
+      "natural_feather"
+    ],
+    [
+      1,
+      "natural_brake"
+    ],
+    [
+      1,
+      "away_control"
+    ],
+    [
+      2,
+      "natural_brake"
+    ],
+    [
+      2,
+      "natural_feather"
+    ],
+    [
+      2,
+      "natural_reference"
+    ],
+    [
+      3,
+      "natural_reference"
+    ],
+    [
+      3,
+      "natural_feather"
+    ],
+    [
+      3,
+      "natural_brake"
+    ]
+  ],
+  "testKind": "ANCHOR_CONTINUITY_DIAGNOSTIC",
+  "ownerDataUsedForNavigation": false,
+  "controlledDebugPoseUsed": false,
+  "debugEntryUsed": true,
+  "runs": [
+    {
+      "folder": "BOT1D11F_20261103T014630Z_r01_01_host_positive",
+      "profile": "host_positive",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 110,
+      "samples": 53,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014657Z_r01_02_natural_reference",
+      "profile": "natural_reference",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 167,
+      "samples": 103,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014727Z_r01_03_natural_feather",
+      "profile": "natural_feather",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 161,
+      "samples": 105,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014755Z_r01_04_natural_brake",
+      "profile": "natural_brake",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 150,
+      "samples": 98,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014822Z_r01_05_away_control",
+      "profile": "away_control",
+      "round": 1,
+      "status": "CAPTURED",
+      "events": 126,
+      "samples": 78,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014845Z_r02_06_natural_brake",
+      "profile": "natural_brake",
+      "round": 2,
+      "status": "CAPTURED",
+      "events": 153,
+      "samples": 86,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014913Z_r02_07_natural_feather",
+      "profile": "natural_feather",
+      "round": 2,
+      "status": "CAPTURED",
+      "events": 162,
+      "samples": 98,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T014940Z_r02_08_natural_reference",
+      "profile": "natural_reference",
+      "round": 2,
+      "status": "CAPTURED",
+      "events": 159,
+      "samples": 98,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T015007Z_r03_09_natural_reference",
+      "profile": "natural_reference",
+      "round": 3,
+      "status": "CAPTURED",
+      "events": 165,
+      "samples": 104,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T015035Z_r03_10_natural_feather",
+      "profile": "natural_feather",
+      "round": 3,
+      "status": "CAPTURED",
+      "events": 155,
+      "samples": 106,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11F_20261103T015102Z_r03_11_natural_brake",
+      "profile": "natural_brake",
+      "round": 3,
+      "status": "CAPTURED",
+      "events": 148,
+      "samples": 102,
+      "errors": []
+    }
+  ]
+}

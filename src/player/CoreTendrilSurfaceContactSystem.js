@@ -351,6 +351,10 @@ export class CoreTendrilSurfaceContactSystem {
         const index = (this.stepCursor + offset) % 3;
         const tendril = this.tendrils[index];
         if (!tendril || tendril.phase !== "sealed") continue;
+        // D11J: ordinary stride must never remove the sole grounded foothold.
+        // A second valid sealed anchor, not a reaching or peeling tendril,
+        // is required before a pressure-driven handoff may start.
+        if (tendril.anchorSurface?.valid && !this.hasIndependentSealedSupport(tendril)) continue;
         const ideal = idealAnchors[index];
         const anchorDrift = tendril.anchorWorld.distanceTo(ideal);
         const stretch = this.computeStartWorld(index, this.tempA).distanceTo(tendril.anchorWorld);
@@ -394,7 +398,8 @@ export class CoreTendrilSurfaceContactSystem {
       }
 
       if (desired && tendril.phase === "sealed" && this.surfaceTruthActive
-          && !stepClaimed && tendril.index === this.stepCandidateIndex) {
+          && !stepClaimed && tendril.index === this.stepCandidateIndex
+          && (!tendril.anchorSurface?.valid || this.hasIndependentSealedSupport(tendril))) {
         // Predict the next planted point slightly ahead in the tangent frame.
         // The destination is frozen when the peel begins, so the body moves over
         // a world-planted support rather than chasing a target attached to itself.
@@ -508,6 +513,25 @@ export class CoreTendrilSurfaceContactSystem {
       .addScaledVector(this.normal, 0.16);
 
     return this.projectToBoundary(this.tempA, new THREE.Vector3());
+  }
+
+  // D11J: only a different sealed, authored, locally reachable foothold
+  // can take load when an ordinary stride peels the current anchor.
+  // D11G remains responsible for surface provenance. This is a handoff guard,
+  // not a substitute for mesh-distance validation or deliberate release.
+  hasIndependentSealedSupport(candidate) {
+    const reachEnvelope = Math.max(1.2, this.maxStretch * 2.2);
+    return this.tendrils.some((other) => {
+      if (other === candidate || other?.index === candidate?.index
+          || other?.phase !== "sealed" || !other.anchorSurface?.valid
+          || !other.anchorSurface.surfaceId || other.anchorSurface.surfaceId === "none"
+          || !other.anchorWorld || !Number.isFinite(other.anchorWorld.x)
+          || !Number.isFinite(other.anchorWorld.y) || !Number.isFinite(other.anchorWorld.z)) {
+        return false;
+      }
+      return this.computeStartWorld(other.index, this.tempB)
+        .distanceTo(other.anchorWorld) <= reachEnvelope;
+    });
   }
 
   computePredictedStepAnchor(index, ideal, out) {

@@ -1,0 +1,62 @@
+{
+  "revision": "BOT1-D11F-1",
+  "frozenInputPolicy": "BOT1-D11E-1",
+  "profile": "away_control",
+  "round": 1,
+  "status": "CAPTURED",
+  "startedAt": "2026-11-03T01:48:24.138+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": false,
+  "debugCellEntryUsed": true,
+  "gameplayChanged": false,
+  "policyFrozen": true,
+  "ownerDataUsedForSteering": false,
+  "mode": "D11F_READ_ONLY_GEOMETRY_AND_REAL_KEY_INPUT",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-03T01:48:35.632+00:00",
+      "endedAt": "2026-11-03T01:48:36.483+00:00"
+    },
+    {
+      "label": "move_away",
+      "key": "c",
+      "plannedSeconds": 1.1,
+      "startedAt": "2026-11-03T01:48:36.518+00:00",
+      "endedAt": "2026-11-03T01:48:37.798+00:00"
+    },
+    {
+      "label": "away_observe",
+      "key": null,
+      "plannedSeconds": 2.1,
+      "startedAt": "2026-11-03T01:48:37.846+00:00",
+      "endedAt": "2026-11-03T01:48:39.995+00:00"
+    },
+    {
+      "label": "move_side",
+      "key": "d",
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-03T01:48:40.021+00:00",
+      "endedAt": "2026-11-03T01:48:40.611+00:00"
+    },
+    {
+      "label": "end_observe",
+      "key": null,
+      "plannedSeconds": 1.0,
+      "startedAt": "2026-11-03T01:48:40.660+00:00",
+      "endedAt": "2026-11-03T01:48:41.719+00:00"
+    }
+  ],
+  "errors": [],
+  "debugEntrySettledAt": "2026-11-03T01:48:34.718+00:00",
+  "rec1": {
+    "events": 126,
+    "droppedDetails": 0
+  },
+  "samples": 78,
+  "continuitySamples": 78,
+  "finishedAt": "2026-11-03T01:48:45.656+00:00",
+  "wallSeconds": 21.52
+}

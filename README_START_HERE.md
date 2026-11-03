@@ -1,80 +1,70 @@
-# BLOB: HOST CORE — BOT1-D11I First-Foothold Event & Dwell Comparison
+# BLOB: HOST CORE — BOT1-D11J Support-Preserving First Foothold
 
-**Mode:** diagnostic convergence, test-only. **No gameplay source edits.**  
-**Source baseline:** D11B shelf + D11D contact bootstrap + D11G rebased anchor-provenance repair, with D11C/D11F/D11H diagnostic hooks already installed.  
-**Reference:** D11H audit (`BLOB_BOT1_D11H_RESULTS_AUDIT_D11I_SCOPE.md`).
+**Mode:** guarded experimental single-owner patch + conservative live referee.  
+**Baseline:** D11G *rebased* tendril owner (CRLF). D11D contact bootstrap, D11B Silt shelf, D11F geometry probe, and D11I event observer remain installed.  
+**Scope:** only `src/player/CoreTendrilSurfaceContactSystem.js` is modified by the installer. No movement-controller, chemistry, material, surface geometry, or bot steering changes.
 
-## Why this test exists
+## Why this exists
 
-D11H passed **3/9** natural Silt approaches; the HC positive and Away controls passed. Some runs reached but never recorded a seal; others recorded momentary seal/support without sustained attached travel. The earlier ~25 ms probe was not truly event-granular in the live browser (median observed gap ~79 ms).
+D11I showed that all 12 natural tests reached/sealed an initial Silt anchor, then a pressure-driven peel began ~2–3 ms after attachment. Four runs lost support before a replacement anchor was ready. D11G previously eliminated false geometry-boundary footholds; that protection must remain in place.
 
-D11I adds a **debug-only owner-call observer** for the existing embodiment, tendril, support-plane and movement owner methods. It records method attempts and phase transitions as they happen; it does not substitute telemetry for ordinary controls and does not alter the return value of any wrapped owner method. The Silt geometry and LS1 physics remain unchanged.
+D11J guards **ordinary pressure-driven stepping** so a valid sealed support is not peeled before *another* sealed, authored, locally reachable support exists. Reaching/peeling tendrils do not count as replacement support. Normal outward-input release, contact-state release, and D11G no-truth overextension release are untouched. The alternate-support check is a conservative **owner-state and reach-envelope check**; the independent D11F mesh audit is still required to prove geometry.
 
-**Evidence distinctions:** `reach_attempt`, `tendril_phase_transition` (seal), `support_plane_transition`, `movement_attachment_transition` are intercepted owner-method observations. `brush_gate_observation.candidateReason` is an **inferred D11D eligibility classification**, not an engine-emitted rejection reason. A successful seal event does **not** certify sustained support; D11F geometry + D11H owner-state criteria remain the independent gate.
+## Installation (project root, PowerShell)
 
-## Test matrix (default: 14 runs)
-
-Two natural policies (`natural_reference`, `natural_feather`) × three arms × two rounds = **12**; HC positive and Away controls = **2**.
-
-| Arm | Path | Added time |
-|---|---|---:|
-| `baseline` | Unmodified D11E reference/feather input sequence | 0 seconds |
-| `contact_dwell` | Same route plus hands-off pause immediately after final shelf approach | +0.70 seconds |
-| `timing_control` | Same route plus equal hands-off pause **before** approach | +0.70 seconds |
-
-No hidden telemetry steers the bot. All starts use ordinary `Shift+6` Silt debug entry (HC control uses `Shift+1`). **No controlled debug relocation.** `--rounds 3` expands the natural comparison to 18 + two controls = **20** captures, if desired later.
-
-## Install
-
-Copy `BLOB_BOT1_D11I_EVENT_DWELL_TEST_DELTA.zip` into your **local** `BLOB-HOST-CORE` root (the directory containing `src` and `BLOB_BOT1_REAL_INPUT_HARNESS`). In the VS Code PowerShell terminal:
+Put the ZIP in the project root (same folder as `src` and `BLOB_BOT1_REAL_INPUT_HARNESS`).
 
 ```powershell
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D11I_EVENT_DWELL_TEST_DELTA.zip' -DestinationPath '.' -Force
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D11J_FIRST_FOOTHOLD_HANDOFF_DELTA.zip' -DestinationPath '.' -Force
 
-py .\D11I_APPLY.py --check
-py .\D11I_APPLY.py --apply
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11i.py
+py .\D11J_APPLY.py --check
+py .\D11J_APPLY.py --apply
+node .\scripts\testBOT1D11JSupportHandoff.mjs
+node .\scripts\testBOT1D11GAnchorProvenance.mjs
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_analyze_bot1d11j.py
 ```
 
-**If `--check` stops:** do not force it. D11I expects the installed D11H probe. Preserve the terminal output and source file for reconciliation.
+The installer verifies the **exact** D11G rebased owner SHA-256 and the patched output SHA. If your current file has changed, it **stops**. Do not bypass it or replace the owner with an old HC source. Upload the current owner to rebase.
 
-## Live browser capture
+`D11J_BACKUP_ORIGINALS/` contains the prepatch byte-identical source plus an install record. A second apply is harmless and reports already installed. Older HC historical validator failures from hardcoded build names are not addressed by D11J.
 
-With Vite running at `http://127.0.0.1:5173`:
+## Live mobility test
+
+Keep the D11B surface, D11D bootstrap, D11C hook, D11F geometric inspector, D11H first-foothold probe and D11I owner-event observer installed. The live referee needs both geometry and owner events. Start Vite at `http://127.0.0.1:5173`.
+
+Reuse the frozen input policies from D11F (no new bot navigation logic):
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11i_browser.py --browser-channel chrome --headed --rounds 2 --seconds 75 --output BOT1D11I_RESULTS
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11f_browser.py --browser-channel chrome --headed --rounds 3 --seconds 75 --output BOT1D11J_RESULTS
+
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11f.py BOT1D11J_RESULTS
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11h.py BOT1D11J_RESULTS
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11j.py BOT1D11J_RESULTS
+
+Compress-Archive -Path '.\BOT1D11J_RESULTS\*' -DestinationPath '.\BOT1D11J_RESULTS.zip' -Force
 ```
 
-Each run saves `RUN.json`, `REC1.json`, `D11C_TRACE.json`, and screenshots. The trace includes `firstFoothold` (D11H) and `firstFootholdEvents` (D11I). If the event observer is unavailable the test stops instead of silently running an older probe.
+**Upload `BOT1D11J_RESULTS.zip`.** The analyzer will intentionally report a nonzero exit code if the full live acceptance gate fails; keep the results and upload them anyway.
 
-## Analyze, package, upload
+The planned live matrix is 11 independent runs: Reference, Feather, and Brake (3 each), plus one HC Positive and one Away Control. The D11J referee expects `D11C_TRACE.json` with `firstFootholdEvents` revision `BOT1-D11I-1`, plus a D11F audit. It checks for any early solo pressure peel, real owner attachment/release, and the independent geometric support gate. If the event hook is missing, it refuses to pass the run rather than assuming no peel occurred.
+
+**The pass is not certified until these live results arrive.** The temporary repair could reduce contact loss or expose a different bottleneck; do not expand Silt surfaces yet. D10B Fold regression must be preserved before promotion to a stable checkpoint.
+
+## Undo (before making other edits to the owner)
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11f.py BOT1D11I_RESULTS
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11h.py BOT1D11I_RESULTS
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11i.py BOT1D11I_RESULTS
-
-Compress-Archive -Path '.\BOT1D11I_RESULTS\*' -DestinationPath '.\BOT1D11I_RESULTS.zip' -Force
+py .\D11J_APPLY.py --undo
 ```
 
-Upload `BOT1D11I_RESULTS.zip` for review.
+Undo is guarded. If the owner has been edited since D11J installation, rollback refuses to overwrite the newer work. The installer does **not** remove D11G, D11D, or the instrumentation.
 
-## Decision gate
+## Package contents
 
-- Confirm owner-call events and probe coverage for each capture, with no overflow.
-- Distinguish a brush refusal (especially outward input) from reaching followed by a failed seal.
-- Compare contact dwell with the equal-duration *pre-approach* timing control; do **not** ascribe causality to a small batch alone.
-- Preserve D11G's **no orphan anchors** requirement, supported attachment, and deliberate release.
-- Keep HC positive control and Away control passing.
-- Use owner evidence to localize any future repair; no broad movement rewrite and no Silt network expansion from this diagnostic alone.
+- `D11J_APPLY.py` — guarded CRLF-preserving single-owner installer and rollback
+- `D11J_PATCH_OPERATIONS.json` — exact source/target hashes and three scoped edits
+- `scripts/testBOT1D11JSupportHandoff.mjs` — 15 deterministic owner-level tests
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d11j.py` — conservative live referee
+- `BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_analyze_bot1d11j.py` — 7 referee tests
+- `MANIFEST_D11J.json` — source and verification manifest
 
-## Removal
-
-D11I modifies only `src/debug/BOT1D11CDiagnosticProbe.js`, and backs it up under `D11I_BACKUP_ORIGINALS`. Roll back **after testing** with:
-
-```powershell
-py .\D11I_APPLY.py --undo
-```
-
-This restores the D11H probe bytes. The D11I helper remains dormant once it is no longer imported. **Do not undo D11H or D11F before D11I.** Existing D11B shelf, D11D bootstrap, D11G repair, LS1 movement, and chemistry files remain untouched.
+No full 1500+ file snapshot. No game binaries or gameplay data changes.
