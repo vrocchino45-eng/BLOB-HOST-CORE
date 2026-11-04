@@ -1,0 +1,302 @@
+{
+  "revision": "BOT1-D11M-1",
+  "createdAt": "2026-11-03T23:57:38.592+00:00",
+  "pairs": 3,
+  "schedule": [
+    [
+      1,
+      "host_positive",
+      "baseline",
+      "observer_on"
+    ],
+    [
+      1,
+      "away_control",
+      "baseline",
+      "observer_off"
+    ],
+    [
+      1,
+      "natural_reference",
+      "baseline",
+      "observer_on"
+    ],
+    [
+      1,
+      "natural_feather",
+      "baseline",
+      "observer_on"
+    ],
+    [
+      1,
+      "natural_feather",
+      "baseline",
+      "observer_off"
+    ],
+    [
+      1,
+      "natural_reference",
+      "baseline",
+      "observer_off"
+    ],
+    [
+      1,
+      "natural_brake",
+      "baseline",
+      "observer_on"
+    ],
+    [
+      1,
+      "natural_brake",
+      "neutral_counter",
+      "observer_on"
+    ],
+    [
+      1,
+      "natural_brake",
+      "baseline",
+      "observer_off"
+    ],
+    [
+      1,
+      "natural_brake",
+      "neutral_counter",
+      "observer_off"
+    ],
+    [
+      2,
+      "natural_brake",
+      "neutral_counter",
+      "observer_off"
+    ],
+    [
+      2,
+      "natural_brake",
+      "baseline",
+      "observer_off"
+    ],
+    [
+      2,
+      "natural_brake",
+      "neutral_counter",
+      "observer_on"
+    ],
+    [
+      2,
+      "natural_brake",
+      "baseline",
+      "observer_on"
+    ],
+    [
+      3,
+      "natural_brake",
+      "baseline",
+      "observer_on"
+    ],
+    [
+      3,
+      "natural_brake",
+      "neutral_counter",
+      "observer_on"
+    ],
+    [
+      3,
+      "natural_brake",
+      "baseline",
+      "observer_off"
+    ],
+    [
+      3,
+      "natural_brake",
+      "neutral_counter",
+      "observer_off"
+    ]
+  ],
+  "runs": [
+    {
+      "folder": "BOT1D11M_20261103T234844Z_r01_01_host_positive_baseline_observer_on",
+      "round": 1,
+      "profile": "host_positive",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 106,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T234919Z_r01_02_away_control_baseline_observer_off",
+      "round": 1,
+      "profile": "away_control",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 124,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T234950Z_r01_03_natural_reference_baseline_observer_on",
+      "round": 1,
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 186,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235026Z_r01_04_natural_feather_baseline_observer_on",
+      "round": 1,
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 171,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235057Z_r01_05_natural_feather_baseline_observer_off",
+      "round": 1,
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 156,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235126Z_r01_06_natural_reference_baseline_observer_off",
+      "round": 1,
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 166,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235156Z_r01_07_natural_brake_baseline_observer_on",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 165,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235225Z_r01_08_natural_brake_neutral_counter_observer_on",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 157,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235253Z_r01_09_natural_brake_baseline_observer_off",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 156,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235320Z_r01_10_natural_brake_neutral_counter_observer_off",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 155,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235347Z_r02_11_natural_brake_neutral_counter_observer_off",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 154,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235414Z_r02_12_natural_brake_baseline_observer_off",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 165,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235442Z_r02_13_natural_brake_neutral_counter_observer_on",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 165,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235513Z_r02_14_natural_brake_baseline_observer_on",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 158,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235544Z_r03_15_natural_brake_baseline_observer_on",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 167,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235614Z_r03_16_natural_brake_neutral_counter_observer_on",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_on",
+      "status": "CAPTURED",
+      "events": 160,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235643Z_r03_17_natural_brake_baseline_observer_off",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 154,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11M_20261103T235709Z_r03_18_natural_brake_neutral_counter_observer_off",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_off",
+      "status": "CAPTURED",
+      "events": 154,
+      "errors": []
+    }
+  ],
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "controlledDebugStart": false,
+  "comparisonIsFixedInput": true,
+  "observerOffMeansD11LOnly": true
+}

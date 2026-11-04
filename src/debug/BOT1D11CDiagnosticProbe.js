@@ -106,6 +106,7 @@ export function installBOT1D11CProbe(runtime) {
     reset() { samples.length = 0; interventions.length = 0; t0 = performance.now(); running = true; d11h.reset(); d11i.reset(); d11l.reset(); collect(); },
     mark(label) { interventions.push({ kind: 'marker', label: String(label).slice(0, 80), ms: Math.round(performance.now() - t0) }); },
     controlledStart: placeAboveSiltShelf,
+    disableD11LReleaseRecorder() { d11l.stop(); return true; },
     dump() { collect(); return { revision: 'BOT1-D11C-1', target: TARGET, cell: CELL,
       intervalMs: 50, maxSamples: 2400, samples: samples.slice(), interventions: interventions.slice(),
       lastCell, firstFoothold: d11h.dump(), firstFootholdEvents: d11i.dump(), releaseGate: d11l.dump(), exportedAt: new Date().toISOString() }; },
