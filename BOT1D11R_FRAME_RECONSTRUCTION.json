@@ -1,0 +1,627 @@
+{
+  "status": "READ_ONLY_FRAME_RECONSTRUCTION",
+  "schema": "BOT1-D11R-1",
+  "runs": [
+    {
+      "run": "BOT1D11O_20261104T013138Z_r01_01_host_positive_control_control",
+      "released": false,
+      "attachedFrames": 155,
+      "awayFrames": 0,
+      "holdFrames": 11,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.45725,
+      "maxHoldAge": 0.4542,
+      "transitions": [
+        {
+          "ms": 2257,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 4267,
+          "away": false,
+          "hold": false,
+          "detach": "incompatible_surface_change",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 4911,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 5830,
+          "away": false,
+          "hold": true,
+          "detach": "none",
+          "awayIntent": 0.45304,
+          "holdAge": 0.148,
+          "ownerArmed": false
+        },
+        {
+          "ms": 6302,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0.03036,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013234Z_r01_03_natural_reference_control_control",
+      "released": true,
+      "attachedFrames": 161,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.8554,
+      "maxHoldAge": 0.1164,
+      "transitions": [
+        {
+          "ms": 2183,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 6897,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.85402,
+          "holdAge": 0.0263,
+          "ownerArmed": false
+        },
+        {
+          "ms": 7013,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.8554,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013305Z_r01_04_natural_feather_control_control",
+      "released": false,
+      "attachedFrames": 239,
+      "awayFrames": 0,
+      "holdFrames": 48,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.37197,
+      "maxHoldAge": 1.0929,
+      "transitions": [
+        {
+          "ms": 2831,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 6500,
+          "away": false,
+          "hold": true,
+          "detach": "none",
+          "awayIntent": 0.36532,
+          "holdAge": 0.1491,
+          "ownerArmed": false
+        },
+        {
+          "ms": 7878,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0.09018,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013334Z_r01_05_natural_brake_tangential_up_c",
+      "released": true,
+      "attachedFrames": 168,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.67195,
+      "maxHoldAge": 0.1168,
+      "transitions": [
+        {
+          "ms": 2631,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8159,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.67195,
+          "holdAge": 0.02655,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8275,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.67195,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013406Z_r01_06_natural_brake_tangential_up_left_ca",
+      "released": false,
+      "attachedFrames": 276,
+      "awayFrames": 0,
+      "holdFrames": 49,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.46982,
+      "maxHoldAge": 1.319,
+      "transitions": [
+        {
+          "ms": 3059,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8423,
+          "away": false,
+          "hold": true,
+          "detach": "none",
+          "awayIntent": 0.39509,
+          "holdAge": 0.1499,
+          "ownerArmed": false
+        },
+        {
+          "ms": 9953,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0.08956,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013437Z_r01_07_natural_brake_tangential_up_right_cd",
+      "released": false,
+      "attachedFrames": 261,
+      "awayFrames": 0,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.38666,
+      "maxHoldAge": 0.0711,
+      "transitions": [
+        {
+          "ms": 2998,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013509Z_r01_08_natural_brake_neutral_dwell_up_left_ca",
+      "released": true,
+      "attachedFrames": 143,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.88047,
+      "maxHoldAge": 0.1248,
+      "transitions": [
+        {
+          "ms": 3076,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 7995,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.88047,
+          "holdAge": 0.03205,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8135,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.61327,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013540Z_r01_09_natural_brake_neutral_dwell_up_right_cd",
+      "released": true,
+      "attachedFrames": 158,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.86358,
+      "maxHoldAge": 0.1291,
+      "transitions": [
+        {
+          "ms": 2936,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8465,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.86358,
+          "holdAge": 0.03045,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8609,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.60828,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013612Z_r01_10_natural_brake_neutral_dwell_up_c",
+      "released": true,
+      "attachedFrames": 178,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.8554,
+      "maxHoldAge": 0.1236,
+      "transitions": [
+        {
+          "ms": 2449,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8323,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.8554,
+          "holdAge": 0.03085,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8438,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.8554,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013644Z_r02_11_natural_brake_neutral_dwell_up_left_ca",
+      "released": true,
+      "attachedFrames": 157,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.86717,
+      "maxHoldAge": 0.1258,
+      "transitions": [
+        {
+          "ms": 2507,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 7905,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.86717,
+          "holdAge": 0.0269,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8049,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.61045,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013715Z_r02_12_natural_brake_neutral_dwell_up_right_cd",
+      "released": true,
+      "attachedFrames": 151,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.87865,
+      "maxHoldAge": 0.1148,
+      "transitions": [
+        {
+          "ms": 2946,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8130,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.87865,
+          "holdAge": 0.0283,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8260,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.6327,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013746Z_r02_13_natural_brake_neutral_dwell_up_c",
+      "released": true,
+      "attachedFrames": 150,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.87891,
+      "maxHoldAge": 0.129,
+      "transitions": [
+        {
+          "ms": 2875,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 7958,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.87891,
+          "holdAge": 0.03115,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8081,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.87891,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013816Z_r02_14_natural_brake_tangential_up_right_cd",
+      "released": false,
+      "attachedFrames": 282,
+      "awayFrames": 0,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.39195,
+      "maxHoldAge": 0.0651,
+      "transitions": [
+        {
+          "ms": 2762,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013848Z_r02_15_natural_brake_tangential_up_c",
+      "released": true,
+      "attachedFrames": 164,
+      "awayFrames": 5,
+      "holdFrames": 0,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.66357,
+      "maxHoldAge": 0.113,
+      "transitions": [
+        {
+          "ms": 2614,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8094,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.66357,
+          "holdAge": 0.02655,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8208,
+          "away": true,
+          "hold": false,
+          "detach": "deliberate_away_input",
+          "awayIntent": 0.66357,
+          "holdAge": 0,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    },
+    {
+      "run": "BOT1D11O_20261104T013919Z_r02_16_natural_brake_tangential_up_left_ca",
+      "released": false,
+      "attachedFrames": 296,
+      "awayFrames": 2,
+      "holdFrames": 51,
+      "simultaneousModeledGateFrames": 0,
+      "overlapMs": [],
+      "maxAway": 0.63279,
+      "maxHoldAge": 1.2521,
+      "transitions": [
+        {
+          "ms": 2561,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8265,
+          "away": true,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.63279,
+          "holdAge": 0.02585,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8324,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0.49455,
+          "holdAge": 0.08095,
+          "ownerArmed": false
+        },
+        {
+          "ms": 8392,
+          "away": false,
+          "hold": true,
+          "detach": "none",
+          "awayIntent": 0.49517,
+          "holdAge": 0.14365,
+          "ownerArmed": false
+        },
+        {
+          "ms": 9827,
+          "away": false,
+          "hold": false,
+          "detach": "none",
+          "awayIntent": 0,
+          "holdAge": 0.1161,
+          "ownerArmed": false
+        }
+      ],
+      "note": "Modeled gates are NOT authoritative owner refusal reasons. Sampling may miss transitions."
+    }
+  ],
+  "limitations": [
+    "No physics changes",
+    "Modeled gates may not match actual release decision",
+    "Sampled owner frames may miss sub-frame changes",
+    "Do not infer causality from peak values"
+  ]
+}
