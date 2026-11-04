@@ -56,9 +56,19 @@ def classify_release(trace,run,physical):
 
 def run_row(trace,run):
     adapted=copy.deepcopy(run)
-    adapted['revision']='BOT1-D11N-1'
+    adapted['revision']='BOT1-D11N-1'  # D11N physical scorer's required revision
     # No changes to start receipts, scores or captured event facts.
-    physical=d11n_row(adapted,trace)
+    # D11M requires an observer-on/off marker specific to its old experiment.
+    # D11O always records owner frames but does not emit that D11M marker.
+    # Adapt a copy solely for legacy physical scoring; independently verify
+    # the actual D11L gate and the D11O revision/status below.
+    scoring_trace=copy.deepcopy(trace)
+    scoring_trace.setdefault('interventions',[]).append({'label':'release_observer_on','kind':'d11p_scorer_compatibility_only'})
+    physical=d11n_row(adapted,scoring_trace)
+    # D11N's own capture check is valid for its in-memory revision adaptation.
+    # D11O additionally validates the original revision, status and runner errors.
+    physical['captureValid']=bool(physical.get('captureValid') and run.get('revision')==REVISION
+        and run.get('status')=='CAPTURED' and not run.get('errors'))
     pre=run.get('precondition') or {}
     if run.get('profile')=='natural_brake':
         physical_pre=bool(pre.get('valid') and run.get('releaseAttempted'))
