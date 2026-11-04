@@ -1,0 +1,74 @@
+{
+  "revision": "BOT1-D11O-1",
+  "round": 1,
+  "profile": "host_positive",
+  "context": "control",
+  "release": "control",
+  "observer": "observer_on",
+  "arm": "baseline",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-04T01:31:40.501+00:00",
+  "entry": "Shift+1",
+  "controlledDebugStart": false,
+  "ownerDataUsedForSteering": false,
+  "gameplayChanged": false,
+  "mode": "D11O_ATTACHED_ONLY_PREDECLARED_RELEASE_MATRIX",
+  "actions": [
+    {
+      "label": "host_neutral",
+      "keys": [],
+      "plannedSeconds": 1.5,
+      "startedAt": "2026-11-04T01:31:54.149+00:00",
+      "endedAt": "2026-11-04T01:31:55.703+00:00"
+    },
+    {
+      "label": "host_forward",
+      "keys": [
+        "w"
+      ],
+      "plannedSeconds": 0.6,
+      "startedAt": "2026-11-04T01:31:55.782+00:00",
+      "endedAt": "2026-11-04T01:31:56.594+00:00"
+    },
+    {
+      "label": "host_settle",
+      "keys": [],
+      "plannedSeconds": 1.6,
+      "startedAt": "2026-11-04T01:31:56.705+00:00",
+      "endedAt": "2026-11-04T01:31:58.420+00:00"
+    },
+    {
+      "label": "host_side",
+      "keys": [
+        "a"
+      ],
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-04T01:31:58.489+00:00",
+      "endedAt": "2026-11-04T01:31:59.098+00:00"
+    },
+    {
+      "label": "host_pause",
+      "keys": [],
+      "plannedSeconds": 1.5,
+      "startedAt": "2026-11-04T01:31:59.192+00:00",
+      "endedAt": "2026-11-04T01:32:00.785+00:00"
+    }
+  ],
+  "errors": [],
+  "precondition": {
+    "valid": null,
+    "reason": "control_no_attached_only_release_precondition"
+  },
+  "releaseAttempted": false,
+  "releaseKeys": [],
+  "controlledStartReceipt": null,
+  "rec1": {
+    "events": 116,
+    "droppedDetails": 0
+  },
+  "sampleCount": 53,
+  "ownerEventCount": 95,
+  "releaseOwnerFrameCount": 228,
+  "finishedAt": "2026-11-04T01:32:07.183+00:00",
+  "wallSeconds": 26.68
+}

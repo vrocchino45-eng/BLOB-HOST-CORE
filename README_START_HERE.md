@@ -1,63 +1,44 @@
-# BLOB — BOT1-D11M Acquisition-Envelope Repeatability
+# BLOB / BOT1-D11O — Tilted-Surface Release Precondition & Fixed Input Comparison
 
-**Mode:** read-only telemetry / fixed-input bot comparison. **No gameplay physics, geometry, adhesion, release thresholds, Core/Guide evolution, or controller mapping changes.** D11G/D11J remain experimental. D11M does not lock LS1.
+**Mode:** test-only diagnostic, no runtime mechanics change. This is not a locomotion lock.
 
-## Why this pass
+## Scope and source continuity
 
-The D11L batch captured 16 runs and 2,548 REC1 events. Seven of 14 natural attempts attached; 7/7 attached attempts subsequently deliberately released. Of the seven Brake acquisition failures, five did not brush while the minimum sampled eligible Silt surface distance was ~0.499–0.649 (above the D11D 0.46 brush gate); two reached only after the fixed release interval started, without sealing. D11L is a *diagnostic-only* comparison, so this is not proof of a gameplay regression.
+Use after D11N. Requires existing D11C / D11F geometry / D11H foothold / D11I owner events / D11L release gate and D11N controlled start, plus D11G and D11J movement owners. D11O adds **three new Python files** (policy, runner, analyzer) plus an offline test script. It never replaces existing movement, game, physics, telemetry probe, or controller files.
 
-D11M keeps the original D11E Brake trajectory and tests a duration-matched neutral replacement for the 0.16s reverse-input step. It also checks how the extra D11L release-owner recorder affects observational timing. Never use telemetry to steer or teleport the bot. Shift+6 is a debug entry, **not proof of world navigability**.
+**Falsifiable question:** Given a genuinely attached and supported Silt foothold, does a fixed upward-only release differ from fixed upward-plus-left or upward-plus-right input? Does that difference vary with sampled contact normal? No live normal steers the bot. The two approach contexts are a fixed tangential `a` contact preparation and a duration-matched neutral preparation; their resulting normal regimes are **observed**, not presumed.
 
-## Prerequisites
+- Default matrix: 2 rounds × 2 contact contexts × 3 fixed-release combinations = 12 experimental attempts, plus one each HC positive, Away, Reference, and Feather controls = **16 recordings**.
+- Experimental input precondition: Core's *real* attachment active; supported Silt plane; at least one measured authored anchor within 0.35 unit; three recent independent valid samples over ≥150 ms. No direct state-forcing, script-created anchors or adhesive changes.
+- If an attempt lacks precondition: classify `PRECONDITION_NOT_MET`, do **not** apply release key, preserve trace and don't count it as failed release.
+- If it meets precondition: apply the predeclared key(s) for exactly 1.15 seconds. Read actual `deliberate_away_input` owner release events, D11L away-intent and model threshold, and D11F authored mesh measurement.
+- A context labelled tangential does **not** guarantee a tilted plane; audit shows actual normal classes and `bothNormalRegimesObserved`.
+- Retain previous D11G anchor integrity, D11J sole-anchor guard, and D10B Fold regression as independent later lock gates. This test is not normal player navigation proof: `Shift+6` + D11N debug setup is used.
 
-- The exact currently working project with D11B/D11D and the experimental D11G/D11J mechanic updates in place.
-- D11C, D11F, D11H, D11I **and D11L applied**, and the D11E / D11K harness scripts installed. D11M uses the existing D11F mesh truth and D11I owner events.
-- Vite on `http://127.0.0.1:5173`, Python and Playwright with Chrome configured as for previous live runs.
-- **D11L's installer must have been applied already.** The D11M guarded installer refuses a mismatching diagnostic source. Do not force or paste edits if it refuses.
+## Install (Windows PowerShell)
 
-## 1. Install from repository root in PowerShell
-
-```powershell
-Expand-Archive -LiteralPath '.\BLOB_BOT1_D11M_ACQUISITION_REPEATABILITY_DELTA.zip' -DestinationPath '.' -Force
-py .\D11M_APPLY.py --check
-py .\D11M_APPLY.py --apply
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11m.py
-```
-
-`D11M_APPLY.py` modifies only `src/debug/BOT1D11CDiagnosticProbe.js`, adding one debug-only API that can stop the D11L release-owner recorder independently for a test run. It creates checksummed backup files in `D11M_BACKUP_ORIGINALS` and supports `--undo`. It never edits the movement owner. A repeat `--apply` is safe; mismatched files and unsupported diagnostic versions cause a refusal.
-
-**Undo D11M before undoing D11L or earlier instrumentation**:
+1. Put ZIP in the GitHub `BLOB-HOST-CORE` root and expand its contents there:
 
 ```powershell
-py .\D11M_APPLY.py --undo
+Expand-Archive -LiteralPath '.\BLOB_BOT1_D11O_ATTACHED_RELEASE_DIAGNOSTIC_DELTA.zip' -DestinationPath '.' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\test_bot1d11o.py
 ```
 
-## 2. Live run (default: 18 runs)
+2. With Vite running at `127.0.0.1:5173`, run the browser matrix:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11m_browser.py --browser-channel chrome --headed --pairs 3 --seconds 75 --output BOT1D11M_RESULTS
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\bot1d11o_browser.py --browser-channel chrome --headed --rounds 2 --seconds 75 --output BOT1D11O_RESULTS
 ```
 
-The default run is **12 Brake attempts** (3 repeats of baseline and neutral-counter under each observer condition), **4 Reference/Feather comparisons**, and **HC + Away controls**. Brake order and recorder condition alternate between rounds. For a longer repeatability test, `--pairs 5` runs 26 total trials; never overwrite or mix result roots.
-
-**Recorder conditions:**
-
-- `observer_on`: D11L release-owner method wrapper active (plus existing D11C/F/H/I and REC1).
-- `observer_off`: D11L release-owner method restored **before the scripted approach**. D11C/F/H/I and REC1 **stay active**. This is a partial observer-effect comparison, not a recording-free gameplay benchmark. All fixed inputs and input durations stay identical within a matched Brake pair.
-
-Owner-frame absence in the off condition is expected; the analyzer checks for this explicitly. The off condition should still contain D11I reach/seal/attachment events and D11F true authored mesh geometry.
-
-## 3. Analyze and send complete output
+3. Analyze and zip the raw output regardless of verdict:
 
 ```powershell
-py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11m.py BOT1D11M_RESULTS
-Compress-Archive -Path '.\BOT1D11M_RESULTS\*' -DestinationPath '.\BOT1D11M_RESULTS.zip' -Force
+py .\BLOB_BOT1_REAL_INPUT_HARNESS\scripts\analyze_bot1d11o.py BOT1D11O_RESULTS
+Compress-Archive -Path '.\BOT1D11O_RESULTS\*' -DestinationPath '.\BOT1D11O_RESULTS.zip' -Force
 ```
 
-Upload `BOT1D11M_RESULTS.zip` even if the browser runner or analyzer exits nonzero. `BOT1D11M_AUDIT.json` contains per-run acquisition classes, pre-release nearest sampled eligible distance, observed approach time in the 0.46 brush envelope, wall-clock input action overruns, sample/frame gaps, inferred brush-gate reason counts, D11G geometry findings, D11J sole-sealed-anchor peel checks, plus grouped and per-round matched comparisons.
+Upload `BOT1D11O_RESULTS.zip`. The analyzer's candidate release successes, precondition success count, controls, and normal-regime coverage are **separate** measures. Even 16/16 capture success does not certify release correctness.
 
-**Careful interpretation:** The sample intervals are not guaranteed 50ms; no full continuous contact window is proven. A run with no anchors cannot count as a geometry pass. Brush-gate reasons are *derived D11D classifications*, not owner-issued error codes. Surface-center velocity is a proxy, not collider normal velocity. Any apparent observer effect from ~3 trials per condition needs repetition.
+## Parallel Guide lab
 
-## Exit gate and next decision
-
-D11M is a diagnosis, not an LS1 lock. We need to identify whether misses originate in approach path/proximity, outward/velocity guards, reach/seal maturation, or instrumentation jitter. If the fixed bot simply misses the surface, correct the bot and test human-facing control mapping without lowering game constraints. If a repeatable, narrow runtime defect remains, scope a single owner repair and repeat HC, Away, D11F mesh, D11J, and frozen D10B Fold regressions. **Only then** proceed to two-surface LS1 geometry and later Core propulsion, environmental acclimation, phase progression, and Guide Signal Language.
+A separate ZIP `BLOB_GUIDE_SIGNAL_LAB_V0.zip` contains an isolated mock interpreter and JSON demo. It adds **no game integration**. A future event source must be independently verified before these Guide responses affect actual play. Its expressions are original, conceptual (not audible files or copied film sounds); HC027D1 mixing level remains unchanged.

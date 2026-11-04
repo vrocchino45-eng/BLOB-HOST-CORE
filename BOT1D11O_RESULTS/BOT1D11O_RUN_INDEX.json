@@ -1,0 +1,303 @@
+{
+  "revision": "BOT1-D11O-1",
+  "createdAt": "2026-11-04T01:39:53.973+00:00",
+  "rounds": 2,
+  "schedule": [
+    [
+      1,
+      "host_positive",
+      "control",
+      "control"
+    ],
+    [
+      1,
+      "away_control",
+      "control",
+      "control"
+    ],
+    [
+      1,
+      "natural_reference",
+      "control",
+      "control"
+    ],
+    [
+      1,
+      "natural_feather",
+      "control",
+      "control"
+    ],
+    [
+      1,
+      "natural_brake",
+      "tangential",
+      "up_c"
+    ],
+    [
+      1,
+      "natural_brake",
+      "tangential",
+      "up_left_ca"
+    ],
+    [
+      1,
+      "natural_brake",
+      "tangential",
+      "up_right_cd"
+    ],
+    [
+      1,
+      "natural_brake",
+      "neutral_dwell",
+      "up_left_ca"
+    ],
+    [
+      1,
+      "natural_brake",
+      "neutral_dwell",
+      "up_right_cd"
+    ],
+    [
+      1,
+      "natural_brake",
+      "neutral_dwell",
+      "up_c"
+    ],
+    [
+      2,
+      "natural_brake",
+      "neutral_dwell",
+      "up_left_ca"
+    ],
+    [
+      2,
+      "natural_brake",
+      "neutral_dwell",
+      "up_right_cd"
+    ],
+    [
+      2,
+      "natural_brake",
+      "neutral_dwell",
+      "up_c"
+    ],
+    [
+      2,
+      "natural_brake",
+      "tangential",
+      "up_right_cd"
+    ],
+    [
+      2,
+      "natural_brake",
+      "tangential",
+      "up_c"
+    ],
+    [
+      2,
+      "natural_brake",
+      "tangential",
+      "up_left_ca"
+    ]
+  ],
+  "runs": [
+    {
+      "folder": "BOT1D11O_20261104T013138Z_r01_01_host_positive_control_control",
+      "round": 1,
+      "profile": "host_positive",
+      "context": "control",
+      "release": "control",
+      "status": "CAPTURED",
+      "precondition": null,
+      "releaseAttempted": false,
+      "events": 116,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013207Z_r01_02_away_control_control_control",
+      "round": 1,
+      "profile": "away_control",
+      "context": "control",
+      "release": "control",
+      "status": "CAPTURED",
+      "precondition": null,
+      "releaseAttempted": false,
+      "events": 129,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013234Z_r01_03_natural_reference_control_control",
+      "round": 1,
+      "profile": "natural_reference",
+      "context": "control",
+      "release": "control",
+      "status": "CAPTURED",
+      "precondition": null,
+      "releaseAttempted": false,
+      "events": 182,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013305Z_r01_04_natural_feather_control_control",
+      "round": 1,
+      "profile": "natural_feather",
+      "context": "control",
+      "release": "control",
+      "status": "CAPTURED",
+      "precondition": null,
+      "releaseAttempted": false,
+      "events": 170,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013334Z_r01_05_natural_brake_tangential_up_c",
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_c",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 183,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013406Z_r01_06_natural_brake_tangential_up_left_ca",
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_left_ca",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 183,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013437Z_r01_07_natural_brake_tangential_up_right_cd",
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_right_cd",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 185,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013509Z_r01_08_natural_brake_neutral_dwell_up_left_ca",
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_left_ca",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 180,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013540Z_r01_09_natural_brake_neutral_dwell_up_right_cd",
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_right_cd",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 185,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013612Z_r01_10_natural_brake_neutral_dwell_up_c",
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_c",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 174,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013644Z_r02_11_natural_brake_neutral_dwell_up_left_ca",
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_left_ca",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 172,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013715Z_r02_12_natural_brake_neutral_dwell_up_right_cd",
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_right_cd",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 177,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013746Z_r02_13_natural_brake_neutral_dwell_up_c",
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_c",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 173,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013816Z_r02_14_natural_brake_tangential_up_right_cd",
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_right_cd",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 184,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013848Z_r02_15_natural_brake_tangential_up_c",
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_c",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 183,
+      "errors": []
+    },
+    {
+      "folder": "BOT1D11O_20261104T013919Z_r02_16_natural_brake_tangential_up_left_ca",
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_left_ca",
+      "status": "CAPTURED",
+      "precondition": true,
+      "releaseAttempted": true,
+      "events": 183,
+      "errors": []
+    }
+  ],
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "releaseInputsPredeclared": true,
+  "controlsIncluded": true,
+  "controlledDebugStart": true,
+  "preconditionOnlyGatesTestability": true
+}

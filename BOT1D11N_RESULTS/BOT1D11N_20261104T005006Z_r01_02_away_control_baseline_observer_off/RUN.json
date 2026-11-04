@@ -1,0 +1,100 @@
+{
+  "revision": "BOT1-D11N-1",
+  "round": 1,
+  "profile": "away_control",
+  "arm": "baseline",
+  "observer": "observer_off",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-04T00:50:08.451+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": true,
+  "debugEntryUsed": true,
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "mode": "CANONICAL_POST_SHIFT6_REFERENCE_FIXED_INPUT_ACQUISITION",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-04T00:50:22.029+00:00",
+      "endedAt": "2026-11-04T00:50:22.896+00:00"
+    },
+    {
+      "label": "move_away",
+      "key": "c",
+      "plannedSeconds": 1.1,
+      "startedAt": "2026-11-04T00:50:22.940+00:00",
+      "endedAt": "2026-11-04T00:50:24.174+00:00"
+    },
+    {
+      "label": "away_observe",
+      "key": null,
+      "plannedSeconds": 2.1,
+      "startedAt": "2026-11-04T00:50:24.217+00:00",
+      "endedAt": "2026-11-04T00:50:26.371+00:00"
+    },
+    {
+      "label": "move_side",
+      "key": "d",
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-04T00:50:26.384+00:00",
+      "endedAt": "2026-11-04T00:50:26.900+00:00"
+    },
+    {
+      "label": "end_observe",
+      "key": null,
+      "plannedSeconds": 1.0,
+      "startedAt": "2026-11-04T00:50:26.946+00:00",
+      "endedAt": "2026-11-04T00:50:27.998+00:00"
+    }
+  ],
+  "errors": [],
+  "controlledStartReceipt": {
+    "kind": "controlled_preapproach_start_d11n",
+    "ms": 110,
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "position": {
+      "x": -0.04,
+      "y": -0.07,
+      "z": -0.17
+    },
+    "expectedPosition": {
+      "x": -0.04,
+      "y": -0.07,
+      "z": -0.17
+    },
+    "playerQuaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "cameraQuaternion": [
+      -0.2187339402523527,
+      0.03746178819641608,
+      0.00840402134645194,
+      0.9750289484071822
+    ],
+    "shelfCenter": {
+      "x": -0.18,
+      "y": -0.75,
+      "z": -2.65
+    },
+    "shelfDistanceFromOrigin": 2.5753,
+    "preExistingContact": false,
+    "momentumReset": true,
+    "ownerDataUsedForSteering": false,
+    "cameraHeadingForced": false,
+    "reason": "debug_only_fixed_post_shift6_reference_no_contact_or_navigation_credit"
+  },
+  "rec1": {
+    "events": 134,
+    "droppedDetails": 0
+  },
+  "sampleCount": 100,
+  "ownerEventCount": 2,
+  "releaseOwnerFrameCount": 0,
+  "finishedAt": "2026-11-04T00:50:32.320+00:00",
+  "wallSeconds": 23.87
+}

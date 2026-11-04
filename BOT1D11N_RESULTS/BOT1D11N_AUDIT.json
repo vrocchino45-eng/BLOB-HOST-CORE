@@ -1,0 +1,2166 @@
+{
+  "revision": "BOT1-D11N-1",
+  "runsCaptured": 18,
+  "matrixComplete": true,
+  "capturesComplete": true,
+  "controlledStartValid": true,
+  "naturalAttached": 11,
+  "naturalCount": 16,
+  "baselineAttached": 1,
+  "baselineCount": 6,
+  "neutralAttached": 6,
+  "neutralCount": 6,
+  "nonAdversarialPassed": 7,
+  "nonAdversarialCount": 10,
+  "controlPassed": 2,
+  "controlCount": 2,
+  "cameraHeadingDifferences": [
+    {
+      "round": 1,
+      "observer": "observer_on",
+      "cameraOrientationDifferenceDeg": 0.008,
+      "baselineAcquired": false,
+      "neutralAcquired": true,
+      "baselineMinEligibleDistance": 0.5744,
+      "neutralMinEligibleDistance": 0.4019,
+      "neutralMinusBaseline": -0.1725
+    },
+    {
+      "round": 1,
+      "observer": "observer_off",
+      "cameraOrientationDifferenceDeg": 0.027,
+      "baselineAcquired": false,
+      "neutralAcquired": true,
+      "baselineMinEligibleDistance": 0.5911,
+      "neutralMinEligibleDistance": 0.4014,
+      "neutralMinusBaseline": -0.1897
+    },
+    {
+      "round": 2,
+      "observer": "observer_on",
+      "cameraOrientationDifferenceDeg": 0.025,
+      "baselineAcquired": false,
+      "neutralAcquired": true,
+      "baselineMinEligibleDistance": 0.7326,
+      "neutralMinEligibleDistance": 0.4161,
+      "neutralMinusBaseline": -0.3165
+    },
+    {
+      "round": 2,
+      "observer": "observer_off",
+      "cameraOrientationDifferenceDeg": 0.007,
+      "baselineAcquired": false,
+      "neutralAcquired": true,
+      "baselineMinEligibleDistance": 0.671,
+      "neutralMinEligibleDistance": 0.4103,
+      "neutralMinusBaseline": -0.2607
+    },
+    {
+      "round": 3,
+      "observer": "observer_on",
+      "cameraOrientationDifferenceDeg": 0.014,
+      "baselineAcquired": true,
+      "neutralAcquired": true,
+      "baselineMinEligibleDistance": 0.4175,
+      "neutralMinEligibleDistance": 0.3919,
+      "neutralMinusBaseline": -0.0256
+    },
+    {
+      "round": 3,
+      "observer": "observer_off",
+      "cameraOrientationDifferenceDeg": 0.009,
+      "baselineAcquired": false,
+      "neutralAcquired": true,
+      "baselineMinEligibleDistance": 0.7168,
+      "neutralMinEligibleDistance": 0.4183,
+      "neutralMinusBaseline": -0.2985
+    }
+  ],
+  "cameraHeadingWarnings": [],
+  "geometryOrPeelWarnings": [],
+  "rows": [
+    {
+      "folder": "BOT1D11N_20261104T004937Z_r01_01_host_positive_baseline_observer_on",
+      "round": 1,
+      "profile": "host_positive",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 236,
+      "events": 125,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.2671,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": null,
+        "brushOwner": 2008,
+        "reachOwner": 2008,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": 2288
+      },
+      "initialSamplePose": {
+        "x": 4.1672,
+        "y": -0.3307,
+        "z": -1.4697
+      },
+      "initialSampleFrame": 35,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": null,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": null,
+        "approachStartMs": null,
+        "releaseInputStartMs": null,
+        "eligibleSampleCountBeforeRelease": 0,
+        "eligibleSampleCountWholeRun": 0,
+        "minEligibleDistanceBeforeRelease": null,
+        "minEligibleDistanceWholeRun": null,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 150,
+        "p90SampleGapMs": 182.0,
+        "maximumSampleGapMs": 234,
+        "gapsOver150Ms": 30,
+        "sampleCount": 64,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 96.0,
+        "p90RouteActionOverrunMs": 219.2
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": null,
+        "maximumTowardShelfCenterUnitsPerSec": null,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "different_surface": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "different_surface": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "hc_unchanged",
+        "cameraQuaternion": null
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005006Z_r01_02_away_control_baseline_observer_off",
+      "round": 1,
+      "profile": "away_control",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 134,
+      "geometryClassification": "AWAY_CONTROL_CLEAR",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": null,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "NO_ELIGIBLE_SHELF_OBSERVED",
+      "acquiredAtAnyTime": false,
+      "acquiredBeforeRelease": false,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": null,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "initialSamplePose": {
+        "x": -0.076,
+        "y": -0.1331,
+        "z": -0.3041
+      },
+      "initialSampleFrame": 64,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": null,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": null,
+        "approachStartMs": null,
+        "releaseInputStartMs": null,
+        "eligibleSampleCountBeforeRelease": 0,
+        "eligibleSampleCountWholeRun": 0,
+        "minEligibleDistanceBeforeRelease": null,
+        "minEligibleDistanceWholeRun": null,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 55,
+        "p90SampleGapMs": 105.2,
+        "maximumSampleGapMs": 150,
+        "gapsOver150Ms": 0,
+        "sampleCount": 100,
+        "frameDeltaMedian": 1,
+        "medianRouteActionOverrunMs": 67.0,
+        "p90RouteActionOverrunMs": 126.8
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": null,
+        "maximumTowardShelfCenterUnitsPerSec": null,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.2187339402523527,
+          0.03746178819641608,
+          0.00840402134645194,
+          0.9750289484071822
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005032Z_r01_03_natural_reference_baseline_observer_on",
+      "round": 1,
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 310,
+      "events": 178,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1147,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 1954,
+        "brushOwner": 2020,
+        "reachOwner": 2022,
+        "sealOwner": 2180,
+        "supportOwner": 2233,
+        "attachedOwner": 2251
+      },
+      "initialSamplePose": {
+        "x": -0.0706,
+        "y": -0.1237,
+        "z": -0.2825
+      },
+      "initialSampleFrame": 64,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 1954,
+        "firstInsideBrushSampleBeforeReleaseMs": 2079,
+        "closestEligibleSampleBeforeReleaseMs": 2223,
+        "approachStartMs": 1116,
+        "releaseInputStartMs": 6627,
+        "eligibleSampleCountBeforeRelease": 39,
+        "eligibleSampleCountWholeRun": 43,
+        "minEligibleDistanceBeforeRelease": 0.2713,
+        "minEligibleDistanceWholeRun": 0.2713,
+        "envelopeSampleCountBeforeRelease": 36,
+        "sampledConsecutiveEnvelopeSpanMs": 3389,
+        "sampledAdjacentEnvelopeTimeMs": 3533,
+        "maxConsecutiveEnvelopeSamples": 34,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 104,
+        "p90SampleGapMs": 131.2,
+        "maximumSampleGapMs": 193,
+        "gapsOver150Ms": 4,
+        "sampleCount": 110,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 74.0,
+        "p90RouteActionOverrunMs": 161.0
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.023,
+        "maximumTowardShelfCenterUnitsPerSec": 1.968,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21880663716153098,
+          0.03734269175100128,
+          0.00838018648681981,
+          0.9750174108093137
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005102Z_r01_04_natural_feather_baseline_observer_on",
+      "round": 1,
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 288,
+      "events": 171,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.0824,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2525,
+        "brushOwner": 2601,
+        "reachOwner": 2603,
+        "sealOwner": 2745,
+        "supportOwner": 2801,
+        "attachedOwner": 2820
+      },
+      "initialSamplePose": {
+        "x": -0.0753,
+        "y": -0.1318,
+        "z": -0.3011
+      },
+      "initialSampleFrame": 62,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2525,
+        "firstInsideBrushSampleBeforeReleaseMs": 2662,
+        "closestEligibleSampleBeforeReleaseMs": 2787,
+        "approachStartMs": 1137,
+        "releaseInputStartMs": 6161,
+        "eligibleSampleCountBeforeRelease": 13,
+        "eligibleSampleCountWholeRun": 17,
+        "minEligibleDistanceBeforeRelease": 0.306,
+        "minEligibleDistanceWholeRun": 0.306,
+        "envelopeSampleCountBeforeRelease": 12,
+        "sampledConsecutiveEnvelopeSpanMs": 965,
+        "sampledAdjacentEnvelopeTimeMs": 1090,
+        "maxConsecutiveEnvelopeSamples": 10,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 111.0,
+        "p90SampleGapMs": 136.7,
+        "maximumSampleGapMs": 193,
+        "gapsOver150Ms": 6,
+        "sampleCount": 95,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 82.0,
+        "p90RouteActionOverrunMs": 171.2
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.055,
+        "maximumTowardShelfCenterUnitsPerSec": 1.631,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21874343526670817,
+          0.037412631357186664,
+          0.008393359290233661,
+          0.975028797555475
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005132Z_r01_05_natural_feather_baseline_observer_off",
+      "round": 1,
+      "profile": "natural_feather",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 163,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1479,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2526,
+        "brushOwner": 2684,
+        "reachOwner": 2686,
+        "sealOwner": 2863,
+        "supportOwner": 2906,
+        "attachedOwner": 2923
+      },
+      "initialSamplePose": {
+        "x": -0.0734,
+        "y": -0.1286,
+        "z": -0.2937
+      },
+      "initialSampleFrame": 69,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2526,
+        "firstInsideBrushSampleBeforeReleaseMs": 2732,
+        "closestEligibleSampleBeforeReleaseMs": 5873,
+        "approachStartMs": 1113,
+        "releaseInputStartMs": 6125,
+        "eligibleSampleCountBeforeRelease": 15,
+        "eligibleSampleCountWholeRun": 17,
+        "minEligibleDistanceBeforeRelease": 0.3249,
+        "minEligibleDistanceWholeRun": 0.3249,
+        "envelopeSampleCountBeforeRelease": 11,
+        "sampledConsecutiveEnvelopeSpanMs": 889,
+        "sampledAdjacentEnvelopeTimeMs": 1126,
+        "maxConsecutiveEnvelopeSamples": 8,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 83.5,
+        "p90SampleGapMs": 129.0,
+        "maximumSampleGapMs": 194,
+        "gapsOver150Ms": 2,
+        "sampleCount": 119,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 75.0,
+        "p90RouteActionOverrunMs": 157.0
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.187,
+        "maximumTowardShelfCenterUnitsPerSec": 1.634,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21864692860996823,
+          0.03746340724515613,
+          0.008400873311441136,
+          0.9750484290816618
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005159Z_r01_06_natural_reference_baseline_observer_off",
+      "round": 1,
+      "profile": "natural_reference",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 169,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.0403,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2034,
+        "brushOwner": 2059,
+        "reachOwner": 2060,
+        "sealOwner": 2269,
+        "supportOwner": 2284,
+        "attachedOwner": 2292
+      },
+      "initialSamplePose": {
+        "x": -0.0717,
+        "y": -0.1256,
+        "z": -0.2869
+      },
+      "initialSampleFrame": 68,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2034,
+        "firstInsideBrushSampleBeforeReleaseMs": 2130,
+        "closestEligibleSampleBeforeReleaseMs": 2369,
+        "approachStartMs": 1164,
+        "releaseInputStartMs": 6893,
+        "eligibleSampleCountBeforeRelease": 44,
+        "eligibleSampleCountWholeRun": 50,
+        "minEligibleDistanceBeforeRelease": 0.2224,
+        "minEligibleDistanceWholeRun": 0.2224,
+        "envelopeSampleCountBeforeRelease": 42,
+        "sampledConsecutiveEnvelopeSpanMs": 3547,
+        "sampledAdjacentEnvelopeTimeMs": 3547,
+        "maxConsecutiveEnvelopeSamples": 40,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 97.0,
+        "p90SampleGapMs": 161.0,
+        "maximumSampleGapMs": 258,
+        "gapsOver150Ms": 15,
+        "sampleCount": 107,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 110.0,
+        "p90RouteActionOverrunMs": 208.4
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.031,
+        "maximumTowardShelfCenterUnitsPerSec": 1.882,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21877813559284717,
+          0.03746285309158307,
+          0.008406043868729332,
+          0.9750189744057463
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005226Z_r01_07_natural_brake_baseline_observer_on",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 244,
+      "events": 159,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": null,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ELIGIBLE_OUTSIDE_BRUSH_ENVELOPE",
+      "acquiredAtAnyTime": false,
+      "acquiredBeforeRelease": false,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 3819,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "initialSamplePose": {
+        "x": -0.0716,
+        "y": -0.1254,
+        "z": -0.2863
+      },
+      "initialSampleFrame": 68,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 3819,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": 4655,
+        "approachStartMs": 1123,
+        "releaseInputStartMs": 5721,
+        "eligibleSampleCountBeforeRelease": 23,
+        "eligibleSampleCountWholeRun": 24,
+        "minEligibleDistanceBeforeRelease": 0.5744,
+        "minEligibleDistanceWholeRun": 0.5744,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 83,
+        "p90SampleGapMs": 110.0,
+        "maximumSampleGapMs": 149,
+        "gapsOver150Ms": 0,
+        "sampleCount": 120,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 103.5,
+        "p90RouteActionOverrunMs": 146.1
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.098,
+        "maximumTowardShelfCenterUnitsPerSec": 2.086,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21878889781261476,
+          0.037484052595721996,
+          0.008411242688267767,
+          0.9750156998691771
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005254Z_r01_08_natural_brake_neutral_counter_observer_on",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 299,
+      "events": 166,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1067,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2069,
+        "brushOwner": 2563,
+        "reachOwner": 2564,
+        "sealOwner": 2736,
+        "supportOwner": 2744,
+        "attachedOwner": 2803
+      },
+      "initialSamplePose": {
+        "x": -0.0709,
+        "y": -0.1242,
+        "z": -0.2836
+      },
+      "initialSampleFrame": 66,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2069,
+        "firstInsideBrushSampleBeforeReleaseMs": 2673,
+        "closestEligibleSampleBeforeReleaseMs": 2786,
+        "approachStartMs": 1130,
+        "releaseInputStartMs": 5662,
+        "eligibleSampleCountBeforeRelease": 11,
+        "eligibleSampleCountWholeRun": 44,
+        "minEligibleDistanceBeforeRelease": 0.4019,
+        "minEligibleDistanceWholeRun": 0.382,
+        "envelopeSampleCountBeforeRelease": 3,
+        "sampledConsecutiveEnvelopeSpanMs": 113,
+        "sampledAdjacentEnvelopeTimeMs": 113,
+        "maxConsecutiveEnvelopeSamples": 2,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 105,
+        "p90SampleGapMs": 121.0,
+        "maximumSampleGapMs": 167,
+        "gapsOver150Ms": 2,
+        "sampleCount": 102,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 63.5,
+        "p90RouteActionOverrunMs": 151.7
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.151,
+        "maximumTowardShelfCenterUnitsPerSec": 2.043,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21885571647093743,
+          0.03748837120195959,
+          0.008414911692197167,
+          0.9750005059761914
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005322Z_r01_09_natural_brake_baseline_observer_off",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 156,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": null,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ELIGIBLE_OUTSIDE_BRUSH_ENVELOPE",
+      "acquiredAtAnyTime": false,
+      "acquiredBeforeRelease": false,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 3897,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "initialSamplePose": {
+        "x": -0.0734,
+        "y": -0.1285,
+        "z": -0.2935
+      },
+      "initialSampleFrame": 68,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 3897,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": 4589,
+        "approachStartMs": 1141,
+        "releaseInputStartMs": 5696,
+        "eligibleSampleCountBeforeRelease": 26,
+        "eligibleSampleCountWholeRun": 30,
+        "minEligibleDistanceBeforeRelease": 0.5911,
+        "minEligibleDistanceWholeRun": 0.5911,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 82.0,
+        "p90SampleGapMs": 113.6,
+        "maximumSampleGapMs": 156,
+        "gapsOver150Ms": 1,
+        "sampleCount": 123,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 99.0,
+        "p90RouteActionOverrunMs": 137.9
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.107,
+        "maximumTowardShelfCenterUnitsPerSec": 2.108,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.2186600239391317,
+          0.03748222194875867,
+          0.00840562765925303,
+          0.9750447284060237
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005348Z_r01_10_natural_brake_neutral_counter_observer_off",
+      "round": 1,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 156,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1067,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2110,
+        "brushOwner": 2646,
+        "reachOwner": 2649,
+        "sealOwner": 2820,
+        "supportOwner": 2866,
+        "attachedOwner": 2881
+      },
+      "initialSamplePose": {
+        "x": -0.08,
+        "y": -0.14,
+        "z": -0.3198
+      },
+      "initialSampleFrame": 63,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2110,
+        "firstInsideBrushSampleBeforeReleaseMs": 2693,
+        "closestEligibleSampleBeforeReleaseMs": 2924,
+        "approachStartMs": 1148,
+        "releaseInputStartMs": 5699,
+        "eligibleSampleCountBeforeRelease": 14,
+        "eligibleSampleCountWholeRun": 22,
+        "minEligibleDistanceBeforeRelease": 0.4014,
+        "minEligibleDistanceWholeRun": 0.4014,
+        "envelopeSampleCountBeforeRelease": 3,
+        "sampledConsecutiveEnvelopeSpanMs": 231,
+        "sampledAdjacentEnvelopeTimeMs": 231,
+        "maxConsecutiveEnvelopeSamples": 3,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 104,
+        "p90SampleGapMs": 121.0,
+        "maximumSampleGapMs": 135,
+        "gapsOver150Ms": 0,
+        "sampleCount": 102,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 64.0,
+        "p90RouteActionOverrunMs": 155.3
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.125,
+        "maximumTowardShelfCenterUnitsPerSec": 1.806,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.2185661114847389,
+          0.03727720362560349,
+          0.008355809564077322,
+          0.97507407177446
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005415Z_r02_11_natural_brake_neutral_counter_observer_off",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 154,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1048,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2088,
+        "brushOwner": 2810,
+        "reachOwner": 2812,
+        "sealOwner": 3001,
+        "supportOwner": 3011,
+        "attachedOwner": 3069
+      },
+      "initialSamplePose": {
+        "x": -0.0716,
+        "y": -0.1253,
+        "z": -0.2863
+      },
+      "initialSampleFrame": 69,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2088,
+        "firstInsideBrushSampleBeforeReleaseMs": 2925,
+        "closestEligibleSampleBeforeReleaseMs": 3055,
+        "approachStartMs": 1103,
+        "releaseInputStartMs": 5702,
+        "eligibleSampleCountBeforeRelease": 15,
+        "eligibleSampleCountWholeRun": 25,
+        "minEligibleDistanceBeforeRelease": 0.4103,
+        "minEligibleDistanceWholeRun": 0.4103,
+        "envelopeSampleCountBeforeRelease": 2,
+        "sampledConsecutiveEnvelopeSpanMs": 130,
+        "sampledAdjacentEnvelopeTimeMs": 130,
+        "maxConsecutiveEnvelopeSamples": 2,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 84.0,
+        "p90SampleGapMs": 116.8,
+        "maximumSampleGapMs": 164,
+        "gapsOver150Ms": 2,
+        "sampleCount": 113,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 70.5,
+        "p90RouteActionOverrunMs": 160.4
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.128,
+        "maximumTowardShelfCenterUnitsPerSec": 1.956,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.2188307349934034,
+          0.037481725891008566,
+          0.008412409087543581,
+          0.9750063902456343
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005442Z_r02_12_natural_brake_baseline_observer_off",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 154,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": null,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ELIGIBLE_OUTSIDE_BRUSH_ENVELOPE",
+      "acquiredAtAnyTime": false,
+      "acquiredBeforeRelease": false,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 4239,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "initialSamplePose": {
+        "x": -0.0741,
+        "y": -0.1298,
+        "z": -0.2966
+      },
+      "initialSampleFrame": 68,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 4239,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": 4717,
+        "approachStartMs": 1122,
+        "releaseInputStartMs": 5963,
+        "eligibleSampleCountBeforeRelease": 6,
+        "eligibleSampleCountWholeRun": 7,
+        "minEligibleDistanceBeforeRelease": 0.671,
+        "minEligibleDistanceWholeRun": 0.671,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 90.5,
+        "p90SampleGapMs": 162.0,
+        "maximumSampleGapMs": 204,
+        "gapsOver150Ms": 14,
+        "sampleCount": 101,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 121.0,
+        "p90RouteActionOverrunMs": 194.8
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.108,
+        "maximumTowardShelfCenterUnitsPerSec": 2.128,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 2
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21877613554957848,
+          0.037467934711577555,
+          0.008407105409647767,
+          0.9750192187649802
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005508Z_r02_13_natural_brake_neutral_counter_observer_on",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 295,
+      "events": 162,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1086,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2079,
+        "brushOwner": 2689,
+        "reachOwner": 2691,
+        "sealOwner": 2868,
+        "supportOwner": 2919,
+        "attachedOwner": 2936
+      },
+      "initialSamplePose": {
+        "x": -0.0789,
+        "y": -0.1381,
+        "z": -0.3154
+      },
+      "initialSampleFrame": 71,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2079,
+        "firstInsideBrushSampleBeforeReleaseMs": 2738,
+        "closestEligibleSampleBeforeReleaseMs": 2908,
+        "approachStartMs": 1110,
+        "releaseInputStartMs": 5644,
+        "eligibleSampleCountBeforeRelease": 14,
+        "eligibleSampleCountWholeRun": 47,
+        "minEligibleDistanceBeforeRelease": 0.4161,
+        "minEligibleDistanceWholeRun": 0.3818,
+        "envelopeSampleCountBeforeRelease": 3,
+        "sampledConsecutiveEnvelopeSpanMs": 170,
+        "sampledAdjacentEnvelopeTimeMs": 170,
+        "maxConsecutiveEnvelopeSamples": 3,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 104,
+        "p90SampleGapMs": 124.0,
+        "maximumSampleGapMs": 175,
+        "gapsOver150Ms": 3,
+        "sampleCount": 102,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 66.5,
+        "p90RouteActionOverrunMs": 146.0
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.119,
+        "maximumTowardShelfCenterUnitsPerSec": 1.793,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21856809672680802,
+          0.03752489680488316,
+          0.008411497105547058,
+          0.975063647117175
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005535Z_r02_14_natural_brake_baseline_observer_on",
+      "round": 2,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 231,
+      "events": 164,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": null,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ELIGIBLE_OUTSIDE_BRUSH_ENVELOPE",
+      "acquiredAtAnyTime": false,
+      "acquiredBeforeRelease": false,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 4378,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "initialSamplePose": {
+        "x": -0.0711,
+        "y": -0.1245,
+        "z": -0.2845
+      },
+      "initialSampleFrame": 70,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 4378,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": 4615,
+        "approachStartMs": 1115,
+        "releaseInputStartMs": 5653,
+        "eligibleSampleCountBeforeRelease": 6,
+        "eligibleSampleCountWholeRun": 6,
+        "minEligibleDistanceBeforeRelease": 0.7326,
+        "minEligibleDistanceWholeRun": 0.7326,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 79,
+        "p90SampleGapMs": 112.0,
+        "maximumSampleGapMs": 170,
+        "gapsOver150Ms": 2,
+        "sampleCount": 126,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 93.5,
+        "p90RouteActionOverrunMs": 143.1
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.097,
+        "maximumTowardShelfCenterUnitsPerSec": 1.798,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.2187780727798278,
+          0.0374727025796887,
+          0.008408254807155851,
+          0.9750185909423557
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005602Z_r03_15_natural_brake_baseline_observer_on",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 285,
+      "events": 166,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.0315,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2418,
+        "brushOwner": 4823,
+        "reachOwner": 4825,
+        "sealOwner": 4977,
+        "supportOwner": 5029,
+        "attachedOwner": 5047
+      },
+      "initialSamplePose": {
+        "x": -0.0939,
+        "y": -0.1645,
+        "z": -0.3757
+      },
+      "initialSampleFrame": 60,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2418,
+        "firstInsideBrushSampleBeforeReleaseMs": 4958,
+        "closestEligibleSampleBeforeReleaseMs": 5101,
+        "approachStartMs": 1344,
+        "releaseInputStartMs": 6491,
+        "eligibleSampleCountBeforeRelease": 15,
+        "eligibleSampleCountWholeRun": 15,
+        "minEligibleDistanceBeforeRelease": 0.4175,
+        "minEligibleDistanceWholeRun": 0.4175,
+        "envelopeSampleCountBeforeRelease": 2,
+        "sampledConsecutiveEnvelopeSpanMs": 143,
+        "sampledAdjacentEnvelopeTimeMs": 143,
+        "maxConsecutiveEnvelopeSamples": 2,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 105.5,
+        "p90SampleGapMs": 188.5,
+        "maximumSampleGapMs": 346,
+        "gapsOver150Ms": 17,
+        "sampleCount": 87,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 155.0,
+        "p90RouteActionOverrunMs": 283.3
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.097,
+        "maximumTowardShelfCenterUnitsPerSec": 2.032,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 3,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 2,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.2180453460368854,
+          0.03743083910768901,
+          0.00836930749712526,
+          0.9751846563843014
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005632Z_r03_16_natural_brake_neutral_counter_observer_on",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_on",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 287,
+      "events": 167,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1063,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": true,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2091,
+        "brushOwner": 2619,
+        "reachOwner": 2621,
+        "sealOwner": 2799,
+        "supportOwner": 2846,
+        "attachedOwner": 2864
+      },
+      "initialSamplePose": {
+        "x": -0.095,
+        "y": -0.1664,
+        "z": -0.3802
+      },
+      "initialSampleFrame": 69,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2091,
+        "firstInsideBrushSampleBeforeReleaseMs": 2726,
+        "closestEligibleSampleBeforeReleaseMs": 2921,
+        "approachStartMs": 1169,
+        "releaseInputStartMs": 5693,
+        "eligibleSampleCountBeforeRelease": 13,
+        "eligibleSampleCountWholeRun": 22,
+        "minEligibleDistanceBeforeRelease": 0.3919,
+        "minEligibleDistanceWholeRun": 0.3919,
+        "envelopeSampleCountBeforeRelease": 3,
+        "sampledConsecutiveEnvelopeSpanMs": 195,
+        "sampledAdjacentEnvelopeTimeMs": 195,
+        "maxConsecutiveEnvelopeSamples": 3,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 97,
+        "p90SampleGapMs": 120.4,
+        "maximumSampleGapMs": 173,
+        "gapsOver150Ms": 2,
+        "sampleCount": 104,
+        "frameDeltaMedian": 2,
+        "medianRouteActionOverrunMs": 67.0,
+        "p90RouteActionOverrunMs": 144.4
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.16,
+        "maximumTowardShelfCenterUnitsPerSec": 1.902,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1,
+        "releasing_or_reacquire_block": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21813772174098553,
+          0.03750447512919003,
+          0.008389528290804539,
+          0.975160994151219
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": true
+    },
+    {
+      "folder": "BOT1D11N_20261104T005700Z_r03_17_natural_brake_baseline_observer_off",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "baseline",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 151,
+      "geometryClassification": "NO_ATTACHMENT_OBSERVED",
+      "geometryGatePassed": false,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": null,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ELIGIBLE_OUTSIDE_BRUSH_ENVELOPE",
+      "acquiredAtAnyTime": false,
+      "acquiredBeforeRelease": false,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 4314,
+        "brushOwner": null,
+        "reachOwner": null,
+        "sealOwner": null,
+        "supportOwner": null,
+        "attachedOwner": null
+      },
+      "initialSamplePose": {
+        "x": -0.0743,
+        "y": -0.1301,
+        "z": -0.2971
+      },
+      "initialSampleFrame": 65,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 4314,
+        "firstInsideBrushSampleBeforeReleaseMs": null,
+        "closestEligibleSampleBeforeReleaseMs": 4503,
+        "approachStartMs": 1102,
+        "releaseInputStartMs": 5637,
+        "eligibleSampleCountBeforeRelease": 8,
+        "eligibleSampleCountWholeRun": 8,
+        "minEligibleDistanceBeforeRelease": 0.7168,
+        "minEligibleDistanceWholeRun": 0.7168,
+        "envelopeSampleCountBeforeRelease": 0,
+        "sampledConsecutiveEnvelopeSpanMs": 0,
+        "sampledAdjacentEnvelopeTimeMs": 0,
+        "maxConsecutiveEnvelopeSamples": 0,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 84.0,
+        "p90SampleGapMs": 124.9,
+        "maximumSampleGapMs": 172,
+        "gapsOver150Ms": 5,
+        "sampleCount": 115,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 88.0,
+        "p90RouteActionOverrunMs": 139.8
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.098,
+        "maximumTowardShelfCenterUnitsPerSec": 1.856,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 2,
+        "distance_over_brush_gate": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21874032278205197,
+          0.03748674957634826,
+          0.00840988738244807,
+          0.9750265066087273
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    },
+    {
+      "folder": "BOT1D11N_20261104T005725Z_r03_18_natural_brake_neutral_counter_observer_off",
+      "round": 3,
+      "profile": "natural_brake",
+      "arm": "neutral_counter",
+      "observer": "observer_off",
+      "captureValid": true,
+      "ownerRecorderConditionValid": true,
+      "recordedReleaseOwnerFrames": 0,
+      "events": 155,
+      "geometryClassification": "NO_GEOMETRY_OFFSET_WARNING_OBSERVED",
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToCarriedMesh": 0.1073,
+      "soleSealedPeelViolations": 0,
+      "acquisitionClass": "ATTACHED",
+      "acquiredAtAnyTime": true,
+      "acquiredBeforeRelease": true,
+      "deliberateRelease": false,
+      "lateBrushAfterReleaseStart": false,
+      "lateReachAfterReleaseStart": false,
+      "firstMilestonesMs": {
+        "eligibleSampled": 2120,
+        "brushOwner": 2780,
+        "reachOwner": 2781,
+        "sealOwner": 2957,
+        "supportOwner": 3014,
+        "attachedOwner": 3028
+      },
+      "initialSamplePose": {
+        "x": -0.0718,
+        "y": -0.1258,
+        "z": -0.2874
+      },
+      "initialSampleFrame": 67,
+      "acquisitionEnvelope": {
+        "thresholdUnits": 0.46,
+        "firstEligibleSampleBeforeReleaseMs": 2120,
+        "firstInsideBrushSampleBeforeReleaseMs": 2874,
+        "closestEligibleSampleBeforeReleaseMs": 3002,
+        "approachStartMs": 1095,
+        "releaseInputStartMs": 5632,
+        "eligibleSampleCountBeforeRelease": 15,
+        "eligibleSampleCountWholeRun": 50,
+        "minEligibleDistanceBeforeRelease": 0.4183,
+        "minEligibleDistanceWholeRun": 0.38,
+        "envelopeSampleCountBeforeRelease": 2,
+        "sampledConsecutiveEnvelopeSpanMs": 128,
+        "sampledAdjacentEnvelopeTimeMs": 128,
+        "maxConsecutiveEnvelopeSamples": 2,
+        "timeSamplingLimitation": "Values only bound observed adjacent samples, not a continuous contact interval."
+      },
+      "timing": {
+        "medianSampleGapMs": 95.0,
+        "p90SampleGapMs": 120.3,
+        "maximumSampleGapMs": 151,
+        "gapsOver150Ms": 1,
+        "sampleCount": 109,
+        "frameDeltaMedian": 2.0,
+        "medianRouteActionOverrunMs": 80.0,
+        "p90RouteActionOverrunMs": 133.5
+      },
+      "approachMotion": {
+        "medianTowardShelfCenterUnitsPerSec": 0.132,
+        "maximumTowardShelfCenterUnitsPerSec": 2.036,
+        "method": "world-space displacement projected toward shelf center; not true signed surface-normal velocity"
+      },
+      "derivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "preReleaseDerivedBrushGuardReasonCounts": {
+        "surface_not_mechanically_eligible": 1,
+        "distance_over_brush_gate": 1,
+        "brush_candidate_ready": 1,
+        "already_attached": 1
+      },
+      "caveat": "Guard reasons are modeled from D11D; D11L observer off restores one diagnostic wrapper, not all recording overhead.",
+      "revision": "BOT1-D11N-1",
+      "start": {
+        "valid": true,
+        "kind": "silt_preapproach",
+        "checks": {
+          "runReceipt": true,
+          "traceReceipt": true,
+          "matchingPosition": true,
+          "canonicalWorldOrigin": true,
+          "notShelfContactTeleport": true,
+          "momentumCleared": true,
+          "noPreexistingAttachment": true,
+          "noOwnerSteering": true,
+          "cellCorrect": true,
+          "controlledDeclared": true,
+          "noCameraSteering": true,
+          "cameraQuaternionRecorded": true
+        },
+        "position": {
+          "x": -0.04,
+          "y": -0.07,
+          "z": -0.17
+        },
+        "cameraQuaternion": [
+          -0.21881918884955393,
+          0.03746880530114928,
+          0.008409038732052765,
+          0.9750095072808934
+        ],
+        "shelfCenter": {
+          "x": -0.18,
+          "y": -0.75,
+          "z": -2.65
+        }
+      },
+      "priorScorer": "D11M physical/event scorer with revision and legacy uncontrolled-start flag adapted in memory; D11N start verified independently",
+      "testPass": false
+    }
+  ],
+  "decision": "D11N_REVIEW_OR_REPEAT_REQUIRED",
+  "caveats": [
+    "Debug Shift+6 entry is not navigation proof; D11N normalizes to the frozen post-entry pre-approach reference pose, not the shelf",
+    "World player pose and momentum controlled; camera quaternion is recorded but not actively forced",
+    "Test runs still have timing jitter and sampled, not continuous, contact distance",
+    "Legacy D11M/D11K physical scorer requires uncontrolled start; its revision/start flag is adapted only in memory, while D11N independently validates the real controlled-start receipt; no stored artifacts edited",
+    "No Core propulsion, Guide signal, adhesion or gameplay owner changed"
+  ]
+}

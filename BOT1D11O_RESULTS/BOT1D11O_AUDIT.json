@@ -1,0 +1,1025 @@
+{
+  "revision": "BOT1-D11O-1",
+  "runs": 16,
+  "matrixComplete": true,
+  "capturesComplete": false,
+  "controlPasses": 0,
+  "controlTotal": 4,
+  "releaseCandidateTotal": 12,
+  "releasePreconditions": 12,
+  "candidateDeliberateReleases": 8,
+  "geometryPeelWarnings": [],
+  "observedNormalClasses": {
+    "TILTED_NORMAL": 6,
+    "NEAR_VERTICAL_NORMAL": 6
+  },
+  "bothNormalRegimesObserved": true,
+  "comparisons": {
+    "tangential": {
+      "up_c": {
+        "runs": 2,
+        "preconditionVerified": 2,
+        "released": 2,
+        "geometryWarnings": 0,
+        "classes": {
+          "DELIVERED_DELIBERATE_RELEASE": 2
+        }
+      },
+      "up_left_ca": {
+        "runs": 2,
+        "preconditionVerified": 2,
+        "released": 0,
+        "geometryWarnings": 0,
+        "classes": {
+          "UNRELEASED_OUTWARD_GATE_BELOW_THRESHOLD": 1,
+          "UNRELEASED_OTHER_GATE_OR_OWNER_REVIEW": 1
+        }
+      },
+      "up_right_cd": {
+        "runs": 2,
+        "preconditionVerified": 2,
+        "released": 0,
+        "geometryWarnings": 0,
+        "classes": {
+          "UNRELEASED_OUTWARD_GATE_BELOW_THRESHOLD": 2
+        }
+      }
+    },
+    "neutral_dwell": {
+      "up_c": {
+        "runs": 2,
+        "preconditionVerified": 2,
+        "released": 2,
+        "geometryWarnings": 0,
+        "classes": {
+          "DELIVERED_DELIBERATE_RELEASE": 2
+        }
+      },
+      "up_left_ca": {
+        "runs": 2,
+        "preconditionVerified": 2,
+        "released": 2,
+        "geometryWarnings": 0,
+        "classes": {
+          "DELIVERED_DELIBERATE_RELEASE": 2
+        }
+      },
+      "up_right_cd": {
+        "runs": 2,
+        "preconditionVerified": 2,
+        "released": 2,
+        "geometryWarnings": 0,
+        "classes": {
+          "DELIVERED_DELIBERATE_RELEASE": 2
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "round": 1,
+      "profile": "host_positive",
+      "context": "control",
+      "release": "control",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": null,
+        "reason": "control_no_attached_only_release_precondition"
+      },
+      "preconditionRechecked": null,
+      "preconditionVerified": null,
+      "observedPreconditionNormalClass": "UNKNOWN",
+      "releaseResult": {
+        "class": "CONTROL",
+        "testable": false,
+        "actualDeliberateRelease": false
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1265,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013138Z_r01_01_host_positive_control_control"
+    },
+    {
+      "round": 1,
+      "profile": "away_control",
+      "context": "control",
+      "release": "control",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": null,
+        "reason": "control_no_attached_only_release_precondition"
+      },
+      "preconditionRechecked": null,
+      "preconditionVerified": null,
+      "observedPreconditionNormalClass": "UNKNOWN",
+      "releaseResult": {
+        "class": "CONTROL",
+        "testable": false,
+        "actualDeliberateRelease": false
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": null,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013207Z_r01_02_away_control_control_control"
+    },
+    {
+      "round": 1,
+      "profile": "natural_reference",
+      "context": "control",
+      "release": "control",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": null,
+        "reason": "control_no_attached_only_release_precondition"
+      },
+      "preconditionRechecked": null,
+      "preconditionVerified": null,
+      "observedPreconditionNormalClass": "UNKNOWN",
+      "releaseResult": {
+        "class": "CONTROL",
+        "testable": false,
+        "actualDeliberateRelease": true
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1484,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013234Z_r01_03_natural_reference_control_control"
+    },
+    {
+      "round": 1,
+      "profile": "natural_feather",
+      "context": "control",
+      "release": "control",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": null,
+        "reason": "control_no_attached_only_release_precondition"
+      },
+      "preconditionRechecked": null,
+      "preconditionVerified": null,
+      "observedPreconditionNormalClass": "UNKNOWN",
+      "releaseResult": {
+        "class": "CONTROL",
+        "testable": false,
+        "actualDeliberateRelease": false
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1911,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013305Z_r01_04_natural_feather_control_control"
+    },
+    {
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_c",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 588,
+        "terminalSampleMs": 6093,
+        "terminalNormal": {
+          "x": 0.0076,
+          "y": 0.7466,
+          "z": 0.6652
+        },
+        "terminalMeshOffset": 0.1352,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 833,
+        "terminalSampleMs": 8033,
+        "terminalNormal": {
+          "x": 0.0076,
+          "y": 0.7466,
+          "z": 0.6652
+        },
+        "terminalMeshOffset": 0.1352,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "TILTED_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8097,
+        "releaseEndMs": 9402,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.67195,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.74661,
+          0.74661
+        ],
+        "physicalPlaneNormalYRange": [
+          0.7466,
+          0.7466
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1352,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013334Z_r01_05_natural_brake_tangential_up_c"
+    },
+    {
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_left_ca",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 673,
+        "terminalSampleMs": 6228,
+        "terminalNormal": {
+          "x": -0.0226,
+          "y": 0.522,
+          "z": 0.8526
+        },
+        "terminalMeshOffset": 0.1059,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 779,
+        "terminalSampleMs": 8167,
+        "terminalNormal": {
+          "x": -0.0226,
+          "y": 0.522,
+          "z": 0.8526
+        },
+        "terminalMeshOffset": 0.1059,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "TILTED_NORMAL",
+      "releaseResult": {
+        "class": "UNRELEASED_OUTWARD_GATE_BELOW_THRESHOLD",
+        "testable": true,
+        "actualDeliberateRelease": false,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8227,
+        "releaseEndMs": 9663,
+        "attachedOwnerFrameCount": 46,
+        "ownerAwayIntentMax": 0.46982,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.52202,
+          0.52202
+        ],
+        "physicalPlaneNormalYRange": [
+          0.522,
+          0.522
+        ],
+        "actualDeliberateReleaseEvents": 0,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1059,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013406Z_r01_06_natural_brake_tangential_up_left_ca"
+    },
+    {
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_right_cd",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 765,
+        "terminalSampleMs": 6082,
+        "terminalNormal": {
+          "x": -0.0562,
+          "y": 0.7928,
+          "z": 0.6069
+        },
+        "terminalMeshOffset": 0.1059,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 685,
+        "terminalSampleMs": 8093,
+        "terminalNormal": {
+          "x": 0.0346,
+          "y": 0.4296,
+          "z": 0.9023
+        },
+        "terminalMeshOffset": 0.1059,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "TILTED_NORMAL",
+      "releaseResult": {
+        "class": "UNRELEASED_OUTWARD_GATE_BELOW_THRESHOLD",
+        "testable": true,
+        "actualDeliberateRelease": false,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8157,
+        "releaseEndMs": 9595,
+        "attachedOwnerFrameCount": 44,
+        "ownerAwayIntentMax": 0.38666,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.42962,
+          0.42962
+        ],
+        "physicalPlaneNormalYRange": [
+          0.4296,
+          0.4296
+        ],
+        "actualDeliberateReleaseEvents": 0,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1059,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013437Z_r01_07_natural_brake_tangential_up_right_cd"
+    },
+    {
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_left_ca",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 750,
+        "terminalSampleMs": 6067,
+        "terminalNormal": {
+          "x": 0.0292,
+          "y": 0.9783,
+          "z": 0.2051
+        },
+        "terminalMeshOffset": 0.0309,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 895,
+        "terminalSampleMs": 7921,
+        "terminalNormal": {
+          "x": 0.0292,
+          "y": 0.9783,
+          "z": 0.2051
+        },
+        "terminalMeshOffset": 0.0309,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "NEAR_VERTICAL_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 7924,
+        "releaseEndMs": 9342,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.88047,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.97831,
+          0.97831
+        ],
+        "physicalPlaneNormalYRange": [
+          0.9783,
+          0.9783
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.0309,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013509Z_r01_08_natural_brake_neutral_dwell_up_left_ca"
+    },
+    {
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_right_cd",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 753,
+        "terminalSampleMs": 6035,
+        "terminalNormal": {
+          "x": 0.0179,
+          "y": 0.9595,
+          "z": 0.281
+        },
+        "terminalMeshOffset": 0.0311,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 978,
+        "terminalSampleMs": 8390,
+        "terminalNormal": {
+          "x": 0.0179,
+          "y": 0.9595,
+          "z": 0.281
+        },
+        "terminalMeshOffset": 0.0311,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "NEAR_VERTICAL_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8395,
+        "releaseEndMs": 9809,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.86358,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.95954,
+          0.95954
+        ],
+        "physicalPlaneNormalYRange": [
+          0.9595,
+          0.9595
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.0311,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013540Z_r01_09_natural_brake_neutral_dwell_up_right_cd"
+    },
+    {
+      "round": 1,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_c",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 700,
+        "terminalSampleMs": 6077,
+        "terminalNormal": {
+          "x": 0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        },
+        "terminalMeshOffset": 0.0521,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 854,
+        "terminalSampleMs": 8250,
+        "terminalNormal": {
+          "x": 0.0287,
+          "y": 0.9505,
+          "z": 0.3096
+        },
+        "terminalMeshOffset": 0.0521,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "NEAR_VERTICAL_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8254,
+        "releaseEndMs": 9528,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.8554,
+        "modeledThresholdMin": 0.55285,
+        "ownerNormalYRange": [
+          0.95044,
+          0.95044
+        ],
+        "physicalPlaneNormalYRange": [
+          0.9505,
+          0.9505
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.0521,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013612Z_r01_10_natural_brake_neutral_dwell_up_c"
+    },
+    {
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_left_ca",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 635,
+        "terminalSampleMs": 6023,
+        "terminalNormal": {
+          "x": 0.0247,
+          "y": 0.9635,
+          "z": 0.2665
+        },
+        "terminalMeshOffset": 0.0398,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 906,
+        "terminalSampleMs": 7841,
+        "terminalNormal": {
+          "x": 0.0247,
+          "y": 0.9635,
+          "z": 0.2665
+        },
+        "terminalMeshOffset": 0.0398,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "NEAR_VERTICAL_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 7842,
+        "releaseEndMs": 9264,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.86717,
+        "modeledThresholdMin": 0.55285,
+        "ownerNormalYRange": [
+          0.96352,
+          0.96352
+        ],
+        "physicalPlaneNormalYRange": [
+          0.9635,
+          0.9635
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.0398,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013644Z_r02_11_natural_brake_neutral_dwell_up_left_ca"
+    },
+    {
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_right_cd",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 710,
+        "terminalSampleMs": 6090,
+        "terminalNormal": {
+          "x": 0.0324,
+          "y": 0.9763,
+          "z": 0.2141
+        },
+        "terminalMeshOffset": 0.0316,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 842,
+        "terminalSampleMs": 8012,
+        "terminalNormal": {
+          "x": 0.0324,
+          "y": 0.9763,
+          "z": 0.2141
+        },
+        "terminalMeshOffset": 0.0316,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "NEAR_VERTICAL_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8068,
+        "releaseEndMs": 9485,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.87865,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.97628,
+          0.97628
+        ],
+        "physicalPlaneNormalYRange": [
+          0.9763,
+          0.9763
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.0316,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013715Z_r02_12_natural_brake_neutral_dwell_up_right_cd"
+    },
+    {
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "neutral_dwell",
+      "release": "up_c",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 662,
+        "terminalSampleMs": 6064,
+        "terminalNormal": {
+          "x": 0.0578,
+          "y": 0.9766,
+          "z": 0.2073
+        },
+        "terminalMeshOffset": 0.0388,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 906,
+        "terminalSampleMs": 7887,
+        "terminalNormal": {
+          "x": 0.0578,
+          "y": 0.9766,
+          "z": 0.2073
+        },
+        "terminalMeshOffset": 0.0388,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "NEAR_VERTICAL_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 7889,
+        "releaseEndMs": 9194,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.87891,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.97657,
+          0.97657
+        ],
+        "physicalPlaneNormalYRange": [
+          0.9766,
+          0.9766
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.0388,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013746Z_r02_13_natural_brake_neutral_dwell_up_c"
+    },
+    {
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_right_cd",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 651,
+        "terminalSampleMs": 6223,
+        "terminalNormal": {
+          "x": 0.0068,
+          "y": 0.7623,
+          "z": 0.6472
+        },
+        "terminalMeshOffset": 0.1302,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 924,
+        "terminalSampleMs": 8179,
+        "terminalNormal": {
+          "x": -0.1011,
+          "y": 0.4355,
+          "z": 0.8945
+        },
+        "terminalMeshOffset": 0.2058,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "TILTED_NORMAL",
+      "releaseResult": {
+        "class": "UNRELEASED_OUTWARD_GATE_BELOW_THRESHOLD",
+        "testable": true,
+        "actualDeliberateRelease": false,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8236,
+        "releaseEndMs": 9694,
+        "attachedOwnerFrameCount": 48,
+        "ownerAwayIntentMax": 0.39195,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.4355,
+          0.4355
+        ],
+        "physicalPlaneNormalYRange": [
+          0.4355,
+          0.4355
+        ],
+        "actualDeliberateReleaseEvents": 0,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.2058,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013816Z_r02_14_natural_brake_tangential_up_right_cd"
+    },
+    {
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_c",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 683,
+        "terminalSampleMs": 6092,
+        "terminalNormal": {
+          "x": -0.0089,
+          "y": 0.7373,
+          "z": 0.6755
+        },
+        "terminalMeshOffset": 0.1336,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 790,
+        "terminalSampleMs": 8031,
+        "terminalNormal": {
+          "x": -0.0089,
+          "y": 0.7373,
+          "z": 0.6755
+        },
+        "terminalMeshOffset": 0.1336,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "TILTED_NORMAL",
+      "releaseResult": {
+        "class": "DELIVERED_DELIBERATE_RELEASE",
+        "testable": true,
+        "actualDeliberateRelease": true,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8034,
+        "releaseEndMs": 9334,
+        "attachedOwnerFrameCount": 7,
+        "ownerAwayIntentMax": 0.66357,
+        "modeledThresholdMin": 0.55552,
+        "ownerNormalYRange": [
+          0.7373,
+          0.7373
+        ],
+        "physicalPlaneNormalYRange": [
+          0.7373,
+          0.7373
+        ],
+        "actualDeliberateReleaseEvents": 1,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1336,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013848Z_r02_15_natural_brake_tangential_up_c"
+    },
+    {
+      "round": 2,
+      "profile": "natural_brake",
+      "context": "tangential",
+      "release": "up_left_ca",
+      "captureValid": false,
+      "startValid": true,
+      "preconditionFromRunner": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 729,
+        "terminalSampleMs": 6124,
+        "terminalNormal": {
+          "x": -0.0118,
+          "y": 0.7031,
+          "z": 0.711
+        },
+        "terminalMeshOffset": 0.1421,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionRechecked": {
+        "valid": true,
+        "reason": "sampled_valid_support",
+        "supportSamples": 8,
+        "sampledSupportSpanMs": 836,
+        "terminalSampleMs": 8150,
+        "terminalNormal": {
+          "x": -0.0118,
+          "y": 0.7031,
+          "z": 0.711
+        },
+        "terminalMeshOffset": 0.1421,
+        "latestAttachmentActive": true,
+        "caveat": "Sampled support receipt, not a continuous collision proof"
+      },
+      "preconditionVerified": true,
+      "observedPreconditionNormalClass": "TILTED_NORMAL",
+      "releaseResult": {
+        "class": "UNRELEASED_OTHER_GATE_OR_OWNER_REVIEW",
+        "testable": true,
+        "actualDeliberateRelease": false,
+        "ownerModelVerified": true,
+        "releaseStartMs": 8207,
+        "releaseEndMs": 9631,
+        "attachedOwnerFrameCount": 50,
+        "ownerAwayIntentMax": 0.63279,
+        "modeledThresholdMin": 0.55285,
+        "ownerNormalYRange": [
+          0.3674,
+          0.7031
+        ],
+        "physicalPlaneNormalYRange": [
+          0.3674,
+          0.7031
+        ],
+        "actualDeliberateReleaseEvents": 0,
+        "physicalGeometryGatePassed": true,
+        "limitation": "Owner-away-intent is captured; threshold is a matched-source model; sampled normal is not continuous contact truth."
+      },
+      "testPass": false,
+      "geometryGatePassed": true,
+      "geometryWarning": false,
+      "maxAnchorToMesh": 0.1868,
+      "soleAnchorPressurePeels": 0,
+      "physicalEvaluation": "D11N scorer with in-memory revision adaptation; release verified independently at D11O action interval",
+      "folder": "BOT1D11O_20261104T013919Z_r02_16_natural_brake_tangential_up_left_ca"
+    }
+  ],
+  "decision": "D11O_INCOMPLETE",
+  "notALock": "This is a diagnostic comparison from controlled debug entry, not complete HC/LS movement or Fold regression.",
+  "limitations": [
+    "Fixed keys are never chosen from live normals",
+    "A precondition failure is not a release failure",
+    "Tilted vs upward physical normals must be observed; a context label does not prove tilt",
+    "A modeled threshold is not an owner-issued refusal reason",
+    "D11O alone does not certify D10B Fold"
+  ]
+}

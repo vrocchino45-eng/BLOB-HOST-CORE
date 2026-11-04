@@ -1,0 +1,128 @@
+{
+  "revision": "BOT1-D11N-1",
+  "round": 1,
+  "profile": "natural_reference",
+  "arm": "baseline",
+  "observer": "observer_off",
+  "status": "CAPTURED",
+  "startedAt": "2026-11-04T00:52:01.328+00:00",
+  "entry": "Shift+6",
+  "controlledDebugStart": true,
+  "debugEntryUsed": true,
+  "gameplayChanged": false,
+  "ownerDataUsedForSteering": false,
+  "mode": "CANONICAL_POST_SHIFT6_REFERENCE_FIXED_INPUT_ACQUISITION",
+  "actions": [
+    {
+      "label": "spawn_neutral",
+      "key": null,
+      "plannedSeconds": 0.8,
+      "startedAt": "2026-11-04T00:52:12.569+00:00",
+      "endedAt": "2026-11-04T00:52:13.426+00:00"
+    },
+    {
+      "label": "approach_1",
+      "key": "w",
+      "plannedSeconds": 0.6,
+      "startedAt": "2026-11-04T00:52:13.462+00:00",
+      "endedAt": "2026-11-04T00:52:14.332+00:00"
+    },
+    {
+      "label": "pause_1",
+      "key": null,
+      "plannedSeconds": 0.65,
+      "startedAt": "2026-11-04T00:52:14.422+00:00",
+      "endedAt": "2026-11-04T00:52:15.182+00:00"
+    },
+    {
+      "label": "approach_2",
+      "key": "w",
+      "plannedSeconds": 0.4,
+      "startedAt": "2026-11-04T00:52:15.201+00:00",
+      "endedAt": "2026-11-04T00:52:15.794+00:00"
+    },
+    {
+      "label": "approach_settle",
+      "key": null,
+      "plannedSeconds": 1.8,
+      "startedAt": "2026-11-04T00:52:15.853+00:00",
+      "endedAt": "2026-11-04T00:52:17.719+00:00"
+    },
+    {
+      "label": "tangential",
+      "key": "a",
+      "plannedSeconds": 0.45,
+      "startedAt": "2026-11-04T00:52:17.783+00:00",
+      "endedAt": "2026-11-04T00:52:18.370+00:00"
+    },
+    {
+      "label": "post_tangent",
+      "key": null,
+      "plannedSeconds": 0.7,
+      "startedAt": "2026-11-04T00:52:18.424+00:00",
+      "endedAt": "2026-11-04T00:52:19.185+00:00"
+    },
+    {
+      "label": "away_vertical",
+      "key": "c",
+      "plannedSeconds": 1.15,
+      "startedAt": "2026-11-04T00:52:19.232+00:00",
+      "endedAt": "2026-11-04T00:52:20.534+00:00"
+    },
+    {
+      "label": "post_away",
+      "key": null,
+      "plannedSeconds": 1.3,
+      "startedAt": "2026-11-04T00:52:20.599+00:00",
+      "endedAt": "2026-11-04T00:52:21.968+00:00"
+    }
+  ],
+  "errors": [],
+  "controlledStartReceipt": {
+    "kind": "controlled_preapproach_start_d11n",
+    "ms": 130,
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "position": {
+      "x": -0.04,
+      "y": -0.07,
+      "z": -0.17
+    },
+    "expectedPosition": {
+      "x": -0.04,
+      "y": -0.07,
+      "z": -0.17
+    },
+    "playerQuaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "cameraQuaternion": [
+      -0.21877813559284717,
+      0.03746285309158307,
+      0.008406043868729332,
+      0.9750189744057463
+    ],
+    "shelfCenter": {
+      "x": -0.18,
+      "y": -0.75,
+      "z": -2.65
+    },
+    "shelfDistanceFromOrigin": 2.5753,
+    "preExistingContact": false,
+    "momentumReset": true,
+    "ownerDataUsedForSteering": false,
+    "cameraHeadingForced": false,
+    "reason": "debug_only_fixed_post_shift6_reference_no_contact_or_navigation_credit"
+  },
+  "rec1": {
+    "events": 169,
+    "droppedDetails": 0
+  },
+  "sampleCount": 107,
+  "ownerEventCount": 71,
+  "releaseOwnerFrameCount": 0,
+  "finishedAt": "2026-11-04T00:52:26.871+00:00",
+  "wallSeconds": 25.54
+}

@@ -101,11 +101,60 @@ export function installBOT1D11CProbe(runtime) {
     interventions.push(at);
     return at;
   }
+  // D11N test-only pre-approach normalization; this is NOT the older D11C
+  // controlledStart() above the shelf. It starts at a frozen pre-approach
+  // reference pose sampled after Shift+6 (not an ideal contact location), without claiming any navigation or contact success.
+  function controlledD11NPreApproachStart() {
+    const prior = snapshot();
+    if (prior.cell !== CELL) throw new Error(`D11N requires ${CELL}; got ${prior.cell}`);
+    if (!prior.shelf.present || !prior.shelf.visible) throw new Error('D11N requires authored Silt shelf');
+    if (prior.attachment.active || prior.contact.sealed > 0 || prior.plane.active ||
+        (prior.contact.state !== 'suspended' && prior.contact.state !== 'none'))
+      throw new Error('D11N will not reset an already attached Core');
+    const player = runtime.playerCore;
+    const movementReset = runtime.debugAreaJumpSystem?.zeroMomentum;
+    if (!player || typeof movementReset !== 'function')
+      throw new Error('D11N requires existing test-platform momentum reset');
+    const destination = new THREE.Vector3(-0.04, -0.07, -0.17); // frozen D11M pre-approach reference
+    const center = new THREE.Vector3();
+    const mesh = surfaceMesh();
+    mesh.updateWorldMatrix(true, false);
+    mesh.getWorldPosition(center);
+    if (destination.distanceTo(center) < 1.5)
+      throw new Error('D11N origin too close to shelf; refusing favored contact placement');
+    const local = player.parent ? player.parent.worldToLocal(destination.clone()) : destination;
+    player.position.copy(local);
+    player.quaternion.identity();
+    runtime.debugAreaJumpSystem.zeroMomentum();
+    player.updateWorldMatrix(true, false);
+    const actual = new THREE.Vector3();
+    player.getWorldPosition(actual);
+    const velocity = runtime.playerMovementController?.velocity;
+    if (!runtime.camera?.getWorldQuaternion) throw new Error('D11N camera unavailable');
+    const cameraQuaternion = new THREE.Quaternion();
+    runtime.camera.getWorldQuaternion(cameraQuaternion);
+    if (actual.distanceTo(destination) > 0.002 || (velocity?.length?.() ?? 1) > 0.001)
+      throw new Error('D11N position or momentum did not normalize');
+    const receipt = {
+      kind: 'controlled_preapproach_start_d11n',
+      ms: Math.round(performance.now() - t0), cell: prior.cell,
+      position: copy3(actual), expectedPosition: copy3(destination),
+      playerQuaternion: [player.quaternion.x, player.quaternion.y, player.quaternion.z, player.quaternion.w],
+      cameraQuaternion: [cameraQuaternion.x, cameraQuaternion.y, cameraQuaternion.z, cameraQuaternion.w],
+      shelfCenter: copy3(center), shelfDistanceFromOrigin: Number(actual.distanceTo(center).toFixed(4)),
+      preExistingContact: false, momentumReset: true, ownerDataUsedForSteering: false,
+      cameraHeadingForced: false,
+      reason: 'debug_only_fixed_post_shift6_reference_no_contact_or_navigation_credit'
+    };
+    interventions.push(receipt);
+    return receipt;
+  }
   window.__BLOB_D11C_PROBE__ = Object.freeze({
     version: 'BOT1-D11C-1', snapshot,
     reset() { samples.length = 0; interventions.length = 0; t0 = performance.now(); running = true; d11h.reset(); d11i.reset(); d11l.reset(); collect(); },
     mark(label) { interventions.push({ kind: 'marker', label: String(label).slice(0, 80), ms: Math.round(performance.now() - t0) }); },
     controlledStart: placeAboveSiltShelf,
+    controlledD11NPreApproachStart,
     disableD11LReleaseRecorder() { d11l.stop(); return true; },
     dump() { collect(); return { revision: 'BOT1-D11C-1', target: TARGET, cell: CELL,
       intervalMs: 50, maxSamples: 2400, samples: samples.slice(), interventions: interventions.slice(),
