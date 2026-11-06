@@ -1,0 +1,128 @@
+{
+  "pass": "GSL-4E2G-OFFLINE-1",
+  "source": "/mnt/data/BLOB_GSL4E2F_OBS1.json",
+  "recordedGuideEvents": 85,
+  "scope": "recorded-change invariants only; not a simulated LS1 runtime",
+  "checks": [
+    {
+      "name": "B00 complete GSL payload",
+      "status": "PASS",
+      "observations": 85,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "B08 disabled must not express",
+      "status": "NOT_OBSERVED",
+      "observations": 0,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "B06 core-work expression protection",
+      "status": "NOT_OBSERVED",
+      "observations": 0,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "B07 movement ownership agreement",
+      "status": "PASS",
+      "observations": 85,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "B07 authored/pulse movement not overwritten",
+      "status": "PASS",
+      "observations": 60,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "Expression must be enabled when applied",
+      "status": "PASS",
+      "observations": 85,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "Suppressed expression cannot be allowed",
+      "status": "PASS",
+      "observations": 85,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "B01 normal attachment",
+      "status": "PASS",
+      "observations": 17,
+      "violations": 0,
+      "detail": "Coverage only; correctness of transition timing requires deterministic runtime tests"
+    },
+    {
+      "name": "B02 deliberate release",
+      "status": "PASS",
+      "observations": 62,
+      "violations": 0,
+      "detail": "Coverage only; correctness of transition timing requires deterministic runtime tests"
+    },
+    {
+      "name": "B03 unexpected loss",
+      "status": "PASS",
+      "observations": 6,
+      "violations": 0,
+      "detail": "Coverage only; correctness of transition timing requires deterministic runtime tests"
+    },
+    {
+      "name": "B04 attachment recovery",
+      "status": "PASS",
+      "observations": 17,
+      "violations": 0,
+      "detail": "Coverage only; correctness of transition timing requires deterministic runtime tests"
+    },
+    {
+      "name": "B05 recovery timeout",
+      "status": "NOT_OBSERVED",
+      "observations": 0,
+      "violations": 0,
+      "detail": "Coverage only; correctness of transition timing requires deterministic runtime tests"
+    },
+    {
+      "name": "B10 event ordinal monotonic",
+      "status": "PASS",
+      "observations": 85,
+      "violations": 0,
+      "detail": ""
+    },
+    {
+      "name": "B09 rapid-change oscillation",
+      "status": "NOT_OBSERVED",
+      "observations": 0,
+      "violations": 0,
+      "detail": "Requires per-frame timestamps and explicit cooldown specification"
+    }
+  ],
+  "eventIntentionCounts": [
+    {
+      "event": "attachment_recovered",
+      "intention": "companion",
+      "count": 15
+    },
+    {
+      "event": "attachment_recovered",
+      "intention": "support",
+      "count": 2
+    },
+    {
+      "event": "deliberate_release",
+      "intention": "companion",
+      "count": 62
+    },
+    {
+      "event": "unexpected_loss",
+      "intention": "companion",
+      "count": 6
+    }
+  ]
+}

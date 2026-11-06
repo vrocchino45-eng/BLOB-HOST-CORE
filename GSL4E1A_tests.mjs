@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createBoundedExplorer} from './GSL4E1A_BoundedExplorer.mjs';
+const core={x:200,y:180};
+const tick=(c,s={},n=1)=>{let r;for(let i=0;i<n;i++)r=c.step(20,{core,...s});return r;};
+const c=createBoundedExplorer();
+assert.equal(tick(c).state,'idle');
+let r=tick(c,{interest:{x:700,y:180}});assert.equal(r.state,'curiosity');assert.ok(Math.hypot(r.target.x-200,r.target.y-180)<=165.001);
+r=tick(c,{interest:{x:700,y:180},unexpectedLoss:true});assert.equal(r.state,'concern');
+r=tick(c,{interest:{x:700,y:180}},45);assert.equal(r.state,'concern');
+r=tick(c,{supportNeeded:true},10);assert.equal(r.state,'support');
+r=tick(c,{supportNeeded:false},20);assert.equal(r.state,'support');
+r=tick(c,{},40);assert.equal(r.state,'idle');
+const d=createBoundedExplorer();assert.notEqual(tick(d,{intentionalRelease:true,unexpectedLoss:true}).state,'concern');
+assert.equal(tick(d,{guidePosition:{x:600,y:180}}).returnRequested,true);
+console.log('PASS: idle, bounded curiosity, loss interrupt, concern recovery, support dwell, deliberate release suppression, range warning');

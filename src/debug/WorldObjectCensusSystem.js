@@ -32,6 +32,8 @@ export class WorldObjectCensusSystem {
     this.guide0LastCheckpointMs = null;
     this.guide0LastPulseId = null;
     this.guide0LastOutcomeSequence = null;
+    // GSL-4E2F-OBS1: recorder-only interpretation snapshot deduplication.
+    this.gslObservationPrevious = null;
     this.lastCircuitVascularSequence = 0;
     this.lastCircuitGraveSequence = 0;
     // C0D4-MOB1: observer only. All locomotion/input ownership stays external.
@@ -1041,7 +1043,50 @@ export class WorldObjectCensusSystem {
     // Typical 25-minute field tests fit comfortably in a compact JSON export.
     this.captureEvents.push(entry);
   }
+  // GSL-4E2F-OBS1: observe published Guide receipts; never write to frameState.
+  // Change-only records avoid 150ms polling spam while retaining meaningful transitions.
+  sampleGslInterpretation() {
+    if (!this.captureActive) return;
+    const fs = this.frameState ?? {};
+    const interpretation = fs.guideInterpretation;
+    const expression = fs.gsl4e2eDebug;
+    const ownership = fs.gsl4e2dDebug;
+    const state = interpretation && interpretation.pass === 'GSL-4E2F'
+      ? {
+          available: true,
+          interpretation: {
+            pass: interpretation.pass, enabled: !!interpretation.enabled,
+            source: interpretation.source ?? null, observed: !!interpretation.observed,
+            attachmentActive: !!interpretation.attachmentActive,
+            detachReason: interpretation.detachReason ?? null,
+            event: interpretation.event ?? null, intention: interpretation.intention ?? null,
+            expressionAllowed: !!interpretation.expressionAllowed,
+            expressionSuppression: interpretation.expressionSuppression ?? null,
+            movementOwner: interpretation.movementOwner ?? null
+          },
+          expression: expression ? {
+            enabled: !!expression.enabled, selectedMode: expression.selectedMode ?? null,
+            expressionMode: expression.expressionMode ?? null,
+            expressionApplied: !!expression.expressionApplied,
+            coreWorkProtected: !!expression.coreWorkProtected,
+            movementOwner: expression.movementOwner ?? null
+          } : null,
+          ownership: ownership ? {
+            enabled: !!ownership.enabled, selectedMode: ownership.selectedMode ?? null,
+            selected: !!ownership.selected, applied: !!ownership.applied,
+            finalGuideState: ownership.finalGuideState ?? null,
+            finalOwner: ownership.finalOwner ?? null,
+            suppressionReason: ownership.suppressionReason ?? null
+          } : null
+        }
+      : { available: false, reason: 'gsl4e2f_receipt_missing' };
+    const signature = JSON.stringify(state);
+    if (signature === this.gslObservationPrevious) return;
+    this.gslObservationPrevious = signature;
+    this.recordEvent('gsl-guide-interpretation-change', { gsl: state });
+  }
   sampleState() {
+    this.sampleGslInterpretation();
     this.sampleInputs();
     this.sampleMobility();
     this.sampleAuthority();
@@ -1090,6 +1135,8 @@ export class WorldObjectCensusSystem {
     this.guide0LastCheckpointMs = null;
     this.guide0LastPulseId = null;
     this.guide0LastOutcomeSequence = null;
+    // GSL-4E2F-OBS1: recorder-only interpretation snapshot deduplication.
+    this.gslObservationPrevious = null;
     this.mobPrevious = null; this.mobBlockSinceMs=null; this.mobBlockReported=null;
     this.c0e2bLastVolumeSignature=null;this.c0e2bLastApproachMs=null;
     this.mobBlockReason=null; this.mobLastSampleMs=null; this.mobD9SNeutralLastSampleMs=null; this.mobLastGuidedSignature=null;
@@ -1111,7 +1158,7 @@ export class WorldObjectCensusSystem {
     const report = {
       pass: 'LS1E2-VERIFIED-VASCULAR-LOCAL-RESPONSE', recorderRevision: 'C0C-REC1',
       recorderSchemaVersion: 2, circuitObservationRevision: 'C0D4-OBS1',
-      mobilityObservationRevision: 'C0D4-MOB1', territoryObservationRevision: 'C0E1', territorySpatialRevision: 'C0E2',
+      mobilityObservationRevision: 'C0D4-MOB1', territoryObservationRevision: 'C0E1', territorySpatialRevision: 'C0E2', guideObservationRevision: 'GSL-4E2F-OBS1',
       captureStartedAt: this.captureStartedAt, captureStoppedAt: this.captureStoppedAt,
       captureDurationSeconds: this.captureStartedAt
         ? Number(((Date.parse(endAt) - Date.parse(this.captureStartedAt)) / 1000).toFixed(3)) : null,

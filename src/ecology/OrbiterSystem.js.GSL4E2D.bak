@@ -1,0 +1,632 @@
+import * as THREE from "three";
+import { GSL4E2BReadOnlyAdapter } from "../../GSL4E2B_ReadOnlyAdapter.mjs";
+
+export class OrbiterSystem {
+  constructor({ recipeDataSystem, visualComposer, playerRoot, chemObjectSystem, localCellRecipe, frameState }) {
+    if (!recipeDataSystem) throw new Error("[OrbiterSystem] recipeDataSystem is required.");
+    if (!visualComposer) throw new Error("[OrbiterSystem] visualComposer is required.");
+    if (!playerRoot) throw new Error("[OrbiterSystem] playerRoot is required.");
+    if (!chemObjectSystem) throw new Error("[OrbiterSystem] chemObjectSystem is required.");
+    if (!localCellRecipe) throw new Error("[OrbiterSystem] localCellRecipe is required.");
+
+    this.recipeDataSystem = recipeDataSystem;
+    this.visualComposer = visualComposer;
+    this.playerRoot = playerRoot;
+    this.chemObjectSystem = chemObjectSystem;
+    this.localCellRecipe = localCellRecipe;
+    this.frameState = frameState;
+
+    this.gsl4e2b = new GSL4E2BReadOnlyAdapter();
+    // GSL4E2C runtime toggle: only affects Guide response; never writes to LS1.
+    this.gsl4e2cEnabled = false;
+    this.gsl4e2cLastReport = "";
+    this.gsl4e2cToggle = (event) => {
+      if (event.code !== "F9" || !event.ctrlKey || !event.shiftKey || event.repeat) return;
+      this.gsl4e2cEnabled = !this.gsl4e2cEnabled;
+      this.gsl4e2b = new GSL4E2BReadOnlyAdapter(); // fresh transition history per comparison
+      this.gsl4e2cLastReport = "";
+      console.info(`[GSL4E2C] ${this.gsl4e2cEnabled ? "ON" : "OFF"} (Ctrl+Shift+F9)`);
+    };
+    if (typeof window !== "undefined") window.addEventListener("keydown", this.gsl4e2cToggle);
+    this.orbiters = [];
+    this.temp = new THREE.Vector3();
+    this.workRight = new THREE.Vector3();
+    this.workCameraRadial = new THREE.Vector3();
+    this.workSelectedRadial = new THREE.Vector3();
+    this.workLookDirection = new THREE.Vector3();
+    this.guideOffset = new THREE.Vector3(0.82, 0.68, 0.52);
+    this.shimmerLine = null;
+    this.linePositions = new Float32Array(6);
+    this.guideFocusHalo = null;
+    this.guideFocusStrength = 0;
+    this.focusToGuide = new THREE.Vector3();
+    this.focusCameraForward = new THREE.Vector3();
+    this.focusCameraPosition = new THREE.Vector3();
+    this.focusToCore = new THREE.Vector3();
+  }
+
+  init() {
+    const orbiterIds = this.localCellRecipe.contents?.orbiters ?? [];
+
+    for (const id of orbiterIds) {
+      const recipe = this.recipeDataSystem.get("orbiterRecipes", id);
+      const spawn = recipe.spawn ?? {};
+
+      const root = this.visualComposer.compose({
+        objectId: recipe.id,
+        visualRecipeId: recipe.visual.visualRecipe,
+        placeholderRecipeId: recipe.visual.placeholderRecipe,
+        position: spawn.position ?? [0, 0, 0],
+        scale: spawn.scale ?? 1
+      });
+
+      root.userData.orbiterRecipe = recipe.id;
+      root.userData.originType = recipe.origin?.originType ?? "unknown";
+      root.userData.primaryRole = recipe.role?.primaryRole ?? "unknown";
+      root.userData.orbiterState = "idle";
+
+      this.orbiters.push({
+        root,
+        recipe,
+        baseScale: spawn.scale ?? 1,
+        state: "idle",
+        guideTarget: "none",
+        pulseAge: 999,
+        lastReaction: "none",
+        shimmerActive: false
+      });
+    }
+
+    this.createShimmerLine();
+    const guide = this.orbiters.find((orbiter) => orbiter.recipe.id === "guide_orbiter_folded_lantern_001");
+    if (guide) this.createGuideFocusHalo(guide);
+
+    this.frameState.guideFocus = {
+      pass: "HC-024D0C",
+      active: false,
+      honed: false,
+      targetId: "guide_orbiter_folded_lantern_001",
+      targetRole: "core_work_entry",
+      alignment: -1,
+      strength: 0,
+      distance: 0,
+      visualCue: "guide_hone_glow",
+      primaryAction: "commit_reserved"
+    };
+
+    this.frameState.orbiterState = {
+      total: this.orbiters.length,
+      guideState: "spawned",
+      guideTarget: "none",
+      guideDistance: 0,
+      lastReaction: "none",
+      shimmerActive: false
+    };
+  }
+
+  update(dt, frameState) {
+    // GSL4E2C runtime toggle: disabled at startup; no mutation of attachment state.
+    frameState.gsl4e2bEnabled = this.gsl4e2cEnabled;
+    if (frameState.input?.pulsePressed) {
+      this.applyPulse(frameState);
+    }
+
+    for (const orbiter of this.orbiters) {
+      orbiter.pulseAge += dt;
+
+      if (orbiter.recipe.id === "guide_orbiter_folded_lantern_001") {
+        this.updateGuide(orbiter, dt, frameState);
+      }
+    }
+
+    this.updateDebug(frameState);
+  }
+
+  applyPulse(frameState) {
+    for (const orbiter of this.orbiters) {
+      const distance = this.playerRoot.position.distanceTo(orbiter.root.position);
+
+      if (distance > 4.5) continue;
+
+      orbiter.pulseAge = 0;
+      orbiter.state = "answering_player_pulse";
+      orbiter.lastReaction = "guide_answered_with_smaller_wave";
+      orbiter.root.userData.lastPulseResponse = orbiter.lastReaction;
+    }
+  }
+
+  updateGuide(orbiter, dt, frameState) {
+    const t = frameState.runtimeSeconds;
+    const seedTarget = this.findChemObject("dormant_seed_nutrient_001");
+    const scarTarget = this.findChemObject("scar_contamination_plate_001");
+    const scarActive = frameState.currentChemTarget === "scar_contamination_plate_001";
+    const pulseT = Math.max(0, 1 - orbiter.pulseAge / 0.9);
+
+    let targetPosition = this.temp.copy(this.playerRoot.position).add(this.guideOffset);
+    const compositionYield = Math.min(
+      0.88,
+      Math.max(0, frameState.interactionComposition?.companionYield ?? 0)
+    );
+    if (compositionYield > 0) {
+      targetPosition.x += compositionYield * 0.62;
+      targetPosition.y += compositionYield * 0.36;
+      targetPosition.z += compositionYield * 0.30;
+    }
+    let guideTarget = "player";
+    let state = "hover_slightly_ahead";
+    let shimmerActive = false;
+    const surfaceEcology = frameState.surfaceWakeEcology ?? {};
+    const surfaceFold = frameState.surfaceWakeLayeredInteraction ?? {};
+
+    const signalLoop = frameState.signalChorusInteraction ?? {};
+    const signalArrival = frameState.signalChorusArrival ?? {};
+    const hubFoundation = frameState.hubChamberFoundation ?? {};
+    const hubInvestigation = frameState.hubInvestigationGameplay ?? {};
+    const graveMemoryRoute = frameState.graveMemoryRoute ?? {};
+    const graveHistory = frameState.act1RouteHistory ?? {};
+    const coreWork = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    const coreWorkActive = Boolean(coreWork.active && coreWork.coreWorkActive);
+
+    if (coreWorkActive) {
+      const yaw = frameState.cameraControl?.yaw ?? 0;
+      const composition = coreWork.guideComposition ?? {};
+      const sideOffset = composition.sideOffset ?? 0.76;
+      const lift = composition.lift ?? 0.34;
+      const cameraTowardOffset = composition.cameraTowardOffset ?? 0.18;
+      const manipulation = frameState.coreWorkManipulation ?? {};
+      const selectedWorld = manipulation.selectedWorldPosition ?? null;
+      this.workRight.set(Math.cos(yaw), 0, -Math.sin(yaw));
+      this.workCameraRadial.set(Math.sin(yaw), 0, Math.cos(yaw));
+
+      if (selectedWorld) {
+        targetPosition = this.temp.set(
+          selectedWorld.x ?? this.playerRoot.position.x,
+          selectedWorld.y ?? this.playerRoot.position.y,
+          selectedWorld.z ?? this.playerRoot.position.z
+        );
+        this.workSelectedRadial.copy(targetPosition).sub(this.playerRoot.position);
+        if (this.workSelectedRadial.lengthSq() <= 0.0001) this.workSelectedRadial.copy(this.workCameraRadial);
+        else this.workSelectedRadial.normalize();
+        const depth01 = THREE.MathUtils.clamp(manipulation.selectedDepth01 ?? 0.5, 0, 1);
+        const radialAttend = manipulation.held ? 0.22 + depth01 * 0.1 : 0.14 + depth01 * 0.06;
+        targetPosition
+          .addScaledVector(this.workSelectedRadial, radialAttend)
+          .addScaledVector(this.workRight, manipulation.held ? 0.1 : 0.2)
+          .addScaledVector(this.workCameraRadial, manipulation.held ? 0.055 : 0.12);
+        targetPosition.y += manipulation.held ? 0.055 : 0.11;
+        guideTarget = manipulation.selectedPieceId ?? "player_core_work_surface";
+        orbiter.lastReaction = manipulation.held
+          ? "guide_physically_holding_selected_core_piece"
+          : "guide_attending_selected_core_piece";
+      } else {
+        targetPosition = this.temp.copy(this.playerRoot.position)
+          .addScaledVector(this.workRight, sideOffset)
+          .addScaledVector(this.workCameraRadial, cameraTowardOffset);
+        targetPosition.y += lift;
+        guideTarget = "player_core_work_surface";
+        orbiter.lastReaction = "guide_waiting_for_visible_core_piece";
+      }
+      state = "guide_attending_core_work";
+      shimmerActive = true;
+    } else if (frameState.activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001" && graveMemoryRoute.active) {
+      targetPosition = this.temp.copy(this.playerRoot.position).add(new THREE.Vector3(1.18, 0.92, 0.48));
+      guideTarget = graveMemoryRoute.currentFocus && graveMemoryRoute.currentFocus !== "none"
+        ? graveMemoryRoute.currentFocus
+        : "grave_memory_consequence";
+      state = graveMemoryRoute.graveMemoryImprintCommitted
+        ? "witnessing_retained_grave_memory"
+        : graveMemoryRoute.visualConsequencePhase === "recoil_scatter"
+          ? "witnessing_residue_recoil"
+          : graveMemoryRoute.visualConsequencePhase === "stabilization_reweave"
+            ? "witnessing_trace_recovery"
+            : "interpreting_grave_memory_from_clear_perch";
+      shimmerActive = false;
+      orbiter.lastReaction = graveMemoryRoute.graveMemoryImprintCommitted
+        ? "guide_holds_apart_from_the_retained_pearl"
+        : "guide_witnesses_without_covering_the_grave_objects";
+    } else if (frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active) {
+      const returnedImprint = Boolean(
+        graveHistory.graveReturned
+        && (graveHistory.graveMemoryImprintCommitted || frameState.coreGrowth?.graveMemoryImprintCommitted)
+      );
+      targetPosition = this.temp.copy(this.playerRoot.position).add(
+        returnedImprint
+          ? new THREE.Vector3(1.86, 1.42, 0.68)
+          : new THREE.Vector3(-1.48, 1.22, 0.62)
+      );
+      guideTarget = hubInvestigation.investigationReady
+        ? "grave_memory_route"
+        : hubInvestigation.nearestRouteId && hubInvestigation.nearestRouteId !== "none"
+          ? hubInvestigation.nearestRouteId
+          : "hub_comparison_cradle";
+      state = hubInvestigation.investigationReady
+        ? "holding_hub_route_comparison"
+        : "interpreting_hub_territories";
+      shimmerActive = false;
+      orbiter.lastReaction = hubInvestigation.investigationReady
+        ? returnedImprint
+          ? "guide_keeps_clear_of_core_pearl_and_hub_memory_echo"
+          : "guide_holds_one_active_and_two_dormant_route_readings"
+        : "guide_keeps_a_clear_interpreter_perch";
+    } else if (signalLoop.active || signalArrival.active) {
+      const signalFocusId = signalLoop.active
+        ? signalLoop.currentFocus
+        : signalArrival.focusObjectId;
+      const focus = this.findChemObject(signalFocusId);
+      if (focus) {
+        targetPosition = this.temp.copy(focus.root.position).lerp(this.playerRoot.position, 0.34);
+        targetPosition.y += 0.78;
+        targetPosition.x += 0.22;
+        targetPosition.z += 0.16;
+        guideTarget = signalFocusId;
+        state = signalLoop.active
+          ? "following_signal_chorus_interaction_focus"
+          : "interpreting_signal_chorus_nerve";
+        shimmerActive = true;
+        orbiter.lastReaction = signalLoop.active
+          ? "guide_following_signal_chorus_handoff"
+          : "guide_listening_with_signal_chorus";
+      } else {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(new THREE.Vector3(0.48, 0.62, 0.22));
+        guideTarget = "signal_chorus_nerve";
+        state = "hover_signal_chorus_interpreter";
+        shimmerActive = false;
+      }
+    } else if ((frameState.bloomResidueInteraction?.active || frameState.bloomResidueArrival?.active) && frameState.activeCellId === "CELL_BLOOM_RESIDUE_FORK_001") {
+      const bloomLoop = frameState.bloomResidueInteraction ?? {};
+      const bloomArrival = frameState.bloomResidueArrival ?? {};
+      const bloomFocusId = bloomLoop.active
+        ? bloomLoop.currentFocus
+        : bloomArrival.focusObjectId;
+      const focus = this.findChemObject(bloomFocusId);
+      if (focus) {
+        targetPosition = this.temp.copy(focus.root.position).lerp(this.playerRoot.position, 0.34);
+        targetPosition.y += 0.74;
+        targetPosition.x += 0.20;
+        targetPosition.z += 0.14;
+        guideTarget = bloomFocusId;
+        state = bloomLoop.active
+          ? "following_bloom_residue_interaction_focus"
+          : "interpreting_bloom_residue_fork";
+        shimmerActive = true;
+        orbiter.lastReaction = bloomLoop.active
+          ? "guide_following_bloom_residue_handoff"
+          : "guide_reading_bloom_residue_arrival";
+      } else {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(new THREE.Vector3(0.46, 0.60, 0.21));
+        guideTarget = "bloom_residue_fork";
+        state = "hover_bloom_residue_interpreter";
+        shimmerActive = false;
+      }
+    } else if (frameState.scarFlowArrival?.active) {
+      const focus = this.findChemObject(frameState.scarFlowArrival.focusObjectId);
+      if (focus) {
+        targetPosition = this.temp.copy(focus.root.position).lerp(this.playerRoot.position, 0.36);
+        targetPosition.y += 0.68;
+        targetPosition.x += 0.18;
+        targetPosition.z += 0.12;
+        guideTarget = frameState.scarFlowArrival.focusObjectId;
+        state = "interpreting_scar_flow_fold";
+        shimmerActive = true;
+        orbiter.lastReaction = "guide_interpreting_scar_flow_arrival";
+      } else {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(new THREE.Vector3(0.52, 0.58, 0.26));
+        guideTarget = "scar_flow_fold";
+        state = "hover_scar_flow_interpreter";
+        shimmerActive = false;
+      }
+    } else if (frameState.activeCellId === "CELL_MEMBRANE_NURSERY_001" && surfaceEcology.active && !surfaceFold.completed) {
+      guideTarget = surfaceEcology.phase === "communicate" ? "listening_fold_response" : "nursery_reaction";
+      state = surfaceEcology.phase === "communicate" ? "interpreting_traveling_answer" : "observing_with_player";
+      shimmerActive = surfaceEcology.phase === "communicate";
+      if (surfaceEcology.phase === "communicate") {
+        targetPosition = this.temp.set(-3.08, 0.92, -2.45);
+      } else {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(new THREE.Vector3(0.94, 0.78, 0.32));
+      }
+      orbiter.lastReaction = surfaceEcology.phase === "communicate"
+        ? "guide_traced_answer_without_claiming_meaning"
+        : "guide_waited_for_world_response";
+    } else if (seedTarget && surfaceFold.completed && !seedTarget.absorbed && !seedTarget.root.userData.absorbed) {
+      const seedDistance = this.playerRoot.position.distanceTo(seedTarget.root.position);
+      if (seedDistance > 0.65) {
+        targetPosition = this.temp.copy(seedTarget.root.position).lerp(this.playerRoot.position, 0.42);
+        targetPosition.y += 0.48;
+        guideTarget = "safe_seed_nutrient";
+        state = "point_to_safe_absorb";
+        shimmerActive = true;
+      }
+    }
+
+    if (!coreWorkActive && !frameState.signalChorusArrival?.active && !frameState.bloomResidueArrival?.active && !frameState.bloomResidueInteraction?.active && !frameState.scarFlowArrival?.active && scarActive && scarTarget) {
+      targetPosition = this.temp.copy(this.playerRoot.position).add(new THREE.Vector3(-0.42, 0.54, 0.28));
+      guideTarget = "scar_warning";
+      state = "fold_shut_and_dim";
+      shimmerActive = false;
+      orbiter.lastReaction = "guide_dimmed_near_scar";
+    }
+
+    // GSL-4E2B: opt-in only. Authored Guide decisions always win.
+    const gslEnabled = Boolean(frameState.gsl4e2bEnabled);
+    if (gslEnabled) {
+      const gsl = this.gsl4e2b.sample(frameState, Number.isFinite(t) ? t : 0);
+      const authored = coreWorkActive || shimmerActive || guideTarget !== "player" || pulseT > 0.05;
+      if (!authored && gsl.mode === "concern") {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(this.guideOffset).multiplyScalar(1);
+        targetPosition.y += 0.12;
+        state = "gsl_concern";
+      } else if (!authored && gsl.mode === "support") {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(this.guideOffset);
+        targetPosition.x *= 1;
+        state = "gsl_support";
+      }
+      frameState.gsl4e2bDebug = { enabled: true, mode: gsl.mode, event: gsl.event, authoredOverride: authored };
+      const report = `${gsl.mode}|${gsl.event}|${gsl.active}|${gsl.reason}|${authored}`;
+      if (report !== this.gsl4e2cLastReport) {
+        this.gsl4e2cLastReport = report;
+        console.info("[GSL4E2C]", { mode: gsl.mode, event: gsl.event, attached: gsl.active, detachReason: gsl.reason, authoredOverride: authored });
+      }
+    }
+    if (!coreWorkActive && pulseT > 0.05) {
+      state = "answering_player_pulse";
+      shimmerActive = true;
+    }
+
+    orbiter.root.position.lerp(targetPosition, Math.min(1, dt * (coreWorkActive ? 5.4 : 3.2)));
+    orbiter.root.position.y += Math.sin(t * (coreWorkActive ? 1.25 : 1.8)) * (coreWorkActive ? 0.003 : 0.006);
+
+    if (coreWorkActive) {
+      this.workLookDirection.copy(this.playerRoot.position).sub(orbiter.root.position);
+      const planarLength = Math.hypot(this.workLookDirection.x, this.workLookDirection.z);
+      if (planarLength > 0.0001) {
+        const targetYaw = Math.atan2(this.workLookDirection.x, this.workLookDirection.z);
+        const yawDelta = Math.atan2(
+          Math.sin(targetYaw - orbiter.root.rotation.y),
+          Math.cos(targetYaw - orbiter.root.rotation.y)
+        );
+        orbiter.root.rotation.y += yawDelta * (1 - Math.exp(-dt * 5.8));
+      }
+      orbiter.root.rotation.x = Math.sin(t * 0.72) * 0.035;
+    } else {
+      orbiter.root.rotation.y += dt * (0.36 + pulseT * 0.65);
+      orbiter.root.rotation.x = Math.sin(t * 0.8) * 0.08;
+    }
+
+    const hubSilhouetteBoost = state === "interpreting_hub_territories" || state === "holding_hub_route_comparison"
+      ? 0.12
+      : 0;
+    const coreWorkScaleBoost = coreWorkActive ? 0.08 : 0;
+    const scale = orbiter.baseScale * (1 + pulseT * 0.14 + hubSilhouetteBoost + coreWorkScaleBoost + (state === "fold_shut_and_dim" ? -0.08 : 0));
+    orbiter.root.scale.setScalar(scale);
+
+    orbiter.state = state;
+    orbiter.guideTarget = guideTarget;
+    orbiter.shimmerActive = shimmerActive;
+    orbiter.root.userData.orbiterState = state;
+    orbiter.root.userData.guideTarget = guideTarget;
+    orbiter.root.userData.lastPulseResponse = orbiter.lastReaction;
+    orbiter.root.userData.silhouetteLane = coreWorkActive
+      ? "core_work_manipulation_lane"
+      : frameState.activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+        ? "upper_right_witness_lane"
+        : frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active
+          ? "upper_interpreter_lane"
+          : "companion_lane";
+    orbiter.root.userData.minimumCoreSeparation = coreWorkActive
+      ? (coreWork.guideComposition?.minimumCoreSeparation ?? 0.54)
+      : frameState.activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+        ? 2.0
+        : frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active
+          ? 1.85
+          : 1.2;
+
+    this.updateGuideFocusReadability(orbiter, dt, frameState);
+    this.updateShimmerLine(orbiter, shimmerActive, frameState);
+  }
+
+  createGuideFocusHalo(orbiter) {
+    if (this.guideFocusHalo || !orbiter?.root) return;
+
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xffe8a8,
+      transparent: true,
+      opacity: 0,
+      side: THREE.BackSide,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    const halo = new THREE.Mesh(new THREE.SphereGeometry(1.28, 20, 14), material);
+    halo.name = "guide_inspection_hone_glow";
+    halo.visible = false;
+    halo.renderOrder = 4;
+    orbiter.root.add(halo);
+    this.guideFocusHalo = halo;
+  }
+
+  updateGuideFocusReadability(orbiter, dt, frameState) {
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    const externalInspection = Boolean(inspection.active && !inspection.coreWorkActive);
+    const camera = frameState.cameraControl ?? {};
+    const cameraPosition = camera.worldPosition;
+    const cameraForward = camera.worldForward;
+
+    let alignment = -1;
+    let distance = this.playerRoot.position.distanceTo(orbiter.root.position);
+    let rawStrength = 0;
+    let honed = false;
+    let guideDepth = 0;
+    let coreDepth = 0;
+    let behindCoreBy = 0;
+
+    if (
+      externalInspection
+      && cameraPosition
+      && cameraForward
+      && Number.isFinite(cameraPosition.x)
+      && Number.isFinite(cameraForward.x)
+    ) {
+      this.focusCameraPosition.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+      this.focusCameraForward.set(cameraForward.x, cameraForward.y, cameraForward.z);
+      if (this.focusCameraForward.lengthSq() > 0.0001) this.focusCameraForward.normalize();
+
+      this.focusToGuide.copy(orbiter.root.position).sub(this.focusCameraPosition);
+      distance = this.focusToGuide.length();
+      if (distance > 0.0001) {
+        this.focusToGuide.normalize();
+        alignment = this.focusCameraForward.dot(this.focusToGuide);
+      }
+
+      // HC024D0B1: hone means intentional centerline focus, not merely "Guide is in frame."
+      // The previous cone was broad enough that a Guide sitting behind the Core could
+      // still qualify. Tighten the angular read and reject targets materially deeper
+      // than the Core along the active inspection-camera ray.
+      const beginGlowDot = 0.955;
+      const honeDot = 0.988;
+      const distanceFade = Math.max(0, Math.min(1, 1 - Math.max(0, distance - 4.6) / 1.7));
+
+      this.focusToCore.copy(this.playerRoot.position).sub(this.focusCameraPosition);
+      guideDepth = Math.max(0, this.focusToGuide.copy(orbiter.root.position).sub(this.focusCameraPosition).dot(this.focusCameraForward));
+      coreDepth = Math.max(0, this.focusToCore.dot(this.focusCameraForward));
+      behindCoreBy = guideDepth - coreDepth;
+      const depthGate = behindCoreBy <= 0.12
+        ? 1
+        : Math.max(0, 1 - (behindCoreBy - 0.12) / 0.34);
+
+      rawStrength = Math.max(0, Math.min(1, (alignment - beginGlowDot) / (honeDot - beginGlowDot)))
+        * distanceFade
+        * depthGate;
+      honed = Boolean(
+        alignment >= honeDot
+        && distance <= 5.1
+        && behindCoreBy <= 0.12
+      );
+    }
+
+    const targetStrength = externalInspection ? rawStrength : 0;
+    this.guideFocusStrength += (targetStrength - this.guideFocusStrength)
+      * (1 - Math.exp(-Math.max(0, dt) * (honed ? 12 : 8)));
+
+    if (this.guideFocusHalo) {
+      const t = frameState.runtimeSeconds ?? 0;
+      const pulse = honed ? (0.5 + Math.sin(t * 7.2) * 0.5) : 0;
+      this.guideFocusHalo.visible = this.guideFocusStrength > 0.025;
+      this.guideFocusHalo.material.opacity = Math.min(0.42, 0.035 + this.guideFocusStrength * 0.24 + pulse * 0.08);
+      this.guideFocusHalo.scale.setScalar(0.96 + this.guideFocusStrength * 0.16 + pulse * 0.025);
+    }
+
+    orbiter.root.userData.inspectionHoned = honed;
+    orbiter.root.userData.inspectionHoneStrength = this.guideFocusStrength;
+    frameState.guideFocus = {
+      pass: "HC-024D0C",
+      active: externalInspection,
+      honed,
+      targetId: orbiter.recipe.id,
+      targetRole: "core_work_entry",
+      alignment,
+      strength: this.guideFocusStrength,
+      distance,
+      guideDepth,
+      coreDepth,
+      behindCoreBy,
+      focusPolicy: "tight_centerline_plus_front_of_core_depth_gate",
+      visualCue: "guide_hone_glow",
+      primaryAction: "commit_reserved",
+      translationRule: "hone_readability_can_extend_to_future_interactable_targets"
+    };
+  }
+
+  findChemObject(id) {
+    return this.chemObjectSystem.objects.find((item) => {
+      return item.recipe.id === id
+        && !item.absorbed
+        && !item.root.userData.absorbed
+        && item.root.visible;
+    });
+  }
+
+  createShimmerLine() {
+    if (this.shimmerLine) return;
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(this.linePositions, 3));
+
+    const material = new THREE.LineBasicMaterial({
+      color: 0xffe2a3,
+      transparent: true,
+      opacity: 0.22
+    });
+
+    this.shimmerLine = new THREE.Line(geometry, material);
+    this.shimmerLine.name = "guide_path_shimmer_line";
+    this.shimmerLine.visible = false;
+    this.visualComposer.scene.add(this.shimmerLine);
+  }
+
+  updateShimmerLine(orbiter, active, frameState) {
+    if (!this.shimmerLine) return;
+
+    if (!active) {
+      this.shimmerLine.visible = false;
+      return;
+    }
+
+    this.shimmerLine.visible = true;
+    const manipulation = frameState.coreWorkManipulation ?? {};
+    const selectedWorld = frameState.inspectionCamera?.coreWorkActive
+      ? manipulation.selectedWorldPosition
+      : null;
+    this.linePositions[0] = selectedWorld?.x ?? this.playerRoot.position.x;
+    this.linePositions[1] = selectedWorld?.y ?? this.playerRoot.position.y;
+    this.linePositions[2] = selectedWorld?.z ?? this.playerRoot.position.z;
+    this.linePositions[3] = orbiter.root.position.x;
+    this.linePositions[4] = orbiter.root.position.y;
+    this.linePositions[5] = orbiter.root.position.z;
+    this.shimmerLine.geometry.attributes.position.needsUpdate = true;
+
+    const heldBoost = manipulation.held ? 0.18 : 0;
+    const depthMotionBoost = Math.min(0.12, Math.abs(manipulation.depthInput ?? 0) * 0.12);
+    const pulse = 0.18 + Math.sin(frameState.runtimeSeconds * (manipulation.held ? 6.2 : 5.0)) * 0.08;
+    this.shimmerLine.material.opacity = Math.min(0.72, 0.14 + pulse * 0.75 + heldBoost + depthMotionBoost);
+  }
+
+  updateDebug(frameState) {
+    const guide = this.orbiters.find((orbiter) => orbiter.recipe.id === "guide_orbiter_folded_lantern_001");
+
+    if (!guide) {
+      frameState.orbiterState = {
+        total: this.orbiters.length,
+        guideState: "not_spawned",
+        guideTarget: "none",
+        guideDistance: 0,
+        lastReaction: "none",
+        shimmerActive: false
+      };
+      return;
+    }
+
+    frameState.orbiterState = {
+      total: this.orbiters.length,
+      guideState: guide.state,
+      guideTarget: guide.guideTarget,
+      guideDistance: this.playerRoot.position.distanceTo(guide.root.position),
+      lastReaction: guide.lastReaction,
+      shimmerActive: guide.shimmerActive,
+      coreWorkPoseActive: guide.state === "guide_attending_core_work",
+      coreWorkTarget: guide.state === "guide_attending_core_work"
+        ? (frameState.coreWorkManipulation?.selectedPieceId ?? "player_core_work_surface")
+        : "none",
+      coreWorkPass: guide.state === "guide_attending_core_work" ? "HC-024C2" : "inactive",
+      coreWorkPieceHeld: Boolean(frameState.coreWorkManipulation?.held),
+      inspectionHoned: Boolean(frameState.guideFocus?.honed),
+      inspectionHoneStrength: frameState.guideFocus?.strength ?? 0,
+      coreWorkCandidateCount: frameState.coreWorkManipulation?.candidateCount ?? 0,
+      silhouetteLane: guide.root.userData.silhouetteLane ?? "companion_lane",
+      minimumCoreSeparation: guide.root.userData.minimumCoreSeparation ?? 1.2,
+      visualConsequencePerchActive: [
+        "upper_right_witness_lane",
+        "upper_interpreter_lane"
+      ].includes(guide.root.userData.silhouetteLane),
+      visualConsequencePass: "HC-010E"
+    };
+  }
+}

@@ -1,0 +1,39 @@
+--- a/src/ecology/OrbiterSystem.js
++++ b/src/ecology/OrbiterSystem.js
+@@ -433,11 +433,34 @@
+       : 0;
+     const coreWorkScaleBoost = coreWorkActive ? 0.08 : 0;
+     const scale = orbiter.baseScale * (1 + pulseT * 0.14 + hubSilhouetteBoost + coreWorkScaleBoost + (state === "fold_shut_and_dim" ? -0.08 : 0));
++    // GSL-4E2F: one read-only interpretation receipt for the existing LS1 event.
++    // This is a Guide-facing observation, not a second attachment authority.
++    const observedAttachment = frameState.playerAttachment ?? null;
++    const pendingInterpretation = gslEnabled ? this.gsl4e2dPending : null;
++    const interpretedMode = pendingInterpretation?.selected
++      ? pendingInterpretation.mode : "companion";
++    const expressionAllowed = Boolean(gslEnabled && !coreWorkActive && pendingInterpretation?.selected);
++    frameState.guideInterpretation = {
++      pass: "GSL-4E2F",
++      enabled: gslEnabled,
++      source: "LS1.playerAttachment",
++      observed: Boolean(observedAttachment),
++      attachmentActive: Boolean(observedAttachment?.active),
++      detachReason: observedAttachment?.detachReason ?? "none",
++      event: pendingInterpretation?.event ?? "none",
++      intention: interpretedMode,
++      expressionAllowed,
++      expressionSuppression: !gslEnabled ? "gsl_disabled"
++        : coreWorkActive ? "core_work_protected"
++        : !pendingInterpretation?.selected ? "no_active_response" : "none",
++      movementOwner: frameState.gsl4e2dDebug?.finalOwner ?? "original_guide"
++    };
++
+     // GSL-4E2E: layered expression. The authored owner retains ALL position,
+     // target, state, rotation, Core Work, and pulse decisions above.
+     // Expression is a smoothed, reversible local silhouette deformation only.
+-    const expressionMode = gslEnabled && !coreWorkActive && this.gsl4e2dPending?.selected
+-      ? this.gsl4e2dPending.mode : "companion";
++    const expressionMode = frameState.guideInterpretation.expressionAllowed
++      ? frameState.guideInterpretation.intention : "companion";
+     const expressionTarget = expressionMode === "concern" ? 1 : expressionMode === "support" ? -1 : 0;
+     if (!Number.isFinite(orbiter.gsl4e2eExpression)) orbiter.gsl4e2eExpression = 0;
+     const expressionRate = expressionTarget === 0 ? 4.8 : expressionTarget > 0 ? 11 : 6.5;

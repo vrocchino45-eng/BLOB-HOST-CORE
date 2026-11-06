@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { GSL4E2BReadOnlyAdapter } from "../../GSL4E2B_ReadOnlyAdapter.mjs";
 
 export class OrbiterSystem {
   constructor({ recipeDataSystem, visualComposer, playerRoot, chemObjectSystem, localCellRecipe, frameState }) {
@@ -15,6 +16,18 @@ export class OrbiterSystem {
     this.localCellRecipe = localCellRecipe;
     this.frameState = frameState;
 
+    this.gsl4e2b = new GSL4E2BReadOnlyAdapter();
+    // GSL4E2C runtime toggle: only affects Guide response; never writes to LS1.
+    this.gsl4e2cEnabled = false;
+    this.gsl4e2cLastReport = "";
+    this.gsl4e2cToggle = (event) => {
+      if (event.code !== "F9" || !event.ctrlKey || !event.shiftKey || event.repeat) return;
+      this.gsl4e2cEnabled = !this.gsl4e2cEnabled;
+      this.gsl4e2b = new GSL4E2BReadOnlyAdapter(); // fresh transition history per comparison
+      this.gsl4e2cLastReport = "";
+      console.info(`[GSL4E2C] ${this.gsl4e2cEnabled ? "ON" : "OFF"} (Ctrl+Shift+F9)`);
+    };
+    if (typeof window !== "undefined") window.addEventListener("keydown", this.gsl4e2cToggle);
     this.orbiters = [];
     this.temp = new THREE.Vector3();
     this.workRight = new THREE.Vector3();
@@ -92,6 +105,8 @@ export class OrbiterSystem {
   }
 
   update(dt, frameState) {
+    // GSL4E2C runtime toggle: disabled at startup; no mutation of attachment state.
+    frameState.gsl4e2bEnabled = this.gsl4e2cEnabled;
     if (frameState.input?.pulsePressed) {
       this.applyPulse(frameState);
     }
@@ -121,6 +136,7 @@ export class OrbiterSystem {
   }
 
   updateGuide(orbiter, dt, frameState) {
+    this.gsl4e2dPending = null;
     const t = frameState.runtimeSeconds;
     const seedTarget = this.findChemObject("dormant_seed_nutrient_001");
     const scarTarget = this.findChemObject("scar_contamination_plate_001");
@@ -331,9 +347,65 @@ export class OrbiterSystem {
       orbiter.lastReaction = "guide_dimmed_near_scar";
     }
 
+    // GSL-4E2B: opt-in only. Authored Guide decisions always win.
+    const gslEnabled = Boolean(frameState.gsl4e2bEnabled);
+    if (gslEnabled) {
+      const gsl = this.gsl4e2b.sample(frameState, Number.isFinite(t) ? t : 0);
+      const authored = coreWorkActive || shimmerActive || guideTarget !== "player" || pulseT > 0.05;
+      if (!authored && gsl.mode === "concern") {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(this.guideOffset).multiplyScalar(1);
+        targetPosition.y += 0.12;
+        state = "gsl_concern";
+      } else if (!authored && gsl.mode === "support") {
+        targetPosition = this.temp.copy(this.playerRoot.position).add(this.guideOffset);
+        targetPosition.x *= 1;
+        state = "gsl_support";
+      }
+      // GSL-4E2D: report selection and ownership separately; no gameplay changes.
+      const ownerReasons = [];
+      if (coreWorkActive) ownerReasons.push("core_work");
+      if (shimmerActive) ownerReasons.push("authored_shimmer");
+      if (guideTarget !== "player") ownerReasons.push(`authored_target:${guideTarget}`);
+      if (pulseT > 0.05) ownerReasons.push("pulse_response");
+      const owner = authored ? "authored_guide" : "companion_available";
+      const selected = gsl.mode === "concern" || gsl.mode === "support";
+      const provisionalApplied = !authored && selected;
+      frameState.gsl4e2bDebug = { enabled: true, mode: gsl.mode, event: gsl.event, authoredOverride: authored };
+      this.gsl4e2dPending = {
+        mode: gsl.mode, event: gsl.event, attached: gsl.active,
+        detachReason: gsl.reason, selected, provisionalApplied,
+        owner, ownerReasons, authoredOverride: authored
+      };
+    }
     if (!coreWorkActive && pulseT > 0.05) {
       state = "answering_player_pulse";
       shimmerActive = true;
+    }
+
+    // GSL-4E2D: resolve AFTER pulse's final state override. Observe only.
+    if (gslEnabled && this.gsl4e2dPending) {
+      const d = this.gsl4e2dPending;
+      const expectedState = d.mode === "concern" ? "gsl_concern" : d.mode === "support" ? "gsl_support" : null;
+      const applied = Boolean(d.selected && expectedState && state === expectedState);
+      const finalOwner = applied ? "gsl_response" : (state === "answering_player_pulse" ? "pulse_response" : d.owner);
+      const suppressionReason = !d.selected ? "no_active_gsl_response"
+        : applied ? "none"
+        : state === "answering_player_pulse" ? "pulse_final_override"
+        : d.ownerReasons.join(",") || "final_state_not_gsl";
+      const diagnostic = {
+        event: d.event, selectedMode: d.mode, selected: d.selected,
+        applied, finalGuideState: state, finalOwner,
+        authoredOverride: d.authoredOverride, ownerReasons: d.ownerReasons,
+        suppressionReason, guideTarget, attached: d.attached, detachReason: d.detachReason
+      };
+      frameState.gsl4e2dDebug = diagnostic;
+      const report = JSON.stringify(diagnostic);
+      if (report !== this.gsl4e2cLastReport) {
+        this.gsl4e2cLastReport = report;
+        console.info("[GSL4E2D]", diagnostic);
+      }
+    } else {
+      frameState.gsl4e2dDebug = { enabled: false, applied: false };
     }
 
     orbiter.root.position.lerp(targetPosition, Math.min(1, dt * (coreWorkActive ? 5.4 : 3.2)));
@@ -361,7 +433,50 @@ export class OrbiterSystem {
       : 0;
     const coreWorkScaleBoost = coreWorkActive ? 0.08 : 0;
     const scale = orbiter.baseScale * (1 + pulseT * 0.14 + hubSilhouetteBoost + coreWorkScaleBoost + (state === "fold_shut_and_dim" ? -0.08 : 0));
-    orbiter.root.scale.setScalar(scale);
+    // GSL-4E2F: one read-only interpretation receipt for the existing LS1 event.
+    // This is a Guide-facing observation, not a second attachment authority.
+    const observedAttachment = frameState.playerAttachment ?? null;
+    const pendingInterpretation = gslEnabled ? this.gsl4e2dPending : null;
+    const interpretedMode = pendingInterpretation?.selected
+      ? pendingInterpretation.mode : "companion";
+    const expressionAllowed = Boolean(gslEnabled && !coreWorkActive && pendingInterpretation?.selected);
+    frameState.guideInterpretation = {
+      pass: "GSL-4E2F",
+      enabled: gslEnabled,
+      source: "LS1.playerAttachment",
+      observed: Boolean(observedAttachment),
+      attachmentActive: Boolean(observedAttachment?.active),
+      detachReason: observedAttachment?.detachReason ?? "none",
+      event: pendingInterpretation?.event ?? "none",
+      intention: interpretedMode,
+      expressionAllowed,
+      expressionSuppression: !gslEnabled ? "gsl_disabled"
+        : coreWorkActive ? "core_work_protected"
+        : !pendingInterpretation?.selected ? "no_active_response" : "none",
+      movementOwner: frameState.gsl4e2dDebug?.finalOwner ?? "original_guide"
+    };
+
+    // GSL-4E2E: layered expression. The authored owner retains ALL position,
+    // target, state, rotation, Core Work, and pulse decisions above.
+    // Expression is a smoothed, reversible local silhouette deformation only.
+    const expressionMode = frameState.guideInterpretation.expressionAllowed
+      ? frameState.guideInterpretation.intention : "companion";
+    const expressionTarget = expressionMode === "concern" ? 1 : expressionMode === "support" ? -1 : 0;
+    if (!Number.isFinite(orbiter.gsl4e2eExpression)) orbiter.gsl4e2eExpression = 0;
+    const expressionRate = expressionTarget === 0 ? 4.8 : expressionTarget > 0 ? 11 : 6.5;
+    orbiter.gsl4e2eExpression += (expressionTarget - orbiter.gsl4e2eExpression)
+      * (1 - Math.exp(-Math.max(0, Math.min(dt, 0.1)) * expressionRate));
+    const expression = orbiter.gsl4e2eExpression;
+    // Concern contracts/heightens; support broadens/softens. Neutral is exactly 1:1:1.
+    orbiter.root.scale.set(scale * (1 - expression * 0.12),
+      scale * (1 + expression * 0.075), scale * (1 - expression * 0.085));
+    frameState.gsl4e2eDebug = {
+      enabled: gslEnabled, selectedMode: this.gsl4e2dPending?.mode ?? "companion",
+      expressionMode, expressionWeight: Number(expression.toFixed(3)),
+      expressionApplied: gslEnabled && Math.abs(expression) > 0.015,
+      movementOwner: frameState.gsl4e2dDebug?.finalOwner ?? "original_guide",
+      coreWorkProtected: coreWorkActive
+    };
 
     orbiter.state = state;
     orbiter.guideTarget = guideTarget;
