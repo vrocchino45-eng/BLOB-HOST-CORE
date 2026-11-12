@@ -1,0 +1,68 @@
+{
+  "pass": "GSL-4E2G-STAGE2A",
+  "scope": "production OrbiterSystem, controlled adapter responses; not production LS1 adapter",
+  "checks": [
+    {
+      "name": "B01 attached neutral -> companion, no GSL takeover",
+      "status": "PASS"
+    },
+    {
+      "name": "B02 deliberate release -> no fabricated concern",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32mactual\u001b[39m \u001b[31mexpected\u001b[39m\n\n\u001b[39m'\u001b[39m\u001b[32mn\u001b[39m\u001b[32mo\u001b[39m\u001b[32mn\u001b[39m\u001b[31md\u001b[39m\u001b[39me\u001b[39m\u001b[31ml\u001b[39m\u001b[31mi\u001b[39m\u001b[31mb\u001b[39m\u001b[31me\u001b[39m\u001b[31mr\u001b[39m\u001b[31ma\u001b[39m\u001b[31mt\u001b[39m\u001b[31me\u001b[39m\u001b[31m_\u001b[39m\u001b[31mr\u001b[39m\u001b[31me\u001b[39m\u001b[31ml\u001b[39m\u001b[31me\u001b[39m\u001b[31ma\u001b[39m\u001b[31ms\u001b[39m\u001b[31me\u001b[39m\u001b[39m'\u001b[39m\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:33:157\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:33:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B03 unexpected loss -> concern when companion owns movement",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32mactual\u001b[39m \u001b[31mexpected\u001b[39m\n\n\u001b[39m'\u001b[39m\u001b[39mc\u001b[39m\u001b[39mo\u001b[39m\u001b[32mm\u001b[39m\u001b[32mp\u001b[39m\u001b[32ma\u001b[39m\u001b[39mn\u001b[39m\u001b[32mi\u001b[39m\u001b[32mo\u001b[39m\u001b[31mc\u001b[39m\u001b[31me\u001b[39m\u001b[31mr\u001b[39m\u001b[39mn\u001b[39m\u001b[39m'\u001b[39m\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:34:178\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:34:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B04 recovery -> support when companion owns movement",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32mactual\u001b[39m \u001b[31mexpected\u001b[39m\n\n\u001b[39m'\u001b[39m\u001b[32mc\u001b[39m\u001b[32mo\u001b[39m\u001b[32mm\u001b[39m\u001b[31ms\u001b[39m\u001b[31mu\u001b[39m\u001b[39mp\u001b[39m\u001b[32ma\u001b[39m\u001b[32mn\u001b[39m\u001b[32mi\u001b[39m\u001b[31mp\u001b[39m\u001b[39mo\u001b[39m\u001b[32mn\u001b[39m\u001b[31mr\u001b[39m\u001b[31mt\u001b[39m\u001b[39m'\u001b[39m\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:35:138\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:35:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B06 Core Work -> movement preserved and expression suppressed",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32mactual\u001b[39m \u001b[31mexpected\u001b[39m\n\n\u001b[39m'\u001b[39m\u001b[32mg\u001b[39m\u001b[32ms\u001b[39m\u001b[32ml\u001b[39m\u001b[31mc\u001b[39m\u001b[31mo\u001b[39m\u001b[31mr\u001b[39m\u001b[31me\u001b[39m\u001b[39m_\u001b[39m\u001b[32md\u001b[39m\u001b[32mi\u001b[39m\u001b[32ms\u001b[39m\u001b[32ma\u001b[39m\u001b[32mb\u001b[39m\u001b[32ml\u001b[39m\u001b[31mw\u001b[39m\u001b[31mo\u001b[39m\u001b[31mr\u001b[39m\u001b[31mk\u001b[39m\u001b[31m_\u001b[39m\u001b[31mp\u001b[39m\u001b[31mr\u001b[39m\u001b[31mo\u001b[39m\u001b[31mt\u001b[39m\u001b[39me\u001b[39m\u001b[31mc\u001b[39m\u001b[31mt\u001b[39m\u001b[31me\u001b[39m\u001b[39md\u001b[39m\u001b[39m'\u001b[39m\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:36:218\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:36:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B07 authored Guide target retains movement",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32m+ actual\u001b[39m \u001b[31m- expected\u001b[39m\n\n\u001b[32m+\u001b[39m undefined\n\u001b[31m- \u001b[39m'authored_guide'\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:37:182\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:37:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B07 pulse overrides GSL movement",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32m+ actual\u001b[39m \u001b[31m- expected\u001b[39m\n\n\u001b[32m+\u001b[39m undefined\n\u001b[31m- \u001b[39m'pulse_response'\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:38:169\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:38:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B08 GSL disabled -> original Guide and no expression",
+      "status": "PASS"
+    },
+    {
+      "name": "B08 disabled after active expression -> smooth decay",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(Math.abs(f.orbiter.gsl4e2eExpression)<before)\n\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:40:267\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:40:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B10 repeated identical input -> stable owner and finite expression",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\u001b[32m+ actual\u001b[39m \u001b[31m- expected\u001b[39m\n\n\u001b[32m+\u001b[39m undefined\n\u001b[31m- \u001b[39m'gsl_response'\n\n    at has (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:30:25)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:41:175\n    at test (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:12:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_RUNTIME.mjs:41:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "Guide integration never mutates LS1 attachment",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 8
+  },
+  "notVerified": [
+    "B05 real adapter recovery timeout",
+    "B09 real adapter rapid-event cooldown",
+    "LS1 attachment producer -> real GSL4E2B adapter end-to-end",
+    "visual rendering and human feel"
+  ]
+}

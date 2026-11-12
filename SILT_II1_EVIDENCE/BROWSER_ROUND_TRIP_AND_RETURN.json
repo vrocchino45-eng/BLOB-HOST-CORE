@@ -1,0 +1,1373 @@
+{
+  "pass": "SILT-II1-BROWSER",
+  "setup": {
+    "pass": "VASCULAR-II1-TEST-START",
+    "testOnly": true,
+    "earnedProgression": false,
+    "scope": "Staged prior first-route return, qualified revisit and source pose only; no phase-two handoff or completion credit written.",
+    "next": "Return focus to the game. Hold LT/Q, then tap Pulse/X while holding. Follow gold to green intake; hold LT/Q there.",
+    "position": [
+      1.3835288646708668,
+      0.10760142440314734,
+      -11.060600763803077
+    ]
+  },
+  "siltSetup": {
+    "pass": "SILT-II1-TEST-START",
+    "testOnly": true,
+    "earnedProgression": false,
+    "scope": "Staged previous first-route completion, qualified revisit and near-grain pose. No new goal proof, ecology time skip, material creation or phase-two credit written.",
+    "grainId": "silt-grain-01",
+    "next": "Return focus to game. Aim at the nearby grain, hold LT/Q and press A/E; continue imprint, seat, extract, deliberate release and native return."
+  },
+  "contactFixture": {
+    "scope": "Controlled player/accepted held-grain contact placement; actual controller pulses, seat, extraction and release still execute. No goal proof or near-native state written.",
+    "accepted": true,
+    "grainId": "silt-grain-01"
+  },
+  "vascularStages": [
+    {
+      "label": "qualified source",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "source_relationship",
+        "completed": false,
+        "completionPublished": false,
+        "handoffId": null,
+        "sourcePulseId": null,
+        "sourceHoldSeconds": 0,
+        "sourceHoldAtProjection": 0,
+        "travelProgress": 0,
+        "settleProgress": 0,
+        "completionSequence": 0,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 4,
+      "engine": 3,
+      "position": [
+        1.4838557699204105,
+        0.13487864238944672,
+        -11.140071178974452
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": true,
+        "packet": false,
+        "packetPosition": [
+          0,
+          0,
+          0
+        ]
+      },
+      "nextAction": "Hold LT at the amber branch valve to establish the return current."
+    },
+    {
+      "label": "projected current",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "handoff_travel",
+        "completed": false,
+        "completionPublished": false,
+        "handoffId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "sourceHoldSeconds": 0.18,
+        "sourceHoldAtProjection": 0.18,
+        "travelProgress": 0.049999999999999996,
+        "settleProgress": 0,
+        "completionSequence": 0,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 4,
+      "engine": 3,
+      "position": [
+        1.6832712350526684,
+        0.1889431616351314,
+        -10.902743624324888
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": true,
+        "packet": true,
+        "packetPosition": [
+          1.3984427092494647,
+          0.15364684550478191,
+          -10.736331183726893
+        ]
+      },
+      "nextAction": "Follow the gold current response toward the green intake valve."
+    },
+    {
+      "label": "receiver approach",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "receiver_pending",
+        "completed": false,
+        "completionPublished": false,
+        "handoffId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "sourceHoldSeconds": 0.18,
+        "sourceHoldAtProjection": 0.18,
+        "travelProgress": 1,
+        "settleProgress": 0,
+        "completionSequence": 0,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 4,
+      "engine": 3,
+      "position": [
+        -1.021125307976059,
+        0.5484612767568136,
+        -6.700296348805056
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": true,
+        "packet": true,
+        "packetPosition": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ]
+      },
+      "nextAction": "Hold LT at the green intake valve to receive and settle the return current."
+    },
+    {
+      "label": "settled and credited",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "completed",
+        "completed": true,
+        "completionPublished": true,
+        "handoffId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "sourceHoldSeconds": 0.18,
+        "sourceHoldAtProjection": 0.18,
+        "travelProgress": 1,
+        "settleProgress": 1,
+        "completionSequence": 1,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 5,
+      "engine": 3,
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        -1.4385506481385373,
+        0.35528975262497364,
+        -5.225824234455519
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": false,
+        "packet": true,
+        "packetPosition": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ]
+      },
+      "nextAction": "Paired return current settled. Follow the gold current into the open entry fold."
+    }
+  ],
+  "siltStages": [
+    {
+      "label": "actual grip",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "frame": 92,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "gripped",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 1,
+        "proof": {
+          "grip": 1,
+          "imprint": null,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "aim": {
+        "pass": "LS1D1D1",
+        "aiming": true,
+        "candidateId": "silt-grain-01",
+        "lockedId": "silt-grain-01",
+        "heldId": "silt-grain-01",
+        "candidateAimDot": 1,
+        "state": "locked"
+      },
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "input": {
+        "moveX": 0,
+        "moveY": 0,
+        "moveZ": 0,
+        "boostHeld": false,
+        "interactPressed": false,
+        "interactEventId": 1,
+        "primaryActionContext": "world",
+        "primaryActionRole": "commit_reserved",
+        "primaryActionSuppressed": false,
+        "coreWorkPressed": false,
+        "coreWorkViewPressed": false,
+        "coreWorkViewSource": "none",
+        "coreWorkEventId": 0,
+        "coreWorkManipX": 0,
+        "coreWorkManipY": 0,
+        "coreWorkManipDepth": 0,
+        "coreWorkSelectPrevPressed": false,
+        "coreWorkSelectNextPressed": false,
+        "coreWorkTraversalSuppressed": false,
+        "worldInteractSuppressedByCoreWork": false,
+        "guideHonedForReadability": false,
+        "pulsePressed": false,
+        "pulseEventId": 1,
+        "pulseSource": "keyboard_x",
+        "pulseHeld": false,
+        "pulseReleased": false,
+        "pulseHoldSeconds": 0,
+        "pulseCharge01": 0,
+        "pulseReleaseCharge01": 0,
+        "pulseReleaseKind": "none",
+        "pulseCommitment": "idle",
+        "pulseChargeRateMultiplier": 1.02,
+        "pulseEffectiveChargeThresholdSeconds": 0.33665016461206926,
+        "pulseEffectiveFullChargeSeconds": 1.2549019607843137,
+        "absorbHeld": false,
+        "stabilizeHeld": true,
+        "resonanceHeld": true,
+        "guideFocusPressed": false,
+        "cancelPressed": false,
+        "cameraLookX": 0,
+        "cameraLookY": 0,
+        "recenterCameraPressed": false,
+        "toggleInspectionCameraPressed": false,
+        "statusPageTogglePressed": false,
+        "statusPageEventId": 0,
+        "statusPageSource": "none",
+        "statusTabPrevPressed": false,
+        "statusTabNextPressed": false,
+        "menuUpPressed": false,
+        "menuDownPressed": false,
+        "menuLeftPressed": false,
+        "menuRightPressed": false,
+        "debugJumpSlot": 0,
+        "debugJumpDirect": false,
+        "debugTestPlatformSlot": 0,
+        "debugCoreWorkSeedPressed": false,
+        "debugCoreEngineCyclePressed": false
+      },
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        1.1589044031540978,
+        -0.3335659481818854,
+        -11.177976123004756
+      ],
+      "nextAction": "Bring this grain to the garden patch; hold LT and Pulse to imprint it."
+    },
+    {
+      "label": "actual imprint",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "frame": 95,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "imprinted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 10,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "aim": {
+        "pass": "LS1D1D1",
+        "aiming": true,
+        "candidateId": "silt-grain-01",
+        "lockedId": "silt-grain-01",
+        "heldId": "silt-grain-01",
+        "candidateAimDot": 0.993,
+        "state": "locked"
+      },
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "input": {
+        "moveX": 0,
+        "moveY": 0,
+        "moveZ": 0,
+        "boostHeld": false,
+        "interactPressed": false,
+        "interactEventId": 1,
+        "primaryActionContext": "world",
+        "primaryActionRole": "commit_reserved",
+        "primaryActionSuppressed": false,
+        "coreWorkPressed": false,
+        "coreWorkViewPressed": false,
+        "coreWorkViewSource": "none",
+        "coreWorkEventId": 0,
+        "coreWorkManipX": 0,
+        "coreWorkManipY": 0,
+        "coreWorkManipDepth": 0,
+        "coreWorkSelectPrevPressed": false,
+        "coreWorkSelectNextPressed": false,
+        "coreWorkTraversalSuppressed": false,
+        "worldInteractSuppressedByCoreWork": false,
+        "guideHonedForReadability": false,
+        "pulsePressed": false,
+        "pulseEventId": 3,
+        "pulseSource": "keyboard_x",
+        "pulseHeld": false,
+        "pulseReleased": false,
+        "pulseHoldSeconds": 0,
+        "pulseCharge01": 0,
+        "pulseReleaseCharge01": 0,
+        "pulseReleaseKind": "none",
+        "pulseCommitment": "idle",
+        "pulseChargeRateMultiplier": 1.02,
+        "pulseEffectiveChargeThresholdSeconds": 0.33665016461206926,
+        "pulseEffectiveFullChargeSeconds": 1.2549019607843137,
+        "absorbHeld": false,
+        "stabilizeHeld": true,
+        "resonanceHeld": true,
+        "guideFocusPressed": false,
+        "cancelPressed": false,
+        "cameraLookX": 0,
+        "cameraLookY": 0,
+        "recenterCameraPressed": false,
+        "toggleInspectionCameraPressed": false,
+        "statusPageTogglePressed": false,
+        "statusPageEventId": 0,
+        "statusPageSource": "none",
+        "statusTabPrevPressed": false,
+        "statusTabNextPressed": false,
+        "menuUpPressed": false,
+        "menuDownPressed": false,
+        "menuLeftPressed": false,
+        "menuRightPressed": false,
+        "debugJumpSlot": 0,
+        "debugJumpDirect": false,
+        "debugTestPlatformSlot": 0,
+        "debugCoreWorkSeedPressed": false,
+        "debugCoreEngineCyclePressed": false
+      },
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        -5.374262503857808,
+        -2.6004099475755074,
+        -9.322068352327225
+      ],
+      "nextAction": "Keep LT held and press A to seat the imprinted grain."
+    },
+    {
+      "label": "actual seat",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "frame": 96,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "seated",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 13,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "aim": {
+        "pass": "LS1D1D1",
+        "aiming": true,
+        "candidateId": "silt-grain-01",
+        "lockedId": null,
+        "heldId": null,
+        "candidateAimDot": 0.996,
+        "state": "candidate"
+      },
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "input": {
+        "moveX": 0,
+        "moveY": 0,
+        "moveZ": 0,
+        "boostHeld": false,
+        "interactPressed": false,
+        "interactEventId": 2,
+        "primaryActionContext": "world",
+        "primaryActionRole": "commit_reserved",
+        "primaryActionSuppressed": false,
+        "coreWorkPressed": false,
+        "coreWorkViewPressed": false,
+        "coreWorkViewSource": "none",
+        "coreWorkEventId": 0,
+        "coreWorkManipX": 0,
+        "coreWorkManipY": 0,
+        "coreWorkManipDepth": 0,
+        "coreWorkSelectPrevPressed": false,
+        "coreWorkSelectNextPressed": false,
+        "coreWorkTraversalSuppressed": false,
+        "worldInteractSuppressedByCoreWork": false,
+        "guideHonedForReadability": false,
+        "pulsePressed": false,
+        "pulseEventId": 3,
+        "pulseSource": "keyboard_x",
+        "pulseHeld": false,
+        "pulseReleased": false,
+        "pulseHoldSeconds": 0,
+        "pulseCharge01": 0,
+        "pulseReleaseCharge01": 0,
+        "pulseReleaseKind": "none",
+        "pulseCommitment": "idle",
+        "pulseChargeRateMultiplier": 1.02,
+        "pulseEffectiveChargeThresholdSeconds": 0.33665016461206926,
+        "pulseEffectiveFullChargeSeconds": 1.2549019607843137,
+        "absorbHeld": false,
+        "stabilizeHeld": true,
+        "resonanceHeld": true,
+        "guideFocusPressed": false,
+        "cancelPressed": false,
+        "cameraLookX": 0,
+        "cameraLookY": 0,
+        "recenterCameraPressed": false,
+        "toggleInspectionCameraPressed": false,
+        "statusPageTogglePressed": false,
+        "statusPageEventId": 0,
+        "statusPageSource": "none",
+        "statusTabPrevPressed": false,
+        "statusTabNextPressed": false,
+        "menuUpPressed": false,
+        "menuDownPressed": false,
+        "menuLeftPressed": false,
+        "menuRightPressed": false,
+        "debugJumpSlot": 0,
+        "debugJumpDirect": false,
+        "debugTestPlatformSlot": 0,
+        "debugCoreWorkSeedPressed": false,
+        "debugCoreEngineCyclePressed": false
+      },
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        -5.388041795709209,
+        -2.6031252385202115,
+        -9.296174506193225
+      ],
+      "nextAction": "Aim at that seated grain; hold LT and press A to extract it."
+    },
+    {
+      "label": "actual extraction",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "frame": 98,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "extracted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 17,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "aim": {
+        "pass": "LS1D1D1",
+        "aiming": true,
+        "candidateId": "silt-grain-01",
+        "lockedId": "silt-grain-01",
+        "heldId": "silt-grain-01",
+        "candidateAimDot": 0.999,
+        "state": "locked"
+      },
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "input": {
+        "moveX": 0,
+        "moveY": 0,
+        "moveZ": 0,
+        "boostHeld": false,
+        "interactPressed": false,
+        "interactEventId": 3,
+        "primaryActionContext": "world",
+        "primaryActionRole": "commit_reserved",
+        "primaryActionSuppressed": false,
+        "coreWorkPressed": false,
+        "coreWorkViewPressed": false,
+        "coreWorkViewSource": "none",
+        "coreWorkEventId": 0,
+        "coreWorkManipX": 0,
+        "coreWorkManipY": 0,
+        "coreWorkManipDepth": 0,
+        "coreWorkSelectPrevPressed": false,
+        "coreWorkSelectNextPressed": false,
+        "coreWorkTraversalSuppressed": false,
+        "worldInteractSuppressedByCoreWork": false,
+        "guideHonedForReadability": false,
+        "pulsePressed": false,
+        "pulseEventId": 3,
+        "pulseSource": "keyboard_x",
+        "pulseHeld": false,
+        "pulseReleased": false,
+        "pulseHoldSeconds": 0,
+        "pulseCharge01": 0,
+        "pulseReleaseCharge01": 0,
+        "pulseReleaseKind": "none",
+        "pulseCommitment": "idle",
+        "pulseChargeRateMultiplier": 1.02,
+        "pulseEffectiveChargeThresholdSeconds": 0.33665016461206926,
+        "pulseEffectiveFullChargeSeconds": 1.2549019607843137,
+        "absorbHeld": false,
+        "stabilizeHeld": true,
+        "resonanceHeld": true,
+        "guideFocusPressed": false,
+        "cancelPressed": false,
+        "cameraLookX": 0,
+        "cameraLookY": 0,
+        "recenterCameraPressed": false,
+        "toggleInspectionCameraPressed": false,
+        "statusPageTogglePressed": false,
+        "statusPageEventId": 0,
+        "statusPageSource": "none",
+        "statusTabPrevPressed": false,
+        "statusTabNextPressed": false,
+        "menuUpPressed": false,
+        "menuDownPressed": false,
+        "menuLeftPressed": false,
+        "menuRightPressed": false,
+        "debugJumpSlot": 0,
+        "debugJumpDirect": false,
+        "debugTestPlatformSlot": 0,
+        "debugCoreWorkSeedPressed": false,
+        "debugCoreEngineCyclePressed": false
+      },
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        -5.431529072418854,
+        -2.6100818826111585,
+        -9.221535505273277
+      ],
+      "nextAction": "Move the grain clear of the patch, then press A with LT held to release it."
+    },
+    {
+      "label": "actual free release",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "frame": 99,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "released_pending_native",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 20,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": 18
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "aim": {
+        "pass": "LS1D1D1",
+        "aiming": true,
+        "candidateId": null,
+        "lockedId": null,
+        "heldId": null,
+        "candidateAimDot": null,
+        "state": "open"
+      },
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "input": {
+        "moveX": 0,
+        "moveY": 0,
+        "moveZ": 0,
+        "boostHeld": false,
+        "interactPressed": false,
+        "interactEventId": 4,
+        "primaryActionContext": "world",
+        "primaryActionRole": "commit_reserved",
+        "primaryActionSuppressed": false,
+        "coreWorkPressed": false,
+        "coreWorkViewPressed": false,
+        "coreWorkViewSource": "none",
+        "coreWorkEventId": 0,
+        "coreWorkManipX": 0,
+        "coreWorkManipY": 0,
+        "coreWorkManipDepth": 0,
+        "coreWorkSelectPrevPressed": false,
+        "coreWorkSelectNextPressed": false,
+        "coreWorkTraversalSuppressed": false,
+        "worldInteractSuppressedByCoreWork": false,
+        "guideHonedForReadability": false,
+        "pulsePressed": false,
+        "pulseEventId": 3,
+        "pulseSource": "keyboard_x",
+        "pulseHeld": false,
+        "pulseReleased": false,
+        "pulseHoldSeconds": 0,
+        "pulseCharge01": 0,
+        "pulseReleaseCharge01": 0,
+        "pulseReleaseKind": "none",
+        "pulseCommitment": "idle",
+        "pulseChargeRateMultiplier": 1.02,
+        "pulseEffectiveChargeThresholdSeconds": 0.33665016461206926,
+        "pulseEffectiveFullChargeSeconds": 1.2549019607843137,
+        "absorbHeld": false,
+        "stabilizeHeld": true,
+        "resonanceHeld": true,
+        "guideFocusPressed": false,
+        "cancelPressed": false,
+        "cameraLookX": 0,
+        "cameraLookY": 0,
+        "recenterCameraPressed": false,
+        "toggleInspectionCameraPressed": false,
+        "statusPageTogglePressed": false,
+        "statusPageEventId": 0,
+        "statusPageSource": "none",
+        "statusTabPrevPressed": false,
+        "statusTabNextPressed": false,
+        "menuUpPressed": false,
+        "menuDownPressed": false,
+        "menuLeftPressed": false,
+        "menuRightPressed": false,
+        "debugJumpSlot": 0,
+        "debugJumpDirect": false,
+        "debugTestPlatformSlot": 0,
+        "debugCoreWorkSeedPressed": false,
+        "debugCoreEngineCyclePressed": false
+      },
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        -5.450359997248203,
+        -2.612786392376,
+        -6.183116981015335
+      ],
+      "nextAction": "Let that same free grain settle back into its circulation path."
+    },
+    {
+      "label": "native return and six-phase credit",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "frame": 144,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "completed",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 20,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": 18
+        },
+        "completed": true,
+        "completionPublished": true,
+        "completionSequence": 1,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "aim": {
+        "pass": "LS1D1D1",
+        "aiming": false,
+        "candidateId": null,
+        "lockedId": null,
+        "heldId": null,
+        "candidateAimDot": null,
+        "state": "hidden"
+      },
+      "credits": 6,
+      "engine": 6,
+      "mass": 8,
+      "input": {
+        "moveX": 0,
+        "moveY": 0,
+        "moveZ": 0,
+        "boostHeld": false,
+        "interactPressed": false,
+        "interactEventId": 4,
+        "primaryActionContext": "world",
+        "primaryActionRole": "commit_reserved",
+        "primaryActionSuppressed": false,
+        "coreWorkPressed": false,
+        "coreWorkViewPressed": false,
+        "coreWorkViewSource": "none",
+        "coreWorkEventId": 0,
+        "coreWorkManipX": 0,
+        "coreWorkManipY": 0,
+        "coreWorkManipDepth": 0,
+        "coreWorkSelectPrevPressed": false,
+        "coreWorkSelectNextPressed": false,
+        "coreWorkTraversalSuppressed": false,
+        "worldInteractSuppressedByCoreWork": false,
+        "guideHonedForReadability": false,
+        "pulsePressed": false,
+        "pulseEventId": 3,
+        "pulseSource": "keyboard_x",
+        "pulseHeld": false,
+        "pulseReleased": false,
+        "pulseHoldSeconds": 0,
+        "pulseCharge01": 0,
+        "pulseReleaseCharge01": 0,
+        "pulseReleaseKind": "none",
+        "pulseCommitment": "idle",
+        "pulseChargeRateMultiplier": 1.02,
+        "pulseEffectiveChargeThresholdSeconds": 0.33665016461206926,
+        "pulseEffectiveFullChargeSeconds": 1.2549019607843137,
+        "absorbHeld": false,
+        "stabilizeHeld": false,
+        "resonanceHeld": false,
+        "guideFocusPressed": false,
+        "cancelPressed": false,
+        "cameraLookX": 0,
+        "cameraLookY": 0,
+        "recenterCameraPressed": false,
+        "toggleInspectionCameraPressed": false,
+        "statusPageTogglePressed": false,
+        "statusPageEventId": 0,
+        "statusPageSource": "none",
+        "statusTabPrevPressed": false,
+        "statusTabNextPressed": false,
+        "menuUpPressed": false,
+        "menuDownPressed": false,
+        "menuLeftPressed": false,
+        "menuRightPressed": false,
+        "debugJumpSlot": 0,
+        "debugJumpDirect": false,
+        "debugTestPlatformSlot": 0,
+        "debugCoreWorkSeedPressed": false,
+        "debugCoreEngineCyclePressed": false
+      },
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "silt:phase_2",
+        "routeKey": "silt",
+        "phase": 2,
+        "sequence": 1,
+        "source": "SiltPressureRouteSystem",
+        "frame": 144,
+        "evidenceId": "silt:round-trip:1",
+        "grainId": "silt-grain-01",
+        "proofSequences": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": 18
+        },
+        "materialTransfer": false,
+        "conservedMass": 8
+      },
+      "position": [
+        -5.663021117473702,
+        -2.635562365385037,
+        -4.457672990170546
+      ],
+      "nextAction": "Silt II round trip complete. Follow the amber breath back to the Hub."
+    }
+  ],
+  "navigation": [
+    {
+      "distance": 2.8571048253202878,
+      "keys": [
+        "s",
+        "a"
+      ],
+      "position": [
+        0.20926630397848217,
+        0.5276464544784703,
+        -8.182188046982288
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 2.5340232782798005,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        0.000940566065706111,
+        0.5960930171779408,
+        -7.914306195154267
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 2.5340232782798005,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        0.000940566065706111,
+        0.5960930171779408,
+        -7.914306195154267
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.6744421363301663,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        -0.6148746766685804,
+        0.6151990573536549,
+        -7.173245305829602
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.2144047862539549,
+      "keys": [
+        "s"
+      ],
+      "position": [
+        -1.021125307976059,
+        0.5484612767568136,
+        -6.700296348805056
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    }
+  ],
+  "returnNavigation": [
+    {
+      "distance": 7.261324094226791,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -5.489623101590208,
+        -2.585163405447345,
+        -3.394101274688683
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 7.261324094226791,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -5.489623101590208,
+        -2.585163405447345,
+        -3.394101274688683
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 7.085211571901322,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -5.397405387769454,
+        -2.4814253405980224,
+        -3.266859967244446
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 6.770770446725274,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -5.223665676641767,
+        -2.2740889328510576,
+        -3.0631367040927904
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 6.374795661529803,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -5.00011150551282,
+        -2.003534696295805,
+        -2.8124096718107623
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 5.933186136673434,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -4.746123014447478,
+        -1.6944283008645276,
+        -2.5327576915209233
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 5.469240540335815,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -4.473547530052662,
+        -1.361803411613118,
+        -2.2353108982141405
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 4.999037293868914,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -4.189644210623168,
+        -1.014770722104166,
+        -1.926974144590502
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 4.999037293868914,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -4.189644210623168,
+        -1.014770722104166,
+        -1.926974144590502
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 4.535008613999621,
+      "keys": [
+        "s",
+        "d",
+        "c"
+      ],
+      "position": [
+        -3.8988760804328457,
+        -0.6588086095892428,
+        -1.6120717603109458
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 4.088499520933176,
+      "keys": [
+        "s",
+        "d"
+      ],
+      "position": [
+        -3.6039991122104356,
+        -0.29717799522163074,
+        -1.2933421572293307
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 3.6377122163575835,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -3.2815720809652555,
+        0.007004223983401753,
+        -0.9490842709664399
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 3.1985364080039695,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -2.9507223177595048,
+        0.16667277298090438,
+        -0.5970288910750211
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 2.773383510784166,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -2.622760901794062,
+        0.2035300539997687,
+        -0.24802906789391205
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 2.773383510784166,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -2.622760901794062,
+        0.2035300539997687,
+        -0.24802906789391205
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 2.3640236843126905,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -2.2965660082871278,
+        0.16636280844200416,
+        0.09864892743622061
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 1.9832608323892653,
+      "keys": [
+        "d"
+      ],
+      "position": [
+        -1.9714502106790484,
+        0.08477719682862303,
+        0.44353967229292324
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 1.5882329979159384,
+      "keys": [
+        "d"
+      ],
+      "position": [
+        -1.5846105549251304,
+        0.018457025781671493,
+        0.709867797489872
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 1.1668335555834075,
+      "keys": [
+        "w",
+        "d"
+      ],
+      "position": [
+        -1.1336602138175962,
+        -0.02069548515483203,
+        0.8955764898336793
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 1.1668335555834075,
+      "keys": [
+        "w",
+        "d"
+      ],
+      "position": [
+        -1.1336602138175962,
+        -0.02069548515483203,
+        0.8955764898336793
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 0.7571719834376187,
+      "keys": [
+        "w",
+        "d",
+        "c"
+      ],
+      "position": [
+        -0.6859905987985531,
+        -0.08587543979868373,
+        0.9372093234539891
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 0.37709234099046285,
+      "keys": [
+        "w",
+        "d",
+        "c"
+      ],
+      "position": [
+        -0.27744421551382287,
+        -0.1010252929069447,
+        0.8679904323501383
+      ],
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001"
+    },
+    {
+      "distance": 0.37953007233164116,
+      "keys": [
+        "w",
+        "c"
+      ],
+      "position": [
+        0.2123112876837347,
+        -0.08205819649902032,
+        0.9317660998783944
+      ],
+      "cell": "CELL_SIGNAL_CHORUS_NERVE_001"
+    }
+  ],
+  "returned": {
+    "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "returnReady": true,
+    "credits": 6,
+    "engine": 6
+  },
+  "errors": []
+}

@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { readVascularHostPressure } from "../world/HostConditionSystem.js";
+import { VascularReturnHandoff } from "./VascularReturnHandoff.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
 
@@ -13,6 +15,43 @@ const RECIPE_ID = "VASCULAR_RHYTHM_PLAYABLE_CIRCUIT_HC011A1";
  * route. The system still never moves the player, changes activeCellId,
  * completes an objective, or crosses a gate directly.
  */
+// CONNECTION3: the existing physiology publication shapes only local directional
+// calming. Movement reception, reserve, goals and the 0..1 calm envelope retain
+// their existing owners. Invalid/ineligible context preserves the original law.
+export function readVascularCoherenceResponse(frameState, sample, route, enabled = true) {
+  const profile = frameState.corePerformance;
+  const coherence = profile?.verbModifiers?.stabilize?.coherenceMultiplier;
+  const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+  const reason = !enabled ? 'disabled'
+    : !route.active || frameState.activeCellId !== 'CELL_VASCULAR_RHYTHM_ROUTE_001' ? 'not_mounted'
+    : inspection.coreWorkActive ? 'core_work'
+    : frameState.input?.stabilizeHeld !== true || route.stabilizing !== true ? 'not_stabilizing'
+    : !Number.isFinite(sample.distance) || sample.distance > (route.recipe.anatomy?.corridorRadius ?? 1.18) * 1.08 ? 'outside_current'
+    : profile?.active !== true || profile.owner !== 'CoreRadialPerformanceSystem' ? 'inactive_physiology'
+    : !Number.isFinite(coherence) || coherence < 0.66 || coherence > 1.48 ? 'invalid_coherence'
+    : 'coherence_applied';
+  const eligible = reason === 'coherence_applied';
+  return { pass: 'CONNECTION3', owner: 'VascularRhythmRouteSystem',
+    sourceOwner: 'CoreRadialPerformanceSystem', eligible, reason,
+    sampledAtSeconds: frameState.runtimeSeconds,
+    coherence: Number.isFinite(coherence) ? coherence : null,
+    factor: eligible ? Math.max(0.85, Math.min(1.15, coherence)) : 1,
+    affects: 'directional_stabilize_calming_only', progressionAuthority: false };
+}
+
+// Presentation consumes the already-applied current terms, never Core placement.
+export function readCurrentMoteCoherenceRatio(frameState, response) {
+  const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+  if (frameState.activeCellId !== 'CELL_VASCULAR_RHYTHM_ROUTE_001' || inspection.coreWorkActive
+    || response?.pass !== 'CONNECTION3' || response.owner !== 'VascularRhythmRouteSystem'
+    || !response.eligible || !Number.isFinite(frameState.runtimeSeconds)
+    || response.sampledAtSeconds !== frameState.runtimeSeconds
+    || !Number.isFinite(response.directionalCalm) || response.directionalCalm < 0.609 - 1e-9 || response.directionalCalm > 1
+    || !Number.isFinite(response.neutralDirectionalCalm) || response.neutralDirectionalCalm < 0.66 - 1e-9 || response.neutralDirectionalCalm > 1) return 1;
+  const ratio = response.directionalCalm / response.neutralDirectionalCalm;
+  return Number.isFinite(ratio) && ratio >= 0.92 && ratio <= 1.08 ? ratio : 1;
+}
+
 export class VascularRhythmRouteSystem {
   constructor({ recipeDataSystem, scene, playerRoot, frameState, hostConnectionReceiptLedger = null }) {
     if (!recipeDataSystem) throw new Error("[VascularRhythmRouteSystem] recipeDataSystem is required.");
@@ -26,6 +65,14 @@ export class VascularRhythmRouteSystem {
     this.frameState = frameState;
     this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
     this.siltSignalReceiver = new VascularSiltSignalReceiver();
+    // VASCULAR-II1: fresh, paired return flow; first-visit state stays retained.
+    this.returnHandoff = new VascularReturnHandoff();
+    this.returnHandoffVisuals = null;
+    this.returnHandoffPlayer = new THREE.Vector3();
+    this.returnHandoffSource = new THREE.Vector3();
+    this.returnHandoffReceiver = new THREE.Vector3();
+    this.returnHandoffSourceDistance = Infinity;
+    this.returnHandoffReceiverDistance = Infinity;
     this.hostCauseNotice = null;
     this.hostCauseNoticeText = '';
 
@@ -41,6 +88,10 @@ export class VascularRhythmRouteSystem {
     this.wallFolds = [];
     this.valves = [];
     this.currentMotes = [];
+    // CONNECTION5: same-runtime phase survives hiding/remount; new instances seed zero.
+    this.currentMoteTravelPhase = 0;
+    this.currentMoteVisualRate = 0;
+    this.currentMoteCoherenceRatio = 1;
     this.chargeRoot = null;
     this.chargeCore = null;
     this.chargeLight = null;
@@ -154,6 +205,7 @@ export class VascularRhythmRouteSystem {
     this.buildPathMetrics();
     this.pathCurve = new THREE.CatmullRomCurve3(this.pathPoints, false, "centripetal", 0.42);
     this.createAnatomy();
+    this.createReturnHandoffVisuals();
     this.setVisible(false);
     this.prepared = true;
     this.publish(this.frameState, false);
@@ -188,6 +240,9 @@ export class VascularRhythmRouteSystem {
   }
 
   onRuntimeUnmount(frameState) {
+    this.returnHandoff.suspend();
+    this.currentMoteVisualRate = 0;
+    this.currentMoteCoherenceRatio = 1;
     this.active = false;
     this.setVisible(false);
     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
@@ -229,20 +284,140 @@ export class VascularRhythmRouteSystem {
 
     const sample = this.samplePlayerPath(dt, frameState);
     this.updateCadence(dt, frameState, sample);
+    this.updateReturnHandoff(dt, frameState);
     this.updateTraversalMaterialResponse(dt, frameState, sample);
     this.updateGrammarReinforcement(frameState, sample);
     this.applyDynamicCurrent(frameState, sample);
+    this.updateCurrentMoteTravel(dt, frameState);
     this.animate(dt, frameState, sample);
     this.applyHostRhythmVisual(frameState);
     // Post-composition, bounded anatomical expression: never a gameplay input.
     this.applySiltPressureAnatomy();
+    this.applyHostPressureAnatomy();
     this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
       input: frameState.input, signal01: territorySignal("vascular", {membraneLoad: this.siltSignalReceiver.membraneLoad}),
       circuitStatus: this.siltSignalReceiver.receivedTotal > 0 ? "silt_cause_received" : "awaiting_silt_cause", frameState});
+    this.updateReturnHandoffVisuals(frameState);
     this.publish(frameState, true);
   }
 
 
+
+  returnHandoffEligible(frameState = this.frameState) {
+    const history = frameState.act1RouteHistory ?? {};
+    const route = history.routeStates?.vascular_route ?? {};
+    const returned = route.returned === true || history.vascularReturned === true;
+    return Boolean(this.active && frameState.activeCellId === ROUTE_CELL_ID
+      && this.completed && returned && (route.entryCount ?? 0) >= 2
+      && (!frameState.returnRegionEngine?.phase2?.vascular || this.returnHandoff.completed));
+  }
+
+  updateReturnHandoff(dt, frameState) {
+    const eligible = this.returnHandoffEligible(frameState);
+    if (!eligible) { this.returnHandoff.suspend(); return; }
+    this.root.updateWorldMatrix(true, true);
+    this.playerRoot.getWorldPosition(this.returnHandoffPlayer);
+    this.valves[1].getWorldPosition(this.returnHandoffSource);
+    this.valves[0].getWorldPosition(this.returnHandoffReceiver);
+    this.returnHandoffSourceDistance = this.returnHandoffPlayer.distanceTo(this.returnHandoffSource);
+    this.returnHandoffReceiverDistance = this.returnHandoffPlayer.distanceTo(this.returnHandoffReceiver);
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    const suspended = Boolean(inspection.coreWorkActive);
+    this.returnHandoff.update(dt, {
+      eligible, suspended,
+      sourceNear: this.returnHandoffSourceDistance <= 1.9,
+      receiverNear: this.returnHandoffReceiverDistance <= 1.9,
+      stabilizeHeld: Boolean(frameState.input?.stabilizeHeld),
+      pulsePressed: Boolean(frameState.input?.pulsePressed),
+      pulseEventId: frameState.input?.pulseEventId ?? 0
+    });
+    // The shared credit owner runs before regional completion publishers.
+    // Keep a pending completion if another owner published in this same frame.
+    const pending = frameState.returnRegionCompletionEvent;
+    if (eligible && !suspended && this.returnHandoff.completed && !this.returnHandoff.published
+        && !(pending && pending.frame === (frameState.frame ?? 0)
+          && pending.key !== 'vascular:phase_2')) {
+      frameState.returnRegionCompletionEvent = {
+        pass: 'EARNED-REGION-PHASE2-1', schemaVersion: 1,
+        key: 'vascular:phase_2', routeKey: 'vascular', phase: 2,
+        sequence: this.returnHandoff.completionSequence,
+        source: 'VascularRhythmRouteSystem', frame: frameState.frame ?? 0,
+        evidenceId: this.returnHandoff.handoffId,
+        sourcePulseId: this.returnHandoff.sourcePulseId,
+        receiverSettleSeconds: this.returnHandoff.settleSeconds,
+        materialTransfer: false
+      };
+      this.returnHandoff.published = true;
+    }
+  }
+
+  createReturnHandoffVisuals() {
+    const root = new THREE.Group();
+    root.name = 'vascular_ii_paired_return_handoff';
+    root.userData.targetingSuppressed = true;
+    const marker = (valve, color) => {
+      const material = this.trackMaterial(new THREE.MeshStandardMaterial({
+        color, emissive: color, emissiveIntensity: 0.7,
+        transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide
+      }));
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.54, 0.026, 6, 32), material);
+      ring.position.copy(valve.position);
+      ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1),
+        this.pathCurve.getTangentAt(valve.userData.progress).normalize());
+      ring.userData.targetingSuppressed = true;
+      root.add(ring);
+      return ring;
+    };
+    const source = marker(this.valves[1], 0xffc66b);
+    const receiver = marker(this.valves[0], 0x76ffca);
+    const packet = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 7),
+      this.trackMaterial(new THREE.MeshStandardMaterial({
+        color: 0xffd489, emissive: 0xffbe57, emissiveIntensity: 1,
+        transparent: true, opacity: 0.92, depthWrite: false
+      })));
+    packet.name = 'vascular_ii_projected_current_response';
+    packet.userData.targetingSuppressed = true;
+    root.add(packet);
+    root.visible = false;
+    this.root.add(root);
+    this.returnHandoffVisuals = { root, source, receiver, packet };
+  }
+
+  updateReturnHandoffVisuals(frameState) {
+    const visual = this.returnHandoffVisuals;
+    const goal = this.returnHandoff;
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    visual.root.visible = this.returnHandoffEligible(frameState) && !goal.completed
+      && !inspection.coreWorkActive;
+    if (!visual.root.visible) return;
+    const wave = (Math.sin(this.elapsed * 3.2) + 1) * 0.5;
+    visual.source.material.opacity = goal.handoffId ? 0.2 : 0.6 + wave * 0.3;
+    visual.receiver.material.opacity = goal.travelSeconds >= 2 ? 0.65 + wave * 0.3 : 0.32;
+    visual.receiver.scale.setScalar(1 + goal.settleSeconds / 0.75 * 0.12);
+    visual.packet.visible = Boolean(goal.handoffId);
+    if (goal.handoffId) {
+      visual.packet.position.copy(this.pathCurve.getPointAt(
+        THREE.MathUtils.lerp(0.55, 0.28, goal.travelSeconds / 2)));
+      visual.packet.scale.setScalar(1 + wave * 0.18);
+    }
+  }
+
+  returnHandoffAction() {
+    if (!this.returnHandoffEligible()) return null;
+    if (this.returnHandoff.completed) return 'Paired return current settled. Follow the gold current into the open entry fold.';
+    const goal = this.returnHandoff;
+    if (!goal.handoffId) {
+      return this.returnHandoffSourceDistance <= 1.9
+        ? goal.sourceHold >= 0.18
+          ? 'Pulse while holding LT to send the return current toward the green intake valve.'
+          : 'Hold LT at the amber branch valve to establish the return current.'
+        : 'Approach the amber branch valve to send a paired return current.';
+    }
+    if (goal.travelSeconds < 2) return 'Follow the gold current response toward the green intake valve.';
+    return this.returnHandoffReceiverDistance <= 1.9
+      ? 'Hold LT at the green intake valve to receive and settle the return current.'
+      : 'Approach the green intake valve and hold LT to receive the waiting current.';
+  }
 
   applyHostRhythmVisual(frameState) {
     const host = frameState.hostRhythm ?? {};
@@ -1022,7 +1197,9 @@ export class VascularRhythmRouteSystem {
   }
 
   applyDynamicCurrent(frameState, sample) {
+    this.coreCoherenceResponse = readVascularCoherenceResponse(frameState, sample, this);
     const contractFeel = frameState.physicalFeel ?? {};
+    this.hostPressureResponse = readVascularHostPressure(frameState);
     const direction = this.completed ? -1 : 1;
     // HC-016Y: circulation must matter between valves. The current is stronger
     // than the old presentation-biased drift, while turbulence remains recoverable.
@@ -1035,12 +1212,16 @@ export class VascularRhythmRouteSystem {
       && worldComposition.profileId === "vascular_psa_44_micro"
       ? THREE.MathUtils.clamp(worldComposition.flowScale ?? 1, 0.96, 1.06)
       : 1;
+    // Name the exact existing terms without changing arithmetic or physics.
+    this.coreCoherenceResponse.directionalCalm = 1 - this.traversalStabilizeCalm * 0.34 * this.coreCoherenceResponse.factor;
+    this.coreCoherenceResponse.neutralDirectionalCalm = 1 - this.traversalStabilizeCalm * 0.34;
     const flowStrength = baseFlowStrength
       * (1 + this.traversalPulseWake * 0.22)
       * (1 - this.traversalAbsorbShear * 0.16)
-      * (1 - this.traversalStabilizeCalm * 0.34)
+      * this.coreCoherenceResponse.directionalCalm
       * worldRhythmFlowScale
-      * this.siltSignalReceiver.flowScale;
+      * this.siltSignalReceiver.flowScale
+      * this.hostPressureResponse.flowScale;
     const swirl = this.turbulence * 0.20
       * (1 + this.traversalPulseWake * 0.28)
       * (1 - this.traversalAbsorbShear * 0.18)
@@ -1083,6 +1264,7 @@ export class VascularRhythmRouteSystem {
         absorbShear: this.traversalAbsorbShear,
         stabilizeCalm: this.traversalStabilizeCalm,
         worldRhythmFlowScale,
+        hostPressure: this.hostPressureResponse,
         remoteSiltMembraneLoad: this.siltSignalReceiver.membraneLoad,
         remoteSiltDirectionalFlowScale: this.siltSignalReceiver.flowScale,
         worldRhythmBeat: worldComposition.active ? worldComposition.beatNumber ?? 0 : 0,
@@ -1118,6 +1300,24 @@ export class VascularRhythmRouteSystem {
         restoresPriorBoundaryOnExit: authoredBounds.restoresPriorBoundaryOnExit !== false
       }
     };
+  }
+
+  updateCurrentMoteTravel(dt, frameState) {
+    if (!this.active || frameState.activeCellId !== ROUTE_CELL_ID) return;
+    this.currentMoteCoherenceRatio = readCurrentMoteCoherenceRatio(frameState, this.coreCoherenceResponse);
+    const composition = frameState.hostRhythm?.composition;
+    const worldScale = composition?.active && composition.profileId === 'vascular_psa_44_micro'
+      ? THREE.MathUtils.clamp(composition.moteSpeedScale ?? 1, 0.92, 1.10) : 1;
+    const speed = (0.055 + this.synchronization * 0.025)
+      * (1 + this.traversalPulseWake * 0.42)
+      * (1 - this.traversalStabilizeCalm * 0.38)
+      * worldScale * this.siltSignalReceiver.flowScale * this.currentMoteCoherenceRatio;
+    this.currentMoteVisualRate = Number.isFinite(speed) ? (this.completed ? -1 : 1) * speed : 0;
+    // GameRuntime supplies <=50ms substeps. Never use wall-clock backlog here.
+    const seconds = Number.isFinite(dt) && dt > 0 ? Math.min(dt, 0.05) : 0;
+    const phase = Number.isFinite(this.currentMoteTravelPhase) ? this.currentMoteTravelPhase : 0;
+    this.currentMoteTravelPhase = seconds > 0 && this.currentMoteVisualRate !== 0
+      ? ((phase + this.currentMoteVisualRate * seconds) % 1 + 1) % 1 : phase;
   }
 
   animate(dt, frameState, sample) {
@@ -1265,19 +1465,10 @@ export class VascularRhythmRouteSystem {
       trail.material.emissive.setHex(chargeColor);
     }
 
-    const direction = this.completed ? -1 : 1;
     for (const mote of this.currentMotes) {
-      const worldMoteSpeedScale = frameState.hostRhythm?.composition?.active
-        && frameState.hostRhythm.composition.profileId === "vascular_psa_44_micro"
-        ? THREE.MathUtils.clamp(frameState.hostRhythm.composition.moteSpeedScale ?? 1, 0.92, 1.10)
-        : 1;
-      const currentSpeed = (0.055 + this.synchronization * 0.025)
-        * (1 + this.traversalPulseWake * 0.42)
-        * (1 - this.traversalStabilizeCalm * 0.38)
-        * worldMoteSpeedScale
-        * this.siltSignalReceiver.flowScale;
-      let progress = (mote.userData.baseProgress + direction * t * currentSpeed) % 1;
+      let progress = (mote.userData.baseProgress + this.currentMoteTravelPhase) % 1;
       if (progress < 0) progress += 1;
+      mote.userData.renderedTravelProgress = progress;
       mote.position.copy(this.pathCurve.getPointAt(progress));
       const tangent = this.pathCurve.getTangentAt(progress).normalize();
       const side = new THREE.Vector3(-tangent.z, 0, tangent.x).normalize();
@@ -1397,6 +1588,8 @@ export class VascularRhythmRouteSystem {
   }
 
   guideLine() {
+    const handoff = this.returnHandoffAction();
+    if (handoff) return handoff;
     if (this.completed) return "The vessel retained the relationship. Its current now carries you back toward the Hub.";
     const requiredReads = this.recipe.cadence?.requiredReads ?? 3;
     const readsComplete = this.lockedCadenceReads >= requiredReads;
@@ -1419,6 +1612,8 @@ export class VascularRhythmRouteSystem {
   }
 
   nextAction() {
+    const handoff = this.returnHandoffAction();
+    if (handoff) return handoff;
     if (this.completed) return "Follow the gold return current into the open entry fold.";
     const requiredReads = this.recipe.cadence?.requiredReads ?? 3;
     const readsComplete = this.lockedCadenceReads >= requiredReads;
@@ -1604,6 +1799,31 @@ export class VascularRhythmRouteSystem {
     };
   }
 
+  // HOST-CAUSE1: coherent protective tone, distinct from Silt's traveling band.
+  // animate() resets fold scale/material strengths before this post-composition step.
+  // These non-targetable wall folds are presentation, never collision/anchor truth.
+  applyHostPressureAnatomy() {
+    const response = this.hostPressureResponse;
+    let modified = 0;
+    if (response?.active) {
+      for (const fold of this.wallFolds) {
+        fold.scale.x *= 1 - response.visualCompression;
+        fold.scale.z *= 1 - response.visualCompression * 0.625;
+        if (fold.material) {
+          fold.material.emissiveIntensity += response.amplitude * 0.28;
+          fold.material.opacity = Math.min(0.95, fold.material.opacity + response.amplitude * 0.12);
+        }
+        modified++;
+      }
+    }
+    this.hostPressureVisual = {
+      active: Boolean(response?.active), foldCount: modified,
+      radialCompression: response?.visualCompression ?? 0,
+      episodeId: response?.episodeId ?? null, presentationOnly: true,
+      collisionMutation: false, receiverMutation: false
+    };
+  }
+
   publish(frameState, active) {
     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
     const requiredReads = this.recipe?.cadence?.requiredReads ?? 3;
@@ -1612,6 +1832,18 @@ export class VascularRhythmRouteSystem {
     // No Vascular route logic reads this to progress or change circulation.
     const hostCause = this.hostConnectionReceiptLedger?.forVascular() ?? null;
     frameState.vascularRhythmRoute = {
+      returnHandoff: this.returnHandoff.snapshot({
+        eligible: this.returnHandoffEligible(frameState),
+        active: Boolean(active && this.returnHandoffEligible(frameState)
+          && !(frameState.inspectionCamera ?? frameState.tightInspectionCamera)?.coreWorkActive)
+      }),
+      currentMoteTravel: { pass: 'CONNECTION5', presentationOnly: true,
+        phase: this.currentMoteTravelPhase, rate: active ? this.currentMoteVisualRate : 0,
+        coherenceRatio: active ? this.currentMoteCoherenceRatio : 1 },
+      coreCoherenceResponse: active ? (this.coreCoherenceResponse ?? null)
+        : { pass: 'CONNECTION3', eligible: false, reason: 'not_mounted', factor: 1 },
+      hostPressureResponse: active ? (this.hostPressureResponse ?? null) : null,
+      hostPressureVisual: active ? (this.hostPressureVisual ?? null) : null,
       hostConnectionObservation: hostCause,
       // LS1E2: receiver state belongs to Vascular; Silt receipts stay immutable.
       siltSignalResponse: this.siltSignalReceiver.snapshot(),

@@ -1,0 +1,4 @@
+import fs from 'node:fs';import {RecipeDataSystem} from './src/data/RecipeDataSystem.js';
+const old=globalThis.fetch;globalThis.fetch=async p=>{try{return new Response(fs.readFileSync(new URL('./public'+p,import.meta.url)),{status:200});}catch{return new Response('',{status:404});}};
+const results=[];try{for(const profile of ['first_slice_runtime','legacy_archive']){const d=new RecipeDataSystem({validationProfile:profile});try{await d.loadAll();results.push({profile,status:'PASS',counts:d.getCounts(),translation:d.data.blueprintTranslationLayer});}catch(e){results.push({profile,status:'FAIL',error:String(e)});}}}finally{globalThis.fetch=old;}
+fs.writeFileSync(new URL('../audit/authority1/'+(process.argv[2]??'after')+'.json',import.meta.url),JSON.stringify(results,null,2));console.log(JSON.stringify(results.map(({profile,status,error})=>({profile,status,error})),null,2));

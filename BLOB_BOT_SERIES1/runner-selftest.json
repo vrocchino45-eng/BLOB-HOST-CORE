@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "scope": "Intentional negative controls in an isolated temporary project, not failures of BLOB gameplay.",
+  "verified": [
+    "nonzero worker failure",
+    "blocked browser exit",
+    "missing report",
+    "insufficient check count",
+    "valid result",
+    "overall failure on production-source mutation"
+  ],
+  "expectedControlSummary": {
+    "passed": 2,
+    "failed": 3,
+    "blocked": 1,
+    "notRun": 0,
+    "checksPassed": 2
+  },
+  "sourceMutationDetected": true
+}

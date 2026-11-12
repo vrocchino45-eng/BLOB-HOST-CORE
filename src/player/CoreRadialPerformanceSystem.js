@@ -37,6 +37,9 @@ const round = (value, digits = 3) => Number(value.toFixed(digits));
  * performance profile. It does not own Core Work placement, chemistry,
  * movement translation, progression, growth, or 3/6/12 engine architecture.
  *
+ * PAIRED-DEMAND2 consumes the earned phase ceiling only to coordinate
+ * concurrent verb reserve drain. It never writes progression or architecture.
+ *
  * Pure Deep = reserve/recovery/stability (diesel character)
  * Pure Inner = transmission/control/efficiency
  * Pure Membrane = response/output/consumption/risk (race-car character)
@@ -213,8 +216,36 @@ export class CoreRadialPerformanceSystem {
       : 0.075;
     const recoveryPerSecond = profile.active ? 0.10 * profile.recovery : 0.10;
 
+    // PAIRED-DEMAND2: counterpart coordination saves only shared verb drain.
+    // Read the earned ceiling, never the O-key architecture preview.
+    const verbSum = absorbDemand + stabilizeDemand + pulseDemand;
+    const sharedFraction = verbSum > 0
+      ? clamp01((verbSum - Math.max(absorbDemand, stabilizeDemand, pulseDemand)) / verbSum)
+      : 0;
+    const earnedPhaseCeiling = frameState.returnRegionEngine?.unlockedPhaseCount ?? 3;
+    const coordinationEligible = profile.active && earnedPhaseCeiling >= 6 && !input.boostHeld;
+    const coordinationFactor = coordinationEligible ? 1 - 0.20 * sharedFraction : 1;
+    const baseDrainRate = demand01 > 0.02 ? drainPerSecond * demand01 : 0;
+    const effectiveDrainRate = baseDrainRate * coordinationFactor;
+    const reserveBefore = this.reserve01;
+    const reserveSaved = Math.max(0,
+      Math.min(reserveBefore, baseDrainRate * dt) - Math.min(reserveBefore, effectiveDrainRate * dt));
+    profile.coordination = {
+      pass: "PAIRED-DEMAND2", earnedPhaseCeiling,
+      eligible: Boolean(coordinationEligible), active: reserveSaved > 1e-9,
+      factor: round(coordinationFactor, 6), sharedFraction: round(sharedFraction, 6),
+      baseDrainPerSecond: round(baseDrainRate, 6),
+      effectiveDrainPerSecond: round(effectiveDrainRate, 6),
+      reserveSavedThisUpdate: round(reserveSaved, 9),
+      reason: !profile.active ? "incomplete_topology" : earnedPhaseCeiling < 6 ? "not_earned"
+        : input.boostHeld ? "boost_priority" : sharedFraction <= 0 ? "no_overlap"
+          : demand01 <= 0.02 ? "below_drain_threshold" : dt <= 0 ? "no_elapsed_time"
+            : reserveBefore <= 0 ? "reserve_empty" : reserveSaved > 1e-9 ? "coordinating" : "no_realized_saving",
+      progressionAuthority: false, architectureAuthority: false
+    };
+
     if (demand01 > 0.02) {
-      this.reserve01 = clamp01(this.reserve01 - drainPerSecond * demand01 * dt);
+      this.reserve01 = clamp01(this.reserve01 - effectiveDrainRate * dt);
       if (this.reserve01 <= 0.001) this.lastEvent = "endurance_reserve_depleted";
     } else {
       const previous = this.reserve01;
@@ -311,7 +342,8 @@ export class CoreRadialPerformanceSystem {
         drainPerSecond: round(profile.drainPerSecond ?? 0, 4),
         recoveryPerSecond: round(profile.recoveryPerSecond ?? 0, 4),
         fatigueFactor: round(fatigueFactor),
-        instabilityRisk01: round(risk01)
+        instabilityRisk01: round(risk01),
+        coordination: profile.coordination ?? null
       },
       movementModifiers: {
         boostAccelerationMultiplier: round(boostAccelerationMultiplier),

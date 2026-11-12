@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { SiltReturnRoundTrip } from "./SiltReturnRoundTrip.js";
 import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
 import { applyCrawlableSurfaceMetadata } from "../world/CrawlableSurfaceRegistry.js";
 import { SiltGripAuthority } from "../contact/SiltGripAuthority.js";
@@ -33,6 +34,7 @@ export class SiltPressureRouteSystem {
     this.frameState = frameState;
     this.camera = camera;
     this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
+    this.returnRoundTrip = new SiltReturnRoundTrip();
     // C0D3-C — Silt alone owns the return pressure echo from a *completed* Grave II.
     // Host owns provenance; no second event, mass, progression, or off-route tick.
     this.graveIIConsumedSequence = 0;
@@ -238,6 +240,7 @@ export class SiltPressureRouteSystem {
   }
 
   onRuntimeUnmount(frameState) {
+    this.returnRoundTrip.suspend();
     // LS1D1D2K: region exit is a real release transaction. There may not be
     // another Silt update after unmount to reconcile the grip with the ledger.
     // Flush the pending pull and restore any stranded grip owner first.
@@ -294,6 +297,9 @@ export class SiltPressureRouteSystem {
     }
     if (!this.active) this.onRuntimeMount(frameState);
 
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    this.returnRoundTrip.context({ eligible: this.returnRoundTripEligible(frameState),
+      suspended: Boolean(inspection.coreWorkActive), sequence: this.transactionSequence });
     // Receives once on a mounted Silt frame, never while this cell is hidden.
     this.receiveGraveIIHostOutcome();
     this.elapsed += dt;
@@ -321,6 +327,7 @@ export class SiltPressureRouteSystem {
       stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
     });
     this.animateLivingMatter(dt);
+    this.updateReturnRoundTrip(frameState);
     this.siltTrajectoryField.sample(dt, this.siltTrajectory.snapshot().units,
       this.recipe?.habitatFoundation?.habitats ?? []);
     this.updateSiltContact(dt, frameState);
@@ -957,6 +964,27 @@ export class SiltPressureRouteSystem {
     this.habitatDrift.name = "silt_visual_seep_grains_fixed_pool_LS1A2";
     this.habitatDrift.userData.targetingSuppressed = true;
     group.add(this.habitatDrift);
+    // SILT-VIS1: keep this distant geological reference legible when the world
+    // camera pulls back. At the original 0.045 scene density, far Silt can
+    // dissolve into the background while its labels remain. Only this named
+    // visual geology uses a shorter fog depth; openings, face sides, opacity,
+    // contact metadata and the scene's atmospheric density stay authored.
+    const geologyMaterials = new Set();
+    group.traverse((object) => {
+      if (!object.isMesh) return;
+      for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+        if (material) geologyMaterials.add(material);
+      }
+    });
+    for (const material of geologyMaterials) {
+      material.onBeforeCompile = (shader) => {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          "#include <fog_fragment>",
+          THREE.ShaderChunk.fog_fragment.replaceAll("vFogDepth", "(vFogDepth * 0.6)")
+        );
+      };
+      material.customProgramCacheKey = () => "silt-geology-fog-depth-0.6-VIS1";
+    }
     this.root.add(group);
     this.habitatAnatomy = group;
     this.animateHabitatFoundation(this.frameState);
@@ -1284,11 +1312,15 @@ export class SiltPressureRouteSystem {
   // explicit material target ID until shared Host target registration is ready.
   updateSiltGrip(frameState, dt = 0) {
     const input = frameState.input ?? {};
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    // SILT-MODE1: mode suspension is not a deliberate world release/seat.
+    // Current mode also wins over world input normalized before mode entry.
+    const coreWorkSuspended = Boolean(inspection.coreWorkActive);
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
     this.heldContactBracedPulseFrame = false;
-    const aiming = Boolean(input.stabilizeHeld);
+    const aiming = Boolean(input.stabilizeHeld && !coreWorkSuspended);
     const units = this.livingCycle?.units ?? [];
     const eligible = new Set(["veins", "garden_transit", "settled"]);
     if (!this.livingCycle?.active) {
@@ -1337,7 +1369,7 @@ export class SiltPressureRouteSystem {
         // Intentional release of a proven imprint hands this specific grain
         // to the receiving site. RT withdrawal or an unpressed contact never seats.
         let seatingReceipt = null;
-        if (!input.absorbHeld && this.siltContact?.heldId === held.id) {
+        if (!coreWorkSuspended && !input.absorbHeld && this.siltContact?.heldId === held.id) {
           const receipt = this.siltPlateSeat.trySeat({
             unitId: held.id, heldPosition: this.siltGrip.position,
             sitePosition: this.siltContact.position,
@@ -1357,7 +1389,9 @@ export class SiltPressureRouteSystem {
           // Seated material cannot also have a free trajectory.
           this.siltTrajectory.cancelHold(held.id);
         } else if (this.siltGrip.position) {
-          const trajectory = this.siltTrajectory.release(held.id, this.siltGrip.position);
+          const trajectory = this.siltTrajectory.release(held.id, this.siltGrip.position, {
+            reason: coreWorkSuspended ? 'core-work-suspended' : 'deliberate-release'
+          });
           if (trajectory) this.recordSiltDecision('silt-trajectory', trajectory, frameState);
         }
         this.flushHeldAbsorbMotion(frameState, 'grip-released');
@@ -1877,6 +1911,53 @@ export class SiltPressureRouteSystem {
     }
   }
 
+  returnRoundTripEligible(frameState = this.frameState) {
+    const history = frameState.act1RouteHistory ?? {};
+    const route = history.routeStates?.silt_burrow_route ?? {};
+    return Boolean(this.active && frameState.activeCellId === ROUTE_CELL_ID
+      && this.completed && this.safeMatterAbsorbed
+      && (route.returned === true || history.siltReturned === true)
+      && (route.entryCount ?? 0) >= 2
+      && (!frameState.returnRegionEngine?.phase2?.silt || this.returnRoundTrip.completed));
+  }
+
+  updateReturnRoundTrip(frameState) {
+    const goal = this.returnRoundTrip;
+    if (!goal.active) return;
+    const unit = this.siltTrajectory.snapshot().units.find(item => item.unitId === goal.grainId);
+    goal.observeNative({ unit, owner: this.materialIdentity?.get(goal.grainId)?.owner,
+      heldId: this.siltGrip.heldId, seatedId: this.siltPlateSeat.unitId,
+      mass: this.materialIdentity?.totalMass() });
+    const pending = frameState.returnRegionCompletionEvent;
+    if (goal.completed && !goal.published
+        && !(pending && pending.frame === (frameState.frame ?? 0) && pending.key !== 'silt:phase_2')) {
+      frameState.returnRegionCompletionEvent = {
+        pass: 'EARNED-REGION-PHASE2-1', schemaVersion: 1,
+        key: 'silt:phase_2', routeKey: 'silt', phase: 2,
+        sequence: goal.completionSequence, source: 'SiltPressureRouteSystem',
+        frame: frameState.frame ?? 0,
+        evidenceId: `silt:round-trip:${goal.attemptSequence}`,
+        grainId: goal.grainId, proofSequences: { ...goal.proof },
+        materialTransfer: false, conservedMass: this.materialIdentity.totalMass()
+      };
+      goal.published = true;
+    }
+  }
+
+  returnRoundTripAction() {
+    if (!this.returnRoundTripEligible()) return null;
+    const goal = this.returnRoundTrip;
+    switch (goal.stage) {
+      case 'completed': return 'Silt II round trip complete. Follow the amber breath back to the Hub.';
+      case 'gripped': return 'Bring this grain to the garden patch; hold LT and Pulse to imprint it.';
+      case 'imprinted': return 'Keep LT held and press A to seat the imprinted grain.';
+      case 'seated': return 'Aim at that seated grain; hold LT and press A to extract it.';
+      case 'extracted': return 'Move the grain clear of the patch, then press A with LT held to release it.';
+      case 'released_pending_native': return 'Let that same free grain settle back into its circulation path.';
+      default: return 'Aim at one circulating grain; hold LT and press A to begin a Silt II round trip.';
+    }
+  }
+
   recordSiltDecision(kind, details = {}, frameState = this.frameState) {
     const entry = {
       sequence: ++this.transactionSequence,
@@ -1889,6 +1970,8 @@ export class SiltPressureRouteSystem {
     };
     this.transactionTrace.push(entry);
     if (this.transactionTrace.length > 64) this.transactionTrace.shift();
+    // Consume at the authoritative decision point, before the bounded trace rolls over.
+    this.returnRoundTrip.observe(entry);
     // LS1E1: emit only *after* the authoritative route decision was recorded.
     // Deliberate released matter creates provenance; it does not move to Vascular.
     if (kind === 'silt-trajectory' && entry.outcome === 'released-with-trajectory'
@@ -2374,6 +2457,8 @@ export class SiltPressureRouteSystem {
   }
 
   guideLine() {
+    const roundTrip = this.returnRoundTripAction();
+    if (roundTrip) return roundTrip;
     if (this.completed) return "The silt has stopped closing around appetite. Its released breath now returns to the Hub.";
     if (this.compressionFailure) return "Packed residue compressed the route. Nothing is lost—hold Stabilize until the ribs reopen.";
     if (!this.pressureRead) return "The low ribs close in sequence. Move inside them, hold Stabilize to catch the pressure, then Pulse through that relationship.";
@@ -2383,6 +2468,8 @@ export class SiltPressureRouteSystem {
   }
 
   nextAction() {
+    const roundTrip = this.returnRoundTripAction();
+    if (roundTrip) return roundTrip;
     if (this.completed) return "Follow the amber silt breath into the open entry fold.";
     if (this.compressionFailure) return this.stabilizationInRange
       ? "Hold LT until the compressed ribs reopen. Your earlier progress is safe."
@@ -2405,6 +2492,7 @@ export class SiltPressureRouteSystem {
   publish(frameState, active) {
     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
     frameState.siltPressureRoute = {
+      returnRoundTrip: this.returnRoundTrip.snapshot(),
       pass: "HC-031S",
       id: this.recipe?.id ?? RECIPE_ID,
       active: Boolean(active),

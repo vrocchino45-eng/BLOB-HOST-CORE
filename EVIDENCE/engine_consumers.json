@@ -1,0 +1,189 @@
+{
+  "scope": "Controlled architecture-consumer comparison; supplied unlock values, not newly earned regional goals. No rendering or audio listening test.",
+  "checks": [
+    {
+      "name": "Progression consumer selects paired architecture without debug input",
+      "status": "PASS"
+    },
+    {
+      "name": "Six phases contain two distinct ordinals for each root function",
+      "status": "PASS"
+    },
+    {
+      "name": "Same inputs retain operating RPM, load and cycle rate",
+      "status": "PASS"
+    },
+    {
+      "name": "Verb bridge retains intent and drive across architectures",
+      "status": "PASS"
+    },
+    {
+      "name": "World resonance acknowledges paired continuity without timing gate or gameplay advantage",
+      "status": "PASS"
+    },
+    {
+      "name": "Core remains a consumer without chemistry or movement authority",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0
+  },
+  "comparison": {
+    "three": {
+      "pass": "HC-027B",
+      "active": true,
+      "owner": "CoreEngineSystem",
+      "geometryLaw": "triadic_base_resolves_3_to_6_to_12",
+      "functions": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ],
+      "architectureId": "triadic_3",
+      "architectureLabel": "3-phase",
+      "phaseCount": 3,
+      "phasesPerFunction": 1,
+      "resolution": "one_phase_per_function",
+      "firingOrder": [
+        {
+          "index": 0,
+          "function": "pulse",
+          "ordinal": 1,
+          "label": "pulse_1"
+        },
+        {
+          "index": 1,
+          "function": "absorb",
+          "ordinal": 1,
+          "label": "absorb_1"
+        },
+        {
+          "index": 2,
+          "function": "stabilize",
+          "ordinal": 1,
+          "label": "stabilize_1"
+        }
+      ],
+      "currentPhaseIndex": 0,
+      "currentPhaseFunction": "pulse",
+      "currentPhaseOrdinal": 1,
+      "currentPhaseLabel": "pulse_1",
+      "cycleProgress01": 0.2076,
+      "cycleCount": 3,
+      "phaseEventCount": 10,
+      "rpm": 5889,
+      "targetRpm": 5893,
+      "rpmMin": 3000,
+      "rpmMax": 10000,
+      "load01": 0.413,
+      "cycleHz": 1.75,
+      "phaseEventsPerSecond": 5.25,
+      "rpmMeaning": "marker_for_current_core_energy_cycling_and_expenditure",
+      "literalMechanicalRpm": false,
+      "architectureDebugCycleCommand": "O",
+      "architectureDebugOnly": false,
+      "progressionUnlockSource": "ReturnRegionEngineSystem",
+      "progressionUnlockedPhaseCount": 3,
+      "defaultArchitecture": "3-phase",
+      "gameplayAuthority": false,
+      "movementAuthority": false,
+      "verbAuthority": false,
+      "chemistryAuthority": false,
+      "coreWorkPlacementAuthority": false,
+      "progressionAuthority": false,
+      "progressionConsumer": true,
+      "growthAuthority": false,
+      "geometryViolationEnabled": false,
+      "nonTriadicArchitectureEnabled": false,
+      "lastEvent": "phase_fire:pulse_1"
+    },
+    "six": {
+      "pass": "HC-027B",
+      "active": true,
+      "owner": "CoreEngineSystem",
+      "geometryLaw": "triadic_base_resolves_3_to_6_to_12",
+      "functions": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ],
+      "architectureId": "paired_6",
+      "architectureLabel": "6-phase",
+      "phaseCount": 6,
+      "phasesPerFunction": 2,
+      "resolution": "paired_counterpart_phases_per_function",
+      "firingOrder": [
+        {
+          "index": 0,
+          "function": "pulse",
+          "ordinal": 1,
+          "label": "pulse_1"
+        },
+        {
+          "index": 1,
+          "function": "absorb",
+          "ordinal": 1,
+          "label": "absorb_1"
+        },
+        {
+          "index": 2,
+          "function": "stabilize",
+          "ordinal": 1,
+          "label": "stabilize_1"
+        },
+        {
+          "index": 3,
+          "function": "pulse",
+          "ordinal": 2,
+          "label": "pulse_2"
+        },
+        {
+          "index": 4,
+          "function": "absorb",
+          "ordinal": 2,
+          "label": "absorb_2"
+        },
+        {
+          "index": 5,
+          "function": "stabilize",
+          "ordinal": 2,
+          "label": "stabilize_2"
+        }
+      ],
+      "currentPhaseIndex": 1,
+      "currentPhaseFunction": "absorb",
+      "currentPhaseOrdinal": 1,
+      "currentPhaseLabel": "absorb_1",
+      "cycleProgress01": 0.2076,
+      "cycleCount": 3,
+      "phaseEventCount": 20,
+      "rpm": 5889,
+      "targetRpm": 5893,
+      "rpmMin": 3000,
+      "rpmMax": 10000,
+      "load01": 0.413,
+      "cycleHz": 1.75,
+      "phaseEventsPerSecond": 10.5,
+      "rpmMeaning": "marker_for_current_core_energy_cycling_and_expenditure",
+      "literalMechanicalRpm": false,
+      "architectureDebugCycleCommand": "O",
+      "architectureDebugOnly": false,
+      "progressionUnlockSource": "ReturnRegionEngineSystem",
+      "progressionUnlockedPhaseCount": 6,
+      "defaultArchitecture": "3-phase",
+      "gameplayAuthority": false,
+      "movementAuthority": false,
+      "verbAuthority": false,
+      "chemistryAuthority": false,
+      "coreWorkPlacementAuthority": false,
+      "progressionAuthority": false,
+      "progressionConsumer": true,
+      "growthAuthority": false,
+      "geometryViolationEnabled": false,
+      "nonTriadicArchitectureEnabled": false,
+      "lastEvent": "phase_fire:absorb_1"
+    }
+  }
+}

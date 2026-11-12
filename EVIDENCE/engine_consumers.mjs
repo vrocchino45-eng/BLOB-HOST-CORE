@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {CoreEngineSystem} from '../../candidate_base/src/player/CoreEngineSystem.js';
+import {CoreVerbEngineCouplingSystem} from '../../candidate_base/src/player/CoreVerbEngineCouplingSystem.js';
+import {CoreWorldResonanceSystem} from '../../candidate_base/src/world/CoreWorldResonanceSystem.js';
+const checks=[];function test(name,fn){fn();checks.push({name,status:'PASS'});}
+function run(unlocked){const f={frame:1,input:{absorbHeld:true,stabilizeHeld:true,pulseHeld:true,pulseCharge01:.5},playerKinematics:{speed:1},returnRegionEngine:{unlockedPhaseCount:unlocked},hostRhythm:{composition:{active:true,currentFunction:'pulse',sharedHostClock:true}}};const e=new CoreEngineSystem({frameState:f,playerRoot:{userData:{}}}),v=new CoreVerbEngineCouplingSystem({frameState:f}),w=new CoreWorldResonanceSystem({frameState:f});e.init();v.init();w.init();const input=JSON.stringify(f.input);for(let i=0;i<120;i++){f.frame++;e.update(1/60,f);v.update(1/60,f);w.update(1/60,f);}assert.equal(JSON.stringify(f.input),input);return f;}
+const a=run(3),b=run(6);
+test('Progression consumer selects paired architecture without debug input',()=>assert.equal(b.coreEngine.architectureId,'paired_6'));
+test('Six phases contain two distinct ordinals for each root function',()=>{for(const fn of ['pulse','absorb','stabilize'])assert.deepEqual(b.coreEngine.firingOrder.filter(x=>x.function===fn).map(x=>x.ordinal),[1,2]);});
+test('Same inputs retain operating RPM, load and cycle rate',()=>{for(const key of ['rpm','load01','cycleHz'])assert.equal(a.coreEngine[key],b.coreEngine[key]);assert.equal(b.coreEngine.phaseEventsPerSecond,Number((b.coreEngine.cycleHz*6).toFixed(2)));});
+test('Verb bridge retains intent and drive across architectures',()=>{assert.deepEqual(a.coreVerbEngineCoupling.functionDrive,b.coreVerbEngineCoupling.functionDrive);assert.equal(b.coreVerbEngineCoupling.verbPowerAuthority,false);assert.equal(b.coreVerbEngineCoupling.chord,'full_system');});
+test('World resonance acknowledges paired continuity without timing gate or gameplay advantage',()=>{assert.equal(a.coreWorldResonance.architectureContinuity01,.28);assert.equal(b.coreWorldResonance.architectureContinuity01,.58);assert.equal(b.coreWorldResonance.inputTimingGate,false);assert.equal(b.coreWorldResonance.gameplayAdvantage,false);});
+test('Core remains a consumer without chemistry or movement authority',()=>{for(const key of ['chemistryAuthority','movementAuthority','verbAuthority','progressionAuthority'])assert.equal(b.coreEngine[key],false);assert.equal(b.coreEngine.progressionConsumer,true);});
+const result={scope:'Controlled architecture-consumer comparison; supplied unlock values, not newly earned regional goals. No rendering or audio listening test.',checks,summary:{passed:checks.length,failed:0},comparison:{three:a.coreEngine,six:b.coreEngine}};fs.writeFileSync(new URL('./engine_consumers.json',import.meta.url),JSON.stringify(result,null,2));console.log(JSON.stringify(result.summary));

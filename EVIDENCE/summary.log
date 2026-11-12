@@ -1,0 +1,142 @@
+{
+  "summary": {
+    "passed": 39,
+    "failed": 0
+  },
+  "rows": [
+    {
+      "condition": "quiet",
+      "basePressure": 0.72,
+      "rejected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9930429864253392,
+        "flowVelocityTargetRatio": 0.9926900584795321
+      },
+      "selected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9699999999999999,
+        "flowVelocityTargetRatio": 0.9699999999999999
+      }
+    },
+    {
+      "condition": "stabilize",
+      "basePressure": 0.6,
+      "rejected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9954624999999999,
+        "flowVelocityTargetRatio": 0.9950322580645161
+      },
+      "selected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.97,
+        "flowVelocityTargetRatio": 0.9700000000000001
+      }
+    },
+    {
+      "condition": "pulse",
+      "basePressure": 0.82,
+      "rejected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9913522012578616,
+        "flowVelocityTargetRatio": 0.9910488245931285
+      },
+      "selected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9699999999999999,
+        "flowVelocityTargetRatio": 0.9699999999999999
+      }
+    },
+    {
+      "condition": "absorb",
+      "basePressure": 0.72,
+      "rejected": {
+        "rawFlowRatio": 0.9699999999999999,
+        "environmentAccelerationRatio": 0.9930429864253392,
+        "flowVelocityTargetRatio": 0.9926900584795321
+      },
+      "selected": {
+        "rawFlowRatio": 0.9699999999999999,
+        "environmentAccelerationRatio": 0.9699999999999998,
+        "flowVelocityTargetRatio": 0.9699999999999999
+      }
+    },
+    {
+      "condition": "return",
+      "basePressure": 0.72,
+      "rejected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9930429864253392,
+        "flowVelocityTargetRatio": 0.9926900584795321
+      },
+      "selected": {
+        "rawFlowRatio": 0.97,
+        "environmentAccelerationRatio": 0.9699999999999999,
+        "flowVelocityTargetRatio": 0.9699999999999999
+      }
+    },
+    {
+      "condition": "siltLoaded",
+      "basePressure": 0.72,
+      "rejected": {
+        "rawFlowRatio": 0.9699999999999999,
+        "environmentAccelerationRatio": 0.9930429864253393,
+        "flowVelocityTargetRatio": 0.9926900584795321
+      },
+      "selected": {
+        "rawFlowRatio": 0.9699999999999999,
+        "environmentAccelerationRatio": 0.9699999999999999,
+        "flowVelocityTargetRatio": 0.97
+      }
+    },
+    {
+      "condition": "turbulent",
+      "basePressure": 0.848,
+      "rejected": {
+        "rawFlowRatio": 0.971462800824225,
+        "environmentAccelerationRatio": 0.9924167026497269,
+        "flowVelocityTargetRatio": 0.9921248951345595
+      },
+      "selected": {
+        "rawFlowRatio": 0.971462800824225,
+        "environmentAccelerationRatio": 0.971462800824225,
+        "flowVelocityTargetRatio": 0.9714628008242249
+      }
+    },
+    {
+      "condition": "combined",
+      "basePressure": 0.73,
+      "rejected": {
+        "rawFlowRatio": 0.9701638500023231,
+        "environmentAccelerationRatio": 0.9930296646488425,
+        "flowVelocityTargetRatio": 0.9926821598669807
+      },
+      "selected": {
+        "rawFlowRatio": 0.9701638500023231,
+        "environmentAccelerationRatio": 0.9701638500023231,
+        "flowVelocityTargetRatio": 0.9701638500023231
+      }
+    }
+  ],
+  "visits": [
+    {
+      "startSeconds": 30,
+      "oneShotHasEpisodeWithin45Seconds": true,
+      "periodicHasEpisodeWithin45Seconds": true
+    },
+    {
+      "startSeconds": 90,
+      "oneShotHasEpisodeWithin45Seconds": false,
+      "periodicHasEpisodeWithin45Seconds": true
+    },
+    {
+      "startSeconds": 300,
+      "oneShotHasEpisodeWithin45Seconds": false,
+      "periodicHasEpisodeWithin45Seconds": true
+    },
+    {
+      "startSeconds": 900,
+      "oneShotHasEpisodeWithin45Seconds": false,
+      "periodicHasEpisodeWithin45Seconds": true
+    }
+  ]
+}

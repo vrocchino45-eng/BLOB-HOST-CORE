@@ -1,0 +1,193 @@
+{
+  "pass": "PHASE2-GOALS1",
+  "status": "DEFINED_NOT_IMPLEMENTED",
+  "date": "2026-11-08 America/New_York",
+  "base": "Exported integration base plus SILT-VIS1",
+  "mode": "Goal and completion-contract definition",
+  "shared": {
+    "eligibility": "Mounted route; retained first completion AND actual prior return; route entryCount >= 2; phase-two credit not already awarded",
+    "engineThresholds": [
+      6,
+      12
+    ],
+    "offlineSimulation": false,
+    "crossSessionPersistenceClaimed": false,
+    "firstVisitStateReset": false,
+    "creditPerRegionPhase": 1,
+    "sourceEventRequired": true,
+    "repeatVisitAwardsCredit": false,
+    "existingReturnFoldRemainsAvailable": true
+  },
+  "vascular": {
+    "goal": "Paired return-current handoff",
+    "sourceValveRole": "branch",
+    "sourceValveProgress": 0.55,
+    "receiverValveRole": "intake",
+    "receiverValveProgress": 0.28,
+    "direction": "Existing completed-route outward current toward Hub",
+    "steps": [
+      "Establish LT relationship at branch valve",
+      "Fresh Pulse sends a bounded current response toward intake valve",
+      "Follow response to intake",
+      "Hold LT at intake to settle the arrived response"
+    ],
+    "initialTuningTargets": {
+      "sourceHoldSeconds": 0.18,
+      "relationshipRangeWorldUnits": 1.9,
+      "responseTravelActiveSeconds": 2.0,
+      "receiverSettleActiveSeconds": 0.75
+    },
+    "tuningStatus": "Initial acceptance targets; not production changes or new global control laws",
+    "sourceProof": "Accepted nonzero fresh phase-two projection at branch, after eligibility cursor",
+    "receiverProof": "Same handoff ID arrived and was actively stabilized at intake; passive arrival is insufficient",
+    "states": [
+      "dormant",
+      "source_relationship",
+      "handoff_pending",
+      "receiver_settling",
+      "completed"
+    ],
+    "creditKey": "vascular:phase_2",
+    "excludedAsCredit": [
+      "Old first-visit valve reads",
+      "Passive membrane-load recovery",
+      "Receiving a Host/Silt disturbance",
+      "A new visit without handoff",
+      "A beat-timing success requirement"
+    ]
+  },
+  "silt": {
+    "goal": "Conserved grain round trip",
+    "steps": [
+      "Fresh grip of one of the existing eight grains",
+      "Touch garden patch and Pulse to imprint",
+      "Deliberately seat same grain",
+      "Extract same grain",
+      "Move clear of receiving contact and deliberately release same grain",
+      "Existing trajectory reports same grain free and near native path after that release"
+    ],
+    "states": [
+      "dormant",
+      "gripped",
+      "imprinted",
+      "seated",
+      "extracted",
+      "released_pending_native",
+      "completed"
+    ],
+    "identityRule": "All proof belongs to one grain and one attempt; mixed IDs cannot complete",
+    "activationRule": "Snapshot existing transaction cursor when eligible; no pre-eligibility receipt may satisfy stage",
+    "nativePathProof": "Per-unit trajectory nearNative true on a mounted advance after qualified deliberate release, with environment ownership and no seat/grip",
+    "authoritativeHooks": [
+      "held-material-motion: acquired-with-outward-headroom",
+      "silt-contact: real imprint event",
+      "silt-seat: plate-seated",
+      "silt-seat: plate-extracted",
+      "silt-trajectory: released-with-trajectory / deliberate-release",
+      "SiltTrajectoryMemory per-unit nearNative"
+    ],
+    "creditKey": "silt:phase_2",
+    "massBeforeAfter": 8,
+    "extraNativePathDwellSeconds": 0,
+    "mandatoryAbsorbButton": false,
+    "excludedAsCredit": [
+      "Original porous-packet absorption",
+      "Autonomous sediment growth or wave finish",
+      "Region-hidden release",
+      "Contact without imprint",
+      "Grain A seated and grain B extracted/released",
+      "Global near-native event from another grain"
+    ]
+  },
+  "completionReceipt": {
+    "pass": "EARNED-REGION-PHASE2-1",
+    "schemaVersion": 1,
+    "key": "<routeKey>:phase_2",
+    "routeKey": "vascular | silt",
+    "phase": 2,
+    "sequence": "Monotonic owner completion sequence; first earned phase-two completion = 1",
+    "source": "Actual mounted regional gameplay owner",
+    "frame": "Real completion frame",
+    "evidenceId": "Owner-owned completed handoff/round-trip attempt",
+    "materialTransfer": false,
+    "counterOwner": "ReturnRegionEngineSystem",
+    "architectureConsumer": "CoreEngineSystem"
+  },
+  "acceptanceCases": [
+    {
+      "case": "Second visit with no action",
+      "expected": "No credit"
+    },
+    {
+      "case": "Vascular source-only Pulse, receiver never stabilized",
+      "expected": "Pending; no credit"
+    },
+    {
+      "case": "Vascular receiving stabilization without qualified source handoff",
+      "expected": "No credit"
+    },
+    {
+      "case": "Vascular complete handoff off beat",
+      "expected": "One vascular:phase_2 credit; beat is not permission"
+    },
+    {
+      "case": "Hidden route with unfinished goal",
+      "expected": "No progress, time catch-up or completion"
+    },
+    {
+      "case": "Silt old first-visit round-trip receipts",
+      "expected": "Ignored for phase two"
+    },
+    {
+      "case": "Silt complete same-grain fresh round trip and native-path return",
+      "expected": "One silt:phase_2 credit; mass remains eight"
+    },
+    {
+      "case": "Silt seat/extract chain mixes grain IDs",
+      "expected": "No credit"
+    },
+    {
+      "case": "Silt implicit release on region exit",
+      "expected": "No completion or deliberate-release substitute"
+    },
+    {
+      "case": "Silt global near-native event belongs to another grain",
+      "expected": "No credit"
+    },
+    {
+      "case": "Duplicate frames, events, remounts after completion",
+      "expected": "No additional credit"
+    },
+    {
+      "case": "Four existing distinct credits plus first new phase-two goal",
+      "expected": "Five credits; still 3-phase"
+    },
+    {
+      "case": "Then second distinct new phase-two goal, in either order",
+      "expected": "Six credits; paired 6-phase"
+    },
+    {
+      "case": "6-phase unlocked through earned arc",
+      "expected": "Two phases per Pulse/Absorb/Stabilize; 12-phase stays locked"
+    }
+  ],
+  "implementationOrder": [
+    "Vascular II owner and observable paired handoff",
+    "Silt II completion observer over existing accepted receipts",
+    "Joint earned-six-credit integration and small delta delivery"
+  ],
+  "notImplemented": [
+    "Vascular II paired handoff state/presentation",
+    "Silt II round-trip completion observer",
+    "New regional phase-two credit publication"
+  ],
+  "locked": [
+    "First-visit route mechanics and returns",
+    "Accepted grain controls and physics",
+    "SILT-VIS1 fog adjustment",
+    "Movement/attachment/Guide authority",
+    "3->6->12 thresholds and rooted triadic architecture",
+    "Existing Host provenance channels and eight-grain mass",
+    "Current audio baseline and checkpoint history"
+  ]
+}

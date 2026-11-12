@@ -1,3 +1,4 @@
+import { HOST_CORE_SOURCE_AUTHORITY } from "../core/HostCoreSourceAuthority.js";
 export class RecipeDataSystem {
   constructor({ validationProfile = "first_slice_runtime" } = {}) {
     this.validationProfile = validationProfile;
@@ -1703,8 +1704,16 @@ export class RecipeDataSystem {
       throw new Error("[RecipeDataSystem] Missing HC-003F blueprint translation layer.");
     }
 
-    if (layer.primaryReference !== "HOST_CORE_Blueprint_v1_reference_docs.zip") {
+    if (layer.primaryReference !== HOST_CORE_SOURCE_AUTHORITY.sourcePackage
+      || layer.compatibleDetailReference !== HOST_CORE_SOURCE_AUTHORITY.compatibleDetailSourcePackage) {
       throw new Error("[RecipeDataSystem] HC-003F translation layer must use the Host Core Rebuild blueprint as primary reference.");
+    }
+
+    // AUTHORITY1: archived role maps cannot override the rebuild architecture.
+    for (const rule of ["local_cells_replace_chambers", "morph_regions_replace_exits", "no_gates_or_hard_region_transitions"]) {
+      if (!layer.architectureRules?.includes(rule)) {
+        throw new Error(`[RecipeDataSystem] Translation missing rebuild architecture rule: ${rule}`);
+      }
     }
 
     const mappings = layer.localCellToBlueprintRole ?? [];
@@ -1739,7 +1748,7 @@ export class RecipeDataSystem {
       .toLowerCase();
 
     const requiredAuthorityMarkers = [
-      "authored gate",
+      "no hard gates",
       "arbitrary",
       "renderer-owned progression"
     ];
@@ -1916,8 +1925,14 @@ export class RecipeDataSystem {
 
     const cell = this.get("localCellRecipes", "CELL_GRAVE_MEMORY_RESIDUE_BED_001");
     const graveMorphPrototypeActive = this.data.graveRouteMorphPrototype?.id === "HC004D_GRAVE_ROUTE_MORPH_PROTOTYPE";
-    const graveReadLoopActive = ["HC-004F", "HC-004G", "HC-004H", "HC-004I", "HC-004J", "HC-004K", "HC-004L", "HC-004M", "HC-004N", "HC-004O", "HC-004P", "HC-004Q", "HC-004QA", "HC-004QB", "HC-004QC", "HC-004QD", "HC-004QE", "HC-004QF", "HC-004QG", "HC-004QH", "HC-004QI", "HC-004QJ", "HC-004R", "HC-005A", "HC-005B", "HC-005C", "HC-005D", "HC-006A", "HC-006B", "HC-006C", "HC-006D", "HC-006E", "HC-006EA", "HC-006EB", "HC-006F", "HC-006G", "HC-006H", "HC-006HA", "HC-006I", "HC-006IA", "HC-006J", "HC-006JA", "HC-006K", "HC-006KA", "HC-006KB", "HC-006KC", "HC-006KD", "HC-007A", "HC-007B", "HC-007C", "HC-007D", "HC-007E", "HC-008B", "HC-008C", "HC-008D", "HC-008E", "HC-008F", "HC-008G", "HC-009A", "HC-009B", "HC-009C", "HC-009D", "HC-009E", "HC-009F", "HC-009G"] .includes(this.data.buildManifest?.id);
-    const graveRouteReadDataActive = graveReadLoopActive || ["HC-010A", "HC-010B", "HC-010C", "HC-010D", "HC-010E", "HC-010F", "HC-010G", "HC-011A", "HC-011A1", "HC-011B", "HC-012A", "HC-012B", "HC-012C", "HC-013A", "HC-013B", "HC-013C", "HC-013D", "HC-014A", "HC-014B", "HC-014C", "HC-014D", "HC-014E", "HC-014F", "HC-014G", "HC-014H", "HC-014I"].includes(this.data.buildManifest?.id);
+    // ARCHIVE-GRAVE1: validate the authored read-loop capability, not a stale
+    // release-ID allowlist. Loading archive data never activates runtime systems.
+    const graveReadLoop = this.data.graveReadBeforeAbsorbRecipes.get("GRAVE_READ_BEFORE_ABSORB_LOOP_001");
+    const graveRouteReadDataActive = graveReadLoop?.id === "GRAVE_READ_BEFORE_ABSORB_LOOP_001"
+      && graveReadLoop.cellId === cell.id
+      && graveReadLoop.route === pack.route.id
+      && graveReadLoop.loopType === "read_first_then_one_safe_residue_transfer"
+      && ["runtime_active_minimal_read_before_absorb_loop", "runtime_active_minimal_read_before_absorb_loop_stability_tuned", "runtime_active_minimal_read_before_absorb_loop_exit_readiness_prototype"].includes(graveReadLoop.status);
     const allowedCellStatus = graveRouteReadDataActive
       ? ["authored_recipe_pack_not_runtime_active", "runtime_grave_morph_destination_prototype", "runtime_grave_read_before_absorb_loop_active", "runtime_grave_read_loop_stability_active_exit_deferred", "runtime_grave_exit_readiness_prototype_active_exit_deferred"]
       : graveMorphPrototypeActive

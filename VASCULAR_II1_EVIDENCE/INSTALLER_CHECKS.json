@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "checks": [
+    "apply installs exact dependency, optional stage module and regional owner",
+    "backup preserves exact original owner",
+    "repeat apply is idempotent",
+    "restore reinstates owner and removes only patch additions",
+    "recognized interrupted dependency-only install can finish",
+    "restore rejects later work without changing any file",
+    "apply rejects unexpected owner without changing any file",
+    "bad payload rejects the whole installation before changes"
+  ]
+}

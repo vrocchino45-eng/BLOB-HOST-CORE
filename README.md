@@ -1,11 +1,10 @@
-# GSL-4E2G — Offline observation contract, stage 1
+# CONNECTION1 checkpoint
 
-**Read-only**. No repository source files are modified. Python 3 standard library only.
+Audit/report only. Nothing to install into the game.
 
-Run from your BLOB repository root (adjust JSON filename/path):
+- CONNECTION1.md: baseline, ownership/connection map, measured gap and keep/remove decisions.
+- CONNECTION2_CONTRACT.md: bounded next candidate and required bot/human comparisons; not an implemented feature.
+- EVIDENCE/probe.json: 32 controlled scenarios, 107 assertions, source hashes and exact measurements.
+- EVIDENCE/connection-probe.mjs: reproducible owner/method audit. With the project's usual Node dependencies installed, run `node path/to/connection-probe.mjs path/to/BLOB-HOST-CORE path/to/output.json`.
 
-```powershell
-py .\GSL4E2G_AUDIT.py .\BLOB_GSL4E2F_OBS1.json --out .\GSL4E2G_REPORT.json
-```
-
-This tests the **recorded** `gsl-guide-interpretation-change` payload for schema, owner consistency, disabled/core-work suppression, and coverage of LS1 events. `NOT_OBSERVED` means the capture did not exercise a case; it is **not** a pass. Event-count coverage does not prove transition timing or correct motion. A second stage must use the production Guide/LS1 runtime with controlled attachment inputs to test deterministic transitions, cooldown, and recovery timeout. No gameplay code changes in this package.
+The current gameplay and Bot Series 1 baseline are preserved. This archive does not replace or renumber earlier builds.

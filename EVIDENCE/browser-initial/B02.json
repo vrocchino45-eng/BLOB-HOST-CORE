@@ -1,0 +1,160 @@
+{
+  "case": "B02",
+  "status": "PASS",
+  "summary": {
+    "passed": 1,
+    "failed": 0
+  },
+  "detail": {
+    "scope": "Actual keyboard acquisition, imprint and F/G handoff; supplied first-return/revisit and accepted contact/player pose fixtures. No goal proof, seat, release classification or Host result forced.",
+    "setup": {
+      "pass": "SILT-II1-TEST-START",
+      "testOnly": true,
+      "earnedProgression": false,
+      "scope": "Staged previous first-route completion, qualified revisit and near-grain pose. No new goal proof, ecology time skip, material creation or phase-two credit written.",
+      "grainId": "silt-grain-01",
+      "next": "Return focus to game. Aim at the nearby grain, hold LT/Q and press A/E; continue imprint, seat, extract, deliberate release and native return."
+    },
+    "contact": true,
+    "before": {
+      "host": 0,
+      "credits": 1,
+      "held": "silt-grain-01",
+      "seat": null,
+      "mass": 8,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "imprinted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 10,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      }
+    },
+    "work": {
+      "host": 0,
+      "credits": 1,
+      "held": null,
+      "seat": null,
+      "mass": 8,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": false,
+        "started": true,
+        "stage": "imprinted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 10,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "release": {
+        "sequence": 11,
+        "kind": "silt-trajectory",
+        "frame": 38,
+        "siltElapsedSeconds": 1.549,
+        "heldGrainId": "silt-grain-01",
+        "candidateAtFrameStart": "silt-grain-01",
+        "outcome": "released-with-trajectory",
+        "unitId": "silt-grain-01",
+        "position": [
+          -5.35,
+          -2.6905,
+          -10.4
+        ],
+        "velocity": [
+          -0.0038,
+          -0.0013,
+          0.0013
+        ],
+        "reason": "core-work-suspended",
+        "noMaterialTransfer": true,
+        "progressionCredit": false
+      }
+    },
+    "reacquired": {
+      "host": 0,
+      "credits": 1,
+      "held": "silt-grain-01",
+      "seat": null,
+      "mass": 8,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "gripped",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 2,
+        "activationSequence": 0,
+        "consumedSequence": 16,
+        "proof": {
+          "grip": 14,
+          "imprint": null,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "release": {
+        "sequence": 11,
+        "kind": "silt-trajectory",
+        "frame": 38,
+        "siltElapsedSeconds": 1.549,
+        "heldGrainId": "silt-grain-01",
+        "candidateAtFrameStart": "silt-grain-01",
+        "outcome": "released-with-trajectory",
+        "unitId": "silt-grain-01",
+        "position": [
+          -5.35,
+          -2.6905,
+          -10.4
+        ],
+        "velocity": [
+          -0.0038,
+          -0.0013,
+          0.0013
+        ],
+        "reason": "core-work-suspended",
+        "noMaterialTransfer": true,
+        "progressionCredit": false
+      }
+    }
+  },
+  "errors": []
+}

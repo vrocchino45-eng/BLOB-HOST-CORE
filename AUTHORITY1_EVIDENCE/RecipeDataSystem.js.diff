@@ -1,0 +1,36 @@
+--- audit/authority1/BASE/src/data/RecipeDataSystem.js	2026-11-09 03:25:51.679364945 -0500
++++ candidate_base/src/data/RecipeDataSystem.js	2026-11-09 03:25:51.682605812 -0500
+@@ -1,3 +1,4 @@
++import { HOST_CORE_SOURCE_AUTHORITY } from "../core/HostCoreSourceAuthority.js";
+ export class RecipeDataSystem {
+   constructor({ validationProfile = "first_slice_runtime" } = {}) {
+     this.validationProfile = validationProfile;
+@@ -1703,10 +1704,18 @@
+       throw new Error("[RecipeDataSystem] Missing HC-003F blueprint translation layer.");
+     }
+ 
+-    if (layer.primaryReference !== "HOST_CORE_Blueprint_v1_reference_docs.zip") {
++    if (layer.primaryReference !== HOST_CORE_SOURCE_AUTHORITY.sourcePackage
++      || layer.compatibleDetailReference !== HOST_CORE_SOURCE_AUTHORITY.compatibleDetailSourcePackage) {
+       throw new Error("[RecipeDataSystem] HC-003F translation layer must use the Host Core Rebuild blueprint as primary reference.");
+     }
+ 
++    // AUTHORITY1: archived role maps cannot override the rebuild architecture.
++    for (const rule of ["local_cells_replace_chambers", "morph_regions_replace_exits", "no_gates_or_hard_region_transitions"]) {
++      if (!layer.architectureRules?.includes(rule)) {
++        throw new Error(`[RecipeDataSystem] Translation missing rebuild architecture rule: ${rule}`);
++      }
++    }
++
+     const mappings = layer.localCellToBlueprintRole ?? [];
+     const requiredCells = [
+       "CELL_MEMBRANE_NURSERY_001",
+@@ -1739,7 +1748,7 @@
+       .toLowerCase();
+ 
+     const requiredAuthorityMarkers = [
+-      "authored gate",
++      "no hard gates",
+       "arbitrary",
+       "renderer-owned progression"
+     ];

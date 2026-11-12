@@ -1,0 +1,24 @@
+--- audit/host_cause1/BASE/public/data/hosts/HOST_ALPHA_WOUNDED_NURSERY.json	2026-11-09 12:06:37.552640904 -0500
++++ candidate_base/public/data/hosts/HOST_ALPHA_WOUNDED_NURSERY.json	2026-11-09 12:06:38.087290623 -0500
+@@ -32,5 +32,21 @@
+   },
+   "allegory": {
+     "humanReading": "A protective being carrying unresolved injury while trying to shelter new life."
++  },
++  "externalPressureEpisode": {
++    "id": "HOST_ALPHA_PREDATORY_PRESSURE_001",
++    "enabled": true,
++    "anatomyId": "vascular_routes",
++    "externalCause": "predatory_pressure",
++    "clockSource": "runtimeSeconds",
++    "onsetSeconds": 12,
++    "repeatSeconds": 45,
++    "riseSeconds": 3,
++    "holdSeconds": 3,
++    "recoverySeconds": 6,
++    "maxFlowReduction": 0.03,
++    "maxVisualCompression": 0.08,
++    "scope": "authored_external_pressure_prototype_not_predatory_host_AI",
++    "meaning": "The wounded nursery tightens its protective vascular membrane under recurring external pressure, then relaxes."
+   }
+ }

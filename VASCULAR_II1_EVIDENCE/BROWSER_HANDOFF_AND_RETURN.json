@@ -1,0 +1,465 @@
+{
+  "pass": "VASCULAR-II1-BROWSER",
+  "setup": {
+    "pass": "VASCULAR-II1-TEST-START",
+    "testOnly": true,
+    "earnedProgression": false,
+    "scope": "Staged prior first-route return, qualified revisit and source pose only; no phase-two handoff or completion credit written.",
+    "next": "Return focus to the game. Hold LT/Q, then tap Pulse/X while holding. Follow gold to green intake; hold LT/Q there.",
+    "position": [
+      1.3835288646708668,
+      0.10760142440314734,
+      -11.060600763803077
+    ]
+  },
+  "stages": [
+    {
+      "label": "qualified source",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "source_relationship",
+        "completed": false,
+        "completionPublished": false,
+        "handoffId": null,
+        "sourcePulseId": null,
+        "sourceHoldSeconds": 0,
+        "sourceHoldAtProjection": 0,
+        "travelProgress": 0,
+        "settleProgress": 0,
+        "completionSequence": 0,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 4,
+      "engine": 3,
+      "position": [
+        1.4792638275993608,
+        0.13363260399043442,
+        -11.142713793091492
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": true,
+        "packet": false,
+        "packetPosition": [
+          0,
+          0,
+          0
+        ]
+      },
+      "nextAction": "Hold LT at the amber branch valve to establish the return current."
+    },
+    {
+      "label": "projected current",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "handoff_travel",
+        "completed": false,
+        "completionPublished": false,
+        "handoffId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "sourceHoldSeconds": 0.18,
+        "sourceHoldAtProjection": 0.18,
+        "travelProgress": 0.049999999999999996,
+        "settleProgress": 0,
+        "completionSequence": 0,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 4,
+      "engine": 3,
+      "position": [
+        1.6855119708340085,
+        0.18954894509755535,
+        -10.895656432979637
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": true,
+        "packet": true,
+        "packetPosition": [
+          1.3984427092494647,
+          0.15364684550478191,
+          -10.736331183726893
+        ]
+      },
+      "nextAction": "Follow the gold current response toward the green intake valve."
+    },
+    {
+      "label": "receiver approach",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "receiver_pending",
+        "completed": false,
+        "completionPublished": false,
+        "handoffId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "sourceHoldSeconds": 0.18,
+        "sourceHoldAtProjection": 0.18,
+        "travelProgress": 1,
+        "settleProgress": 0,
+        "completionSequence": 0,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 4,
+      "engine": 3,
+      "position": [
+        -1.1140085896524736,
+        0.5583602603925368,
+        -6.563373950501206
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": true,
+        "packet": true,
+        "packetPosition": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ]
+      },
+      "nextAction": "Hold LT at the green intake valve to receive and settle the return current."
+    },
+    {
+      "label": "settled and credited",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "goal": {
+        "pass": "VASCULAR-II1",
+        "eligible": true,
+        "active": true,
+        "stage": "completed",
+        "completed": true,
+        "completionPublished": true,
+        "handoffId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "sourceHoldSeconds": 0.18,
+        "sourceHoldAtProjection": 0.18,
+        "travelProgress": 1,
+        "settleProgress": 1,
+        "completionSequence": 1,
+        "sourceRole": "branch",
+        "receiverRole": "intake",
+        "completionKey": "vascular:phase_2",
+        "materialTransfer": false,
+        "offRouteSimulation": false,
+        "crossingAuthority": false
+      },
+      "credits": 5,
+      "engine": 3,
+      "event": {
+        "pass": "EARNED-REGION-PHASE2-1",
+        "schemaVersion": 1,
+        "key": "vascular:phase_2",
+        "routeKey": "vascular",
+        "phase": 2,
+        "sequence": 1,
+        "source": "VascularRhythmRouteSystem",
+        "frame": 63,
+        "evidenceId": "vascular:handoff:1",
+        "sourcePulseId": 1,
+        "receiverSettleSeconds": 0.75,
+        "materialTransfer": false
+      },
+      "position": [
+        -1.5050578508661387,
+        0.35819845472490736,
+        -5.170633227028074
+      ],
+      "source": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ],
+      "receiver": [
+        -0.7949583966504195,
+        0.6062734088194878,
+        -5.508539129198519
+      ],
+      "visual": {
+        "root": false,
+        "packet": true,
+        "packetPosition": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ]
+      },
+      "nextAction": "Paired return current settled. Follow the gold current into the open entry fold."
+    }
+  ],
+  "navigation": [
+    {
+      "distance": 2.7179008778406466,
+      "keys": [
+        "s",
+        "a"
+      ],
+      "position": [
+        0.13173729974559778,
+        0.5417072953699378,
+        -8.062761414952458
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 2.3652609117974195,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        -0.09395858815593235,
+        0.6135263415791691,
+        -7.767522494417006
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.9085798527354907,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        -0.41429697320552433,
+        0.6489329203652888,
+        -7.378286197933595
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.9085798527354907,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        -0.41429697320552433,
+        0.6489329203652888,
+        -7.378286197933595
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.1030708026593317,
+      "keys": [
+        "s",
+        "d"
+      ],
+      "position": [
+        -1.1140085896524736,
+        0.5583602603925368,
+        -6.563373950501206
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    }
+  ],
+  "returnNavigation": [
+    {
+      "distance": 2.8199851349336313,
+      "keys": [
+        "s",
+        "a",
+        "z"
+      ],
+      "position": [
+        0.0656044686249184,
+        0.07982993857819864,
+        -2.199064098190659
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 2.5513360151762945,
+      "keys": [
+        "s"
+      ],
+      "position": [
+        -0.052962320179148294,
+        0.02019577321822594,
+        -1.9306121153642382
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 2.110391521701137,
+      "keys": [
+        "s"
+      ],
+      "position": [
+        -0.19203540032655225,
+        0.019433583280950538,
+        -1.4814139225907916
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.5601961397053117,
+      "keys": [
+        "s",
+        "z"
+      ],
+      "position": [
+        -0.29466520828906295,
+        0.10952076220886181,
+        -0.9109610342008695
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.0056899187028343,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -0.37102765403852067,
+        0.1430722286269779,
+        -0.310101205663982
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 0.49097504967643685,
+      "keys": [
+        "s",
+        "d",
+        "z"
+      ],
+      "position": [
+        -0.3411414365959483,
+        0.09484163213378417,
+        0.269759728658153
+      ],
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001"
+    },
+    {
+      "distance": 1.0443714419513224,
+      "keys": [
+        "w",
+        "d",
+        "c"
+      ],
+      "position": [
+        -0.3829911883659468,
+        -0.0502531983982612,
+        1.586425762595577
+      ],
+      "cell": "CELL_SIGNAL_CHORUS_NERVE_001"
+    }
+  ],
+  "returned": {
+    "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+    "credits": 5,
+    "history": {
+      "graveReturned": true,
+      "graveMemoryImprintCommitted": true,
+      "siltReturned": true,
+      "siltCompleted": true,
+      "vascularReturned": true,
+      "vascularCompleted": true,
+      "routeStates": {
+        "vascular_route": {
+          "entered": true,
+          "returned": true,
+          "completed": true,
+          "entryCount": 2,
+          "returnCount": 2,
+          "lastGateId": "vascular_route_to_hub_chamber",
+          "lastCrossingFrame": 92,
+          "transitionOwner": "LocalCellBoundaryMorphSystem"
+        }
+      },
+      "pass": "HC-015N",
+      "lastTransition": {
+        "from": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "to": "CELL_SIGNAL_CHORUS_NERVE_001",
+        "routeId": "vascular_route",
+        "boundaryId": "vascular_to_hub",
+        "transitionOwner": "LocalCellBoundaryMorphSystem",
+        "transitionType": "recipe_driven_continuous_anatomical_morph",
+        "frame": 92
+      },
+      "vascularReturnCount": 1,
+      "vascularCadenceReads": 3,
+      "vascularSynchronization": 1,
+      "vascularCirculationIntegrity": 1,
+      "vascularDesynchronizationRecovered": false
+    },
+    "goal": {
+      "pass": "VASCULAR-II1",
+      "eligible": false,
+      "active": false,
+      "stage": "completed",
+      "completed": true,
+      "completionPublished": true,
+      "handoffId": "vascular:handoff:1",
+      "sourcePulseId": 1,
+      "sourceHoldSeconds": 0,
+      "sourceHoldAtProjection": 0.18,
+      "travelProgress": 1,
+      "settleProgress": 1,
+      "completionSequence": 1,
+      "sourceRole": "branch",
+      "receiverRole": "intake",
+      "completionKey": "vascular:phase_2",
+      "materialTransfer": false,
+      "offRouteSimulation": false,
+      "crossingAuthority": false
+    }
+  },
+  "errors": []
+}

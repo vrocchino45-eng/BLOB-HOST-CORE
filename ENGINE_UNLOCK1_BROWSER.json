@@ -1,0 +1,1099 @@
+{
+  "pass": "ENGINE-UNLOCK1-BROWSER",
+  "fixture": {
+    "scope": "Controlled prior first-route returns and near-resolution Grave II state; subsequent completion and credit consumption use the original running registry. Not earned gameplay."
+  },
+  "actualCompletion": {
+    "cell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "frame": 41,
+    "credits": {
+      "pass": "HC-031A1",
+      "active": true,
+      "owner": "ReturnRegionEngineSystem",
+      "law": "regional_fundamental_x_octave_resonance_doubles_resolution_3_to_6_to_12",
+      "creditCount": 4,
+      "nextThreshold": 6,
+      "unlockedPhaseCount": 3,
+      "phase1": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase2": {
+        "grave": true,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "graveLayout": {
+        "routeKey": "grave",
+        "equationId": "return_octave_resonance_v2",
+        "inputs": {
+          "visitPhase": 2,
+          "entryCount": 2,
+          "topology": {
+            "deep": 0.333,
+            "inner": 0.333,
+            "membrane": 0.333
+          },
+          "memoryStrength": 0,
+          "reactivePressure": 0,
+          "traceIntegrity": 0.68,
+          "riskPressure": 0,
+          "chord": "idle",
+          "c0d3GraveIIHostMemory": {
+            "applied": false,
+            "inheritedPressure01": 0,
+            "resonanceContribution01": 0,
+            "mode": "authentic_vascular_memory_to_grave_ii_existing_resonance_only"
+          }
+        },
+        "octave": {
+          "fundamentalPhaseCount": 3,
+          "octaveRatio": 2,
+          "octavePhaseCount": 6,
+          "resonance01": 0.562,
+          "resonancePhase": 4.206,
+          "harmonicSpread": 1.116
+        },
+        "outputs": {
+          "depthScale": 1.457,
+          "lateralBias": 0.044,
+          "verticalBias": 0,
+          "compression": 0.719,
+          "echoDensity": 0.409,
+          "instability": 0.1,
+          "twist": -0.039,
+          "resonance01": 0.562,
+          "harmonicSpread": 1.116
+        }
+      },
+      "progressionAuthority": true,
+      "engineUnlockAuthority": true,
+      "routeCrossingAuthority": false,
+      "targetingAuthority": false,
+      "verbAuthority": false,
+      "randomGeneration": false,
+      "lastEvent": "grave_phase_2_credited"
+    },
+    "engine": {
+      "pass": "HC-027B",
+      "active": true,
+      "owner": "CoreEngineSystem",
+      "geometryLaw": "triadic_base_resolves_3_to_6_to_12",
+      "functions": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ],
+      "architectureId": "triadic_3",
+      "architectureLabel": "3-phase",
+      "phaseCount": 3,
+      "phasesPerFunction": 1,
+      "resolution": "one_phase_per_function",
+      "firingOrder": [
+        {
+          "index": 0,
+          "function": "pulse",
+          "ordinal": 1,
+          "label": "pulse_1"
+        },
+        {
+          "index": 1,
+          "function": "absorb",
+          "ordinal": 1,
+          "label": "absorb_1"
+        },
+        {
+          "index": 2,
+          "function": "stabilize",
+          "ordinal": 1,
+          "label": "stabilize_1"
+        }
+      ],
+      "currentPhaseIndex": 0,
+      "currentPhaseFunction": "pulse",
+      "currentPhaseOrdinal": 1,
+      "currentPhaseLabel": "pulse_1",
+      "cycleProgress01": 0.0009,
+      "cycleCount": 2,
+      "phaseEventCount": 7,
+      "rpm": 3137,
+      "targetRpm": 3135,
+      "rpmMin": 3000,
+      "rpmMax": 10000,
+      "load01": 0.019,
+      "cycleHz": 0.826,
+      "phaseEventsPerSecond": 2.48,
+      "rpmMeaning": "marker_for_current_core_energy_cycling_and_expenditure",
+      "literalMechanicalRpm": false,
+      "architectureDebugCycleCommand": "O",
+      "architectureDebugOnly": false,
+      "progressionUnlockSource": "ReturnRegionEngineSystem",
+      "progressionUnlockedPhaseCount": 3,
+      "defaultArchitecture": "3-phase",
+      "gameplayAuthority": false,
+      "movementAuthority": false,
+      "verbAuthority": false,
+      "chemistryAuthority": false,
+      "coreWorkPlacementAuthority": false,
+      "progressionAuthority": false,
+      "progressionConsumer": true,
+      "growthAuthority": false,
+      "geometryViolationEnabled": false,
+      "nonTriadicArchitectureEnabled": false,
+      "lastEvent": "phase_fire:pulse_1"
+    },
+    "completionEvent": {
+      "pass": "HC-031B",
+      "sequence": 1,
+      "key": "grave:phase_2",
+      "routeKey": "grave",
+      "phase": 2,
+      "resolutionId": "shared_memory",
+      "source": "GraveResonanceGameplaySystem",
+      "frame": 41
+    },
+    "grave": {
+      "pass": "HC-031B",
+      "active": true,
+      "owner": "GraveResonanceGameplaySystem",
+      "law": "touch_one_part_of_the_octave_and_other_parts_answer",
+      "nodes": {
+        "retainedDraw": {
+          "objectId": "residue_silt_cloud_001",
+          "role": "memory_silt",
+          "level01": 0.55,
+          "propagationImpulse01": 0.435,
+          "interactionCount": 0
+        },
+        "coherentPush": {
+          "objectId": "scar_lock_plate_001",
+          "role": "protective_scar",
+          "level01": 0.55,
+          "propagationImpulse01": 0.435,
+          "interactionCount": 0
+        },
+        "heldEquilibrium": {
+          "objectId": "inheritance_seed_remnant_001",
+          "role": "inheritance_remnant",
+          "level01": 0.55,
+          "propagationImpulse01": 0.435,
+          "interactionCount": 0
+        }
+      },
+      "regional": {
+        "mean01": 0.55,
+        "spread01": 0,
+        "variance01": 0,
+        "candidateResolution": "shared_memory",
+        "resolutionHold01": 1
+      },
+      "interactionCount": 3,
+      "touchedNodeCount": 2,
+      "completed": true,
+      "resolutionId": "shared_memory",
+      "lastPropagationEvent": null,
+      "lastEvent": "grave_ii_shared_memory_resolved",
+      "rules": {
+        "exactComboGate": false,
+        "regionalConditionResolution": true,
+        "multipleValidResolutionBands": [
+          "quiet_retention",
+          "shared_memory",
+          "held_contradiction"
+        ],
+        "exitBlocked": false,
+        "newAbilityButtons": 0,
+        "targetingAuthority": false,
+        "routeCrossingAuthority": false,
+        "perObjectReactiveStateAuthority": false
+      }
+    },
+    "hostResolution": {
+      "pass": "C0D3-B",
+      "schemaVersion": 1,
+      "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "sequence": 1,
+      "lastSourceCompletionSequence": 1,
+      "acceptedTotal": 1,
+      "rejectedTotal": 0,
+      "duplicateTotal": 0,
+      "prunedTotal": 0,
+      "retainedCount": 1,
+      "lastReceiptId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+      "records": [
+        {
+          "schemaVersion": 1,
+          "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+          "sequence": 1,
+          "kind": "grave_ii_regional_resonance_resolved",
+          "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+          "sourceSystem": "GraveResonanceGameplaySystem",
+          "sourceCompletionSequence": 1,
+          "resolutionId": "shared_memory",
+          "completedAtFrame": 41,
+          "parentVascularEffectId": null,
+          "inheritedVascularMemory": false,
+          "materialTransfer": false,
+          "routeCredit": false,
+          "progressionAuthority": false,
+          "offRouteSimulation": false
+        }
+      ],
+      "materialTransfer": false,
+      "routeCredit": false,
+      "progressionAuthority": false,
+      "offRouteSimulation": false,
+      "persistentAcrossCellsInRuntime": true,
+      "persistsAcrossReload": false
+    }
+  },
+  "repeated": {
+    "cell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "frame": 45,
+    "credits": {
+      "pass": "HC-031A1",
+      "active": true,
+      "owner": "ReturnRegionEngineSystem",
+      "law": "regional_fundamental_x_octave_resonance_doubles_resolution_3_to_6_to_12",
+      "creditCount": 4,
+      "nextThreshold": 6,
+      "unlockedPhaseCount": 3,
+      "phase1": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase2": {
+        "grave": true,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "graveLayout": {
+        "routeKey": "grave",
+        "equationId": "return_octave_resonance_v2",
+        "inputs": {
+          "visitPhase": 2,
+          "entryCount": 2,
+          "topology": {
+            "deep": 0.333,
+            "inner": 0.333,
+            "membrane": 0.333
+          },
+          "memoryStrength": 0,
+          "reactivePressure": 0,
+          "traceIntegrity": 0.68,
+          "riskPressure": 0,
+          "chord": "idle",
+          "c0d3GraveIIHostMemory": {
+            "applied": false,
+            "inheritedPressure01": 0,
+            "resonanceContribution01": 0,
+            "mode": "authentic_vascular_memory_to_grave_ii_existing_resonance_only"
+          }
+        },
+        "octave": {
+          "fundamentalPhaseCount": 3,
+          "octaveRatio": 2,
+          "octavePhaseCount": 6,
+          "resonance01": 0.562,
+          "resonancePhase": 4.206,
+          "harmonicSpread": 1.116
+        },
+        "outputs": {
+          "depthScale": 1.457,
+          "lateralBias": 0.044,
+          "verticalBias": 0,
+          "compression": 0.719,
+          "echoDensity": 0.409,
+          "instability": 0.1,
+          "twist": -0.039,
+          "resonance01": 0.562,
+          "harmonicSpread": 1.116
+        }
+      },
+      "progressionAuthority": true,
+      "engineUnlockAuthority": true,
+      "routeCrossingAuthority": false,
+      "targetingAuthority": false,
+      "verbAuthority": false,
+      "randomGeneration": false,
+      "lastEvent": "grave_phase_2_credited"
+    },
+    "engine": {
+      "pass": "HC-027B",
+      "active": true,
+      "owner": "CoreEngineSystem",
+      "geometryLaw": "triadic_base_resolves_3_to_6_to_12",
+      "functions": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ],
+      "architectureId": "triadic_3",
+      "architectureLabel": "3-phase",
+      "phaseCount": 3,
+      "phasesPerFunction": 1,
+      "resolution": "one_phase_per_function",
+      "firingOrder": [
+        {
+          "index": 0,
+          "function": "pulse",
+          "ordinal": 1,
+          "label": "pulse_1"
+        },
+        {
+          "index": 1,
+          "function": "absorb",
+          "ordinal": 1,
+          "label": "absorb_1"
+        },
+        {
+          "index": 2,
+          "function": "stabilize",
+          "ordinal": 1,
+          "label": "stabilize_1"
+        }
+      ],
+      "currentPhaseIndex": 1,
+      "currentPhaseFunction": "absorb",
+      "currentPhaseOrdinal": 1,
+      "currentPhaseLabel": "absorb_1",
+      "cycleProgress01": 0.385,
+      "cycleCount": 2,
+      "phaseEventCount": 8,
+      "rpm": 3136,
+      "targetRpm": 3136,
+      "rpmMin": 3000,
+      "rpmMax": 10000,
+      "load01": 0.019,
+      "cycleHz": 0.826,
+      "phaseEventsPerSecond": 2.48,
+      "rpmMeaning": "marker_for_current_core_energy_cycling_and_expenditure",
+      "literalMechanicalRpm": false,
+      "architectureDebugCycleCommand": "O",
+      "architectureDebugOnly": false,
+      "progressionUnlockSource": "ReturnRegionEngineSystem",
+      "progressionUnlockedPhaseCount": 3,
+      "defaultArchitecture": "3-phase",
+      "gameplayAuthority": false,
+      "movementAuthority": false,
+      "verbAuthority": false,
+      "chemistryAuthority": false,
+      "coreWorkPlacementAuthority": false,
+      "progressionAuthority": false,
+      "progressionConsumer": true,
+      "growthAuthority": false,
+      "geometryViolationEnabled": false,
+      "nonTriadicArchitectureEnabled": false,
+      "lastEvent": "phase_fire:absorb_1"
+    },
+    "completionEvent": {
+      "pass": "HC-031B",
+      "sequence": 1,
+      "key": "grave:phase_2",
+      "routeKey": "grave",
+      "phase": 2,
+      "resolutionId": "shared_memory",
+      "source": "GraveResonanceGameplaySystem",
+      "frame": 41
+    },
+    "grave": {
+      "pass": "HC-031B",
+      "active": true,
+      "owner": "GraveResonanceGameplaySystem",
+      "law": "touch_one_part_of_the_octave_and_other_parts_answer",
+      "nodes": {
+        "retainedDraw": {
+          "objectId": "residue_silt_cloud_001",
+          "role": "memory_silt",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        },
+        "coherentPush": {
+          "objectId": "scar_lock_plate_001",
+          "role": "protective_scar",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        },
+        "heldEquilibrium": {
+          "objectId": "inheritance_seed_remnant_001",
+          "role": "inheritance_remnant",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        }
+      },
+      "regional": {
+        "mean01": 0.55,
+        "spread01": 0,
+        "variance01": 0,
+        "candidateResolution": "shared_memory",
+        "resolutionHold01": 1
+      },
+      "interactionCount": 3,
+      "touchedNodeCount": 2,
+      "completed": true,
+      "resolutionId": "shared_memory",
+      "lastPropagationEvent": null,
+      "lastEvent": "grave_ii_shared_memory_resolved",
+      "rules": {
+        "exactComboGate": false,
+        "regionalConditionResolution": true,
+        "multipleValidResolutionBands": [
+          "quiet_retention",
+          "shared_memory",
+          "held_contradiction"
+        ],
+        "exitBlocked": false,
+        "newAbilityButtons": 0,
+        "targetingAuthority": false,
+        "routeCrossingAuthority": false,
+        "perObjectReactiveStateAuthority": false
+      }
+    },
+    "hostResolution": {
+      "pass": "C0D3-B",
+      "schemaVersion": 1,
+      "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "sequence": 1,
+      "lastSourceCompletionSequence": 1,
+      "acceptedTotal": 1,
+      "rejectedTotal": 0,
+      "duplicateTotal": 0,
+      "prunedTotal": 0,
+      "retainedCount": 1,
+      "lastReceiptId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+      "records": [
+        {
+          "schemaVersion": 1,
+          "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+          "sequence": 1,
+          "kind": "grave_ii_regional_resonance_resolved",
+          "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+          "sourceSystem": "GraveResonanceGameplaySystem",
+          "sourceCompletionSequence": 1,
+          "resolutionId": "shared_memory",
+          "completedAtFrame": 41,
+          "parentVascularEffectId": null,
+          "inheritedVascularMemory": false,
+          "materialTransfer": false,
+          "routeCredit": false,
+          "progressionAuthority": false,
+          "offRouteSimulation": false
+        }
+      ],
+      "materialTransfer": false,
+      "routeCredit": false,
+      "progressionAuthority": false,
+      "offRouteSimulation": false,
+      "persistentAcrossCellsInRuntime": true,
+      "persistsAcrossReload": false
+    }
+  },
+  "debugSix": {
+    "cell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "frame": 46,
+    "credits": {
+      "pass": "HC-031A1",
+      "active": true,
+      "owner": "ReturnRegionEngineSystem",
+      "law": "regional_fundamental_x_octave_resonance_doubles_resolution_3_to_6_to_12",
+      "creditCount": 4,
+      "nextThreshold": 6,
+      "unlockedPhaseCount": 3,
+      "phase1": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase2": {
+        "grave": true,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "graveLayout": {
+        "routeKey": "grave",
+        "equationId": "return_octave_resonance_v2",
+        "inputs": {
+          "visitPhase": 2,
+          "entryCount": 2,
+          "topology": {
+            "deep": 0.333,
+            "inner": 0.333,
+            "membrane": 0.333
+          },
+          "memoryStrength": 0,
+          "reactivePressure": 0,
+          "traceIntegrity": 0.68,
+          "riskPressure": 0,
+          "chord": "idle",
+          "c0d3GraveIIHostMemory": {
+            "applied": false,
+            "inheritedPressure01": 0,
+            "resonanceContribution01": 0,
+            "mode": "authentic_vascular_memory_to_grave_ii_existing_resonance_only"
+          }
+        },
+        "octave": {
+          "fundamentalPhaseCount": 3,
+          "octaveRatio": 2,
+          "octavePhaseCount": 6,
+          "resonance01": 0.562,
+          "resonancePhase": 4.206,
+          "harmonicSpread": 1.116
+        },
+        "outputs": {
+          "depthScale": 1.457,
+          "lateralBias": 0.044,
+          "verticalBias": 0,
+          "compression": 0.719,
+          "echoDensity": 0.409,
+          "instability": 0.1,
+          "twist": -0.039,
+          "resonance01": 0.562,
+          "harmonicSpread": 1.116
+        }
+      },
+      "progressionAuthority": true,
+      "engineUnlockAuthority": true,
+      "routeCrossingAuthority": false,
+      "targetingAuthority": false,
+      "verbAuthority": false,
+      "randomGeneration": false,
+      "lastEvent": "grave_phase_2_credited"
+    },
+    "engine": {
+      "pass": "HC-027B",
+      "active": true,
+      "owner": "CoreEngineSystem",
+      "geometryLaw": "triadic_base_resolves_3_to_6_to_12",
+      "functions": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ],
+      "architectureId": "paired_6",
+      "architectureLabel": "6-phase",
+      "phaseCount": 6,
+      "phasesPerFunction": 2,
+      "resolution": "paired_counterpart_phases_per_function",
+      "firingOrder": [
+        {
+          "index": 0,
+          "function": "pulse",
+          "ordinal": 1,
+          "label": "pulse_1"
+        },
+        {
+          "index": 1,
+          "function": "absorb",
+          "ordinal": 1,
+          "label": "absorb_1"
+        },
+        {
+          "index": 2,
+          "function": "stabilize",
+          "ordinal": 1,
+          "label": "stabilize_1"
+        },
+        {
+          "index": 3,
+          "function": "pulse",
+          "ordinal": 2,
+          "label": "pulse_2"
+        },
+        {
+          "index": 4,
+          "function": "absorb",
+          "ordinal": 2,
+          "label": "absorb_2"
+        },
+        {
+          "index": 5,
+          "function": "stabilize",
+          "ordinal": 2,
+          "label": "stabilize_2"
+        }
+      ],
+      "currentPhaseIndex": 0,
+      "currentPhaseFunction": "pulse",
+      "currentPhaseOrdinal": 1,
+      "currentPhaseLabel": "pulse_1",
+      "cycleProgress01": 0.1238,
+      "cycleCount": 2,
+      "phaseEventCount": 9,
+      "rpm": 3136,
+      "targetRpm": 3136,
+      "rpmMin": 3000,
+      "rpmMax": 10000,
+      "load01": 0.019,
+      "cycleHz": 0.826,
+      "phaseEventsPerSecond": 4.95,
+      "rpmMeaning": "marker_for_current_core_energy_cycling_and_expenditure",
+      "literalMechanicalRpm": false,
+      "architectureDebugCycleCommand": "O",
+      "architectureDebugOnly": false,
+      "progressionUnlockSource": "ReturnRegionEngineSystem",
+      "progressionUnlockedPhaseCount": 3,
+      "defaultArchitecture": "3-phase",
+      "gameplayAuthority": false,
+      "movementAuthority": false,
+      "verbAuthority": false,
+      "chemistryAuthority": false,
+      "coreWorkPlacementAuthority": false,
+      "progressionAuthority": false,
+      "progressionConsumer": true,
+      "growthAuthority": false,
+      "geometryViolationEnabled": false,
+      "nonTriadicArchitectureEnabled": false,
+      "lastEvent": "phase_fire:pulse_1"
+    },
+    "completionEvent": {
+      "pass": "HC-031B",
+      "sequence": 1,
+      "key": "grave:phase_2",
+      "routeKey": "grave",
+      "phase": 2,
+      "resolutionId": "shared_memory",
+      "source": "GraveResonanceGameplaySystem",
+      "frame": 41
+    },
+    "grave": {
+      "pass": "HC-031B",
+      "active": true,
+      "owner": "GraveResonanceGameplaySystem",
+      "law": "touch_one_part_of_the_octave_and_other_parts_answer",
+      "nodes": {
+        "retainedDraw": {
+          "objectId": "residue_silt_cloud_001",
+          "role": "memory_silt",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        },
+        "coherentPush": {
+          "objectId": "scar_lock_plate_001",
+          "role": "protective_scar",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        },
+        "heldEquilibrium": {
+          "objectId": "inheritance_seed_remnant_001",
+          "role": "inheritance_remnant",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        }
+      },
+      "regional": {
+        "mean01": 0.55,
+        "spread01": 0,
+        "variance01": 0,
+        "candidateResolution": "shared_memory",
+        "resolutionHold01": 1
+      },
+      "interactionCount": 3,
+      "touchedNodeCount": 2,
+      "completed": true,
+      "resolutionId": "shared_memory",
+      "lastPropagationEvent": null,
+      "lastEvent": "grave_ii_shared_memory_resolved",
+      "rules": {
+        "exactComboGate": false,
+        "regionalConditionResolution": true,
+        "multipleValidResolutionBands": [
+          "quiet_retention",
+          "shared_memory",
+          "held_contradiction"
+        ],
+        "exitBlocked": false,
+        "newAbilityButtons": 0,
+        "targetingAuthority": false,
+        "routeCrossingAuthority": false,
+        "perObjectReactiveStateAuthority": false
+      }
+    },
+    "hostResolution": {
+      "pass": "C0D3-B",
+      "schemaVersion": 1,
+      "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "sequence": 1,
+      "lastSourceCompletionSequence": 1,
+      "acceptedTotal": 1,
+      "rejectedTotal": 0,
+      "duplicateTotal": 0,
+      "prunedTotal": 0,
+      "retainedCount": 1,
+      "lastReceiptId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+      "records": [
+        {
+          "schemaVersion": 1,
+          "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+          "sequence": 1,
+          "kind": "grave_ii_regional_resonance_resolved",
+          "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+          "sourceSystem": "GraveResonanceGameplaySystem",
+          "sourceCompletionSequence": 1,
+          "resolutionId": "shared_memory",
+          "completedAtFrame": 41,
+          "parentVascularEffectId": null,
+          "inheritedVascularMemory": false,
+          "materialTransfer": false,
+          "routeCredit": false,
+          "progressionAuthority": false,
+          "offRouteSimulation": false
+        }
+      ],
+      "materialTransfer": false,
+      "routeCredit": false,
+      "progressionAuthority": false,
+      "offRouteSimulation": false,
+      "persistentAcrossCellsInRuntime": true,
+      "persistsAcrossReload": false
+    }
+  },
+  "debugTwelve": {
+    "cell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+    "frame": 47,
+    "credits": {
+      "pass": "HC-031A1",
+      "active": true,
+      "owner": "ReturnRegionEngineSystem",
+      "law": "regional_fundamental_x_octave_resonance_doubles_resolution_3_to_6_to_12",
+      "creditCount": 4,
+      "nextThreshold": 6,
+      "unlockedPhaseCount": 3,
+      "phase1": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase2": {
+        "grave": true,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "graveLayout": {
+        "routeKey": "grave",
+        "equationId": "return_octave_resonance_v2",
+        "inputs": {
+          "visitPhase": 2,
+          "entryCount": 2,
+          "topology": {
+            "deep": 0.333,
+            "inner": 0.333,
+            "membrane": 0.333
+          },
+          "memoryStrength": 0,
+          "reactivePressure": 0,
+          "traceIntegrity": 0.68,
+          "riskPressure": 0,
+          "chord": "idle",
+          "c0d3GraveIIHostMemory": {
+            "applied": false,
+            "inheritedPressure01": 0,
+            "resonanceContribution01": 0,
+            "mode": "authentic_vascular_memory_to_grave_ii_existing_resonance_only"
+          }
+        },
+        "octave": {
+          "fundamentalPhaseCount": 3,
+          "octaveRatio": 2,
+          "octavePhaseCount": 6,
+          "resonance01": 0.562,
+          "resonancePhase": 4.206,
+          "harmonicSpread": 1.116
+        },
+        "outputs": {
+          "depthScale": 1.457,
+          "lateralBias": 0.044,
+          "verticalBias": 0,
+          "compression": 0.719,
+          "echoDensity": 0.409,
+          "instability": 0.1,
+          "twist": -0.039,
+          "resonance01": 0.562,
+          "harmonicSpread": 1.116
+        }
+      },
+      "progressionAuthority": true,
+      "engineUnlockAuthority": true,
+      "routeCrossingAuthority": false,
+      "targetingAuthority": false,
+      "verbAuthority": false,
+      "randomGeneration": false,
+      "lastEvent": "grave_phase_2_credited"
+    },
+    "engine": {
+      "pass": "HC-027B",
+      "active": true,
+      "owner": "CoreEngineSystem",
+      "geometryLaw": "triadic_base_resolves_3_to_6_to_12",
+      "functions": [
+        "pulse",
+        "absorb",
+        "stabilize"
+      ],
+      "architectureId": "continuous_12",
+      "architectureLabel": "12-phase",
+      "phaseCount": 12,
+      "phasesPerFunction": 4,
+      "resolution": "four_phase_resolution_per_function",
+      "firingOrder": [
+        {
+          "index": 0,
+          "function": "pulse",
+          "ordinal": 1,
+          "label": "pulse_1"
+        },
+        {
+          "index": 1,
+          "function": "absorb",
+          "ordinal": 1,
+          "label": "absorb_1"
+        },
+        {
+          "index": 2,
+          "function": "stabilize",
+          "ordinal": 1,
+          "label": "stabilize_1"
+        },
+        {
+          "index": 3,
+          "function": "pulse",
+          "ordinal": 2,
+          "label": "pulse_2"
+        },
+        {
+          "index": 4,
+          "function": "absorb",
+          "ordinal": 2,
+          "label": "absorb_2"
+        },
+        {
+          "index": 5,
+          "function": "stabilize",
+          "ordinal": 2,
+          "label": "stabilize_2"
+        },
+        {
+          "index": 6,
+          "function": "pulse",
+          "ordinal": 3,
+          "label": "pulse_3"
+        },
+        {
+          "index": 7,
+          "function": "absorb",
+          "ordinal": 3,
+          "label": "absorb_3"
+        },
+        {
+          "index": 8,
+          "function": "stabilize",
+          "ordinal": 3,
+          "label": "stabilize_3"
+        },
+        {
+          "index": 9,
+          "function": "pulse",
+          "ordinal": 4,
+          "label": "pulse_4"
+        },
+        {
+          "index": 10,
+          "function": "absorb",
+          "ordinal": 4,
+          "label": "absorb_4"
+        },
+        {
+          "index": 11,
+          "function": "stabilize",
+          "ordinal": 4,
+          "label": "stabilize_4"
+        }
+      ],
+      "currentPhaseIndex": 1,
+      "currentPhaseFunction": "absorb",
+      "currentPhaseOrdinal": 1,
+      "currentPhaseLabel": "absorb_1",
+      "cycleProgress01": 0.1238,
+      "cycleCount": 2,
+      "phaseEventCount": 11,
+      "rpm": 3136,
+      "targetRpm": 3136,
+      "rpmMin": 3000,
+      "rpmMax": 10000,
+      "load01": 0.019,
+      "cycleHz": 0.826,
+      "phaseEventsPerSecond": 9.91,
+      "rpmMeaning": "marker_for_current_core_energy_cycling_and_expenditure",
+      "literalMechanicalRpm": false,
+      "architectureDebugCycleCommand": "O",
+      "architectureDebugOnly": false,
+      "progressionUnlockSource": "ReturnRegionEngineSystem",
+      "progressionUnlockedPhaseCount": 3,
+      "defaultArchitecture": "3-phase",
+      "gameplayAuthority": false,
+      "movementAuthority": false,
+      "verbAuthority": false,
+      "chemistryAuthority": false,
+      "coreWorkPlacementAuthority": false,
+      "progressionAuthority": false,
+      "progressionConsumer": true,
+      "growthAuthority": false,
+      "geometryViolationEnabled": false,
+      "nonTriadicArchitectureEnabled": false,
+      "lastEvent": "phase_fire:absorb_1"
+    },
+    "completionEvent": {
+      "pass": "HC-031B",
+      "sequence": 1,
+      "key": "grave:phase_2",
+      "routeKey": "grave",
+      "phase": 2,
+      "resolutionId": "shared_memory",
+      "source": "GraveResonanceGameplaySystem",
+      "frame": 41
+    },
+    "grave": {
+      "pass": "HC-031B",
+      "active": true,
+      "owner": "GraveResonanceGameplaySystem",
+      "law": "touch_one_part_of_the_octave_and_other_parts_answer",
+      "nodes": {
+        "retainedDraw": {
+          "objectId": "residue_silt_cloud_001",
+          "role": "memory_silt",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        },
+        "coherentPush": {
+          "objectId": "scar_lock_plate_001",
+          "role": "protective_scar",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        },
+        "heldEquilibrium": {
+          "objectId": "inheritance_seed_remnant_001",
+          "role": "inheritance_remnant",
+          "level01": 0.55,
+          "propagationImpulse01": 0,
+          "interactionCount": 0
+        }
+      },
+      "regional": {
+        "mean01": 0.55,
+        "spread01": 0,
+        "variance01": 0,
+        "candidateResolution": "shared_memory",
+        "resolutionHold01": 1
+      },
+      "interactionCount": 3,
+      "touchedNodeCount": 2,
+      "completed": true,
+      "resolutionId": "shared_memory",
+      "lastPropagationEvent": null,
+      "lastEvent": "grave_ii_shared_memory_resolved",
+      "rules": {
+        "exactComboGate": false,
+        "regionalConditionResolution": true,
+        "multipleValidResolutionBands": [
+          "quiet_retention",
+          "shared_memory",
+          "held_contradiction"
+        ],
+        "exitBlocked": false,
+        "newAbilityButtons": 0,
+        "targetingAuthority": false,
+        "routeCrossingAuthority": false,
+        "perObjectReactiveStateAuthority": false
+      }
+    },
+    "hostResolution": {
+      "pass": "C0D3-B",
+      "schemaVersion": 1,
+      "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "sequence": 1,
+      "lastSourceCompletionSequence": 1,
+      "acceptedTotal": 1,
+      "rejectedTotal": 0,
+      "duplicateTotal": 0,
+      "prunedTotal": 0,
+      "retainedCount": 1,
+      "lastReceiptId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+      "records": [
+        {
+          "schemaVersion": 1,
+          "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+          "sequence": 1,
+          "kind": "grave_ii_regional_resonance_resolved",
+          "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+          "sourceSystem": "GraveResonanceGameplaySystem",
+          "sourceCompletionSequence": 1,
+          "resolutionId": "shared_memory",
+          "completedAtFrame": 41,
+          "parentVascularEffectId": null,
+          "inheritedVascularMemory": false,
+          "materialTransfer": false,
+          "routeCredit": false,
+          "progressionAuthority": false,
+          "offRouteSimulation": false
+        }
+      ],
+      "materialTransfer": false,
+      "routeCredit": false,
+      "progressionAuthority": false,
+      "offRouteSimulation": false,
+      "persistentAcrossCellsInRuntime": true,
+      "persistsAcrossReload": false
+    }
+  },
+  "errors": []
+}

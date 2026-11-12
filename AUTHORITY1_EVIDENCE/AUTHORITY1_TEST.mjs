@@ -1,0 +1,14 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {RecipeDataSystem} from './src/data/RecipeDataSystem.js';import {HOST_CORE_SOURCE_AUTHORITY as a} from './src/core/HostCoreSourceAuthority.js';
+const old=globalThis.fetch;globalThis.fetch=async p=>{try{return new Response(fs.readFileSync(new URL('./public'+p,import.meta.url)),{status:200});}catch{return new Response('',{status:404});}};
+const d=new RecipeDataSystem();try{await d.loadAll();}finally{globalThis.fetch=old;}
+const layer=JSON.parse(fs.readFileSync(new URL('./public/data/planning/blueprintTranslationLayer_HC003F.json',import.meta.url)));const checks=[];const test=(name,fn)=>{fn();checks.push({name,status:'PASS'});};
+test('Current source package resolves primary rebuild authority',()=>assert.equal(a.sourcePackage,a.rebuildBlueprint+'.zip'));
+test('Compatible detail remains separately identified',()=>assert.equal(a.compatibleDetailSourcePackage,'HOST_CORE_Blueprint_v1_reference_docs.zip'));
+test('Historical checkpoint and strategy labels preserved and qualified',()=>{assert.equal(a.implementationCheckpoint,'HC015N_HOTFIX2');assert.equal(a.activeStrategy,'R0_REBUILD_ARCHITECTURE_REBASELINE');assert.ok(a.activeStrategyRole.includes('historical'));});
+test('Normal loader leaves archival role map unmounted',()=>assert.equal(d.data.blueprintTranslationLayer,null));
+test('Corrected archival role map passes its actual validator',()=>{d.data.blueprintTranslationLayer=structuredClone(layer);d.validateBlueprintTranslationLayer();});
+test('Wrong primary reference is rejected',()=>{d.data.blueprintTranslationLayer={...layer,primaryReference:a.compatibleDetailSourcePackage};assert.throws(()=>d.validateBlueprintTranslationLayer(),/primary reference/);});
+test('Missing compatible detail reference is rejected',()=>{d.data.blueprintTranslationLayer={...layer,compatibleDetailReference:undefined};assert.throws(()=>d.validateBlueprintTranslationLayer(),/primary reference/);});
+for(const rule of layer.architectureRules)test('Missing '+rule+' is rejected',()=>{d.data.blueprintTranslationLayer={...layer,architectureRules:layer.architectureRules.filter(x=>x!==rule)};assert.throws(()=>d.validateBlueprintTranslationLayer(),/architecture rule/);});
+test('Historical ID, build and next-pass IDs are retained',()=>{assert.equal(layer.id,'HC003F_BLUEPRINT_TRANSLATION_LAYER');assert.equal(layer.build,'HC-006H');assert.equal(layer.nextRecommendedPass.id,'HC-006I');assert.equal(layer.nextRecommendedPass.historicalRecommendation,true);});
+const report={pass:'AUTHORITY1',checks,summary:{passed:checks.length,failed:0},archiveQualification:'Full legacy_archive validation fails with the same pre-existing Grave cell status error before and after this patch. Targeted translation validator passes.'};fs.writeFileSync(new URL('../audit/authority1/contracts.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report.summary));

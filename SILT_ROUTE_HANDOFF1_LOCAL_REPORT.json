@@ -1,0 +1,51 @@
+{
+  "pass": "SILT-ROUTE-HANDOFF1",
+  "scope": "isolated exact production route method bodies with real contact/grip/seat/trajectory/ledger helpers; controlled release/unmount fixtures",
+  "sourceRouteSHA256": "6090c5b0ec1834ef51e8fe8e2df401b79b1b4de4e66e12b9c45d6d11e023ed0b",
+  "checks": [
+    {
+      "name": "Free deliberate release preserves held ID and creates one Host observation",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated release input cannot mint another trajectory or Host observation",
+      "status": "PASS"
+    },
+    {
+      "name": "Imprinted braced contact seats the same grain and cancels free trajectory",
+      "status": "PASS"
+    },
+    {
+      "name": "Absorb withdrawal cannot seat an imprinted grain",
+      "status": "PASS"
+    },
+    {
+      "name": "Unimprinted contact follows free release rather than seating",
+      "status": "PASS"
+    },
+    {
+      "name": "Release flushes pending absorb displacement under original held ID once",
+      "status": "PASS"
+    },
+    {
+      "name": "Unmount releases locally, restores ledger ownership and grants no Host disturbance",
+      "status": "PASS"
+    },
+    {
+      "name": "Unmount repairs stale grip ledger owners within the same ledger only",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0
+  },
+  "notVerified": [
+    "full route module evaluation under Three.js",
+    "camera-based acquisition or seated extraction",
+    "full update scheduling and post-grip ledger reconciliation",
+    "actual authored recipe and geometry",
+    "live controls, camera, audio, feel",
+    "intermittent disappearance"
+  ]
+}

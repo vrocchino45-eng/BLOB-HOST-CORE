@@ -1,0 +1,1490 @@
+{
+  "pass": "HOST-CAUSE1-BROWSER",
+  "fixture": {
+    "scope": "Player placed at authored vessel midpoint and rendering-only camera fixed for visibility. Global clock, Host owner, flow/visual outputs, credits and receiver are not staged.",
+    "startClock": 1.2333999999999652
+  },
+  "natural": [
+    {
+      "clock": 1.3350999999999187,
+      "phase": "waiting",
+      "amplitude": 0,
+      "host": {
+        "pass": "HOST-CAUSE1",
+        "schemaVersion": 1,
+        "owner": "HostConditionSystem",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "anatomyId": "vascular_routes",
+        "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+        "externalCause": "predatory_pressure",
+        "clockSource": "runtimeSeconds",
+        "sampledAtSeconds": 1.3350999999999187,
+        "enabled": true,
+        "active": false,
+        "phase": "waiting",
+        "amplitude": 0,
+        "episodeIndex": null,
+        "episodeId": null,
+        "maxFlowReduction": 0.03,
+        "maxVisualCompression": 0.08,
+        "reason": "authored_episode",
+        "localPhysicsAuthority": false,
+        "materialTransfer": false,
+        "progressionAuthority": false,
+        "persistsAcrossReload": false,
+        "simulatedPredatoryHostAI": false
+      },
+      "response": {
+        "active": false,
+        "amplitude": 0,
+        "flowScale": 1,
+        "visualCompression": 0,
+        "phase": "waiting",
+        "episodeId": null,
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+      },
+      "visual": {
+        "active": false,
+        "foldCount": 0,
+        "radialCompression": 0,
+        "episodeId": null,
+        "presentationOnly": true,
+        "collisionMutation": false,
+        "receiverMutation": false
+      },
+      "physicalFeel": {
+        "viscosity": 0.31,
+        "pressure": 0.84,
+        "flowVector": {
+          "x": 0.46125570956356843,
+          "y": -0.08702937916293745,
+          "z": -0.720603259469122
+        },
+        "boundaryBehavior": "vascular_living_contraction_current",
+        "materialPassageOpen": false,
+        "materialPassageStrength": 0,
+        "movementBounds": {
+          "active": true,
+          "mode": "entry_anchored_ellipsoid",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "radii": {
+            "x": 4.5,
+            "y": 3.2,
+            "z": 22.5
+          },
+          "owner": "PlayerMovementController",
+          "tuningOwner": "VascularRhythmRouteSystem",
+          "regionId": "vascular_route",
+          "centerSource": "preserved_gate_entry_position",
+          "restoresPriorBoundaryOnExit": true
+        },
+        "routeFeelProfile": "vascular_directional_circulation_hc018c",
+        "accelerationScale": 1.04,
+        "speedScale": 1.02,
+        "boostScale": 1,
+        "flowCouplingScale": 1.34,
+        "withFlowSpeedBonus": 0.24,
+        "againstFlowSpeedPenalty": 0.2,
+        "spatialFeel": {
+          "progress": 0.5026728441499532,
+          "centerlineDistance": 0.1967949311867983,
+          "flowStrength": 0.8600000000000001,
+          "baseFlowStrength": 0.8600000000000001,
+          "turbulence": 0,
+          "traversalMaterialMode": "ride_current",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": false,
+            "amplitude": 0,
+            "flowScale": 1,
+            "visualCompression": 0,
+            "phase": "waiting",
+            "episodeId": null,
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "matched_current_rewards_directional_flow"
+        }
+      },
+      "receiver": {
+        "pass": "LS1E2",
+        "owner": "VascularRhythmRouteSystem",
+        "sourceCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "receiverCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "mode": "bounded_local_membrane_response",
+        "receivedTotal": 0,
+        "lastSourceSequence": 0,
+        "sourceReceiptGaps": 0,
+        "lastReceiptId": null,
+        "lastSubjectId": null,
+        "membraneLoad": 0,
+        "directionalFlowScale": 1,
+        "localResponseApplied": false,
+        "recentReceipts": [],
+        "noMaterialArrival": true,
+        "noNewMaterial": true,
+        "altersProgression": false,
+        "altersCadenceReads": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "receiverEvents": {
+        "pass": "C0D1-A",
+        "schemaVersion": 1,
+        "owner": "VascularSiltSignalReceiver",
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "lastAppliedEffectSequence": 0,
+        "prunedEffects": 0,
+        "retainedCount": 0,
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistsAcrossReload": false
+      },
+      "credits": 0,
+      "completion": null,
+      "folds": [
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        }
+      ]
+    },
+    {
+      "clock": 12.078199999999994,
+      "phase": "rising",
+      "amplitude": 0.0020029902394070828,
+      "host": {
+        "pass": "HOST-CAUSE1",
+        "schemaVersion": 1,
+        "owner": "HostConditionSystem",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "anatomyId": "vascular_routes",
+        "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+        "externalCause": "predatory_pressure",
+        "clockSource": "runtimeSeconds",
+        "sampledAtSeconds": 12.078199999999994,
+        "enabled": true,
+        "active": true,
+        "phase": "rising",
+        "amplitude": 0.0020029902394070828,
+        "episodeIndex": 0,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "maxFlowReduction": 0.03,
+        "maxVisualCompression": 0.08,
+        "reason": "authored_episode",
+        "localPhysicsAuthority": false,
+        "materialTransfer": false,
+        "progressionAuthority": false,
+        "persistsAcrossReload": false,
+        "simulatedPredatoryHostAI": false
+      },
+      "response": {
+        "active": true,
+        "amplitude": 0.0020029902394070828,
+        "flowScale": 0.9999399102928178,
+        "visualCompression": 0.00016023921915256663,
+        "phase": "rising",
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+      },
+      "visual": {
+        "active": true,
+        "foldCount": 9,
+        "radialCompression": 0.00016023921915256663,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "presentationOnly": true,
+        "collisionMutation": false,
+        "receiverMutation": false
+      },
+      "physicalFeel": {
+        "viscosity": 0.31,
+        "pressure": 0.6,
+        "flowVector": {
+          "x": 0.1187596234934847,
+          "y": 0.07600615903583022,
+          "z": -0.5419239139254695
+        },
+        "boundaryBehavior": "vascular_living_contraction_current",
+        "materialPassageOpen": false,
+        "materialPassageStrength": 0,
+        "movementBounds": {
+          "active": true,
+          "mode": "entry_anchored_ellipsoid",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "radii": {
+            "x": 4.5,
+            "y": 3.2,
+            "z": 22.5
+          },
+          "owner": "PlayerMovementController",
+          "tuningOwner": "VascularRhythmRouteSystem",
+          "regionId": "vascular_route",
+          "centerSource": "preserved_gate_entry_position",
+          "restoresPriorBoundaryOnExit": true
+        },
+        "routeFeelProfile": "vascular_directional_circulation_hc018c",
+        "accelerationScale": 1.04,
+        "speedScale": 1.02,
+        "boostScale": 1,
+        "flowCouplingScale": 1.34,
+        "withFlowSpeedBonus": 0.24,
+        "againstFlowSpeedPenalty": 0.2,
+        "spatialFeel": {
+          "progress": 1,
+          "centerlineDistance": 0.9754932112117888,
+          "flowStrength": 0.5599663497639781,
+          "baseFlowStrength": 0.56,
+          "turbulence": 0,
+          "traversalMaterialMode": "ride_current",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": true,
+            "amplitude": 0.0020029902394070828,
+            "flowScale": 0.9999399102928178,
+            "visualCompression": 0.00016023921915256663,
+            "phase": "rising",
+            "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "matched_current_rewards_directional_flow"
+        }
+      },
+      "receiver": {
+        "pass": "LS1E2",
+        "owner": "VascularRhythmRouteSystem",
+        "sourceCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "receiverCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "mode": "bounded_local_membrane_response",
+        "receivedTotal": 0,
+        "lastSourceSequence": 0,
+        "sourceReceiptGaps": 0,
+        "lastReceiptId": null,
+        "lastSubjectId": null,
+        "membraneLoad": 0,
+        "directionalFlowScale": 1,
+        "localResponseApplied": false,
+        "recentReceipts": [],
+        "noMaterialArrival": true,
+        "noNewMaterial": true,
+        "altersProgression": false,
+        "altersCadenceReads": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "receiverEvents": {
+        "pass": "C0D1-A",
+        "schemaVersion": 1,
+        "owner": "VascularSiltSignalReceiver",
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "lastAppliedEffectSequence": 0,
+        "prunedEffects": 0,
+        "retainedCount": 0,
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistsAcrossReload": false
+      },
+      "credits": 0,
+      "completion": null,
+      "folds": [
+        {
+          "scale": [
+            0.9998397607808475,
+            0.78,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.92,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.78,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.92,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.78,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.92,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.78,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.92,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9998397607808475,
+            0.78,
+            0.9998998504880297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24024035882872885,
+          "emissive": 0.11056083726703399,
+          "collider": false
+        }
+      ]
+    },
+    {
+      "clock": 15.093000000000025,
+      "phase": "holding",
+      "amplitude": 1,
+      "host": {
+        "pass": "HOST-CAUSE1",
+        "schemaVersion": 1,
+        "owner": "HostConditionSystem",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "anatomyId": "vascular_routes",
+        "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+        "externalCause": "predatory_pressure",
+        "clockSource": "runtimeSeconds",
+        "sampledAtSeconds": 15.093000000000025,
+        "enabled": true,
+        "active": true,
+        "phase": "holding",
+        "amplitude": 1,
+        "episodeIndex": 0,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "maxFlowReduction": 0.03,
+        "maxVisualCompression": 0.08,
+        "reason": "authored_episode",
+        "localPhysicsAuthority": false,
+        "materialTransfer": false,
+        "progressionAuthority": false,
+        "persistsAcrossReload": false,
+        "simulatedPredatoryHostAI": false
+      },
+      "response": {
+        "active": true,
+        "amplitude": 1,
+        "flowScale": 0.97,
+        "visualCompression": 0.08,
+        "phase": "holding",
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+      },
+      "visual": {
+        "active": true,
+        "foldCount": 9,
+        "radialCompression": 0.08,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "presentationOnly": true,
+        "collisionMutation": false,
+        "receiverMutation": false
+      },
+      "physicalFeel": {
+        "viscosity": 0.31168,
+        "pressure": 0.60112,
+        "flowVector": {
+          "x": 0.11660079141664714,
+          "y": 0.07332659321040211,
+          "z": -0.5256977855337044
+        },
+        "boundaryBehavior": "vascular_living_contraction_current",
+        "materialPassageOpen": false,
+        "materialPassageStrength": 0,
+        "movementBounds": {
+          "active": true,
+          "mode": "entry_anchored_ellipsoid",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "radii": {
+            "x": 4.5,
+            "y": 3.2,
+            "z": 22.5
+          },
+          "owner": "PlayerMovementController",
+          "tuningOwner": "VascularRhythmRouteSystem",
+          "regionId": "vascular_route",
+          "centerSource": "preserved_gate_entry_position",
+          "restoresPriorBoundaryOnExit": true
+        },
+        "routeFeelProfile": "vascular_directional_circulation_hc018c",
+        "accelerationScale": 1.03916,
+        "speedScale": 1.02,
+        "boostScale": 1,
+        "flowCouplingScale": 1.34,
+        "withFlowSpeedBonus": 0.24,
+        "againstFlowSpeedPenalty": 0.2,
+        "spatialFeel": {
+          "progress": 0.9883562041499163,
+          "centerlineDistance": 1.462123735477586,
+          "flowStrength": 0.5432,
+          "baseFlowStrength": 0.56,
+          "turbulence": 0.007,
+          "traversalMaterialMode": "ride_current",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": true,
+            "amplitude": 1,
+            "flowScale": 0.97,
+            "visualCompression": 0.08,
+            "phase": "holding",
+            "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "matched_current_rewards_directional_flow"
+        }
+      },
+      "receiver": {
+        "pass": "LS1E2",
+        "owner": "VascularRhythmRouteSystem",
+        "sourceCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "receiverCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "mode": "bounded_local_membrane_response",
+        "receivedTotal": 0,
+        "lastSourceSequence": 0,
+        "sourceReceiptGaps": 0,
+        "lastReceiptId": null,
+        "lastSubjectId": null,
+        "membraneLoad": 0,
+        "directionalFlowScale": 1,
+        "localResponseApplied": false,
+        "recentReceipts": [],
+        "noMaterialArrival": true,
+        "noNewMaterial": true,
+        "altersProgression": false,
+        "altersCadenceReads": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "receiverEvents": {
+        "pass": "C0D1-A",
+        "schemaVersion": 1,
+        "owner": "VascularSiltSignalReceiver",
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "lastAppliedEffectSequence": 0,
+        "prunedEffects": 0,
+        "retainedCount": 0,
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistsAcrossReload": false
+      },
+      "credits": 0,
+      "completion": null,
+      "folds": [
+        {
+          "scale": [
+            0.92,
+            0.78,
+            0.95
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.92,
+            0.95
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.78,
+            0.95
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.92,
+            0.95
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.78,
+            0.95
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.92,
+            0.95
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.78,
+            0.95
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.92,
+            0.95
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.92,
+            0.78,
+            0.95
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.36,
+          "emissive": 0.39,
+          "collider": false
+        }
+      ]
+    },
+    {
+      "clock": 18.07820000000008,
+      "phase": "recovering",
+      "amplitude": 0.9994948245534063,
+      "host": {
+        "pass": "HOST-CAUSE1",
+        "schemaVersion": 1,
+        "owner": "HostConditionSystem",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "anatomyId": "vascular_routes",
+        "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+        "externalCause": "predatory_pressure",
+        "clockSource": "runtimeSeconds",
+        "sampledAtSeconds": 18.07820000000008,
+        "enabled": true,
+        "active": true,
+        "phase": "recovering",
+        "amplitude": 0.9994948245534063,
+        "episodeIndex": 0,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "maxFlowReduction": 0.03,
+        "maxVisualCompression": 0.08,
+        "reason": "authored_episode",
+        "localPhysicsAuthority": false,
+        "materialTransfer": false,
+        "progressionAuthority": false,
+        "persistsAcrossReload": false,
+        "simulatedPredatoryHostAI": false
+      },
+      "response": {
+        "active": true,
+        "amplitude": 0.9994948245534063,
+        "flowScale": 0.9700151552633978,
+        "visualCompression": 0.07995958596427251,
+        "phase": "recovering",
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+      },
+      "visual": {
+        "active": true,
+        "foldCount": 9,
+        "radialCompression": 0.07995958596427251,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "presentationOnly": true,
+        "collisionMutation": false,
+        "receiverMutation": false
+      },
+      "physicalFeel": {
+        "viscosity": 0.3618313600000002,
+        "pressure": 0.8745542400000001,
+        "flowVector": {
+          "x": 0.21683675616461995,
+          "y": 0.10914465163299784,
+          "z": -0.8073342127913228
+        },
+        "boundaryBehavior": "vascular_living_contraction_current",
+        "materialPassageOpen": false,
+        "materialPassageStrength": 0,
+        "movementBounds": {
+          "active": true,
+          "mode": "entry_anchored_ellipsoid",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "radii": {
+            "x": 4.5,
+            "y": 3.2,
+            "z": 22.5
+          },
+          "owner": "PlayerMovementController",
+          "tuningOwner": "VascularRhythmRouteSystem",
+          "regionId": "vascular_route",
+          "centerSource": "preserved_gate_entry_position",
+          "restoresPriorBoundaryOnExit": true
+        },
+        "routeFeelProfile": "vascular_directional_circulation_hc018c",
+        "accelerationScale": 1.0140843199999998,
+        "speedScale": 1.02,
+        "boostScale": 1,
+        "flowCouplingScale": 1.34,
+        "withFlowSpeedBonus": 0.24,
+        "againstFlowSpeedPenalty": 0.2,
+        "spatialFeel": {
+          "progress": 0.9433140434439494,
+          "centerlineDistance": 2.1467438737269084,
+          "flowStrength": 0.8342130335265222,
+          "baseFlowStrength": 0.8600000000000001,
+          "turbulence": 0.21596400000000096,
+          "traversalMaterialMode": "ride_current",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": true,
+            "amplitude": 0.9994948245534063,
+            "flowScale": 0.9700151552633978,
+            "visualCompression": 0.07995958596427251,
+            "phase": "recovering",
+            "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "matched_current_rewards_directional_flow"
+        }
+      },
+      "receiver": {
+        "pass": "LS1E2",
+        "owner": "VascularRhythmRouteSystem",
+        "sourceCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "receiverCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "mode": "bounded_local_membrane_response",
+        "receivedTotal": 0,
+        "lastSourceSequence": 0,
+        "sourceReceiptGaps": 0,
+        "lastReceiptId": null,
+        "lastSubjectId": null,
+        "membraneLoad": 0,
+        "directionalFlowScale": 1,
+        "localResponseApplied": false,
+        "recentReceipts": [],
+        "noMaterialArrival": true,
+        "noNewMaterial": true,
+        "altersProgression": false,
+        "altersCadenceReads": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "receiverEvents": {
+        "pass": "C0D1-A",
+        "schemaVersion": 1,
+        "owner": "VascularSiltSignalReceiver",
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "lastAppliedEffectSequence": 0,
+        "prunedEffects": 0,
+        "retainedCount": 0,
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistsAcrossReload": false
+      },
+      "credits": 0,
+      "completion": null,
+      "folds": [
+        {
+          "scale": [
+            0.9200404140357274,
+            0.78,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.92,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.78,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.92,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.78,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.92,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.78,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.92,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        },
+        {
+          "scale": [
+            0.9200404140357274,
+            0.78,
+            0.9500252587723297
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.35993937894640876,
+          "emissive": 0.3898585508749538,
+          "collider": false
+        }
+      ]
+    },
+    {
+      "clock": 24.007700000000163,
+      "phase": "resting",
+      "amplitude": 0,
+      "host": {
+        "pass": "HOST-CAUSE1",
+        "schemaVersion": 1,
+        "owner": "HostConditionSystem",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "anatomyId": "vascular_routes",
+        "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+        "externalCause": "predatory_pressure",
+        "clockSource": "runtimeSeconds",
+        "sampledAtSeconds": 24.007700000000163,
+        "enabled": true,
+        "active": false,
+        "phase": "resting",
+        "amplitude": 0,
+        "episodeIndex": 0,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "maxFlowReduction": 0.03,
+        "maxVisualCompression": 0.08,
+        "reason": "authored_episode",
+        "localPhysicsAuthority": false,
+        "materialTransfer": false,
+        "progressionAuthority": false,
+        "persistsAcrossReload": false,
+        "simulatedPredatoryHostAI": false
+      },
+      "response": {
+        "active": false,
+        "amplitude": 0,
+        "flowScale": 1,
+        "visualCompression": 0,
+        "phase": "resting",
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+      },
+      "visual": {
+        "active": false,
+        "foldCount": 0,
+        "radialCompression": 0,
+        "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+        "presentationOnly": true,
+        "collisionMutation": false,
+        "receiverMutation": false
+      },
+      "physicalFeel": {
+        "viscosity": 0.46144695999999985,
+        "pressure": 0.7009646399999999,
+        "flowVector": {
+          "x": 0.1628535738553376,
+          "y": 0.006861250586188736,
+          "z": -0.541956479931654
+        },
+        "boundaryBehavior": "vascular_recoverable_desynchronization_recoil",
+        "materialPassageOpen": false,
+        "materialPassageStrength": 0,
+        "movementBounds": {
+          "active": true,
+          "mode": "entry_anchored_ellipsoid",
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "radii": {
+            "x": 4.5,
+            "y": 3.2,
+            "z": 22.5
+          },
+          "owner": "PlayerMovementController",
+          "tuningOwner": "VascularRhythmRouteSystem",
+          "regionId": "vascular_route",
+          "centerSource": "preserved_gate_entry_position",
+          "restoresPriorBoundaryOnExit": true
+        },
+        "routeFeelProfile": "vascular_directional_circulation_hc018c",
+        "accelerationScale": 0.9642765200000001,
+        "speedScale": 1.02,
+        "boostScale": 1,
+        "flowCouplingScale": 1.34,
+        "withFlowSpeedBonus": 0.24,
+        "againstFlowSpeedPenalty": 0.2,
+        "spatialFeel": {
+          "progress": 0.8621139496905157,
+          "centerlineDistance": 3.1761467647931028,
+          "flowStrength": 0.56,
+          "baseFlowStrength": 0.56,
+          "turbulence": 0.6310289999999994,
+          "traversalMaterialMode": "turbulent_current",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": false,
+            "amplitude": 0,
+            "flowScale": 1,
+            "visualCompression": 0,
+            "phase": "resting",
+            "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "turbulent_current_fights_clean_alignment"
+        }
+      },
+      "receiver": {
+        "pass": "LS1E2",
+        "owner": "VascularRhythmRouteSystem",
+        "sourceCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "receiverCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "mode": "bounded_local_membrane_response",
+        "receivedTotal": 0,
+        "lastSourceSequence": 0,
+        "sourceReceiptGaps": 0,
+        "lastReceiptId": null,
+        "lastSubjectId": null,
+        "membraneLoad": 0,
+        "directionalFlowScale": 1,
+        "localResponseApplied": false,
+        "recentReceipts": [],
+        "noMaterialArrival": true,
+        "noNewMaterial": true,
+        "altersProgression": false,
+        "altersCadenceReads": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "receiverEvents": {
+        "pass": "C0D1-A",
+        "schemaVersion": 1,
+        "owner": "VascularSiltSignalReceiver",
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "lastAppliedEffectSequence": 0,
+        "prunedEffects": 0,
+        "retainedCount": 0,
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistsAcrossReload": false
+      },
+      "credits": 0,
+      "completion": null,
+      "folds": [
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.92,
+            1
+          ],
+          "base": [
+            1,
+            0.92,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        },
+        {
+          "scale": [
+            1,
+            0.78,
+            1
+          ],
+          "base": [
+            1,
+            0.78,
+            1
+          ],
+          "opacity": 0.24,
+          "emissive": 0.11,
+          "collider": false
+        }
+      ]
+    }
+  ],
+  "hiddenBefore": {
+    "elapsed": 25.544000000000167,
+    "clock": 26.737500000000182
+  },
+  "hiddenAfter": {
+    "elapsed": 25.544000000000167,
+    "clock": 27.21500000000019
+  },
+  "remount": {
+    "host": {
+      "pass": "HOST-CAUSE1",
+      "schemaVersion": 1,
+      "owner": "HostConditionSystem",
+      "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+      "anatomyId": "vascular_routes",
+      "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+      "externalCause": "predatory_pressure",
+      "clockSource": "runtimeSeconds",
+      "sampledAtSeconds": 27.365000000000194,
+      "enabled": true,
+      "active": false,
+      "phase": "resting",
+      "amplitude": 0,
+      "episodeIndex": 0,
+      "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+      "maxFlowReduction": 0.03,
+      "maxVisualCompression": 0.08,
+      "reason": "authored_episode",
+      "localPhysicsAuthority": false,
+      "materialTransfer": false,
+      "progressionAuthority": false,
+      "persistsAcrossReload": false,
+      "simulatedPredatoryHostAI": false
+    },
+    "response": {
+      "active": false,
+      "amplitude": 0,
+      "flowScale": 1,
+      "visualCompression": 0,
+      "phase": "resting",
+      "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+      "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+    },
+    "credits": 0
+  },
+  "errors": []
+}

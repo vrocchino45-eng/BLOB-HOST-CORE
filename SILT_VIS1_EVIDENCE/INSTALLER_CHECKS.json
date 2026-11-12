@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "checks": [
+    "apply accepts exact baseline and writes exact payload",
+    "backup preserves exact original",
+    "repeat apply is idempotent",
+    "restore returns exact original",
+    "different source rejected without overwrite",
+    "restore refuses later edits"
+  ]
+}

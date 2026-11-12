@@ -1,0 +1,30 @@
+{
+  "pass": "BOT-TIMING1",
+  "scope": "Bot tools only; no production gameplay changes",
+  "files": {
+    "run.mjs": {
+      "beforeSha256": "593610e81fe7265bdd7aba61f524644569c6158759248f88f5f5ff28d6cc2f6e",
+      "afterSha256": "d26a120d1901fbabb911824b5e47a57276d45169b1f0940118097d3f5ffe86ff"
+    },
+    "cases/browser.mjs": {
+      "beforeSha256": "d0506506db9835819e79120052e15127600a7adaa5105e90eefa90408e646ad1",
+      "afterSha256": "0f8a1ab6a51a1069c0367f4736f69c561d9aa0a1b6c4af523fccaf6b04defafc"
+    },
+    "cases/browser-arc.mjs": {
+      "beforeSha256": "1c6141a8bce5eb2dccb3c03a1fdf5e08e3a1f1bbfbf72168a5eac299cde274e3",
+      "afterSha256": "5a126c879b3852cf2cbe82799d1667b933d422bb24292257e954fe746dffca0c"
+    },
+    "cases/simulation-clock.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "57468dafc8727d26ed916d44a9b806a95afc2cb76427418a406ca4e9ba6f1f25"
+    }
+  },
+  "artifactHashes": {
+    "BLOB_BOT_SERIES1/TIMING1.md": "67118b9cb0e333cf1a63bb12e9c3eeac3208eb7cde6bfaa515f2d6fc8bd18d0f",
+    "BLOB_BOT_SERIES1/TIMING1_EVIDENCE.json": "3fb25ed13c1009724ed6eb361d4eb58d4f9b23362b46861d096124697b4d9767",
+    "BLOB_BOT_SERIES1/cases/browser-arc.mjs": "5a126c879b3852cf2cbe82799d1667b933d422bb24292257e954fe746dffca0c",
+    "BLOB_BOT_SERIES1/cases/browser.mjs": "0f8a1ab6a51a1069c0367f4736f69c561d9aa0a1b6c4af523fccaf6b04defafc",
+    "BLOB_BOT_SERIES1/cases/simulation-clock.mjs": "57468dafc8727d26ed916d44a9b806a95afc2cb76427418a406ca4e9ba6f1f25",
+    "BLOB_BOT_SERIES1/run.mjs": "d26a120d1901fbabb911824b5e47a57276d45169b1f0940118097d3f5ffe86ff"
+  }
+}

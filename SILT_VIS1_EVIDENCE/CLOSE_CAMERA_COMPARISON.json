@@ -1,0 +1,639 @@
+{
+  "scope": "Controlled frozen camera sweep, independent of release; all-sided comparison covers named visual geology only, restored after each view. Fixed camera release uses existing debug shelf staging.",
+  "meta": {
+    "player": [
+      -5.35,
+      -0.74,
+      -10.4
+    ],
+    "camera": [
+      0.5086101314228193,
+      4.6436367339184965,
+      9.115783787538428
+    ],
+    "root": {
+      "visible": true,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "meshCount": 174,
+    "fog": 0.045,
+    "lobes": [
+      {
+        "name": "silt_reservoir_irregular_inward_stone_stratum",
+        "center": [
+          1.1,
+          -0.43,
+          -12.2
+        ],
+        "radii": [
+          3.35,
+          2,
+          3.4
+        ],
+        "opacity": 0.22419999999999998
+      },
+      {
+        "name": "silt_garden_irregular_inward_stone_stratum",
+        "center": [
+          -5.35,
+          -0.74,
+          -10.4
+        ],
+        "radii": [
+          3.15,
+          2.35,
+          3.3
+        ],
+        "opacity": 0.59
+      },
+      {
+        "name": "silt_veins_irregular_inward_stone_stratum",
+        "center": [
+          5.8,
+          -0.62,
+          -16.2
+        ],
+        "radii": [
+          2.85,
+          2.2,
+          3.25
+        ],
+        "opacity": 0.22419999999999998
+      }
+    ],
+    "attachment": {
+      "pass": "HC-031L",
+      "active": false,
+      "state": "free",
+      "authority": "none",
+      "adhesionStrength": 0,
+      "authoredSuctionSupportActive": false,
+      "authoredSuctionSupportCount": 0,
+      "authoredSuctionSupportStrength": 0,
+      "authoredSuctionSupportSurfaceId": "none",
+      "anchorCarriedSurfaceIdentityActive": false,
+      "anchorCarriedSurfaceId": "none",
+      "anchorCarriedSurfaceProfileId": "none",
+      "anchorCarriedSurfaceMaterialFamily": "none",
+      "anchorCarriedSurfaceAdhesion": 0,
+      "anchorCarriedSurfaceLoadTolerance": 0,
+      "anchorCarriedSurfaceCompliance": 0,
+      "anchorCarriedSurfaceVerbTransmission": {
+        "pulse": 0,
+        "absorb": 0,
+        "stabilize": 0
+      },
+      "siltSurfaceAlignment": 0,
+      "releaseTension": 0,
+      "peelIntent01": 0,
+      "peelHoldAge": 0,
+      "releaseArmed": false,
+      "detachReason": "none",
+      "reacquireBlocked": false,
+      "reacquireCandidateSurfaceId": "none",
+      "reacquireUnblockReason": "none",
+      "reacquireUnblockFromSurfaceId": "none",
+      "reacquireUnblockToSurfaceId": "none",
+      "releaseSurfaceId": "none",
+      "releaseClearance": 0,
+      "ownerSurfaceId": "none",
+      "ownerAuthority": "none",
+      "acquireAge": 0,
+      "contactGapActive": false,
+      "contactGapAge": 0,
+      "contactGapTolerance": 0.3,
+      "continuityMode": "none",
+      "supportIdentityTransferCount": 0,
+      "surfaceTangentSpeed": 0.111,
+      "momentumHandoffMode": "none",
+      "landingHandoffAge": 99,
+      "landingHandoffDuration": 0.38,
+      "landingCarry01": 0,
+      "landingEntrySpeed": 0,
+      "landingEntryTangentialSpeed": 0,
+      "landingRetainedTangentialSpeed": 0,
+      "releaseInheritedTangentialSpeed": 0,
+      "releaseNormalImpulse": 0,
+      "pulsePeelAssist": 0,
+      "verbPhysicalGrammarMode": "idle",
+      "verbPhysicalRelationshipSource": "none",
+      "verbEnvironmentalFlowMultiplier": 1,
+      "verbSurfaceTractionMultiplier": 1,
+      "tendrilLocomotionActive": false,
+      "tendrilSupportCount": 0,
+      "tendrilTraction01": 0,
+      "tendrilLeadingAnchorIndex": -1,
+      "tendrilLoadPulse01": 0,
+      "tendrilPullAcceleration": 0,
+      "tendrilLeadingAnchorWorld": null,
+      "standOffDistance": 0.3,
+      "tendrilSupportPlaneActive": false,
+      "tendrilSupportPlaneQuality01": 0,
+      "tendrilSupportPlaneCount": 0,
+      "tendrilSupportPlaneSurfaceId": "none",
+      "tendrilSupportRideHeightError": 0,
+      "surfaceTruthActive": false,
+      "surfaceTruthDistance": null,
+      "surfaceTruthMeshName": "none",
+      "surfaceTruthSurfaceId": "none",
+      "surfaceTruthProfileId": "none",
+      "surfaceTruthMaterialFamily": "none",
+      "surfaceTruthAdhesion": 0.75,
+      "surfaceTruthLoadTolerance": 0.7,
+      "surfaceTruthCompliance": 0.5,
+      "surfaceTruthVerbTransmission": {
+        "pulse": 0.5,
+        "absorb": 0.5,
+        "stabilize": 0.5
+      },
+      "boundaryProximity": 0,
+      "boundaryNormalizedDistance": 0.005,
+      "shellNormalizedDistance": 0.955,
+      "releaseCooldown": 0,
+      "siltZoneId": "none",
+      "surfaceCoverageClass": "region_local_envelope",
+      "surfaceCoverageLabel": "route-local",
+      "surfaceCoverageRegionId": "silt_burrow_route",
+      "surfaceCoverageTuningOwner": "Act1RouteContractSystem",
+      "interiorDecorativeGeometryContactable": false,
+      "usesTrustedMovementBoundaryOnly": false,
+      "visibleSurfaceTruthPreferred": false,
+      "authoredEcologicalSurfaceTruthPreferred": true,
+      "genericVisibleMeshSurfaceTruthAllowed": false,
+      "authoredBoundaryFallback": true,
+      "requiresSiltMembrane": false,
+      "legacySiltMembraneAttachmentSupported": true,
+      "authoredSuctionSupportCanAttach": true,
+      "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+      "usesSiltWorldAlignment": true,
+      "addsCollider": false,
+      "addsRaycast": false,
+      "progressionAuthority": false
+    }
+  },
+  "records": [
+    {
+      "key": "d2.65_y0",
+      "distance": 2.65,
+      "yaw": 0,
+      "camera": [
+        -5.35,
+        0.13450000000000006,
+        -7.75
+      ],
+      "rootVisible": true,
+      "geoVisible": true,
+      "attachmentActive": false
+    },
+    {
+      "key": "d2.65_y90",
+      "distance": 2.65,
+      "yaw": 1.5707963267948966,
+      "camera": [
+        -2.6999999999999997,
+        0.13450000000000006,
+        -10.4
+      ],
+      "rootVisible": true,
+      "geoVisible": true,
+      "attachmentActive": false
+    },
+    {
+      "key": "d2.65_y180",
+      "distance": 2.65,
+      "yaw": 3.141592653589793,
+      "camera": [
+        -5.35,
+        0.13450000000000006,
+        -13.05
+      ],
+      "rootVisible": true,
+      "geoVisible": true,
+      "attachmentActive": false
+    },
+    {
+      "key": "d2.65_y270",
+      "distance": 2.65,
+      "yaw": 4.71238898038469,
+      "camera": [
+        -8,
+        0.13450000000000006,
+        -10.4
+      ],
+      "rootVisible": true,
+      "geoVisible": true,
+      "attachmentActive": false
+    }
+  ],
+  "release": {
+    "before": {
+      "snapshot": {
+        "ms": 8111,
+        "frame": 36,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1726,
+          "y": -0.1561,
+          "z": -2.6628
+        },
+        "shelf": {
+          "present": true,
+          "visible": true,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": true,
+          "eligible": true,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "profile": "residue_weak",
+          "distance": 0.3468,
+          "reason": "none",
+          "point": {
+            "x": -0.1733,
+            "y": -0.5104,
+            "z": -2.6615
+          },
+          "normal": {
+            "x": 0.0077,
+            "y": 0.9996,
+            "z": -0.0265
+          },
+          "candidateCount": 1,
+          "probeCandidates": 1
+        },
+        "capability": {
+          "authoredCount": 1,
+          "surfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "finding": "authored_surface_mechanically_reachable",
+          "nearestValid": true
+        },
+        "contact": {
+          "state": "attached",
+          "requested": "attached",
+          "suppressed": false,
+          "sealed": 1,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": true,
+          "truthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "locomotionActive": true,
+          "supportCount": 1,
+          "carriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "anchors": [
+            {
+              "phase": "sealed",
+              "sealed": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": true,
+          "supportCount": 1,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "reason": "none",
+          "quality": 0.273,
+          "normal": {
+            "x": -0.02,
+            "y": 0.9998,
+            "z": 0.0037
+          }
+        },
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 1
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": true,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": true,
+          "liveTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "playerWorld": {
+            "x": -0.1726,
+            "y": -0.1561,
+            "z": -2.6628
+          },
+          "playerToCarriedMesh": {
+            "status": "measured",
+            "distance": 0.3542,
+            "point": {
+              "x": -0.1765,
+              "y": -0.5101,
+              "z": -2.6543
+            },
+            "triangles": 624,
+            "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+            "meshUuid": "f6969259-2f4e-4358-8f72-a782e5732112"
+          },
+          "availableSurfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "sealed",
+              "planted": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9518
+              },
+              "playerToAnchor": 0.4561,
+              "geometry": {
+                "status": "measured",
+                "distance": 0.0151,
+                "point": {
+                  "x": -0.18,
+                  "y": -0.5239,
+                  "z": -2.9505
+                },
+                "triangles": 624,
+                "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+                "meshUuid": "f6969259-2f4e-4358-8f72-a782e5732112"
+              }
+            },
+            {
+              "index": 1,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 1,
+          "measuredCount": 1,
+          "maxPlantedAnchorToMesh": 0.0151,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "attached"
+        }
+      },
+      "root": true,
+      "geology": true,
+      "camera": [
+        0.37586875691713095,
+        4.385953305079429,
+        6.857584615106925
+      ]
+    },
+    "after": {
+      "snapshot": {
+        "ms": 8293,
+        "frame": 46,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1657,
+          "y": -0.0603,
+          "z": -2.676
+        },
+        "shelf": {
+          "present": true,
+          "visible": true,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": true,
+          "eligible": true,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "profile": "residue_weak",
+          "distance": 0.4244,
+          "reason": "none",
+          "point": {
+            "x": -0.1662,
+            "y": -0.5108,
+            "z": -2.6746
+          },
+          "normal": {
+            "x": 0.0077,
+            "y": 0.9996,
+            "z": -0.0265
+          },
+          "candidateCount": 1,
+          "probeCandidates": 1
+        },
+        "capability": {
+          "authoredCount": 1,
+          "surfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "finding": "authored_surface_mechanically_reachable",
+          "nearestValid": true
+        },
+        "contact": {
+          "state": "releasing",
+          "requested": "releasing",
+          "suppressed": false,
+          "sealed": 0,
+          "reaching": 0,
+          "peeling": 3,
+          "truthActive": true,
+          "truthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "locomotionActive": false,
+          "supportCount": 0,
+          "carriedSurfaceId": "none",
+          "anchors": [
+            {
+              "phase": "peeling",
+              "sealed": false,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            },
+            {
+              "phase": "peeling",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "peeling",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": false,
+          "supportCount": 0,
+          "surfaceId": "none",
+          "reason": "no_sealed_anchor_with_carried_surface_identity",
+          "quality": 0,
+          "normal": null
+        },
+        "attachment": {
+          "active": false,
+          "state": "releasing",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "deliberate_away_input",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 0
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": false,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": true,
+          "liveTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "playerWorld": {
+            "x": -0.1657,
+            "y": -0.0603,
+            "z": -2.676
+          },
+          "playerToCarriedMesh": {
+            "status": "measured",
+            "distance": 0.4503,
+            "point": {
+              "x": -0.1692,
+              "y": -0.5105,
+              "z": -2.6641
+            },
+            "triangles": 624,
+            "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+            "meshUuid": "f6969259-2f4e-4358-8f72-a782e5732112"
+          },
+          "availableSurfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "peeling",
+              "planted": false,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9518
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 1,
+              "phase": "peeling",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": 0.1094,
+                "y": -0.5155,
+                "z": -2.7736
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "peeling",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.3466,
+                "y": -0.5157,
+                "z": -2.9122
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 0,
+          "measuredCount": 0,
+          "maxPlantedAnchorToMesh": null,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "releasing"
+        }
+      },
+      "root": true,
+      "geology": true,
+      "camera": [
+        0.37586875691713095,
+        4.385953305079429,
+        6.857584615106925
+      ]
+    }
+  },
+  "errors": []
+}

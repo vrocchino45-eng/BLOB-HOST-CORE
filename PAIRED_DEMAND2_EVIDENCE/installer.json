@@ -1,0 +1,15 @@
+{
+  "summary": {
+    "passed": 7,
+    "failed": 0
+  },
+  "checks": [
+    "both known baselines accepted",
+    "exact two-file apply and backup",
+    "idempotence",
+    "exact two-file restore",
+    "unknown src/player/CoreRadialPerformanceSystem.js prevents any apply/restore writes",
+    "unknown src/ui/PlaytestHudSystem.js prevents any apply/restore writes",
+    "second payload corruption rejected before first write"
+  ]
+}

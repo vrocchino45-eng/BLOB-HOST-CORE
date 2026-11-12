@@ -1,0 +1,172 @@
+{
+  "id": "HC003F_BLUEPRINT_TRANSLATION_LAYER",
+  "build": "HC-006H",
+  "status": "active_true_source_rebaseline",
+  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "largerNorthStarReferences": [
+    "reference_docs/HOST_CORE_Blueprint_v1.md",
+    "reference_docs/HOST_CORE_Implementation_Plan_v1.md",
+    "reference_docs/HOST_CORE_Controls_UI_Camera_v1.md",
+    "reference_docs/HOST_CORE_Chemistry_Core_Growth_v1.md",
+    "reference_docs/HOST_CORE_Region_Grammar_v1.md"
+  ],
+  "translationRule": "Modes own scene behavior. Systems own reusable gameplay. Registries own authored content. UI displays state only. Authored GateSystem thresholds are valid; arbitrary teleports, branch menus, and legacy stage graphs are not.",
+  "activeHostCoreTruth": {
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "hostType": "Nursery Host",
+    "condition": [
+      "wounded",
+      "fraying",
+      "protective"
+    ],
+    "playerRole": "becoming-core awakened during reseeding instability",
+    "primaryConflict": "protect new becoming while metabolizing old wounds"
+  },
+  "firstPlayableMinute": {
+    "requiredCells": [
+      "CELL_MEMBRANE_NURSERY_001",
+      "CELL_SCAR_FLOW_FOLD_001",
+      "CELL_SIGNAL_CHORUS_NERVE_001"
+    ],
+    "optionalBeyondMinuteFork": "CELL_BLOOM_RESIDUE_FORK_001",
+    "decision": "The first playable minute ends once Signal Chorus teaches response/listening. Bloom Residue remains playable but is treated as the first beyond-minute fork."
+  },
+  "localCellToBlueprintRole": [
+    {
+      "cellId": "CELL_MEMBRANE_NURSERY_001",
+      "cellName": "Membrane Nursery Pocket",
+      "hostAnatomy": "membrane_layer",
+      "blueprintRole": "Surface Wake",
+      "roleType": "awakening / first contact",
+      "whatItTeaches": [
+        "the player is a small seed-core inside a macro host",
+        "movement is soft and viscous",
+        "safe seed matter can be absorbed",
+        "the Guide is an interpreter, not a menu"
+      ],
+      "legacyNameHandling": "Surface Wake is the authored first-slice region role; the current local cell is its runtime expression pending registry rebind.",
+      "mustNotAdd": [
+        "arbitrary teleport",
+        "UI-owned progression",
+        "renderer-owned gate completion"
+      ]
+    },
+    {
+      "cellId": "CELL_SCAR_FLOW_FOLD_001",
+      "cellName": "Scar-Flow Fold",
+      "hostAnatomy": "scar_fields / vascular pressure fold",
+      "blueprintRole": "Guide Threshold",
+      "roleType": "first danger-meaning / threshold without gate",
+      "whatItTeaches": [
+        "scar matter remembers pressure",
+        "not everything should be absorbed",
+        "pulse can read, not just activate",
+        "morphing is tissue recomposition rather than a door"
+      ],
+      "legacyNameHandling": "Guide Threshold is an authored threshold role. The living tissue fold may later bind to GateSystem without becoming a hard door or teleport.",
+      "mustNotAdd": [
+        "arbitrary door",
+        "teleport",
+        "single-button auto-cross",
+        "renderer-owned crossing state"
+      ]
+    },
+    {
+      "cellId": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "cellName": "Signal Chorus Nerve",
+      "hostAnatomy": "signal_choir_tissue",
+      "blueprintRole": "Hub Chamber / route-awareness function",
+      "roleType": "first route readability / listening before choosing",
+      "whatItTeaches": [
+        "the host answers through tone and signal",
+        "route logic should emerge from response, not a menu",
+        "the player can tune relation before expanding",
+        "the first playable minute can lock before broader branching"
+      ],
+      "legacyNameHandling": "Signal Chorus currently provides route-awareness behavior, but it is a functional proxy rather than a completed Hub Chamber implementation.",
+      "mustNotAdd": [
+        "branch menu as world substitute",
+        "hub teleport list",
+        "UI-owned route state"
+      ]
+    },
+    {
+      "cellId": "CELL_BLOOM_RESIDUE_FORK_001",
+      "cellName": "Bloom Residue Fork",
+      "hostAnatomy": "bloom_organs / residue_beds",
+      "blueprintRole": "beyond-minute first fork pressure",
+      "roleType": "optional extension / future first route pressure",
+      "whatItTeaches": [
+        "growth and memory can split the next path",
+        "bloom is tempting but must be stabilized",
+        "residue carries inherited cost",
+        "the player is approaching route choice, not opening a menu"
+      ],
+      "legacyNameHandling": "This is not Aperture Fields yet. It is the first readable fork pressure after the required opening minute.",
+      "mustNotAdd": [
+        "fifth cell",
+        "Act 2 field",
+        "route selector UI",
+        "Aperture gate"
+      ]
+    }
+  ],
+  "legacyBlueprintRoleMap": [
+    {
+      "legacyRole": "Surface Wake",
+      "currentExpression": "CELL_MEMBRANE_NURSERY_001",
+      "translationStatus": "runtime_expression_requires_registry_rebind",
+      "notes": "Embryonic awakening, first movement, first safe nourishment."
+    },
+    {
+      "legacyRole": "Guide Threshold",
+      "currentExpression": "CELL_SCAR_FLOW_FOLD_001",
+      "translationStatus": "runtime_expression_can_bind_authored_gate_system",
+      "notes": "Threshold remains living tissue, but authored GateSystem ownership is valid under the true blueprint."
+    },
+    {
+      "legacyRole": "Hub Chamber",
+      "currentExpression": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "translationStatus": "functional_proxy_not_first_slice_lock",
+      "notes": "Signal Chorus supplies route awareness; a real Hub Chamber registry/mode pass is still required."
+    },
+    {
+      "legacyRole": "Graveyard / Grave Route",
+      "currentExpression": "future residue-scar route branch",
+      "translationStatus": "planned_not_runtime_active",
+      "notes": "Likely best first route after HC-003 lock because Scar/Bloom/Residue already point toward memory and inheritance."
+    },
+    {
+      "legacyRole": "Comb Threshold \u2192 Aperture Fields",
+      "currentExpression": "future end-of-Act-1 expansion",
+      "translationStatus": "not_current_scope",
+      "notes": "Do not implement until the first route branch is stable."
+    }
+  ],
+  "debugReadout": {
+    "compactLine": "Blueprint Role",
+    "showActiveCellRole": true,
+    "showLegacyRuntimeWarning": true,
+    "warning": "True source active: authored living gates are valid; arbitrary doors, teleports, menus, and legacy stage graphs are not."
+  },
+  "nextRecommendedPass": {
+    "id": "HC-006I",
+    "label": "First-Slice Runtime Ownership Rebind",
+    "mode": "architecture_convergence",
+    "reason": "Bind Surface Wake, Guide Threshold, and the Hub Chamber role to explicit mode/system/registry ownership before adding more route content."
+  },
+  "noLegacyRuntimeWarning": {
+    "strictMarker": "authored gates valid; arbitrary transitions forbidden",
+    "plainLanguage": "Use GateSystem for authored living thresholds. Do not restore arbitrary doors, teleports, branch menus, renderer-owned progression, or legacy stage graphs.",
+    "permissionWarning": "Blueprint roles authorize their documented systems, including GateSystem. They do not authorize old one-off transition code.",
+    "forbiddenRuntimeArchitecture": [
+      "arbitrary doors",
+      "teleports",
+      "branch-menu world replacement",
+      "renderer-owned progression",
+      "legacy stage-node graph",
+      "hidden chamber-specific transition hacks"
+    ],
+    "allowedTranslation": "Surface Wake, Guide Threshold, and Hub Chamber may use authored registries, modes, ObjectiveSystem, and GateSystem while preserving living-world continuity."
+  }
+}

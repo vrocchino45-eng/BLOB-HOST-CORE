@@ -1,0 +1,169 @@
+{
+  "status": "OFFLINE PROPOSAL ONLY; NO PRODUCTION CHANGE",
+  "coefficient": 0.2,
+  "scope": "Actual radial owner versus in-memory candidate formula; controlled topology, input, reserve and 1.2 composition multiplier; not natural gameplay or feel acceptance.",
+  "checks": [
+    {
+      "name": "deep: existing owner is architecture independent",
+      "status": "PASS"
+    },
+    {
+      "name": "deep: proposed three-phase remains exactly baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "deep: idle preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "deep: absorb preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "deep: boost preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "deep: boost-pair preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "deep: paired demand stays positive and no worse than baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: existing owner is architecture independent",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: proposed three-phase remains exactly baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: idle preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: absorb preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: boost preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: boost-pair preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "inner: paired demand stays positive and no worse than baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: existing owner is architecture independent",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: proposed three-phase remains exactly baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: idle preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: absorb preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: boost preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: boost-pair preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "membrane: paired demand stays positive and no worse than baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: existing owner is architecture independent",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: proposed three-phase remains exactly baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: idle preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: absorb preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: boost preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: boost-pair preserves baseline",
+      "status": "PASS"
+    },
+    {
+      "name": "balanced: paired demand stays positive and no worse than baseline",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 28,
+    "failed": 0
+  },
+  "rows": [
+    {
+      "topology": "deep",
+      "initialReserve": 1,
+      "seconds": 5,
+      "current3ReservePercent": 80.22160659819998,
+      "current6ReservePercent": 80.22160659819998,
+      "proposed6ReservePercent": 82.04373445255631,
+      "proposedGainPercentagePoints": 1.8221278543563257,
+      "currentFinalDemand": 1,
+      "proposedFinalDemand": 1
+    },
+    {
+      "topology": "inner",
+      "initialReserve": 1,
+      "seconds": 5,
+      "current3ReservePercent": 63.73312739495128,
+      "current6ReservePercent": 63.73312739495128,
+      "proposed6ReservePercent": 67.18211518821857,
+      "proposedGainPercentagePoints": 3.4489877932672885,
+      "currentFinalDemand": 1,
+      "proposedFinalDemand": 1
+    },
+    {
+      "topology": "membrane",
+      "initialReserve": 1,
+      "seconds": 5,
+      "current3ReservePercent": 14.201932508105198,
+      "current6ReservePercent": 14.201932508105198,
+      "proposed6ReservePercent": 22.70080571004518,
+      "proposedGainPercentagePoints": 8.498873201939983,
+      "currentFinalDemand": 1,
+      "proposedFinalDemand": 1
+    },
+    {
+      "topology": "balanced",
+      "initialReserve": 1,
+      "seconds": 5,
+      "current3ReservePercent": 63.518317896592045,
+      "current6ReservePercent": 63.518317896592045,
+      "proposed6ReservePercent": 67.00394856847512,
+      "proposedGainPercentagePoints": 3.4856306718830776,
+      "currentFinalDemand": 1,
+      "proposedFinalDemand": 1
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+[GSL4E2D] {
+  event: 'none',
+  selectedMode: 'companion',
+  selected: false,
+  applied: false,
+  finalGuideState: 'hover_slightly_ahead',
+  finalOwner: 'companion_available',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'no_active_gsl_response',
+  guideTarget: 'player',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'deliberate_release',
+  selectedMode: 'companion',
+  selected: false,
+  applied: false,
+  finalGuideState: 'hover_slightly_ahead',
+  finalOwner: 'companion_available',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'no_active_gsl_response',
+  guideTarget: 'player',
+  attached: false,
+  detachReason: 'deliberate_release'
+}
+[GSL4E2D] {
+  event: 'unexpected_loss',
+  selectedMode: 'concern',
+  selected: true,
+  applied: true,
+  finalGuideState: 'gsl_concern',
+  finalOwner: 'gsl_response',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'none',
+  guideTarget: 'player',
+  attached: false,
+  detachReason: 'unexpected_loss'
+}
+[GSL4E2D] {
+  event: 'attachment_recovered',
+  selectedMode: 'support',
+  selected: true,
+  applied: true,
+  finalGuideState: 'gsl_support',
+  finalOwner: 'gsl_response',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'none',
+  guideTarget: 'player',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'unexpected_loss',
+  selectedMode: 'concern',
+  selected: true,
+  applied: false,
+  finalGuideState: 'guide_attending_core_work',
+  finalOwner: 'authored_guide',
+  authoredOverride: true,
+  ownerReasons: [
+    'core_work',
+    'authored_shimmer',
+    'authored_target:player_core_work_surface'
+  ],
+  suppressionReason: 'core_work,authored_shimmer,authored_target:player_core_work_surface',
+  guideTarget: 'player_core_work_surface',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'unexpected_loss',
+  selectedMode: 'concern',
+  selected: true,
+  applied: false,
+  finalGuideState: 'interpreting_grave_memory_from_clear_perch',
+  finalOwner: 'authored_guide',
+  authoredOverride: true,
+  ownerReasons: [ 'authored_target:grave_memory_consequence' ],
+  suppressionReason: 'authored_target:grave_memory_consequence',
+  guideTarget: 'grave_memory_consequence',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'unexpected_loss',
+  selectedMode: 'concern',
+  selected: true,
+  applied: false,
+  finalGuideState: 'answering_player_pulse',
+  finalOwner: 'pulse_response',
+  authoredOverride: true,
+  ownerReasons: [ 'pulse_response' ],
+  suppressionReason: 'pulse_final_override',
+  guideTarget: 'player',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'unexpected_loss',
+  selectedMode: 'concern',
+  selected: true,
+  applied: true,
+  finalGuideState: 'gsl_concern',
+  finalOwner: 'gsl_response',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'none',
+  guideTarget: 'player',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'attachment_recovered',
+  selectedMode: 'support',
+  selected: true,
+  applied: true,
+  finalGuideState: 'gsl_support',
+  finalOwner: 'gsl_response',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'none',
+  guideTarget: 'player',
+  attached: true,
+  detachReason: 'none'
+}
+[GSL4E2D] {
+  event: 'unexpected_loss',
+  selectedMode: 'concern',
+  selected: true,
+  applied: true,
+  finalGuideState: 'gsl_concern',
+  finalOwner: 'gsl_response',
+  authoredOverride: false,
+  ownerReasons: [],
+  suppressionReason: 'none',
+  guideTarget: 'player',
+  attached: true,
+  detachReason: 'none'
+}
+{
+  "pass": "GSL-4E2G-STAGE2A-R",
+  "scope": "production OrbiterSystem, controlled adapter responses; not production LS1 adapter",
+  "checks": [
+    {
+      "name": "B01 attached neutral -> companion, no GSL takeover",
+      "status": "PASS"
+    },
+    {
+      "name": "B02 deliberate release -> no fabricated concern",
+      "status": "PASS"
+    },
+    {
+      "name": "B03 unexpected loss -> concern when companion owns movement",
+      "status": "PASS"
+    },
+    {
+      "name": "B04 recovery -> support when companion owns movement",
+      "status": "PASS"
+    },
+    {
+      "name": "B06 Core Work -> movement preserved and expression suppressed",
+      "status": "PASS"
+    },
+    {
+      "name": "B07 authored Guide target retains movement",
+      "status": "PASS"
+    },
+    {
+      "name": "B07 pulse overrides GSL movement",
+      "status": "PASS"
+    },
+    {
+      "name": "B08 GSL disabled -> original Guide and no expression",
+      "status": "PASS"
+    },
+    {
+      "name": "B08 disabled after active expression -> smooth decay",
+      "status": "PASS"
+    },
+    {
+      "name": "B10 repeated identical input -> stable owner and finite expression",
+      "status": "PASS"
+    },
+    {
+      "name": "Guide integration never mutates LS1 attachment",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0
+  },
+  "notVerified": [
+    "B05 real adapter recovery timeout",
+    "B09 real adapter rapid-event cooldown",
+    "LS1 attachment producer -> real GSL4E2B adapter end-to-end",
+    "visual rendering and human feel"
+  ]
+}

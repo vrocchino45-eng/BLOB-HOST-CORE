@@ -1,0 +1,925 @@
+{
+  "pass": "BOT-STEERING1",
+  "dateLocal": "2026-11-10",
+  "userRun": "2026-11-11T02-21-01-244Z",
+  "diagnosis": {
+    "clock": 30.900000000000304,
+    "receiverDistanceAtFailure": 13.413601422200209,
+    "vascularGoal": {
+      "pass": "VASCULAR-II1",
+      "eligible": true,
+      "active": true,
+      "stage": "receiver_pending",
+      "completed": false,
+      "completionPublished": false,
+      "handoffId": "vascular:handoff:1",
+      "sourcePulseId": 1,
+      "sourceHoldSeconds": 0.18,
+      "sourceHoldAtProjection": 0.18,
+      "travelProgress": 1,
+      "settleProgress": 0,
+      "completionSequence": 0,
+      "sourceRole": "branch",
+      "receiverRole": "intake",
+      "completionKey": "vascular:phase_2",
+      "materialTransfer": false,
+      "offRouteSimulation": false,
+      "crossingAuthority": false
+    },
+    "browserErrors": [],
+    "productionFilesUnchanged": true,
+    "navigationSamples": 3,
+    "navigationWallSeconds": 26.341,
+    "navigationSimulationSeconds": 2.10000000000003
+  },
+  "normalFullB03": {
+    "suite": "BLOB-BOT-SERIES1",
+    "mode": "--browser",
+    "selectedCase": "B03",
+    "startedAt": "2026-11-11T02:31:21.344Z",
+    "runId": "2026-11-11T02-31-21-298Z",
+    "baseline": "HOST-TRACE1",
+    "qualification": "Scripted bots and controlled owner/receipt fixtures. No claim of human feel, physical controller delivery, autonomous exploration or a from-zero campaign.",
+    "results": [
+      {
+        "id": "D01",
+        "name": "Data profiles and invalid archive data",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "M01",
+        "name": "Conserved Silt material loop",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "M02",
+        "name": "Core Work grip handoff",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "G01",
+        "name": "Vascular paired handoff",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "G02",
+        "name": "Silt goal negative receipts",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "synthetic_receipts"
+      },
+      {
+        "id": "G03",
+        "name": "Six-credit owner integration",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "H01",
+        "name": "Host cycle owner and hidden-region handling",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "H02",
+        "name": "Six-cycle recovery against neutral twin",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "T01",
+        "name": "Read-only Host telemetry export",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "P01",
+        "name": "Paired reserve and credit boundary",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "B01",
+        "name": "Host cycle and real telemetry download",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "running_browser"
+      },
+      {
+        "id": "B02",
+        "name": "Held-grain mode interruption and reacquisition",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "running_browser"
+      },
+      {
+        "id": "B03",
+        "name": "Regional goals, six-phase, Hub and reserve arc",
+        "status": "PASS",
+        "tier": "running_browser",
+        "checksPassed": 1,
+        "checksFailed": 0,
+        "expectedChecks": 1,
+        "durationSeconds": 74.3,
+        "exitCode": 0,
+        "timedOut": false,
+        "report": "B03.json",
+        "error": null
+      }
+    ],
+    "productionFilesUnchanged": true,
+    "sourceFingerprint": "7e3f3ff5a958d0d88014c7d1d29c3da612ec431dc88bad397296e77dd5ece55d",
+    "summary": {
+      "passed": 1,
+      "failed": 0,
+      "blocked": 0,
+      "notRun": 12,
+      "checksPassed": 1
+    },
+    "completedAt": "2026-11-11T02:32:35.700Z"
+  },
+  "slowVascularControl": {
+    "scope": "Vascular steering control only; 2000ms frame delay, 8000ms evaluation return delay during steering, Host peak wait omitted; no clock or physics injection.",
+    "summary": {
+      "suite": "BLOB-BOT-SERIES1",
+      "mode": "--all",
+      "selectedCase": "B03",
+      "startedAt": "2026-11-11T02:32:58.736Z",
+      "runId": "2026-11-11T02-32-58-542Z",
+      "baseline": "HOST-TRACE1",
+      "qualification": "Scripted bots and controlled owner/receipt fixtures. No claim of human feel, physical controller delivery, autonomous exploration or a from-zero campaign.",
+      "results": [
+        {
+          "id": "D01",
+          "name": "Data profiles and invalid archive data",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "M01",
+          "name": "Conserved Silt material loop",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "M02",
+          "name": "Core Work grip handoff",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "G01",
+          "name": "Vascular paired handoff",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "G02",
+          "name": "Silt goal negative receipts",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "synthetic_receipts"
+        },
+        {
+          "id": "G03",
+          "name": "Six-credit owner integration",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "H01",
+          "name": "Host cycle owner and hidden-region handling",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "H02",
+          "name": "Six-cycle recovery against neutral twin",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "T01",
+          "name": "Read-only Host telemetry export",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "P01",
+          "name": "Paired reserve and credit boundary",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "B01",
+          "name": "Host cycle and real telemetry download",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "running_browser"
+        },
+        {
+          "id": "B02",
+          "name": "Held-grain mode interruption and reacquisition",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "running_browser"
+        },
+        {
+          "id": "B03",
+          "name": "Regional goals, six-phase, Hub and reserve arc",
+          "status": "PASS",
+          "tier": "running_browser",
+          "checksPassed": 1,
+          "checksFailed": 0,
+          "expectedChecks": 1,
+          "durationSeconds": 69.5,
+          "exitCode": 0,
+          "timedOut": false,
+          "report": "B03.json",
+          "error": null
+        }
+      ],
+      "productionFilesUnchanged": true,
+      "sourceFingerprint": "7e3f3ff5a958d0d88014c7d1d29c3da612ec431dc88bad397296e77dd5ece55d",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 12,
+        "checksPassed": 1
+      },
+      "completedAt": "2026-11-11T02:34:08.300Z"
+    },
+    "stages": [
+      {
+        "label": "qualified source",
+        "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "goal": {
+          "pass": "VASCULAR-II1",
+          "eligible": false,
+          "active": false,
+          "stage": "dormant",
+          "completed": false,
+          "completionPublished": false,
+          "handoffId": null,
+          "sourcePulseId": null,
+          "sourceHoldSeconds": 0,
+          "sourceHoldAtProjection": 0,
+          "travelProgress": 0,
+          "settleProgress": 0,
+          "completionSequence": 0,
+          "sourceRole": "branch",
+          "receiverRole": "intake",
+          "completionKey": "vascular:phase_2",
+          "materialTransfer": false,
+          "offRouteSimulation": false,
+          "crossingAuthority": false
+        },
+        "credits": 3,
+        "engine": 3,
+        "position": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "source": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "receiver": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ],
+        "visual": {
+          "root": false,
+          "packet": true,
+          "packetPosition": [
+            0,
+            0,
+            0
+          ]
+        },
+        "nextAction": "Ride to the next valve and hold Stabilize to establish a relationship with the current.",
+        "host": {
+          "pass": "HOST-CAUSE1",
+          "schemaVersion": 1,
+          "owner": "HostConditionSystem",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "anatomyId": "vascular_routes",
+          "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+          "externalCause": "predatory_pressure",
+          "clockSource": "runtimeSeconds",
+          "sampledAtSeconds": 0.15,
+          "enabled": true,
+          "active": false,
+          "phase": "waiting",
+          "amplitude": 0,
+          "episodeIndex": null,
+          "episodeId": null,
+          "maxFlowReduction": 0.03,
+          "maxVisualCompression": 0.08,
+          "reason": "authored_episode",
+          "localPhysicsAuthority": false,
+          "materialTransfer": false,
+          "progressionAuthority": false,
+          "persistsAcrossReload": false,
+          "simulatedPredatoryHostAI": false
+        },
+        "hostResponse": {
+          "active": false,
+          "amplitude": 0,
+          "flowScale": 1,
+          "visualCompression": 0,
+          "phase": "waiting",
+          "episodeId": null,
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+        }
+      },
+      {
+        "label": "projected current",
+        "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "goal": {
+          "pass": "VASCULAR-II1",
+          "eligible": true,
+          "active": true,
+          "stage": "handoff_travel",
+          "completed": false,
+          "completionPublished": false,
+          "handoffId": "vascular:handoff:1",
+          "sourcePulseId": 1,
+          "sourceHoldSeconds": 0.18,
+          "sourceHoldAtProjection": 0.18,
+          "travelProgress": 0.049999999999999996,
+          "settleProgress": 0,
+          "completionSequence": 0,
+          "sourceRole": "branch",
+          "receiverRole": "intake",
+          "completionKey": "vascular:phase_2",
+          "materialTransfer": false,
+          "offRouteSimulation": false,
+          "crossingAuthority": false
+        },
+        "credits": 4,
+        "engine": 3,
+        "position": [
+          1.614024578298939,
+          0.170133851660162,
+          -10.893565656623716
+        ],
+        "source": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "receiver": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ],
+        "visual": {
+          "root": true,
+          "packet": true,
+          "packetPosition": [
+            1.3984427092494647,
+            0.15364684550478191,
+            -10.736331183726893
+          ]
+        },
+        "nextAction": "Follow the gold current response toward the green intake valve.",
+        "host": {
+          "pass": "HOST-CAUSE1",
+          "schemaVersion": 1,
+          "owner": "HostConditionSystem",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "anatomyId": "vascular_routes",
+          "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+          "externalCause": "predatory_pressure",
+          "clockSource": "runtimeSeconds",
+          "sampledAtSeconds": 0.7500000000000001,
+          "enabled": true,
+          "active": false,
+          "phase": "waiting",
+          "amplitude": 0,
+          "episodeIndex": null,
+          "episodeId": null,
+          "maxFlowReduction": 0.03,
+          "maxVisualCompression": 0.08,
+          "reason": "authored_episode",
+          "localPhysicsAuthority": false,
+          "materialTransfer": false,
+          "progressionAuthority": false,
+          "persistsAcrossReload": false,
+          "simulatedPredatoryHostAI": false
+        },
+        "hostResponse": {
+          "active": false,
+          "amplitude": 0,
+          "flowScale": 1,
+          "visualCompression": 0,
+          "phase": "waiting",
+          "episodeId": null,
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+        }
+      },
+      {
+        "label": "settled and credited",
+        "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "goal": {
+          "pass": "VASCULAR-II1",
+          "eligible": true,
+          "active": true,
+          "stage": "completed",
+          "completed": true,
+          "completionPublished": true,
+          "handoffId": "vascular:handoff:1",
+          "sourcePulseId": 1,
+          "sourceHoldSeconds": 0.18,
+          "sourceHoldAtProjection": 0.18,
+          "travelProgress": 1,
+          "settleProgress": 1,
+          "completionSequence": 1,
+          "sourceRole": "branch",
+          "receiverRole": "intake",
+          "completionKey": "vascular:phase_2",
+          "materialTransfer": false,
+          "offRouteSimulation": false,
+          "crossingAuthority": false
+        },
+        "credits": 5,
+        "engine": 3,
+        "event": {
+          "pass": "EARNED-REGION-PHASE2-1",
+          "schemaVersion": 1,
+          "key": "vascular:phase_2",
+          "routeKey": "vascular",
+          "phase": 2,
+          "sequence": 1,
+          "source": "VascularRhythmRouteSystem",
+          "frame": 24,
+          "evidenceId": "vascular:handoff:1",
+          "sourcePulseId": 1,
+          "receiverSettleSeconds": 0.75,
+          "materialTransfer": false
+        },
+        "position": [
+          0.009574087634400614,
+          0.4117450954911106,
+          -5.258148163358898
+        ],
+        "source": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "receiver": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ],
+        "visual": {
+          "root": false,
+          "packet": true,
+          "packetPosition": [
+            -0.7949583966504195,
+            0.6062734088194878,
+            -5.508539129198519
+          ]
+        },
+        "nextAction": "Paired return current settled. Follow the gold current into the open entry fold.",
+        "host": {
+          "pass": "HOST-CAUSE1",
+          "schemaVersion": 1,
+          "owner": "HostConditionSystem",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "anatomyId": "vascular_routes",
+          "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+          "externalCause": "predatory_pressure",
+          "clockSource": "runtimeSeconds",
+          "sampledAtSeconds": 4.6499999999999915,
+          "enabled": true,
+          "active": false,
+          "phase": "waiting",
+          "amplitude": 0,
+          "episodeIndex": null,
+          "episodeId": null,
+          "maxFlowReduction": 0.03,
+          "maxVisualCompression": 0.08,
+          "reason": "authored_episode",
+          "localPhysicsAuthority": false,
+          "materialTransfer": false,
+          "progressionAuthority": false,
+          "persistsAcrossReload": false,
+          "simulatedPredatoryHostAI": false
+        },
+        "hostResponse": {
+          "active": false,
+          "amplitude": 0,
+          "flowScale": 1,
+          "visualCompression": 0,
+          "phase": "waiting",
+          "episodeId": null,
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+        }
+      }
+    ],
+    "steering": {
+      "mode": "vascular",
+      "done": true,
+      "error": null,
+      "samples": [
+        {
+          "clock": 0.7500000000000001,
+          "distance": 5.915397483516054,
+          "position": [
+            1.614024578298939,
+            0.170133851660162,
+            -10.893565656623716
+          ],
+          "velocity": {
+            "x": 0.36237188990290514,
+            "y": 0.09820492399062442,
+            "z": 0.53322030804329
+          },
+          "keys": [
+            "KeyS",
+            "KeyA",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 0.9000000000000002,
+          "distance": 5.71815354884226,
+          "position": [
+            1.5478460620794328,
+            0.2295911019116217,
+            -10.71110173967765
+          ],
+          "velocity": {
+            "x": -0.8488103217813895,
+            "y": 0.5288273469764234,
+            "z": 1.5323372089071832
+          },
+          "keys": [
+            "KeyS",
+            "KeyA",
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.0500000000000003,
+          "distance": 5.360948890811017,
+          "position": [
+            1.3379325042831018,
+            0.25727682707337907,
+            -10.41453044600009
+          ],
+          "velocity": {
+            "x": -1.6416254884245858,
+            "y": 0.032384302732192755,
+            "z": 2.1722289687470298
+          },
+          "keys": [
+            "KeyS",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.2000000000000004,
+          "distance": 4.883254355425004,
+          "position": [
+            1.1200710999101762,
+            0.32634586189159726,
+            -9.99189453509164
+          ],
+          "velocity": {
+            "x": -1.3565170530299075,
+            "y": 0.6468720148971783,
+            "z": 3.082500446934079
+          },
+          "keys": [
+            "KeyS",
+            "KeyA",
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.3500000000000005,
+          "distance": 4.358415529527106,
+          "position": [
+            0.8656402480466182,
+            0.3683069647265637,
+            -9.531171357073593
+          ],
+          "velocity": {
+            "x": -1.8431402497668734,
+            "y": 0.11722301436049891,
+            "z": 3.06155018996632
+          },
+          "keys": [
+            "KeyS",
+            "KeyD",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.5000000000000007,
+          "distance": 3.869658879517611,
+          "position": [
+            0.7293208318155578,
+            0.4252393606635965,
+            -9.060729911082982
+          ],
+          "velocity": {
+            "x": -0.4954321130075077,
+            "y": 0.49494266252691194,
+            "z": 3.165980917234067
+          },
+          "keys": [
+            "KeyW",
+            "KeyA",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.6500000000000008,
+          "distance": 3.5166181536808647,
+          "position": [
+            0.566151019886421,
+            0.4470884364003209,
+            -8.747156818826065
+          ],
+          "velocity": {
+            "x": -1.3526697871415143,
+            "y": -0.007747649577149679,
+            "z": 1.6209105076330328
+          },
+          "keys": [
+            "KeyS",
+            "KeyD",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.800000000000001,
+          "distance": 3.1988411264032726,
+          "position": [
+            0.4762879178793658,
+            0.4886163080185345,
+            -8.441570695069318
+          ],
+          "velocity": {
+            "x": -0.2667794511218918,
+            "y": 0.40433683887708033,
+            "z": 2.228238658952122
+          },
+          "keys": [
+            "KeyS",
+            "KeyA",
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 1.950000000000001,
+          "distance": 2.8145626656376734,
+          "position": [
+            0.35113028446642425,
+            0.5058971652518702,
+            -8.07722913454065
+          ],
+          "velocity": {
+            "x": -1.0825220992843017,
+            "y": -0.014542036758837,
+            "z": 2.5108862420006997
+          },
+          "keys": [
+            "KeyW",
+            "KeyC",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 2.1000000000000005,
+          "distance": 2.539500759748509,
+          "position": [
+            0.20977095746401547,
+            0.5487432960395321,
+            -7.8401208498052775
+          ],
+          "velocity": {
+            "x": -0.876544107989524,
+            "y": 0.41876518137355057,
+            "z": 1.160897871250229
+          },
+          "keys": [
+            "KeyS",
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 2.25,
+          "distance": 2.275712211579038,
+          "position": [
+            0.0943615660169949,
+            0.5586536732707947,
+            -7.602747436582829
+          ],
+          "velocity": {
+            "x": -0.7216439694502916,
+            "y": -0.09109993444944697,
+            "z": 1.7703515921385111
+          },
+          "keys": [
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 2.3999999999999995,
+          "distance": 2.041805021234375,
+          "position": [
+            0.001824705847909315,
+            0.5511847997325569,
+            -7.387653196374834
+          ],
+          "velocity": {
+            "x": -0.5783343607606477,
+            "y": -0.031177775384040096,
+            "z": 1.300435341921258
+          },
+          "keys": [
+            "KeyS",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 2.549999999999999,
+          "distance": 1.7303258582322643,
+          "position": [
+            -0.08597103783983115,
+            0.6072054798829805,
+            -7.086944537183914
+          ],
+          "velocity": {
+            "x": -0.5917181989954929,
+            "y": 0.5544146650237906,
+            "z": 2.3237357932212803
+          },
+          "keys": [
+            "KeyW",
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0
+        },
+        {
+          "clock": 2.6999999999999984,
+          "distance": 1.4779699257198669,
+          "position": [
+            -0.1759061052897682,
+            0.5705703869471407,
+            -6.850140655778859
+          ],
+          "velocity": {
+            "x": -0.5975024386486448,
+            "y": -0.6011768941984037,
+            "z": 1.2379968984593814
+          },
+          "keys": [
+            "KeyC",
+            "KeyQ"
+          ],
+          "settleProgress": 0.13333333333333333
+        },
+        {
+          "clock": 2.849999999999998,
+          "distance": 1.2925362385568064,
+          "position": [
+            -0.2585339324089151,
+            0.6161466846465748,
+            -6.684464824372426
+          ],
+          "velocity": {
+            "x": -0.5277838578619015,
+            "y": 0.7067059039235505,
+            "z": 1.0414571341895855
+          },
+          "keys": [
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0.3333333333333333
+        },
+        {
+          "clock": 2.9999999999999973,
+          "distance": 1.1352249026571917,
+          "position": [
+            -0.32853934976511967,
+            0.5866103400372312,
+            -6.543334865584065
+          ],
+          "velocity": {
+            "x": -0.4018553272469891,
+            "y": -0.605935877628392,
+            "z": 0.8963321172372979
+          },
+          "keys": [
+            "KeyC",
+            "KeyQ"
+          ],
+          "settleProgress": 0.5333333333333333
+        },
+        {
+          "clock": 3.149999999999997,
+          "distance": 1.0066912543610589,
+          "position": [
+            -0.3666427340161473,
+            0.6280536713172278,
+            -6.419307263750193
+          ],
+          "velocity": {
+            "x": -0.18682075509022517,
+            "y": 0.6692281991593789,
+            "z": 0.7980145691302926
+          },
+          "keys": [
+            "KeyZ",
+            "KeyQ"
+          ],
+          "settleProgress": 0.7333333333333333
+        },
+        {
+          "clock": 3.2999999999999963,
+          "distance": 0.8938918385223362,
+          "position": [
+            -0.3718773680058773,
+            0.5901354342140308,
+            -6.295803143334535
+          ],
+          "velocity": {
+            "x": 0.03922166054938826,
+            "y": -0.6646128762861826,
+            "z": 0.8449591955650602
+          },
+          "keys": [
+            "KeyW",
+            "KeyA",
+            "KeyC",
+            "KeyQ"
+          ],
+          "settleProgress": 0.9333333333333335
+        }
+      ],
+      "startedAt": 0.7500000000000001,
+      "delivery": "Synthetic DOM keyboard events through InputSystem, once per real game tick",
+      "finishedAt": 3.4499999999999957
+    }
+  },
+  "driverLifecycle": {
+    "status": "PASS",
+    "scope": "Driver lifecycle controls with an isolated minimal runtime, not gameplay validation",
+    "checks": [
+      "Success uses DOM inputs, calls original tick once per frame and restores it",
+      "Failure releases keys and restores tick"
+    ]
+  },
+  "correctedUserResult": "PENDING"
+}

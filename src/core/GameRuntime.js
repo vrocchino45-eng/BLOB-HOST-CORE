@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { SystemRegistry } from "./SystemRegistry.js";
 import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinator.js";
 import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
+import { HostConditionSystem } from "../world/HostConditionSystem.js";
 import { HostConnectionReceiptLedger } from "./HostConnectionReceiptLedger.js";
 import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
 import { FrameTruthObserver } from "./FrameTruthObserver.js";
@@ -137,6 +138,7 @@ export class GameRuntime {
     this.hostContactEcologyContinuationSystem = null;
     this.coreEmbodimentSystem = null;
     this.coreTendrilSurfaceContactSystem = null;
+    this.hostConditionSystem = null;
     this.coreEngineSystem = null;
     this.coreRadialPerformanceSystem = null;
     this.coreTopologyResonanceSystem = null;
@@ -2033,6 +2035,7 @@ export class GameRuntime {
       frameState: this.frameState,
       localCellRecipe: this.localCellRecipe
     });
+    this.hostConditionSystem = new HostConditionSystem({ recipeDataSystem: this.recipeDataSystem, frameState: this.frameState });
     this.coreEngineSystem = new CoreEngineSystem({
       frameState: this.frameState,
       playerRoot: this.playerCore
@@ -2612,6 +2615,8 @@ export class GameRuntime {
     this.registry.register("graveRuptureHarvestSystem", this.graveRuptureHarvestSystem);
     // HC031D turns missed rupture debris into bounded Grave memory after harvest resolves.
     this.registry.register("graveRuptureConsequenceSystem", this.graveRuptureConsequenceSystem);
+    // HOST-CAUSE1 publishes macro context; only mounted anatomy applies local physics.
+    this.registry.register("hostConditionSystem", this.hostConditionSystem);
     this.registry.register("act1RouteContractSystem", this.act1RouteContractSystem, regionScoped);
     this.registry.register("vascularRhythmRouteSystem", this.vascularRhythmRouteSystem, regionScoped);
     this.registry.register("siltPressureRouteSystem", this.siltPressureRouteSystem, regionScoped);

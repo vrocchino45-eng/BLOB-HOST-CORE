@@ -6,7 +6,7 @@ export class GSL4E2BReadOnlyAdapter {
     const active = typeof a?.active === "boolean" ? a.active : null;
     const reason = typeof a?.detachReason === "string" ? a.detachReason : "";
     if (this.previousActive === true && active === false) {
-      if (reason === "deliberate_away_input") { this.lastEvent = "deliberate_release"; this.concernUntil = 0; }
+      if (reason === "deliberate_away_input") { this.lastEvent = "deliberate_release"; this.concernUntil = 0; this.supportUntil = 0; }
       else if (reason && reason !== "none") { this.lastEvent = "unexpected_loss"; this.concernUntil = now + 1.8; }
       else this.lastEvent = "unknown_release"; // Do not infer an alarm without authoritative reason.
     }

@@ -29,6 +29,12 @@ export class SessionTelemetrySystem {
     this.events = [];
     this.movementSamples = [];
     this.coreSnapshots = [];
+    // HOST-TRACE1: bounded developer-only evidence, never perceptual events.
+    this.hostCycleDiagnostics = [];
+    this.hostCycleDiagnosticCapacity = 512;
+    this.hostCycleDiagnosticPruned = 0;
+    this.lastHostCycleDiagnosticKey = null;
+    this.lastHostCycleDiagnosticSimT = -Infinity;
     this.sourceAliasByInternalId = new Map();
     this.sourceInternalByAlias = new Map();
     this.semanticAliasByInternalId = new Map();
@@ -199,6 +205,7 @@ export class SessionTelemetrySystem {
     const wallNow = this.wallTime();
     this.observeCell(frameState);
     this.observeHostContinuation(frameState);
+    this.observeHostCycleDiagnostics(frameState);
     this.observeRouteResolution(frameState);
     this.observeVascularCurrentization(frameState);
     this.observeSiltCurrentization(frameState);
@@ -3182,6 +3189,60 @@ export class SessionTelemetrySystem {
     });
   }
 
+  // HOST-TRACE1 observes the authored cause and mounted response separately.
+  // A requested visual state is evidence of owner output, not of player perception.
+  observeHostCycleDiagnostics(frameState) {
+    const host = frameState.hostCondition;
+    if (host?.pass !== "HOST-CAUSE1" || host.owner !== "HostConditionSystem") return;
+    const route = frameState.vascularRhythmRoute ?? {};
+    const mounted = frameState.activeCellId === "CELL_VASCULAR_RHYTHM_ROUTE_001" && route.active === true;
+    const response = mounted ? route.hostPressureResponse : null;
+    const visual = mounted ? route.hostPressureVisual : null;
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    const mode = inspection.coreWorkActive ? "core_work" : inspection.active ? "core_inspection" : "world";
+    const simT = Number.isFinite(frameState.runtimeSeconds) ? frameState.runtimeSeconds : 0;
+    const key = JSON.stringify([host.enabled, host.phase, host.episodeId, mounted,
+      Boolean(response?.active), Boolean(visual?.active), mode]);
+    const changed = key !== this.lastHostCycleDiagnosticKey;
+    if (!changed && !(mounted && host.active && simT - this.lastHostCycleDiagnosticSimT >= 2)) return;
+    const measured = value => Number.isFinite(value) ? round(value, 6) : null;
+    const feel = frameState.physicalFeel ?? {};
+    const record = {
+      wallT: this.wallTime(), simT: this.simTime(), runtimeSeconds: measured(frameState.runtimeSeconds),
+      frame: frameState.frame ?? 0, reason: this.lastHostCycleDiagnosticKey === null ? "initial"
+        : changed ? "state_change" : "mounted_active_interval",
+      cellId: frameState.activeCellId ?? "none", cameraMode: mode,
+      host: {
+        hostId: host.hostId ?? null, anatomyId: host.anatomyId ?? null,
+        profileId: host.profileId ?? null, episodeId: host.episodeId ?? null,
+        episodeIndex: host.episodeIndex ?? null, enabled: Boolean(host.enabled),
+        phase: host.phase ?? "unavailable", amplitude: measured(host.amplitude),
+        sampledAtSeconds: measured(host.sampledAtSeconds),
+        publicationCurrent: Number.isFinite(host.sampledAtSeconds) && Number.isFinite(frameState.runtimeSeconds)
+          && host.sampledAtSeconds === frameState.runtimeSeconds
+      },
+      localResponse: mounted ? {
+        mounted: true, active: Boolean(response?.active),
+        sourceEpisodeId: response?.episodeId ?? null,
+        sourceMatchesHostEpisode: Boolean(response?.episodeId && host.episodeId && response.episodeId === host.episodeId),
+        amplitude: measured(response?.amplitude), flowScale: measured(response?.flowScale),
+        directionalFlowStrength: measured(feel.spatialFeel?.flowStrength),
+        localPressure: measured(feel.pressure), routeFeelProfile: feel.routeFeelProfile ?? null,
+        visualSourceEpisodeId: visual?.episodeId ?? null,
+        visualRequested: Boolean(visual?.active), foldCount: visual?.foldCount ?? 0,
+        radialCompression: measured(visual?.radialCompression),
+        siltReceiptLoad: measured(route.siltSignalResponse?.membraneLoad)
+      } : null
+    };
+    this.hostCycleDiagnostics.push(record);
+    if (this.hostCycleDiagnostics.length > this.hostCycleDiagnosticCapacity) {
+      this.hostCycleDiagnostics.shift();
+      this.hostCycleDiagnosticPruned += 1;
+    }
+    this.lastHostCycleDiagnosticKey = key;
+    this.lastHostCycleDiagnosticSimT = simT;
+  }
+
   captureCoreSnapshot(reason = "interval", frameState = this.frameState) {
     const perf = frameState.corePerformance ?? {};
     const engine = frameState.coreEngine ?? {};
@@ -3322,6 +3383,13 @@ export class SessionTelemetrySystem {
       movementSamples: this.movementSamples,
       coreSnapshots: this.coreSnapshots,
       developerTruth: {
+        hostCycle: {
+          pass: "HOST-TRACE1", observer: "SessionTelemetrySystem",
+          capacity: this.hostCycleDiagnosticCapacity, prunedCount: this.hostCycleDiagnosticPruned,
+          sampling: "state changes plus two-second mounted active intervals",
+          records: this.hostCycleDiagnostics,
+          playerPerceptionVerified: false, gameplayAuthority: false
+        },
         sourceAliasMap: Object.fromEntries(this.sourceInternalByAlias.entries()),
         semanticAliasMap: Object.fromEntries(this.semanticInternalByAlias.entries()),
         implementationPass: this.physicalLanguageValidation?.pass ?? this.frameState.buildId ?? "unknown",

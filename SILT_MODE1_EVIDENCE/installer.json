@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "checks": [
+    "matching prior source accepted by check",
+    "exact corrected source installed",
+    "exact SILT-II1 source backed up",
+    "repeat apply is idempotent",
+    "restore reinstates exact SILT-II1 source",
+    "apply rejects later edits unchanged",
+    "restore rejects later edits unchanged",
+    "bad payload rejected before source write",
+    "missing SILT-II1 prerequisite rejects without writes"
+  ]
+}

@@ -1,0 +1,419 @@
+{
+  "pass": "SILT-CONNECTION1",
+  "scope": "Actual initialized browser runtime owners; renderer paused for controlled fixtures and explicit full route updates using normalized InputSystem input. Direct cell changes and prior-progress/near-resolution fixtures are not ordinary navigation or puzzle acceptance.",
+  "checks": [
+    {
+      "name": "Actual normalized input grips existing finite Silt grain",
+      "status": "PASS"
+    },
+    {
+      "name": "Region exit releases grip without generating a deliberate Host cause",
+      "status": "PASS"
+    },
+    {
+      "name": "Hidden Silt simulation remains paused",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing imprint and seat survive a real route update",
+      "status": "PASS"
+    },
+    {
+      "name": "Remount retains completed checkpoint, seated identity and finite supply",
+      "status": "PASS"
+    },
+    {
+      "name": "Retained seated grain can be extracted after remount",
+      "status": "PASS"
+    },
+    {
+      "name": "Deliberate free release emits exactly one authenticated Silt cause",
+      "status": "PASS"
+    },
+    {
+      "name": "Hidden Vascular does not consume pending Silt cause",
+      "status": "PASS"
+    },
+    {
+      "name": "Mounted Vascular applies one local effect with authenticated Silt parent",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated Vascular updates do not replay the cause",
+      "status": "PASS"
+    },
+    {
+      "name": "Hidden Grave does not consume Vascular memory",
+      "status": "PASS"
+    },
+    {
+      "name": "Mounted Grave receives applied Vascular history without moving Silt mass",
+      "status": "PASS"
+    },
+    {
+      "name": "Grave remount does not duplicate retained memory pressure",
+      "status": "PASS"
+    },
+    {
+      "name": "Authenticated Grave memory feeds the existing Grave II layout",
+      "status": "PASS"
+    },
+    {
+      "name": "Real Grave II completion evaluator publishes one authenticated return outcome",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing return engine credits Grave phase two once",
+      "status": "PASS"
+    },
+    {
+      "name": "Silt consumes Grave II pressure echo only after remount",
+      "status": "PASS"
+    },
+    {
+      "name": "Return echo does not accumulate on repeated frames or remount",
+      "status": "PASS"
+    }
+  ],
+  "observations": {
+    "initial": {
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "host": {
+        "pass": "LS1E1",
+        "schemaVersion": 1,
+        "sequence": 0,
+        "lastSourceDecisionSequence": 0,
+        "acceptedTotal": 0,
+        "rejectedTotal": 0,
+        "duplicateTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 0,
+        "lastReceiptId": null,
+        "lastSubjectId": null,
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "persistentAcrossCellsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "mass": 8
+    },
+    "beforeReturn": {
+      "siltCause": {
+        "pass": "LS1E1",
+        "schemaVersion": 1,
+        "sequence": 1,
+        "lastSourceDecisionSequence": 22,
+        "acceptedTotal": 1,
+        "rejectedTotal": 0,
+        "duplicateTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 1,
+        "lastReceiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+        "lastSubjectId": "silt-grain-01",
+        "records": [
+          {
+            "schemaVersion": 1,
+            "id": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+            "sequence": 1,
+            "kind": "silt_material_disturbance_observed",
+            "sourceCellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "sourceSystem": "SiltPressureRouteSystem",
+            "sourceReceiptSequence": 22,
+            "subjectId": "silt-grain-01",
+            "simulationSeconds": 16.976,
+            "origin": [
+              -5.35,
+              -2.4705,
+              -7.4
+            ],
+            "releaseVelocity": [
+              0,
+              0,
+              0.462
+            ],
+            "effectType": "observed_only",
+            "targetCellId": null,
+            "materialTransfer": false,
+            "routeCredit": false,
+            "worldConsequence": false
+          }
+        ],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "persistentAcrossCellsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "vascularEffect": {
+        "pass": "C0D1-B",
+        "schemaVersion": 1,
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "sequence": 1,
+        "lastSourceEventSequence": 1,
+        "lastParentSiltReceiptSequence": 1,
+        "acceptedTotal": 1,
+        "rejectedTotal": 0,
+        "duplicateTotal": 0,
+        "gapRejectedTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 1,
+        "lastReceiptId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+        "records": [
+          {
+            "schemaVersion": 1,
+            "id": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+            "sequence": 1,
+            "kind": "vascular_membrane_load_change_applied",
+            "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+            "sourceSystem": "VascularSiltSignalReceiver",
+            "sourceEventSequence": 1,
+            "parentSiltReceiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+            "parentSiltReceiptSequence": 1,
+            "parentSiltDecisionSequence": 22,
+            "subjectId": "silt-grain-01",
+            "membraneLoadBefore": 0,
+            "membraneLoadAfter": 0.15016400000000002,
+            "appliedDelta": 0.15016400000000002,
+            "materialTransfer": false,
+            "routeCredit": false,
+            "offRouteSimulation": false
+          }
+        ],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistentAcrossCellsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "graveMemory": {
+        "pass": "C0D1-C",
+        "schemaVersion": 1,
+        "owner": "GraveMemoryRouteSystem",
+        "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+        "active": true,
+        "mode": "bounded_retained_vascular_effect_memory",
+        "receivedTotal": 1,
+        "lastHostSequence": 1,
+        "replayedTotal": 1,
+        "rejectedTotal": 0,
+        "gapRejectedTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 1,
+        "memoryPressure": 0.15016400000000002,
+        "lastVascularEffectId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+        "lastParentSiltReceiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+        "lastSubjectId": "silt-grain-01",
+        "records": [
+          {
+            "sequence": 1,
+            "vascularEffectId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+            "vascularEventSequence": 1,
+            "parentSiltReceiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+            "subjectId": "silt-grain-01",
+            "appliedDelta": 0.15016400000000002,
+            "observedMembraneLoadAfter": 0.15016400000000002,
+            "materialTransfer": false,
+            "routeCredit": false
+          }
+        ],
+        "gameplayConsequenceApplied": false,
+        "graveObjectivesChanged": false,
+        "materialTransfer": false,
+        "routeCredit": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      }
+    },
+    "final": {
+      "siltMass": 8,
+      "siltCompleted": true,
+      "hostCauses": 1,
+      "vascularEffects": {
+        "pass": "C0D1-B",
+        "schemaVersion": 1,
+        "sourceCellId": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "sequence": 1,
+        "lastSourceEventSequence": 1,
+        "lastParentSiltReceiptSequence": 1,
+        "acceptedTotal": 1,
+        "rejectedTotal": 0,
+        "duplicateTotal": 0,
+        "gapRejectedTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 1,
+        "lastReceiptId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+        "records": [],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "offRouteSimulation": false,
+        "persistentAcrossCellsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "graveMemory": {
+        "pass": "C0D1-C",
+        "schemaVersion": 1,
+        "owner": "GraveMemoryRouteSystem",
+        "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+        "active": false,
+        "mode": "bounded_retained_vascular_effect_memory",
+        "receivedTotal": 1,
+        "lastHostSequence": 1,
+        "replayedTotal": 1,
+        "rejectedTotal": 0,
+        "gapRejectedTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 1,
+        "memoryPressure": 0.15016400000000002,
+        "lastVascularEffectId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+        "lastParentSiltReceiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+        "lastSubjectId": "silt-grain-01",
+        "records": [
+          {
+            "sequence": 1,
+            "vascularEffectId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+            "vascularEventSequence": 1,
+            "parentSiltReceiptId": "CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:22",
+            "subjectId": "silt-grain-01",
+            "appliedDelta": 0.15016400000000002,
+            "observedMembraneLoadAfter": 0.15016400000000002,
+            "materialTransfer": false,
+            "routeCredit": false
+          }
+        ],
+        "gameplayConsequenceApplied": false,
+        "graveObjectivesChanged": false,
+        "materialTransfer": false,
+        "routeCredit": false,
+        "persistsAcrossCellMountsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "returnOutcome": {
+        "pass": "C0D3-B",
+        "schemaVersion": 1,
+        "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+        "sequence": 1,
+        "lastSourceCompletionSequence": 1,
+        "acceptedTotal": 1,
+        "rejectedTotal": 0,
+        "duplicateTotal": 0,
+        "prunedTotal": 0,
+        "retainedCount": 1,
+        "lastReceiptId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+        "records": [
+          {
+            "schemaVersion": 1,
+            "id": "CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:1",
+            "sequence": 1,
+            "kind": "grave_ii_regional_resonance_resolved",
+            "sourceCellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+            "sourceSystem": "GraveResonanceGameplaySystem",
+            "sourceCompletionSequence": 1,
+            "resolutionId": "shared_memory",
+            "completedAtFrame": 519,
+            "parentVascularEffectId": "CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:1",
+            "inheritedVascularMemory": true,
+            "materialTransfer": false,
+            "routeCredit": false,
+            "progressionAuthority": false,
+            "offRouteSimulation": false
+          }
+        ],
+        "materialTransfer": false,
+        "routeCredit": false,
+        "progressionAuthority": false,
+        "offRouteSimulation": false,
+        "persistentAcrossCellsInRuntime": true,
+        "persistsAcrossReload": false
+      },
+      "siltEcho": 0.028
+    }
+  },
+  "summary": {
+    "expected": 18,
+    "passed": 18,
+    "failed": 0,
+    "complete": true
+  },
+  "notVerified": [
+    "physical controller delivery",
+    "ordinary gate-free entry/return traversal",
+    "full registry scheduling during this manual-owner fixture",
+    "earning initial porous packet or Grave II resolution",
+    "cross-session persistence"
+  ],
+  "warmupRuntimeLifecycle": [
+    {
+      "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "silt": {
+        "active": false,
+        "prepared": false,
+        "visible": false
+      },
+      "vascular": {
+        "active": false,
+        "prepared": false,
+        "visible": false
+      },
+      "grave": {
+        "active": false,
+        "prepared": false,
+        "visible": false
+      }
+    },
+    {
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "silt": {
+        "active": false,
+        "prepared": false,
+        "visible": false
+      },
+      "vascular": {
+        "active": true,
+        "prepared": true,
+        "visible": true
+      },
+      "grave": {
+        "active": false,
+        "prepared": false,
+        "visible": false
+      }
+    },
+    {
+      "cell": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "silt": {
+        "active": false,
+        "prepared": false,
+        "visible": false
+      },
+      "vascular": {
+        "active": false,
+        "prepared": true,
+        "visible": false
+      },
+      "grave": {
+        "active": true,
+        "prepared": true,
+        "visible": true
+      }
+    },
+    {
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "silt": {
+        "active": true,
+        "prepared": true,
+        "visible": true
+      },
+      "vascular": {
+        "active": false,
+        "prepared": true,
+        "visible": false
+      },
+      "grave": {
+        "active": false,
+        "prepared": true,
+        "visible": false
+      }
+    }
+  ],
+  "browserErrors": []
+}

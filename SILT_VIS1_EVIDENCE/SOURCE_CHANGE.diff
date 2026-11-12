@@ -1,0 +1,30 @@
+--- baseline/src/routes/SiltPressureRouteSystem.js
++++ VIS1/src/routes/SiltPressureRouteSystem.js
+@@ -957,6 +957,27 @@
+     this.habitatDrift.name = "silt_visual_seep_grains_fixed_pool_LS1A2";
+     this.habitatDrift.userData.targetingSuppressed = true;
+     group.add(this.habitatDrift);
++    // SILT-VIS1: keep this distant geological reference legible when the world
++    // camera pulls back. At the original 0.045 scene density, far Silt can
++    // dissolve into the background while its labels remain. Only this named
++    // visual geology uses a shorter fog depth; openings, face sides, opacity,
++    // contact metadata and the scene's atmospheric density stay authored.
++    const geologyMaterials = new Set();
++    group.traverse((object) => {
++      if (!object.isMesh) return;
++      for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
++        if (material) geologyMaterials.add(material);
++      }
++    });
++    for (const material of geologyMaterials) {
++      material.onBeforeCompile = (shader) => {
++        shader.fragmentShader = shader.fragmentShader.replace(
++          "#include <fog_fragment>",
++          THREE.ShaderChunk.fog_fragment.replaceAll("vFogDepth", "(vFogDepth * 0.6)")
++        );
++      };
++      material.customProgramCacheKey = () => "silt-geology-fog-depth-0.6-VIS1";
++    }
+     this.root.add(group);
+     this.habitatAnatomy = group;
+     this.animateHabitatFoundation(this.frameState);

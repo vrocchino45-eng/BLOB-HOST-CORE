@@ -1,0 +1,69 @@
+{
+  "pass": "SILT-SELECTION-INTEGRATION1",
+  "scope": "full production route module evaluation and real updateSiltGrip calls with real Three.js camera/transforms and controlled scene/units; no renderer or authored data",
+  "threeRevision": "179",
+  "routeSHA256": "6090c5b0ec1834ef51e8fe8e2df401b79b1b4de4e66e12b9c45d6d11e023ed0b",
+  "checks": [
+    {
+      "name": "Camera alignment wins over a nearer off-axis grain",
+      "status": "PASS"
+    },
+    {
+      "name": "Translated and rotated route selects the same local grain",
+      "status": "PASS"
+    },
+    {
+      "name": "Outside grip range cannot become a camera candidate",
+      "status": "PASS"
+    },
+    {
+      "name": "Candidate outside aim cone is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Hidden visual body cannot be acquired",
+      "status": "PASS"
+    },
+    {
+      "name": "Grip acquisition needs fresh commit and stabilize",
+      "status": "PASS"
+    },
+    {
+      "name": "Aiming at another grain does not redirect the committed grip",
+      "status": "PASS"
+    },
+    {
+      "name": "New unseated grip leaves outward headroom without moving the Core",
+      "status": "PASS"
+    },
+    {
+      "name": "Close grain is not pushed outward to the preferred radius",
+      "status": "PASS"
+    },
+    {
+      "name": "Seated grain inside extraction leash keeps exact position on accepted grip",
+      "status": "PASS"
+    },
+    {
+      "name": "Seated grain outside 1.59 extraction gate remains seated",
+      "status": "PASS"
+    },
+    {
+      "name": "Extraction does not repeat while commit is absent",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0
+  },
+  "notVerified": [
+    "installed dependency version parity",
+    "actual authored geometry/recipe",
+    "renderer, visual quality and occlusion",
+    "InputSystem -> route timing and full route.update",
+    "post-grip ledger reconciliation loop",
+    "GSL rapid-release live acceptance",
+    "intermittent Silt disappearance"
+  ]
+}

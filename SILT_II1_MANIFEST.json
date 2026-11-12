@@ -1,0 +1,26 @@
+{
+  "pass": "SILT-II1",
+  "base": "SILT-VIS1 plus accepted VASCULAR-II1 (Vascular files untouched)",
+  "productionFiles": [
+    "src/routes/SiltPressureRouteSystem.js",
+    "src/routes/SiltReturnRoundTrip.js"
+  ],
+  "optionalTestOnlyFile": "SILT_II1_TEST_START.mjs",
+  "files": [
+    {
+      "path": "src/routes/SiltReturnRoundTrip.js",
+      "before": null,
+      "after": "7638ec2a614490fce46198ea502e439c576c869ff46748852f22c205e48663ff"
+    },
+    {
+      "path": "SILT_II1_TEST_START.mjs",
+      "before": null,
+      "after": "74a04edaf831bed35fa5d2921dac222ae29897291b08f8779a9fb660d1653aac"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "before": "108c16d27289743767ec509421cdfe478fdc6dd2426e9ff695b3a8007f78602d",
+      "after": "c9cccf2766af8587d2629e38d6e429401a07eae98ce598db7f213bf973570c4d"
+    }
+  ]
+}

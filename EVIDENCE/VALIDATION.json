@@ -1,0 +1,29 @@
+{
+  "pass": "CONNECTION5",
+  "dateLocal": "2026-11-11",
+  "componentChecks": 255,
+  "browserPassesAcrossRuns": [
+    "B01",
+    "B02",
+    "B03",
+    "W03",
+    "W05"
+  ],
+  "additionalSlowCase": "W05, 500ms animation callback delay; game time not injected to earn results",
+  "physicsParity": "72 unique matched pre-CONNECTION5/current physicalFeel fixtures plus retained W01/W02 and original suite coverage",
+  "initialFailures": "New W04 fixture initialization and wrap expectation were corrected. Initial W05 assumed an unmounted Silt owner was initialized; changed to verify unchanged nullable material state and restore controlled route fields. These were test-fixture corrections, not gameplay-rule changes. Initial browser summary and W05 log are retained; final W05 passed normal and slowed runs.",
+  "build": {
+    "status": "PASS",
+    "command": "npm run build",
+    "vite": "7.1.0",
+    "modules": 168,
+    "durationSeconds": 4.82,
+    "existingWarning": "Main bundle approximately 2.71 MB; existing large-chunk warning."
+  },
+  "installerGroups": 7,
+  "productionFilesChanged": [
+    "src/routes/VascularRhythmRouteSystem.js"
+  ],
+  "CONNECTION3Feel": "provisionally accepted by user before this visual pass",
+  "CONNECTION5VisualAcceptance": "PENDING"
+}

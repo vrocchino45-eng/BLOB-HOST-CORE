@@ -1,27 +1,14 @@
 {
-  "pass": "C0D1-A",
-  "mode": "Owner Local Applied Effect Capture",
-  "baseline": "C0C-VIS1-B",
-  "changedGameplayFiles": [
-    "src/routes/VascularSiltSignalReceiver.js"
-  ],
-  "sourceBeforeSha256": "618828692cc1d49248aa48275fa35c4ff948d6e91ba0730c8f56185da5805bf9",
-  "sourceAfterSha256": "59f3d12d06ff80f9d00d7c056c792b611807a78d74a89c89341dc551c18dfcf4",
-  "mechanics": "Existing Silt receipt handling and Vascular flow/recovery unchanged; separate read-only bounded applied-effect stream",
-  "hostRelay": false,
-  "graveConsumer": false,
-  "runtimeBrowserProof": false,
-  "locked": [
-    "Silt source",
-    "Host ledger LS1E1",
-    "VascularRhythmRouteSystem VIS1-B",
-    "Vascular flow/decay",
-    "Grave I/II",
-    "Core",
-    "controller",
-    "movement",
-    "progression",
-    "chemistry",
-    "save"
-  ]
+  "pass": "CONNECTION1",
+  "dateLocal": "2026-11-10",
+  "mode": "Audit / Convergence",
+  "productionChanged": false,
+  "nextCandidateImplemented": false,
+  "files": {
+    "CONNECTION1.md": "06ff70fc9a2931f7d5d2cceb597ca89ce8c5e03dd9f2101b5d91fab2460a0aaa",
+    "CONNECTION2_CONTRACT.md": "38ff63b8c7d779b9b1594fde2dfde2c949bf9b7d3f0c8a9fc512b04f50e2295f",
+    "EVIDENCE/connection-probe.mjs": "fe1f7dd7485f06d7246ee99734f30f93e737fbf598e644f0deff2cdbadd36d4f",
+    "EVIDENCE/probe.json": "de877db480b88c8a3c054f6bfba7221208f6ff79d5dc9a9cace11da32232c88e",
+    "README.md": "2bf10b1b751b588f243ce30bcef94c2c2d0b285d3f492990ca292050db88a692"
+  }
 }

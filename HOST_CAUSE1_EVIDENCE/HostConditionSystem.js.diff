@@ -1,0 +1,92 @@
+--- /dev/null	2026-11-09 09:56:52.797413615 -0500
++++ candidate_base/src/world/HostConditionSystem.js	2026-11-09 12:06:37.917179404 -0500
+@@ -0,0 +1,89 @@
++const HOST_ID = 'HOST_ALPHA_WOUNDED_NURSERY';
++const ANATOMY_ID = 'vascular_routes';
++const PROFILE_ID = 'HOST_ALPHA_PREDATORY_PRESSURE_001';
++const clamp01 = n => Math.max(0, Math.min(1, n));
++const smoothstep = n => n * n * (3 - 2 * n);
++
++// Optional authored prototype, not predatory-host AI or local hidden physics.
++export function validateHostPressureProfile(profile) {
++  if (!profile || profile.enabled === false) return 'disabled_or_missing_profile';
++  if (profile.enabled !== true || profile.id !== PROFILE_ID
++    || profile.anatomyId !== ANATOMY_ID || profile.externalCause !== 'predatory_pressure') return 'unsupported_profile';
++  for (const key of ['onsetSeconds', 'repeatSeconds', 'riseSeconds', 'holdSeconds', 'recoverySeconds', 'maxFlowReduction', 'maxVisualCompression']) {
++    if (!Number.isFinite(profile[key])) return 'non_finite_profile';
++  }
++  if (profile.onsetSeconds < 0 || profile.riseSeconds <= 0 || profile.holdSeconds < 0 || profile.recoverySeconds <= 0
++    || profile.repeatSeconds <= profile.riseSeconds + profile.holdSeconds + profile.recoverySeconds
++    || profile.maxFlowReduction < 0 || profile.maxFlowReduction > 0.03
++    || profile.maxVisualCompression < 0 || profile.maxVisualCompression > 0.08) return 'out_of_bounds_profile';
++  return null;
++}
++
++export class HostConditionSystem {
++  constructor({ recipeDataSystem, frameState }) {
++    this.recipeDataSystem = recipeDataSystem;
++    this.frameState = frameState;
++    this.lastClock = 0;
++  }
++
++  init() {
++    this.host = this.recipeDataSystem.get('hosts', HOST_ID);
++    this.profile = this.host.externalPressureEpisode;
++    this.profileError = validateHostPressureProfile(this.profile);
++    this.update(0, this.frameState);
++  }
++
++  update(_dt, frameState = this.frameState) {
++    const clockValid = Number.isFinite(frameState.runtimeSeconds) && frameState.runtimeSeconds >= this.lastClock;
++    if (clockValid) this.lastClock = frameState.runtimeSeconds;
++    const clock = this.lastClock;
++    const supportedHost = frameState.activeHostId === HOST_ID
++      && this.host.temperament?.externalPressure === 'predatory';
++    const enabled = !this.profileError && supportedHost && clockValid;
++    let amplitude = 0, phase = 'inactive', episodeIndex = null;
++    if (enabled) {
++      const p = this.profile;
++      phase = 'waiting';
++      if (clock >= p.onsetSeconds) {
++        episodeIndex = Math.floor((clock - p.onsetSeconds) / p.repeatSeconds);
++        const age = (clock - p.onsetSeconds) % p.repeatSeconds;
++        if (age < p.riseSeconds) { phase = 'rising'; amplitude = smoothstep(age / p.riseSeconds); }
++        else if (age < p.riseSeconds + p.holdSeconds) { phase = 'holding'; amplitude = 1; }
++        else if (age < p.riseSeconds + p.holdSeconds + p.recoverySeconds) {
++          phase = 'recovering'; amplitude = 1 - smoothstep((age - p.riseSeconds - p.holdSeconds) / p.recoverySeconds);
++        } else phase = 'resting';
++      }
++    }
++    frameState.hostCondition = {
++      pass: 'HOST-CAUSE1', schemaVersion: 1, owner: 'HostConditionSystem',
++      hostId: HOST_ID, anatomyId: ANATOMY_ID, profileId: enabled ? PROFILE_ID : null,
++      externalCause: 'predatory_pressure', clockSource: 'runtimeSeconds', sampledAtSeconds: clock,
++      enabled, active: enabled && amplitude > 0, phase, amplitude: clamp01(amplitude),
++      episodeIndex, episodeId: enabled && episodeIndex !== null ? `${PROFILE_ID}:${episodeIndex}` : null,
++      maxFlowReduction: enabled ? this.profile.maxFlowReduction : 0,
++      maxVisualCompression: enabled ? this.profile.maxVisualCompression : 0,
++      reason: this.profileError ?? (!supportedHost ? 'unsupported_host' : !clockValid ? 'invalid_or_rewound_clock' : 'authored_episode'),
++      localPhysicsAuthority: false, materialTransfer: false, progressionAuthority: false,
++      persistsAcrossReload: false, simulatedPredatoryHostAI: false
++    };
++  }
++}
++
++const NEUTRAL = Object.freeze({ active: false, amplitude: 0, flowScale: 1, visualCompression: 0,
++  phase: 'inactive', episodeId: null, hostId: null });
++
++// The mounted anatomy reads current provenance. A stale/foreign publication is neutral.
++export function readVascularHostPressure(frameState) {
++  const s = frameState.hostCondition;
++  if (frameState.activeCellId !== 'CELL_VASCULAR_RHYTHM_ROUTE_001' || frameState.activeHostId !== HOST_ID
++    || s?.pass !== 'HOST-CAUSE1' || s.owner !== 'HostConditionSystem' || s.schemaVersion !== 1
++    || !s.enabled || s.hostId !== HOST_ID || s.anatomyId !== ANATOMY_ID || s.profileId !== PROFILE_ID
++    || s.externalCause !== 'predatory_pressure' || s.clockSource !== 'runtimeSeconds'
++    || !Number.isFinite(frameState.runtimeSeconds) || s.sampledAtSeconds !== frameState.runtimeSeconds
++    || !Number.isFinite(s.amplitude) || s.amplitude < 0 || s.amplitude > 1
++    || !Number.isFinite(s.maxFlowReduction) || s.maxFlowReduction < 0 || s.maxFlowReduction > 0.03
++    || !Number.isFinite(s.maxVisualCompression) || s.maxVisualCompression < 0 || s.maxVisualCompression > 0.08) return NEUTRAL;
++  return { active: s.amplitude > 0, amplitude: s.amplitude, flowScale: 1 - s.maxFlowReduction * s.amplitude,
++    visualCompression: s.maxVisualCompression * s.amplitude,
++    phase: s.phase, episodeId: s.episodeId, hostId: s.hostId };
++}

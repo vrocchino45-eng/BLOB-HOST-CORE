@@ -1,0 +1,83 @@
+--- audit/host_cause1/BASE/src/routes/VascularRhythmRouteSystem.js	2026-11-09 12:06:37.552401208 -0500
++++ candidate_base/src/routes/VascularRhythmRouteSystem.js	2026-11-09 12:06:38.089126990 -0500
+@@ -1,4 +1,5 @@
+ import * as THREE from "three";
++import { readVascularHostPressure } from "../world/HostConditionSystem.js";
+ import { VascularReturnHandoff } from "./VascularReturnHandoff.js";
+ import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
+ import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
+@@ -248,6 +249,7 @@
+     this.applyHostRhythmVisual(frameState);
+     // Post-composition, bounded anatomical expression: never a gameplay input.
+     this.applySiltPressureAnatomy();
++    this.applyHostPressureAnatomy();
+     this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
+       input: frameState.input, signal01: territorySignal("vascular", {membraneLoad: this.siltSignalReceiver.membraneLoad}),
+       circuitStatus: this.siltSignalReceiver.receivedTotal > 0 ? "silt_cause_received" : "awaiting_silt_cause", frameState});
+@@ -1152,6 +1154,7 @@
+ 
+   applyDynamicCurrent(frameState, sample) {
+     const contractFeel = frameState.physicalFeel ?? {};
++    this.hostPressureResponse = readVascularHostPressure(frameState);
+     const direction = this.completed ? -1 : 1;
+     // HC-016Y: circulation must matter between valves. The current is stronger
+     // than the old presentation-biased drift, while turbulence remains recoverable.
+@@ -1169,7 +1172,8 @@
+       * (1 - this.traversalAbsorbShear * 0.16)
+       * (1 - this.traversalStabilizeCalm * 0.34)
+       * worldRhythmFlowScale
+-      * this.siltSignalReceiver.flowScale;
++      * this.siltSignalReceiver.flowScale
++      * this.hostPressureResponse.flowScale;
+     const swirl = this.turbulence * 0.20
+       * (1 + this.traversalPulseWake * 0.28)
+       * (1 - this.traversalAbsorbShear * 0.18)
+@@ -1212,6 +1216,7 @@
+         absorbShear: this.traversalAbsorbShear,
+         stabilizeCalm: this.traversalStabilizeCalm,
+         worldRhythmFlowScale,
++        hostPressure: this.hostPressureResponse,
+         remoteSiltMembraneLoad: this.siltSignalReceiver.membraneLoad,
+         remoteSiltDirectionalFlowScale: this.siltSignalReceiver.flowScale,
+         worldRhythmBeat: worldComposition.active ? worldComposition.beatNumber ?? 0 : 0,
+@@ -1737,6 +1742,31 @@
+     };
+   }
+ 
++  // HOST-CAUSE1: coherent protective tone, distinct from Silt's traveling band.
++  // animate() resets fold scale/material strengths before this post-composition step.
++  // These non-targetable wall folds are presentation, never collision/anchor truth.
++  applyHostPressureAnatomy() {
++    const response = this.hostPressureResponse;
++    let modified = 0;
++    if (response?.active) {
++      for (const fold of this.wallFolds) {
++        fold.scale.x *= 1 - response.visualCompression;
++        fold.scale.z *= 1 - response.visualCompression * 0.625;
++        if (fold.material) {
++          fold.material.emissiveIntensity += response.amplitude * 0.28;
++          fold.material.opacity = Math.min(0.95, fold.material.opacity + response.amplitude * 0.12);
++        }
++        modified++;
++      }
++    }
++    this.hostPressureVisual = {
++      active: Boolean(response?.active), foldCount: modified,
++      radialCompression: response?.visualCompression ?? 0,
++      episodeId: response?.episodeId ?? null, presentationOnly: true,
++      collisionMutation: false, receiverMutation: false
++    };
++  }
++
+   publish(frameState, active) {
+     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
+     const requiredReads = this.recipe?.cadence?.requiredReads ?? 3;
+@@ -1750,6 +1780,8 @@
+         active: Boolean(active && this.returnHandoffEligible(frameState)
+           && !(frameState.inspectionCamera ?? frameState.tightInspectionCamera)?.coreWorkActive)
+       }),
++      hostPressureResponse: active ? (this.hostPressureResponse ?? null) : null,
++      hostPressureVisual: active ? (this.hostPressureVisual ?? null) : null,
+       hostConnectionObservation: hostCause,
+       // LS1E2: receiver state belongs to Vascular; Silt receipts stay immutable.
+       siltSignalResponse: this.siltSignalReceiver.snapshot(),

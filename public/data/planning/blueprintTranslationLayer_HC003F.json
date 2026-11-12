@@ -1,8 +1,8 @@
 {
   "id": "HC003F_BLUEPRINT_TRANSLATION_LAYER",
   "build": "HC-006H",
-  "status": "active_true_source_rebaseline",
-  "primaryReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "status": "historical_role_map_aligned_to_rebuild_authority",
+  "primaryReference": "BLOB_HOST_CORE_REBUILD_BLUEPRINT_v0_1.zip",
   "largerNorthStarReferences": [
     "reference_docs/HOST_CORE_Blueprint_v1.md",
     "reference_docs/HOST_CORE_Implementation_Plan_v1.md",
@@ -10,7 +10,7 @@
     "reference_docs/HOST_CORE_Chemistry_Core_Growth_v1.md",
     "reference_docs/HOST_CORE_Region_Grammar_v1.md"
   ],
-  "translationRule": "Modes own scene behavior. Systems own reusable gameplay. Registries own authored content. UI displays state only. Authored GateSystem thresholds are valid; arbitrary teleports, branch menus, and legacy stage graphs are not.",
+  "translationRule": "Host anatomy and chemistry own causes. Local cells replace chambers; morph regions replace exits. No hard gates or hard region transitions. UI displays state only. Arbitrary teleports, branch menus and renderer-owned progression remain forbidden.",
   "activeHostCoreTruth": {
     "host": "HOST_ALPHA_WOUNDED_NURSERY",
     "hostType": "Nursery Host",
@@ -63,7 +63,7 @@
         "pulse can read, not just activate",
         "morphing is tissue recomposition rather than a door"
       ],
-      "legacyNameHandling": "Guide Threshold is an authored threshold role. The living tissue fold may later bind to GateSystem without becoming a hard door or teleport.",
+      "legacyNameHandling": "Guide Threshold is an authored tissue threshold role, interpreted through continuous morph ownership; it does not authorize hard gates.",
       "mustNotAdd": [
         "arbitrary door",
         "teleport",
@@ -121,8 +121,8 @@
     {
       "legacyRole": "Guide Threshold",
       "currentExpression": "CELL_SCAR_FLOW_FOLD_001",
-      "translationStatus": "runtime_expression_can_bind_authored_gate_system",
-      "notes": "Threshold remains living tissue, but authored GateSystem ownership is valid under the true blueprint."
+      "translationStatus": "historical_role_requires_continuous_morph_ownership",
+      "notes": "Threshold means living tissue recomposition. Historical GateSystem data does not authorize hard gates or hard region transitions."
     },
     {
       "legacyRole": "Hub Chamber",
@@ -147,18 +147,19 @@
     "compactLine": "Blueprint Role",
     "showActiveCellRole": true,
     "showLegacyRuntimeWarning": true,
-    "warning": "True source active: authored living gates are valid; arbitrary doors, teleports, menus, and legacy stage graphs are not."
+    "warning": "Rebuild authority: no hard gates or hard region transitions. Historical role mappings do not activate old doors, teleports, menus or stage graphs."
   },
   "nextRecommendedPass": {
     "id": "HC-006I",
     "label": "First-Slice Runtime Ownership Rebind",
     "mode": "architecture_convergence",
-    "reason": "Bind Surface Wake, Guide Threshold, and the Hub Chamber role to explicit mode/system/registry ownership before adding more route content."
+    "reason": "Bind Surface Wake, Guide Threshold, and the Hub Chamber role to explicit mode/system/registry ownership before adding more route content.",
+    "historicalRecommendation": true
   },
   "noLegacyRuntimeWarning": {
-    "strictMarker": "authored gates valid; arbitrary transitions forbidden",
-    "plainLanguage": "Use GateSystem for authored living thresholds. Do not restore arbitrary doors, teleports, branch menus, renderer-owned progression, or legacy stage graphs.",
-    "permissionWarning": "Blueprint roles authorize their documented systems, including GateSystem. They do not authorize old one-off transition code.",
+    "strictMarker": "no hard gates; no hard region transitions; continuous morph ownership",
+    "plainLanguage": "Use local cells and continuous morphs for authored tissue thresholds. Do not restore arbitrary doors, teleports, branch menus, renderer-owned progression or legacy stage graphs.",
+    "permissionWarning": "Blueprint roles translate meaning only. Archived GateSystem names are not permission to activate hard gates or replace accepted morph owners.",
     "forbiddenRuntimeArchitecture": [
       "arbitrary doors",
       "teleports",
@@ -167,6 +168,14 @@
       "legacy stage-node graph",
       "hidden chamber-specific transition hacks"
     ],
-    "allowedTranslation": "Surface Wake, Guide Threshold, and Hub Chamber may use authored registries, modes, ObjectiveSystem, and GateSystem while preserving living-world continuity."
-  }
+    "allowedTranslation": "Surface Wake, Guide Threshold and Hub roles map to authored anatomy, registries and reusable systems while local cells and continuous morph owners preserve living-world continuity."
+  },
+  "scope": "legacy_archive_only_not_runtime_activation",
+  "compatibleDetailReference": "HOST_CORE_Blueprint_v1_reference_docs.zip",
+  "compatibleDetailRole": "content_reference_only_where_compatible_with_rebuild",
+  "architectureRules": [
+    "local_cells_replace_chambers",
+    "morph_regions_replace_exits",
+    "no_gates_or_hard_region_transitions"
+  ]
 }

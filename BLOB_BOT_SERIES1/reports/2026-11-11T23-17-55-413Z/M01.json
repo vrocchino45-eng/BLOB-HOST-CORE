@@ -1,0 +1,55 @@
+{
+  "pass": "SILT-INSTALLED-INTEGRATION1",
+  "scope": "real InputSystem.update -> full SiltPressureRouteSystem.update with actual recipes and Three.js 0.179.1; headless controlled prior-progress, Core positions and held-contact placement",
+  "threeRevision": "179",
+  "checks": [
+    {
+      "name": "Actual recipe initializes eight units and one crawlable shelf",
+      "status": "PASS"
+    },
+    {
+      "name": "Normalized Q and commit acquire grain; same full update reconciles grip owner",
+      "status": "PASS"
+    },
+    {
+      "name": "Absent commit edge retains lock and withholds grain from ecology",
+      "status": "PASS"
+    },
+    {
+      "name": "Normalized Pulse release loads actual braced contact and imprint",
+      "status": "PASS"
+    },
+    {
+      "name": "Commit seats grain, returns environment ownership and excludes free trajectory",
+      "status": "PASS"
+    },
+    {
+      "name": "Seated grain stays excluded during full route updates",
+      "status": "PASS"
+    },
+    {
+      "name": "Normalized commit extracts seated grain and reconciles grip ownership",
+      "status": "PASS"
+    },
+    {
+      "name": "Core Work suppresses world input before route and releases existing grip",
+      "status": "PASS"
+    },
+    {
+      "name": "Full unmount clears local grip owners without route-exit Host effect",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0
+  },
+  "notVerified": [
+    "browser renderer and human feel",
+    "physical device event delivery",
+    "GameRuntime/SystemRegistry overall scheduling",
+    "earning initial safe-packet progression",
+    "player movement/attachment integration",
+    "intermittent Silt visual disappearance"
+  ]
+}

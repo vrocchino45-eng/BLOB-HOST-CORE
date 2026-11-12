@@ -1,0 +1,27 @@
+--- audit/core_read1/BASE_PlaytestHudSystem.js	2026-11-09 03:01:39.184271763 -0500
++++ candidate_base/src/ui/PlaytestHudSystem.js	2026-11-09 03:01:39.184854940 -0500
+@@ -1,4 +1,15 @@
+ import { readHostLanguage } from '../language/HostLanguageGrammar.js';
++// CORE-READ1: describe the active architecture separately from its earned ceiling.
++// Presentation only; the progression and Core owners retain all authority.
++export function describeCoreArchitecture(engine = {}, progression = {}) {
++  const phase = engine.phaseCount;
++  if (![3, 6, 12].includes(phase)) return 'engine unavailable';
++  const unlocked = progression.unlockedPhaseCount ?? engine.progressionUnlockedPhaseCount ?? 3;
++  const source = phase !== unlocked ? 'debug preview' : phase === 3 ? 'base' : 'earned';
++  const structure = phase === 3 ? 'one per function' : phase === 6 ? 'two per function' : 'four per function';
++  return `${phase}-phase · ${structure} · ${source}`;
++}
++
+ export class PlaytestHudSystem {
+   constructor({ recipeDataSystem, frameState }) {
+     if (!recipeDataSystem) throw new Error("[PlaytestHudSystem] recipeDataSystem is required.");
+@@ -238,7 +249,7 @@
+       ? ` / cloud ${cloudPattern.stablePatternLabel}${cloudPattern.popActive ? " · POP" : ""}`
+       : "";
+     const engineRead = coreEngine.active
+-      ? ` / engine ${coreEngine.architectureLabel ?? "3-phase"} · ${Math.round(coreEngine.rpm ?? 3000)} RPM · ${coreEngine.currentPhaseLabel ?? "pulse_1"}`
++      ? ` / engine ${describeCoreArchitecture(coreEngine, frameState.returnRegionEngine)} · ${Math.round(coreEngine.rpm ?? 3000)} RPM · ${coreEngine.currentPhaseLabel ?? "pulse_1"}`
+       : "";
+     const activeVerbPhysiology = frameState.input?.pulseHeld || frameState.input?.pulsePressed
+       ? `Pulse charge x${corePerformance.verbModifiers?.pulse?.chargeRateMultiplier ?? 1} / cost x${corePerformance.verbModifiers?.pulse?.costMultiplier ?? 1}`

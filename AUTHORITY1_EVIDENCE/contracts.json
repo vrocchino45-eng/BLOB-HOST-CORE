@@ -1,0 +1,54 @@
+{
+  "pass": "AUTHORITY1",
+  "checks": [
+    {
+      "name": "Current source package resolves primary rebuild authority",
+      "status": "PASS"
+    },
+    {
+      "name": "Compatible detail remains separately identified",
+      "status": "PASS"
+    },
+    {
+      "name": "Historical checkpoint and strategy labels preserved and qualified",
+      "status": "PASS"
+    },
+    {
+      "name": "Normal loader leaves archival role map unmounted",
+      "status": "PASS"
+    },
+    {
+      "name": "Corrected archival role map passes its actual validator",
+      "status": "PASS"
+    },
+    {
+      "name": "Wrong primary reference is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing compatible detail reference is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing local_cells_replace_chambers is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing morph_regions_replace_exits is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing no_gates_or_hard_region_transitions is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Historical ID, build and next-pass IDs are retained",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0
+  },
+  "archiveQualification": "Full legacy_archive validation fails with the same pre-existing Grave cell status error before and after this patch. Targeted translation validator passes."
+}

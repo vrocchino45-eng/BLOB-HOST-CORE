@@ -1,0 +1,41 @@
+{
+  "pass": "SILT-INSTALLED-INTEGRATION1-CHECKPOINT",
+  "baselineArchive": "BLOB_INTEGRATION_BASE_1794185675218.zip",
+  "baselineArchiveSHA256": "ae8fa5c3ad7d67a12cc75eee895af9c920db876a364d33747614e2bc637c5e60",
+  "verifiedExportedFiles": 703,
+  "changedExportedFiles": [],
+  "installedUserNodeVersion": "v24.14.0",
+  "localValidationNodeVersion": "v24.22.1",
+  "userInstalledThreeVersion": "0.179.1",
+  "localThreeVersion": "0.179.1",
+  "localViteVersion": "7.1.0",
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "transformedModules": 165,
+    "vite": "7.1.0",
+    "warning": "main minified chunk exceeds 500 kB; no chunking changes in this pass"
+  },
+  "dependencyRestore": {
+    "fullNpmCi": "failed: transient HTTP 503 for tinyglobby package",
+    "fallback": "isolated exact direct dependencies Three.js 0.179.1 and Vite 7.1.0; not a claim of full transitive lockfile parity"
+  },
+  "suites": {
+    "SILT_INSTALLED_INTEGRATION1_LOCAL_REPORT.json": {
+      "passed": 9,
+      "failed": 0
+    },
+    "C1_PINNED_BASE_REPORT.json": {
+      "passed": 13,
+      "failed": 0
+    },
+    "STAGE2B_PINNED_BASE_REPORT.json": {
+      "passed": 11,
+      "failed": 0
+    },
+    "SELECTION_PINNED_BASE_REPORT.json": {
+      "passed": 12,
+      "failed": 0
+    }
+  }
+}

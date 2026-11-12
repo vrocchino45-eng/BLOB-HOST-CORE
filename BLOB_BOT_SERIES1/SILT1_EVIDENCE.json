@@ -1,0 +1,534 @@
+{
+  "pass": "BOT-SILT1",
+  "dateLocal": "2026-11-10",
+  "userRun": "2026-11-11T02-38-24-498Z",
+  "userResult": {
+    "vascularGoal": {
+      "pass": "VASCULAR-II1",
+      "eligible": false,
+      "active": false,
+      "stage": "completed",
+      "completed": true,
+      "completionPublished": true,
+      "handoffId": "vascular:handoff:1",
+      "sourcePulseId": 1,
+      "sourceHoldSeconds": 0,
+      "sourceHoldAtProjection": 0.18,
+      "travelProgress": 1,
+      "settleProgress": 1,
+      "completionSequence": 1,
+      "sourceRole": "branch",
+      "receiverRole": "intake",
+      "completionKey": "vascular:phase_2",
+      "materialTransfer": false,
+      "offRouteSimulation": false,
+      "crossingAuthority": false
+    },
+    "timeout": "Silt seating wait, browser-arc line34",
+    "siltGoalAtFailure": {
+      "pass": "SILT-II1",
+      "active": true,
+      "started": true,
+      "stage": "await_grip",
+      "grainId": null,
+      "attemptSequence": 1,
+      "activationSequence": 0,
+      "consumedSequence": 15,
+      "proof": {
+        "grip": null,
+        "imprint": null,
+        "seat": null,
+        "extract": null,
+        "release": null
+      },
+      "completed": false,
+      "completionPublished": false,
+      "completionSequence": 0,
+      "completionKey": "silt:phase_2",
+      "materialTransfer": false,
+      "physicsAuthority": false,
+      "offRouteSimulation": false
+    },
+    "browserErrors": [],
+    "productionFilesUnchanged": true
+  },
+  "normalFullB03": {
+    "suite": "BLOB-BOT-SERIES1",
+    "mode": "--browser",
+    "selectedCase": "B03",
+    "startedAt": "2026-11-11T02:50:35.121Z",
+    "runId": "2026-11-11T02-50-34-953Z",
+    "baseline": "HOST-TRACE1",
+    "qualification": "Scripted bots and controlled owner/receipt fixtures. No claim of human feel, physical controller delivery, autonomous exploration or a from-zero campaign.",
+    "results": [
+      {
+        "id": "D01",
+        "name": "Data profiles and invalid archive data",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "M01",
+        "name": "Conserved Silt material loop",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "M02",
+        "name": "Core Work grip handoff",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "G01",
+        "name": "Vascular paired handoff",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "G02",
+        "name": "Silt goal negative receipts",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "synthetic_receipts"
+      },
+      {
+        "id": "G03",
+        "name": "Six-credit owner integration",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "H01",
+        "name": "Host cycle owner and hidden-region handling",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "H02",
+        "name": "Six-cycle recovery against neutral twin",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "T01",
+        "name": "Read-only Host telemetry export",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "P01",
+        "name": "Paired reserve and credit boundary",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "owner_fixture"
+      },
+      {
+        "id": "B01",
+        "name": "Host cycle and real telemetry download",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "running_browser"
+      },
+      {
+        "id": "B02",
+        "name": "Held-grain mode interruption and reacquisition",
+        "status": "NOT_RUN",
+        "reason": "Excluded by selected mode",
+        "tier": "running_browser"
+      },
+      {
+        "id": "B03",
+        "name": "Regional goals, six-phase, Hub and reserve arc",
+        "status": "PASS",
+        "tier": "running_browser",
+        "checksPassed": 1,
+        "checksFailed": 0,
+        "expectedChecks": 1,
+        "durationSeconds": 77.5,
+        "exitCode": 0,
+        "timedOut": false,
+        "report": "B03.json",
+        "error": null
+      }
+    ],
+    "productionFilesUnchanged": true,
+    "sourceFingerprint": "7e3f3ff5a958d0d88014c7d1d29c3da612ec431dc88bad397296e77dd5ece55d",
+    "summary": {
+      "passed": 1,
+      "failed": 0,
+      "blocked": 0,
+      "notRun": 12,
+      "checksPassed": 1
+    },
+    "completedAt": "2026-11-11T02:51:52.741Z"
+  },
+  "slowGoalArc": {
+    "scope": "All B03 goal/Hub/reserve assertions retained. Only initial Host-peak wait omitted. Each animation callback delayed 2000ms; Silt driver evaluate returns delayed 8000ms. No clock, goal or physics injection. Earlier declared progress/contact/release pose fixtures retained.",
+    "summary": {
+      "suite": "BLOB-BOT-SERIES1",
+      "mode": "--all",
+      "selectedCase": "B03",
+      "startedAt": "2026-11-11T02:51:33.089Z",
+      "runId": "2026-11-11T02-51-32-955Z",
+      "baseline": "HOST-TRACE1",
+      "qualification": "Scripted bots and controlled owner/receipt fixtures. No claim of human feel, physical controller delivery, autonomous exploration or a from-zero campaign.",
+      "results": [
+        {
+          "id": "D01",
+          "name": "Data profiles and invalid archive data",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "M01",
+          "name": "Conserved Silt material loop",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "M02",
+          "name": "Core Work grip handoff",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "G01",
+          "name": "Vascular paired handoff",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "G02",
+          "name": "Silt goal negative receipts",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "synthetic_receipts"
+        },
+        {
+          "id": "G03",
+          "name": "Six-credit owner integration",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "H01",
+          "name": "Host cycle owner and hidden-region handling",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "H02",
+          "name": "Six-cycle recovery against neutral twin",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "T01",
+          "name": "Read-only Host telemetry export",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "P01",
+          "name": "Paired reserve and credit boundary",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "owner_fixture"
+        },
+        {
+          "id": "B01",
+          "name": "Host cycle and real telemetry download",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "running_browser"
+        },
+        {
+          "id": "B02",
+          "name": "Held-grain mode interruption and reacquisition",
+          "status": "NOT_RUN",
+          "reason": "Excluded by selected mode",
+          "tier": "running_browser"
+        },
+        {
+          "id": "B03",
+          "name": "Regional goals, six-phase, Hub and reserve arc",
+          "status": "PASS",
+          "tier": "running_browser",
+          "checksPassed": 1,
+          "checksFailed": 0,
+          "expectedChecks": 1,
+          "durationSeconds": 432.1,
+          "exitCode": 0,
+          "timedOut": false,
+          "report": "B03.json",
+          "error": null
+        }
+      ],
+      "productionFilesUnchanged": true,
+      "sourceFingerprint": "7e3f3ff5a958d0d88014c7d1d29c3da612ec431dc88bad397296e77dd5ece55d",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 12,
+        "checksPassed": 1
+      },
+      "completedAt": "2026-11-11T02:58:45.217Z"
+    },
+    "siltStages": [
+      {
+        "label": "actual grip",
+        "clock": 4.3499999999999925,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "gripped",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 1,
+          "proof": {
+            "grip": 1,
+            "imprint": null,
+            "seat": null,
+            "extract": null,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": "silt-grain-01",
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          1.267858684997546,
+          -0.31797396358500407,
+          -11.193189931827748
+        ]
+      },
+      {
+        "label": "actual imprint",
+        "clock": 5.399999999999989,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "imprinted",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 10,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": null,
+            "extract": null,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": "silt-grain-01",
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.397780262587644,
+          -2.605165711358245,
+          -9.162511260283926
+        ]
+      },
+      {
+        "label": "actual seat",
+        "clock": 5.549999999999988,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "seated",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 13,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": null,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": null,
+        "seated": "silt-grain-01",
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.409867763730844,
+          -2.6068157600005386,
+          -9.124233286891624
+        ]
+      },
+      {
+        "label": "actual extraction",
+        "clock": 6.149999999999986,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "extracted",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 17,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": "silt-grain-01",
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.422052255829338,
+          -2.6079640834535804,
+          -8.969338504834884
+        ]
+      },
+      {
+        "label": "actual free release",
+        "clock": 6.5999999999999845,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "released_pending_native",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": null,
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.449500208545025,
+          -2.6113493765418507,
+          -5.850532116040098
+        ]
+      },
+      {
+        "label": "native return and six-phase credit",
+        "clock": 26.40000000000024,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "completed",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": true,
+          "completionPublished": true,
+          "completionSequence": 1,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": null,
+        "seated": null,
+        "credits": 6,
+        "engine": 6,
+        "mass": 8,
+        "position": [
+          -4.4841332202277755,
+          -2.3251858994554846,
+          0.6828847121604502
+        ]
+      }
+    ],
+    "returned": {
+      "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "returnReady": true,
+      "credits": 6,
+      "engine": 6
+    },
+    "errors": []
+  },
+  "correctedUserResult": "PENDING"
+}

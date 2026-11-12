@@ -1,0 +1,15 @@
+{
+  "summary": {
+    "passed": 7,
+    "failed": 0
+  },
+  "checks": [
+    "baseline accepted",
+    "exact apply and backup",
+    "idempotent apply",
+    "exact restore",
+    "unknown edit refused",
+    "restore preserves unknown edit",
+    "corrupt payload refused before write"
+  ]
+}

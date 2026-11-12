@@ -1,0 +1,39 @@
+--- audit/silt_mode1/BASE_SiltPressureRouteSystem.js	2026-11-09 02:42:25.850584338 -0500
++++ candidate_base/src/routes/SiltPressureRouteSystem.js	2026-11-09 02:42:59.633202563 -0500
+@@ -1312,11 +1312,15 @@
+   // explicit material target ID until shared Host target registration is ready.
+   updateSiltGrip(frameState, dt = 0) {
+     const input = frameState.input ?? {};
++    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
++    // SILT-MODE1: mode suspension is not a deliberate world release/seat.
++    // Current mode also wins over world input normalized before mode entry.
++    const coreWorkSuspended = Boolean(inspection.coreWorkActive);
+     this.heldContactPulseApproachFrame = 0;
+     this.heldContactPulseResistedFrame = 0;
+     this.heldContactPulseAttemptedFrame = false;
+     this.heldContactBracedPulseFrame = false;
+-    const aiming = Boolean(input.stabilizeHeld);
++    const aiming = Boolean(input.stabilizeHeld && !coreWorkSuspended);
+     const units = this.livingCycle?.units ?? [];
+     const eligible = new Set(["veins", "garden_transit", "settled"]);
+     if (!this.livingCycle?.active) {
+@@ -1365,7 +1369,7 @@
+         // Intentional release of a proven imprint hands this specific grain
+         // to the receiving site. RT withdrawal or an unpressed contact never seats.
+         let seatingReceipt = null;
+-        if (!input.absorbHeld && this.siltContact?.heldId === held.id) {
++        if (!coreWorkSuspended && !input.absorbHeld && this.siltContact?.heldId === held.id) {
+           const receipt = this.siltPlateSeat.trySeat({
+             unitId: held.id, heldPosition: this.siltGrip.position,
+             sitePosition: this.siltContact.position,
+@@ -1385,7 +1389,9 @@
+           // Seated material cannot also have a free trajectory.
+           this.siltTrajectory.cancelHold(held.id);
+         } else if (this.siltGrip.position) {
+-          const trajectory = this.siltTrajectory.release(held.id, this.siltGrip.position);
++          const trajectory = this.siltTrajectory.release(held.id, this.siltGrip.position, {
++            reason: coreWorkSuspended ? 'core-work-suspended' : 'deliberate-release'
++          });
+           if (trajectory) this.recordSiltDecision('silt-trajectory', trajectory, frameState);
+         }
+         this.flushHeldAbsorbMotion(frameState, 'grip-released');

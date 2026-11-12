@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "passed": 10,
+    "failed": 0
+  },
+  "checks": [
+    "exact baselines and authority prerequisite",
+    "exact four-file install and original backups",
+    "idempotent",
+    "restore originals and remove exact new module",
+    "later edits protected: src/world/HostConditionSystem.js",
+    "later edits protected: public/data/hosts/HOST_ALPHA_WOUNDED_NURSERY.json",
+    "later edits protected: src/core/GameRuntime.js",
+    "later edits protected: src/routes/VascularRhythmRouteSystem.js",
+    "late corrupt payload prevents new-module write",
+    "missing authority prerequisite prevents writes"
+  ]
+}

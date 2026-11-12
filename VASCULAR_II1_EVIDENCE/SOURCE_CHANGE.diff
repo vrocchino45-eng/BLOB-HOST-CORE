@@ -1,0 +1,205 @@
+--- baseline/src/routes/VascularRhythmRouteSystem.js
++++ VASCULAR-II1/src/routes/VascularRhythmRouteSystem.js
+@@ -1,4 +1,5 @@
+ import * as THREE from "three";
++import { VascularReturnHandoff } from "./VascularReturnHandoff.js";
+ import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
+ import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
+ 
+@@ -26,6 +27,14 @@
+     this.frameState = frameState;
+     this.hostConnectionReceiptLedger = hostConnectionReceiptLedger;
+     this.siltSignalReceiver = new VascularSiltSignalReceiver();
++    // VASCULAR-II1: fresh, paired return flow; first-visit state stays retained.
++    this.returnHandoff = new VascularReturnHandoff();
++    this.returnHandoffVisuals = null;
++    this.returnHandoffPlayer = new THREE.Vector3();
++    this.returnHandoffSource = new THREE.Vector3();
++    this.returnHandoffReceiver = new THREE.Vector3();
++    this.returnHandoffSourceDistance = Infinity;
++    this.returnHandoffReceiverDistance = Infinity;
+     this.hostCauseNotice = null;
+     this.hostCauseNoticeText = '';
+ 
+@@ -154,6 +163,7 @@
+     this.buildPathMetrics();
+     this.pathCurve = new THREE.CatmullRomCurve3(this.pathPoints, false, "centripetal", 0.42);
+     this.createAnatomy();
++    this.createReturnHandoffVisuals();
+     this.setVisible(false);
+     this.prepared = true;
+     this.publish(this.frameState, false);
+@@ -188,6 +198,7 @@
+   }
+ 
+   onRuntimeUnmount(frameState) {
++    this.returnHandoff.suspend();
+     this.active = false;
+     this.setVisible(false);
+     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
+@@ -229,6 +240,7 @@
+ 
+     const sample = this.samplePlayerPath(dt, frameState);
+     this.updateCadence(dt, frameState, sample);
++    this.updateReturnHandoff(dt, frameState);
+     this.updateTraversalMaterialResponse(dt, frameState, sample);
+     this.updateGrammarReinforcement(frameState, sample);
+     this.applyDynamicCurrent(frameState, sample);
+@@ -239,10 +251,127 @@
+     this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
+       input: frameState.input, signal01: territorySignal("vascular", {membraneLoad: this.siltSignalReceiver.membraneLoad}),
+       circuitStatus: this.siltSignalReceiver.receivedTotal > 0 ? "silt_cause_received" : "awaiting_silt_cause", frameState});
++    this.updateReturnHandoffVisuals(frameState);
+     this.publish(frameState, true);
+   }
+ 
+ 
++
++  returnHandoffEligible(frameState = this.frameState) {
++    const history = frameState.act1RouteHistory ?? {};
++    const route = history.routeStates?.vascular_route ?? {};
++    const returned = route.returned === true || history.vascularReturned === true;
++    return Boolean(this.active && frameState.activeCellId === ROUTE_CELL_ID
++      && this.completed && returned && (route.entryCount ?? 0) >= 2
++      && (!frameState.returnRegionEngine?.phase2?.vascular || this.returnHandoff.completed));
++  }
++
++  updateReturnHandoff(dt, frameState) {
++    const eligible = this.returnHandoffEligible(frameState);
++    if (!eligible) { this.returnHandoff.suspend(); return; }
++    this.root.updateWorldMatrix(true, true);
++    this.playerRoot.getWorldPosition(this.returnHandoffPlayer);
++    this.valves[1].getWorldPosition(this.returnHandoffSource);
++    this.valves[0].getWorldPosition(this.returnHandoffReceiver);
++    this.returnHandoffSourceDistance = this.returnHandoffPlayer.distanceTo(this.returnHandoffSource);
++    this.returnHandoffReceiverDistance = this.returnHandoffPlayer.distanceTo(this.returnHandoffReceiver);
++    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
++    const suspended = Boolean(inspection.coreWorkActive);
++    this.returnHandoff.update(dt, {
++      eligible, suspended,
++      sourceNear: this.returnHandoffSourceDistance <= 1.9,
++      receiverNear: this.returnHandoffReceiverDistance <= 1.9,
++      stabilizeHeld: Boolean(frameState.input?.stabilizeHeld),
++      pulsePressed: Boolean(frameState.input?.pulsePressed),
++      pulseEventId: frameState.input?.pulseEventId ?? 0
++    });
++    // The shared credit owner runs before regional completion publishers.
++    // Keep a pending completion if another owner published in this same frame.
++    const pending = frameState.returnRegionCompletionEvent;
++    if (eligible && !suspended && this.returnHandoff.completed && !this.returnHandoff.published
++        && !(pending && pending.frame === (frameState.frame ?? 0)
++          && pending.key !== 'vascular:phase_2')) {
++      frameState.returnRegionCompletionEvent = {
++        pass: 'EARNED-REGION-PHASE2-1', schemaVersion: 1,
++        key: 'vascular:phase_2', routeKey: 'vascular', phase: 2,
++        sequence: this.returnHandoff.completionSequence,
++        source: 'VascularRhythmRouteSystem', frame: frameState.frame ?? 0,
++        evidenceId: this.returnHandoff.handoffId,
++        sourcePulseId: this.returnHandoff.sourcePulseId,
++        receiverSettleSeconds: this.returnHandoff.settleSeconds,
++        materialTransfer: false
++      };
++      this.returnHandoff.published = true;
++    }
++  }
++
++  createReturnHandoffVisuals() {
++    const root = new THREE.Group();
++    root.name = 'vascular_ii_paired_return_handoff';
++    root.userData.targetingSuppressed = true;
++    const marker = (valve, color) => {
++      const material = this.trackMaterial(new THREE.MeshStandardMaterial({
++        color, emissive: color, emissiveIntensity: 0.7,
++        transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide
++      }));
++      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.54, 0.026, 6, 32), material);
++      ring.position.copy(valve.position);
++      ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1),
++        this.pathCurve.getTangentAt(valve.userData.progress).normalize());
++      ring.userData.targetingSuppressed = true;
++      root.add(ring);
++      return ring;
++    };
++    const source = marker(this.valves[1], 0xffc66b);
++    const receiver = marker(this.valves[0], 0x76ffca);
++    const packet = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 7),
++      this.trackMaterial(new THREE.MeshStandardMaterial({
++        color: 0xffd489, emissive: 0xffbe57, emissiveIntensity: 1,
++        transparent: true, opacity: 0.92, depthWrite: false
++      })));
++    packet.name = 'vascular_ii_projected_current_response';
++    packet.userData.targetingSuppressed = true;
++    root.add(packet);
++    root.visible = false;
++    this.root.add(root);
++    this.returnHandoffVisuals = { root, source, receiver, packet };
++  }
++
++  updateReturnHandoffVisuals(frameState) {
++    const visual = this.returnHandoffVisuals;
++    const goal = this.returnHandoff;
++    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
++    visual.root.visible = this.returnHandoffEligible(frameState) && !goal.completed
++      && !inspection.coreWorkActive;
++    if (!visual.root.visible) return;
++    const wave = (Math.sin(this.elapsed * 3.2) + 1) * 0.5;
++    visual.source.material.opacity = goal.handoffId ? 0.2 : 0.6 + wave * 0.3;
++    visual.receiver.material.opacity = goal.travelSeconds >= 2 ? 0.65 + wave * 0.3 : 0.32;
++    visual.receiver.scale.setScalar(1 + goal.settleSeconds / 0.75 * 0.12);
++    visual.packet.visible = Boolean(goal.handoffId);
++    if (goal.handoffId) {
++      visual.packet.position.copy(this.pathCurve.getPointAt(
++        THREE.MathUtils.lerp(0.55, 0.28, goal.travelSeconds / 2)));
++      visual.packet.scale.setScalar(1 + wave * 0.18);
++    }
++  }
++
++  returnHandoffAction() {
++    if (!this.returnHandoffEligible()) return null;
++    if (this.returnHandoff.completed) return 'Paired return current settled. Follow the gold current into the open entry fold.';
++    const goal = this.returnHandoff;
++    if (!goal.handoffId) {
++      return this.returnHandoffSourceDistance <= 1.9
++        ? goal.sourceHold >= 0.18
++          ? 'Pulse while holding LT to send the return current toward the green intake valve.'
++          : 'Hold LT at the amber branch valve to establish the return current.'
++        : 'Approach the amber branch valve to send a paired return current.';
++    }
++    if (goal.travelSeconds < 2) return 'Follow the gold current response toward the green intake valve.';
++    return this.returnHandoffReceiverDistance <= 1.9
++      ? 'Hold LT at the green intake valve to receive and settle the return current.'
++      : 'Approach the green intake valve and hold LT to receive the waiting current.';
++  }
+ 
+   applyHostRhythmVisual(frameState) {
+     const host = frameState.hostRhythm ?? {};
+@@ -1397,6 +1526,8 @@
+   }
+ 
+   guideLine() {
++    const handoff = this.returnHandoffAction();
++    if (handoff) return handoff;
+     if (this.completed) return "The vessel retained the relationship. Its current now carries you back toward the Hub.";
+     const requiredReads = this.recipe.cadence?.requiredReads ?? 3;
+     const readsComplete = this.lockedCadenceReads >= requiredReads;
+@@ -1419,6 +1550,8 @@
+   }
+ 
+   nextAction() {
++    const handoff = this.returnHandoffAction();
++    if (handoff) return handoff;
+     if (this.completed) return "Follow the gold return current into the open entry fold.";
+     const requiredReads = this.recipe.cadence?.requiredReads ?? 3;
+     const readsComplete = this.lockedCadenceReads >= requiredReads;
+@@ -1612,6 +1745,11 @@
+     // No Vascular route logic reads this to progress or change circulation.
+     const hostCause = this.hostConnectionReceiptLedger?.forVascular() ?? null;
+     frameState.vascularRhythmRoute = {
++      returnHandoff: this.returnHandoff.snapshot({
++        eligible: this.returnHandoffEligible(frameState),
++        active: Boolean(active && this.returnHandoffEligible(frameState)
++          && !(frameState.inspectionCamera ?? frameState.tightInspectionCamera)?.coreWorkActive)
++      }),
+       hostConnectionObservation: hostCause,
+       // LS1E2: receiver state belongs to Vascular; Silt receipts stay immutable.
+       siltSignalResponse: this.siltSignalReceiver.snapshot(),

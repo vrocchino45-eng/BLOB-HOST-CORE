@@ -1,0 +1,164 @@
+{
+  "pass": "SILT-MODE1",
+  "scope": "Actual recipes, normalized InputSystem and Silt owner with controlled prior-progress/contact/player poses; explicit stale-input fixture tests same-frame precedence.",
+  "checks": [
+    {
+      "name": "Core Work release is classified as mode suspension and creates no Host disturbance",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:7:283\n    at check (file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:4:54)\n    at file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:7:1"
+    },
+    {
+      "name": "Core Work cannot silently seat a braced imprinted grain",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'silt-grain-01'\n- null\n\n    at file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:8:222\n    at check (file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:4:54)\n    at file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:8:1"
+    },
+    {
+      "name": "Current Core Work context overrides stale normalized world input in the entry frame",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'silt-grain-01'\n- null\n\n    at file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:9:381\n    at check (file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:4:54)\n    at file:///workspace/scratch/5e2510728e07/candidate_base/SILT_MODE_HANDOFF1_TEST.mjs:9:1"
+    },
+    {
+      "name": "Ordinary A release away from the patch still creates one deliberate Host cause",
+      "status": "PASS"
+    },
+    {
+      "name": "Ordinary LT release at a real imprint still seats deliberately",
+      "status": "PASS"
+    },
+    {
+      "name": "Ordinary A commit at a real imprint still seats deliberately",
+      "status": "PASS"
+    },
+    {
+      "name": "Region-hidden release keeps its existing reason and cannot create a Host cause",
+      "status": "PASS"
+    },
+    {
+      "name": "Leaving Core Work permits a fresh grip without stale imprint/seat proof",
+      "status": "PASS"
+    }
+  ],
+  "cases": [
+    {
+      "name": "unbraced Core Work",
+      "held": null,
+      "seat": null,
+      "mass": 8,
+      "host": 1,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": false,
+        "started": true,
+        "stage": "gripped",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 1,
+        "proof": {
+          "grip": 1,
+          "imprint": null,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "lastTrajectory": {
+        "sequence": 2,
+        "kind": "silt-trajectory",
+        "frame": 323,
+        "siltElapsedSeconds": 16.15,
+        "heldGrainId": "silt-grain-01",
+        "candidateAtFrameStart": "silt-grain-01",
+        "outcome": "released-with-trajectory",
+        "unitId": "silt-grain-01",
+        "position": [
+          -4.46,
+          -1.88,
+          -10.4
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "reason": "deliberate-release",
+        "noMaterialTransfer": true,
+        "progressionCredit": false
+      }
+    },
+    {
+      "name": "imprinted Core Work",
+      "held": null,
+      "seat": "silt-grain-01",
+      "mass": 8,
+      "host": 0,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": false,
+        "started": true,
+        "stage": "imprinted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 10,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      }
+    },
+    {
+      "name": "stale input on mode entry",
+      "held": null,
+      "seat": "silt-grain-01",
+      "mass": 8,
+      "host": 0,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": false,
+        "started": true,
+        "stage": "imprinted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 10,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      }
+    }
+  ],
+  "summary": {
+    "expected": 8,
+    "passed": 5,
+    "failed": 3
+  }
+}

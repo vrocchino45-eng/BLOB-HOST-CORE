@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "checks": [
+    "apply installs exact helper, optional stage module and owner",
+    "backup preserves exact VIS1 Silt source",
+    "repeat apply is idempotent",
+    "restore reinstates VIS1 and removes only patch additions",
+    "recognized partial dependency-only installation can finish",
+    "restore refuses later edits without changing any file",
+    "apply rejects unexpected versions without changing any file",
+    "payload mismatch rejects all writes"
+  ]
+}

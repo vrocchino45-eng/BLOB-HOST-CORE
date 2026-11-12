@@ -1,0 +1,60 @@
+{
+  "pass": "GSL-4E2G-STAGE2B",
+  "scope": "real production adapter and Guide consumer, controlled playerAttachment inputs (not LS1 producer)",
+  "checks": [
+    {
+      "name": "B05 unexpected loss holds concern 1.8s then companion",
+      "status": "PASS"
+    },
+    {
+      "name": "B05 recovery holds support 1.3s then companion",
+      "status": "PASS"
+    },
+    {
+      "name": "B02 deliberate_away_input suppresses concern",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 rapid loss -> recovery -> loss transitions deterministically",
+      "status": "FAIL",
+      "error": "TypeError: Cannot read properties of undefined (reading 'sample')\n    at sample (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_STAGE2B.mjs:9:108)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_STAGE2B.mjs:13:336\n    at check (file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_STAGE2B.mjs:7:29)\n    at file:///C:/Users/vrocc_000/Documents/GitHub/BLOB-HOST-CORE/GSL4E2G_STAGE2B.mjs:13:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "B09 stable attachment does not re-trigger event",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 missing reason never fabricates concern",
+      "status": "PASS"
+    },
+    {
+      "name": "Adapter never mutates LS1 playerAttachment",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: unexpected loss concern",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: recovery support and timeout",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: deliberate release neutral",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: LS1 state not mutated",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 1
+  },
+  "notVerified": [
+    "actual LS1 attachment producer event semantics",
+    "browser rendering and human feel",
+    "explicit cooldown guarantee (adapter implements timed modes, not a separate cooldown)"
+  ]
+}

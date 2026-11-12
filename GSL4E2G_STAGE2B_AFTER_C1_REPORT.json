@@ -1,0 +1,59 @@
+{
+  "pass": "GSL-4E2G-STAGE2B",
+  "scope": "real production adapter and Guide consumer, controlled playerAttachment inputs (not LS1 producer)",
+  "checks": [
+    {
+      "name": "B05 unexpected loss holds concern 1.8s then companion",
+      "status": "PASS"
+    },
+    {
+      "name": "B05 recovery holds support 1.3s then companion",
+      "status": "PASS"
+    },
+    {
+      "name": "B02 deliberate_away_input suppresses concern",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 rapid loss -> recovery -> loss transitions deterministically",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 stable attachment does not re-trigger event",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 missing reason never fabricates concern",
+      "status": "PASS"
+    },
+    {
+      "name": "Adapter never mutates LS1 playerAttachment",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: unexpected loss concern",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: recovery support and timeout",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: deliberate release neutral",
+      "status": "PASS"
+    },
+    {
+      "name": "Real adapter -> Guide: LS1 state not mutated",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "failed": 0
+  },
+  "notVerified": [
+    "actual LS1 attachment producer event semantics",
+    "browser rendering and human feel",
+    "explicit cooldown guarantee (adapter implements timed modes, not a separate cooldown)"
+  ]
+}

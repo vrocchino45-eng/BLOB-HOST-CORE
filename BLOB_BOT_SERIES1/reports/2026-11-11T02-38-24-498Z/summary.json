@@ -1,0 +1,119 @@
+{
+  "suite": "BLOB-BOT-SERIES1",
+  "mode": "--browser",
+  "selectedCase": "B03",
+  "startedAt": "2026-11-11T02:38:27.532Z",
+  "runId": "2026-11-11T02-38-24-498Z",
+  "baseline": "HOST-TRACE1",
+  "qualification": "Scripted bots and controlled owner/receipt fixtures. No claim of human feel, physical controller delivery, autonomous exploration or a from-zero campaign.",
+  "results": [
+    {
+      "id": "D01",
+      "name": "Data profiles and invalid archive data",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "M01",
+      "name": "Conserved Silt material loop",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "M02",
+      "name": "Core Work grip handoff",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "G01",
+      "name": "Vascular paired handoff",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "G02",
+      "name": "Silt goal negative receipts",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "synthetic_receipts"
+    },
+    {
+      "id": "G03",
+      "name": "Six-credit owner integration",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "H01",
+      "name": "Host cycle owner and hidden-region handling",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "H02",
+      "name": "Six-cycle recovery against neutral twin",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "T01",
+      "name": "Read-only Host telemetry export",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "P01",
+      "name": "Paired reserve and credit boundary",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "owner_fixture"
+    },
+    {
+      "id": "B01",
+      "name": "Host cycle and real telemetry download",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "running_browser"
+    },
+    {
+      "id": "B02",
+      "name": "Held-grain mode interruption and reacquisition",
+      "status": "NOT_RUN",
+      "reason": "Excluded by selected mode",
+      "tier": "running_browser"
+    },
+    {
+      "id": "B03",
+      "name": "Regional goals, six-phase, Hub and reserve arc",
+      "status": "FAIL",
+      "tier": "running_browser",
+      "checksPassed": 0,
+      "checksFailed": 0,
+      "expectedChecks": 1,
+      "durationSeconds": 513.8,
+      "exitCode": 1,
+      "timedOut": false,
+      "report": null,
+      "error": null
+    }
+  ],
+  "productionFilesUnchanged": true,
+  "sourceFingerprint": "96ba0ada947428688260b77aec253025b7f69db428d7137ecac5d673d4f006b2",
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "blocked": 0,
+    "notRun": 12,
+    "checksPassed": 0
+  },
+  "completedAt": "2026-11-11T02:47:04.204Z"
+}
