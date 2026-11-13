@@ -1,0 +1,252 @@
+{
+  "done": true,
+  "error": null,
+  "setup": {
+    "pass": "SILT-II1-TEST-START",
+    "testOnly": true,
+    "earnedProgression": false,
+    "scope": "Staged previous first-route completion, qualified revisit and near-grain pose. No new goal proof, ecology time skip, material creation or phase-two credit written.",
+    "grainId": "silt-grain-01",
+    "next": "Return focus to game. Aim at the nearby grain, hold LT/Q and press A/E; continue imprint, seat, extract, deliberate release and native return."
+  },
+  "stages": [
+    {
+      "label": "actual grip",
+      "clock": 20.10829999999972,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "gripped",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 1,
+        "proof": {
+          "grip": 1,
+          "imprint": null,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "held": "silt-grain-01",
+      "seated": null,
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "position": [
+        1.2689435084722713,
+        -0.317080936322584,
+        -11.20011486913911
+      ]
+    },
+    {
+      "label": "actual imprint",
+      "clock": 21.05549999999968,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "imprinted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 10,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": null,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "held": "silt-grain-01",
+      "seated": null,
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "position": [
+        -5.365019602059478,
+        -2.6004843240369127,
+        -9.186765590104859
+      ]
+    },
+    {
+      "label": "actual seat",
+      "clock": 21.20549999999968,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "seated",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 13,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": null,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "held": null,
+      "seated": "silt-grain-01",
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "position": [
+        -5.3728885046089765,
+        -2.6015823954585646,
+        -9.148272744954614
+      ]
+    },
+    {
+      "label": "actual extraction",
+      "clock": 21.655499999999687,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "extracted",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 17,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": null
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "held": "silt-grain-01",
+      "seated": null,
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "position": [
+        -5.380839808532655,
+        -2.6023411450654055,
+        -9.0321118217539
+      ]
+    },
+    {
+      "label": "actual free release",
+      "clock": 22.105499999999694,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "released_pending_native",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 20,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": 20
+        },
+        "completed": false,
+        "completionPublished": false,
+        "completionSequence": 0,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "held": null,
+      "seated": null,
+      "credits": 5,
+      "engine": 3,
+      "mass": 8,
+      "position": [
+        -5.433125083280368,
+        -2.6092816777679793,
+        -5.9145725596733145
+      ]
+    },
+    {
+      "label": "native return and six-phase credit",
+      "clock": 41.788599999999384,
+      "goal": {
+        "pass": "SILT-II1",
+        "active": true,
+        "started": true,
+        "stage": "completed",
+        "grainId": "silt-grain-01",
+        "attemptSequence": 1,
+        "activationSequence": 0,
+        "consumedSequence": 20,
+        "proof": {
+          "grip": 1,
+          "imprint": 10,
+          "seat": 11,
+          "extract": 14,
+          "release": 20
+        },
+        "completed": true,
+        "completionPublished": true,
+        "completionSequence": 1,
+        "completionKey": "silt:phase_2",
+        "materialTransfer": false,
+        "physicsAuthority": false,
+        "offRouteSimulation": false
+      },
+      "held": null,
+      "seated": null,
+      "credits": 6,
+      "engine": 6,
+      "mass": 8,
+      "position": [
+        -4.254457415405936,
+        -2.2944136623787106,
+        0.5847620856694193
+      ]
+    }
+  ],
+  "contactFixture": {
+    "scope": "One controlled player/accepted held-grain contact pose, same fixture as earlier B03. No goal proof written.",
+    "accepted": true,
+    "grainId": "silt-grain-01"
+  },
+  "releaseFixture": {
+    "scope": "One existing B03 player release-clearance pose: world z +3. No grain/native/goal state forced."
+  },
+  "delivery": "Synthetic DOM keyboard events through InputSystem once per real tick; existing prior-progress/contact/release poses remain declared fixtures",
+  "phase": "native"
+}

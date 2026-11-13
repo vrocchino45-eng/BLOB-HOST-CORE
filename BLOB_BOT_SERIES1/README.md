@@ -1,6 +1,6 @@
 # BLOB: HOST CORE — Bot Series 1
 
-Repeatable scripted regression bots for the current CONNECTION5 visual trial build. This adds a separate test folder and reports; no production game file or existing package script is replaced.
+Repeatable scripted regression bots for CONNECTION13 Core Work input coverage on CONNECTION12 gameplay, retaining prior identities and checks. This adds a separate test folder and reports; no production game file or existing package script is replaced.
 
 ## Run
 
@@ -12,9 +12,9 @@ With your usual Node/project dependencies installed:
 node .\BLOB_BOT_SERIES1\run.mjs --quick
 ```
 
-The quick run executes thirteen owner/contract groups with 255 checks. It needs the project's existing Three.js dependency and runs without a browser installation.
+The quick run executes fifteen owner/contract cases with 293 checks. It needs the project's existing Three.js dependency and runs without a browser installation.
 
-To enable the five browser scenarios, install the suite's pinned test dependency into its own folder, then install its Chromium browser:
+To enable the eight browser scenarios, install the suite's pinned test dependency into its own folder, then install its Chromium browser:
 
 ```powershell
 npm install --prefix .\BLOB_BOT_SERIES1
@@ -56,9 +56,9 @@ The runner starts a temporary local Vite server and isolated headless browser fo
 
 CONNECTION3 retains the original case identities and adds W01/W02/W03. Earlier RESULTS.md and packaged report directories remain historical evidence. Use each new summary's baseline, selected cases and source fingerprint for current results. `--case=W03` or `--case=B03` selects a single case; omitted cases are NOT_RUN. Browser workers have a 30-minute hard watchdog. Frame-scheduled test inputs do not advance game time or prove physical gamepad delivery.
 
-CONNECTION5 adds W04 (14 particle continuity, lifecycle and exact physics-parity groups) and W05 (matched actual particle-position browser checks). Current quick total is 255 checks; browser total is five scenarios. The particle phase uses existing <=50ms mounted simulation steps; ordinary render calls cannot advance it. Prior CONNECTION3 counts and reports above remain historical evidence.
+CONNECTION5 adds W04 (14 particle continuity, lifecycle and exact physics-parity groups) and W05 (matched actual particle-position browser checks). At CONNECTION5, the quick total was 255 checks and the browser total was five scenarios. The particle phase uses existing <=50ms mounted simulation steps; ordinary render calls cannot advance it. Prior CONNECTION3 counts and reports above remain historical evidence.
 
-Browser scenarios each count as one scenario in the machine summary; their many internal assertions are not represented as a separate assertion total. The quick count is 255 owner/contract checks. plan.json is the exact executable case catalog.
+Browser scenarios each count as one scenario in the machine summary; their many internal assertions are not represented as a separate assertion total. The CONNECTION5 quick count was 255 owner/contract checks; CONNECTION10 extends that to 261. plan.json is the exact executable case catalog.
 
 The runner itself can be checked with `node .\BLOB_BOT_SERIES1\check-runner.mjs`. Its intentional failure controls run in a temporary miniature project and leave the game untouched.
 
@@ -89,3 +89,55 @@ This is an initial bot series. Broader from-zero exploration, long soak tests, p
 ## Optional environment overrides
 
 Advanced/CI runs can set BLOB_BOT_CHROMIUM_EXECUTABLE and JSON-array BLOB_BOT_CHROMIUM_ARGS for an existing Chromium executable. The delivery environment used its supplied Playwright and Chromium with these overrides. Normal local setup above uses Playwright's installed Chromium. The harness never requests elevated permissions, installs dependencies automatically or modifies gameplay to bypass missing tools.
+
+
+## CONNECTION10 — consequence-loop coverage
+
+Gameplay baseline remains CONNECTION5. Existing case IDs and historical results are retained. C01 adds the existing 18-check Silt → Vascular → Grave → Silt audit to the browser catalog as one scenario. C02 adds six owner groups including 32 matched topology/Host/signal/calm fixtures, positive-delta saturation, replay and invalid-provenance controls.
+
+C01 uses normalized input and actual route/evaluator owners, with direct cell changes, supplied prior progress, contact poses and a near-resolution Grave II fixture. It does not earn an uninterrupted campaign. C02 supplies valid release decisions and prior Grave-return history to actual owners; it does not simulate material transactions or establish visual perception. Saturated causes may remain accepted while producing no new positive applied-effect record.
+
+Current quick total: 261 checks. Current browser total: six scenarios. --all selects 20 catalog cases, totaling 267 summary checks when all pass. C01's 18 internal checks are included inside its one browser scenario, not added again to that machine-summary total.
+
+Run one new case with `node BLOB_BOT_SERIES1/run.mjs --case=C01` or `--case=C02`. Use `--all` for closeout. Test-only consequence helpers stay inside this harness and are never imported by normal boot. No source, goal, reserve, receipt, material, controller or camera law changes are included.
+
+
+## CONNECTION11 — portable gameplay-source identity
+
+Each completed summary retains its original raw `sourceFingerprint` and byte-exact `productionFilesUnchanged` guard. It also includes `sourceIdentity`: a canonical sorted per-file SHA-256 manifest of src, public, package.json and index.html, plus `sourceIdentityUnchanged`.
+
+The v1 policy normalizes CRLF to LF only in recognized UTF-8 text extensions. Binary bytes, whitespace, BOM and final newline remain significant. Full relative paths use forward slashes and code-point ordering. Source identity excludes the harness itself, node_modules, dist, runtime state, user performance and environment. It is not an event-authentication or dependency-reproducibility claim.
+
+Compare current source against a completed new-format summary:
+
+```powershell
+node .\BLOB_BOT_SERIES1\compare-source.mjs --current .\CONNECTION11_EVIDENCE\quick\summary.json
+```
+
+Or compare two new summaries:
+
+```powershell
+node .\BLOB_BOT_SERIES1\compare-source.mjs .\run-a\summary.json .\run-b\summary.json
+```
+
+Exit 0 means equivalent under the declared policy; exit 1 lists changed/added/removed paths; exit 2 means missing, invalid or unsupported identity. Historical reports remain valid evidence of their original tests but cannot acquire a portable manifest retroactively from one raw aggregate hash. Preserve them; compare new-format reports going forward.
+
+Self-check the utility with `node .\BLOB_BOT_SERIES1\check-source-identity.mjs`. Its eleven temporary-tree/runner controls are outside the catalog's 261 quick checks. The catalog remains 20 cases and six browser scenarios. Raw byte mutation still fails the runner even when the two portable identities agree.
+
+
+## CONNECTION12 — territory Pulse freshness
+
+L01 adds 32 owner checks across Silt, Vascular, Grave and Hub. L02 adds one running-browser scenario through actual InputSystem, Vascular unmount/remount and supplied Core Work context. A counter advance while another region is active cannot replay a local exploratory Pulse; a current canonical released-Pulse flag is also required. Fresh local releases, range checks and existing held Absorb/Stabilize reads are preserved.
+
+Current catalog: 22 cases, 293 quick checks and seven browser scenarios; a full pass totals 300 machine-summary checks. Older counts above are checkpoint history. L02 uses a paused registry, manual bounded owner ticks, direct cell switches and near-site poses; it is not ordinary navigation or physical gamepad acceptance. No target permission, Host receipt, material, goal, reserve, current or control law changes are included.
+
+The CONNECTION12 gameplay identity deliberately differs from CONNECTION11 in `src/world/RegionalTerritoryExpansion.js`. Comparing a current build with the historical CONNECTION11 example report should list that path. Compare new run summaries for the current baseline. New checks are selectable with `--case=L01` and `--case=L02`.
+
+
+## CONNECTION13 — real Core Work placement inputs
+
+K01 adds one browser scenario from actual keyboard/mouse through selection, grab, inward/outward depth, place, live chemistry, radial physiology and Vascular coherence. It moves all three retained pieces into Deep Core, then to membrane, using F/G, E, arrows, Q and right mouse. It does not assign piece offsets, counts, physiology, reserve or current factors.
+
+The earlier returned-piece/four-credit checkpoint and in-current sampling pose are fixtures; this does not earn those pieces from zero. The test waits for the supplied checkpoint's actual four-credit publication before measuring, rather than changing registry order. Core Work suppresses world verbs/local coherence; world mode uses the resulting placement. Material mass, credits, architecture phase and accepted Host causes are preserved. Reserve samples are observed, not reset.
+
+Current catalog: 23 cases, 293 quick checks and eight browser scenarios; a complete future pass totals 301 machine-summary checks. CONNECTION13 validation runs the quick catalog and K01 only. The prior 22-case/300-check full run remains CONNECTION12 evidence; it is not recounted as a fresh full run. K01 is selectable with `--case=K01`. Physical gamepad delivery and naturally earned campaigns remain separate evidence.

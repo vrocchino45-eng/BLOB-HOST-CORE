@@ -1,0 +1,62 @@
+{
+  "pass": "SILT-II1-CONTRACT",
+  "scope": "Synthetic receipt negatives for the bounded goal observer only; gameplay success is checked separately against actual producers.",
+  "checks": [
+    {
+      "name": "Pre-eligibility and stale receipt sequences cannot begin a goal",
+      "status": "PASS"
+    },
+    {
+      "name": "A dormant first visit cannot observe a round trip",
+      "status": "PASS"
+    },
+    {
+      "name": "Seat before imprint and native observation alone cannot complete",
+      "status": "PASS"
+    },
+    {
+      "name": "Mixed grain IDs cannot combine imprint, seat or extraction proof",
+      "status": "PASS"
+    },
+    {
+      "name": "A new pre-seat grip starts a clean attempt",
+      "status": "PASS"
+    },
+    {
+      "name": "Relaxed imprint must be earned again before seating",
+      "status": "PASS"
+    },
+    {
+      "name": "Implicit region-hidden release cannot satisfy the final release",
+      "status": "PASS"
+    },
+    {
+      "name": "Core Work or hidden receipts are skipped on resume",
+      "status": "PASS"
+    },
+    {
+      "name": "Another free grain near the native path cannot finish the chosen journey",
+      "status": "PASS"
+    },
+    {
+      "name": "Held/seated grain or incorrect ledger ownership cannot finish",
+      "status": "PASS"
+    },
+    {
+      "name": "A release must have a subsequent real trajectory advance",
+      "status": "PASS"
+    },
+    {
+      "name": "Reacquiring the released grain invalidates prior release proof",
+      "status": "PASS"
+    },
+    {
+      "name": "Correct ordered same-grain proof completes only once",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 13,
+    "failed": 0
+  }
+}

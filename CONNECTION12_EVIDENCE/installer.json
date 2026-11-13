@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "checks": [
+    "Apply/check/idempotence/byte-exact restore LF",
+    "Apply/check/idempotence/byte-exact restore CRLF",
+    "Reject without writes: bad-source",
+    "Reject without writes: bad-payload",
+    "Reject without writes: occupied-new-file",
+    "Reject without writes: conflicting-backup",
+    "Reject without writes: edited-installed-file"
+  ]
+}

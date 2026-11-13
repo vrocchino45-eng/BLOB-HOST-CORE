@@ -1,6 +1,6 @@
 {
   "suite": "BLOB-BOT-SERIES1",
-  "baseline": "CONNECTION5",
+  "baseline": "CONNECTION13-HARNESS / CONNECTION12-GAMEPLAY",
   "cases": [
     {
       "id": "D01",
@@ -141,6 +141,46 @@
     {
       "id": "W05",
       "name": "Live continuous current particle contribution and lifecycle",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "C01",
+      "name": "Silt\u2013Vascular\u2013Grave\u2013Silt consequence loop",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "C02",
+      "name": "Consequence attribution, saturation and provenance",
+      "file": "cases/C02.mjs",
+      "expectedChecks": 6,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "L01",
+      "name": "Territory Pulse freshness across region gaps",
+      "file": "cases/L01.mjs",
+      "expectedChecks": 32,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "L02",
+      "name": "Live input, territory remount and Core Work Pulse isolation",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "K01",
+      "name": "Player-input Core placement to Vascular and reserve",
       "file": "cases/browser.mjs",
       "expectedChecks": 1,
       "tier": "running_browser",

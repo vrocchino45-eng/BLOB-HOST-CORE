@@ -1,3 +1,5 @@
+import {coreWorkBrowser} from './core-work-browser.mjs';
+import {territoryInputBrowser} from './territory-input-browser.mjs';
 import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {fileURLToPath} from 'node:url';import {currentVisualBrowser} from './current-visual-browser.mjs';import {simulationClock} from './simulation-clock.mjs';import {connectionBrowser} from './connection-browser.mjs';import {runArc} from './browser-arc.mjs';
 const require=createRequire(import.meta.url),root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),reportDir=process.env.BLOB_BOT_RUN_DIR,id=process.env.BLOB_BOT_CASE;let chromium;
 try{let api;try{api=require('playwright');}catch{if(!process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES)throw Error('Playwright is not installed');api=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));}chromium=api.chromium;}catch(e){console.error('Browser tests require Playwright and its Chromium browser. Use --quick for owner tests with the existing project dependencies. '+e.message);process.exit(78);}
@@ -28,6 +30,14 @@ try{
   await page.keyboard.press('f');await page.waitForFunction(()=>!window.__CAMERA_AUDIT_RUNTIME__.frameState.inspectionCamera.active);
   await page.evaluate(id=>{const r=window.__CAMERA_AUDIT_RUNTIME__,s=r.siltPressureRouteSystem,i=s.livingCycle.units.findIndex(x=>x.id===id),p=s.livingMatterMeshes[i].body.position.clone().add(r.playerCore.position.clone().set(0,.1,1));r.playerCore.position.copy(s.root.localToWorld(p));r.cameraYaw=0;r.cameraPitch=.18;},before.held);
   await page.waitForFunction(id=>window.__CAMERA_AUDIT_RUNTIME__.frameState.siltMaterialAim?.candidateId===id,before.held,{timeout:10000});await page.keyboard.press('e');await page.waitForFunction(id=>window.__CAMERA_AUDIT_RUNTIME__.siltPressureRouteSystem.siltGrip.heldId===id,before.held,{timeout:10000});const reacquired=await shot();assert.equal(reacquired.mass,8);assert.equal(reacquired.host,before.host);assert.equal(reacquired.goal.proof.imprint,null);await page.keyboard.up('q');detail={scope:'Actual keyboard acquisition, imprint and F/G handoff; supplied first-return/revisit and accepted contact/player pose fixtures. No goal proof, seat, release classification or Host result forced.',setup,contact,before,work,reacquired};
+ }else if(id==='C01'){
+  for(const [slot,cell] of [[3,'CELL_SIGNAL_CHORUS_NERVE_001'],[5,'CELL_VASCULAR_RHYTHM_ROUTE_001'],[4,'CELL_GRAVE_MEMORY_RESIDUE_BED_001'],[6,'CELL_SILT_PRESSURE_ROUTE_001']]){
+   await warp(slot);await page.waitForFunction(cell=>window.__CAMERA_AUDIT_RUNTIME__.frameState.activeCellId===cell,cell);await page.waitForTimeout(200);
+  }
+  detail=await page.evaluate(async()=>{const {auditConnections}=await import('/BLOB_BOT_SERIES1/cases/consequence-chain.mjs');return auditConnections(window.__CAMERA_AUDIT_RUNTIME__);});
+  assert.equal(detail.summary.passed,18);assert.equal(detail.summary.failed,0);assert.equal(detail.summary.complete,true);
+ }else if(id==='L02'){detail=await territoryInputBrowser(page);
+ }else if(id==='K01'){detail=await coreWorkBrowser(page);
  }else if(id==='W05'){detail=await currentVisualBrowser(page);
  }else if(id==='W03'){detail=await connectionBrowser(page);
  }else if(id==='B03'){detail=await runArc(page,{reportDir,errors});}else throw Error('Unknown browser case '+id);

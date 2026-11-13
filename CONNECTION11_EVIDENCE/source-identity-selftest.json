@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "scope": "Temporary file trees and intentional runner controls; no gameplay acceptance claim.",
+  "summary": {
+    "passed": 11,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "LF/CRLF text, root paths and file creation order yield the same identity",
+      "status": "PASS"
+    },
+    {
+      "name": "Hash validates and includes the declared file manifest",
+      "status": "PASS"
+    },
+    {
+      "name": "Code-content changes remain different and name the file",
+      "status": "PASS"
+    },
+    {
+      "name": "Binary CRLF bytes are never normalized",
+      "status": "PASS"
+    },
+    {
+      "name": "Added and removed files are distinguished",
+      "status": "PASS"
+    },
+    {
+      "name": "Whitespace, final newline and BOM remain significant",
+      "status": "PASS"
+    },
+    {
+      "name": "Harness/reports/dependencies/build output stay outside gameplay identity",
+      "status": "PASS"
+    },
+    {
+      "name": "Malformed, tampered and legacy identities fail closed",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid UTF-8 in declared text is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI equality/difference/legacy exits are explicit",
+      "status": "PASS"
+    },
+    {
+      "name": "Runner still fails a byte-only CRLF mutation despite portable equivalence",
+      "status": "PASS"
+    }
+  ]
+}

@@ -263,7 +263,9 @@ export class RegionalTerritoryExpansion {
     const pulseSequence = safeNumber(input.pulseEventId, 0);
     if (this.lastPulseEventId === null) this.lastPulseEventId = pulseSequence;
     else if (pulseSequence > this.lastPulseEventId) {
-      if (eligible) this.observe(nearest, 'pulse', signal, frameState);
+      // The global counter can advance while this territory is unmounted.
+      // Consume that cursor without replaying a release from another region.
+      if (eligible && input.pulsePressed === true) this.observe(nearest, 'pulse', signal, frameState);
       this.lastPulseEventId = pulseSequence;
     }
     const stabilize = input.stabilizeHeld === true;

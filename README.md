@@ -1,10 +1,22 @@
-# CONNECTION1 checkpoint
+# CONNECTION10 harness delta
 
-Audit/report only. Nothing to install into the game.
+This adds consequence-loop bot coverage to the accepted CONNECTION5 build. Gameplay is unchanged. CONNECTION6–9 were report/model checkpoints and require no installation.
 
-- CONNECTION1.md: baseline, ownership/connection map, measured gap and keep/remove decisions.
-- CONNECTION2_CONTRACT.md: bounded next candidate and required bot/human comparisons; not an implemented feature.
-- EVIDENCE/probe.json: 32 controlled scenarios, 107 assertions, source hashes and exact measurements.
-- EVIDENCE/connection-probe.mjs: reproducible owner/method audit. With the project's usual Node dependencies installed, run `node path/to/connection-probe.mjs path/to/BLOB-HOST-CORE path/to/output.json`.
+Extract this archive into the project root. Apply with:
 
-The current gameplay and Bot Series 1 baseline are preserved. This archive does not replace or renumber earlier builds.
+```powershell
+node .\APPLY_CONNECTION10.mjs --check
+node .\APPLY_CONNECTION10.mjs
+```
+
+The installer refuses unrelated harness versions or later edits. It keeps originals in CONNECTION10_BACKUP. Restore with `node .\APPLY_CONNECTION10.mjs --restore`.
+
+Run the expanded suite using your existing browser-test setup:
+
+```powershell
+node .\BLOB_BOT_SERIES1\run.mjs --all
+```
+
+For focused checks, use `--case=C01` for the connected browser loop or `--case=C02` for owner attribution/saturation. The suite's README retains browser setup and environment options. No new dependency is required.
+
+Read CONNECTION10_REPORT.md for ownership, fixtures and limitations. VALIDATION.md records final checks. EVIDENCE contains exact results. No playtest recording is requested for this harness-only change.
