@@ -1,0 +1,67 @@
+--- CONNECTION43/src/ui/CoreArrangementLabels.js
++++ CONNECTION44/src/ui/CoreArrangementLabels.js
+@@ -1,3 +1,4 @@
++import { deriveCoreEarnedEvolution } from "../player/CoreEarnedEvolution.js";
+ import { CoreRadialPerformanceSystem } from '../player/CoreRadialPerformanceSystem.js';
+ 
+ export const CORE_LABEL_ZONES = Object.freeze(['deep_core', 'inner_body', 'membrane']);
+@@ -16,10 +17,10 @@
+ 
+ // Read-only counterfactual. Reuse the physiology owner on a private frame; never
+ // update the live owner, reserve, placement, input, targeting or progression.
+-export function previewCoreArrangement(counts, reserve01 = 1) {
++export function previewCoreArrangement(counts, reserve01 = 1, coreGrowth = null) {
+   if (!validCounts(counts) || !Number.isFinite(reserve01) || reserve01 < 0 || reserve01 > 1) return null;
+   const distribution = CORE_LABEL_ZONES.map(z=>counts[z]).join(':');
+-  const f = {input:{}, spatialCoreChemistry:{counts:{...counts}, retainedPieceCount:3,
++  const f = {input:{}, coreGrowth:coreGrowth ?? {}, spatialCoreChemistry:{counts:{...counts}, retainedPieceCount:3,
+     topology:{id:'label_preview', label:'Arrangement preview', distribution, complete:true}}};
+   const owner = new CoreRadialPerformanceSystem({frameState:f, playerRoot:{userData:{}}});
+   owner.reserve01 = reserve01;
+@@ -57,7 +58,7 @@
+   const previews = current && selected ? CORE_LABEL_ZONES.map(zoneId => {
+     const next = {...counts}; next[selected.zoneId]--; next[zoneId]++;
+     return {zoneId, zoneLabel:zoneName(zoneId), current:zoneId===selected.zoneId,
+-      ...previewCoreArrangement(next,performance.endurance.reserve01)};
++      ...previewCoreArrangement(next,performance.endurance.reserve01,f.coreGrowth)};
+   }) : [];
+   const local = f.activeCellId === 'CELL_VASCULAR_RHYTHM_ROUTE_001'
+     ? 'Vascular: Stabilize coherence shapes directional calming while bracing inside the current.'
+@@ -69,7 +70,7 @@
+           : 'Surface repair trial OFF: scar plate repair uses its baseline rate; Core coherence still shapes ring acquisition.'
+         : 'Local materials keep their own interaction rules; these Core factors do not guarantee a local action.';
+   return {
+-    pass:'CONNECTION40', presentationOnly:true, inWork, inInspection,
++    pass:'CONNECTION44', evolution:deriveCoreEarnedEvolution(f.coreGrowth), presentationOnly:true, inWork, inInspection,
+     cellId:f.activeCellId ?? 'none',
+     distribution:complete ? CORE_LABEL_ZONES.map(z=>counts[z]).join(':') : null,
+     arrangement: current ? performance.personality : 'Arrangement data unavailable / forming',
+@@ -85,11 +86,20 @@
+   };
+ }
+ 
++function evolutionRows(s) {
++  const e=s.evolution;if(!e?.growthKnown)return [];
++  const result=[];
++  if(e.earnedFamilies.vascular) result.push({title:'EARNED CIRCULATION',text:'Returned Vascular cadence: idle reserve recovery is 8% higher than the same arrangement without this adaptation.'});
++  else result.push({title:'CORE EVOLUTION',text:e.matureBinding ? 'Next adaptation: finish the Vascular cadence and carry it back to the Hub.' : 'Mature the Binding Core through nursery nourishment and the protected seed. Debug anatomy does not earn growth.'});
++  if(e.integrated)result.push({title:'INTEGRATED CORE',text:'Grave memory, Vascular circulation and Silt filtration are earned and retained together.'});
++  return result;
++}
+ const factor = value => `×${value.toFixed(2)}`;
+ export function coreArrangementLabelRows(s) {
+   const rows = [{title:'CORE ARRANGEMENT',text:s.distribution
+     ? `${s.arrangement} · Deep / Inner / Membrane ${s.distribution} · reserve ${s.reservePercent ?? '?'}%`
+     : s.arrangement}];
++  rows.push(...evolutionRows(s));
+   rows.push(...s.pieces.map(p=>({title:`${p.selected?'SELECTED · ':''}${p.family} · ${p.zone}`, text:s.inWork && p.selected ? `Authored role: ${p.meaning}` : ''})));
+   if (s.current) {
+     rows.push({title:'LIVE VERB FACTORS',text:`Pulse charge ${factor(s.current.charge)} / echo reach ${factor(s.current.reach)} · Absorb progress ${factor(s.current.absorb)} · Stabilize coherence ${factor(s.current.coherence)}`});
+@@ -118,6 +128,7 @@
+   const rows = [{title:'CORE ARRANGEMENT',text:counts
+     ? `Deep ${counts[0]} · Inner ${counts[1]} · Membrane ${counts[2]} · reserve ${s.reservePercent ?? '?'}%`
+     : s.arrangement}];
++  rows.push(...evolutionRows(s));
+   if (s.pieces.length) rows.push({title:'PIECES',text:s.pieces.map(p=>`${p.family}: ${p.zone}`).join(' · ')});
+   const selected = s.pieces.find(p=>p.selected);
+   if (s.inWork && selected) rows.push({title:`SELECTED · ${selected.family} · CURRENT ZONE · ${selected.zone}`,text:s.guide});

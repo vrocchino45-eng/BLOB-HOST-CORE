@@ -10,8 +10,11 @@ if (!appRoot) {
   throw new Error("[BLOB BOOT] Missing #app root element.");
 }
 
+const coreRepairTrial = new URLSearchParams(window.location.search).get('coreRepairTrial') === '1';
+if (coreRepairTrial) document.title += ' [Core repair trial]';
 const runtime = new GameRuntime({
   appRoot,
+  coreRepairTrial,
   buildId: "HC-031W1",
   buildLabel: "Stabilized Aim + Local Contact Proof"
 });

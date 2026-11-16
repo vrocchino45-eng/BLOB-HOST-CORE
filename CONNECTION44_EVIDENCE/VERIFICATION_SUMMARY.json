@@ -1,0 +1,67 @@
+{
+  "pass": "CONNECTION44",
+  "status": "PASS",
+  "sourceFingerprint": "2270c58800481cb8e637b85d3489f49e45a81a2a1b15d59a16767db6537c5dae",
+  "quickCases": 33,
+  "quickChecks": 574,
+  "focusedBrowserRuns": 3,
+  "focusedBrowserGroups": 45,
+  "installerGroups": 9,
+  "build": "PASS",
+  "unselectedBrowserCases": 21,
+  "runs": [
+    {
+      "runId": "2026-11-15T02-40-04-425Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 55,
+        "checksPassed": 19
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T02-40-05-368Z",
+      "mode": "--quick",
+      "selectedCase": null,
+      "summary": {
+        "passed": 33,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 23,
+        "checksPassed": 574
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T02-41-02-661Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 55,
+        "checksPassed": 19
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T02-41-56-193Z",
+      "mode": "--all",
+      "selectedCase": "S05",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 55,
+        "checksPassed": 7
+      },
+      "productionFilesUnchanged": true
+    }
+  ],
+  "qualification": "Intentional earned gameplay change: 8% idle recovery plus an earned Integrated Core stage. Existing unearned physiology stays exact; held drain is unchanged. Browser tests inject explicit pre-earned history/seed fixtures into actual registered consumers, not a naturally earned campaign. Human tuning/feel remains open. S03/S04 were not rerun in this pass; their older reports remain historical."
+}

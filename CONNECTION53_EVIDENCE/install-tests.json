@@ -1,0 +1,53 @@
+{
+  "pass": "CONNECTION53",
+  "summary": {
+    "passed": 32,
+    "failed": 0
+  },
+  "acceptedBaselines": [
+    "CONNECTION43",
+    "CONNECTION44",
+    "CONNECTION45",
+    "CONNECTION46",
+    "CONNECTION47",
+    "CONNECTION48",
+    "CONNECTION49",
+    "CONNECTION50",
+    "CONNECTION51",
+    "CONNECTION52"
+  ],
+  "checks": [
+    "CONNECTION43 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION43 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION44 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION44 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION45 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION45 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION46 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION46 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION47 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION47 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION48 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION48 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION49 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION49 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION50 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION50 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION51 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION51 CRLF check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION52 check/apply/idempotence/exact restore/preserve history",
+    "CONNECTION52 CRLF check/apply/idempotence/exact restore/preserve history",
+    "later-edit refuses before mutation",
+    "corrupt-payload refuses before mutation",
+    "missing-payload refuses before mutation",
+    "bad-anchor refuses before mutation",
+    "unknown-mixed refuses before mutation",
+    "absent-file-collision refuses before mutation",
+    "Interrupted mixed apply finishes and restores exact starting checkpoint",
+    "Restore protects later edits",
+    "Changed backup refuses restore",
+    "Exact final checkpoint recognized safely without an installation backup",
+    "Exact partial backup adopted without losing originals",
+    "Conflicting partial backup refused"
+  ]
+}

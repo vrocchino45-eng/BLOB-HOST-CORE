@@ -1,0 +1,1 @@
+An initial successful run used the standard Vascular test platform, which seeds debug anatomy. The final run uses the region-only debug input queue and explicitly asserts no seeded anatomy and exactly two earned retained organs. Production code was unchanged.

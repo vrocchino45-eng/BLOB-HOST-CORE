@@ -1,0 +1,20 @@
+--- CONNECTION54/src/ui/PlaytestHudSystem.js
++++ CONNECTION55/src/ui/PlaytestHudSystem.js
+@@ -288,7 +288,7 @@
+       : inHub && layeredInteraction.active && !(layeredInteraction.completed && hubFoundation.active)
+       ? `${layeredInteraction.hudStatus ?? "Signal Chorus: layered resonance"} / ${Math.round((layeredInteraction.progress ?? 0) * 100)}%`
+       : inHub && hubInvestigation.active
+-      ? `Hub Investigation: ${hubInvestigation.routeReadCount ?? 0}/${hubInvestigation.routeCount ?? 3} routes / memory ${hubInvestigation.memoryRead ? "read" : "unread"}`
++      ? "Hub: choose an available destination / readings optional"
+       : inHub && hubFoundation.active
+       ? `Hub Junction: ${
+           hubFoundation.vascularRhythmRetained
+@@ -1105,7 +1105,7 @@
+   }
+ 
+   hubReadingLabel(hubFoundation, hubInvestigation) {
+-    if (hubInvestigation.investigationReady) return "Route comparison";
++    if (hubInvestigation.active) return "Hub destinations";
+     const nearest = hubInvestigation.nearestRouteId;
+     const route = (hubFoundation.routes ?? []).find((entry) => entry.id === nearest);
+     if (route?.displayName) return route.displayName;

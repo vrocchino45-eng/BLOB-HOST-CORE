@@ -1,0 +1,58 @@
+{
+  "pass": "CONNECTION57",
+  "scope": "Actual registry/commitment/Hub/boundary owners with declared logical input, publication, readiness, foreign-cell and Core Work state fixtures. Prior-source failures are reproduced. No device delivery, full camera/InputSystem lifecycle, renderer, browser or human acceptance claim.",
+  "checks": [
+    {
+      "name": "previous pending request survives departure and incorrectly starts on a no-input return",
+      "status": "PASS"
+    },
+    {
+      "name": "leaving Hub retires owned pending intent; returning requires a fresh choice",
+      "status": "PASS"
+    },
+    {
+      "name": "previous queued choice can cross while Core Work is active",
+      "status": "PASS"
+    },
+    {
+      "name": "Core Work entry cancels queued travel without changing anatomy or credits",
+      "status": "PASS"
+    },
+    {
+      "name": "same-frame Core Work command wins over an unstarted queued destination",
+      "status": "PASS"
+    },
+    {
+      "name": "cancel clears the queued choice and cannot auto-resume after release",
+      "status": "PASS"
+    },
+    {
+      "name": "same-frame A plus Core Work cannot create a new route request",
+      "status": "PASS"
+    },
+    {
+      "name": "a started boundary claim remains authoritative before its first flight publication",
+      "status": "PASS"
+    },
+    {
+      "name": "normal completion clears the old request without duplicating entry on a later Hub return",
+      "status": "PASS"
+    },
+    {
+      "name": "pending cancellation never deletes a replacement request with another owner identity",
+      "status": "PASS"
+    },
+    {
+      "name": "a stale offered event emitted after departure is acknowledged rather than replayed",
+      "status": "PASS"
+    },
+    {
+      "name": "inspection alone and brief preparation loss preserve deliberate waiting as before",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0
+  }
+}

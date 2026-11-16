@@ -1,0 +1,67 @@
+{
+  "case": "W04",
+  "status": "PASS",
+  "summary": {
+    "passed": 14,
+    "failed": 0
+  },
+  "scope": "Actual current/animation/lifecycle owner checks, with controlled topology/coherence/sample/time fixtures. No physical controller or human perception claim.",
+  "checks": [
+    {
+      "name": "Exact pre-visual-patch physics parity across 72 matched current fixtures",
+      "status": "PASS"
+    },
+    {
+      "name": "Deep/membrane actual applied current yields distinct particle travel and actual positions",
+      "status": "PASS"
+    },
+    {
+      "name": "Speed/coherence changes and repeated renders at fixed time cannot advance phase or positions",
+      "status": "PASS"
+    },
+    {
+      "name": "Calm and reversal at zero dt preserve authored longitudinal progress",
+      "status": "PASS"
+    },
+    {
+      "name": "Constant speed integrates equivalently across accepted substeps",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid/zero time cannot travel; oversized calls admit at most existing 50ms substep",
+      "status": "PASS"
+    },
+    {
+      "name": "Hidden update and same-runtime remount retain phase without backlog; fresh instance seeds zero",
+      "status": "PASS"
+    },
+    {
+      "name": "Neutral visual guard missing",
+      "status": "PASS"
+    },
+    {
+      "name": "Neutral visual guard stale",
+      "status": "PASS"
+    },
+    {
+      "name": "Neutral visual guard foreign",
+      "status": "PASS"
+    },
+    {
+      "name": "Neutral visual guard ineligible",
+      "status": "PASS"
+    },
+    {
+      "name": "Neutral visual guard invalid",
+      "status": "PASS"
+    },
+    {
+      "name": "Neutral visual guard CoreWork",
+      "status": "PASS"
+    },
+    {
+      "name": "Coherence-one ratio, visual identity, and gameplay publications remain unchanged",
+      "status": "PASS"
+    }
+  ]
+}

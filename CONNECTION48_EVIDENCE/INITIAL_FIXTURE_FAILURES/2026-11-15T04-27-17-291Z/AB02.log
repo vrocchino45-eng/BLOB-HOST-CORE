@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+false !== true
+
+    at file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION48_GRAVE_RECOVERY_BROWSER.mjs:31:197
+    at async check (file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION48_GRAVE_RECOVERY_BROWSER.mjs:15:47)
+    at async file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION48_GRAVE_RECOVERY_BROWSER.mjs:31:2 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

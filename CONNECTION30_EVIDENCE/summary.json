@@ -1,0 +1,64 @@
+{
+  "pass": "CONNECTION30",
+  "status": "PASS",
+  "sourceFingerprint": "7b2287eae1bf920b74cdc42e91a7c16cb25b4ce2149493cd549e2a44547ae19e",
+  "quick": {
+    "cases": 25,
+    "checks": 481
+  },
+  "browser": {
+    "cases": [
+      "N02",
+      "F02"
+    ],
+    "checks": 2
+  },
+  "uniqueExecutedMachineSummaryChecks": 483,
+  "catalog": {
+    "cases": 43,
+    "checks": 500,
+    "completeBrowserCatalogRerun": false
+  },
+  "installerGroups": 15,
+  "gameplayModifierActivated": false,
+  "legacyChemistryWritesChanged": false,
+  "allTenAuthoredCellContexts": "PASS",
+  "normalCommitmentCrossings": 3,
+  "actualSessionDownload": "PASS",
+  "testSetupNote": "Two initial N02 fixtures paused destination preparation and timed out at unchanged Hub readiness. Final scenario uses a fresh runtime with ordinary automatic preparation enabled. Production, timeout and readiness assertions were unchanged.",
+  "runs": [
+    {
+      "scope": "quick25",
+      "runId": "2026-11-14T04-56-58-828Z",
+      "summary": {
+        "passed": 25,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 18,
+        "checksPassed": 481
+      }
+    },
+    {
+      "scope": "N02",
+      "runId": "2026-11-14T05-01-46-994Z",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 42,
+        "checksPassed": 1
+      }
+    },
+    {
+      "scope": "F02",
+      "runId": "2026-11-14T05-02-47-340Z",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 42,
+        "checksPassed": 1
+      }
+    }
+  ]
+}

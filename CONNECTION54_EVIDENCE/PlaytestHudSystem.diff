@@ -1,0 +1,54 @@
+--- CONNECTION53/src/ui/PlaytestHudSystem.js
++++ CONNECTION54/src/ui/PlaytestHudSystem.js
+@@ -287,7 +287,7 @@
+       ? `${guideThresholdInteraction.hudStatus ?? "Guide Threshold: movement-led reading"} / ${Math.round((guideThresholdInteraction.progress ?? 0) * 100)}%`
+       : inHub && layeredInteraction.active && !(layeredInteraction.completed && hubFoundation.active)
+       ? `${layeredInteraction.hudStatus ?? "Signal Chorus: layered resonance"} / ${Math.round((layeredInteraction.progress ?? 0) * 100)}%`
+-      : inHub && hubInvestigation.active && !hubInvestigation.investigationReady
++      : inHub && hubInvestigation.active
+       ? `Hub Investigation: ${hubInvestigation.routeReadCount ?? 0}/${hubInvestigation.routeCount ?? 3} routes / memory ${hubInvestigation.memoryRead ? "read" : "unread"}`
+       : inHub && hubFoundation.active
+       ? `Hub Junction: ${
+@@ -749,6 +749,9 @@
+     const hostAudio = frameState.hostAudio ?? {};
+     const coreEngine = frameState.coreEngine ?? {};
+     if (returnTraversal.transitionActive) return "Stay with the remembered fold while the same anatomy resolves at the earlier scale.";
++    if (frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001" && frameState.hubInvestigationGameplay?.active) {
++      return frameState.hubInvestigationGameplay.nextAction ?? "Approach an awake route body.";
++    }
+     if (returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.08) {
+       return returnTraversal.nearestSeamArmed
+         ? "The remembered fold is physically aligned. Move through it to revisit the connected early anatomy."
+@@ -787,7 +790,7 @@
+       if (layeredInteraction.active && !(layeredInteraction.completed && frameState.hubChamberFoundation?.active)) return layeredInteraction.objectiveLine ?? "Follow the layered resonance sequence.";
+       const hubFoundation = frameState.hubChamberFoundation ?? {};
+       const hubInvestigation = frameState.hubInvestigationGameplay ?? {};
+-      if (hubInvestigation.active && !hubInvestigation.investigationReady) return hubInvestigation.objectiveLine ?? "Investigate all three routes and the memory fragment.";
++      if (hubInvestigation.active) return hubInvestigation.objectiveLine ?? "Investigate all three routes and the memory fragment.";
+       if (hubFoundation.active) return hubFoundation.objectiveLine ?? "Read one active route and two dormant routes around the junction.";
+       const nextRoutePressure = frameState.signalChorusNextRoutePressure ?? {};
+       if (nextRoutePressure.active) return nextRoutePressure.objectiveLine ?? "Observe the combward pressure. It is readable, but it is not open.";
+@@ -871,6 +874,14 @@
+     const hostAudio = frameState.hostAudio ?? {};
+     const coreEngine = frameState.coreEngine ?? {};
+     if (returnTraversal.transitionActive) return "Keep moving; the remembered tissue is resolving without a teleport or gate.";
++    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && frameState.hubInvestigationGameplay?.active) {
++      const entry = frameState.hubInvestigationGameplay.nextAction ?? "Approach an awake route body.";
++      const nearReturn = !frameState.hubRouteCommit?.pending && returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance)
++        && returnTraversal.nearestSeamDistance <= 1.08;
++      return nearReturn
++        ? `${entry} To return instead, ${returnTraversal.nearestSeamArmed ? "move through the lit crease" : "move away from the arrival crease, then return to it"}.`
++        : entry;
++    }
+     if (returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.08) {
+       return returnTraversal.nearestSeamArmed
+         ? "Move through the lit tissue crease. No button is required."
+@@ -937,7 +948,7 @@
+       if (inspectionCamera.available) return `${action} Y inspects the Core / readable focus.`;
+       return action;
+     }
+-    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubInvestigation.active && !hubInvestigation.investigationReady) return hubInvestigation.nextAction ?? "Approach an awake route body and press A to commit.";
++    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubInvestigation.active) return hubInvestigation.nextAction ?? "Approach an awake route body and press A to commit.";
+     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active) return hubFoundation.nextAction ?? "Read the active route and remember the two dormant routes.";
+     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && nextRoutePressure.active) return nextRoutePressure.nextAction ?? "Hold the reading and learn the direction. No route input is accepted.";
+     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && signalReturnState.active) return signalReturnState.nextAction ?? "Hold the returned Grave reading.";

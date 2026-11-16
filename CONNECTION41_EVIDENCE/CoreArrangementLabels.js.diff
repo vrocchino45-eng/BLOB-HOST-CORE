@@ -1,0 +1,36 @@
+--- CONNECTION40/src/ui/CoreArrangementLabels.js
++++ CONNECTION41/src/ui/CoreArrangementLabels.js
+@@ -104,3 +104,33 @@
+   if (s.suspension) rows.push({title:'WORLD',text:s.suspension});
+   return rows;
+ }
++
++const percentChange = (value, reference = 1) => {
++  const n = Math.round((value / reference - 1) * 100);
++  return n === 0 ? 'unchanged' : `${Math.abs(n)}% ${n > 0 ? 'higher' : 'lower'}`;
++};
++
++// CONNECTION41: short reading layer over the same immutable explanation data.
++// Current effects compare with neutral. Move previews compare with NOW at the
++// same reserve, never with a fresh-reserve Core or a predicted completion time.
++export function compactCoreArrangementLabelRows(s) {
++  const counts = s.distribution?.split(':');
++  const rows = [{title:'CORE ARRANGEMENT',text:counts
++    ? `Deep ${counts[0]} · Inner ${counts[1]} · Membrane ${counts[2]} · reserve ${s.reservePercent ?? '?'}%`
++    : s.arrangement}];
++  if (s.pieces.length) rows.push({title:'PIECES',text:s.pieces.map(p=>`${p.family}: ${p.zone}`).join(' · ')});
++  const selected = s.pieces.find(p=>p.selected);
++  if (s.inWork && selected) rows.push({title:`SELECTED · ${selected.family} · CURRENT ZONE · ${selected.zone}`,text:s.guide});
++  else if (s.inWork) rows.push({title:'GUIDE',text:s.pieces.length ? 'Select a retained piece to compare moves.' : 'No retained pieces available to rearrange yet.'});
++  if (s.current) {
++    rows.push({title:'NOW · COMPARED WITH NEUTRAL',text:`Pulse charge ${percentChange(s.current.charge)} · Absorb progress ${percentChange(s.current.absorb)} · Stabilize coherence ${percentChange(s.current.coherence)}`});
++    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${percentChange(s.current.recovery)} · endurance capacity ${percentChange(s.current.endurance)}`});
++    if (s.inWork) for (const p of s.previews.filter(p=>!p.current)) {
++      rows.push({title:`IF MOVED TO · ${p.zoneLabel} · VS NOW`,text:`Pulse ${percentChange(p.charge,s.current.charge)} · Absorb ${percentChange(p.absorb,s.current.absorb)} · Stabilize ${percentChange(p.coherence,s.current.coherence)}. Recovery ${percentChange(p.recovery,s.current.recovery)}; endurance ${percentChange(p.endurance,s.current.endurance)}.`});
++    }
++  } else rows.push({title:'EFFECTS',text:'Complete, matching Core data is unavailable; no effect estimate shown.'});
++  rows.push({title:'HERE',text:s.local});
++  if (s.suspension) rows.push({title:'WORLD',text:s.suspension});
++  rows.push({title:'DETAILS · SHIFT+F4 / DESIGN NOTES',text:'Previews use current reserve with no verb held. Pulse action range is unchanged. Full factors, authored roles and limits are in notes.'});
++  return rows;
++}

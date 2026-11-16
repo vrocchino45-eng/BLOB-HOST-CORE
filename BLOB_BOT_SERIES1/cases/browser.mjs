@@ -1,4 +1,5 @@
 import {coreWorkBrowser} from './core-work-browser.mjs';
+import {reviewFixBrowser} from './review-fix-browser.mjs';
 import {territoryInputBrowser} from './territory-input-browser.mjs';
 import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {fileURLToPath} from 'node:url';import {currentVisualBrowser} from './current-visual-browser.mjs';import {simulationClock} from './simulation-clock.mjs';import {connectionBrowser} from './connection-browser.mjs';import {runArc} from './browser-arc.mjs';
 const require=createRequire(import.meta.url),root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),reportDir=process.env.BLOB_BOT_RUN_DIR,id=process.env.BLOB_BOT_CASE;let chromium;
@@ -38,8 +39,9 @@ try{
   assert.equal(detail.summary.passed,18);assert.equal(detail.summary.failed,0);assert.equal(detail.summary.complete,true);
  }else if(id==='L02'){detail=await territoryInputBrowser(page);
  }else if(id==='K01'){detail=await coreWorkBrowser(page);
+ }else if(id==='U02'){detail=await reviewFixBrowser(page);
  }else if(id==='W05'){detail=await currentVisualBrowser(page);
  }else if(id==='W03'){detail=await connectionBrowser(page);
  }else if(id==='B03'){detail=await runArc(page,{reportDir,errors});}else throw Error('Unknown browser case '+id);
  assert.equal(errors.length,0);fs.writeFileSync(process.env.BLOB_BOT_REPORT,JSON.stringify({case:id,status:'PASS',summary:{passed:1,failed:0},detail,errors},null,2));console.log(id+' browser scenario PASS');
-}catch(e){console.error(e.stack??String(e));if(page){try{const diagnostic=await page.evaluate(()=>{const r=window.__CAMERA_AUDIT_RUNTIME__;return {cell:r?.frameState?.activeCellId,clock:r?.frameState?.runtimeSeconds,input:r?.frameState?.input,aim:r?.frameState?.siltMaterialAim,goal:r?.siltPressureRouteSystem?.returnRoundTrip?.snapshot(),vascular:r?.frameState?.vascularRhythmRoute,vascularReceiverDistance:r?.vascularRhythmRouteSystem?.returnHandoffReceiverDistance,position:r?.playerCore?.position?.toArray()};});fs.writeFileSync(path.join(reportDir,id+'-failure.json'),JSON.stringify({error:String(e),diagnostic,errors},null,2));}catch{}}if(process.exitCode!==78)process.exitCode=1;}finally{if(browser)await browser.close();if(server)await server.close();}
+}catch(e){console.error(e.stack??String(e));if(page){try{const diagnostic=await page.evaluate(()=>{const r=window.__CAMERA_AUDIT_RUNTIME__;return {reviewStage:window.__REVIEW_FIX_STAGE__,hub:r?.frameState?.hubChamberFoundation,hubCommit:r?.frameState?.hubRouteCommit,hubRequest:r?.frameState?.hubRouteCommitRequest,investigation:r?.frameState?.hubInvestigationGameplay,clock:r?.frameState?.runtimeSeconds,input:r?.frameState?.input,aim:r?.frameState?.siltMaterialAim,goal:r?.siltPressureRouteSystem?.returnRoundTrip?.snapshot(),vascular:r?.frameState?.vascularRhythmRoute,vascularReceiverDistance:r?.vascularRhythmRouteSystem?.returnHandoffReceiverDistance,position:r?.playerCore?.position?.toArray()};});fs.writeFileSync(path.join(reportDir,id+'-failure.json'),JSON.stringify({error:String(e),diagnostic,errors},null,2));}catch{}}if(process.exitCode!==78)process.exitCode=1;}finally{if(browser)await browser.close();if(server)await server.close();}

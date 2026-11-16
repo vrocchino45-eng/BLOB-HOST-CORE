@@ -1,0 +1,1 @@
+Initial Guide consumer equality assertion differed by 0.0000000029 because growth and Guide publish in registry order. Changed the browser-only comparison to absolute tolerance 0.000001; production physics unchanged. Retested all four selected browser runs.

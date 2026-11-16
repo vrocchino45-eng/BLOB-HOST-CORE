@@ -1,0 +1,184 @@
+import { deriveCoreEarnedEvolution } from "../player/CoreEarnedEvolution.js";
+import { CoreRadialPerformanceSystem } from '../player/CoreRadialPerformanceSystem.js';
+
+export const CORE_LABEL_ZONES = Object.freeze(['deep_core', 'inner_body', 'membrane']);
+const zoneName = id => ({deep_core:'Deep Core', inner_body:'Inner Body', membrane:'Membrane'})[id] ?? 'Unknown zone';
+const familyName = id => ({grave_memory_retention:'Grave', vascular_rhythm_retention:'Vascular', silt_pressure_retention:'Silt'})[id] ?? 'Unidentified piece';
+const metrics = p => ({
+  charge: p.verbModifiers.pulse.chargeRateMultiplier,
+  reach: p.verbModifiers.pulse.structuralReachMultiplier,
+  absorb: p.verbModifiers.absorb.progressMultiplier,
+  coherence: p.verbModifiers.stabilize.coherenceMultiplier,
+  recovery: p.traits.recovery,
+  endurance: p.traits.enduranceCapacity
+});
+const validCounts = c => c && CORE_LABEL_ZONES.every(z => Number.isInteger(c[z]) && c[z] >= 0)
+  && CORE_LABEL_ZONES.reduce((sum,z) => sum+c[z],0) === 3;
+
+// Read-only counterfactual. Reuse the physiology owner on a private frame; never
+// update the live owner, reserve, placement, input, targeting or progression.
+export function previewCoreArrangement(counts, reserve01 = 1, coreGrowth = null) {
+  if (!validCounts(counts) || !Number.isFinite(reserve01) || reserve01 < 0 || reserve01 > 1) return null;
+  const distribution = CORE_LABEL_ZONES.map(z=>counts[z]).join(':');
+  const f = {input:{}, coreGrowth:coreGrowth ?? {}, spatialCoreChemistry:{counts:{...counts}, retainedPieceCount:3,
+    topology:{id:'label_preview', label:'Arrangement preview', distribution, complete:true}}};
+  const owner = new CoreRadialPerformanceSystem({frameState:f, playerRoot:{userData:{}}});
+  owner.reserve01 = reserve01;
+  const profile = owner.resolveProfile(f);
+  owner.updateReserve(0,f,profile);
+  owner.publish(f,profile);
+  return {distribution, personality:f.corePerformance.personality, ...metrics(f.corePerformance)};
+}
+
+export function buildCoreArrangementLabels(f = {}, {repairTrialEnabled = false} = {}) {
+  const chemistry = f.spatialCoreChemistry ?? {}, work = f.coreWorkManipulation ?? {};
+  const placements = Array.isArray(chemistry.placements) ? chemistry.placements : [];
+  const selected = placements.find(p => p.pieceId === work.selectedPieceId) ?? null;
+  const counts = chemistry.counts;
+  const complete = chemistry.retainedPieceCount === 3 && chemistry.topology?.complete === true
+    && placements.length === 3 && new Set(placements.map(p=>p.pieceId)).size === 3
+    && placements.every(p=>CORE_LABEL_ZONES.includes(p.zoneId)) && validCounts(counts)
+    && CORE_LABEL_ZONES.every(z=>placements.filter(p=>p.zoneId===z).length === counts[z]);
+  const performance = f.corePerformance;
+  const validPerformance = complete && performance?.active === true
+    && performance.owner === 'CoreRadialPerformanceSystem'
+    && performance.distribution === CORE_LABEL_ZONES.map(z=>counts[z]).join(':')
+    && performance.topologyId === chemistry.topology.id
+    && Number.isFinite(performance.endurance?.reserve01)
+    && performance.endurance.reserve01 >= 0 && performance.endurance.reserve01 <= 1
+    && ['pulse','absorb','stabilize'].every(v=>performance.verbModifiers?.[v])
+    && performance.traits;
+  const inWork = Boolean(f.inspectionCamera?.coreWorkActive || f.tightInspectionCamera?.coreWorkActive);
+  const inInspection = Boolean(f.inspectionCamera?.active || f.tightInspectionCamera?.active);
+  let current = null;
+  if (validPerformance) {
+    const m = metrics(performance);
+    if (Object.values(m).every(Number.isFinite)) current = m;
+  }
+  const previews = current && selected ? CORE_LABEL_ZONES.map(zoneId => {
+    const next = {...counts}; next[selected.zoneId]--; next[zoneId]++;
+    return {zoneId, zoneLabel:zoneName(zoneId), current:zoneId===selected.zoneId,
+      ...previewCoreArrangement(next,performance.endurance.reserve01,f.coreGrowth)};
+  }) : [];
+  const local = f.activeCellId === 'CELL_VASCULAR_RHYTHM_ROUTE_001'
+    ? 'Vascular: Stabilize coherence shapes directional calming while bracing inside the current.'
+    : f.activeCellId === 'CELL_SILT_PRESSURE_ROUTE_001'
+      ? 'Silt: placing the Silt piece at the Membrane enables boundary adhesion on supported surfaces.'
+      : f.activeCellId === 'CELL_MEMBRANE_NURSERY_001'
+        ? repairTrialEnabled
+          ? 'Surface repair trial ON: coherence can scale Stabilize repair on the scar plate when engaged in world view.'
+          : 'Surface repair trial OFF: scar plate repair uses its baseline rate; Core coherence still shapes ring acquisition.'
+        : f.activeCellId === 'CELL_GRAVE_MEMORY_RESIDUE_BED_001' && deriveCoreEarnedEvolution(f.coreGrowth).earnedFamilies.grave
+          ? 'Grave: earned memory assists recoil/trace recovery only while holding Stabilize near already-read, stabilized residue. Inspection suspends the Core assist.'
+          : 'Local materials keep their own interaction rules; these Core factors do not guarantee a local action.';
+  return {
+    pass:'CONNECTION50', graveRecovery:graveRecoveryFeedback(f), surfaceHandling:surfaceHandling(f.coreGrowth), evolution:deriveCoreEarnedEvolution(f.coreGrowth), presentationOnly:true, inWork, inInspection,
+    cellId:f.activeCellId ?? 'none',
+    distribution:complete ? CORE_LABEL_ZONES.map(z=>counts[z]).join(':') : null,
+    arrangement: current ? performance.personality : 'Arrangement data unavailable / forming',
+    reservePercent:current ? Math.round(performance.endurance.reserve01*100) : null,
+    pieces:placements.map(p=>({pieceId:p.pieceId, family:familyName(p.family), zone:zoneName(p.zoneId),
+      selected:p===selected, meaning:p.interactionIntent ?? 'No authored placement explanation'})),
+    selectedId:selected?.pieceId ?? null, current, previews, local,
+    guide:inWork ? work.held ? 'Guide holding: movement changes the live arrangement; place to release.'
+      : 'Guide selecting: grab a piece to reposition it.' : 'Inspect the Core, then enter Core Work to rearrange it.',
+    scope:'Pulse: charge speed / charged visual echo reach (action range unchanged). Absorb: progress on eligible bonds after committing the hold. Stabilize: coherence / ring acquisition. Higher factors mean faster response or more reserve capacity/recovery. Neutral is ×1.00; these are not completion times.',
+    previewScope:'Move only the selected piece. Preview uses current reserve with no held verb; it does not predict future fatigue, exact geometry patterns or local repair time.',
+    suspension:inWork || inInspection ? 'World repair is suspended during inspection and Core Work.' : ''
+  };
+}
+
+// Use only a current, mounted owner witness. Retained history never proves an active action.
+function graveRecoveryFeedback(f) {
+  const r=f.coreGraveRecovery;
+  if(f.activeCellId!=='CELL_GRAVE_MEMORY_RESIDUE_BED_001' || r?.owner!=='GraveMemoryRouteSystem'
+    || r.active!==true || !Number.isSafeInteger(f.frame) || f.frame<0 || r.publishedFrame!==f.frame
+    || !deriveCoreEarnedEvolution(f.coreGrowth).earnedFamilies.grave) return null;
+  const text={
+    rebinding:'Rebinding now: earned Core memory is helping this Stabilize hold restore the disturbed trace.',
+    paused:'Core memory assist paused during inspection or Core Work.',
+    read_required:'Pulse to read the residue before using its retained memory.',
+    settle_required:'Hold Stabilize to settle the read residue first; the recovery assist begins afterward.',
+    approach_required:'Move near the residue to use the Core memory assist.',
+    trace_intact:'Trace intact. Core memory is retained; no recovery is needed.',
+    hold_required:'Memory available. Hold Stabilize near the disturbed trace to rebind it.',
+    shared_ceiling:'Host memory already supplies the full recovery assist; Core memory adds no extra rate.',
+    ready:'Memory available; waiting for a recovery update.'
+  }[r.status];
+  if(!text || r.status==='rebinding' && (r.lastAppliedFrame!==f.frame || !Number.isSafeInteger(r.assistedTicks) || r.assistedTicks<=0))return null;
+  return {title:'GRAVE RESPONSE',text};
+}
+
+// Display only actual growth-owner output, independently of three-piece arrangement availability.
+function surfaceHandling(g) {
+  const m=g?.movementModifiers;
+  if(g?.owner!=='CoreGrowthSystem' || g.surfaceFoundationRetained!==true || !m
+    || !['pressureResponseMultiplier','flowCouplingMultiplier','stabilizeEfficiencyMultiplier'].every(k=>Number.isFinite(m[k]) && m[k]>0)) return null;
+  return {pressure:m.pressureResponseMultiplier,flow:m.flowCouplingMultiplier,brace:m.stabilizeEfficiencyMultiplier};
+}
+
+function evolutionRows(s) {
+  const e=s.evolution;if(!e?.growthKnown)return [];
+  const result=[];
+  if(e.surfaceFoundation) {
+    result.push({title:'SURFACE FOUNDATION',text:e.matureBinding ? 'Surface-grown tissue retained in the Binding Core.' : 'Earned Surface experience is becoming Core tissue; the protected seed is optional.'});
+    if(s.surfaceHandling) result.push({title:'SURFACE HANDLING · VS UNGROWN',text:`Pressure response ${percentChange(s.surfaceHandling.pressure)} · flow coupling ${percentChange(s.surfaceHandling.flow)} · Guide bracing efficiency ${percentChange(s.surfaceHandling.brace)}. Applies where those systems act; not an Absorb or repair-speed bonus.`});
+  }
+  if(e.earnedFamilies.grave) result.push({title:'EARNED GRAVE MEMORY',text:'On a Grave revisit, held Stabilize can rebind already-read, stabilized residue up to 15% faster. Shares the Host-memory ceiling; no stacking, passive repair or faster safe transfer.'});
+  if(s.graveRecovery) result.push(s.graveRecovery);
+  if(e.earnedFamilies.vascular) result.push({title:'EARNED CIRCULATION',text:'Returned Vascular cadence: idle reserve recovery is 8% higher than the same arrangement without this adaptation.'});
+  else result.push({title:'CORE EVOLUTION',text:e.matureBinding ? 'Surface-grown Binding Core retained. Later: carry a completed Vascular cadence back to the Hub.' : 'Growth starts at Surface: produce a safe nursery outcome or complete its Host-language lesson. The protected seed is optional; debug anatomy does not earn growth.'});
+  if(e.integrated)result.push({title:'INTEGRATED CORE',text:'Grave memory, Vascular circulation and Silt filtration are earned and retained together.'});
+  return result;
+}
+const factor = value => `×${value.toFixed(2)}`;
+export function coreArrangementLabelRows(s) {
+  const rows = [{title:'CORE ARRANGEMENT',text:s.distribution
+    ? `${s.arrangement} · Deep / Inner / Membrane ${s.distribution} · reserve ${s.reservePercent ?? '?'}%`
+    : s.arrangement}];
+  rows.push(...evolutionRows(s));
+  rows.push(...s.pieces.map(p=>({title:`${p.selected?'SELECTED · ':''}${p.family} · ${p.zone}`, text:s.inWork && p.selected ? `Authored role: ${p.meaning}` : ''})));
+  if (s.current) {
+    rows.push({title:'LIVE VERB FACTORS',text:`Pulse charge ${factor(s.current.charge)} / echo reach ${factor(s.current.reach)} · Absorb progress ${factor(s.current.absorb)} · Stabilize coherence ${factor(s.current.coherence)}`});
+    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${factor(s.current.recovery)} · endurance capacity ${factor(s.current.endurance)}`});
+  }
+  if (s.inWork) {
+    for (const p of s.previews) rows.push({title:`${p.current?'CURRENT ZONE':'IF MOVED TO'} · ${p.zoneLabel}`,text:`Pulse charge ${factor(p.charge)} / echo reach ${factor(p.reach)} · Absorb ${factor(p.absorb)} · Stabilize ${factor(p.coherence)} · recovery ${factor(p.recovery)} / endurance ${factor(p.endurance)}`});
+    rows.push({title:'GUIDE / PREVIEW',text:`${s.guide} ${s.previewScope}`});
+  }
+  rows.push({title:'HERE',text:s.local});
+  rows.push({title:'EFFECT SCOPE',text:s.scope});
+  if (s.suspension) rows.push({title:'WORLD',text:s.suspension});
+  return rows;
+}
+
+const percentChange = (value, reference = 1) => {
+  const n = Math.round((value / reference - 1) * 100);
+  return n === 0 ? 'unchanged' : `${Math.abs(n)}% ${n > 0 ? 'higher' : 'lower'}`;
+};
+
+// CONNECTION41: short reading layer over the same immutable explanation data.
+// Current effects compare with neutral. Move previews compare with NOW at the
+// same reserve, never with a fresh-reserve Core or a predicted completion time.
+export function compactCoreArrangementLabelRows(s) {
+  const counts = s.distribution?.split(':');
+  const rows = [{title:'CORE ARRANGEMENT',text:counts
+    ? `Deep ${counts[0]} · Inner ${counts[1]} · Membrane ${counts[2]} · reserve ${s.reservePercent ?? '?'}%`
+    : s.arrangement}];
+  rows.push(...evolutionRows(s));
+  if (s.pieces.length) rows.push({title:'PIECES',text:s.pieces.map(p=>`${p.family}: ${p.zone}`).join(' · ')});
+  const selected = s.pieces.find(p=>p.selected);
+  if (s.inWork && selected) rows.push({title:`SELECTED · ${selected.family} · CURRENT ZONE · ${selected.zone}`,text:s.guide});
+  else if (s.inWork) rows.push({title:'GUIDE',text:s.pieces.length ? 'Select a retained piece to compare moves.' : 'No retained pieces available to rearrange yet.'});
+  if (s.current) {
+    rows.push({title:'NOW · COMPARED WITH NEUTRAL',text:`Pulse charge ${percentChange(s.current.charge)} · Absorb progress ${percentChange(s.current.absorb)} · Stabilize coherence ${percentChange(s.current.coherence)}`});
+    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${percentChange(s.current.recovery)} · endurance capacity ${percentChange(s.current.endurance)}`});
+    if (s.inWork) for (const p of s.previews.filter(p=>!p.current)) {
+      rows.push({title:`IF MOVED TO · ${p.zoneLabel} · VS NOW`,text:`Pulse ${percentChange(p.charge,s.current.charge)} · Absorb ${percentChange(p.absorb,s.current.absorb)} · Stabilize ${percentChange(p.coherence,s.current.coherence)}. Recovery ${percentChange(p.recovery,s.current.recovery)}; endurance ${percentChange(p.endurance,s.current.endurance)}.`});
+    }
+  } else rows.push({title:'EFFECTS',text:'Complete, matching Core data is unavailable; no effect estimate shown.'});
+  rows.push({title:'HERE',text:s.local});
+  if (s.suspension) rows.push({title:'WORLD',text:s.suspension});
+  rows.push({title:'DETAILS · SHIFT+F4 / DESIGN NOTES',text:'Previews use current reserve with no verb held. Pulse action range is unchanged. Full factors, authored roles and limits are in notes.'});
+  return rows;
+}

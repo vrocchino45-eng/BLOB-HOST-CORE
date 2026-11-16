@@ -445,7 +445,7 @@ export class GuidePromptSystem {
 
   hubInvestigationPrompt(frameState) {
     const gameplay = frameState.hubInvestigationGameplay ?? {};
-    if (!gameplay.active || gameplay.investigationReady) return null;
+    if (!gameplay.active) return null;
     return {
       id: "GUIDE_PROMPT_HUB_INVESTIGATION_GAMEPLAY_HC007C",
       beat: gameplay.status ?? "hub_systemic_investigation",
@@ -477,6 +477,21 @@ export class GuidePromptSystem {
   graveMemoryRoutePrompt(frameState) {
     const route = frameState.graveMemoryRoute ?? {};
     if (frameState.activeCellId !== "CELL_GRAVE_MEMORY_RESIDUE_BED_001") return null;
+
+    const resonance = frameState.graveResonanceGameplay ?? {};
+    if (resonance.active) {
+      return {
+        id: "GUIDE_PROMPT_GRAVE_II_RESONANCE_CONNECTION15",
+        beat: `grave_ii_${resonance.guidanceStage ?? "active"}`,
+        priority: 700,
+        guideLine: resonance.guideLine,
+        objectiveLine: resonance.nextAction,
+        debugFallback: resonance.lastEvent ?? "grave_ii_active",
+        tone: resonance.completed ? "grave_route_locked" : "grave",
+        contentOwner: "GraveResonanceGameplaySystem",
+        source: "activeRegionalPhaseState"
+      };
+    }
 
     if (!route.active) {
       return {
@@ -1022,6 +1037,11 @@ export class GuidePromptSystem {
   }
 
   resolveObjectiveLine(prompt, frameState) {
+    if (frameState.activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+      && frameState.graveResonanceGameplay?.active
+      && prompt.contentOwner === "GraveResonanceGameplaySystem") {
+      return prompt.objectiveLine;
+    }
     const guideThreshold = frameState.guideThresholdLayeredInteraction ?? {};
     if (guideThreshold.active) {
       return guideThreshold.objectiveLine ?? "Move with the Guide Threshold current.";

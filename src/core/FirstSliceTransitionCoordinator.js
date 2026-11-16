@@ -384,8 +384,13 @@ export class FirstSliceTransitionCoordinator {
       const resultRoots = Array.isArray(result)
         ? result.filter((item) => item?.isObject3D)
         : [];
-      const newRoots = this.scene.children.filter((root) => !sceneChildrenBefore.has(root));
-      const dormantRoots = resultRoots.filter((root) => root.userData.transitionPrepared === true);
+      // CONNECTION22: GPU/shader warmups span frames. Roots mounted by gameplay
+      // during that interval are not resources created by the warmup. Only the
+      // synchronous preparation jobs own newly created scene roots and dormancy.
+      const newRoots = job.maySpanFrames ? []
+        : this.scene.children.filter((root) => !sceneChildrenBefore.has(root));
+      const dormantRoots = job.maySpanFrames ? []
+        : resultRoots.filter((root) => root.userData.transitionPrepared === true);
 
       for (const root of new Set([...dormantRoots, ...newRoots])) {
         if (!root?.isObject3D) continue;
@@ -398,7 +403,9 @@ export class FirstSliceTransitionCoordinator {
       job.resultStatus = result?.status ?? "complete";
       job.completedAtFrame = this.frameState.frame ?? 0;
     } catch (error) {
-      for (const root of this.scene.children.filter((item) => !sceneChildrenBefore.has(item))) {
+      const failedPreparationRoots = job.maySpanFrames ? []
+        : this.scene.children.filter((item) => !sceneChildrenBefore.has(item));
+      for (const root of failedPreparationRoots) {
         root.visible = false;
         root.userData.transitionPrepared = true;
         this.registerPreparedRoot(root, job.boundary);

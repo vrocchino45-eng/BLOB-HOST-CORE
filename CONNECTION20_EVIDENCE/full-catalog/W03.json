@@ -1,0 +1,910 @@
+{
+  "case": "W03",
+  "status": "PASS",
+  "summary": {
+    "passed": 1,
+    "failed": 0
+  },
+  "detail": {
+    "scope": "Actual running publication/current/movement outputs, real F/G mode input. Earlier four credits and retained-piece offset/near-current/outside-current poses are supplied fixtures. No coherence/current/goal result forced. Fold presence is not perceptual proof; attachment is observed, not asserted as a naturally acquired supported contact.",
+    "setup": {
+      "pass": "VASCULAR-II1-TEST-START",
+      "testOnly": true,
+      "earnedProgression": false,
+      "scope": "Staged prior first-route return, qualified revisit and source pose only; no phase-two handoff or completion credit written.",
+      "next": "Return focus to the game. Hold LT/Q, then tap Pulse/X while holding. Follow gold to green intake; hold LT/Q there.",
+      "position": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ]
+    },
+    "samples": [
+      {
+        "zone": "deep_core",
+        "response": {
+          "pass": "CONNECTION3",
+          "owner": "VascularRhythmRouteSystem",
+          "sourceOwner": "CoreRadialPerformanceSystem",
+          "eligible": true,
+          "reason": "coherence_applied",
+          "sampledAtSeconds": 0.8644000000003729,
+          "coherence": 1.382,
+          "factor": 1.15,
+          "affects": "directional_stabilize_calming_only",
+          "progressionAuthority": false,
+          "directionalCalm": 0.9502405179823376,
+          "neutralDirectionalCalm": 0.9567308852020326
+        },
+        "published": {
+          "pass": "CONNECTION3",
+          "owner": "VascularRhythmRouteSystem",
+          "sourceOwner": "CoreRadialPerformanceSystem",
+          "eligible": true,
+          "reason": "coherence_applied",
+          "sampledAtSeconds": 0.8644000000003729,
+          "coherence": 1.382,
+          "factor": 1.15,
+          "affects": "directional_stabilize_calming_only",
+          "progressionAuthority": false,
+          "directionalCalm": 0.9502405179823376,
+          "neutralDirectionalCalm": 0.9567308852020326
+        },
+        "core": {
+          "pass": "HC-027C",
+          "active": true,
+          "owner": "CoreRadialPerformanceSystem",
+          "sourceOwner": "CoreEmbodimentSystem / spatialCoreChemistry",
+          "law": "radial_anatomy_blends_reserve_control_output_without_changing_3_6_12_engine_geometry",
+          "topologyId": "deep_concentration",
+          "topologyLabel": "Deep Concentration",
+          "distribution": "3:0:0",
+          "personality": "diesel / reserve drive",
+          "dominantZone": "deep_core",
+          "weights": {
+            "deep": 1,
+            "inner": 0,
+            "membrane": 0
+          },
+          "traits": {
+            "output": 0.88,
+            "response": 0.88,
+            "enduranceCapacity": 1.55,
+            "recovery": 1.5,
+            "efficiency": 1.35,
+            "stability": 1.3
+          },
+          "endurance": {
+            "reserve01": 1,
+            "reservePercent": 100,
+            "demand01": 0.142,
+            "drainPerSecond": 0.043,
+            "recoveryPerSecond": 0.15,
+            "fatigueFactor": 1,
+            "instabilityRisk01": 0,
+            "coordination": {
+              "pass": "PAIRED-DEMAND2",
+              "earnedPhaseCeiling": 3,
+              "eligible": false,
+              "active": false,
+              "factor": 1,
+              "sharedFraction": 0,
+              "baseDrainPerSecond": 0.006098,
+              "effectiveDrainPerSecond": 0.006098,
+              "reserveSavedThisUpdate": 0,
+              "reason": "not_earned",
+              "progressionAuthority": false,
+              "architectureAuthority": false
+            }
+          },
+          "movementModifiers": {
+            "boostAccelerationMultiplier": 0.8,
+            "boostSpeedMultiplier": 0.869,
+            "normalMovementMultiplier": 1,
+            "verbCommitmentMovementMultiplier": 1,
+            "appliesToBoostOnly": false,
+            "normalMovementUnaffectedWhenNoVerbCommitted": true
+          },
+          "verbModifiers": {
+            "pass": "HC-027J2",
+            "law": "radial_physiology_continuously_shapes_verb_output_cost_control_and_recovery",
+            "pulse": {
+              "chargeRateMultiplier": 0.86,
+              "structuralReachMultiplier": 0.9,
+              "responseStrengthMultiplier": 0.867,
+              "recoveryBurdenMultiplier": 0.78,
+              "echoClutterMultiplier": 0.92,
+              "demand01": 0,
+              "costMultiplier": 0.794
+            },
+            "absorb": {
+              "commitment01": 0,
+              "powerMultiplier": 0.774,
+              "progressMultiplier": 0.796,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.77
+            },
+            "stabilize": {
+              "commitment01": 0,
+              "coherenceMultiplier": 1.382,
+              "mobilityMultiplier": 1,
+              "demand01": 0.142,
+              "costMultiplier": 0.709
+            },
+            "physiologyProfilesAreContinuousBlends": true,
+            "arbitraryZoneBuffTableAdded": false
+          },
+          "topologyChangeCount": 2,
+          "gameplayAuthority": true,
+          "movementAuthority": false,
+          "movementConsumer": "PlayerMovementController",
+          "coreWorkPlacementAuthority": false,
+          "chemistryAuthority": false,
+          "engineArchitectureAuthority": false,
+          "progressionAuthority": false,
+          "growthAuthority": false,
+          "randomFailureEnabled": false,
+          "misfireEnabled": false,
+          "redlineEnabled": false,
+          "lastEvent": "radial_topology_changed:deep_concentration"
+        },
+        "flow": {
+          "progress": 0.44899950368103814,
+          "centerlineDistance": 0.0966442775753768,
+          "flowStrength": 0.8172068454648104,
+          "baseFlowStrength": 0.8600000000000001,
+          "turbulence": 0,
+          "traversalMaterialMode": "stabilized_calm_lane",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0.12726210234696267,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": false,
+            "amplitude": 0,
+            "flowScale": 1,
+            "visualCompression": 0,
+            "phase": "waiting",
+            "episodeId": null,
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "return_current_carries_core_toward_hub"
+        },
+        "movement": {
+          "position": {
+            "x": 0.3536531822492214,
+            "y": 0.41950604429462496,
+            "z": -8.982104289961542
+          },
+          "velocity": {
+            "x": 0.3439471010224441,
+            "y": 0.11691140954593054,
+            "z": -0.44666049233839
+          },
+          "speed": 0.5757373371596918,
+          "locomotionMode": "normal",
+          "normalSpeedLimit": 4.65,
+          "activeSpeedLimit": 4.743,
+          "boostSpeedMultiplier": 1.85,
+          "routeAccelerationScale": 1.04,
+          "routeSpeedScale": 1.02,
+          "routeBoostScale": 1,
+          "routeFlowCouplingScale": 1.34,
+          "radialPerformanceBoostAccelerationScale": 1,
+          "radialPerformanceBoostSpeedScale": 1,
+          "radialVerbCommitmentMovementScale": 1,
+          "radialPerformanceOwner": "CoreRadialPerformanceSystem",
+          "verbPhysicalGrammar": {
+            "pass": "HC-031L",
+            "mode": "self_coherence",
+            "relationshipSource": "self",
+            "environmentalFlowMultiplier": 1,
+            "surfaceTractionMultiplier": 1,
+            "freeInputAccelerationMultiplier": 1,
+            "speedLimitMultiplier": 1,
+            "attachmentAcquireMultiplier": 1,
+            "attachmentReleaseThresholdMultiplier": 1
+          },
+          "topologyEnvironmentalHandling": {
+            "pass": "HC-028H1",
+            "active": true,
+            "mode": "controlled_transmission",
+            "environmentalCouplingMultiplier": 0.982,
+            "fluidSlipDampingMultiplier": 1.004,
+            "suppressed": false,
+            "suppressionReason": "none",
+            "normalInputAccelerationMultiplier": 1,
+            "speedLimitMultiplier": 1,
+            "worldForceGenerationUnchanged": true
+          },
+          "directionalFlowAlignment": 0,
+          "directionalSpeedScale": 1,
+          "routeFeelProfile": "vascular_directional_circulation_hc018c",
+          "viscosity": 0.299819031812243,
+          "pressure": 0.8247285477183645,
+          "flowVector": {
+            "x": -0.43830386437799596,
+            "y": 0.08269884233547092,
+            "z": 0.6847464145376992
+          },
+          "desiredMoveVector": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "environmentalForceVector": {
+            "x": -0.5521335961953523,
+            "y": 0.10417615022553815,
+            "z": 0.8625785238674559
+          },
+          "finalMoveVector": {
+            "x": 0.3439471010224441,
+            "y": 0.11691140954593054,
+            "z": -0.44666049233839
+          },
+          "convergenceEnvelope01": 0,
+          "convergenceEnvironmentScale": 1,
+          "convergenceReachabilityActive": false,
+          "flowVelocity": {
+            "x": -0.778275370547756,
+            "y": 0.14684440953731243,
+            "z": 1.2158717109689468
+          },
+          "fluidSlip": 2.1203595846958803,
+          "boundaryPressure": 0,
+          "kineticGlow": 0.2214374373691122,
+          "assistStrength": 0,
+          "inputMagnitude": 0,
+          "thrust": 0,
+          "tendrilSurfaceLocomotion": {
+            "active": false,
+            "supportCount": 0,
+            "traction01": 0,
+            "leadingAnchorIndex": -1,
+            "leadingAnchorDistance": 0,
+            "leadingAnchorAlignment": 0,
+            "directInputScale": 1,
+            "pullAcceleration": 0,
+            "loadPulse01": 0,
+            "leadingAnchorWorld": null,
+            "surfaceTruthActive": false,
+            "mode": "single_anchor_pull"
+          },
+          "tendrilSupportPlane": {
+            "active": false,
+            "supportCount": 0,
+            "supportQuality01": 0,
+            "targetRideHeight": 0.38,
+            "rideHeightError": 0,
+            "surfaceId": "none",
+            "normal": {
+              "x": 0.3605,
+              "y": 0.8554,
+              "z": -0.3719
+            }
+          },
+          "movementFeel": "embodied_viscous_current_swim",
+          "movementReference": "camera_relative_embodied_free_3d",
+          "stickForwardMeaning": "true_camera_forward_including_pitch",
+          "verticalReference": "world_y_bumpers_dpad_or_keyboard",
+          "verticalInput": 0,
+          "altitude": 0.41950604429462496,
+          "altitudeRange": {
+            "min": -3.2,
+            "max": 3.2
+          },
+          "movementBoundary": {
+            "mode": "entry_anchored_ellipsoid",
+            "owner": "PlayerMovementController",
+            "tuningOwner": "VascularRhythmRouteSystem",
+            "regionId": "vascular_route",
+            "center": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "radii": {
+              "x": 4.5,
+              "y": 3.2,
+              "z": 22.5
+            },
+            "normalizedDistance": 0.42746547442382926,
+            "c0e2": {
+              "pass": "C0E2",
+              "active": true,
+              "pocketCount": 3,
+              "activePocketId": null,
+              "envelope": "connected_union_of_legacy_and_three_site_pockets",
+              "routeCreditChanged": false,
+              "inputOwnerChanged": false
+            },
+            "pressure": 0,
+            "proximity": 0,
+            "radialSpeed": 0.3905235081199414,
+            "tangentialSpeed": 0.42304239859076387,
+            "surfaceNormal": {
+              "x": 0.36430555187411434,
+              "y": 0.8545776156373851,
+              "z": -0.3701061519688892
+            },
+            "telemetryOnly": true,
+            "contactSurfaceCoverage": {
+              "pass": "HC-025C",
+              "classId": "region_local_envelope",
+              "shortLabel": "route-local",
+              "locality": "region_local",
+              "boundaryMode": "entry_anchored_ellipsoid",
+              "owner": "PlayerMovementController",
+              "tuningOwner": "VascularRhythmRouteSystem",
+              "regionId": "vascular_route",
+              "contactable": true,
+              "mechanicalAttachmentEligible": true,
+              "source": "existing_authored_movement_boundary",
+              "interiorDecorativeGeometryContactable": false,
+              "addsCollider": false,
+              "addsRaycast": false,
+              "geometryExpansionThisPass": false
+            },
+            "attachmentPhysics": {
+              "pass": "HC-025B",
+              "active": false,
+              "state": "free",
+              "adhesionStrength": 0,
+              "siltSurfaceAlignment": 0.175,
+              "releaseTension": 0,
+              "surfaceTangentSpeed": 0.538,
+              "trustedBoundaryOnly": true
+            },
+            "regionLocal": true
+          },
+          "cameraPitchAffectsForwardMovement": true,
+          "cameraForwardVerticalContribution": -0.25929728565908106,
+          "cameraRelativeForward": {
+            "x": 0.025106768794680944,
+            "y": -0.25929728565908106,
+            "z": -0.9654711636348977
+          },
+          "cameraRelativeRight": {
+            "x": 0.9996620496982462,
+            "y": 0,
+            "z": 0.025995891850460157
+          },
+          "inputComfortPass": "HC-009D",
+          "verticalReadabilityContract": "true_camera_pitch_motion_plus_explicit_lift_and_authored_body_response",
+          "coreGrowthStage": "seed_core",
+          "coreGrowthBias": "balanced_first_binding",
+          "growthMovementApplied": true,
+          "growthMovementModifiers": {
+            "accelerationMultiplier": 1,
+            "dragMultiplier": 1,
+            "flowCouplingMultiplier": 1.34,
+            "pressureResponseMultiplier": 1,
+            "stabilizeEfficiencyMultiplier": 1
+          },
+          "abilityUnlockedByGrowth": false
+        },
+        "credits": 4,
+        "receipts": 0,
+        "folds": 9
+      },
+      {
+        "zone": "membrane",
+        "response": {
+          "pass": "CONNECTION3",
+          "owner": "VascularRhythmRouteSystem",
+          "sourceOwner": "CoreRadialPerformanceSystem",
+          "eligible": true,
+          "reason": "coherence_applied",
+          "sampledAtSeconds": 0.9477000000001866,
+          "coherence": 0.665,
+          "factor": 0.85,
+          "affects": "directional_stabilize_calming_only",
+          "progressionAuthority": false,
+          "directionalCalm": 0.8829853738218008,
+          "neutralDirectionalCalm": 0.8623357339080009
+        },
+        "published": {
+          "pass": "CONNECTION3",
+          "owner": "VascularRhythmRouteSystem",
+          "sourceOwner": "CoreRadialPerformanceSystem",
+          "eligible": true,
+          "reason": "coherence_applied",
+          "sampledAtSeconds": 0.9477000000001866,
+          "coherence": 0.665,
+          "factor": 0.85,
+          "affects": "directional_stabilize_calming_only",
+          "progressionAuthority": false,
+          "directionalCalm": 0.8829853738218008,
+          "neutralDirectionalCalm": 0.8623357339080009
+        },
+        "core": {
+          "pass": "HC-027C",
+          "active": true,
+          "owner": "CoreRadialPerformanceSystem",
+          "sourceOwner": "CoreEmbodimentSystem / spatialCoreChemistry",
+          "law": "radial_anatomy_blends_reserve_control_output_without_changing_3_6_12_engine_geometry",
+          "topologyId": "membrane_saturation",
+          "topologyLabel": "Membrane Saturation",
+          "distribution": "0:0:3",
+          "personality": "race / output drive",
+          "dominantZone": "membrane",
+          "weights": {
+            "deep": 0,
+            "inner": 0,
+            "membrane": 1
+          },
+          "traits": {
+            "output": 1.18,
+            "response": 1.2,
+            "enduranceCapacity": 0.72,
+            "recovery": 0.65,
+            "efficiency": 0.72,
+            "stability": 0.7
+          },
+          "endurance": {
+            "reserve01": 0.999,
+            "reservePercent": 100,
+            "demand01": 0.31,
+            "drainPerSecond": 0.1736,
+            "recoveryPerSecond": 0.065,
+            "fatigueFactor": 1,
+            "instabilityRisk01": 0.294,
+            "coordination": {
+              "pass": "PAIRED-DEMAND2",
+              "earnedPhaseCeiling": 3,
+              "eligible": false,
+              "active": false,
+              "factor": 1,
+              "sharedFraction": 0,
+              "baseDrainPerSecond": 0.053819,
+              "effectiveDrainPerSecond": 0.053819,
+              "reserveSavedThisUpdate": 0,
+              "reason": "not_earned",
+              "progressionAuthority": false,
+              "architectureAuthority": false
+            }
+          },
+          "movementModifiers": {
+            "boostAccelerationMultiplier": 1.34,
+            "boostSpeedMultiplier": 1.203,
+            "normalMovementMultiplier": 1,
+            "verbCommitmentMovementMultiplier": 1,
+            "appliesToBoostOnly": false,
+            "normalMovementUnaffectedWhenNoVerbCommitted": true
+          },
+          "verbModifiers": {
+            "pass": "HC-027J2",
+            "law": "radial_physiology_continuously_shapes_verb_output_cost_control_and_recovery",
+            "pulse": {
+              "chargeRateMultiplier": 1.18,
+              "structuralReachMultiplier": 1.15,
+              "responseStrengthMultiplier": 1.208,
+              "recoveryBurdenMultiplier": 1.28,
+              "echoClutterMultiplier": 1.25,
+              "demand01": 0,
+              "costMultiplier": 1.45
+            },
+            "absorb": {
+              "commitment01": 0,
+              "powerMultiplier": 1.415,
+              "progressMultiplier": 1.38,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 1.42
+            },
+            "stabilize": {
+              "commitment01": 0,
+              "coherenceMultiplier": 0.664,
+              "mobilityMultiplier": 1,
+              "demand01": 0.31,
+              "costMultiplier": 1.55
+            },
+            "physiologyProfilesAreContinuousBlends": true,
+            "arbitraryZoneBuffTableAdded": false
+          },
+          "topologyChangeCount": 3,
+          "gameplayAuthority": true,
+          "movementAuthority": false,
+          "movementConsumer": "PlayerMovementController",
+          "coreWorkPlacementAuthority": false,
+          "chemistryAuthority": false,
+          "engineArchitectureAuthority": false,
+          "progressionAuthority": false,
+          "growthAuthority": false,
+          "randomFailureEnabled": false,
+          "misfireEnabled": false,
+          "redlineEnabled": false,
+          "lastEvent": "radial_topology_changed:membrane_saturation"
+        },
+        "flow": {
+          "progress": 0.44899950368103814,
+          "centerlineDistance": 0.0966442775753768,
+          "flowStrength": 0.669154259580025,
+          "baseFlowStrength": 0.7578316463881427,
+          "turbulence": 0,
+          "traversalMaterialMode": "stabilized_calm_lane",
+          "pulseWake": 0,
+          "absorbShear": 0,
+          "stabilizeCalm": 0.40489490027058556,
+          "worldRhythmFlowScale": 1,
+          "hostPressure": {
+            "active": false,
+            "amplitude": 0,
+            "flowScale": 1,
+            "visualCompression": 0,
+            "phase": "waiting",
+            "episodeId": null,
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+          },
+          "remoteSiltMembraneLoad": 0,
+          "remoteSiltDirectionalFlowScale": 1,
+          "worldRhythmBeat": 0,
+          "worldRhythmFunction": "none",
+          "condition": "return_current_carries_core_toward_hub"
+        },
+        "movement": {
+          "position": {
+            "x": 0.349299477882385,
+            "y": 0.41963737829774966,
+            "z": -8.975646848785193
+          },
+          "velocity": {
+            "x": 0.08167575363607624,
+            "y": 0.12482309648789332,
+            "z": -0.05765801185170697
+          },
+          "speed": 0.15992554667575323,
+          "locomotionMode": "normal",
+          "normalSpeedLimit": 4.65,
+          "activeSpeedLimit": 4.743,
+          "boostSpeedMultiplier": 1.85,
+          "routeAccelerationScale": 1.04,
+          "routeSpeedScale": 1.02,
+          "routeBoostScale": 1,
+          "routeFlowCouplingScale": 1.34,
+          "radialPerformanceBoostAccelerationScale": 1,
+          "radialPerformanceBoostSpeedScale": 1,
+          "radialVerbCommitmentMovementScale": 1,
+          "radialPerformanceOwner": "CoreRadialPerformanceSystem",
+          "verbPhysicalGrammar": {
+            "pass": "HC-031L",
+            "mode": "self_coherence",
+            "relationshipSource": "self",
+            "environmentalFlowMultiplier": 1,
+            "surfaceTractionMultiplier": 1,
+            "freeInputAccelerationMultiplier": 1,
+            "speedLimitMultiplier": 1,
+            "attachmentAcquireMultiplier": 1,
+            "attachmentReleaseThresholdMultiplier": 1
+          },
+          "topologyEnvironmentalHandling": {
+            "pass": "HC-028H1",
+            "active": true,
+            "mode": "buffered_inertial",
+            "environmentalCouplingMultiplier": 0.932,
+            "fluidSlipDampingMultiplier": 0.958,
+            "suppressed": false,
+            "suppressionReason": "none",
+            "normalInputAccelerationMultiplier": 1,
+            "speedLimitMultiplier": 1,
+            "worldForceGenerationUnchanged": true
+          },
+          "directionalFlowAlignment": 0,
+          "directionalSpeedScale": 1,
+          "routeFeelProfile": "vascular_directional_circulation_hc018c",
+          "viscosity": 0.2776084079783532,
+          "pressure": 0.7096779290780438,
+          "flowVector": {
+            "x": -0.35889677070938214,
+            "y": 0.0677163718319589,
+            "z": 0.5606915587686196
+          },
+          "desiredMoveVector": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "environmentalForceVector": {
+            "x": -0.39298701131172553,
+            "y": 0.07414849270032557,
+            "z": 0.6139495195586957
+          },
+          "finalMoveVector": {
+            "x": 0.08167575363607624,
+            "y": 0.12482309648789332,
+            "z": -0.05765801185170697
+          },
+          "convergenceEnvelope01": 0,
+          "convergenceEnvironmentScale": 1,
+          "convergenceReachabilityActive": false,
+          "flowVelocity": {
+            "x": -0.58442310465774,
+            "y": 0.11026851031278113,
+            "z": 0.9130232653898277
+          },
+          "fluidSlip": 1.2393526594571975,
+          "boundaryPressure": 0,
+          "kineticGlow": 0.06150982564452047,
+          "assistStrength": 0,
+          "inputMagnitude": 0,
+          "thrust": 0,
+          "tendrilSurfaceLocomotion": {
+            "active": false,
+            "supportCount": 0,
+            "traction01": 0,
+            "leadingAnchorIndex": -1,
+            "leadingAnchorDistance": 0,
+            "leadingAnchorAlignment": 0,
+            "directInputScale": 1,
+            "pullAcceleration": 0,
+            "loadPulse01": 0,
+            "leadingAnchorWorld": null,
+            "surfaceTruthActive": false,
+            "mode": "single_anchor_pull"
+          },
+          "tendrilSupportPlane": {
+            "active": false,
+            "supportCount": 0,
+            "supportQuality01": 0,
+            "targetRideHeight": 0.38,
+            "rideHeightError": 0,
+            "surfaceId": "none",
+            "normal": {
+              "x": 0.3605,
+              "y": 0.8554,
+              "z": -0.3719
+            }
+          },
+          "movementFeel": "embodied_viscous_current_swim",
+          "movementReference": "camera_relative_embodied_free_3d",
+          "stickForwardMeaning": "true_camera_forward_including_pitch",
+          "verticalReference": "world_y_bumpers_dpad_or_keyboard",
+          "verticalInput": 0,
+          "altitude": 0.41963737829774966,
+          "altitudeRange": {
+            "min": -3.2,
+            "max": 3.2
+          },
+          "movementBoundary": {
+            "mode": "entry_anchored_ellipsoid",
+            "owner": "PlayerMovementController",
+            "tuningOwner": "VascularRhythmRouteSystem",
+            "regionId": "vascular_route",
+            "center": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "radii": {
+              "x": 4.5,
+              "y": 3.2,
+              "z": 22.5
+            },
+            "normalizedDistance": 0.4270331393313514,
+            "c0e2": {
+              "pass": "C0E2",
+              "active": true,
+              "pocketCount": 3,
+              "activePocketId": null,
+              "envelope": "connected_union_of_legacy_and_three_site_pockets",
+              "routeCreditChanged": false,
+              "inputOwnerChanged": false
+            },
+            "pressure": 0,
+            "proximity": 0,
+            "radialSpeed": 0.15765293185628745,
+            "tangentialSpeed": 0.026865099230326896,
+            "surfaceNormal": {
+              "x": 0.36035933321305524,
+              "y": 0.8561247929479291,
+              "z": -0.37039369576993064
+            },
+            "telemetryOnly": true,
+            "contactSurfaceCoverage": {
+              "pass": "HC-025C",
+              "classId": "region_local_envelope",
+              "shortLabel": "route-local",
+              "locality": "region_local",
+              "boundaryMode": "entry_anchored_ellipsoid",
+              "owner": "PlayerMovementController",
+              "tuningOwner": "VascularRhythmRouteSystem",
+              "regionId": "vascular_route",
+              "contactable": true,
+              "mechanicalAttachmentEligible": true,
+              "source": "existing_authored_movement_boundary",
+              "interiorDecorativeGeometryContactable": false,
+              "addsCollider": false,
+              "addsRaycast": false,
+              "geometryExpansionThisPass": false
+            },
+            "attachmentPhysics": {
+              "pass": "HC-025B",
+              "active": false,
+              "state": "free",
+              "adhesionStrength": 0.291,
+              "siltSurfaceAlignment": 0.168,
+              "releaseTension": 0,
+              "surfaceTangentSpeed": 0.082,
+              "trustedBoundaryOnly": true
+            },
+            "regionLocal": true
+          },
+          "cameraPitchAffectsForwardMovement": true,
+          "cameraForwardVerticalContribution": -0.3285403901117411,
+          "cameraRelativeForward": {
+            "x": -0.042528096286679425,
+            "y": -0.3285403901117411,
+            "z": -0.9435319671804745
+          },
+          "cameraRelativeRight": {
+            "x": 0.9989857441249398,
+            "y": 0,
+            "z": -0.0450275808270937
+          },
+          "inputComfortPass": "HC-009D",
+          "verticalReadabilityContract": "true_camera_pitch_motion_plus_explicit_lift_and_authored_body_response",
+          "coreGrowthStage": "seed_core",
+          "coreGrowthBias": "balanced_first_binding",
+          "growthMovementApplied": true,
+          "growthMovementModifiers": {
+            "accelerationMultiplier": 1,
+            "dragMultiplier": 1,
+            "flowCouplingMultiplier": 1.34,
+            "pressureResponseMultiplier": 1,
+            "stabilizeEfficiencyMultiplier": 1
+          },
+          "abilityUnlockedByGrowth": false
+        },
+        "credits": 4,
+        "receipts": 0,
+        "folds": 9
+      }
+    ],
+    "work": {
+      "pass": "CONNECTION3",
+      "owner": "VascularRhythmRouteSystem",
+      "sourceOwner": "CoreRadialPerformanceSystem",
+      "eligible": false,
+      "reason": "core_work",
+      "sampledAtSeconds": 1.0146000000005593,
+      "coherence": 0.664,
+      "factor": 1,
+      "affects": "directional_stabilize_calming_only",
+      "progressionAuthority": false,
+      "directionalCalm": 0.8101166151406475,
+      "neutralDirectionalCalm": 0.8101166151406475
+    },
+    "outside": {
+      "response": {
+        "pass": "CONNECTION3",
+        "owner": "VascularRhythmRouteSystem",
+        "sourceOwner": "CoreRadialPerformanceSystem",
+        "eligible": false,
+        "reason": "not_stabilizing",
+        "sampledAtSeconds": 1.0479000000003729,
+        "coherence": 0.664,
+        "factor": 1,
+        "affects": "directional_stabilize_calming_only",
+        "progressionAuthority": false,
+        "directionalCalm": 0.8381661616212994,
+        "neutralDirectionalCalm": 0.8381661616212994
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": false,
+        "state": "free",
+        "authority": "none",
+        "adhesionStrength": 0.927,
+        "authoredSuctionSupportActive": false,
+        "authoredSuctionSupportCount": 0,
+        "authoredSuctionSupportStrength": 0,
+        "authoredSuctionSupportSurfaceId": "none",
+        "anchorCarriedSurfaceIdentityActive": false,
+        "anchorCarriedSurfaceId": "none",
+        "anchorCarriedSurfaceProfileId": "none",
+        "anchorCarriedSurfaceMaterialFamily": "none",
+        "anchorCarriedSurfaceAdhesion": 0,
+        "anchorCarriedSurfaceLoadTolerance": 0,
+        "anchorCarriedSurfaceCompliance": 0,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0,
+          "absorb": 0,
+          "stabilize": 0
+        },
+        "siltSurfaceAlignment": 0.823,
+        "releaseTension": 0,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "none",
+        "reacquireBlocked": false,
+        "reacquireCandidateSurfaceId": "none",
+        "reacquireUnblockReason": "none",
+        "reacquireUnblockFromSurfaceId": "none",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "none",
+        "releaseClearance": 0,
+        "ownerSurfaceId": "none",
+        "ownerAuthority": "none",
+        "acquireAge": 0,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.393,
+        "continuityMode": "none",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.188,
+        "momentumHandoffMode": "none",
+        "landingHandoffAge": 99,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 0,
+        "landingEntrySpeed": 0,
+        "landingEntryTangentialSpeed": 0,
+        "landingRetainedTangentialSpeed": 0,
+        "releaseInheritedTangentialSpeed": 0,
+        "releaseNormalImpulse": 0,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "self_coherence",
+        "verbPhysicalRelationshipSource": "self",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": false,
+        "tendrilSupportCount": 0,
+        "tendrilTraction01": 0,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.3,
+        "tendrilSupportPlaneActive": false,
+        "tendrilSupportPlaneQuality01": 0,
+        "tendrilSupportPlaneCount": 0,
+        "tendrilSupportPlaneSurfaceId": "none",
+        "tendrilSupportRideHeightError": 0,
+        "surfaceTruthActive": false,
+        "surfaceTruthDistance": null,
+        "surfaceTruthMeshName": "none",
+        "surfaceTruthSurfaceId": "none",
+        "surfaceTruthProfileId": "none",
+        "surfaceTruthMaterialFamily": "none",
+        "surfaceTruthAdhesion": 0.75,
+        "surfaceTruthLoadTolerance": 0.7,
+        "surfaceTruthCompliance": 0.5,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.5,
+          "absorb": 0.5,
+          "stabilize": 0.5
+        },
+        "boundaryProximity": 0.478,
+        "boundaryNormalizedDistance": 0.854,
+        "shellNormalizedDistance": 0.955,
+        "releaseCooldown": 0,
+        "siltZoneId": "membrane",
+        "surfaceCoverageClass": "region_local_envelope",
+        "surfaceCoverageLabel": "route-local",
+        "surfaceCoverageRegionId": "vascular_route",
+        "surfaceCoverageTuningOwner": "VascularRhythmRouteSystem",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      },
+      "credits": 4
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,206 @@
+{
+  "suite": "BLOB-BOT-SERIES1",
+  "baseline": "CONNECTION15-HUB-GUIDANCE / CONNECTION13-HARNESS",
+  "cases": [
+    {
+      "id": "D01",
+      "name": "Data profiles and invalid archive data",
+      "file": "cases/D01.mjs",
+      "expectedChecks": 15,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "M01",
+      "name": "Conserved Silt material loop",
+      "file": "cases/M01.mjs",
+      "expectedChecks": 9,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "M02",
+      "name": "Core Work grip handoff",
+      "file": "cases/M02.mjs",
+      "expectedChecks": 8,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "G01",
+      "name": "Vascular paired handoff",
+      "file": "cases/G01.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "G02",
+      "name": "Silt goal negative receipts",
+      "file": "cases/G02.mjs",
+      "expectedChecks": 13,
+      "tier": "synthetic_receipts",
+      "mode": "quick"
+    },
+    {
+      "id": "G03",
+      "name": "Six-credit owner integration",
+      "file": "cases/G03.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "H01",
+      "name": "Host cycle owner and hidden-region handling",
+      "file": "cases/H01.mjs",
+      "expectedChecks": 34,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "H02",
+      "name": "Six-cycle recovery against neutral twin",
+      "file": "cases/H02.mjs",
+      "expectedChecks": 1,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "T01",
+      "name": "Read-only Host telemetry export",
+      "file": "cases/T01.mjs",
+      "expectedChecks": 10,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "P01",
+      "name": "Paired reserve and credit boundary",
+      "file": "cases/P01.mjs",
+      "expectedChecks": 69,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "B01",
+      "name": "Host cycle and real telemetry download",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "B02",
+      "name": "Held-grain mode interruption and reacquisition",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "B03",
+      "name": "Regional goals, six-phase, Hub and reserve arc",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "W01",
+      "name": "Vascular coherence consumer guards",
+      "file": "cases/W01.mjs",
+      "expectedChecks": 26,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "W02",
+      "name": "Coherence and actual movement/reserve comparisons",
+      "file": "cases/W02.mjs",
+      "expectedChecks": 28,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "W03",
+      "name": "Live coherence/current and mode boundaries",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "W04",
+      "name": "Continuous coherence-driven particle travel and physics parity",
+      "file": "cases/W04.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "W05",
+      "name": "Live continuous current particle contribution and lifecycle",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "C01",
+      "name": "Silt\u2013Vascular\u2013Grave\u2013Silt consequence loop",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "C02",
+      "name": "Consequence attribution, saturation and provenance",
+      "file": "cases/C02.mjs",
+      "expectedChecks": 6,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "L01",
+      "name": "Territory Pulse freshness across region gaps",
+      "file": "cases/L01.mjs",
+      "expectedChecks": 32,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "L02",
+      "name": "Live input, territory remount and Core Work Pulse isolation",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "K01",
+      "name": "Player-input Core placement to Vascular and reserve",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "U01",
+      "name": "Hub readiness, Grave phase guidance and Core Work controls",
+      "file": "cases/U01.mjs",
+      "expectedChecks": 31,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "U02",
+      "name": "Live Hub commitments with incomplete presentation and Grave II guide",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    }
+  ]
+}

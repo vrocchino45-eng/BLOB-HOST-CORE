@@ -1,0 +1,93 @@
+{
+  "stage": "Actual inspection input suppresses earned assistance while Stabilize is held",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n",
+  "snapshot": {
+    "risk": 0.16679999999999995,
+    "integrity": 0.8980000000000008,
+    "read": true,
+    "stable": true,
+    "riskCount": 2,
+    "coreTicks": 24,
+    "world": {
+      "pass": "C0D1-C",
+      "schemaVersion": 1,
+      "owner": "GraveMemoryRouteSystem",
+      "cellId": "CELL_GRAVE_MEMORY_RESIDUE_BED_001",
+      "active": false,
+      "mode": "bounded_retained_vascular_effect_memory",
+      "receivedTotal": 0,
+      "lastHostSequence": 0,
+      "replayedTotal": 0,
+      "rejectedTotal": 0,
+      "gapRejectedTotal": 0,
+      "prunedTotal": 0,
+      "retainedCount": 0,
+      "memoryPressure": 0,
+      "lastVascularEffectId": null,
+      "lastParentSiltReceiptId": null,
+      "lastSubjectId": null,
+      "records": [],
+      "gameplayConsequenceApplied": false,
+      "graveObjectivesChanged": false,
+      "materialTransfer": false,
+      "routeCredit": false,
+      "persistsAcrossCellMountsInRuntime": true,
+      "persistsAcrossReload": false
+    },
+    "core": {
+      "pass": "CONNECTION48",
+      "owner": "GraveMemoryRouteSystem",
+      "active": true,
+      "earned": true,
+      "multiplier": 1.15,
+      "coreMultiplier": 1.15,
+      "worldMultiplier": 1,
+      "source": "earned_grave_core",
+      "ceiling": 1.15,
+      "eligibleNow": false,
+      "assistedTicks": 24,
+      "assistedSeconds": 0.39999999999999997,
+      "materialTransfer": false,
+      "routeCredit": false,
+      "offRouteSimulation": false
+    },
+    "earned": {
+      "pass": "CONNECTION44",
+      "owner": "CoreGrowthSystem",
+      "growthKnown": true,
+      "matureBinding": true,
+      "surfaceFoundation": true,
+      "surfaceCause": "player_authored_safe_nursery_outcome",
+      "earnedFamilies": {
+        "grave": true,
+        "vascular": false,
+        "silt": false
+      },
+      "integrated": false,
+      "idleRecoveryMultiplier": 1,
+      "cause": "requires_mature_core_and_earned_vascular_return",
+      "enginePhaseAuthority": false,
+      "materialAuthority": false
+    },
+    "credits": 0,
+    "registryErrors": 0
+  },
+  "checks": [
+    {
+      "name": "Debug route initialization does not earn the Grave adaptation",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual Pulse and Stabilize read and settle the existing residue",
+      "status": "PASS"
+    },
+    {
+      "name": "Protected-remains Absorb causes real recoil; baseline held recovery remains unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "Mature earned-memory fixture produces measured 15% faster real held recovery",
+      "status": "PASS"
+    }
+  ]
+}

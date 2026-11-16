@@ -1,0 +1,60 @@
+--- CONNECTION42/src/thresholds/CombThresholdFoundationSystem.js
++++ CONNECTION43/src/thresholds/CombThresholdFoundationSystem.js
+@@ -1,3 +1,4 @@
++import { resolveCoreFamilyColor } from "../visual/CoreVisualPalette.js";
+ import * as THREE from "three";
+ 
+ const RECIPE_ID = "COMB_THRESHOLD_FOUNDATION_HC013A";
+@@ -233,10 +234,10 @@
+     const lobeCount = this.recipe.anatomy?.filterLobeCount ?? 6;
+     for (let index = 0; index < lobeCount; index += 1) {
+       const color = index % 3 === 0
+-        ? (visual.graveColor ?? 0xb9a0bd)
++        ? (resolveCoreFamilyColor("grave_memory_retention", visual.graveColor ?? 0xb9a0bd))
+         : index % 3 === 1
+-          ? (visual.vascularColor ?? 0x78e3ff)
+-          : (visual.siltColor ?? 0xc99d55);
++          ? (resolveCoreFamilyColor("vascular_rhythm_retention", visual.vascularColor ?? 0x78e3ff))
++          : (resolveCoreFamilyColor("silt_pressure_retention", visual.siltColor ?? 0xc99d55));
+       const material = this.trackMaterial(new THREE.MeshStandardMaterial({
+         color,
+         emissive: color,
+@@ -325,21 +326,21 @@
+     const imprintDefinitions = [
+       {
+         id: "grave_memory",
+-        color: visual.graveColor ?? 0xb9a0bd,
++        color: resolveCoreFamilyColor("grave_memory_retention", visual.graveColor ?? 0xb9a0bd),
+         x: -0.72,
+         y: 0.46,
+         geometry: () => new THREE.OctahedronGeometry(0.12, 0)
+       },
+       {
+         id: "vascular_rhythm",
+-        color: visual.vascularColor ?? 0x78e3ff,
++        color: resolveCoreFamilyColor("vascular_rhythm_retention", visual.vascularColor ?? 0x78e3ff),
+         x: 0,
+         y: 0.72,
+         geometry: () => new THREE.SphereGeometry(0.1, 10, 7)
+       },
+       {
+         id: "silt_pressure",
+-        color: visual.siltColor ?? 0xc99d55,
++        color: resolveCoreFamilyColor("silt_pressure_retention", visual.siltColor ?? 0xc99d55),
+         x: 0.72,
+         y: 0.34,
+         geometry: () => new THREE.BoxGeometry(0.22, 0.08, 0.2)
+@@ -389,10 +390,10 @@
+ 
+     for (let index = 0; index < 3; index += 1) {
+       const color = index === 0
+-        ? (visual.graveColor ?? 0xb9a0bd)
++        ? (resolveCoreFamilyColor("grave_memory_retention", visual.graveColor ?? 0xb9a0bd))
+         : index === 1
+-          ? (visual.vascularColor ?? 0x78e3ff)
+-          : (visual.siltColor ?? 0xc99d55);
++          ? (resolveCoreFamilyColor("vascular_rhythm_retention", visual.vascularColor ?? 0x78e3ff))
++          : (resolveCoreFamilyColor("silt_pressure_retention", visual.siltColor ?? 0xc99d55));
+       const material = this.trackMaterial(new THREE.MeshStandardMaterial({
+         color,
+         emissive: color,

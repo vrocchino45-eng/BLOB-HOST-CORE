@@ -1,0 +1,78 @@
+--- CONNECTION47/src/routes/GraveMemoryRouteSystem.js
++++ CONNECTION48/src/routes/GraveMemoryRouteSystem.js
+@@ -1,6 +1,6 @@
+ import * as THREE from "three";
+ import { GraveVascularEffectMemory } from "./GraveVascularEffectMemory.js";
+-import { graveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
++import { graveRecoveryCoupling, coreGraveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
+ import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
+ 
+ const ROUTE_CELL_ID = "CELL_GRAVE_MEMORY_RESIDUE_BED_001";
+@@ -100,6 +100,8 @@
+     this.protectedAbsorbAttemptCount = 0;
+     this.riskEventCount = 0;
+     this.recoverySeconds = 0;
++    this.coreGraveAssistedTicks = 0;
++    this.coreGraveAssistedSeconds = 0;
+     this.residueRecoilRecovered = false;
+     this.lastRiskSource = "none";
+     this.completed = false;
+@@ -702,6 +704,11 @@
+     this.returnPosition.copy(this.entryAnchor).add(this.tempVector.fromArray(returnOffset));
+   }
+ 
++  coreRecoverySuspended(f) {
++    return Boolean(f.inspectionCamera?.active || f.inspectionCamera?.coreWorkActive
++      || f.tightInspectionCamera?.active || f.tightInspectionCamera?.coreWorkActive);
++  }
++
+   updateInteractions(dt, frameState) {
+     const input = frameState.input ?? {};
+     const pulseEventId = input.pulseEventId ?? (frameState.frame ?? 0);
+@@ -736,16 +743,21 @@
+         this.circuitEnabled
+         && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)
+       ) {
+-        // C0D2: only authenticated, Grave-owned memory affects existing
+-        // Stabilize recovery. No change to damage, objectives or safe thresholds.
+-        const coupling = graveRecoveryCoupling(this.vascularEffectMemory);
++        // CONNECTION48: earned Core memory shares, rather than stacks, the existing ceiling.
++        const worldCoupling = graveRecoveryCoupling(this.vascularEffectMemory);
++        const coupling = coreGraveRecoveryCoupling(this.vascularEffectMemory, frameState.coreGrowth,
++          {suspended:this.coreRecoverySuspended(frameState) || !Number.isFinite(dt) || dt<=0});
+         const recoveryRate = (this.recipe?.interaction?.recoveryPerSecond ?? 0.42) * coupling.multiplier;
+         const integrityRate = (this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3) * coupling.multiplier;
+         this.residueRecoilRisk = Math.max(0, this.residueRecoilRisk - dt * recoveryRate);
+         this.traceIntegrity = Math.min(1, this.traceIntegrity + dt * integrityRate);
+-        if (coupling.assisted && dt > 0) {
++        if (worldCoupling.assisted && dt > 0) {
+           this.c0d2AssistedRecoveryTicks = Math.min(1000000, this.c0d2AssistedRecoveryTicks + 1);
+           this.c0d2AssistedRecoverySeconds = Math.min(3600, this.c0d2AssistedRecoverySeconds + dt);
++        }
++        if (coupling.coreContributing && dt > 0) {
++          this.coreGraveAssistedTicks = Math.min(1000000, this.coreGraveAssistedTicks + 1);
++          this.coreGraveAssistedSeconds = Math.min(3600, this.coreGraveAssistedSeconds + dt);
+         }
+         this.recoverySeconds += dt;
+         this.lastInteraction = "stabilize_rebinding_scattered_memory_trace";
+@@ -1504,6 +1516,20 @@
+           && this.siltStabilized && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)
+           && coupling.assisted)
+       }
++    };
++    const coreCoupling = coreGraveRecoveryCoupling(this.vascularEffectMemory, frameState.coreGrowth,
++      {suspended:this.coreRecoverySuspended(frameState)});
++    frameState.coreGraveRecovery = {
++      pass:"CONNECTION48", owner:"GraveMemoryRouteSystem", active:Boolean(active),
++      earned:coreCoupling.earned, multiplier:active?coreCoupling.multiplier:1,
++      coreMultiplier:coreCoupling.coreMultiplier, worldMultiplier:coreCoupling.worldMultiplier,
++      source:active?coreCoupling.source:"none", ceiling:1.15,
++      eligibleNow:Boolean(active && this.circuitEnabled && this.siltRead && this.siltStabilized
++        && (this.residueRecoilRisk>0 || this.traceIntegrity<1) && frameState.input?.stabilizeHeld
++        && this.distanceToObject("residue_silt_cloud_001") <= (this.recipe?.interaction?.stabilizeRange ?? 1.8)
++        && coreCoupling.coreContributing),
++      assistedTicks:this.coreGraveAssistedTicks, assistedSeconds:this.coreGraveAssistedSeconds,
++      materialTransfer:false, routeCredit:false, offRouteSimulation:false
+     };
+     frameState.graveMemoryRoute = {
+       vascularMemoryPresentation: this.readVascularMemoryPresentation(active),

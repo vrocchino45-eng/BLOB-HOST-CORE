@@ -1,0 +1,69 @@
+{
+  "pass": "CONNECTION60",
+  "summary": {
+    "passed": 15,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "LF preflight/apply/idempotence/exact restore/history preservation",
+      "status": "PASS"
+    },
+    {
+      "name": "CRLF preflight/apply/idempotence/byte-exact restore",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown covered edit rejected before target writes",
+      "status": "PASS"
+    },
+    {
+      "name": "occupied new test file rejected before target writes",
+      "status": "PASS"
+    },
+    {
+      "name": "corrupt payload rejected before target writes",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown gameplay anchor rejected before target writes",
+      "status": "PASS"
+    },
+    {
+      "name": "missing payload rejected without target writes",
+      "status": "PASS"
+    },
+    {
+      "name": "recognized interrupted apply resumes then restores exact originals",
+      "status": "PASS"
+    },
+    {
+      "name": "mixed checkpoint without backup rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "damaged original backup blocks restore",
+      "status": "PASS"
+    },
+    {
+      "name": "later covered edits protected during restore",
+      "status": "PASS"
+    },
+    {
+      "name": "complete final checkpoint recognized without an install backup",
+      "status": "PASS"
+    },
+    {
+      "name": "restore preserves later edits outside covered files",
+      "status": "PASS"
+    },
+    {
+      "name": "unrecognized backup metadata rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "matching partial backup safely completes and restores",
+      "status": "PASS"
+    }
+  ]
+}

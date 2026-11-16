@@ -1,0 +1,88 @@
+--- CONNECTION56/src/hub/HubInvestigationGameplaySystem.js
++++ CONNECTION57/src/hub/HubInvestigationGameplaySystem.js
+@@ -70,7 +70,11 @@
+       this.convergenceLastAngle = null;
+       this.convergenceHasLastPosition = false;
+       this.commitCandidate = null;
+-      this.commitLatch = null;
++      this.releaseOwnedCommitRequest(frameState, "left_hub");
++      const event = frameState.deliberateCommitmentEvent;
++      if (event?.kind === "hub_route_destination" && event.sourceId === "hub_chamber") {
++        this.lastCommitEventId = event.eventId;
++      }
+       if (frameState.commitmentOpportunity?.sourceId === "hub_chamber") {
+         frameState.commitmentOpportunity = null;
+       }
+@@ -150,6 +154,13 @@
+ 
+   updateCommitCandidate(frameState) {
+     if (this.commitLatch) {
++      this.commitCandidate = null;
++      return;
++    }
++
++    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
++    if (inspection.coreWorkActive || frameState.input?.coreWorkViewPressed
++      || frameState.input?.primaryActionContext === "core_work" || frameState.input?.cancelPressed) {
+       this.commitCandidate = null;
+       return;
+     }
+@@ -222,10 +233,15 @@
+       result.routeId = this.commitLatch.routeId;
+       result.guideLine = "The chosen route is carrying you through the tissue.";
+       result.nextAction = `Entering ${label(destination)}. Let the passage finish.`;
+-    } else if ((f.inspectionCamera ?? f.tightInspectionCamera)?.coreWorkActive) {
++    } else if ((f.inspectionCamera ?? f.tightInspectionCamera)?.coreWorkActive
++      || f.input?.coreWorkViewPressed || f.input?.primaryActionContext === "core_work") {
+       result.reason = "core_work";
+       result.guideLine = "Route entry waits while you arrange retained anatomy.";
+       result.nextAction = "B returns to Core inspection; Y / F returns to the world.";
++    } else if (f.input?.cancelPressed) {
++      result.reason = "await_new_choice";
++      result.guideLine = "Cancel does not select a destination.";
++      result.nextAction = "Approach an available route and press A / E again to choose it.";
+     } else if (candidate) {
+       const holdingStabilize = Boolean(f.input?.stabilizeHeld || f.input?.resonanceHeld);
+       result.reason = holdingStabilize ? "release_stabilize" : "ready";
+@@ -260,6 +276,20 @@
+     return result;
+   }
+ 
++  releaseOwnedCommitRequest(frameState, reason) {
++    const latch = this.commitLatch;
++    if (!latch) return;
++    // Match the private event identity: never erase a replacement/foreign request.
++    const request = frameState.hubRouteCommitRequest;
++    if (request?.eventId === latch.eventId && request.routeId === latch.routeId
++      && request.gateId === latch.gateId && request.sourceCellId === HUB_CELL_ID
++      && request.consequenceAuthority === "LocalCellBoundaryMorphSystem") {
++      frameState.hubRouteCommitRequest = null;
++    }
++    this.commitLatch = null;
++    this.lastAction = `${latch.routeId}_destination_choice_released_${reason}`;
++  }
++
+   updateCommitLatch(frameState) {
+     const latch = this.commitLatch;
+     if (!latch) return;
+@@ -273,7 +303,19 @@
+       && flight.gateId === latch.gateId
+     );
+ 
+-    if (matchingFlight && flight.active) latch.ownerStarted = true;
++    const publishedBoundary = frameState.localCellBoundaryMorphById?.[boundary?.activeRecipeId];
++    const matchingBoundaryClaim = Boolean(boundary?.active && publishedBoundary?.active
++      && publishedBoundary.owner === "LocalCellBoundaryMorphSystem"
++      && publishedBoundary.routeId === latch.routeId && publishedBoundary.gateId === latch.gateId);
++    if ((matchingFlight && flight.active) || matchingBoundaryClaim) latch.ownerStarted = true;
++
++    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
++    const workIntent = inspection.coreWorkActive || frameState.input?.coreWorkViewPressed
++      || frameState.input?.primaryActionContext === "core_work";
++    if (!latch.ownerStarted && (workIntent || frameState.input?.cancelPressed)) {
++      this.releaseOwnedCommitRequest(frameState, workIntent ? "core_work" : "cancel");
++      return;
++    }
+ 
+     // Once the boundary owner has claimed the route, only an explicit cancel while
+     // still in the Hub may release the latch. Normal completion changes activeCellId,

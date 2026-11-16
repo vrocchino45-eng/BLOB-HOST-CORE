@@ -1,3 +1,4 @@
+import { inspectLocalChemistryContext } from "../chemistry/LocalChemistryContextSystem.js";
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const round = (value, digits = 3) => Number((Number.isFinite(value) ? value : 0).toFixed(digits));
 
@@ -3383,6 +3384,7 @@ export class SessionTelemetrySystem {
       movementSamples: this.movementSamples,
       coreSnapshots: this.coreSnapshots,
       developerTruth: {
+        localChemistryContext: inspectLocalChemistryContext(this.frameState),
         hostCycle: {
           pass: "HOST-TRACE1", observer: "SessionTelemetrySystem",
           capacity: this.hostCycleDiagnosticCapacity, prunedCount: this.hostCycleDiagnosticPruned,

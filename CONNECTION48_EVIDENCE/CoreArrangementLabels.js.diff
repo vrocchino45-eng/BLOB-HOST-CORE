@@ -1,0 +1,21 @@
+--- CONNECTION47/src/ui/CoreArrangementLabels.js
++++ CONNECTION48/src/ui/CoreArrangementLabels.js
+@@ -68,7 +68,9 @@
+         ? repairTrialEnabled
+           ? 'Surface repair trial ON: coherence can scale Stabilize repair on the scar plate when engaged in world view.'
+           : 'Surface repair trial OFF: scar plate repair uses its baseline rate; Core coherence still shapes ring acquisition.'
+-        : 'Local materials keep their own interaction rules; these Core factors do not guarantee a local action.';
++        : f.activeCellId === 'CELL_GRAVE_MEMORY_RESIDUE_BED_001' && deriveCoreEarnedEvolution(f.coreGrowth).earnedFamilies.grave
++          ? 'Grave: earned memory assists recoil/trace recovery only while holding Stabilize near already-read, stabilized residue. Inspection suspends the Core assist.'
++          : 'Local materials keep their own interaction rules; these Core factors do not guarantee a local action.';
+   return {
+     pass:'CONNECTION46', surfaceHandling:surfaceHandling(f.coreGrowth), evolution:deriveCoreEarnedEvolution(f.coreGrowth), presentationOnly:true, inWork, inInspection,
+     cellId:f.activeCellId ?? 'none',
+@@ -101,6 +103,7 @@
+     result.push({title:'SURFACE FOUNDATION',text:e.matureBinding ? 'Surface-grown tissue retained in the Binding Core.' : 'Earned Surface experience is becoming Core tissue; the protected seed is optional.'});
+     if(s.surfaceHandling) result.push({title:'SURFACE HANDLING · VS UNGROWN',text:`Pressure response ${percentChange(s.surfaceHandling.pressure)} · flow coupling ${percentChange(s.surfaceHandling.flow)} · Guide bracing efficiency ${percentChange(s.surfaceHandling.brace)}. Applies where those systems act; not an Absorb or repair-speed bonus.`});
+   }
++  if(e.earnedFamilies.grave) result.push({title:'EARNED GRAVE MEMORY',text:'On a Grave revisit, held Stabilize can rebind already-read, stabilized residue up to 15% faster. Shares the Host-memory ceiling; no stacking, passive repair or faster safe transfer.'});
+   if(e.earnedFamilies.vascular) result.push({title:'EARNED CIRCULATION',text:'Returned Vascular cadence: idle reserve recovery is 8% higher than the same arrangement without this adaptation.'});
+   else result.push({title:'CORE EVOLUTION',text:e.matureBinding ? 'Surface-grown Binding Core retained. Later: carry a completed Vascular cadence back to the Hub.' : 'Growth starts at Surface: produce a safe nursery outcome or complete its Host-language lesson. The protected seed is optional; debug anatomy does not earn growth.'});
+   if(e.integrated)result.push({title:'INTEGRATED CORE',text:'Grave memory, Vascular circulation and Silt filtration are earned and retained together.'});

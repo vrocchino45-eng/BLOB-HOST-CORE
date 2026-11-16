@@ -1,0 +1,20 @@
+--- CONNECTION39/src/debug/WorldObjectCensusSystem.js
++++ CONNECTION40/src/debug/WorldObjectCensusSystem.js
+@@ -53,7 +53,7 @@
+       if (event.altKey && event.shiftKey && event.code === 'KeyR') { event.preventDefault(); if (!event.repeat) this.toggleCapture(); return; }
+       if (event.altKey && event.shiftKey && event.code === 'KeyE') { event.preventDefault(); if (!event.repeat) this.exportTimeline(); return; }
+       if (this.captureActive && !event.repeat) this.recordEvent('keyboard-down', { code: event.code, shift: event.shiftKey, alt: event.altKey, ctrl: event.ctrlKey, target: this.materialContext() });
+-      if (event.code === 'F4') { event.preventDefault(); this.toggle(); }
++      if (event.code === 'F8') { event.preventDefault(); this.toggle(); }
+       if (event.code === 'F5' && this.visible) { event.preventDefault(); this.exportReport(); }
+     };
+   }
+@@ -1248,7 +1248,7 @@
+     const signalText = response?.receivedTotal > 0
+       ? `Silt: ${response.lastSubjectId} / ${response.receivedTotal} received\nVascular membrane: ${response.membraneLoad.toFixed(3)}, flow: ×${response.directionalFlowScale.toFixed(3)}\nNo grain transfer / no route credit`
+       : signal?.observedCount > 0 ? `Silt cause: ${signal.mostRecentGrainId} / ${signal.observedCount}\nSignal-only · no material transfer` : `Silt cause: none`;
+-    panel.textContent = `WORLD OBJECT CENSUS / LS1E1\nF4 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n${signalText}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
++    panel.textContent = `WORLD OBJECT CENSUS / LS1E1\nF8 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n${signalText}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
+     document.body.appendChild(panel); this.panel = panel;
+   }
+   exportReport() {

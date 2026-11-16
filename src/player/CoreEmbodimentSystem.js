@@ -1,4 +1,6 @@
+import { resolveCoreFamilyColor } from "../visual/CoreVisualPalette.js";
 import * as THREE from "three";
+import { CoreWorkReadability } from "../visual/CoreWorkReadability.js";
 import { canBeginAuthoredSurfaceBrush } from "./CoreAuthoredContactBootstrap.js";
 
 const FORWARD_AXIS = new THREE.Vector3(0, 0, -1);
@@ -69,15 +71,15 @@ export class CoreEmbodimentSystem {
     this.careGrowthColor = new THREE.Color(0x8ff0c5);
     this.scarGrowthColor = new THREE.Color(0xe89268);
     this.growthNucleusColor = new THREE.Color(0xffe2a4);
-    this.memoryPearlColor = new THREE.Color(0xb9a0bd);
+    this.memoryPearlColor = new THREE.Color(resolveCoreFamilyColor("grave_memory_retention", 0xb9a0bd));
     this.memoryPearlEmissive = new THREE.Color(0x795970);
-    this.vascularSignalColor = new THREE.Color(0x78e3ff);
+    this.vascularSignalColor = new THREE.Color(resolveCoreFamilyColor("vascular_rhythm_retention", 0x78e3ff));
     this.vascularReturnColor = new THREE.Color(0xffc96d);
     this.vascularDeepColor = new THREE.Color(0x466ff6);
     this.siltColor = new THREE.Color(0x57442f);
     this.siltDeepColor = new THREE.Color(0x251d1b);
     this.siltPorousColor = new THREE.Color(0xd29b6b);
-    this.siltReturnColor = new THREE.Color(0xc99d55);
+    this.siltReturnColor = new THREE.Color(resolveCoreFamilyColor("silt_pressure_retention", 0xc99d55));
     this.growthColor = new THREE.Color();
     this.tendrilP0 = new THREE.Vector3();
     this.tendrilP1 = new THREE.Vector3();
@@ -223,10 +225,12 @@ export class CoreEmbodimentSystem {
       throw new Error("[CoreEmbodimentSystem] authored Seed Core proxy body is incomplete.");
     }
 
+    this.workReadability = new CoreWorkReadability(this);
     this.frameState.coreEmbodiment = this.createState(false);
   }
 
   update(dt, frameState = this.frameState) {
+    this.workReadability?.restore();
     if (!this.bodyFrame) return;
 
     const kinematics = frameState.playerKinematics ?? {};
@@ -260,7 +264,7 @@ export class CoreEmbodimentSystem {
 
     // HC021C anatomical chronology. Gameplay radius/collision are untouched:
     // the Core begins as membrane + nucleus, then earns visible organization.
-    const mantleTarget = frameState.coreGrowth?.nurseryAgencyProven ? 1 : 0;
+    const mantleTarget = (frameState.coreGrowth?.nurseryAgencyProven || frameState.coreGrowth?.surfaceFoundationRetained) ? 1 : 0;
     const locomotorTarget = frameState.coreGrowth?.guidePressureTested ? 1 : 0;
     const hubTarget = frameState.coreGrowth?.hubReflectionObserved ? 1 : 0;
     this.mantleReveal += (mantleTarget - this.mantleReveal) * (1 - Math.exp(-dt * 2.2));

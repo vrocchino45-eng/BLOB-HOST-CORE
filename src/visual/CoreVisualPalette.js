@@ -1,0 +1,19 @@
+// CONNECTION43: persistent family accents across Core, Hub, Comb and labels.
+// Regional tissue, temporary verb/return accents and engine timing keep their owners.
+export const CORE_VISUAL_PALETTE = Object.freeze({
+  families:Object.freeze({grave_memory_retention:0xb9a0bd, vascular_rhythm_retention:0x78e3ff, silt_pressure_retention:0xc99d55}),
+  selection:0xf1ebd8
+});
+
+const FAMILY_ALIASES = Object.freeze({
+  grave_memory_route:'grave_memory_retention', grave_route:'grave_memory_retention', grave_memory:'grave_memory_retention',
+  vascular_route:'vascular_rhythm_retention', vascular_rhythm:'vascular_rhythm_retention',
+  silt_burrow_route:'silt_pressure_retention', silt_route:'silt_pressure_retention', silt_pressure:'silt_pressure_retention'
+});
+export function resolveCoreFamilyColor(id, fallback = 0xdce8e4) {
+  const safeFallback=Number.isInteger(fallback)&&fallback>=0&&fallback<=0xffffff ? fallback : 0xdce8e4;
+  if(typeof id!=='string')return safeFallback;
+  const family=Object.hasOwn(FAMILY_ALIASES,id) ? FAMILY_ALIASES[id] : id;
+  return Object.hasOwn(CORE_VISUAL_PALETTE.families,family) ? CORE_VISUAL_PALETTE.families[family] : safeFallback;
+}
+export const corePaletteHex = value => '#'+value.toString(16).padStart(6,'0');

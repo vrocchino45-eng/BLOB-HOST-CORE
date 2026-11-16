@@ -53,7 +53,15 @@ export class CoreVerbPhysicalizationSystem {
     this.pulseReturnMotes = [];
     this.absorbMotes = [];
     this.absorbCommitment = 0;
+    this.absorbVisualTargetId = "none";
+    this.absorbVisualState = "inactive";
+    this.previousAbsorbVisualProgress = 0;
+    this.absorbWasPreview = false;
+    this.absorbFlowSeconds = 0;
+    this.absorbCoreWorldPosition = new THREE.Vector3();
     this.stabilizeProgress = 0;
+    this.stabilizeAlignment01 = 0;
+    this.stabilizeCondition01 = null;
     this.stabilizeTargetId = "none";
     this.temp = new THREE.Vector3();
     this.tempB = new THREE.Vector3();
@@ -220,6 +228,8 @@ export class CoreVerbPhysicalizationSystem {
     this.updatePulse(dt, frameState);
     this.updateAbsorb(dt, frameState);
     this.updateStabilize(dt, frameState);
+    // CONNECTION42: effects keep aging while Core Work owns visual attention.
+    this.group.visible = !(frameState.inspectionCamera?.coreWorkActive || frameState.tightInspectionCamera?.coreWorkActive);
 
     const composition = frameState.interactionComposition ?? {};
     const effectSuppression = Math.min(0.42, Math.max(0, composition.effectSuppression ?? 0));
@@ -267,7 +277,10 @@ export class CoreVerbPhysicalizationSystem {
       absorbFilaments: this.absorbFilaments?.children?.length ?? 0,
       stabilizeProgress: this.stabilizeProgress,
       stabilizeTargetId: this.stabilizeTargetId,
-      stabilizeGyroLock01: this.stabilizeProgress,
+      stabilizeGyroLock01: this.stabilizeAlignment01,
+      stabilizeCondition01: this.stabilizeCondition01,
+      stabilizeConditionSource: this.stabilizeCondition01 === null ? "visual_alignment_only" : "ReactiveStateGrammarSystem_current_target",
+      stabilizeProgressMeaning: "current_target_visual_alignment_not_gameplay_completion",
       relationshipTargetId: frameState.targeting?.relationshipTargetId ?? "none",
       pulseFocusedObject: frameState.pulse?.focusedObject ?? "none",
       pulseAmbientObjects: frameState.pulse?.ambientObjects?.length ?? 0,
@@ -275,9 +288,11 @@ export class CoreVerbPhysicalizationSystem {
       stabilizedProjectionMode: frameState.stabilizedProjection?.mode ?? "inactive",
       stabilizedProjectionFocus01: frameState.stabilizedProjection?.focus01 ?? 0,
       stabilizedProjectionRequiresAnchor: false,
-      absorbEffectOwnership: frameState.bondState?.objectId && frameState.bondState.objectId !== "none"
-        ? "focused_relationship"
-        : "none",
+      absorbEffectOwnership: this.absorbVisualState === "silt_grip_preview"
+        ? "silt_committed_visual_only" : this.absorbVisualState !== "inactive" ? "focused_relationship" : "none",
+      absorbVisualTargetId: this.absorbVisualTargetId,
+      absorbVisualState: this.absorbVisualState,
+      absorbFlowMeaning: "published_bond_progress_advanced_not_completion_or_material_receipt",
       stabilizeEffectOwnership: this.stabilizeTargetId !== "none"
         && this.stabilizeTargetId === (frameState.targeting?.relationshipTargetId ?? "none")
           ? "focused_relationship"
@@ -766,11 +781,41 @@ export class CoreVerbPhysicalizationSystem {
     const committedSilt = this.getCommittedSiltVisualTarget(frameState);
     // Presentation only: do not infer a bond, progress, or material transfer from grip.
     const siltPreview = Boolean(held && committedSilt); // Explicit A commitment outranks a stale legacy bond for presentation.
-    const visualPosition = siltPreview ? committedSilt.position : target?.root?.position;
-    const progress = frameState.bondState?.absorbProgress ?? 0;
+    const visualPosition = siltPreview ? committedSilt.position : target?.root?.getWorldPosition(new THREE.Vector3());
+    const publishedProgress = frameState.bondState?.absorbProgress;
+    const progressValid = Number.isFinite(publishedProgress) && publishedProgress >= 0 && publishedProgress <= 1;
+    const progress = progressValid ? publishedProgress : 0;
     const absorbPower = THREE.MathUtils.clamp(frameState.corePerformance?.verbModifiers?.absorb?.powerMultiplier ?? 1, 0.72, 1.42);
     const strength = frameState.bondState?.strength ?? 0;
-    const active = Boolean(siltPreview || (held && target && !target.absorbed && target.root.visible));
+    let targetVisible = Boolean(target?.root && !target.absorbed && !target.root.userData?.absorbed);
+    for (let node = target?.root; targetVisible && node; node = node.parent) {
+      if (!node.visible) targetVisible = false;
+    }
+    const active = Boolean(siltPreview || (held && targetVisible && frameState.bondState?.active === true));
+    const visualId = active ? (siltPreview ? committedSilt.id : targetId) : "none";
+    const changedContact = visualId !== this.absorbVisualTargetId || siltPreview !== this.absorbWasPreview;
+    if (changedContact) {
+      this.absorbCommitment = 0;
+      this.previousAbsorbVisualProgress = progressValid ? progress : null;
+      this.absorbFlowSeconds = 0;
+    }
+    const progressing = active && !siltPreview && !changedContact
+      && frameState.bondState?.active === true
+      && frameState.bondState?.compatibility === "compatible"
+      && progressValid && Number.isFinite(this.previousAbsorbVisualProgress)
+      && progress > this.previousAbsorbVisualProgress;
+    this.absorbVisualTargetId = visualId;
+    this.absorbWasPreview = siltPreview;
+    this.previousAbsorbVisualProgress = progressValid ? progress : null;
+    this.absorbVisualState = siltPreview ? "silt_grip_preview"
+      : progressing ? "bond_progress" : active ? "bond_contact" : "inactive";
+    if (progressing) this.absorbFlowSeconds += dt;
+    // A held grain is not an absorption receipt. Remove old visual fragments
+    // when preview takes ownership so a stale legacy stream cannot imply intake.
+    if (siltPreview) {
+      for (const mote of this.absorbMotes) this.disposeMesh(mote.root);
+      this.absorbMotes = [];
+    }
     const targetCommitment = active && !siltPreview ? 1 : 0;
     const absorbCharacter = frameState.coreTopologyVerbCharacter?.absorb ?? {};
     const composition = frameState.verbComposition ?? {};
@@ -792,8 +837,9 @@ export class CoreVerbPhysicalizationSystem {
     }
 
     const pos = this.absorbLine.geometry.attributes.position.array;
+    this.playerRoot.getWorldPosition(this.absorbCoreWorldPosition);
     pos[0] = visualPosition.x; pos[1] = visualPosition.y; pos[2] = visualPosition.z;
-    pos[3] = this.playerRoot.position.x; pos[4] = this.playerRoot.position.y; pos[5] = this.playerRoot.position.z;
+    pos[3] = this.absorbCoreWorldPosition.x; pos[4] = this.absorbCoreWorldPosition.y; pos[5] = this.absorbCoreWorldPosition.z;
     this.absorbLine.geometry.attributes.position.needsUpdate = true;
     this.absorbLine.material.opacity = Math.min(0.74, (0.12 + strength * 0.26 + progress * 0.18 + this.absorbCommitment * 0.18) * (0.86 + absorbPower * 0.14));
 
@@ -801,9 +847,9 @@ export class CoreVerbPhysicalizationSystem {
     for (const ring of this.absorbFunnel.children) {
       const index = ring.userData.funnelIndex ?? 0;
       const along = 0.20 + index * 0.23;
-      ring.position.lerpVectors(visualPosition, this.playerRoot.position, along);
-      ring.lookAt(this.playerRoot.position);
-      ring.rotation.z += dt
+      ring.position.lerpVectors(visualPosition, this.absorbCoreWorldPosition, along);
+      ring.lookAt(this.absorbCoreWorldPosition);
+      ring.rotation.z += (progressing ? dt : 0)
         * (0.85 + index * 0.32 + this.absorbCommitment * 1.45)
         * (absorbCharacter.helixRateScale ?? 1)
         * compositionSpin;
@@ -812,20 +858,25 @@ export class CoreVerbPhysicalizationSystem {
       ring.scale.setScalar((0.74 + index * 0.12 + this.absorbCommitment * 0.20) * breathe * collapse * (absorbCharacter.convergenceFocusScale ?? 1));
       ring.material.opacity = 0.10 + this.absorbCommitment * (0.16 + index * 0.04) + compositionTension * 0.035;
     }
-    this.updateAbsorbFilaments(visualPosition, siltPreview ? 0 : progress, now, absorbCharacter, compositionSpin, compositionTension);
+    this.updateAbsorbFilaments(visualPosition, siltPreview ? 0 : progress, this.absorbFlowSeconds, absorbCharacter, compositionSpin, compositionTension);
 
     const spawnChance = Math.min(0.88, dt * (12 + progress * 20 + this.absorbCommitment * 22));
-    if (!siltPreview && Math.random() < spawnChance) this.spawnAbsorbMote(visualPosition, progress, absorbCharacter);
+    if (progressing && Math.random() < spawnChance) this.spawnAbsorbMote(visualPosition, progress, absorbCharacter);
     if (siltPreview) {
       this.absorbLine.material.opacity = Math.min(this.absorbLine.material.opacity, 0.20);
       for (const ring of this.absorbFunnel.children) ring.material.opacity = Math.min(ring.material.opacity, 0.11);
       for (const filament of this.absorbFilaments.children) filament.material.opacity = Math.min(filament.material.opacity, 0.10);
+    } else if (!progressing) {
+      this.absorbLine.material.opacity = Math.min(this.absorbLine.material.opacity, 0.14);
+      for (const ring of this.absorbFunnel.children) ring.material.opacity = Math.min(ring.material.opacity, 0.07);
+      for (const filament of this.absorbFilaments.children) filament.material.opacity = Math.min(filament.material.opacity, 0.06);
     }
     this.updateAbsorbMotes(dt);
   }
 
   updateAbsorbFilaments(targetPosition, progress, now, absorbCharacter = {}, compositionSpin = 1, compositionTension = 0) {
-    this.tempB.copy(this.playerRoot.position).sub(targetPosition);
+    this.playerRoot.getWorldPosition(this.absorbCoreWorldPosition);
+    this.tempB.copy(this.absorbCoreWorldPosition).sub(targetPosition);
     const length = this.tempB.length();
     if (length < 0.001) return;
     this.tempB.multiplyScalar(1 / length);
@@ -840,7 +891,7 @@ export class CoreVerbPhysicalizationSystem {
       const positions = filament.geometry.attributes.position.array;
       for (let sample = 0; sample < sampleCount; sample += 1) {
         const along = sample / Math.max(1, sampleCount - 1);
-        this.temp.lerpVectors(targetPosition, this.playerRoot.position, along);
+        this.temp.lerpVectors(targetPosition, this.absorbCoreWorldPosition, along);
         const phase = now
           * (4.2 + index * 0.28)
           * (absorbCharacter.helixRateScale ?? 1)
@@ -888,17 +939,18 @@ export class CoreVerbPhysicalizationSystem {
   }
 
   updateAbsorbMotes(dt) {
+    this.playerRoot.getWorldPosition(this.absorbCoreWorldPosition);
     for (const mote of this.absorbMotes) {
       mote.age += dt;
       const t = Math.min(mote.age / mote.life, 1);
-      this.tempB.copy(this.playerRoot.position).sub(mote.start);
+      this.tempB.copy(this.absorbCoreWorldPosition).sub(mote.start);
       if (this.tempB.lengthSq() > 0.0001) this.tempB.normalize();
       else this.tempB.set(0, 0, -1);
       this.tempC.crossVectors(this.tempB, this.worldUp);
       if (this.tempC.lengthSq() < 0.001) this.tempC.crossVectors(this.tempB, this.worldRight);
       this.tempC.normalize();
       this.tempD.crossVectors(this.tempB, this.tempC).normalize();
-      this.temp.lerpVectors(mote.start, this.playerRoot.position, t);
+      this.temp.lerpVectors(mote.start, this.absorbCoreWorldPosition, t);
       const phase = mote.phase + t * Math.PI * 5.5;
       const radius = mote.spiralRadius * (1 - t) * (0.55 + this.absorbCommitment * 0.45);
       this.temp.addScaledVector(this.tempC, Math.cos(phase) * radius);
@@ -922,6 +974,8 @@ export class CoreVerbPhysicalizationSystem {
     if (!active) {
       this.stabilizeProgress = Math.max(0, this.stabilizeProgress - dt * 2.4);
       this.stabilizeTargetId = "none";
+      this.stabilizeAlignment01 = 0;
+      this.stabilizeCondition01 = null;
       this.stabilizeField.visible = false;
       this.stabilizeLine.visible = false;
       this.setStabilizeFieldOpacity(0);
@@ -936,7 +990,18 @@ export class CoreVerbPhysicalizationSystem {
     const stabilizeRateMultiplier = THREE.MathUtils.clamp(compositionEffects.stabilizeRateMultiplier ?? 1, 0.6, 1.3);
     const stabilizeWobbleMultiplier = THREE.MathUtils.clamp(compositionEffects.stabilizeWobbleMultiplier ?? 1, 0.1, 1.2);
     const stabilizeLineOpacityMultiplier = THREE.MathUtils.clamp(compositionEffects.stabilizeLineOpacityMultiplier ?? 1, 0.8, 1.3);
+    // CONNECTION18: alignment belongs to this contact, never the previous one.
+    if (this.stabilizeTargetId !== target.id) this.stabilizeProgress = 0;
     this.stabilizeProgress = Math.min(1, this.stabilizeProgress + dt * 1.45 * stabilizeCoherence * stabilizeRateMultiplier);
+    const condition = target.object?.recipe?.id === target.id
+      ? frameState.reactiveStateGrammar?.objects?.[target.id]?.condition01 : undefined;
+    this.stabilizeCondition01 = Number.isFinite(condition) ? THREE.MathUtils.clamp(condition, 0, 1) : null;
+    // Material condition is read-only. A coherent body (<=0.30 in the existing
+    // grammar) can align fully; unstable tissue retains visible disagreement.
+    const conditionStress = this.stabilizeCondition01 === null ? 0
+      : THREE.MathUtils.clamp((this.stabilizeCondition01 - 0.30) / 0.70, 0, 1);
+    this.stabilizeAlignment01 = this.stabilizeProgress * (1 - conditionStress);
+    const alignment = this.stabilizeAlignment01;
     this.stabilizeTargetId = target.id;
     this.stabilizeField.visible = true;
     this.stabilizeField.position.copy(target.position);
@@ -949,7 +1014,7 @@ export class CoreVerbPhysicalizationSystem {
     this.stabilizeField.scale.setScalar(Math.max(0.72, Math.min(2.65, latticeScale)));
     this.stabilizeField.rotation.set(0, 0, 0);
     const now = frameState.runtimeSeconds ?? 0;
-    const wobble = ((1 - this.stabilizeProgress) * 0.34 + 0.018)
+    const wobble = ((1 - alignment) * 0.34 + 0.018)
       * (stabilizeCharacter.wobbleScale ?? 1)
       * stabilizeWobbleMultiplier;
     for (const ring of this.stabilizeField.children) {
@@ -957,13 +1022,13 @@ export class CoreVerbPhysicalizationSystem {
       const base = ring.userData.baseRotation ?? { x: 0, y: 0, z: 0 };
       const phase = ring.userData.phase ?? 0;
       const counter = index % 2 === 0 ? 1 : -1;
-      const precession = now * counter * (0.86 - this.stabilizeProgress * 0.62) * (stabilizeCharacter.precessionRateScale ?? 1);
+      const precession = now * counter * (0.86 - alignment * 0.62) * (stabilizeCharacter.precessionRateScale ?? 1);
       ring.rotation.set(
         base.x + Math.sin(now * 2.15 + phase) * wobble * 0.55,
         base.y + Math.cos(now * 1.73 + phase) * wobble * 0.48,
         base.z + precession + Math.sin(now * 1.31 + phase) * wobble * 0.32
       );
-      const settlePulse = 1 + Math.sin(now * (2.1 + index * 0.14) + phase) * (1 - this.stabilizeProgress) * 0.045 * (stabilizeCharacter.settlePulseScale ?? 1);
+      const settlePulse = 1 + Math.sin(now * (2.1 + index * 0.14) + phase) * (1 - alignment) * 0.045 * (stabilizeCharacter.settlePulseScale ?? 1);
       ring.scale.setScalar(settlePulse);
     }
     const guideFieldSuppression = Math.min(
@@ -975,9 +1040,10 @@ export class CoreVerbPhysicalizationSystem {
     );
 
     const positions = this.stabilizeLine.geometry.attributes.position.array;
-    positions[0] = this.playerRoot.position.x;
-    positions[1] = this.playerRoot.position.y;
-    positions[2] = this.playerRoot.position.z;
+    this.playerRoot.getWorldPosition(this.temp);
+    positions[0] = this.temp.x;
+    positions[1] = this.temp.y;
+    positions[2] = this.temp.z;
     positions[3] = target.position.x;
     positions[4] = target.position.y;
     positions[5] = target.position.z;
@@ -1021,7 +1087,7 @@ export class CoreVerbPhysicalizationSystem {
         return {
           id: relationshipTargetId,
           object,
-          position: object.root.position.clone(),
+          position: object.root.getWorldPosition(new THREE.Vector3()),
           ownership: "focused_relationship"
         };
       }
@@ -1033,7 +1099,7 @@ export class CoreVerbPhysicalizationSystem {
       return {
         id: assist.objectId ?? "interaction_target",
         object,
-        position: object?.root?.position?.clone?.()
+        position: object?.root?.getWorldPosition?.(new THREE.Vector3())
           ?? new THREE.Vector3(assist.position.x, assist.position.y, assist.position.z)
       };
     }
@@ -1047,15 +1113,15 @@ export class CoreVerbPhysicalizationSystem {
       if (!state) continue;
       const nearest = this.chemObjectSystem?.findNearestObject?.();
       if (nearest && nearest.distance <= 3.4) {
-        return { id: nearest.recipe.id, object: nearest, position: nearest.root.position.clone() };
+        return { id: nearest.recipe.id, object: nearest, position: nearest.root.getWorldPosition(new THREE.Vector3()) };
       }
       if (frameState.activeCellId?.includes(id.split("_")[0].toUpperCase())) {
-        return { id, position: this.playerRoot.position.clone().add(new THREE.Vector3(0, 0, -1.25)) };
+        return { id, position: this.playerRoot.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0, -1.25)) };
       }
     }
     return {
       id: frameState.currentChemTarget ?? "local_host_field",
-      position: this.playerRoot.position.clone().add(new THREE.Vector3(0, 0, -1.1))
+      position: this.playerRoot.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0, -1.1))
     };
   }
 

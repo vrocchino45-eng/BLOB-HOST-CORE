@@ -1,0 +1,69 @@
+{
+  "scope": "Actual presentation owner with synthetic scene/material fixtures; no gameplay or visual-perception acceptance.",
+  "summary": {
+    "passed": 15,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "actual foreground mesh fades without hiding geometry or moving anything",
+      "status": "PASS"
+    },
+    {
+      "name": "shared off-corridor sibling and original material remain authored",
+      "status": "PASS"
+    },
+    {
+      "name": "existing fog shader callbacks survive a material copy",
+      "status": "PASS"
+    },
+    {
+      "name": "clearing camera corridor restores exact material identity",
+      "status": "PASS"
+    },
+    {
+      "name": "other region restores originals immediately",
+      "status": "PASS"
+    },
+    {
+      "name": "inspection restores originals immediately",
+      "status": "PASS"
+    },
+    {
+      "name": "Core Work restores originals immediately",
+      "status": "PASS"
+    },
+    {
+      "name": "contacted object and its descendants remain unfaded",
+      "status": "PASS"
+    },
+    {
+      "name": "hidden ancestors are excluded",
+      "status": "PASS"
+    },
+    {
+      "name": "geology behind Core is not faded",
+      "status": "PASS"
+    },
+    {
+      "name": "cavity walls and tunnel context are never candidates",
+      "status": "PASS"
+    },
+    {
+      "name": "sample cadence is bounded; cache remains fixed inside region",
+      "status": "PASS"
+    },
+    {
+      "name": "no camera means inactive presentation",
+      "status": "PASS"
+    },
+    {
+      "name": "Core Work and inspection aliases independently suppress fading",
+      "status": "PASS"
+    },
+    {
+      "name": "later material owner is preserved during restore",
+      "status": "PASS"
+    }
+  ]
+}

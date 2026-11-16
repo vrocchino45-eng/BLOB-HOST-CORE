@@ -1,0 +1,21 @@
+FAILED Labels return to available on release and explain inspection pause
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Memory available/. Input:
+
+'WORLD / COREGrave · old core husk memory 001CORE ARRANGEMENTArrangement data unavailable / formingSURFACE FOUNDATIONSurface-grown tissue retained in the Binding Core.SURFACE HANDLING · VS UNGROWNPressure response 15% lower · flow coupling 8% lower · Guide bracing efficiency 19% higher. Applies where those systems act; not an Absorb or repair-speed bonus.EARNED GRAVE MEMORYOn a Grave revisit, held Stabilize can rebind already-read, stabilized residue up to 15% faster. Shares the Host-memory ceiling; no stacking, passive repair or faster safe transfer.GRAVE RESPONSERebinding now: earned Core memory is helping this Stabilize hold restore the disturbed trace.CORE EVOLUTIONSurface-grown Binding Core retained. Later: carry a completed Vascular cadence back to the Hub.PIECESGrave: Inner BodyEFFECTSComplete, matching Core data is unavailable; no effect estimate shown.HEREGrave: earned memory assists recoil/trace recovery only while holding Stabilize near already-read, stabilized residue. Inspection suspends the Core assist.DETAILS · SHIFT+F4 / DESIGN NOTESPreviews use current reserve with no verb held. Pulse action range is unchanged. Full factors, authored roles and limits are in notes.'
+
+    at file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION49_EARNED_GRAVE_RETURN_BROWSER.mjs:71:100
+    at check (file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION49_EARNED_GRAVE_RETURN_BROWSER.mjs:8:65)
+    at file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION49_EARNED_GRAVE_RETURN_BROWSER.mjs:71:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'WORLD / COREGrave · old core husk memory 001CORE ARRANGEMENTArrangement data unavailable / formingSURFACE FOUNDATIONSurface-grown tissue retained in the Binding Core.SURFACE HANDLING · VS UNGROWNPressure response 15% lower · flow coupling 8% lower · Guide bracing efficiency 19% higher. Applies where those systems act; not an Absorb or repair-speed bonus.EARNED GRAVE MEMORYOn a Grave revisit, held Stabilize can rebind already-read, stabilized residue up to 15% faster. Shares the Host-memory ceiling; no stacking, passive repair or faster safe transfer.GRAVE RESPONSERebinding now: earned Core memory is helping this Stabilize hold restore the disturbed trace.CORE EVOLUTIONSurface-grown Binding Core retained. Later: carry a completed Vascular cadence back to the Hub.PIECESGrave: Inner BodyEFFECTSComplete, matching Core data is unavailable; no effect estimate shown.HEREGrave: earned memory assists recoil/trace recovery only while holding Stabilize near already-read, stabilized residue. Inspection suspends the Core assist.DETAILS · SHIFT+F4 / DESIGN NOTESPreviews use current reserve with no verb held. Pulse action range is unchanged. Full factors, authored roles and limits are in notes.',
+  expected: /Memory available/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

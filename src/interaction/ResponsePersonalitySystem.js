@@ -1,3 +1,5 @@
+import { materialInScope, materialVisible, materialScopeActive } from './MaterialResponseScope.js';
+
 const clamp01 = (value) => Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
 const round = (value, digits = 3) => Number((Number.isFinite(value) ? value : 0).toFixed(digits));
 
@@ -192,28 +194,38 @@ const STAGE_EXPRESSIONS = Object.freeze({
  * multipliers for the existing presentation/physics owners to consume.
  */
 export class ResponsePersonalitySystem {
-  constructor({ frameState, chemObjectSystem, entitySystem }) {
+  constructor({ frameState, chemObjectSystem, entitySystem, scope = null }) {
     if (!frameState) throw new Error("[ResponsePersonalitySystem] frameState is required.");
     if (!chemObjectSystem) throw new Error("[ResponsePersonalitySystem] chemObjectSystem is required.");
     if (!entitySystem) throw new Error("[ResponsePersonalitySystem] entitySystem is required.");
     this.frameState = frameState;
     this.chemObjectSystem = chemObjectSystem;
     this.entitySystem = entitySystem;
+    this.scope = scope;
   }
 
   init() {
     this.publish(this.frameState);
   }
 
+  onRuntimePrepare(frameState) { if (this.scope) this.publish(frameState, false); }
+  onRuntimeMount(frameState) { if (this.scope) this.publish(frameState, false); }
+  onRuntimeUnmount(frameState) { if (this.scope) this.publish(frameState, false); }
+
   update(_dt, frameState = this.frameState) {
-    this.publish(frameState);
+    this.publish(frameState, !this.scope || Number.isFinite(_dt) && _dt > 0);
   }
 
-  publish(frameState) {
+  publish(frameState, allowScope = true) {
+    const scopeActive = !this.scope || allowScope && materialScopeActive(frameState, this.scope);
     const objects = {};
     const objectCounts = {};
     for (const item of this.chemObjectSystem.objects ?? []) {
       if (!item?.recipe?.id) continue;
+      if (this.scope && (!scopeActive || !materialInScope(item, this.scope) || !materialVisible(item))) {
+        if (materialInScope(item, this.scope)) delete item.root.userData.responsePersonality;
+        continue;
+      }
       const matterState = item.recipe.chemistry?.matterState ?? "unknown";
       const profile = this.resolveMaterialProfile(matterState, item.recipe.chemistry?.domains ?? []);
       const reactive = frameState.reactiveStateGrammar?.objects?.[item.recipe.id]
@@ -228,7 +240,8 @@ export class ResponsePersonalitySystem {
 
     const entities = {};
     const entityCounts = {};
-    for (const entity of this.entitySystem.entities ?? []) {
+    // The first restoration is material-only; existing entity behavior stays locked.
+    for (const entity of this.scope ? [] : this.entitySystem.entities ?? []) {
       const root = entity?.root;
       const id = entity?.instanceId ?? root?.userData?.entityInstanceId ?? entity?.recipe?.id ?? root?.name ?? "unknown_entity";
       const profile = this.resolveEntityProfile(entity);
@@ -254,10 +267,11 @@ export class ResponsePersonalitySystem {
       if (root?.userData) root.userData.responsePersonality = snapshot;
     }
 
-    const targetId = frameState.targeting?.relationshipActive
+    let targetId = frameState.targeting?.relationshipActive
       ? (frameState.targeting.relationshipTargetId ?? frameState.targeting.targetId ?? "none")
       : "none";
-    const primaryEntityId = frameState.entityRelationshipGrammar?.primary?.entityId ?? "none";
+    if (this.scope && !objects[targetId]) targetId = 'none';
+    const primaryEntityId = this.scope ? 'none' : frameState.entityRelationshipGrammar?.primary?.entityId ?? "none";
 
     frameState.responsePersonality = {
       pass: "HC-030B",

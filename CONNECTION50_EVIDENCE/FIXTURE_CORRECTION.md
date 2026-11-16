@@ -1,0 +1,1 @@
+Initial browser assertion sampled released DOM text after two frames, before the established 0.2-second label refresh. Corrected fixture to wait fifteen frames after release and inspection. No production refresh/physics change.

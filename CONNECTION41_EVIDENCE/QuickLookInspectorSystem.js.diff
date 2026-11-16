@@ -1,0 +1,58 @@
+--- CONNECTION40/src/ui/QuickLookInspectorSystem.js
++++ CONNECTION41/src/ui/QuickLookInspectorSystem.js
+@@ -1,4 +1,4 @@
+-import { buildCoreArrangementLabels, coreArrangementLabelRows } from './CoreArrangementLabels.js';
++import { buildCoreArrangementLabels, coreArrangementLabelRows, compactCoreArrangementLabelRows } from './CoreArrangementLabels.js';
+ 
+ /**
+  * LS1C0 — optional, read-only world-design quick look.
+@@ -275,7 +275,7 @@
+     if (!this.open) return;
+     const snapshot = buildCoreArrangementLabels(this.frameState, {repairTrialEnabled:this.repairTrialEnabled});
+     const world = buildQuickLookSnapshot(this.frameState);
+-    const rows = [{title:'WORLD / CORE', text:`${world.region} · ${snapshot.inWork ? 'Core Work' : snapshot.inInspection ? 'Core inspection' : world.focus}`}, ...coreArrangementLabelRows(snapshot)];
++    const rows = [{title:'WORLD / CORE', text:`${world.region} · ${snapshot.inWork ? 'Core Work' : snapshot.inInspection ? 'Core inspection' : world.focus}`}, ...compactCoreArrangementLabelRows(snapshot)];
+     const signature = JSON.stringify(rows);
+     if (signature === this.coreLabelSignature) return;
+     this.coreLabelSignature = signature;
+@@ -344,14 +344,14 @@
+     this.syncCoreLabels();
+     const snapshot = buildQuickLookSnapshot(frameState);
+     this.lastSnapshot = snapshot;
+-    const signature = JSON.stringify(snapshot);
++    const signature = JSON.stringify({world:snapshot, core:this.expanded ? buildCoreArrangementLabels(frameState, {repairTrialEnabled:this.repairTrialEnabled}) : null});
+     if (signature !== this.lastSignature) this.render(snapshot, signature);
+     this.publish(snapshot);
+   }
+ 
+   publish(snapshot = null) {
+     this.frameState.quickLookInspector = {
+-      pass: 'CONNECTION40', open: this.open, expanded: this.expanded,
++      pass: 'CONNECTION41', open: this.open, expanded: this.expanded,
+       coreLabelsEnabled: this.open, coreLabelsVisible: this.open && !this.expanded,
+       presentationOnly: true, worldAnchors: Boolean(this.sceneRefs),
+       shortcutKeyboard: 'F4 / Shift+F4 design notes',
+@@ -509,6 +509,7 @@
+     if (!this.body) return;
+     this.lastSignature = signature;
+     const b = this.body;
++    const scroll = this.root?.scrollTop ?? 0;
+     b.replaceChildren();
+     const header = document.createElement('div');
+     header.style.cssText = 'font-weight:700;font-size:13px;color:#d9f9ed;margin-bottom:3px';
+@@ -523,6 +524,8 @@
+     focus.style.cssText = 'font-size:10px;color:#bdd3d4;margin-top:3px';
+     focus.textContent = `Focus: ${snapshot.focus} (${snapshot.focusSource})`;
+     b.append(header, hint, loc, focus);
++    const core = buildCoreArrangementLabels(this.frameState, {repairTrialEnabled:this.repairTrialEnabled});
++    for (const row of coreArrangementLabelRows(core)) line(b, row.title, row.text ? [row.text] : []);
+     line(b, 'HOW TO INTERACT · ACTUAL CONTROLS', snapshot.actions);
+     line(b, 'WHAT THE RUNTIME SAYS · IMPLEMENTED', snapshot.live.length ? snapshot.live : [snapshot.status]);
+     line(b, '3 → 6 → 12 · CORE ENGINE', [snapshot.phaseExplanation, snapshot.phaseDetail, snapshot.phaseScope]);
+@@ -532,5 +535,6 @@
+     footer.style.cssText = 'font-size:9px;color:#92a6a8;margin-top:12px;border-top:1px solid #66868c55;padding-top:7px';
+     footer.textContent = 'Scene-anchored diagnostic · labels do not change actual targeting, geometry or gameplay';
+     b.appendChild(footer);
++    if (this.root) this.root.scrollTop = scroll;
+   }
+ }

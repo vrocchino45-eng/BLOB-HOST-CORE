@@ -155,7 +155,11 @@ export class LocalCellBoundaryMorphSystem {
         if (!proximityReturn) state.returnTriggerArmed = false;
       }
 
-      const freshInput = this.consumeFreshTrigger(recipe.trigger, frameState, recipe);
+      // A committed destination is persistent intent. Do not consume its request
+      // until this owner can start the crossing; preparation may change in flight.
+      const freshInput = recipe.trigger === "commit" && !readiness.ready
+        ? false
+        : this.consumeFreshTrigger(recipe.trigger, frameState, recipe);
       const acceptedInput = freshInput && (
         proximityReturn
           ? state.returnTriggerArmed
@@ -859,9 +863,9 @@ export class LocalCellBoundaryMorphSystem {
       && !frameState.act1RouteHistory?.graveEntered
     );
     const firstDestinationInvitation = foundation.firstDestinationInvitation ?? {};
-    const foundationReady = firstGraveEntry
-      ? firstDestinationInvitation.active === true
-      : foundation.completed === true;
+    // Hub-local tours, memory reads and visual invitations are optional.
+    // Mounted Hub + destination preparation + range own entry readiness.
+    const foundationReady = foundation.active === true;
     const routeBody = [
       ...(foundation.routes ?? []),
       ...(foundation.thresholds ?? [])
@@ -899,6 +903,8 @@ export class LocalCellBoundaryMorphSystem {
       foundationReady,
       firstDestinationInvitationActive: Boolean(firstDestinationInvitation.active),
       screenTruthOwnsFirstDestinationPermission: false,
+      hubInvestigationRequired: false,
+      firstDestinationInvitationRequired: false,
       targetPosition: routeBody?.position
         ? { x: routeBody.position[0] ?? 0, y: routeBody.position[1] ?? 0, z: routeBody.position[2] ?? 0 }
         : null
@@ -973,7 +979,7 @@ export class LocalCellBoundaryMorphSystem {
 
     return {
       ready: Boolean(
-        foundation.completed &&
+        foundation.active &&
         convergenceComplete &&
         destinationPrepared &&
         distance <= recipe.interactionRange
@@ -1513,7 +1519,9 @@ export class LocalCellBoundaryMorphSystem {
           && readiness.destinationPrepared
         );
       }
-      return Boolean(frameState.hubChamberFoundation?.completed);
+      // CONNECTION15: later Grave visits use mounted Hub readiness, not the
+      // whole-junction screen-composition diagnostic. Preparation stays owned here.
+      return Boolean(frameState.hubChamberFoundation?.active && readiness.destinationPrepared);
     }
     if (recipe.id === "hub_to_vascular" || recipe.id === "hub_to_silt") {
       return Boolean(

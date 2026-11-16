@@ -1,0 +1,21 @@
+FAILED Surface-grown Core faces the actual Guide current and earns its pressure reading
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(v.guide.stabilizeSeconds>0)
+
+    at file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION47_SURFACE_HUB_BROWSER.mjs:35:345
+    at async check (file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION47_SURFACE_HUB_BROWSER.mjs:8:59)
+    at async file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION47_SURFACE_HUB_BROWSER.mjs:35:2 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

@@ -1,0 +1,11 @@
+--- CONNECTION41/src/core/GameRuntime.js
++++ CONNECTION42/src/core/GameRuntime.js
+@@ -3331,6 +3331,8 @@
+ 
+     this.updateCameraReadabilitySafely(dt);
+     this.inspectionOcclusionSystem?.update(dt, this.frameState, this.camera, this.playerCore);
++    // CONNECTION42: final Core Work palette follows existing camera material fading.
++    this.coreEmbodimentSystem?.workReadability?.apply(this.frameState);
+ 
+     this.camera.getWorldDirection(this.inspectionDirection);
+     const cameraWorldForward = {

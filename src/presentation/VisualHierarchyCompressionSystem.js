@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { CoreSightlinePresentation } from "./CoreSightlinePresentation.js";
 
 const clamp01 = (value) => Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
 
@@ -24,6 +25,9 @@ export class VisualHierarchyCompressionSystem {
     this.targetingSystem = targetingSystem;
     this.coreVerbPhysicalizationSystem = coreVerbPhysicalizationSystem;
     this.frameState = frameState;
+    this.legacyBodyPulseWave = null;
+    this.coreSightline = new CoreSightlinePresentation({ scene,
+      camera: targetingSystem?.camera, playerRoot: targetingSystem?.playerRoot });
 
     this.gradientRoot = new THREE.Group();
     this.gradientRoot.name = "relationship_gradient_trace_hc030b1";
@@ -57,6 +61,7 @@ export class VisualHierarchyCompressionSystem {
 
   update(_dt, frameState = this.frameState) {
     this.frameState = frameState;
+    this.coreSightline.update(_dt, frameState, this.targetingSystem?.relationshipTarget?.root);
     const targeting = frameState.targeting ?? {};
     const relationshipActive = Boolean(targeting.relationshipActive && this.targetingSystem?.relationshipTarget);
     const stage = frameState.reactiveStateGrammar?.focus?.stage ?? "coherent";
@@ -71,12 +76,15 @@ export class VisualHierarchyCompressionSystem {
     this.updateRelationshipTrace(relationshipActive, targeting, acquisition01, stress01, frameState);
     this.compressTargetingGlyphs(relationshipActive, supportLift, frameState);
     this.compressVerbPhysicalization(supportLift, stress01, frameState);
+    const legacyBodyPulseWaveRetired = this.retireDuplicateBodyPulseWave();
 
     frameState.visualHierarchyCompression = {
       pass: "HC-030B1",
       spatialRevealPass: "HC-031W2B2",
       relationshipGrammarPass: "HC-031W2B3.1",
       owner: "VisualHierarchyCompressionSystem",
+      pulsePresentationPass: "CONNECTION59",
+      legacyBodyPulseWaveRetired,
       active: relationshipActive || Boolean(frameState.verbPhysicalization),
       relationshipGradientActive: this.gradientRoot.visible,
       relationshipAge: age,
@@ -105,6 +113,25 @@ export class VisualHierarchyCompressionSystem {
         changesProgression: false
       }
     };
+  }
+
+  retireDuplicateBodyPulseWave() {
+    // Embodiment still authors body charge/deformation and its legacy fallback.
+    // When the current Pulse visual owner is mounted, only that duplicate mesh
+    // yields. Never search or fade world objects, or alter Pulse simulation.
+    const primary = this.coreVerbPhysicalizationSystem;
+    const player = this.targetingSystem?.playerRoot;
+    if (!player || primary?.playerRoot !== player || primary?.scene !== this.scene ||
+        primary?.group?.parent !== this.scene ||
+        primary?.group?.name !== "core_verb_physicalization_hc017a") return false;
+    let ancestor = this.legacyBodyPulseWave;
+    while (ancestor && ancestor !== player) ancestor = ancestor.parent;
+    if (ancestor !== player) this.legacyBodyPulseWave = player.getObjectByName("core_pulse_wave") ?? null;
+    const wave = this.legacyBodyPulseWave;
+    if (!wave?.isMesh || !wave.material || Array.isArray(wave.material)) return false;
+    wave.visible = false;
+    wave.material.opacity = 0;
+    return true;
   }
 
   updateRelationshipTrace(active, targeting, acquisition01, stress01, frameState = this.frameState) {

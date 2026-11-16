@@ -1,0 +1,24 @@
+--- CONNECTION54/src/morph/LocalCellBoundaryMorphSystem.js
++++ CONNECTION55/src/morph/LocalCellBoundaryMorphSystem.js
+@@ -859,9 +859,9 @@
+       && !frameState.act1RouteHistory?.graveEntered
+     );
+     const firstDestinationInvitation = foundation.firstDestinationInvitation ?? {};
+-    const foundationReady = firstGraveEntry
+-      ? firstDestinationInvitation.active === true
+-      : foundation.active === true;
++    // Hub-local tours, memory reads and visual invitations are optional.
++    // Mounted Hub + destination preparation + range own entry readiness.
++    const foundationReady = foundation.active === true;
+     const routeBody = [
+       ...(foundation.routes ?? []),
+       ...(foundation.thresholds ?? [])
+@@ -899,6 +899,8 @@
+       foundationReady,
+       firstDestinationInvitationActive: Boolean(firstDestinationInvitation.active),
+       screenTruthOwnsFirstDestinationPermission: false,
++      hubInvestigationRequired: false,
++      firstDestinationInvitationRequired: false,
+       targetPosition: routeBody?.position
+         ? { x: routeBody.position[0] ?? 0, y: routeBody.position[1] ?? 0, z: routeBody.position[2] ?? 0 }
+         : null

@@ -1,0 +1,73 @@
+{
+  "scope": "Actual presentation methods with declared target/condition/transform fixtures. No gameplay repair, progression, navigation or human-perception acceptance.",
+  "summary": {
+    "passed": 16,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "focused field anchors to actual world position beneath transformed parent",
+      "status": "PASS"
+    },
+    {
+      "name": "tether starts at Core world position and ends at target world position",
+      "status": "PASS"
+    },
+    {
+      "name": "one sustained contact may finish visual acquisition",
+      "status": "PASS"
+    },
+    {
+      "name": "an unstable contacted body retains disagreement after long hold",
+      "status": "PASS"
+    },
+    {
+      "name": "improved actual material condition permits alignment without restarting contact",
+      "status": "PASS"
+    },
+    {
+      "name": "target switch cannot inherit the previous acquisition",
+      "status": "PASS"
+    },
+    {
+      "name": "release hides field and forgets material condition; rehold begins new acquisition",
+      "status": "PASS"
+    },
+    {
+      "name": "another focus condition cannot leak into the current target",
+      "status": "PASS"
+    },
+    {
+      "name": "missing condition stays explicit and uses visual-acquisition fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "nonfinite condition cannot contaminate geometry",
+      "status": "PASS"
+    },
+    {
+      "name": "material condition and gameplay snapshot are never mutated",
+      "status": "PASS"
+    },
+    {
+      "name": "interaction assist uses the target world position",
+      "status": "PASS"
+    },
+    {
+      "name": "unparented targets retain their existing coordinates",
+      "status": "PASS"
+    },
+    {
+      "name": "committed Silt visual target retains its explicit published position",
+      "status": "PASS"
+    },
+    {
+      "name": "presentation retains the same three gyro bands",
+      "status": "PASS"
+    },
+    {
+      "name": "an ambient fallback cannot borrow a stale material condition by id",
+      "status": "PASS"
+    }
+  ]
+}

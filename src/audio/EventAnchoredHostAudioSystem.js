@@ -60,6 +60,14 @@ export class EventAnchoredHostAudioSystem {
     this.previousCoreWorkPlacementCount = 0;
     this.previousPatternPopCount = 0;
     this.previousReturnSignatureId = "none";
+    this.lastVascularArrivalSequence = 0;
+    this.lastVascularArrivalAudioAt = -999;
+    this.vascularArrivalSignatureCount = 0;
+    this.lastGraveMemorySequence = 0;
+    this.lastGraveMemoryAudioAt = -999;
+    this.graveMemorySignatureCount = 0;
+    this.lastSiltGraveReliefSequence = 0;
+    this.siltGraveReliefSignatureCount = 0;
     // HC027J: remember local-consequence event ids so a persistent Host state
     // gets one onset plus a restrained periodic signature, not a tone every frame.
     this.seenSignalPlainConsequenceEventIds = new Set();
@@ -94,6 +102,9 @@ export class EventAnchoredHostAudioSystem {
     this.handleHostRhythm(frameState);
     this.handleCoreEngine(frameState);
     this.handleCoreVerbs(frameState);
+    this.handleVascularSiltArrival(frameState);
+    this.handleGraveVascularMemory(frameState);
+    this.handleSiltGravePressureRelief(frameState);
     this.handleSignalPlainLocalConsequence(frameState);
     this.handleSignalPlainConsequenceNextQuestion(frameState);
     this.handleContact(frameState);
@@ -456,6 +467,104 @@ export class EventAnchoredHostAudioSystem {
     this.recordEvent(progress >= 0.82 ? "core_stabilize_locked" : "core_stabilize_converging");
   }
 
+  handleVascularSiltArrival(frameState) {
+    const route = frameState.vascularRhythmRoute;
+    const arrival = route?.siltArrivalPresentation;
+    if (frameState.activeCellId !== "CELL_VASCULAR_RHYTHM_ROUTE_001" || !route?.active
+      || arrival?.pass !== "CONNECTION19" || arrival.owner !== "VascularRhythmRouteSystem"
+      || arrival.authority !== "HostConnectionReceiptLedger"
+      || arrival.kind !== "vascular_membrane_load_change_applied"
+      || !Number.isSafeInteger(arrival.sequence) || arrival.sequence < 1
+      || arrival.receiptId !== `CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:${arrival.sequence}`
+      || !/^CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:[1-9]\d*$/.test(arrival.parentSiltReceiptId ?? "")
+      || !Number.isFinite(arrival.appliedDelta) || arrival.appliedDelta <= 0 || arrival.appliedDelta > 0.19500001
+      || arrival.materialTransfer !== false || arrival.routeCredit !== false
+      || ![arrival.position?.x, arrival.position?.y, arrival.position?.z].every(Number.isFinite)
+      || !Number.isFinite(arrival.ageSeconds) || arrival.ageSeconds < 0) return;
+    if (arrival.sequence <= this.lastVascularArrivalSequence) return;
+    // Consume observed identities even when locked, internally inspecting or late.
+    // Unlocking / leaving Core Work / revisiting must not replay an old arrival.
+    this.lastVascularArrivalSequence = arrival.sequence;
+    const t = frameState.runtimeSeconds ?? 0;
+    if (arrival.ageSeconds > 0.5 || !Number.isFinite(t)
+      || frameState.inspectionCamera?.coreWorkActive || frameState.tightInspectionCamera?.coreWorkActive
+      || !this.unlocked || this.context?.state !== "running" || !this.masterGain
+      || t - this.lastVascularArrivalAudioAt < 0.4) return;
+    this.playTone({ source: arrival.position, frequency: 96, glideTo: 128,
+      duration: 0.26, gain: 0.035, type: "sine", bus: "world" });
+    this.playTone({ source: arrival.position, frequency: 192, glideTo: 144,
+      duration: 0.16, gain: 0.018, type: "triangle", delay: 0.09, bus: "world" });
+    this.lastVascularArrivalAudioAt = t;
+    this.vascularArrivalSignatureCount += 1;
+    this.recordEvent(`vascular_silt_arrival:${arrival.sequence}`);
+  }
+
+  handleGraveVascularMemory(frameState) {
+    const route = frameState.graveMemoryRoute, memory = route?.vascularMemoryPresentation;
+    if (frameState.activeCellId !== "CELL_GRAVE_MEMORY_RESIDUE_BED_001" || !route?.active
+      || memory?.pass !== "CONNECTION27" || memory.owner !== "GraveMemoryRouteSystem"
+      || memory.authority !== "GraveVascularEffectMemory" || memory.kind !== "positive_vascular_memory_retained"
+      || !Number.isSafeInteger(memory.sequence) || memory.sequence < 1
+      || !Number.isSafeInteger(memory.vascularEventSequence) || memory.vascularEventSequence < 1
+      || memory.receiptId !== `CELL_VASCULAR_RHYTHM_ROUTE_001:membrane-load-applied:${memory.vascularEventSequence}`
+      || !/^CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:[1-9]\d*$/.test(memory.parentSiltReceiptId ?? "")
+      || memory.siteId !== "residue_silt_cloud_001"
+      || ![memory.appliedDelta, memory.memoryDelta, memory.memoryPressureBefore, memory.memoryPressureAfter].every(Number.isFinite)
+      || memory.appliedDelta <= 0 || memory.appliedDelta > 0.19500001
+      || memory.memoryDelta <= 0 || memory.memoryDelta > memory.appliedDelta + 1e-10
+      || memory.memoryPressureBefore < 0 || memory.memoryPressureAfter > 1
+      || Math.abs(memory.memoryPressureAfter - memory.memoryPressureBefore - memory.memoryDelta) > 1e-10
+      || memory.materialTransfer !== false || memory.routeCredit !== false
+      || ![memory.position?.x, memory.position?.y, memory.position?.z].every(Number.isFinite)
+      || !Number.isFinite(memory.ageSeconds) || memory.ageSeconds < 0) return;
+    if (memory.sequence <= this.lastGraveMemorySequence) return;
+    // Consume muted/late/Core Work observations rather than queueing old echoes.
+    this.lastGraveMemorySequence = memory.sequence;
+    const t = frameState.runtimeSeconds ?? 0;
+    if (memory.ageSeconds > 0.5 || !Number.isFinite(t)
+      || frameState.inspectionCamera?.coreWorkActive || frameState.tightInspectionCamera?.coreWorkActive
+      || !this.unlocked || this.context?.state !== "running" || !this.masterGain
+      || t - this.lastGraveMemoryAudioAt < 0.4) return;
+    this.playTone({source: memory.position, frequency: 144, glideTo: 108,
+      duration: 0.30, gain: 0.030, type: "sine", bus: "world"});
+    this.playTone({source: memory.position, frequency: 108, glideTo: 96,
+      duration: 0.28, gain: 0.014, type: "sine", delay: 0.16, bus: "world"});
+    this.lastGraveMemoryAudioAt = t;
+    this.graveMemorySignatureCount += 1;
+    this.recordEvent(`grave_vascular_memory:${memory.sequence}`);
+  }
+
+  handleSiltGravePressureRelief(frameState) {
+    const route = frameState.siltPressureRoute, relief = route?.gravePressureReliefPresentation;
+    const weights = {quiet_retention: 0.018, shared_memory: 0.028, held_contradiction: 0.04};
+    if (frameState.activeCellId !== "CELL_SILT_PRESSURE_ROUTE_001" || !route?.active
+      || relief?.pass !== "CONNECTION28" || relief.owner !== "SiltPressureRouteSystem"
+      || relief.kind !== "grave_ii_assisted_pressure_settling_applied"
+      || !Number.isSafeInteger(relief.sequence) || relief.sequence < 1
+      || relief.receiptId !== `CELL_GRAVE_MEMORY_RESIDUE_BED_001:grave-ii-resolved:${relief.sequence}`
+      || !Object.hasOwn(weights, relief.resolutionId) || relief.echo !== weights[relief.resolutionId]
+      || ![relief.compressionBefore, relief.compressionAfter, relief.neutralAfter, relief.extraRelief].every(Number.isFinite)
+      || relief.compressionBefore > 1 || relief.compressionAfter < 0
+      || relief.compressionAfter >= relief.compressionBefore
+      || relief.extraRelief <= 0 || relief.extraRelief > relief.echo + 1e-10
+      || Math.abs(relief.neutralAfter - relief.compressionAfter - relief.extraRelief) > 1e-10
+      || relief.materialTransfer !== false || relief.progressionCredit !== false
+      || !/^silt_asymmetric_compression_rib_[1-9]\d*$/.test(relief.siteId ?? "")
+      || ![relief.position?.x, relief.position?.y, relief.position?.z].every(Number.isFinite)
+      || !Number.isFinite(relief.ageSeconds) || relief.ageSeconds < 0) return;
+    if (relief.sequence <= this.lastSiltGraveReliefSequence) return;
+    this.lastSiltGraveReliefSequence = relief.sequence;
+    if (relief.ageSeconds > 0.5 || route.compressionFailure || route.stabilizing
+      || frameState.inspectionCamera?.coreWorkActive || frameState.tightInspectionCamera?.coreWorkActive
+      || !this.unlocked || this.context?.state !== "running" || !this.masterGain) return;
+    this.playTone({source: relief.position, frequency: 112, glideTo: 140,
+      duration: 0.30, gain: 0.028, type: "sine", bus: "world"});
+    this.playTone({source: relief.position, frequency: 168, glideTo: 140,
+      duration: 0.20, gain: 0.012, type: "sine", delay: 0.12, bus: "world"});
+    this.siltGraveReliefSignatureCount += 1;
+    this.recordEvent(`silt_grave_pressure_relief:${relief.sequence}`);
+  }
+
   handleSignalPlainLocalConsequence(frameState) {
     const consequence = frameState.signalPlainEcology?.persistentLocalConsequence ?? {};
     if (!consequence.active) return;
@@ -767,7 +876,25 @@ export class EventAnchoredHostAudioSystem {
       eventCount: this.eventCount,
       lastEvent: this.lastEvent,
       lastEventAt: this.lastEventAt,
-      eventFamilies: ["host_pulse", "world_rhythm_beat", "core_pulse_emit_return", "core_absorb_intake_flow_capture", "core_stabilize_convergence", "spatial_memory_landmark", "contact_brush_attach_release", "guide_core_work_grab_place", "chemistry_pattern_pop", "signal_plain_persistent_local_consequence", "signal_plain_consequence_next_question"],
+      vascularArrivalAudio: {
+        observedSequence: this.lastVascularArrivalSequence,
+        scheduledSignatures: this.vascularArrivalSignatureCount,
+        source: "Host_confirmed_positive_local_effect_at_first_vascular_fold",
+        replayOnUnlock: false, replayOnRevisit: false
+      },
+      graveMemoryAudio: {
+        observedSequence: this.lastGraveMemorySequence,
+        scheduledSignatures: this.graveMemorySignatureCount,
+        source: "positive_retained_vascular_memory_at_existing_grave_silt",
+        replayOnUnlock: false, replayOnRevisit: false
+      },
+      siltGravePressureAudio: {
+        observedSequence: this.lastSiltGraveReliefSequence,
+        scheduledSignatures: this.siltGraveReliefSignatureCount,
+        source: "measured_Grave_II_assisted_settling_at_existing_Silt_rib",
+        replayOnUnlock: false, replayOnRevisit: false
+      },
+      eventFamilies: ["host_pulse", "world_rhythm_beat", "core_pulse_emit_return", "core_absorb_intake_flow_capture", "core_stabilize_convergence", "spatial_memory_landmark", "contact_brush_attach_release", "guide_core_work_grab_place", "chemistry_pattern_pop", "signal_plain_persistent_local_consequence", "signal_plain_consequence_next_question", "vascular_silt_applied_arrival", "grave_vascular_memory_retained", "silt_grave_ii_pressure_relief"],
       landmarkSignatures: {
         nursery_triad: "three_soft_living_pulses",
         scar_double_rib: "paired_low_response",

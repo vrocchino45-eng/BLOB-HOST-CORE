@@ -287,14 +287,16 @@ export class PlaytestHudSystem {
       ? `${guideThresholdInteraction.hudStatus ?? "Guide Threshold: movement-led reading"} / ${Math.round((guideThresholdInteraction.progress ?? 0) * 100)}%`
       : inHub && layeredInteraction.active && !(layeredInteraction.completed && hubFoundation.active)
       ? `${layeredInteraction.hudStatus ?? "Signal Chorus: layered resonance"} / ${Math.round((layeredInteraction.progress ?? 0) * 100)}%`
-      : inHub && hubInvestigation.active && !hubInvestigation.investigationReady
-      ? `Hub Investigation: ${hubInvestigation.routeReadCount ?? 0}/${hubInvestigation.routeCount ?? 3} routes / memory ${hubInvestigation.memoryRead ? "read" : "unread"}`
+      : inHub && hubInvestigation.active
+      ? "Hub: choose an available destination / readings optional"
       : inHub && hubFoundation.active
       ? `Hub Junction: ${
           hubFoundation.vascularRhythmRetained
             ? "Vascular cadence retained"
             : hubFoundation.completed ? "three routes readable" : "forming"
         } / ${Math.round((hubFoundation.progress ?? 0) * 100)}%${hubCoreSpatialMirror.active ? ` / mirror ${hubCoreSpatialMirror.topologyLabel ?? "Core"} ${hubCoreSpatialMirror.distribution ?? ""}` : ""}`
+      : inGraveMemory && frameState.graveResonanceGameplay?.active
+      ? `Grave II: ${frameState.graveResonanceGameplay.guidanceStage ?? "active"} / ${Math.round((frameState.graveResonanceGameplay.regional?.resolutionHold01 ?? 0) * 100)}% settled`
       : inGraveMemory
       ? `Grave Memory: ${
           graveMemoryRoute.graveMemoryImprintCommitted
@@ -441,6 +443,8 @@ export class PlaytestHudSystem {
         ? "BLOB // HOST CORE // GUIDE THRESHOLD"
         : inHub && hubFoundation.active
         ? "BLOB // HOST CORE // HUB CHAMBER"
+        : inGraveMemory && frameState.graveResonanceGameplay?.active
+        ? "BLOB // HOST CORE // GRAVE II RESONANCE"
         : inGraveMemory
         ? "BLOB // HOST CORE // GRAVE MEMORY"
         : inVascularRhythm
@@ -737,10 +741,17 @@ export class PlaytestHudSystem {
   }
 
   objectiveFromState(frameState) {
+    if (frameState.activeCellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001"
+      && frameState.graveResonanceGameplay?.active) {
+      return frameState.graveResonanceGameplay.nextAction;
+    }
     const returnTraversal = frameState.firstSliceReturnTraversal ?? {};
     const hostAudio = frameState.hostAudio ?? {};
     const coreEngine = frameState.coreEngine ?? {};
     if (returnTraversal.transitionActive) return "Stay with the remembered fold while the same anatomy resolves at the earlier scale.";
+    if (frameState.activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001" && frameState.hubInvestigationGameplay?.active) {
+      return frameState.hubInvestigationGameplay.nextAction ?? "Approach an awake route body.";
+    }
     if (returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.08) {
       return returnTraversal.nearestSeamArmed
         ? "The remembered fold is physically aligned. Move through it to revisit the connected early anatomy."
@@ -779,7 +790,7 @@ export class PlaytestHudSystem {
       if (layeredInteraction.active && !(layeredInteraction.completed && frameState.hubChamberFoundation?.active)) return layeredInteraction.objectiveLine ?? "Follow the layered resonance sequence.";
       const hubFoundation = frameState.hubChamberFoundation ?? {};
       const hubInvestigation = frameState.hubInvestigationGameplay ?? {};
-      if (hubInvestigation.active && !hubInvestigation.investigationReady) return hubInvestigation.objectiveLine ?? "Investigate all three routes and the memory fragment.";
+      if (hubInvestigation.active) return hubInvestigation.objectiveLine ?? "Investigate all three routes and the memory fragment.";
       if (hubFoundation.active) return hubFoundation.objectiveLine ?? "Read one active route and two dormant routes around the junction.";
       const nextRoutePressure = frameState.signalChorusNextRoutePressure ?? {};
       if (nextRoutePressure.active) return nextRoutePressure.objectiveLine ?? "Observe the combward pressure. It is readable, but it is not open.";
@@ -863,10 +874,21 @@ export class PlaytestHudSystem {
     const hostAudio = frameState.hostAudio ?? {};
     const coreEngine = frameState.coreEngine ?? {};
     if (returnTraversal.transitionActive) return "Keep moving; the remembered tissue is resolving without a teleport or gate.";
+    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && frameState.hubInvestigationGameplay?.active) {
+      const entry = frameState.hubInvestigationGameplay.nextAction ?? "Approach an awake route body.";
+      const nearReturn = !frameState.hubRouteCommit?.pending && returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance)
+        && returnTraversal.nearestSeamDistance <= 1.08;
+      return nearReturn
+        ? `${entry} To return instead, ${returnTraversal.nearestSeamArmed ? "move through the lit crease" : "move away from the arrival crease, then return to it"}.`
+        : entry;
+    }
     if (returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.08) {
       return returnTraversal.nearestSeamArmed
         ? "Move through the lit tissue crease. No button is required."
         : "Move away from the arrival crease once; returning to it will arm the physical revisit path.";
+    }
+    if (cellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001" && frameState.graveResonanceGameplay?.active) {
+      return frameState.graveResonanceGameplay.nextAction;
     }
     const nextRoutePressure = frameState.signalChorusNextRoutePressure ?? {};
     const hubFoundation = frameState.hubChamberFoundation ?? {};
@@ -926,7 +948,7 @@ export class PlaytestHudSystem {
       if (inspectionCamera.available) return `${action} Y inspects the Core / readable focus.`;
       return action;
     }
-    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubInvestigation.active && !hubInvestigation.investigationReady) return hubInvestigation.nextAction ?? "Approach an awake route body and press A to commit.";
+    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubInvestigation.active) return hubInvestigation.nextAction ?? "Approach an awake route body and press A to commit.";
     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active) return hubFoundation.nextAction ?? "Read the active route and remember the two dormant routes.";
     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && nextRoutePressure.active) return nextRoutePressure.nextAction ?? "Hold the reading and learn the direction. No route input is accepted.";
     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && signalReturnState.active) return signalReturnState.nextAction ?? "Hold the returned Grave reading.";
@@ -1014,12 +1036,13 @@ export class PlaytestHudSystem {
             ? (isGamepad ? "GUIDE HONED · A interact · ↓ Core Work · Y world" : "GUIDE HONED · E interact · G Core Work · F world")
             : (isGamepad ? "A interact · ↓ Core Work · center Guide to hone · Y world" : "E interact · G Core Work · center Guide to hone · F world"))
         : inspection.available
-          ? (isGamepad ? "Y inspect Core" : "F inspect Core")
+          ? (isGamepad ? "Y inspect Core → D-Pad Down Core Work" : "F inspect Core → G Core Work")
           : null;
 
     if (isGamepad && frameState.statusPage?.firstHubUsePending) {
       return ["View/Select or Menu/Start Status", "LB/RB tabs", "D-Pad navigate", "B back"].join(" · ");
     }
+    if (inspection.coreWorkActive) return inspectionText;
     if (isGamepad && frameState.inputSource?.pulseContext === "resonance_hold") {
       return ["Left Stick move", "Right Stick camera", "Hold LT stabilize", "X pulse", inspectionText, "R3 reframe", "View Status"].filter(Boolean).join(" · ");
     }
@@ -1028,6 +1051,9 @@ export class PlaytestHudSystem {
     }
     if (!isGamepad && inspectionText) {
       return `WASD move · Mouse/IJKL camera · ${inspectionText} · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe`;
+    }
+    if (isGamepad && inspectionText) {
+      return ["Left Stick move", "Right Stick camera", "RT absorb", "X pulse", "LT stabilize", inspectionText, "R3 reframe", "View Status"].join(" · ");
     }
     return match?.line ?? "Left Stick/WASD move · A interact · X pulse · RT absorb · LT stabilize · Y Core inspect · View/Tab Status · F1 trace · F2 systems · F3 clean";
   }
@@ -1079,7 +1105,7 @@ export class PlaytestHudSystem {
   }
 
   hubReadingLabel(hubFoundation, hubInvestigation) {
-    if (hubInvestigation.investigationReady) return "Route comparison";
+    if (hubInvestigation.active) return "Hub destinations";
     const nearest = hubInvestigation.nearestRouteId;
     const route = (hubFoundation.routes ?? []).find((entry) => entry.id === nearest);
     if (route?.displayName) return route.displayName;

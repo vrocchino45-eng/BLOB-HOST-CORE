@@ -1,3 +1,6 @@
+import { deriveCoreEarnedEvolution } from "./CoreEarnedEvolution.js";
+import { publishCoreStabilizeSample } from './CoreStabilizeSample.js';
+
 const ZONE_TRAITS = {
   deep_core: {
     output: 0.88,
@@ -75,6 +78,12 @@ export class CoreRadialPerformanceSystem {
   }
 
   resolveProfile(frameState) {
+    const profile = this.resolveAnatomyProfile(frameState);
+    profile.recovery *= deriveCoreEarnedEvolution(frameState.coreGrowth).idleRecoveryMultiplier;
+    return profile;
+  }
+
+  resolveAnatomyProfile(frameState) {
     const chemistry = frameState.spatialCoreChemistry ?? {};
     const topology = chemistry.topology ?? {};
     const counts = chemistry.counts ?? {};
@@ -214,7 +223,7 @@ export class CoreRadialPerformanceSystem {
     const drainPerSecond = profile.active
       ? 0.09 / Math.max(0.2, profile.enduranceCapacity * profile.efficiency)
       : 0.075;
-    const recoveryPerSecond = profile.active ? 0.10 * profile.recovery : 0.10;
+    const recoveryPerSecond = 0.10 * profile.recovery;
 
     // PAIRED-DEMAND2: counterpart coordination saves only shared verb drain.
     // Read the earned ceiling, never the O-key architecture preview.
@@ -397,6 +406,8 @@ export class CoreRadialPerformanceSystem {
       redlineEnabled: false,
       lastEvent: this.lastEvent
     };
+
+    frameState.corePerformance.stabilizeSample = publishCoreStabilizeSample(frameState);
 
     this.playerRoot.userData.coreRadialPerformance = {
       topologyId: profile.topologyId,

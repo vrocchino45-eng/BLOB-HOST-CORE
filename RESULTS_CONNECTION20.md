@@ -1,0 +1,13 @@
+# CONNECTION20 integration results
+
+Fresh full catalog: 25 cases passed, 333 machine-summary checks, zero failed, blocked or unrun cases. All nine catalog browser scenarios ran. Production-source mutation guard and portable identity guard pass. The report's plan baseline label remains historical; the included source manifest identifies the actual CONNECTION19 runtime tested.
+
+Coverage includes material conservation, Core Work grip interruption, regional goals, six-phase/Hub/reserve sequence, hidden-region handling, telemetry export, current/coherence consumers and movement, continuous particle travel, the Silt–Vascular–Grave–Silt consequence loop, Pulse freshness/remount isolation, real-input Core placement, and Hub/Grave guidance. Fixtures and limitations remain in each case report. No from-zero campaign or physical-controller acceptance is inferred.
+
+Additional checks: 52 focused owner checks pass (15 visibility, 16 contact, 21 arrival-audio). Visibility and contact browser spot checks were rerun against this same source and pass. They retain explicit staged poses, paused animation/preparation and controlled owner ticks. The CONNECTION19 live audio-graph evidence is included because its production fingerprint is exactly identical; it is retained evidence, not counted as another fresh browser run.
+
+24 installer groups pass across CONNECTION14, 15, 17, 18, 19 and already-installed 20, each with LF and CRLF source. Tests cover guarded check/apply, idempotence, byte-exact restore to the actual starting state, unknown files/anchors/payload rejection without writes, backup integrity, interrupted updates, matching partial backups, later-edit protection and refusal of unknown mixed checkpoints. Reconstructed full production identities for every supported state match the historical identities. The installer itself checks affected files and representative anchors; unrelated files are preserved.
+
+Build passes with the existing large-chunk warning. Production is byte-for-byte CONNECTION19: no new gameplay/visual/audio change. The harness guide adds the consolidation note. The 22-file payload contains ten production paths and the relevant harness documentation/tests and optional root audit utilities. Old HC/LS1 identities, prior reports and earlier backups are retained.
+
+Human acceptance remains open. Use HUMAN_CHECK_CONNECTION20.md for one focused integration session. The broader regional material hierarchy, Pulse/Absorb contact clarity, named-site consequence tracing, further regional sound replies and historical Silt disappearance remain tracked. A passing bot catalog does not close those perceptual questions.

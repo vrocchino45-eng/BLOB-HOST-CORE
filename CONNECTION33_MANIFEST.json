@@ -1,0 +1,149 @@
+{
+  "pass": "CONNECTION33",
+  "baseline": "CONNECTION30; CONNECTION31/32 are lab/audit only",
+  "states": [
+    {
+      "id": "CONNECTION30",
+      "files": {
+        "src/core/GameRuntime.js": "1d8c76c95d6a1ea3d3245a21882c5c82e2bb54a646a1f351919fd84e8857479d",
+        "src/interaction/ReactiveStateGrammarSystem.js": "d54ee80927da4b68a9ecd590a779c222d06fa071711024c5dedf65e05bf739a7",
+        "src/interaction/ResponsePersonalitySystem.js": "f9b07d8ab882e7d17e7d80bfb4e74c6653d941a495abe413eb6b4fa401c7a1c4",
+        "src/interaction/MaterialResponseScope.js": null,
+        "public/data/runtime/act1RuntimeProfile_HC016M.json": "ad6a3aebb103c9febc8bc7b5308f0a5b20cf54590556ad786995349d1e875269",
+        "BLOB_BOT_SERIES1/plan.json": "1055096c67b3776347c5792a8ef15582649c3ecdf3318efdd042a653e5399bfb",
+        "BLOB_BOT_SERIES1/README.md": "784bca2c6e687209f4195a845527c0c31a9e2971bfcd42e6567e6af65f702128",
+        "CONNECTION18_CONTACT_BROWSER.mjs": "f106994b21d1eabc0819cc280ae233e90446c093ed8bcb92384b5fda69b1d5a5",
+        "CONNECTION33_SURFACE_RESPONSE_CHECK.mjs": null,
+        "CONNECTION33_SURFACE_RESPONSE_BROWSER.mjs": null
+      }
+    },
+    {
+      "id": "CONNECTION33",
+      "files": {
+        "src/core/GameRuntime.js": "490b0cf38691251cbe580becb89a825b6c925120b252fab7b3d877862b8a1b1d",
+        "src/interaction/ReactiveStateGrammarSystem.js": "567f30272b2bd26ad4eb91e39887b6dab9b0b010e1685de3dd4c838332d4a28f",
+        "src/interaction/ResponsePersonalitySystem.js": "f444669eb849f3b53f46f467d95d4154a05c6e049488f82e2ecaf1fc83008ebe",
+        "src/interaction/MaterialResponseScope.js": "a7ca144261337e7b5f23379ee807b5e4ae5f80abf60e4ec7215aa2603dae0873",
+        "public/data/runtime/act1RuntimeProfile_HC016M.json": "0056e8c5aca904283eb924bd85a83b460d45137e9916f3a02f7c5fbf81082979",
+        "BLOB_BOT_SERIES1/plan.json": "662b7608a8ef53521d0dafc39c7b8b7a1cf4acc215ff808c33fe738f56e57565",
+        "BLOB_BOT_SERIES1/README.md": "ea320b9269e2bc7fdfdd16d7e8db7ecb26f91c976b6300970582a170b2ffe75d",
+        "CONNECTION18_CONTACT_BROWSER.mjs": "b18b289f7bae9345324f31510e2383cc4cfc7b9e1624a6d05834f632863b3a55",
+        "CONNECTION33_SURFACE_RESPONSE_CHECK.mjs": "fa6f1eaec4e820e06b04dcc50074cf592b393b9e7d0acdcd6cfdf91252e2ee51",
+        "CONNECTION33_SURFACE_RESPONSE_BROWSER.mjs": "e8037f457cfcfbbf9db5d03c873377dccd6e0eba0daaa07c71134d5218303f5f"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "after": "490b0cf38691251cbe580becb89a825b6c925120b252fab7b3d877862b8a1b1d"
+    },
+    {
+      "path": "src/interaction/ReactiveStateGrammarSystem.js",
+      "after": "567f30272b2bd26ad4eb91e39887b6dab9b0b010e1685de3dd4c838332d4a28f"
+    },
+    {
+      "path": "src/interaction/ResponsePersonalitySystem.js",
+      "after": "f444669eb849f3b53f46f467d95d4154a05c6e049488f82e2ecaf1fc83008ebe"
+    },
+    {
+      "path": "src/interaction/MaterialResponseScope.js",
+      "after": "a7ca144261337e7b5f23379ee807b5e4ae5f80abf60e4ec7215aa2603dae0873"
+    },
+    {
+      "path": "public/data/runtime/act1RuntimeProfile_HC016M.json",
+      "after": "0056e8c5aca904283eb924bd85a83b460d45137e9916f3a02f7c5fbf81082979"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/plan.json",
+      "after": "662b7608a8ef53521d0dafc39c7b8b7a1cf4acc215ff808c33fe738f56e57565"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/README.md",
+      "after": "ea320b9269e2bc7fdfdd16d7e8db7ecb26f91c976b6300970582a170b2ffe75d"
+    },
+    {
+      "path": "CONNECTION18_CONTACT_BROWSER.mjs",
+      "after": "b18b289f7bae9345324f31510e2383cc4cfc7b9e1624a6d05834f632863b3a55"
+    },
+    {
+      "path": "CONNECTION33_SURFACE_RESPONSE_CHECK.mjs",
+      "after": "fa6f1eaec4e820e06b04dcc50074cf592b393b9e7d0acdcd6cfdf91252e2ee51"
+    },
+    {
+      "path": "CONNECTION33_SURFACE_RESPONSE_BROWSER.mjs",
+      "after": "e8037f457cfcfbbf9db5d03c873377dccd6e0eba0daaa07c71134d5218303f5f"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/SystemRegistry.js",
+      "sha256": "0c983cdc9374e996d7cd59a17b3e8f8872522740e1756f4cd2ebc17fc72e1207"
+    },
+    {
+      "path": "src/core/FirstSliceTransitionCoordinator.js",
+      "sha256": "e4dd502047da841ea96ee468f9f3909080f1bb512ad4c3ae4a395a86162f88df"
+    },
+    {
+      "path": "src/chemistry/BondSystem.js",
+      "sha256": "c99058bec04e5d945b607acd4fe9352002366a7036df2b54259cb6899a08c43e"
+    },
+    {
+      "path": "src/player/CoreGrowthSystem.js",
+      "sha256": "d67b036201919defe629e45302bca6c3cc8c52c6b26eaec67ba1de5952a22684"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "b9c34cab3cdbd75ca7c72fc788c5a1a4b29a4a0e2f7c8daab307c934d2cb7b63"
+    },
+    {
+      "path": "src/routes/GraveMemoryRouteSystem.js",
+      "sha256": "6666a4cfc45b10a4c3f8da1062d8b9f1b2f62bb0c63d5eeebbd681286536735e"
+    },
+    {
+      "path": "src/audio/EventAnchoredHostAudioSystem.js",
+      "sha256": "422947c9573b4a64fd944c82b4e0ab73aa4245aec51a34873d5063c3aa0a7813"
+    },
+    {
+      "path": "src/data/RecipeDataSystem.js",
+      "sha256": "f970f8c9a1271f1845d5001397270a9bca2e82766c7d583748300085e99dc81a"
+    },
+    {
+      "path": "public/data/world/localCellRecipes.json",
+      "sha256": "ae2f8694859c9e3b1ee199584ccdcb63b19921889c450e78b56817e14f2cb3fe"
+    },
+    {
+      "path": "public/data/hosts/HOST_ALPHA_WOUNDED_NURSERY.json",
+      "sha256": "c0a0a3a525571948b5e43fcbc74b10a19c7bd5978eab7f412c9c33f55ea49fb2"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/source-identity.mjs",
+      "sha256": "0208acc12c04f589a745d939376e7804de936674eb9f0766a100711fe2b2ff69"
+    },
+    {
+      "path": "CONNECTION28_BEFORE_SILT.mjs",
+      "sha256": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132"
+    },
+    {
+      "path": "CONNECTION28_PRESSURE_REPLY_CHECK.mjs",
+      "sha256": "d62e237118041a12ab2049f1825c3c002c1e5792c16e5630b55544f0acb5a073"
+    },
+    {
+      "path": "CONNECTION28_PRESSURE_REPLY_BROWSER.mjs",
+      "sha256": "bf27b2cb19617f9ab10509a93a410bd3dd3a8f9a7c787309c35b126a5b649a70"
+    },
+    {
+      "path": "src/chemistry/LocalChemistryContextSystem.js",
+      "sha256": "4c57daa0fae0f6c78ddfd8a0ba363bbaf867f933adddabd0cf5560bbbe4e6807"
+    },
+    {
+      "path": "src/core/SessionTelemetrySystem.js",
+      "sha256": "d67e2ae586ab22a28cfa18aeff7baf0871305df9f2dca42f66f2c5342f3e33f3"
+    }
+  ],
+  "productionFingerprint": "3517948271c87e188fbc15072f33c251342334f4cd9e0d8718d8d3e4e5e6aa61"
+}

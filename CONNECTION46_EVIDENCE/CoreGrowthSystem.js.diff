@@ -1,0 +1,15 @@
+--- CONNECTION45/src/player/CoreGrowthSystem.js
++++ CONNECTION46/src/player/CoreGrowthSystem.js
+@@ -688,8 +688,10 @@
+           : "Let the memory pearl settle, then carry it through the existing return fold."
+         : this.firstGrowthCommitted
+         ? "Carry the retained Binding Core form into the next living system."
+-        : this.successfulCycleCount > 0 && !this.safeSeedAbsorbed
+-          ? "Complete the existing Fold lesson and absorb the protected seed so the new shell can bind."
++        : this.surfaceFoundationRetained
++          ? "Surface experience is binding into the Core; the protected seed is optional. Continue the existing Fold lesson when ready."
++          : this.successfulCycleCount > 0
++          ? "Continue the existing Fold lesson; a safe Surface outcome can bind the shell without consuming the protected seed."
+           : this.resolvedCycleCount > 0
+             ? "Recover or nourish the nursery; the Core is beginning to answer."
+             : "Live through a nursery cycle so the Core has something to become."

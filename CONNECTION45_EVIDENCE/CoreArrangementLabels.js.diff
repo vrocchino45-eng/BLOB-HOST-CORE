@@ -1,0 +1,13 @@
+--- CONNECTION44/src/ui/CoreArrangementLabels.js
++++ CONNECTION45/src/ui/CoreArrangementLabels.js
+@@ -89,8 +89,9 @@
+ function evolutionRows(s) {
+   const e=s.evolution;if(!e?.growthKnown)return [];
+   const result=[];
++  if(e.surfaceFoundation) result.push({title:'SURFACE FOUNDATION',text:'Earned Surface experience is becoming Core tissue; first pressure/flow handling grows with it.'});
+   if(e.earnedFamilies.vascular) result.push({title:'EARNED CIRCULATION',text:'Returned Vascular cadence: idle reserve recovery is 8% higher than the same arrangement without this adaptation.'});
+-  else result.push({title:'CORE EVOLUTION',text:e.matureBinding ? 'Next adaptation: finish the Vascular cadence and carry it back to the Hub.' : 'Mature the Binding Core through nursery nourishment and the protected seed. Debug anatomy does not earn growth.'});
++  else result.push({title:'CORE EVOLUTION',text:e.matureBinding ? 'Surface-grown Binding Core retained. Later: carry a completed Vascular cadence back to the Hub.' : 'Growth starts at Surface: produce a safe nursery outcome or complete its Host-language lesson. The protected seed is optional; debug anatomy does not earn growth.'});
+   if(e.integrated)result.push({title:'INTEGRATED CORE',text:'Grave memory, Vascular circulation and Silt filtration are earned and retained together.'});
+   return result;
+ }

@@ -1,0 +1,71 @@
+{
+  "pass": "CONNECTION42",
+  "status": "PASS",
+  "sourceFingerprint": "f6d8c8e5d70df103a0f63cacb6ae20e8a788eba2908f6c66a069e4346f33c3d2",
+  "quickCases": 31,
+  "quickChecks": 558,
+  "previewCounterfactualsRetained": 729,
+  "paletteLayoutSelectionFixtures": 81,
+  "matchedPreviousOwnerSteps": 240,
+  "repeatEntryCycles": 300,
+  "focusedBrowserRuns": 3,
+  "focusedBrowserGroups": 39,
+  "installerGroups": 9,
+  "build": "PASS",
+  "unselectedBrowserCases": 21,
+  "runs": [
+    {
+      "runId": "2026-11-15T02-01-50-186Z",
+      "mode": "--quick",
+      "selectedCase": null,
+      "summary": {
+        "passed": 31,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 23,
+        "checksPassed": 558
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T02-03-17-077Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 53,
+        "checksPassed": 16
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T02-04-10-764Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 53,
+        "checksPassed": 16
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T02-05-28-142Z",
+      "mode": "--all",
+      "selectedCase": "S05",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 53,
+        "checksPassed": 7
+      },
+      "productionFilesUnchanged": true
+    }
+  ],
+  "qualification": "Work-scoped visual change with explicit debug anatomy/region fixtures and deterministic browser updates. No naturally earned campaign, physical-controller feel or human visual acceptance. First browser attempt exposed a camera-opacity conflict, corrected by final composition binding. A later screenshot hit its 30-second capture budget; accepted runs use 90 seconds. S03/S04 are historical CONNECTION40 results and were not rerun here."
+}

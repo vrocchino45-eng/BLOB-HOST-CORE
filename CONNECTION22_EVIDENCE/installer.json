@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "scope": "Temporary checkpoint copies only; no production modification or human gameplay acceptance.",
+  "summary": {
+    "passed": 16,
+    "failed": 0
+  },
+  "checks": [
+    "CONNECTION20_OR21: check/apply/idempotent apply/byte-exact restore LF",
+    "CONNECTION20_OR21: check/apply/idempotent apply/byte-exact restore CRLF",
+    "CONNECTION22: check/apply/idempotent apply/byte-exact restore LF",
+    "CONNECTION22: check/apply/idempotent apply/byte-exact restore CRLF",
+    "Reject check/apply without writes: unknown-source",
+    "Reject check/apply without writes: bad-anchor",
+    "Reject check/apply without writes: bad-payload",
+    "Reject check/apply without writes: occupied-new-file",
+    "Reject check/apply without writes: partial-backup-conflict",
+    "Reject check/apply without writes: edited-installed",
+    "Reject check/apply without writes: changed-backup",
+    "Reject check/apply without writes: bad-backup-metadata",
+    "Resume interrupted original/final mixture with backup; exact restore",
+    "Restore refuses later edits without writes",
+    "Complete matching partial backup",
+    "Reject unrecognized mixed checkpoint without backup and without writes"
+  ]
+}

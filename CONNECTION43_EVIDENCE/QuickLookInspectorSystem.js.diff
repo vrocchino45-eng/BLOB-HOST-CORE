@@ -1,0 +1,16 @@
+--- CONNECTION42/src/ui/QuickLookInspectorSystem.js
++++ CONNECTION43/src/ui/QuickLookInspectorSystem.js
+@@ -1,3 +1,4 @@
++import { CORE_VISUAL_PALETTE, resolveCoreFamilyColor, corePaletteHex } from "../visual/CoreVisualPalette.js";
+ import { buildCoreArrangementLabels, coreArrangementLabelRows, compactCoreArrangementLabelRows } from './CoreArrangementLabels.js';
+ 
+ /**
+@@ -377,7 +378,7 @@
+         if (anchor) result.push({id:'piece-'+p.pieceId, anchor,
+           title:`${p.pieceId===work.selectedPieceId ? 'SELECTED · ' : ''}${p.label}`,
+           detail:`${p.zoneLabel} · ${p.interactionLabel}`, offsetX:24, offsetY:18,
+-          maxDistance:80, accent:p.pieceId===work.selectedPieceId ? '#ffdf80' : '#9ee9da'});
++          maxDistance:80, accent:corePaletteHex(p.pieceId===work.selectedPieceId ? CORE_VISUAL_PALETTE.selection : resolveCoreFamilyColor(p.family, 0x9ee9da))});
+       }
+     }
+     if (playerRoot) result.push({

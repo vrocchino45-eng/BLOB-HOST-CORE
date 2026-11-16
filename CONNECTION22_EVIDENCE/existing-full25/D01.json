@@ -1,0 +1,70 @@
+{
+  "pass": "ARCHIVE-GRAVE1",
+  "scope": "Actual full normal/archive RecipeDataSystem loads and targeted negative mutations, restored after each check. No runtime systems are instantiated by these tests.",
+  "checks": [
+    {
+      "name": "Normal runtime data passes without mounting archive planning",
+      "status": "PASS"
+    },
+    {
+      "name": "Entire archive validation now completes against real authored data",
+      "status": "PASS"
+    },
+    {
+      "name": "Changing only the build label cannot disable valid authored capability",
+      "status": "PASS"
+    },
+    {
+      "name": "Mismatched read-loop id cannot authorize mature cell status",
+      "status": "PASS"
+    },
+    {
+      "name": "Mismatched read-loop cellId cannot authorize mature cell status",
+      "status": "PASS"
+    },
+    {
+      "name": "Mismatched read-loop route cannot authorize mature cell status",
+      "status": "PASS"
+    },
+    {
+      "name": "Mismatched read-loop loopType cannot authorize mature cell status",
+      "status": "PASS"
+    },
+    {
+      "name": "Mismatched read-loop status cannot authorize mature cell status",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing read-loop recipe cannot authorize mature cell status",
+      "status": "PASS"
+    },
+    {
+      "name": "Unknown cell status is still rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Unknown cell gameplay-loop status is still rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "Archive recipe pack must stay data-only",
+      "status": "PASS"
+    },
+    {
+      "name": "Required authored objects remain enforced",
+      "status": "PASS"
+    },
+    {
+      "name": "Full archive validation still rejects malformed read-loop content",
+      "status": "PASS"
+    },
+    {
+      "name": "All restored valid data passes again; original IDs remain",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 15,
+    "failed": 0
+  }
+}

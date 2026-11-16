@@ -42,6 +42,8 @@ export class SiltPressureRouteSystem {
     this.graveIIResolutionId = null;
     this.graveIIInheritedVascularMemory = false;
     this.graveIIPressureEcho = 0;
+    this.gravePressureReliefPresentation = null;
+    this.gravePressureReliefPresentationAt = -999;
     this.siltAimCandidateId = null;
     this.siltAimLockedId = null;
     this.siltAimCameraPosition = new THREE.Vector3();
@@ -260,6 +262,7 @@ export class SiltPressureRouteSystem {
       if (record.owner === 'grip') this.materialIdentity.transfer(record.id, 'environment', 'individual');
     }
     this.active = false;
+    this.gravePressureReliefPresentationAt = -999;
     this.siltGrip.release();
     this.heldPulsePending = false;
     this.heldAbsorbId = null;
@@ -337,6 +340,7 @@ export class SiltPressureRouteSystem {
     this.animate(frameState, sample);
     this.animateHabitatFoundation(frameState);
     this.applyHostRhythmVisual(frameState);
+    this.applyGravePressureReplyVisual();
     this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
       input: frameState.input, signal01: territorySignal("silt", {siltPressureEcho: this.graveIIPressureEcho}),
       circuitStatus: this.graveIIReceiptId ? "grave_ii_outcome_consumed" : "no_return_outcome_yet", frameState});
@@ -389,6 +393,56 @@ export class SiltPressureRouteSystem {
       return true;
     }
     return false;
+  }
+
+  // CONNECTION28: observe the existing completed-Silt settling step only.
+  // Receipt consumption alone, failure and manual bracing are not relief.
+  observeGravePressureRelief(compressionBefore, neutralAfter) {
+    if (this.gravePressureReliefPresentation || !this.completed || this.compressionFailure
+        || this.stabilizing || !this.active || this.graveIIConsumedSequence < 1
+        || !this.graveIIReceiptId || this.graveIIPressureEcho <= 0
+        || ![compressionBefore, this.compression, neutralAfter].every(Number.isFinite)
+        || this.compression >= compressionBefore || neutralAfter <= this.compression) return;
+    this.gravePressureReliefPresentation = Object.freeze({
+      pass: "CONNECTION28", owner: "SiltPressureRouteSystem",
+      kind: "grave_ii_assisted_pressure_settling_applied",
+      sequence: this.graveIIConsumedSequence, receiptId: this.graveIIReceiptId,
+      resolutionId: this.graveIIResolutionId, echo: this.graveIIPressureEcho,
+      compressionBefore, compressionAfter: this.compression, neutralAfter,
+      extraRelief: neutralAfter - this.compression,
+      materialTransfer: false, progressionCredit: false
+    });
+    this.gravePressureReliefPresentationAt = this.elapsed;
+  }
+
+  gravePressureReplyRib() {
+    return this.ribGroups[Math.floor(this.ribGroups.length / 2)] ?? null;
+  }
+
+  gravePressureReplyStrength() {
+    if (!this.active || !this.gravePressureReliefPresentation
+        || this.compressionFailure || this.stabilizing) return 0;
+    const age = Math.max(0, this.elapsed - this.gravePressureReliefPresentationAt);
+    const onset = age < 2 ? Math.exp(-age * 2.4) * 0.18 : 0;
+    return onset + this.graveIIPressureEcho / 0.04 * 0.025;
+  }
+
+  applyGravePressureReplyVisual() {
+    const strength = this.gravePressureReplyStrength();
+    if (strength <= 0) return;
+    for (const mesh of this.gravePressureReplyRib()?.children ?? []) {
+      if (mesh.material) mesh.material.emissiveIntensity += strength;
+    }
+  }
+
+  readGravePressureReliefPresentation(active) {
+    const event = this.gravePressureReliefPresentation, rib = this.gravePressureReplyRib();
+    if (!active || !event || !rib) return null;
+    const point = rib.getWorldPosition(new THREE.Vector3());
+    return {...event, siteId: rib.name,
+      ageSeconds: Math.max(0, this.elapsed - this.gravePressureReliefPresentationAt),
+      visualStrength: this.gravePressureReplyStrength(),
+      position: {x: point.x, y: point.y, z: point.z}};
   }
 
   applyHostRhythmVisual(frameState) {
@@ -2163,7 +2217,10 @@ export class SiltPressureRouteSystem {
     const targetCompression = this.pressureSettlingTarget();
     if (!this.compressionFailure && !this.stabilizing) {
       const settleRate = 1 - Math.exp(-dt * 1.7);
+      const compressionBefore = this.compression;
       this.compression += (targetCompression - this.compression) * settleRate;
+      const neutralAfter = compressionBefore + (0.1 - compressionBefore) * settleRate;
+      this.observeGravePressureRelief(compressionBefore, neutralAfter);
     }
 
     if (
@@ -2554,6 +2611,7 @@ export class SiltPressureRouteSystem {
       maxDepthProgress: this.maxDepthProgress,
       pathDistance: active ? this.pathDistance : 0,
       compression: this.compression,
+      gravePressureReliefPresentation: this.readGravePressureReliefPresentation(active),
       graveIIPressureFeedback: {
         pass: 'C0D3-C', active: Boolean(active && this.graveIIConsumedSequence),
         receiptId: this.graveIIReceiptId, sourceSequence: this.graveIIConsumedSequence,

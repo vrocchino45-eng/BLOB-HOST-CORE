@@ -7,7 +7,7 @@ const original=fs.readFileSync(new URL('../fixtures/BASE_CoreRadialPerformanceSy
 const checks=[];function check(name,fn){fn();checks.push({name,status:'PASS'});}
 function make(C=Owner,{counts=[1,1,1],earned=3,phase=3,reserve=1,complete=true}={}){const f={frame:0,input:{},coreEngine:{phaseCount:phase},returnRegionEngine:{unlockedPhaseCount:earned},spatialCoreChemistry:{retainedPieceCount:counts.reduce((a,b)=>a+b),counts:{deep_core:counts[0],inner_body:counts[1],membrane:counts[2]},topology:{id:counts.join(':'),complete}},verbComposition:{effects:{enduranceDemandMultiplier:1.2}}};const o=new C({frameState:f,playerRoot:{userData:{}}});o.init();o.reserve01=reserve;return {f,o};}
 function tick(t,input={},dt=.02){t.f.input=input;t.f.frame++;t.o.update(dt,t.f);return t.f.corePerformance;}
-function legacy(p){const q=structuredClone(p);delete q.endurance.coordination;return q;}
+function legacy(p){const q=structuredClone(p);delete q.endurance.coordination;delete q.stabilizeSample;return q;}
 const patterns={idle:{},absorb:{absorbHeld:true},stabilize:{stabilizeHeld:true},boost:{boostHeld:true},pair:{absorbHeld:true,stabilizeHeld:true},boostPair:{boostHeld:true,absorbHeld:true,stabilizeHeld:true},pulse:{pulseEventId:1,pulseReleaseCharge01:1},heldPulse:{pulseHeld:true,pulseCharge01:1}};
 const rows=[];
 for(const [name,counts] of Object.entries({deep:[3,0,0],inner:[0,3,0],membrane:[0,0,3],balanced:[1,1,1]})){

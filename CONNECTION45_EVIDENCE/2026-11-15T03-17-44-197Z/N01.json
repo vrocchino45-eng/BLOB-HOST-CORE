@@ -1,0 +1,118 @@
+{
+  "case": "N01",
+  "scope": "Actual read-only context/resolver/guards with authored data and declared frame/transition negatives. Matched actual Bond owner path with fixed optional-target pose/input fixtures; no ordinary navigation, completed absorption or physical controller claim.",
+  "summary": {
+    "passed": 27,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "All ten authored cells expose their own nine values and matching Host provenance",
+      "status": "PASS"
+    },
+    {
+      "name": "Authored intensities are preserved without normalization or Host-bias blending",
+      "status": "PASS"
+    },
+    {
+      "name": "Snapshot and values are immutable copies; source recipes remain unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "Publisher writes only its context and preserves all legacy state/reference identities",
+      "status": "PASS"
+    },
+    {
+      "name": "Same-frame cell or Host changes invalidate the prior publication immediately",
+      "status": "PASS"
+    },
+    {
+      "name": "frame advance rejects stale context",
+      "status": "PASS"
+    },
+    {
+      "name": "runtimeSeconds advance rejects stale context",
+      "status": "PASS"
+    },
+    {
+      "name": "runtimeSimulationSubstepIndex advance rejects stale context",
+      "status": "PASS"
+    },
+    {
+      "name": "Next sample after a cell change replaces the entire prior-cell vector",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: missing field",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: missing key",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: extra key",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: nonfinite",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: negative",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: above one",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid authored schema is neutral: array",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing recipes and mismatched Host derivation cannot publish usable chemistry",
+      "status": "PASS"
+    },
+    {
+      "name": "Unresolved transition is neutral: boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "Unresolved transition is neutral: return",
+      "status": "PASS"
+    },
+    {
+      "name": "Unresolved transition is neutral: flight",
+      "status": "PASS"
+    },
+    {
+      "name": "Unresolved transition is neutral: first morph",
+      "status": "PASS"
+    },
+    {
+      "name": "Unresolved transition is neutral: second morph",
+      "status": "PASS"
+    },
+    {
+      "name": "Ready-but-idle, completed and unrelated old morph descriptors do not disable a stable cell",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing, foreign and malformed context payloads are rejected by consumers",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid frame, clock or substep identities remain neutral",
+      "status": "PASS"
+    },
+    {
+      "name": "A dynamic Host-pressure descriptor does not fabricate a changed authored field",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual optional-mote Bond trajectories are unchanged with the publisher present",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,2362 @@
+{
+  "case": "B03",
+  "status": "PASS",
+  "summary": {
+    "passed": 1,
+    "failed": 0
+  },
+  "detail": {
+    "pass": "HOST-CAUSE1-INTEGRATION",
+    "scope": "Full actual Vascular II and Silt II owner publications, return traversal and reserve/mode integration. Earlier four credits, source/contact poses remain declared fixtures. No six-credit completion or reserve result was forced.",
+    "followup": [
+      {
+        "label": "Hub idle after both actual goals",
+        "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+        "credit": 6,
+        "phase": 6,
+        "mass": 8,
+        "siltGoal": {
+          "pass": "SILT-II1",
+          "active": false,
+          "started": true,
+          "stage": "completed",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": true,
+          "completionPublished": true,
+          "completionSequence": 1,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "host": 1,
+        "performance": {
+          "pass": "HC-027C",
+          "active": true,
+          "owner": "CoreRadialPerformanceSystem",
+          "sourceOwner": "CoreEmbodimentSystem / spatialCoreChemistry",
+          "law": "radial_anatomy_blends_reserve_control_output_without_changing_3_6_12_engine_geometry",
+          "topologyId": "inner_saturation",
+          "topologyLabel": "Inner Saturation",
+          "distribution": "0:3:0",
+          "personality": "transmission / control drive",
+          "dominantZone": "inner_body",
+          "weights": {
+            "deep": 0,
+            "inner": 1,
+            "membrane": 0
+          },
+          "traits": {
+            "output": 1,
+            "response": 1.08,
+            "enduranceCapacity": 1.05,
+            "recovery": 1.05,
+            "efficiency": 1.12,
+            "stability": 1.05
+          },
+          "endurance": {
+            "reserve01": 1,
+            "reservePercent": 100,
+            "demand01": 0,
+            "drainPerSecond": 0.0765,
+            "recoveryPerSecond": 0.105,
+            "fatigueFactor": 1,
+            "instabilityRisk01": 0.049,
+            "coordination": {
+              "pass": "PAIRED-DEMAND2",
+              "earnedPhaseCeiling": 6,
+              "eligible": true,
+              "active": false,
+              "factor": 1,
+              "sharedFraction": 0,
+              "baseDrainPerSecond": 0,
+              "effectiveDrainPerSecond": 0,
+              "reserveSavedThisUpdate": 0,
+              "reason": "no_overlap",
+              "progressionAuthority": false,
+              "architectureAuthority": false
+            }
+          },
+          "movementModifiers": {
+            "boostAccelerationMultiplier": 1.08,
+            "boostSpeedMultiplier": 1.008,
+            "normalMovementMultiplier": 1,
+            "verbCommitmentMovementMultiplier": 1,
+            "appliesToBoostOnly": false,
+            "normalMovementUnaffectedWhenNoVerbCommitted": true
+          },
+          "verbModifiers": {
+            "pass": "HC-027J2",
+            "law": "radial_physiology_continuously_shapes_verb_output_cost_control_and_recovery",
+            "pulse": {
+              "chargeRateMultiplier": 1.02,
+              "structuralReachMultiplier": 1,
+              "responseStrengthMultiplier": 1.01,
+              "recoveryBurdenMultiplier": 0.9,
+              "echoClutterMultiplier": 0.78,
+              "demand01": 0,
+              "costMultiplier": 0.964
+            },
+            "absorb": {
+              "commitment01": 0,
+              "powerMultiplier": 1.08,
+              "progressMultiplier": 1.09,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.929
+            },
+            "stabilize": {
+              "commitment01": 0,
+              "coherenceMultiplier": 1.073,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.907
+            },
+            "physiologyProfilesAreContinuousBlends": true,
+            "arbitraryZoneBuffTableAdded": false
+          },
+          "topologyChangeCount": 1,
+          "gameplayAuthority": true,
+          "movementAuthority": false,
+          "movementConsumer": "PlayerMovementController",
+          "coreWorkPlacementAuthority": false,
+          "chemistryAuthority": false,
+          "engineArchitectureAuthority": false,
+          "progressionAuthority": false,
+          "growthAuthority": false,
+          "randomFailureEnabled": false,
+          "misfireEnabled": false,
+          "redlineEnabled": false,
+          "lastEvent": "endurance_reserve_recovered"
+        },
+        "inspection": {
+          "pass": "HC-024C2",
+          "id": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+          "architecture": "persistent_core_inspection_plus_guide_physical_piece_manipulation",
+          "active": false,
+          "available": true,
+          "mode": "player_tethered_orbit",
+          "status": "core_inspection_available_globally",
+          "justActivated": false,
+          "justDeactivated": false,
+          "justFocusChanged": false,
+          "justWorkActivated": false,
+          "justWorkDeactivated": false,
+          "toggleCount": 0,
+          "lastToggleAt": -1,
+          "lastEvent": "hc027g1_test_platform_6_world_view",
+          "deniedReason": "none",
+          "focusMode": "authored_interaction",
+          "focusProviderId": "HubChamberFoundationSystem",
+          "focusObjectId": "hub_junction_anchor_001",
+          "focusLabel": "Hub route territories",
+          "selfInspection": false,
+          "coreCentered": false,
+          "coreWorkActive": false,
+          "coreWorkBlend": 0,
+          "coreWorkAvailable": false,
+          "guideWorkAvailable": true,
+          "workEntryCount": 0,
+          "lastWorkAt": -1,
+          "lastWorkEvent": "core_work_available_from_self_inspection",
+          "coreWorkInput": "D-Pad Down controller / G keyboard while in Core Inspection",
+          "coreWorkExitInput": "B controller / Escape keyboard returns to external Core inspection; Y/F exits to world view",
+          "worldInteractSuppressedDuringSelfInspection": false,
+          "targetOwnedPrimaryAction": true,
+          "intentionalCoreWorkEntry": true,
+          "coreWorkEntryButton": "dpad_down",
+          "guideHoneRequiredForCoreWorkEntry": false,
+          "chemistryEnabled": true,
+          "pieceManipulationEnabled": false,
+          "traversalPaused": false,
+          "traversalInputSuppressed": false,
+          "guideComposition": {
+            "sideOffset": 0.76,
+            "lift": 0.34,
+            "cameraTowardOffset": 0.18,
+            "minimumCoreSeparation": 0.54
+          },
+          "membraneTransparencyTarget": 0.58,
+          "focusPosition": {
+            "x": 0.1,
+            "y": -0.03,
+            "z": -1.8
+          },
+          "focusDistance": 2.7755526552803085,
+          "authoredFocusReadable": true,
+          "authoredFocusAvailable": true,
+          "authoredFocusDistance": 2.7755526552803085,
+          "authoredFocusAssistRange": 10.5,
+          "authoredFocusIntentAlignment": 0.943827722645042,
+          "authoredFocusIntentDot": 0.72,
+          "authoredFocusIntentAligned": true,
+          "authoredFocusTargetMatches": false,
+          "manualFocusOverrideSeconds": 0,
+          "focusIntentReason": "authored_focus_inside_view_intent_cone",
+          "authoredLockPolicy": "Y enters tight view; authored object lock requires view intent; Core Work keeps the focus on the player Core",
+          "showFocusMarker": false,
+          "constrainYaw": true,
+          "toggleRange": 10.5,
+          "autoExitRange": null,
+          "controllerButtonIndex": 3,
+          "controllerButtonLabel": "Y",
+          "keyboardCode": "KeyF",
+          "keyboardLabel": "F",
+          "toggleHint": "Press Y to inspect this interaction closely.",
+          "distance": 8.8,
+          "fieldOfView": 60,
+          "targetBlendTowardFocus": 0.4,
+          "targetLift": 0.28,
+          "baseHeight": 1.55,
+          "pitch": 0.29,
+          "shoulderOffset": 0.24,
+          "forwardOffset": 0,
+          "yawSensitivityScale": 0.46,
+          "pitchSensitivityScale": 0.44,
+          "maxYawOffset": 1.3,
+          "pitchMin": -0.02,
+          "pitchMax": 0.58,
+          "occlusionPullbackScale": 0.3,
+          "followSmoothing": 7.2,
+          "fovSmoothing": 6.4,
+          "focusMarkerScale": 0.72,
+          "blockerOpacity": 0.045,
+          "ambientDensityScale": 0.18,
+          "nearCameraFadeRadius": 2.15,
+          "corridorRadius": 0.62,
+          "preserveEntryAngle": true,
+          "optional": true,
+          "forced": false,
+          "firstPerson": false,
+          "reusableFromOpening": true,
+          "persistentAcrossCells": true,
+          "persistsWithoutAuthoredFocus": true,
+          "playerSelectedMode": true,
+          "authoredFocusAssistOnly": true,
+          "cameraRelativeMovementPreserved": true,
+          "rightStickOrbitPreserved": true,
+          "r3RecentersInspection": true,
+          "instantReturnAvailable": true,
+          "targetRequired": false,
+          "routeActivated": false,
+          "activeCellChanges": false,
+          "interactionStateChanged": false,
+          "blocker": "none_detected"
+        },
+        "hud": "BLOB // HOST CORE // HUB CHAMBER\nMove to the route body you want to enter.\nHub Investigation: 0/3 routes / memory unread · Audio ON x0.82 · Drive transmission / control drive 100% · Seed Core · Reading: Grave Memory\n▽ PULSE·PROJECT  △ ABSORB·DRAW  ◇ STABILIZE·HOLD\nMODE OBSERVE · HUB · JUNCTION / COUNTERPULSE · LOCAL READ OUT OF RANGE\nBETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief\nWASD move · Mouse/IJKL camera · F inspect Core → G Core Work · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+      },
+      {
+        "label": "paired reserve after actual regional publications",
+        "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+        "credit": 6,
+        "phase": 6,
+        "mass": 8,
+        "siltGoal": {
+          "pass": "SILT-II1",
+          "active": false,
+          "started": true,
+          "stage": "completed",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": true,
+          "completionPublished": true,
+          "completionSequence": 1,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "host": 1,
+        "performance": {
+          "pass": "HC-027C",
+          "active": true,
+          "owner": "CoreRadialPerformanceSystem",
+          "sourceOwner": "CoreEmbodimentSystem / spatialCoreChemistry",
+          "law": "radial_anatomy_blends_reserve_control_output_without_changing_3_6_12_engine_geometry",
+          "topologyId": "inner_saturation",
+          "topologyLabel": "Inner Saturation",
+          "distribution": "0:3:0",
+          "personality": "transmission / control drive",
+          "dominantZone": "inner_body",
+          "weights": {
+            "deep": 0,
+            "inner": 1,
+            "membrane": 0
+          },
+          "traits": {
+            "output": 1,
+            "response": 1.08,
+            "enduranceCapacity": 1.05,
+            "recovery": 1.05,
+            "efficiency": 1.12,
+            "stability": 1.05
+          },
+          "endurance": {
+            "reserve01": 0.997,
+            "reservePercent": 100,
+            "demand01": 0.437,
+            "drainPerSecond": 0.0765,
+            "recoveryPerSecond": 0.105,
+            "fatigueFactor": 0.999,
+            "instabilityRisk01": 0.049,
+            "coordination": {
+              "pass": "PAIRED-DEMAND2",
+              "earnedPhaseCeiling": 6,
+              "eligible": true,
+              "active": true,
+              "factor": 0.910246,
+              "sharedFraction": 0.448769,
+              "baseDrainPerSecond": 0.033416,
+              "effectiveDrainPerSecond": 0.030417,
+              "reserveSavedThisUpdate": 0.000088776,
+              "reason": "coordinating",
+              "progressionAuthority": false,
+              "architectureAuthority": false
+            }
+          },
+          "movementModifiers": {
+            "boostAccelerationMultiplier": 1.079,
+            "boostSpeedMultiplier": 1.007,
+            "normalMovementMultiplier": 1,
+            "verbCommitmentMovementMultiplier": 1,
+            "appliesToBoostOnly": false,
+            "normalMovementUnaffectedWhenNoVerbCommitted": true
+          },
+          "verbModifiers": {
+            "pass": "HC-027J2",
+            "law": "radial_physiology_continuously_shapes_verb_output_cost_control_and_recovery",
+            "pulse": {
+              "chargeRateMultiplier": 1.02,
+              "structuralReachMultiplier": 1,
+              "responseStrengthMultiplier": 1.009,
+              "recoveryBurdenMultiplier": 0.9,
+              "echoClutterMultiplier": 0.78,
+              "demand01": 0,
+              "costMultiplier": 0.964
+            },
+            "absorb": {
+              "commitment01": 0,
+              "powerMultiplier": 1.079,
+              "progressMultiplier": 1.089,
+              "mobilityMultiplier": 1,
+              "demand01": 0.223,
+              "costMultiplier": 0.929
+            },
+            "stabilize": {
+              "commitment01": 0,
+              "coherenceMultiplier": 1.072,
+              "mobilityMultiplier": 1,
+              "demand01": 0.181,
+              "costMultiplier": 0.907
+            },
+            "physiologyProfilesAreContinuousBlends": true,
+            "arbitraryZoneBuffTableAdded": false
+          },
+          "topologyChangeCount": 1,
+          "gameplayAuthority": true,
+          "movementAuthority": false,
+          "movementConsumer": "PlayerMovementController",
+          "coreWorkPlacementAuthority": false,
+          "chemistryAuthority": false,
+          "engineArchitectureAuthority": false,
+          "progressionAuthority": false,
+          "growthAuthority": false,
+          "randomFailureEnabled": false,
+          "misfireEnabled": false,
+          "redlineEnabled": false,
+          "lastEvent": "endurance_reserve_recovered"
+        },
+        "inspection": {
+          "pass": "HC-024C2",
+          "id": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+          "architecture": "persistent_core_inspection_plus_guide_physical_piece_manipulation",
+          "active": false,
+          "available": true,
+          "mode": "player_tethered_orbit",
+          "status": "core_inspection_available_globally",
+          "justActivated": false,
+          "justDeactivated": false,
+          "justFocusChanged": false,
+          "justWorkActivated": false,
+          "justWorkDeactivated": false,
+          "toggleCount": 0,
+          "lastToggleAt": -1,
+          "lastEvent": "hc027g1_test_platform_6_world_view",
+          "deniedReason": "none",
+          "focusMode": "authored_interaction",
+          "focusProviderId": "HubChamberFoundationSystem",
+          "focusObjectId": "hub_junction_anchor_001",
+          "focusLabel": "Hub route territories",
+          "selfInspection": false,
+          "coreCentered": false,
+          "coreWorkActive": false,
+          "coreWorkBlend": 0,
+          "coreWorkAvailable": false,
+          "guideWorkAvailable": true,
+          "workEntryCount": 0,
+          "lastWorkAt": -1,
+          "lastWorkEvent": "core_work_available_from_self_inspection",
+          "coreWorkInput": "D-Pad Down controller / G keyboard while in Core Inspection",
+          "coreWorkExitInput": "B controller / Escape keyboard returns to external Core inspection; Y/F exits to world view",
+          "worldInteractSuppressedDuringSelfInspection": false,
+          "targetOwnedPrimaryAction": true,
+          "intentionalCoreWorkEntry": true,
+          "coreWorkEntryButton": "dpad_down",
+          "guideHoneRequiredForCoreWorkEntry": false,
+          "chemistryEnabled": true,
+          "pieceManipulationEnabled": false,
+          "traversalPaused": false,
+          "traversalInputSuppressed": false,
+          "guideComposition": {
+            "sideOffset": 0.76,
+            "lift": 0.34,
+            "cameraTowardOffset": 0.18,
+            "minimumCoreSeparation": 0.54
+          },
+          "membraneTransparencyTarget": 0.58,
+          "focusPosition": {
+            "x": 0.1,
+            "y": -0.03,
+            "z": -1.8
+          },
+          "focusDistance": 2.8040434645094288,
+          "authoredFocusReadable": true,
+          "authoredFocusAvailable": true,
+          "authoredFocusDistance": 2.8040434645094288,
+          "authoredFocusAssistRange": 10.5,
+          "authoredFocusIntentAlignment": 0.9477488683671522,
+          "authoredFocusIntentDot": 0.72,
+          "authoredFocusIntentAligned": true,
+          "authoredFocusTargetMatches": false,
+          "manualFocusOverrideSeconds": 0,
+          "focusIntentReason": "authored_focus_inside_view_intent_cone",
+          "authoredLockPolicy": "Y enters tight view; authored object lock requires view intent; Core Work keeps the focus on the player Core",
+          "showFocusMarker": false,
+          "constrainYaw": true,
+          "toggleRange": 10.5,
+          "autoExitRange": null,
+          "controllerButtonIndex": 3,
+          "controllerButtonLabel": "Y",
+          "keyboardCode": "KeyF",
+          "keyboardLabel": "F",
+          "toggleHint": "Press Y to inspect this interaction closely.",
+          "distance": 8.8,
+          "fieldOfView": 60,
+          "targetBlendTowardFocus": 0.4,
+          "targetLift": 0.28,
+          "baseHeight": 1.55,
+          "pitch": 0.29,
+          "shoulderOffset": 0.24,
+          "forwardOffset": 0,
+          "yawSensitivityScale": 0.46,
+          "pitchSensitivityScale": 0.44,
+          "maxYawOffset": 1.3,
+          "pitchMin": -0.02,
+          "pitchMax": 0.58,
+          "occlusionPullbackScale": 0.3,
+          "followSmoothing": 7.2,
+          "fovSmoothing": 6.4,
+          "focusMarkerScale": 0.72,
+          "blockerOpacity": 0.045,
+          "ambientDensityScale": 0.18,
+          "nearCameraFadeRadius": 2.15,
+          "corridorRadius": 0.62,
+          "preserveEntryAngle": true,
+          "optional": true,
+          "forced": false,
+          "firstPerson": false,
+          "reusableFromOpening": true,
+          "persistentAcrossCells": true,
+          "persistsWithoutAuthoredFocus": true,
+          "playerSelectedMode": true,
+          "authoredFocusAssistOnly": true,
+          "cameraRelativeMovementPreserved": true,
+          "rightStickOrbitPreserved": true,
+          "r3RecentersInspection": true,
+          "instantReturnAvailable": true,
+          "targetRequired": false,
+          "routeActivated": false,
+          "activeCellChanges": false,
+          "interactionStateChanged": false,
+          "blocker": "none_detected"
+        },
+        "hud": "BLOB // HOST CORE // HUB CHAMBER\nMove to the route body you want to enter.\nHub Investigation: 0/3 routes / memory unread · Audio ON x0.82 · Drive transmission / control drive 100% · paired drain −9% · Seed Core · Reading: Grave Memory\n▽ PULSE·PROJECT  △ ABSORB·DRAW  ◇ STABILIZE·HOLD\nMODE BRACED DRAW · HUB · JUNCTION / COUNTERPULSE · LOCAL READ OUT OF RANGE\nBETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief\nWASD move · Mouse/IJKL camera · F inspect Core → G Core Work · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+      },
+      {
+        "label": "Core Work suspension after earned six",
+        "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+        "credit": 6,
+        "phase": 6,
+        "mass": 8,
+        "siltGoal": {
+          "pass": "SILT-II1",
+          "active": false,
+          "started": true,
+          "stage": "completed",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": true,
+          "completionPublished": true,
+          "completionSequence": 1,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "host": 1,
+        "performance": {
+          "pass": "HC-027C",
+          "active": true,
+          "owner": "CoreRadialPerformanceSystem",
+          "sourceOwner": "CoreEmbodimentSystem / spatialCoreChemistry",
+          "law": "radial_anatomy_blends_reserve_control_output_without_changing_3_6_12_engine_geometry",
+          "topologyId": "inner_saturation",
+          "topologyLabel": "Inner Saturation",
+          "distribution": "0:3:0",
+          "personality": "transmission / control drive",
+          "dominantZone": "inner_body",
+          "weights": {
+            "deep": 0,
+            "inner": 1,
+            "membrane": 0
+          },
+          "traits": {
+            "output": 1,
+            "response": 1.08,
+            "enduranceCapacity": 1.05,
+            "recovery": 1.05,
+            "efficiency": 1.12,
+            "stability": 1.05
+          },
+          "endurance": {
+            "reserve01": 1,
+            "reservePercent": 100,
+            "demand01": 0,
+            "drainPerSecond": 0.0765,
+            "recoveryPerSecond": 0.105,
+            "fatigueFactor": 1,
+            "instabilityRisk01": 0.049,
+            "coordination": {
+              "pass": "PAIRED-DEMAND2",
+              "earnedPhaseCeiling": 6,
+              "eligible": true,
+              "active": false,
+              "factor": 1,
+              "sharedFraction": 0,
+              "baseDrainPerSecond": 0,
+              "effectiveDrainPerSecond": 0,
+              "reserveSavedThisUpdate": 0,
+              "reason": "no_overlap",
+              "progressionAuthority": false,
+              "architectureAuthority": false
+            }
+          },
+          "movementModifiers": {
+            "boostAccelerationMultiplier": 1.08,
+            "boostSpeedMultiplier": 1.008,
+            "normalMovementMultiplier": 1,
+            "verbCommitmentMovementMultiplier": 1,
+            "appliesToBoostOnly": false,
+            "normalMovementUnaffectedWhenNoVerbCommitted": true
+          },
+          "verbModifiers": {
+            "pass": "HC-027J2",
+            "law": "radial_physiology_continuously_shapes_verb_output_cost_control_and_recovery",
+            "pulse": {
+              "chargeRateMultiplier": 1.02,
+              "structuralReachMultiplier": 1,
+              "responseStrengthMultiplier": 1.01,
+              "recoveryBurdenMultiplier": 0.9,
+              "echoClutterMultiplier": 0.78,
+              "demand01": 0,
+              "costMultiplier": 0.964
+            },
+            "absorb": {
+              "commitment01": 0,
+              "powerMultiplier": 1.08,
+              "progressMultiplier": 1.09,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.929
+            },
+            "stabilize": {
+              "commitment01": 0,
+              "coherenceMultiplier": 1.073,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.907
+            },
+            "physiologyProfilesAreContinuousBlends": true,
+            "arbitraryZoneBuffTableAdded": false
+          },
+          "topologyChangeCount": 1,
+          "gameplayAuthority": true,
+          "movementAuthority": false,
+          "movementConsumer": "PlayerMovementController",
+          "coreWorkPlacementAuthority": false,
+          "chemistryAuthority": false,
+          "engineArchitectureAuthority": false,
+          "progressionAuthority": false,
+          "growthAuthority": false,
+          "randomFailureEnabled": false,
+          "misfireEnabled": false,
+          "redlineEnabled": false,
+          "lastEvent": "endurance_reserve_recovered"
+        },
+        "inspection": {
+          "pass": "HC-024C2",
+          "id": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+          "architecture": "persistent_core_inspection_plus_guide_physical_piece_manipulation",
+          "active": true,
+          "available": true,
+          "mode": "guide_assisted_core_work",
+          "status": "guide_attending_core_work_view",
+          "justActivated": false,
+          "justDeactivated": false,
+          "justFocusChanged": false,
+          "justWorkActivated": false,
+          "justWorkDeactivated": false,
+          "toggleCount": 1,
+          "lastToggleAt": 44.848999999997766,
+          "lastEvent": "guide_called_into_core_work_view",
+          "deniedReason": "none",
+          "focusMode": "player_forward",
+          "focusProviderId": "InspectionCameraSystem",
+          "focusObjectId": "player_core_self_inspection",
+          "focusLabel": "Guide-assisted Core Work",
+          "selfInspection": true,
+          "coreCentered": true,
+          "coreWorkActive": true,
+          "coreWorkBlend": 0.6054462896283989,
+          "coreWorkAvailable": true,
+          "guideWorkAvailable": true,
+          "workEntryCount": 1,
+          "lastWorkAt": 44.99899999999776,
+          "lastWorkEvent": "guide_called_into_core_work_view",
+          "coreWorkInput": "D-Pad Down controller / G keyboard while in Core Inspection",
+          "coreWorkExitInput": "B controller / Escape keyboard returns to external Core inspection; Y/F exits to world view",
+          "worldInteractSuppressedDuringSelfInspection": false,
+          "targetOwnedPrimaryAction": true,
+          "intentionalCoreWorkEntry": true,
+          "coreWorkEntryButton": "dpad_down",
+          "guideHoneRequiredForCoreWorkEntry": false,
+          "chemistryEnabled": true,
+          "pieceManipulationEnabled": true,
+          "traversalPaused": false,
+          "traversalInputSuppressed": true,
+          "guideComposition": {
+            "sideOffset": 0.76,
+            "lift": 0.34,
+            "cameraTowardOffset": 0.18,
+            "minimumCoreSeparation": 0.54
+          },
+          "membraneTransparencyTarget": 0.58,
+          "focusPosition": {
+            "x": -0.5173615914178995,
+            "y": -0.24496190828444425,
+            "z": 0.9540236624085862
+          },
+          "focusDistance": 0,
+          "authoredFocusReadable": true,
+          "authoredFocusAvailable": false,
+          "authoredFocusDistance": 2.823968737732319,
+          "authoredFocusAssistRange": 10.5,
+          "authoredFocusIntentAlignment": 0.9735880962458969,
+          "authoredFocusIntentDot": 0.72,
+          "authoredFocusIntentAligned": true,
+          "authoredFocusTargetMatches": false,
+          "manualFocusOverrideSeconds": 0,
+          "focusIntentReason": "core_work_suppresses_authored_focus_assist",
+          "authoredLockPolicy": "Y enters tight view; authored object lock requires view intent; Core Work keeps the focus on the player Core",
+          "showFocusMarker": false,
+          "constrainYaw": false,
+          "toggleRange": null,
+          "autoExitRange": null,
+          "controllerButtonIndex": 3,
+          "controllerButtonLabel": "Y",
+          "keyboardCode": "KeyF",
+          "keyboardLabel": "F",
+          "toggleHint": "D-Pad Left/Right chooses retained anatomy · A grabs/places · Left Stick repositions · RT/LT moves Deep↔Inner↔Membrane · radial drive/reserve updates from topology · O cycles 3→6→12 engine architecture independently for debug comparison · Right Stick orbits · B backs out · Y returns to world.",
+          "distance": 1.95,
+          "fieldOfView": 43,
+          "targetBlendTowardFocus": 0.12,
+          "targetLift": 0.02,
+          "baseHeight": 0.1,
+          "pitch": 0.16,
+          "shoulderOffset": 0,
+          "forwardOffset": 0,
+          "yawSensitivityScale": 0.38,
+          "pitchSensitivityScale": 0.36,
+          "maxYawOffset": 3.14,
+          "pitchMin": -0.72,
+          "pitchMax": 0.92,
+          "occlusionPullbackScale": 0.16,
+          "followSmoothing": 8.2,
+          "fovSmoothing": 7.6,
+          "focusMarkerScale": 0.72,
+          "blockerOpacity": 0.045,
+          "ambientDensityScale": 0.42,
+          "nearCameraFadeRadius": 1.15,
+          "corridorRadius": 0.28,
+          "preserveEntryAngle": true,
+          "optional": true,
+          "forced": false,
+          "firstPerson": false,
+          "reusableFromOpening": true,
+          "persistentAcrossCells": true,
+          "persistsWithoutAuthoredFocus": true,
+          "playerSelectedMode": true,
+          "authoredFocusAssistOnly": true,
+          "cameraRelativeMovementPreserved": true,
+          "rightStickOrbitPreserved": true,
+          "r3RecentersInspection": true,
+          "instantReturnAvailable": true,
+          "targetRequired": false,
+          "routeActivated": false,
+          "activeCellChanges": false,
+          "interactionStateChanged": true,
+          "blocker": "none_detected"
+        },
+        "hud": "BLOB // HOST CORE // CORE WORK\nInner Saturation 0:3:0 · Cloud Balanced Triad · Inner Body: Memory Echo · D-Pad Left/Right selects · A grabs Grave Memory · RT/LT changes body zone · B returns · Y world.\nCore Work: 3 pieces / Inner Saturation 0:3:0 / cloud Balanced Triad / engine 6-phase · two per function · earned · 4758 RPM · absorb_2 / drive transmission / control drive · reserve 100% · boost x1.008 / selected Grave Memory / Inner Body · Memory Echo · Audio ON x0.82 · Seed Core · Reading: Grave Memory\n▽ PULSE·PROJECT  △ ABSORB·DRAW  ◇ STABILIZE·HOLD\nMODE OBSERVE · HUB · JUNCTION / COUNTERPULSE · LOCAL READ OUT OF RANGE\nBETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief\nArrows piece · E grab/place · WASD move piece · Right Mouse/Q depth · IJKL orbit · Esc Core view · F world"
+      },
+      {
+        "label": "world return retains six",
+        "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+        "credit": 6,
+        "phase": 6,
+        "mass": 8,
+        "siltGoal": {
+          "pass": "SILT-II1",
+          "active": false,
+          "started": true,
+          "stage": "completed",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": true,
+          "completionPublished": true,
+          "completionSequence": 1,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "host": 1,
+        "performance": {
+          "pass": "HC-027C",
+          "active": true,
+          "owner": "CoreRadialPerformanceSystem",
+          "sourceOwner": "CoreEmbodimentSystem / spatialCoreChemistry",
+          "law": "radial_anatomy_blends_reserve_control_output_without_changing_3_6_12_engine_geometry",
+          "topologyId": "inner_saturation",
+          "topologyLabel": "Inner Saturation",
+          "distribution": "0:3:0",
+          "personality": "transmission / control drive",
+          "dominantZone": "inner_body",
+          "weights": {
+            "deep": 0,
+            "inner": 1,
+            "membrane": 0
+          },
+          "traits": {
+            "output": 1,
+            "response": 1.08,
+            "enduranceCapacity": 1.05,
+            "recovery": 1.05,
+            "efficiency": 1.12,
+            "stability": 1.05
+          },
+          "endurance": {
+            "reserve01": 1,
+            "reservePercent": 100,
+            "demand01": 0,
+            "drainPerSecond": 0.0765,
+            "recoveryPerSecond": 0.105,
+            "fatigueFactor": 1,
+            "instabilityRisk01": 0.049,
+            "coordination": {
+              "pass": "PAIRED-DEMAND2",
+              "earnedPhaseCeiling": 6,
+              "eligible": true,
+              "active": false,
+              "factor": 1,
+              "sharedFraction": 0,
+              "baseDrainPerSecond": 0,
+              "effectiveDrainPerSecond": 0,
+              "reserveSavedThisUpdate": 0,
+              "reason": "no_overlap",
+              "progressionAuthority": false,
+              "architectureAuthority": false
+            }
+          },
+          "movementModifiers": {
+            "boostAccelerationMultiplier": 1.08,
+            "boostSpeedMultiplier": 1.008,
+            "normalMovementMultiplier": 1,
+            "verbCommitmentMovementMultiplier": 1,
+            "appliesToBoostOnly": false,
+            "normalMovementUnaffectedWhenNoVerbCommitted": true
+          },
+          "verbModifiers": {
+            "pass": "HC-027J2",
+            "law": "radial_physiology_continuously_shapes_verb_output_cost_control_and_recovery",
+            "pulse": {
+              "chargeRateMultiplier": 1.02,
+              "structuralReachMultiplier": 1,
+              "responseStrengthMultiplier": 1.01,
+              "recoveryBurdenMultiplier": 0.9,
+              "echoClutterMultiplier": 0.78,
+              "demand01": 0,
+              "costMultiplier": 0.964
+            },
+            "absorb": {
+              "commitment01": 0,
+              "powerMultiplier": 1.08,
+              "progressMultiplier": 1.09,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.929
+            },
+            "stabilize": {
+              "commitment01": 0,
+              "coherenceMultiplier": 1.073,
+              "mobilityMultiplier": 1,
+              "demand01": 0,
+              "costMultiplier": 0.907
+            },
+            "physiologyProfilesAreContinuousBlends": true,
+            "arbitraryZoneBuffTableAdded": false
+          },
+          "topologyChangeCount": 1,
+          "gameplayAuthority": true,
+          "movementAuthority": false,
+          "movementConsumer": "PlayerMovementController",
+          "coreWorkPlacementAuthority": false,
+          "chemistryAuthority": false,
+          "engineArchitectureAuthority": false,
+          "progressionAuthority": false,
+          "growthAuthority": false,
+          "randomFailureEnabled": false,
+          "misfireEnabled": false,
+          "redlineEnabled": false,
+          "lastEvent": "endurance_reserve_recovered"
+        },
+        "inspection": {
+          "pass": "HC-024C2",
+          "id": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+          "architecture": "persistent_core_inspection_plus_guide_physical_piece_manipulation",
+          "active": false,
+          "available": true,
+          "mode": "player_tethered_orbit",
+          "status": "core_inspection_available_globally",
+          "justActivated": false,
+          "justDeactivated": false,
+          "justFocusChanged": false,
+          "justWorkActivated": false,
+          "justWorkDeactivated": false,
+          "toggleCount": 2,
+          "lastToggleAt": 45.13234999999784,
+          "lastEvent": "core_work_and_inspection_released_by_player",
+          "deniedReason": "none",
+          "focusMode": "authored_interaction",
+          "focusProviderId": "HubChamberFoundationSystem",
+          "focusObjectId": "hub_junction_anchor_001",
+          "focusLabel": "Hub route territories",
+          "selfInspection": false,
+          "coreCentered": false,
+          "coreWorkActive": false,
+          "coreWorkBlend": 0.40038470799579706,
+          "coreWorkAvailable": false,
+          "guideWorkAvailable": true,
+          "workEntryCount": 1,
+          "lastWorkAt": 44.99899999999776,
+          "lastWorkEvent": "core_work_closed_with_inspection_toggle",
+          "coreWorkInput": "D-Pad Down controller / G keyboard while in Core Inspection",
+          "coreWorkExitInput": "B controller / Escape keyboard returns to external Core inspection; Y/F exits to world view",
+          "worldInteractSuppressedDuringSelfInspection": false,
+          "targetOwnedPrimaryAction": true,
+          "intentionalCoreWorkEntry": true,
+          "coreWorkEntryButton": "dpad_down",
+          "guideHoneRequiredForCoreWorkEntry": false,
+          "chemistryEnabled": true,
+          "pieceManipulationEnabled": false,
+          "traversalPaused": false,
+          "traversalInputSuppressed": false,
+          "guideComposition": {
+            "sideOffset": 0.76,
+            "lift": 0.34,
+            "cameraTowardOffset": 0.18,
+            "minimumCoreSeparation": 0.54
+          },
+          "membraneTransparencyTarget": 0.58,
+          "focusPosition": {
+            "x": 0.1,
+            "y": -0.03,
+            "z": -1.8
+          },
+          "focusDistance": 2.848330679365989,
+          "authoredFocusReadable": true,
+          "authoredFocusAvailable": true,
+          "authoredFocusDistance": 2.848330679365989,
+          "authoredFocusAssistRange": 10.5,
+          "authoredFocusIntentAlignment": 0.9786446051114617,
+          "authoredFocusIntentDot": 0.72,
+          "authoredFocusIntentAligned": true,
+          "authoredFocusTargetMatches": false,
+          "manualFocusOverrideSeconds": 0,
+          "focusIntentReason": "authored_focus_inside_view_intent_cone",
+          "authoredLockPolicy": "Y enters tight view; authored object lock requires view intent; Core Work keeps the focus on the player Core",
+          "showFocusMarker": false,
+          "constrainYaw": true,
+          "toggleRange": 10.5,
+          "autoExitRange": null,
+          "controllerButtonIndex": 3,
+          "controllerButtonLabel": "Y",
+          "keyboardCode": "KeyF",
+          "keyboardLabel": "F",
+          "toggleHint": "Press Y to inspect this interaction closely.",
+          "distance": 8.8,
+          "fieldOfView": 60,
+          "targetBlendTowardFocus": 0.4,
+          "targetLift": 0.28,
+          "baseHeight": 1.55,
+          "pitch": 0.29,
+          "shoulderOffset": 0.24,
+          "forwardOffset": 0,
+          "yawSensitivityScale": 0.46,
+          "pitchSensitivityScale": 0.44,
+          "maxYawOffset": 1.3,
+          "pitchMin": -0.02,
+          "pitchMax": 0.58,
+          "occlusionPullbackScale": 0.3,
+          "followSmoothing": 7.2,
+          "fovSmoothing": 6.4,
+          "focusMarkerScale": 0.72,
+          "blockerOpacity": 0.045,
+          "ambientDensityScale": 0.18,
+          "nearCameraFadeRadius": 2.15,
+          "corridorRadius": 0.62,
+          "preserveEntryAngle": true,
+          "optional": true,
+          "forced": false,
+          "firstPerson": false,
+          "reusableFromOpening": true,
+          "persistentAcrossCells": true,
+          "persistsWithoutAuthoredFocus": true,
+          "playerSelectedMode": true,
+          "authoredFocusAssistOnly": true,
+          "cameraRelativeMovementPreserved": true,
+          "rightStickOrbitPreserved": true,
+          "r3RecentersInspection": true,
+          "instantReturnAvailable": true,
+          "targetRequired": false,
+          "routeActivated": false,
+          "activeCellChanges": false,
+          "interactionStateChanged": false,
+          "blocker": "none_detected"
+        },
+        "hud": "BLOB // HOST CORE // HUB CHAMBER\nMove to the route body you want to enter.\nHub Investigation: 0/3 routes / memory unread · Audio ON x0.82 · Drive transmission / control drive 100% · Seed Core · Reading: Grave Memory\n▽ PULSE·PROJECT  △ ABSORB·DRAW  ◇ STABILIZE·HOLD\nMODE OBSERVE · HUB · JUNCTION / COUNTERPULSE · LOCAL READ OUT OF RANGE\nBETWEEN LOCAL · 0 traveling · 0 wave finishes · 0 relief\nWASD move · Mouse/IJKL camera · F inspect Core → G Core Work · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe"
+      }
+    ],
+    "setup": {
+      "pass": "VASCULAR-II1-TEST-START",
+      "testOnly": true,
+      "earnedProgression": false,
+      "scope": "Staged prior first-route return, qualified revisit and source pose only; no phase-two handoff or completion credit written.",
+      "next": "Return focus to the game. Hold LT/Q, then tap Pulse/X while holding. Follow gold to green intake; hold LT/Q there.",
+      "position": [
+        1.3835288646708668,
+        0.10760142440314734,
+        -11.060600763803077
+      ]
+    },
+    "siltSetup": {
+      "pass": "SILT-II1-TEST-START",
+      "testOnly": true,
+      "earnedProgression": false,
+      "scope": "Staged previous first-route completion, qualified revisit and near-grain pose. No new goal proof, ecology time skip, material creation or phase-two credit written.",
+      "grainId": "silt-grain-01",
+      "next": "Return focus to game. Aim at the nearby grain, hold LT/Q and press A/E; continue imprint, seat, extract, deliberate release and native return."
+    },
+    "contactFixture": {
+      "scope": "One controlled player/accepted held-grain contact pose, same fixture as earlier B03. No goal proof written.",
+      "accepted": true,
+      "grainId": "silt-grain-01"
+    },
+    "steeringDelivery": "Synthetic DOM keyboard events through InputSystem, once per real game tick",
+    "vascularStages": [
+      {
+        "label": "qualified source",
+        "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "goal": {
+          "pass": "VASCULAR-II1",
+          "eligible": true,
+          "active": true,
+          "stage": "source_relationship",
+          "completed": false,
+          "completionPublished": false,
+          "handoffId": null,
+          "sourcePulseId": null,
+          "sourceHoldSeconds": 0,
+          "sourceHoldAtProjection": 0,
+          "travelProgress": 0,
+          "settleProgress": 0,
+          "completionSequence": 0,
+          "sourceRole": "branch",
+          "receiverRole": "intake",
+          "completionKey": "vascular:phase_2",
+          "materialTransfer": false,
+          "offRouteSimulation": false,
+          "crossingAuthority": false
+        },
+        "credits": 4,
+        "engine": 3,
+        "position": [
+          1.4471430508738543,
+          0.13574198048746094,
+          -11.130203474238263
+        ],
+        "source": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "receiver": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ],
+        "visual": {
+          "root": true,
+          "packet": false,
+          "packetPosition": [
+            0,
+            0,
+            0
+          ]
+        },
+        "nextAction": "Hold LT at the amber branch valve to establish the return current.",
+        "host": {
+          "pass": "HOST-CAUSE1",
+          "schemaVersion": 1,
+          "owner": "HostConditionSystem",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "anatomyId": "vascular_routes",
+          "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+          "externalCause": "predatory_pressure",
+          "clockSource": "runtimeSeconds",
+          "sampledAtSeconds": 15.370099999999704,
+          "enabled": true,
+          "active": true,
+          "phase": "holding",
+          "amplitude": 1,
+          "episodeIndex": 0,
+          "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+          "maxFlowReduction": 0.03,
+          "maxVisualCompression": 0.08,
+          "reason": "authored_episode",
+          "localPhysicsAuthority": false,
+          "materialTransfer": false,
+          "progressionAuthority": false,
+          "persistsAcrossReload": false,
+          "simulatedPredatoryHostAI": false
+        },
+        "hostResponse": {
+          "active": true,
+          "amplitude": 1,
+          "flowScale": 0.97,
+          "visualCompression": 0.08,
+          "phase": "holding",
+          "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+        }
+      },
+      {
+        "label": "projected current",
+        "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "goal": {
+          "pass": "VASCULAR-II1",
+          "eligible": true,
+          "active": true,
+          "stage": "handoff_travel",
+          "completed": false,
+          "completionPublished": false,
+          "handoffId": "vascular:handoff:1",
+          "sourcePulseId": 1,
+          "sourceHoldSeconds": 0.18,
+          "sourceHoldAtProjection": 0.18,
+          "travelProgress": 0.049999999999999996,
+          "settleProgress": 0,
+          "completionSequence": 0,
+          "sourceRole": "branch",
+          "receiverRole": "intake",
+          "completionKey": "vascular:phase_2",
+          "materialTransfer": false,
+          "offRouteSimulation": false,
+          "crossingAuthority": false
+        },
+        "credits": 4,
+        "engine": 3,
+        "position": [
+          1.686373872568744,
+          0.21487507470526102,
+          -10.923408072711617
+        ],
+        "source": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "receiver": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ],
+        "visual": {
+          "root": true,
+          "packet": true,
+          "packetPosition": [
+            1.3984427092494647,
+            0.15364684550478191,
+            -10.736331183726893
+          ]
+        },
+        "nextAction": "Follow the gold current response toward the green intake valve.",
+        "host": {
+          "pass": "HOST-CAUSE1",
+          "schemaVersion": 1,
+          "owner": "HostConditionSystem",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "anatomyId": "vascular_routes",
+          "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+          "externalCause": "predatory_pressure",
+          "clockSource": "runtimeSeconds",
+          "sampledAtSeconds": 15.970099999999713,
+          "enabled": true,
+          "active": true,
+          "phase": "holding",
+          "amplitude": 1,
+          "episodeIndex": 0,
+          "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+          "maxFlowReduction": 0.03,
+          "maxVisualCompression": 0.08,
+          "reason": "authored_episode",
+          "localPhysicsAuthority": false,
+          "materialTransfer": false,
+          "progressionAuthority": false,
+          "persistsAcrossReload": false,
+          "simulatedPredatoryHostAI": false
+        },
+        "hostResponse": {
+          "active": true,
+          "amplitude": 1,
+          "flowScale": 0.97,
+          "visualCompression": 0.08,
+          "phase": "holding",
+          "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+        }
+      },
+      {
+        "label": "settled and credited",
+        "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+        "goal": {
+          "pass": "VASCULAR-II1",
+          "eligible": true,
+          "active": true,
+          "stage": "completed",
+          "completed": true,
+          "completionPublished": true,
+          "handoffId": "vascular:handoff:1",
+          "sourcePulseId": 1,
+          "sourceHoldSeconds": 0.18,
+          "sourceHoldAtProjection": 0.18,
+          "travelProgress": 1,
+          "settleProgress": 1,
+          "completionSequence": 1,
+          "sourceRole": "branch",
+          "receiverRole": "intake",
+          "completionKey": "vascular:phase_2",
+          "materialTransfer": false,
+          "offRouteSimulation": false,
+          "crossingAuthority": false
+        },
+        "credits": 5,
+        "engine": 3,
+        "event": {
+          "pass": "EARNED-REGION-PHASE2-1",
+          "schemaVersion": 1,
+          "key": "vascular:phase_2",
+          "routeKey": "vascular",
+          "phase": 2,
+          "sequence": 1,
+          "source": "VascularRhythmRouteSystem",
+          "frame": 159,
+          "evidenceId": "vascular:handoff:1",
+          "sourcePulseId": 1,
+          "receiverSettleSeconds": 0.75,
+          "materialTransfer": false
+        },
+        "position": [
+          -0.5896313898916915,
+          0.4874131259348951,
+          -6.1224780671827235
+        ],
+        "source": [
+          1.3835288646708668,
+          0.10760142440314734,
+          -11.060600763803077
+        ],
+        "receiver": [
+          -0.7949583966504195,
+          0.6062734088194878,
+          -5.508539129198519
+        ],
+        "visual": {
+          "root": false,
+          "packet": true,
+          "packetPosition": [
+            -0.7949583966504195,
+            0.6062734088194878,
+            -5.508539129198519
+          ]
+        },
+        "nextAction": "Paired return current settled. Follow the gold current into the open entry fold.",
+        "host": {
+          "pass": "HOST-CAUSE1",
+          "schemaVersion": 1,
+          "owner": "HostConditionSystem",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "anatomyId": "vascular_routes",
+          "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+          "externalCause": "predatory_pressure",
+          "clockSource": "runtimeSeconds",
+          "sampledAtSeconds": 18.838099999999752,
+          "enabled": true,
+          "active": true,
+          "phase": "recovering",
+          "amplitude": 0.9469165433365205,
+          "episodeIndex": 0,
+          "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+          "maxFlowReduction": 0.03,
+          "maxVisualCompression": 0.08,
+          "reason": "authored_episode",
+          "localPhysicsAuthority": false,
+          "materialTransfer": false,
+          "progressionAuthority": false,
+          "persistsAcrossReload": false,
+          "simulatedPredatoryHostAI": false
+        },
+        "hostResponse": {
+          "active": true,
+          "amplitude": 0.9469165433365205,
+          "flowScale": 0.9715925036999044,
+          "visualCompression": 0.07575332346692164,
+          "phase": "recovering",
+          "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+        }
+      }
+    ],
+    "siltStages": [
+      {
+        "label": "actual grip",
+        "clock": 19.680699999999387,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "gripped",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 1,
+          "proof": {
+            "grip": 1,
+            "imprint": null,
+            "seat": null,
+            "extract": null,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": "silt-grain-01",
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          1.2676989083106358,
+          -0.3182537693034259,
+          -11.193829038575387
+        ]
+      },
+      {
+        "label": "actual imprint",
+        "clock": 20.5501999999994,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "imprinted",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 10,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": null,
+            "extract": null,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": "silt-grain-01",
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.399629132683318,
+          -2.605539010287922,
+          -9.209373294975872
+        ]
+      },
+      {
+        "label": "actual seat",
+        "clock": 20.700199999999402,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "seated",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 13,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": null,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": null,
+        "seated": "silt-grain-01",
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.405941853784822,
+          -2.606481419644807,
+          -9.170738865481106
+        ]
+      },
+      {
+        "label": "actual extraction",
+        "clock": 21.15019999999941,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "extracted",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 17,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": null
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": "silt-grain-01",
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.451865999101792,
+          -2.612719917856515,
+          -9.056382551166806
+        ]
+      },
+      {
+        "label": "actual free release",
+        "clock": 21.600199999999415,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "released_pending_native",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": false,
+          "completionPublished": false,
+          "completionSequence": 0,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": null,
+        "seated": null,
+        "credits": 5,
+        "engine": 3,
+        "mass": 8,
+        "position": [
+          -5.483294737589397,
+          -2.6166949051167863,
+          -5.937810060771925
+        ]
+      },
+      {
+        "label": "native return and six-phase credit",
+        "clock": 41.29739999999833,
+        "goal": {
+          "pass": "SILT-II1",
+          "active": true,
+          "started": true,
+          "stage": "completed",
+          "grainId": "silt-grain-01",
+          "attemptSequence": 1,
+          "activationSequence": 0,
+          "consumedSequence": 20,
+          "proof": {
+            "grip": 1,
+            "imprint": 10,
+            "seat": 11,
+            "extract": 14,
+            "release": 20
+          },
+          "completed": true,
+          "completionPublished": true,
+          "completionSequence": 1,
+          "completionKey": "silt:phase_2",
+          "materialTransfer": false,
+          "physicsAuthority": false,
+          "offRouteSimulation": false
+        },
+        "held": null,
+        "seated": null,
+        "credits": 6,
+        "engine": 6,
+        "mass": 8,
+        "position": [
+          -4.469873780481949,
+          -2.3268814756047234,
+          0.5437399273794438
+        ]
+      }
+    ],
+    "navigation": [
+      {
+        "clock": 15.970099999999713,
+        "distance": 5.969171480334467,
+        "position": [
+          1.686373872568744,
+          0.21487507470526102,
+          -10.923408072711617
+        ],
+        "velocity": {
+          "x": 0.43344143385332684,
+          "y": 0.1258113314864446,
+          "z": 0.6829525685341127
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 16.120099999999713,
+        "distance": 5.748388295124846,
+        "position": [
+          1.6368782420120571,
+          0.2796442443896273,
+          -10.706947726387757
+        ],
+        "velocity": {
+          "x": -0.7263425328058869,
+          "y": 0.562184118068396,
+          "z": 1.7521754844844324
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 16.270099999999715,
+        "distance": 5.390559098731896,
+        "position": [
+          1.4576266498785801,
+          0.30907057937385213,
+          -10.396857703436975
+        ],
+        "velocity": {
+          "x": -1.4006590580285854,
+          "y": 0.03426431884777979,
+          "z": 2.2041074553102957
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 16.420099999999717,
+        "distance": 4.9298394056779244,
+        "position": [
+          1.182703868456574,
+          0.35828505380561865,
+          -10.017493587465342
+        ],
+        "velocity": {
+          "x": -2.021283512077944,
+          "y": 0.4573757864413818,
+          "z": 2.66932480362808
+        },
+        "keys": [
+          "KeyS",
+          "KeyD",
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 16.57009999999972,
+        "distance": 4.488233694594927,
+        "position": [
+          1.0123958618140625,
+          0.37734493059360796,
+          -9.610405050162381
+        ],
+        "velocity": {
+          "x": -0.7536990797263773,
+          "y": -0.016853432371890256,
+          "z": 2.747006124554542
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 16.72009999999972,
+        "distance": 3.99345893602135,
+        "position": [
+          0.812897428012159,
+          0.4195150469083845,
+          -9.159242518278996
+        ],
+        "velocity": {
+          "x": -1.5833834701751028,
+          "y": 0.41244866501053057,
+          "z": 3.1203365899136815
+        },
+        "keys": [
+          "KeyD",
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 16.870099999999724,
+        "distance": 3.5869738713576473,
+        "position": [
+          0.6978943512062412,
+          0.38888513195664653,
+          -8.762846208148183
+        ],
+        "velocity": {
+          "x": -0.3971295498258945,
+          "y": -0.47766274363634825,
+          "z": 2.415958243973364
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyC",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.020099999999726,
+        "distance": 3.1979987038340365,
+        "position": [
+          0.5761096688163042,
+          0.42363295967776415,
+          -8.391941726117448
+        ],
+        "velocity": {
+          "x": -0.9962239126051324,
+          "y": 0.547641912400813,
+          "z": 2.4971946735588624
+        },
+        "keys": [
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.170099999999728,
+        "distance": 2.862004926981604,
+        "position": [
+          0.4467457095184332,
+          0.3754947746358489,
+          -8.076803978624046
+        ],
+        "velocity": {
+          "x": -0.8027877192853757,
+          "y": -0.7079729612680091,
+          "z": 1.9243050061768765
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyC",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.32009999999973,
+        "distance": 2.5068049903832366,
+        "position": [
+          0.27568956089553703,
+          0.38280839653015425,
+          -7.764164895830808
+        ],
+        "velocity": {
+          "x": -1.2977338475051516,
+          "y": 0.3872778447321176,
+          "z": 2.166357501903491
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.374299999999916,
+        "distance": 2.3956551519053138,
+        "position": [
+          0.22282854163070537,
+          0.396075871455041,
+          -7.667031739887916
+        ],
+        "velocity": {
+          "x": -0.8732961537316528,
+          "y": 0.19939685596268358,
+          "z": 1.6742408636294532
+        },
+        "keys": [
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.52429999999992,
+        "distance": 2.1452161827635363,
+        "position": [
+          0.10410340583782063,
+          0.4222748380397411,
+          -7.4475555994865275
+        ],
+        "velocity": {
+          "x": -0.7568570196751211,
+          "y": 0.164178185579536,
+          "z": 1.3737393390873789
+        },
+        "keys": [
+          "KeyS",
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.579699999999363,
+        "distance": 2.0486045446538097,
+        "position": [
+          0.06370349015936672,
+          0.42389297492756656,
+          -7.359543646170289
+        ],
+        "velocity": {
+          "x": -0.7198233043813214,
+          "y": -0.01407900777238448,
+          "z": 1.6565085765304988
+        },
+        "keys": [
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.729699999999365,
+        "distance": 1.8252681031960496,
+        "position": [
+          -0.029488973582584916,
+          0.425034110660717,
+          -7.155600915439709
+        ],
+        "velocity": {
+          "x": -0.5715945079596397,
+          "y": 0.015311161138713506,
+          "z": 1.2213813725684088
+        },
+        "keys": [
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.845899999999556,
+        "distance": 1.6885595880757354,
+        "position": [
+          -0.08927955016499388,
+          0.4278524870598858,
+          -7.032158774249065
+        ],
+        "velocity": {
+          "x": -0.4893769694588516,
+          "y": 0.028204046230341763,
+          "z": 0.9921284443213202
+        },
+        "keys": [
+          "KeyS",
+          "KeyQ"
+        ],
+        "settleProgress": 0
+      },
+      {
+        "clock": 17.99589999999956,
+        "distance": 1.432018302045375,
+        "position": [
+          -0.15095519518758066,
+          0.48905543373030785,
+          -6.782193807757243
+        ],
+        "velocity": {
+          "x": -0.3763392478081681,
+          "y": 0.5772763786247767,
+          "z": 1.9669452159072
+        },
+        "keys": [
+          "KeyW",
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0.19999999999999998
+      },
+      {
+        "clock": 18.14589999999956,
+        "distance": 1.2401638413143632,
+        "position": [
+          -0.2152836535898753,
+          0.4545763995574222,
+          -6.59434369860419
+        ],
+        "velocity": {
+          "x": -0.46328019091260225,
+          "y": -0.5874566310355847,
+          "z": 0.9511072750351384
+        },
+        "keys": [
+          "KeyC",
+          "KeyQ"
+        ],
+        "settleProgress": 0.39999999999999997
+      },
+      {
+        "clock": 18.295899999999563,
+        "distance": 1.0927495273038204,
+        "position": [
+          -0.252854397797929,
+          0.4970614686813626,
+          -6.45103450636603
+        ],
+        "velocity": {
+          "x": -0.15560142345797084,
+          "y": 0.6712247411551417,
+          "z": 0.9573670071739598
+        },
+        "keys": [
+          "KeyW",
+          "KeyA",
+          "KeyZ",
+          "KeyQ"
+        ],
+        "settleProgress": 0.6
+      },
+      {
+        "clock": 18.388099999999746,
+        "distance": 1.019902780355898,
+        "position": [
+          -0.2895655235649535,
+          0.508572232060452,
+          -6.389012981889222
+        ],
+        "velocity": {
+          "x": -0.4773293715583539,
+          "y": -0.044337291449427566,
+          "z": 0.5781396534476284
+        },
+        "keys": [
+          "KeyQ"
+        ],
+        "settleProgress": 0.7229333333335816
+      },
+      {
+        "clock": 18.538099999999748,
+        "distance": 0.929044668769922,
+        "position": [
+          -0.3296135235513765,
+          0.5018751271668506,
+          -6.305834020965817
+        ],
+        "velocity": {
+          "x": -0.17889866021734704,
+          "y": -0.04461504987864374,
+          "z": 0.5427489134003687
+        },
+        "keys": [
+          "KeyA",
+          "KeyQ"
+        ],
+        "settleProgress": 0.9229333333335817
+      }
+    ],
+    "returnNavigation": [
+      {
+        "clock": 41.447399999998325,
+        "distance": 5.007517533277683,
+        "position": [
+          -4.456520612487861,
+          -2.323447803834815,
+          0.597152599355797
+        ],
+        "velocity": {
+          "x": 0.08901664680214078,
+          "y": 0.02288999489197905,
+          "z": 0.3560665872085631
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 41.597399999998316,
+        "distance": 4.898400148045645,
+        "position": [
+          -4.3581716059484386,
+          -2.275719873802078,
+          0.5728734749337122
+        ],
+        "velocity": {
+          "x": 0.89513164249291,
+          "y": 0.442982597454539,
+          "z": -0.3807443588550442
+        },
+        "keys": [
+          "KeyS",
+          "KeyD",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 41.74739999999831,
+        "distance": 4.669992070341013,
+        "position": [
+          -4.178205003044707,
+          -2.126007852276917,
+          0.6196396957416128
+        ],
+        "velocity": {
+          "x": 1.328524984325607,
+          "y": 1.232672300839412,
+          "z": 0.6044433028321009
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 41.8973999999983,
+        "distance": 4.3809848941876215,
+        "position": [
+          -3.9445368655309916,
+          -1.9462137917433324,
+          0.6225572904746429
+        ],
+        "velocity": {
+          "x": 1.6546772348071581,
+          "y": 1.1842390691346183,
+          "z": -0.227775633018812
+        },
+        "keys": [
+          "KeyS",
+          "KeyD",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.04739999999829,
+        "distance": 4.04579271238635,
+        "position": [
+          -3.6818145994733986,
+          -1.715795878858138,
+          0.6862427286962066
+        ],
+        "velocity": {
+          "x": 1.792392755552481,
+          "y": 1.6848290848471916,
+          "z": 0.7002600030119538
+        },
+        "keys": [
+          "KeyW",
+          "KeyD"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.19739999999828,
+        "distance": 3.709196584162305,
+        "position": [
+          -3.378369911779172,
+          -1.5700024888447293,
+          0.6820356613202122
+        ],
+        "velocity": {
+          "x": 2.120407535312345,
+          "y": 0.6706855500598163,
+          "z": -0.33584011444569406
+        },
+        "keys": [
+          "KeyS",
+          "KeyD",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.20939999999828,
+        "distance": 3.682213517712397,
+        "position": [
+          -3.3528599012610547,
+          -1.561026546740243,
+          0.6792040256322714
+        ],
+        "velocity": {
+          "x": 2.125834209843088,
+          "y": 0.7479951753738405,
+          "z": -0.23596964066172554
+        },
+        "keys": [
+          "KeyS",
+          "KeyD",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.359399999998274,
+        "distance": 3.3229382281960635,
+        "position": [
+          -3.0390973880408083,
+          -1.3782160200200289,
+          0.7424067733913686
+        ],
+        "velocity": {
+          "x": 2.0773456511140664,
+          "y": 1.4176790029258552,
+          "z": 0.6991450254221179
+        },
+        "keys": [
+          "KeyW",
+          "KeyD"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.509399999998266,
+        "distance": 2.969972714323979,
+        "position": [
+          -2.704484664966306,
+          -1.2616875746328988,
+          0.7382374339142057
+        ],
+        "velocity": {
+          "x": 2.295582986209605,
+          "y": 0.5060354697092478,
+          "z": -0.3350110939914591
+        },
+        "keys": [
+          "KeyS",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.65939999999826,
+        "distance": 2.6711824227057295,
+        "position": [
+          -2.450711161039871,
+          -1.0867090252796936,
+          0.8033863597018378
+        ],
+        "velocity": {
+          "x": 1.4366659113275126,
+          "y": 1.4456554133644814,
+          "z": 0.7594590971408336
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyZ"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.80939999999825,
+        "distance": 2.4313964488697954,
+        "position": [
+          -2.211433026899697,
+          -1.028683483701381,
+          0.829183240652779
+        ],
+        "velocity": {
+          "x": 1.662181075913958,
+          "y": -0.06063487575697183,
+          "z": -0.07629819275449799
+        },
+        "keys": [
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 42.95939999999824,
+        "distance": 2.212715364565387,
+        "position": [
+          -2.0263437289474284,
+          -0.9021392879256698,
+          0.8362318777474366
+        ],
+        "velocity": {
+          "x": 1.0529430578008587,
+          "y": 1.2257823764631188,
+          "z": 0.09909465271713061
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyZ"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.10939999999823,
+        "distance": 2.015202762035733,
+        "position": [
+          -1.8291149459027343,
+          -0.8684732303485994,
+          0.7903314221963771
+        ],
+        "velocity": {
+          "x": 1.4255477859019297,
+          "y": -0.19874105508065798,
+          "z": -0.4772031110156981
+        },
+        "keys": [
+          "KeyS",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.25939999999822,
+        "distance": 1.8355663593397682,
+        "position": [
+          -1.670060558015055,
+          -0.7695759348277752,
+          0.8389076230341741
+        ],
+        "velocity": {
+          "x": 0.906030100569214,
+          "y": 1.0219421853678265,
+          "z": 0.6623741733229492
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyZ"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.409399999998215,
+        "distance": 1.6698608728993292,
+        "position": [
+          -1.4890059170690595,
+          -0.7584701794691899,
+          0.8547281725463495
+        ],
+        "velocity": {
+          "x": 1.3342381966368158,
+          "y": -0.32655933273644266,
+          "z": -0.12988519427049638
+        },
+        "keys": [
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.559399999998206,
+        "distance": 1.4953066296392896,
+        "position": [
+          -1.3396761008077398,
+          -0.660922865014682,
+          0.8559335865656713
+        ],
+        "velocity": {
+          "x": 0.852390074171843,
+          "y": 1.0631566674228312,
+          "z": 0.06632360105882083
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyZ"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.7093999999982,
+        "distance": 1.3258653447410067,
+        "position": [
+          -1.1645752798764861,
+          -0.6455707318161367,
+          0.8069957717528967
+        ],
+        "velocity": {
+          "x": 1.3004406421390604,
+          "y": -0.3037041098827063,
+          "z": -0.49216020083785683
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.85939999999819,
+        "distance": 1.2408563088130586,
+        "position": [
+          -1.097245394716934,
+          -0.5760366940510735,
+          0.8400944922628555
+        ],
+        "velocity": {
+          "x": 0.08897824336005954,
+          "y": 0.787817138021029,
+          "z": 0.521905354977967
+        },
+        "keys": [
+          "KeyW",
+          "KeyD"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 43.91289999999819,
+        "distance": 1.2103950267661188,
+        "position": [
+          -1.0750960822281184,
+          -0.5457072511995771,
+          0.8512676174523186
+        ],
+        "velocity": {
+          "x": 0.5163441629553271,
+          "y": 0.49734913710491696,
+          "z": 0.11027266590709556
+        },
+        "keys": [
+          "KeyW",
+          "KeyD"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 44.06289999999818,
+        "distance": 1.0482615085657438,
+        "position": [
+          -0.9108007779370833,
+          -0.5323493905877122,
+          0.7839701522766909
+        ],
+        "velocity": {
+          "x": 1.3399778980617811,
+          "y": -0.0834996313548595,
+          "z": -0.6848583773887393
+        },
+        "keys": [
+          "KeyS",
+          "KeyA",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 44.21289999999817,
+        "distance": 0.9455688294280253,
+        "position": [
+          -0.8391628057123317,
+          -0.4387014465648977,
+          0.7959072289644498
+        ],
+        "velocity": {
+          "x": 0.11312754212351861,
+          "y": 0.923454162655204,
+          "z": 0.4026433122255561
+        },
+        "keys": [
+          "KeyW",
+          "KeyD",
+          "KeyZ"
+        ],
+        "settleProgress": 1
+      },
+      {
+        "clock": 44.36289999999816,
+        "distance": 0.8607651625320767,
+        "position": [
+          -0.7448828343124808,
+          -0.438973931596117,
+          0.7839696010918321
+        ],
+        "velocity": {
+          "x": 0.8463509164904431,
+          "y": -0.3928492026852045,
+          "z": -0.2833804192893557
+        },
+        "keys": [
+          "KeyA",
+          "KeyC"
+        ],
+        "settleProgress": 1
+      }
+    ],
+    "returned": {
+      "cell": "CELL_SIGNAL_CHORUS_NERVE_001",
+      "returnReady": true,
+      "credits": 6,
+      "engine": 6
+    },
+    "errors": []
+  },
+  "errors": []
+}

@@ -1,0 +1,33 @@
+--- CONNECTION54/src/hub/HubInvestigationGameplaySystem.js
++++ CONNECTION55/src/hub/HubInvestigationGameplaySystem.js
+@@ -181,11 +181,7 @@
+     if (!body?.activeRoute) return "dormant";
+     if (body.destinationMounted === false) return "destination_preparing";
+     if (body.playableReady === false || body.gameplayPending) return "destination_not_playable";
+-    if (body.id === "grave_memory_route"
+-      && !frameState.act1RouteHistory?.graveEntered
+-      && frameState.hubChamberFoundation?.firstDestinationInvitation?.active !== true) {
+-      return "first_destination_revealing";
+-    }
++    // CONNECTION55: a Hub tour or first-entry invitation never owns permission.
+     if (!Number.isFinite(body.distanceToPlayer)) return "distance_unavailable";
+     if (!ignoreRange && body.distanceToPlayer > this.commitSelectionRadius) return "out_of_range";
+     return "none";
+@@ -475,7 +471,7 @@
+       && this.convergenceContinuity >= (config.requiredContinuity ?? 0.38)
+     );
+     return {
+-      available: this.threeRouteReadingsRetained(frameState) && this.investigationReady,
++      available: this.threeRouteReadingsRetained(frameState),
+       centerDistance,
+       orbitProgress,
+       readyForPulse
+@@ -590,6 +586,8 @@
+       memoryRead: Boolean(this.memoryRead),
+       returnedToCenter: Boolean(this.returnedToCenter),
+       investigationReady: Boolean(active && this.investigationReady),
++      investigationOptional: true,
++      departureRequiresInvestigation: false,
+       nearestRouteId: active ? this.nearestRouteId : "none",
+       nearestRouteDistance: active && Number.isFinite(this.nearestRouteDistance) ? this.nearestRouteDistance : 0,
+       firstRouteRead: this.firstRouteRead,

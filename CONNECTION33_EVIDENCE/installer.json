@@ -1,0 +1,53 @@
+{
+  "summary": {
+    "passed": 10,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "name": "--check",
+      "result": "Recognized CONNECTION30; ready for CONNECTION33 Surface repair.",
+      "status": "PASS"
+    },
+    {
+      "name": "--apply",
+      "result": "Installed CONNECTION33 Surface material response from CONNECTION30. Originals: CONNECTION33_BACKUP. Reload the game.",
+      "status": "PASS"
+    },
+    {
+      "name": "--check",
+      "result": "CONNECTION33 Surface material response already present.",
+      "status": "PASS"
+    },
+    {
+      "name": "--apply",
+      "result": "CONNECTION33 Surface material response already present. No files changed.",
+      "status": "PASS"
+    },
+    {
+      "name": "--restore",
+      "result": "Restored exact original CONNECTION30 files. Kept reports and backups. Reload if gameplay changed.",
+      "status": "PASS"
+    },
+    {
+      "name": "Exact-byte baseline restore, including absent new files",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject unknown target edit without mutation",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject damaged payload without mutation",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject changed gameplay anchor without mutation",
+      "status": "PASS"
+    },
+    {
+      "name": "Reapply and restore with an existing validated backup",
+      "status": "PASS"
+    }
+  ]
+}

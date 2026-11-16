@@ -1,0 +1,11 @@
+--- CONNECTION39/src/core/GameRuntime.js
++++ CONNECTION40/src/core/GameRuntime.js
+@@ -2530,7 +2530,7 @@
+       playerRoot: this.playerCore
+     });
+ 
+-    this.quickLookInspectorSystem = new QuickLookInspectorSystem({ frameState: this.frameState });
++    this.quickLookInspectorSystem = new QuickLookInspectorSystem({ frameState: this.frameState, repairTrialEnabled: this.reactiveStateGrammarSystem?.repairTrialEnabled === true });
+     this.quickLookInspectorSystem.bindScene({
+       camera: this.camera,
+       playerRoot: this.playerCore,

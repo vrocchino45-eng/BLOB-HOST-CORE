@@ -1,0 +1,52 @@
+--- CONNECTION49/src/routes/GraveMemoryRouteSystem.js
++++ CONNECTION50/src/routes/GraveMemoryRouteSystem.js
+@@ -102,6 +102,7 @@
+     this.recoverySeconds = 0;
+     this.coreGraveAssistedTicks = 0;
+     this.coreGraveAssistedSeconds = 0;
++    this.coreGraveLastAppliedFrame = -1;
+     this.residueRecoilRecovered = false;
+     this.lastRiskSource = "none";
+     this.completed = false;
+@@ -707,6 +708,21 @@
+   coreRecoverySuspended(f) {
+     return Boolean(f.inspectionCamera?.active || f.inspectionCamera?.coreWorkActive
+       || f.tightInspectionCamera?.active || f.tightInspectionCamera?.coreWorkActive);
++  }
++
++  // CONNECTION50: read-only explanation of the existing recovery branch.
++  coreRecoveryStatus(active, f, coupling) {
++    if (!active) return "inactive";
++    if (!coupling.earned) return "unearned";
++    if (this.coreRecoverySuspended(f)) return "paused";
++    if (Number.isSafeInteger(f.frame) && f.frame>=0 && this.coreGraveLastAppliedFrame===f.frame) return "rebinding";
++    if (!this.siltRead) return "read_required";
++    if (!this.siltStabilized) return "settle_required";
++    if (this.distanceToObject("residue_silt_cloud_001")>(this.recipe?.interaction?.stabilizeRange ?? 1.8)) return "approach_required";
++    if (!(this.residueRecoilRisk>0 || this.traceIntegrity<1)) return "trace_intact";
++    if (!f.input?.stabilizeHeld) return "hold_required";
++    if (!coupling.coreContributing) return "shared_ceiling";
++    return "ready";
+   }
+ 
+   updateInteractions(dt, frameState) {
+@@ -756,6 +772,7 @@
+           this.c0d2AssistedRecoverySeconds = Math.min(3600, this.c0d2AssistedRecoverySeconds + dt);
+         }
+         if (coupling.coreContributing && dt > 0) {
++          this.coreGraveLastAppliedFrame = Number.isSafeInteger(frameState.frame) ? frameState.frame : -1;
+           this.coreGraveAssistedTicks = Math.min(1000000, this.coreGraveAssistedTicks + 1);
+           this.coreGraveAssistedSeconds = Math.min(3600, this.coreGraveAssistedSeconds + dt);
+         }
+@@ -1520,7 +1537,10 @@
+     const coreCoupling = coreGraveRecoveryCoupling(this.vascularEffectMemory, frameState.coreGrowth,
+       {suspended:this.coreRecoverySuspended(frameState)});
+     frameState.coreGraveRecovery = {
+-      pass:"CONNECTION48", owner:"GraveMemoryRouteSystem", active:Boolean(active),
++      pass:"CONNECTION50", owner:"GraveMemoryRouteSystem", active:Boolean(active),
++      publishedFrame:Number.isSafeInteger(frameState.frame)?frameState.frame:null,
++      lastAppliedFrame:this.coreGraveLastAppliedFrame,
++      status:this.coreRecoveryStatus(active,frameState,coreCoupling),
+       earned:coreCoupling.earned, multiplier:active?coreCoupling.multiplier:1,
+       coreMultiplier:coreCoupling.coreMultiplier, worldMultiplier:coreCoupling.worldMultiplier,
+       source:active?coreCoupling.source:"none", ceiling:1.15,

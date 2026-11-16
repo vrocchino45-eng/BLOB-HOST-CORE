@@ -1,0 +1,49 @@
+{
+  "pass": "CONNECTION23",
+  "status": "PASS",
+  "sourceFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+  "runs": [
+    {
+      "scope": "quick18",
+      "summary": {
+        "passed": 18,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 11,
+        "checksPassed": 341
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "scope": "V02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 28,
+        "checksPassed": 1
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "scope": "R02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 28,
+        "checksPassed": 2
+      },
+      "productionFilesUnchanged": true
+    }
+  ],
+  "additionalOwnerChecks": {
+    "audio": 21,
+    "absorb": 14
+  },
+  "installerGroups": 15,
+  "humanVisualAndAudioAcceptance": "PENDING",
+  "productionFilesChanged": [
+    "src/routes/VascularRhythmRouteSystem.js"
+  ]
+}

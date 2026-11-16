@@ -1,0 +1,110 @@
+{
+  "pass": "CONNECTION28",
+  "baseline": "CONNECTION27 Grave memory reply and catalog",
+  "states": [
+    {
+      "id": "CONNECTION27",
+      "files": {
+        "src/routes/SiltPressureRouteSystem.js": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132",
+        "src/audio/EventAnchoredHostAudioSystem.js": "b3903a78437ea85c7ecd2349258621827c67f1f28dd96b0866018a52b90e51f1",
+        "BLOB_BOT_SERIES1/plan.json": "ccbc3a3b1a2907efec6d9180c645610f59ee60b202f98f92259ad35508691600",
+        "BLOB_BOT_SERIES1/README.md": "d2d992980c99e2ac3f35e39ae86554579d8e08351735305fe0273b56c56d8ec4",
+        "CONNECTION28_BEFORE_SILT.mjs": null,
+        "CONNECTION28_PRESSURE_REPLY_CHECK.mjs": null,
+        "CONNECTION28_PRESSURE_REPLY_BROWSER.mjs": null
+      }
+    },
+    {
+      "id": "CONNECTION28",
+      "files": {
+        "src/routes/SiltPressureRouteSystem.js": "b9c34cab3cdbd75ca7c72fc788c5a1a4b29a4a0e2f7c8daab307c934d2cb7b63",
+        "src/audio/EventAnchoredHostAudioSystem.js": "422947c9573b4a64fd944c82b4e0ab73aa4245aec51a34873d5063c3aa0a7813",
+        "BLOB_BOT_SERIES1/plan.json": "80906a9b3d825f1f34de867bf2e2faaee05d6db2e5308e7658c852403a49869e",
+        "BLOB_BOT_SERIES1/README.md": "7cfe437d29226728bf6db1001441eb6df14b2cc28334abce841868827641aa69",
+        "CONNECTION28_BEFORE_SILT.mjs": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132",
+        "CONNECTION28_PRESSURE_REPLY_CHECK.mjs": "d62e237118041a12ab2049f1825c3c002c1e5792c16e5630b55544f0acb5a073",
+        "CONNECTION28_PRESSURE_REPLY_BROWSER.mjs": "bf27b2cb19617f9ab10509a93a410bd3dd3a8f9a7c787309c35b126a5b649a70"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "after": "b9c34cab3cdbd75ca7c72fc788c5a1a4b29a4a0e2f7c8daab307c934d2cb7b63"
+    },
+    {
+      "path": "src/audio/EventAnchoredHostAudioSystem.js",
+      "after": "422947c9573b4a64fd944c82b4e0ab73aa4245aec51a34873d5063c3aa0a7813"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/plan.json",
+      "after": "80906a9b3d825f1f34de867bf2e2faaee05d6db2e5308e7658c852403a49869e"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/README.md",
+      "after": "7cfe437d29226728bf6db1001441eb6df14b2cc28334abce841868827641aa69"
+    },
+    {
+      "path": "CONNECTION28_BEFORE_SILT.mjs",
+      "after": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132"
+    },
+    {
+      "path": "CONNECTION28_PRESSURE_REPLY_CHECK.mjs",
+      "after": "d62e237118041a12ab2049f1825c3c002c1e5792c16e5630b55544f0acb5a073"
+    },
+    {
+      "path": "CONNECTION28_PRESSURE_REPLY_BROWSER.mjs",
+      "after": "bf27b2cb19617f9ab10509a93a410bd3dd3a8f9a7c787309c35b126a5b649a70"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/core/FirstSliceTransitionCoordinator.js",
+      "sha256": "e4dd502047da841ea96ee468f9f3909080f1bb512ad4c3ae4a395a86162f88df"
+    },
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "sha256": "1a6053589b775c3678cf01f7afadc364ee33bedb6e0fe6c4d4dbc0c9ee094c10"
+    },
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "sha256": "b708e26e71fa8bc1522c4058eec62e220f728ab02054b50ecdfaf94488fcc9f8"
+    },
+    {
+      "path": "src/routes/GraveMemoryRouteSystem.js",
+      "sha256": "6666a4cfc45b10a4c3f8da1062d8b9f1b2f62bb0c63d5eeebbd681286536735e"
+    },
+    {
+      "path": "src/routes/GraveVascularEffectMemory.js",
+      "sha256": "676f8330014c4131ef5cd9e2d5ef71634a6aafef6ef325e412aa64a7ffb11761"
+    },
+    {
+      "path": "src/routes/GraveResonanceGameplaySystem.js",
+      "sha256": "fe148b7040a3caa90ebef22cb3660ed644707e4b7eecf7a2647d09a35daa7f02"
+    },
+    {
+      "path": "src/core/HostConnectionReceiptLedger.js",
+      "sha256": "13c95fd61ccec296ef1942bd7f7c912cfb43f89056b12e58925654162ed0dda6"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    },
+    {
+      "path": "CONNECTION27_BEFORE_MEMORY.mjs",
+      "sha256": "da97ec58916282fd9103a542486cdee2b1c467b087108143b8f89f956e952028"
+    },
+    {
+      "path": "CONNECTION27_GRAVE_MEMORY_CHECK.mjs",
+      "sha256": "49e8b1ec8dfd7c604c2bdfd5afa9f607302e2dae3b1758301d74d6138b76115a"
+    },
+    {
+      "path": "CONNECTION27_GRAVE_MEMORY_BROWSER.mjs",
+      "sha256": "a5ea2f1ec380e6d7ddc09a396059f0cff0c6a8d5d5b90243665f0829f9200dcb"
+    }
+  ]
+}

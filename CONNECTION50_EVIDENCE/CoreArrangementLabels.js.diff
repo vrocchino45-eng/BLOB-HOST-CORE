@@ -1,0 +1,47 @@
+--- CONNECTION49/src/ui/CoreArrangementLabels.js
++++ CONNECTION50/src/ui/CoreArrangementLabels.js
+@@ -72,7 +72,7 @@
+           ? 'Grave: earned memory assists recoil/trace recovery only while holding Stabilize near already-read, stabilized residue. Inspection suspends the Core assist.'
+           : 'Local materials keep their own interaction rules; these Core factors do not guarantee a local action.';
+   return {
+-    pass:'CONNECTION46', surfaceHandling:surfaceHandling(f.coreGrowth), evolution:deriveCoreEarnedEvolution(f.coreGrowth), presentationOnly:true, inWork, inInspection,
++    pass:'CONNECTION50', graveRecovery:graveRecoveryFeedback(f), surfaceHandling:surfaceHandling(f.coreGrowth), evolution:deriveCoreEarnedEvolution(f.coreGrowth), presentationOnly:true, inWork, inInspection,
+     cellId:f.activeCellId ?? 'none',
+     distribution:complete ? CORE_LABEL_ZONES.map(z=>counts[z]).join(':') : null,
+     arrangement: current ? performance.personality : 'Arrangement data unavailable / forming',
+@@ -86,6 +86,27 @@
+     previewScope:'Move only the selected piece. Preview uses current reserve with no held verb; it does not predict future fatigue, exact geometry patterns or local repair time.',
+     suspension:inWork || inInspection ? 'World repair is suspended during inspection and Core Work.' : ''
+   };
++}
++
++// Use only a current, mounted owner witness. Retained history never proves an active action.
++function graveRecoveryFeedback(f) {
++  const r=f.coreGraveRecovery;
++  if(f.activeCellId!=='CELL_GRAVE_MEMORY_RESIDUE_BED_001' || r?.owner!=='GraveMemoryRouteSystem'
++    || r.active!==true || !Number.isSafeInteger(f.frame) || f.frame<0 || r.publishedFrame!==f.frame
++    || !deriveCoreEarnedEvolution(f.coreGrowth).earnedFamilies.grave) return null;
++  const text={
++    rebinding:'Rebinding now: earned Core memory is helping this Stabilize hold restore the disturbed trace.',
++    paused:'Core memory assist paused during inspection or Core Work.',
++    read_required:'Pulse to read the residue before using its retained memory.',
++    settle_required:'Hold Stabilize to settle the read residue first; the recovery assist begins afterward.',
++    approach_required:'Move near the residue to use the Core memory assist.',
++    trace_intact:'Trace intact. Core memory is retained; no recovery is needed.',
++    hold_required:'Memory available. Hold Stabilize near the disturbed trace to rebind it.',
++    shared_ceiling:'Host memory already supplies the full recovery assist; Core memory adds no extra rate.',
++    ready:'Memory available; waiting for a recovery update.'
++  }[r.status];
++  if(!text || r.status==='rebinding' && (r.lastAppliedFrame!==f.frame || !Number.isSafeInteger(r.assistedTicks) || r.assistedTicks<=0))return null;
++  return {title:'GRAVE RESPONSE',text};
+ }
+ 
+ // Display only actual growth-owner output, independently of three-piece arrangement availability.
+@@ -104,6 +125,7 @@
+     if(s.surfaceHandling) result.push({title:'SURFACE HANDLING · VS UNGROWN',text:`Pressure response ${percentChange(s.surfaceHandling.pressure)} · flow coupling ${percentChange(s.surfaceHandling.flow)} · Guide bracing efficiency ${percentChange(s.surfaceHandling.brace)}. Applies where those systems act; not an Absorb or repair-speed bonus.`});
+   }
+   if(e.earnedFamilies.grave) result.push({title:'EARNED GRAVE MEMORY',text:'On a Grave revisit, held Stabilize can rebind already-read, stabilized residue up to 15% faster. Shares the Host-memory ceiling; no stacking, passive repair or faster safe transfer.'});
++  if(s.graveRecovery) result.push(s.graveRecovery);
+   if(e.earnedFamilies.vascular) result.push({title:'EARNED CIRCULATION',text:'Returned Vascular cadence: idle reserve recovery is 8% higher than the same arrangement without this adaptation.'});
+   else result.push({title:'CORE EVOLUTION',text:e.matureBinding ? 'Surface-grown Binding Core retained. Later: carry a completed Vascular cadence back to the Hub.' : 'Growth starts at Surface: produce a safe nursery outcome or complete its Host-language lesson. The protected seed is optional; debug anatomy does not earn growth.'});
+   if(e.integrated)result.push({title:'INTEGRATED CORE',text:'Grave memory, Vascular circulation and Silt filtration are earned and retained together.'});

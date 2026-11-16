@@ -1,0 +1,18 @@
+{
+  "pass": "CONNECTION52",
+  "summary": {
+    "passed": 9,
+    "failed": 0
+  },
+  "checks": [
+    "Dry run/apply/idempotence/exact restore",
+    "CRLF recognition/exact restore",
+    "later-edit refuses without mutation",
+    "corrupt-payload refuses without mutation",
+    "missing-payload refuses without mutation",
+    "bad-anchor refuses without mutation",
+    "Interrupted mixed install finishes/restores",
+    "Restore protects later edit",
+    "Changed backup refuses restore"
+  ]
+}

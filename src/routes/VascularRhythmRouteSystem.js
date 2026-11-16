@@ -189,6 +189,9 @@ export class VascularRhythmRouteSystem {
     // Age belongs to the local receiving animation, not the Host ledger.
     this.vis1LastReceiptTotal = 0;
     this.vis1WaveAge = 30;
+    this.siltArrivalAccent = new THREE.Color();
+    this.siltArrivalPresentationEvent = null;
+    this.siltArrivalPresentationAt = -999;
     this.vis1Applied = null;
   }
 
@@ -240,6 +243,8 @@ export class VascularRhythmRouteSystem {
   }
 
   onRuntimeUnmount(frameState) {
+    // CONNECTION23: a hidden arrival must not resume as a fresh cue on return.
+    this.vis1WaveAge = 30;
     this.returnHandoff.suspend();
     this.currentMoteVisualRate = 0;
     this.currentMoteCoherenceRatio = 1;
@@ -266,13 +271,20 @@ export class VascularRhythmRouteSystem {
       const cursor = this.hostConnectionReceiptLedger.vascularEffectSnapshot({withRecords: false}).lastSourceEventSequence;
       const applied = this.siltSignalReceiver.appliedEffectSnapshot({afterSequence: cursor});
       for (const effect of applied.records) {
-        this.hostConnectionReceiptLedger.observeVascularAppliedEffect(effect);
+        const confirmed = this.hostConnectionReceiptLedger.observeVascularAppliedEffect(effect);
+        if (confirmed) {
+          // CONNECTION19: read-only presentation witness of the existing Host
+          // confirmation. No extra receipt, current change or credit is created.
+          this.siltArrivalPresentationEvent = confirmed;
+          this.siltArrivalPresentationAt = this.elapsed;
+          this.vis1WaveAge = 0;
+        }
       }
     }
     this.siltSignalReceiver.update(dt);
-    // Record the newly received *signal*, not a material transfer or new route event.
+    // CONNECTION23: arrival shares the audio's Host-confirmed positive effect.
+    // A received signal at saturation has no new tissue change to announce.
     const visualReceiptTotal = this.siltSignalReceiver.receivedTotal;
-    if (visualReceiptTotal > this.vis1LastReceiptTotal) this.vis1WaveAge = 0;
     this.vis1LastReceiptTotal = visualReceiptTotal;
     this.vis1WaveAge = Math.min(30, this.vis1WaveAge + Math.max(0, Math.min(dt, 0.25)));
 
@@ -1641,6 +1653,9 @@ export class VascularRhythmRouteSystem {
   applySiltPressureAnatomy() {
     const load = THREE.MathUtils.clamp(this.siltSignalReceiver.membraneLoad, 0, 0.85);
     const age = this.vis1WaveAge;
+    const warmth = Math.max(0, 1 - age / 5);
+    this.siltArrivalAccent.setRGB(
+      0.28 + warmth * 0.64, 0.72 - warmth * 0.15, 0.80 - warmth * 0.55);
     const justRecovered = load === 0 && (this.vis1Applied?.membraneLoad ?? 0) > 0;
     let peakCompression = 0;
     let sumCompression = 0;
@@ -1671,6 +1686,11 @@ export class VascularRhythmRouteSystem {
             0.2314 + colorPressure * 0.49,
             0.3333 + colorPressure * 0.42
           );
+          // A short warm-to-cyan accent travels on the existing folds; ordinary
+          // pressure circulation retains its cyan palette. No new geometry.
+          if (arrival > 0) {
+            fold.material.emissive?.lerp?.(this.siltArrivalAccent, arrival * 0.72);
+          }
           fold.material.emissiveIntensity = Math.min(1.15,
             fold.material.emissiveIntensity + load * (0.36 + 0.49 * band) + arrival * load * 0.17);
           fold.material.opacity = Math.min(0.83,
@@ -1708,7 +1728,11 @@ export class VascularRhythmRouteSystem {
       : age < 5 ? 'receipt_onset'
       : load >= 0.65 ? 'loaded_pressure' : 'recovering_pressure';
     this.vis1Applied = {
-      revision: 'C0C-VIS1-B',
+      revision: 'CONNECTION23',
+      arrivalReceiptId: age < 5 ? this.siltArrivalPresentationEvent?.id ?? null : null,
+      arrivalParentSiltReceiptId: age < 5 ? this.siltArrivalPresentationEvent?.parentSiltReceiptId ?? null : null,
+      arrivalFrontFold: age < 5 && load > 0
+        ? this.wallFolds[Math.min(this.wallFolds.length - 1, Math.round(age * 2.15))]?.name ?? null : null,
       mode: load > 0 ? 'local_pressure_band_and_envelope_reveal' : 'unloaded_no_op',
       tissueState,
       membraneLoad: Number(load.toFixed(5)),
@@ -1728,6 +1752,24 @@ export class VascularRhythmRouteSystem {
   // C0C-TRACE1-B: passive readings of already-applied presentation parameters.
   // Called only after animate() and applyHostRhythmVisual() finish. No controls,
   // material ownership, movement, route progression, or scene graph changes.
+  readSiltArrivalPresentation(active) {
+    const event = this.siltArrivalPresentationEvent;
+    const fold = this.wallFolds?.[0];
+    if (!active || !event || !fold) return null;
+    const position = fold.getWorldPosition(new THREE.Vector3());
+    return {
+      pass: "CONNECTION19", owner: "VascularRhythmRouteSystem",
+      authority: "HostConnectionReceiptLedger", kind: event.kind,
+      receiptId: event.id, sequence: event.sequence,
+      parentSiltReceiptId: event.parentSiltReceiptId,
+      appliedDelta: event.appliedDelta,
+      ageSeconds: Math.max(0, this.elapsed - this.siltArrivalPresentationAt),
+      position: { x: position.x, y: position.y, z: position.z },
+      source: "first_existing_vascular_wall_fold",
+      materialTransfer: false, routeCredit: false
+    };
+  }
+
   readPresentationTelemetry(frameState, active) {
     if (!active) return null;
     const finite = value => Number.isFinite(value) ? Number(value.toFixed(5)) : null;
@@ -1847,6 +1889,7 @@ export class VascularRhythmRouteSystem {
       hostConnectionObservation: hostCause,
       // LS1E2: receiver state belongs to Vascular; Silt receipts stay immutable.
       siltSignalResponse: this.siltSignalReceiver.snapshot(),
+      siltArrivalPresentation: this.readSiltArrivalPresentation(active),
       presentationTrace: this.readPresentationTelemetry(frameState, active),
       pass: "HC-031R",
       id: this.recipe?.id ?? RECIPE_ID,

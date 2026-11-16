@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "summary": {
+    "passed": 15,
+    "failed": 0
+  },
+  "scope": "Temporary copies of two recognized states; no gameplay or human acceptance claim.",
+  "checks": [
+    "Check/apply/idempotence/byte-exact restore: CONNECTION28 LF",
+    "Check/apply/idempotence/byte-exact restore: CONNECTION28 CRLF",
+    "Check/apply/idempotence/byte-exact restore: CONNECTION30 LF",
+    "Check/apply/idempotence/byte-exact restore: CONNECTION30 CRLF",
+    "Check/apply reject without writes: unknown-source",
+    "Check/apply reject without writes: bad-anchor",
+    "Check/apply reject without writes: bad-payload",
+    "Check/apply reject without writes: occupied-new-file",
+    "Check/apply reject without writes: partial-backup-conflict",
+    "Check/apply reject without writes: edited-installed",
+    "Check/apply reject without writes: changed-backup",
+    "Check/apply reject without writes: bad-backup-metadata",
+    "Resume recognized original/final mixture and restore original checkpoint",
+    "Complete a matching partial backup before applying",
+    "Restore refuses later edits without writes"
+  ]
+}

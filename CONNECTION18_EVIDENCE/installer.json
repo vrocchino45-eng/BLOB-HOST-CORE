@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "scope": "Temporary baseline copies only; installer preflight, patch, restore and conflict guards.",
+  "summary": {
+    "passed": 13,
+    "failed": 0
+  },
+  "checks": [
+    "Check/apply/idempotent apply/byte-exact restore: LF",
+    "Check/apply/idempotent apply/byte-exact restore: CRLF",
+    "Reject check/apply without writes: unknown-source",
+    "Reject check/apply without writes: bad-anchor",
+    "Reject check/apply without writes: bad-payload",
+    "Reject check/apply without writes: occupied-new-file",
+    "Reject check/apply without writes: partial-backup-conflict",
+    "Reject check/apply without writes: edited-installed",
+    "Reject check/apply without writes: changed-backup",
+    "Reject check/apply without writes: bad-backup-metadata",
+    "Resume interrupted original/final mixture; exact restore",
+    "Restore refuses later edits without writes",
+    "Complete a matching partial backup"
+  ]
+}

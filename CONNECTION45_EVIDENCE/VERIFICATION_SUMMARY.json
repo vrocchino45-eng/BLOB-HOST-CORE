@@ -1,0 +1,80 @@
+{
+  "pass": "CONNECTION45",
+  "status": "PASS",
+  "sourceFingerprint": "43181b6475dce43662dd7bfeb224f8c5990914f36ed3c20b0a8345370395cdde",
+  "quickCases": 34,
+  "quickChecks": 583,
+  "focusedBrowserRuns": 4,
+  "focusedBrowserGroups": 50,
+  "installerGroups": 9,
+  "build": "PASS",
+  "unselectedBrowserCases": 21,
+  "runs": [
+    {
+      "runId": "2026-11-15T03-17-43-949Z",
+      "mode": "--all",
+      "selectedCase": "Z02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 57,
+        "checksPassed": 5
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T03-17-44-197Z",
+      "mode": "--quick",
+      "selectedCase": null,
+      "summary": {
+        "passed": 34,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 24,
+        "checksPassed": 583
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T03-18-01-839Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 57,
+        "checksPassed": 19
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T03-19-00-865Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 57,
+        "checksPassed": 19
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T03-20-22-442Z",
+      "mode": "--all",
+      "selectedCase": "S05",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 57,
+        "checksPassed": 7
+      },
+      "productionFilesUnchanged": true
+    }
+  ],
+  "qualification": "Surface-first growth verified with real Surface producer inputs and continuous Guide handoff. Z02 declares player-position and time fixtures, not autonomous navigation. T02 uses declared pre-earned history fixtures; no human feel acceptance. 21 other browser IDs not rerun."
+}

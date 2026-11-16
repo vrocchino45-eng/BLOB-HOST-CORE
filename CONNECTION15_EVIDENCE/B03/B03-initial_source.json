@@ -1,0 +1,86 @@
+{
+  "label": "qualified source",
+  "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+  "goal": {
+    "pass": "VASCULAR-II1",
+    "eligible": true,
+    "active": true,
+    "stage": "source_relationship",
+    "completed": false,
+    "completionPublished": false,
+    "handoffId": null,
+    "sourcePulseId": null,
+    "sourceHoldSeconds": 0,
+    "sourceHoldAtProjection": 0,
+    "travelProgress": 0,
+    "settleProgress": 0,
+    "completionSequence": 0,
+    "sourceRole": "branch",
+    "receiverRole": "intake",
+    "completionKey": "vascular:phase_2",
+    "materialTransfer": false,
+    "offRouteSimulation": false,
+    "crossingAuthority": false
+  },
+  "credits": 4,
+  "engine": 3,
+  "position": [
+    1.4577274412721362,
+    0.14036164037058796,
+    -11.140687598437575
+  ],
+  "source": [
+    1.3835288646708668,
+    0.10760142440314734,
+    -11.060600763803077
+  ],
+  "receiver": [
+    -0.7949583966504195,
+    0.6062734088194878,
+    -5.508539129198519
+  ],
+  "visual": {
+    "root": true,
+    "packet": false,
+    "packetPosition": [
+      0,
+      0,
+      0
+    ]
+  },
+  "nextAction": "Hold LT at the amber branch valve to establish the return current.",
+  "host": {
+    "pass": "HOST-CAUSE1",
+    "schemaVersion": 1,
+    "owner": "HostConditionSystem",
+    "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+    "anatomyId": "vascular_routes",
+    "profileId": "HOST_ALPHA_PREDATORY_PRESSURE_001",
+    "externalCause": "predatory_pressure",
+    "clockSource": "runtimeSeconds",
+    "sampledAtSeconds": 15.460300000001725,
+    "enabled": true,
+    "active": true,
+    "phase": "holding",
+    "amplitude": 1,
+    "episodeIndex": 0,
+    "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+    "maxFlowReduction": 0.03,
+    "maxVisualCompression": 0.08,
+    "reason": "authored_episode",
+    "localPhysicsAuthority": false,
+    "materialTransfer": false,
+    "progressionAuthority": false,
+    "persistsAcrossReload": false,
+    "simulatedPredatoryHostAI": false
+  },
+  "hostResponse": {
+    "active": true,
+    "amplitude": 1,
+    "flowScale": 0.97,
+    "visualCompression": 0.08,
+    "phase": "holding",
+    "episodeId": "HOST_ALPHA_PREDATORY_PRESSURE_001:0",
+    "hostId": "HOST_ALPHA_WOUNDED_NURSERY"
+  }
+}

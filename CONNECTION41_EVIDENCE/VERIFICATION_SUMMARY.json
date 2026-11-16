@@ -1,0 +1,69 @@
+{
+  "pass": "CONNECTION41",
+  "status": "PASS",
+  "sourceFingerprint": "fc75c1e236f83f4709b9f7dbded33e3c25a18a3495884a4694f6d79cd6a0619f",
+  "quickCases": 30,
+  "quickChecks": 550,
+  "previewCounterfactualsRetained": 729,
+  "compactLayoutSelectionFixtures": 81,
+  "focusedBrowserRuns": 3,
+  "focusedBrowserGroups": 33,
+  "installerGroups": 9,
+  "build": "PASS",
+  "unselectedBrowserCases": 21,
+  "runs": [
+    {
+      "runId": "2026-11-15T01-37-35-020Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 52,
+        "checksPassed": 13
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T01-37-35-915Z",
+      "mode": "--quick",
+      "selectedCase": null,
+      "summary": {
+        "passed": 30,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 23,
+        "checksPassed": 550
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T01-38-25-837Z",
+      "mode": "--all",
+      "selectedCase": "T02",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 52,
+        "checksPassed": 13
+      },
+      "productionFilesUnchanged": true
+    },
+    {
+      "runId": "2026-11-15T01-39-12-386Z",
+      "mode": "--all",
+      "selectedCase": "S05",
+      "summary": {
+        "passed": 1,
+        "failed": 0,
+        "blocked": 0,
+        "notRun": 52,
+        "checksPassed": 7
+      },
+      "productionFilesUnchanged": true
+    }
+  ],
+  "qualification": "Read-only UI refinement. Explicit debug anatomy, region mounts and deterministic registry/camera steps; not naturally earned campaign, physical-controller feel or human readability acceptance. S03/S04 were not rerun in this UI-only pass; their earlier CONNECTION40 results remain historical."
+}

@@ -1,3 +1,6 @@
+import { CORE_VISUAL_PALETTE, resolveCoreFamilyColor, corePaletteHex } from "../visual/CoreVisualPalette.js";
+import { buildCoreArrangementLabels, coreArrangementLabelRows, compactCoreArrangementLabelRows } from './CoreArrangementLabels.js';
+
 /**
  * LS1C0 — optional, read-only world-design quick look.
  *
@@ -165,9 +168,12 @@ const bubbleCss = {
 };
 
 export class QuickLookInspectorSystem {
-  constructor({ frameState }) {
+  constructor({ frameState, repairTrialEnabled = false }) {
     if (!frameState) throw new Error('[QuickLookInspectorSystem] frameState is required');
     this.frameState = frameState;
+    this.repairTrialEnabled = repairTrialEnabled === true;
+    this.coreLabels = null;
+    this.coreLabelSignature = null;
     this.open = false;
     this.expanded = false;
     this.root = null;
@@ -250,7 +256,45 @@ export class QuickLookInspectorSystem {
     this.body = document.createElement('div');
     this.root.appendChild(this.body);
     document.body.appendChild(this.root);
+    this.coreLabels = document.createElement('aside');
+    this.coreLabels.id = 'blob-core-arrangement-labels';
+    this.coreLabels.setAttribute('aria-label', 'Core arrangement and verb effects');
+    Object.assign(this.coreLabels.style, {
+      position:'fixed', right:'14px', top:'14px', width:'min(350px, calc(100vw - 28px))',
+      maxHeight:'calc(100vh - 82px)', overflowY:'auto', boxSizing:'border-box',
+      display:'none', padding:'10px 12px', border:'1px solid #9ee9da', borderRadius:'12px',
+      background:'rgba(5,16,22,.95)', color:'#e8f6ed', zIndex:'47', pointerEvents:'auto',
+      font:'11px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace'
+    });
+    document.body.appendChild(this.coreLabels);
     this.publish();
+  }
+
+  syncCoreLabels() {
+    if (!this.coreLabels) return;
+    this.coreLabels.style.display = this.open && !this.expanded ? 'block' : 'none';
+    if (!this.open) return;
+    const snapshot = buildCoreArrangementLabels(this.frameState, {repairTrialEnabled:this.repairTrialEnabled});
+    const world = buildQuickLookSnapshot(this.frameState);
+    const rows = [{title:'WORLD / CORE', text:`${world.region} · ${snapshot.inWork ? 'Core Work' : snapshot.inInspection ? 'Core inspection' : world.focus}`}, ...compactCoreArrangementLabelRows(snapshot)];
+    const signature = JSON.stringify(rows);
+    if (signature === this.coreLabelSignature) return;
+    this.coreLabelSignature = signature;
+    const scroll = this.coreLabels.scrollTop;
+    this.coreLabels.replaceChildren();
+    for (const row of rows) {
+      const title = document.createElement('div');
+      title.textContent = row.title;
+      title.style.cssText = 'font-size:10px;font-weight:700;color:#9defff;margin-top:5px';
+      this.coreLabels.appendChild(title);
+      if (row.text) {
+        const text = document.createElement('div');
+        text.textContent = row.text;
+        text.style.cssText = 'line-height:1.25;margin:2px 0 0;overflow-wrap:anywhere';
+        this.coreLabels.appendChild(text);
+      }
+    }
+    this.coreLabels.scrollTop = scroll;
   }
 
   toggle() {
@@ -261,6 +305,7 @@ export class QuickLookInspectorSystem {
     if (this.detailToggle) this.detailToggle.style.display = this.open ? 'block' : 'none';
     if (this.root) this.root.style.display = this.open && this.expanded ? 'block' : 'none';
     this.lastSignature = '';
+    this.syncCoreLabels();
     this.publish();
     if (this.open) {
       this.lastSnapshot = buildQuickLookSnapshot(this.frameState);
@@ -275,6 +320,7 @@ export class QuickLookInspectorSystem {
     if (this.root) this.root.style.display = this.expanded ? 'block' : 'none';
     if (this.detailToggle) this.detailToggle.textContent = this.expanded ? 'DESIGN NOTES ▾' : 'DESIGN NOTES ▸';
     this.lastSignature = '';
+    this.syncCoreLabels();
     this.publish();
   }
 
@@ -296,16 +342,18 @@ export class QuickLookInspectorSystem {
     this.sampleAccum += Math.max(0, dt ?? 0);
     if (this.sampleAccum < .2) return;
     this.sampleAccum = 0;
+    this.syncCoreLabels();
     const snapshot = buildQuickLookSnapshot(frameState);
     this.lastSnapshot = snapshot;
-    const signature = JSON.stringify(snapshot);
+    const signature = JSON.stringify({world:snapshot, core:this.expanded ? buildCoreArrangementLabels(frameState, {repairTrialEnabled:this.repairTrialEnabled}) : null});
     if (signature !== this.lastSignature) this.render(snapshot, signature);
     this.publish(snapshot);
   }
 
   publish(snapshot = null) {
     this.frameState.quickLookInspector = {
-      pass: 'LS1C0.1', open: this.open, expanded: this.expanded,
+      pass: 'CONNECTION41', open: this.open, expanded: this.expanded,
+      coreLabelsEnabled: this.open, coreLabelsVisible: this.open && !this.expanded,
       presentationOnly: true, worldAnchors: Boolean(this.sceneRefs),
       shortcutKeyboard: 'F4 / Shift+F4 design notes',
       shortcutController: 'Hold LB + RB for 0.6s',
@@ -323,6 +371,16 @@ export class QuickLookInspectorSystem {
     const cycle = live.livingMaterialCycle;
     const count = cycle?.counts ?? {};
     const result = [];
+    const work = this.frameState.coreWorkManipulation ?? {};
+    if (this.frameState.inspectionCamera?.coreWorkActive || this.frameState.tightInspectionCamera?.coreWorkActive) {
+      for (const p of this.frameState.spatialCoreChemistry?.placements ?? []) {
+        const anchor = playerRoot?.getObjectByName(p.pieceId);
+        if (anchor) result.push({id:'piece-'+p.pieceId, anchor,
+          title:`${p.pieceId===work.selectedPieceId ? 'SELECTED · ' : ''}${p.label}`,
+          detail:`${p.zoneLabel} · ${p.interactionLabel}`, offsetX:24, offsetY:18,
+          maxDistance:80, accent:corePaletteHex(p.pieceId===work.selectedPieceId ? CORE_VISUAL_PALETTE.selection : resolveCoreFamilyColor(p.family, 0x9ee9da))});
+      }
+    }
     if (playerRoot) result.push({
       id: 'core', anchor: playerRoot,
       title: `CORE · ${snapshot.phaseCount ?? '?'}-PHASE`,
@@ -452,13 +510,14 @@ export class QuickLookInspectorSystem {
     if (!this.body) return;
     this.lastSignature = signature;
     const b = this.body;
+    const scroll = this.root?.scrollTop ?? 0;
     b.replaceChildren();
     const header = document.createElement('div');
     header.style.cssText = 'font-weight:700;font-size:13px;color:#d9f9ed;margin-bottom:3px';
     header.textContent = `WORLD DESIGN // ${snapshot.region}`;
     const hint = document.createElement('div');
     hint.style.cssText = 'font-size:10px;color:#93b4bb';
-    hint.textContent = 'F4 / LB+RB to close · Shift+F4 to hide notes · world labels follow objects';
+    hint.textContent = 'F4 / LB+RB to close · Shift+F4 to hide notes · labels ON · Core arrangement at right · Shift+F4 for notes';
     const loc = document.createElement('div');
     loc.style.cssText = 'color:#fae4af;font-size:12px;margin-top:9px';
     loc.textContent = `LANDMARK: ${snapshot.landmark}`;
@@ -466,6 +525,8 @@ export class QuickLookInspectorSystem {
     focus.style.cssText = 'font-size:10px;color:#bdd3d4;margin-top:3px';
     focus.textContent = `Focus: ${snapshot.focus} (${snapshot.focusSource})`;
     b.append(header, hint, loc, focus);
+    const core = buildCoreArrangementLabels(this.frameState, {repairTrialEnabled:this.repairTrialEnabled});
+    for (const row of coreArrangementLabelRows(core)) line(b, row.title, row.text ? [row.text] : []);
     line(b, 'HOW TO INTERACT · ACTUAL CONTROLS', snapshot.actions);
     line(b, 'WHAT THE RUNTIME SAYS · IMPLEMENTED', snapshot.live.length ? snapshot.live : [snapshot.status]);
     line(b, '3 → 6 → 12 · CORE ENGINE', [snapshot.phaseExplanation, snapshot.phaseDetail, snapshot.phaseScope]);
@@ -475,5 +536,6 @@ export class QuickLookInspectorSystem {
     footer.style.cssText = 'font-size:9px;color:#92a6a8;margin-top:12px;border-top:1px solid #66868c55;padding-top:7px';
     footer.textContent = 'Scene-anchored diagnostic · labels do not change actual targeting, geometry or gameplay';
     b.appendChild(footer);
+    if (this.root) this.root.scrollTop = scroll;
   }
 }

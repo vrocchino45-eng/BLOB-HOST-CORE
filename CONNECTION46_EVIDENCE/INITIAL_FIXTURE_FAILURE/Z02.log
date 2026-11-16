@@ -1,0 +1,24 @@
+FAILED Existing continuous Guide transition carries Surface growth forward
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 0.8383575856312846
+- 0.8383575884870151
+            ^
+
+    at file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION45_SURFACE_GROWTH_BROWSER.mjs:30:354
+    at check (file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION45_SURFACE_GROWTH_BROWSER.mjs:8:65)
+    at file:///workspace/scratch/5e2510728e07/candidate_base/CONNECTION45_SURFACE_GROWTH_BROWSER.mjs:30:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0.8383575856312846,
+  expected: 0.8383575884870151,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

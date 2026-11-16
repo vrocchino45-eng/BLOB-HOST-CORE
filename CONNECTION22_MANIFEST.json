@@ -1,0 +1,76 @@
+{
+  "pass": "CONNECTION22",
+  "baseline": "CONNECTION20 or CONNECTION21 current checkpoint/harness",
+  "states": [
+    {
+      "id": "CONNECTION20_OR21",
+      "files": {
+        "src/core/FirstSliceTransitionCoordinator.js": "9ce290b889282d082c41d004a5baff3bf501a269cef41998f6a3ca4fe2717fd0",
+        "BLOB_BOT_SERIES1/plan.json": "9a09b4f75f3c0c3ff8a3adbc715d44f9ef0ec1b267bfa257b1f5005582b52326",
+        "BLOB_BOT_SERIES1/README.md": "73b3ea9f53f5ef22266eca71a5a0a0cea3c178d29c548db413fce0bbdc669652",
+        "CONNECTION22_BEFORE_PREPARATION.mjs": null,
+        "CONNECTION22_PREPARATION_CHECK.mjs": null,
+        "CONNECTION22_PREPARATION_BROWSER.mjs": null
+      }
+    },
+    {
+      "id": "CONNECTION22",
+      "files": {
+        "src/core/FirstSliceTransitionCoordinator.js": "e4dd502047da841ea96ee468f9f3909080f1bb512ad4c3ae4a395a86162f88df",
+        "BLOB_BOT_SERIES1/plan.json": "a20c4036201de37a0ced9f8b30f3b9cb01fda1402f3035b661a36c89f44edd0b",
+        "BLOB_BOT_SERIES1/README.md": "f88258721155bf5617f324c9cd17f8335fd6da68a8f6933e4a831e7a477f6630",
+        "CONNECTION22_BEFORE_PREPARATION.mjs": "9ce290b889282d082c41d004a5baff3bf501a269cef41998f6a3ca4fe2717fd0",
+        "CONNECTION22_PREPARATION_CHECK.mjs": "b1cb6731a7a2ca3ad6c5b20d4fc4ddf736721544cfa058754fca00fe2f9b1a66",
+        "CONNECTION22_PREPARATION_BROWSER.mjs": "ce998ea8957ccaaf5db2ca315a2717bb59263bba6b2ea255a554d971356758d3"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/core/FirstSliceTransitionCoordinator.js",
+      "after": "e4dd502047da841ea96ee468f9f3909080f1bb512ad4c3ae4a395a86162f88df"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/plan.json",
+      "after": "a20c4036201de37a0ced9f8b30f3b9cb01fda1402f3035b661a36c89f44edd0b"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/README.md",
+      "after": "f88258721155bf5617f324c9cd17f8335fd6da68a8f6933e4a831e7a477f6630"
+    },
+    {
+      "path": "CONNECTION22_BEFORE_PREPARATION.mjs",
+      "after": "9ce290b889282d082c41d004a5baff3bf501a269cef41998f6a3ca4fe2717fd0"
+    },
+    {
+      "path": "CONNECTION22_PREPARATION_CHECK.mjs",
+      "after": "b1cb6731a7a2ca3ad6c5b20d4fc4ddf736721544cfa058754fca00fe2f9b1a66"
+    },
+    {
+      "path": "CONNECTION22_PREPARATION_BROWSER.mjs",
+      "after": "ce998ea8957ccaaf5db2ca315a2717bb59263bba6b2ea255a554d971356758d3"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/core/SystemRegistry.js",
+      "sha256": "0c983cdc9374e996d7cd59a17b3e8f8872522740e1756f4cd2ebc17fc72e1207"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132"
+    },
+    {
+      "path": "src/morph/LocalCellBoundaryRecipeRegistry.js",
+      "sha256": "d183a0309fcb0d4f1dc1e286e117b6c0e9d3209ee85d108794883af04a473783"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}

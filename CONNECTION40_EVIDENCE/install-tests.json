@@ -1,0 +1,18 @@
+{
+  "pass": "CONNECTION40",
+  "summary": {
+    "passed": 9,
+    "failed": 0
+  },
+  "checks": [
+    "CONNECTION38 dry-run/apply/idempotence/exact restore",
+    "CONNECTION38 CRLF recognition/exact restore",
+    "CONNECTION39 dry-run/apply/idempotence/exact restore",
+    "CONNECTION39 CRLF recognition/exact restore",
+    "Unknown local edit refuses without mutation",
+    "Corrupt payload refuses before mutation",
+    "Unknown physiology anchor refuses before mutation",
+    "Interrupted mixed installation finishes and restores",
+    "Restore protects later edits"
+  ]
+}

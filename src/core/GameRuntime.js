@@ -3,6 +3,7 @@ import { SystemRegistry } from "./SystemRegistry.js";
 import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinator.js";
 import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
 import { HostConditionSystem } from "../world/HostConditionSystem.js";
+import { LocalChemistryContextSystem } from "../chemistry/LocalChemistryContextSystem.js";
 import { HostConnectionReceiptLedger } from "./HostConnectionReceiptLedger.js";
 import { SessionTelemetrySystem } from "./SessionTelemetrySystem.js";
 import { FrameTruthObserver } from "./FrameTruthObserver.js";
@@ -17,6 +18,7 @@ import { DeliberateCommitmentSystem } from "../input/DeliberateCommitmentSystem.
 import { VerbCompositionSystem } from "../interaction/VerbCompositionSystem.js";
 import { StabilizedProjectionSystem } from "../interaction/StabilizedProjectionSystem.js";
 import { ReactiveStateGrammarSystem } from "../interaction/ReactiveStateGrammarSystem.js";
+import { SURFACE_MATERIAL_RESPONSE_SCOPE } from "../interaction/MaterialResponseScope.js";
 import { ResponsePersonalitySystem } from "../interaction/ResponsePersonalitySystem.js";
 import { HOST_CORE_SOURCE_AUTHORITY } from "./HostCoreSourceAuthority.js";
 import { ControllerComfortSystem } from "../input/ControllerComfortSystem.js";
@@ -112,10 +114,11 @@ import { ApertureAdjacentTerritorySystem } from "../fields/ApertureAdjacentTerri
 import { GatheringGroundAliveSystem } from "../fields/GatheringGroundAliveSystem.js";
 
 export class GameRuntime {
-  constructor({ appRoot, buildId, buildLabel }) {
+  constructor({ appRoot, buildId, buildLabel, coreRepairTrial = false }) {
     this.appRoot = appRoot;
     this.buildId = buildId;
     this.buildLabel = buildLabel;
+    Object.defineProperty(this, 'coreRepairTrial', { value: coreRepairTrial === true, writable: false });
 
     this.registry = new SystemRegistry();
     this.recipeDataSystem = new RecipeDataSystem({
@@ -139,6 +142,7 @@ export class GameRuntime {
     this.coreEmbodimentSystem = null;
     this.coreTendrilSurfaceContactSystem = null;
     this.hostConditionSystem = null;
+    this.localChemistryContextSystem = null;
     this.coreEngineSystem = null;
     this.coreRadialPerformanceSystem = null;
     this.coreTopologyResonanceSystem = null;
@@ -2036,6 +2040,7 @@ export class GameRuntime {
       localCellRecipe: this.localCellRecipe
     });
     this.hostConditionSystem = new HostConditionSystem({ recipeDataSystem: this.recipeDataSystem, frameState: this.frameState });
+    this.localChemistryContextSystem = new LocalChemistryContextSystem({recipeDataSystem: this.recipeDataSystem, frameState: this.frameState});
     this.coreEngineSystem = new CoreEngineSystem({
       frameState: this.frameState,
       playerRoot: this.playerCore
@@ -2116,7 +2121,9 @@ export class GameRuntime {
 
     this.reactiveStateGrammarSystem = new ReactiveStateGrammarSystem({
       frameState: this.frameState,
-      chemObjectSystem: this.chemObjectSystem
+      chemObjectSystem: this.chemObjectSystem,
+      scope: SURFACE_MATERIAL_RESPONSE_SCOPE,
+      repairTrialEnabled: this.coreRepairTrial
     });
 
     this.bondSystem = new BondSystem({
@@ -2233,7 +2240,8 @@ export class GameRuntime {
     this.responsePersonalitySystem = new ResponsePersonalitySystem({
       frameState: this.frameState,
       chemObjectSystem: this.chemObjectSystem,
-      entitySystem: this.entitySystem
+      entitySystem: this.entitySystem,
+      scope: SURFACE_MATERIAL_RESPONSE_SCOPE
     });
     this.entityRelationshipGrammarSystem = new EntityRelationshipGrammarSystem({
       entitySystem: this.entitySystem,
@@ -2522,7 +2530,7 @@ export class GameRuntime {
       playerRoot: this.playerCore
     });
 
-    this.quickLookInspectorSystem = new QuickLookInspectorSystem({ frameState: this.frameState });
+    this.quickLookInspectorSystem = new QuickLookInspectorSystem({ frameState: this.frameState, repairTrialEnabled: this.reactiveStateGrammarSystem?.repairTrialEnabled === true });
     this.quickLookInspectorSystem.bindScene({
       camera: this.camera,
       playerRoot: this.playerCore,
@@ -2587,6 +2595,9 @@ export class GameRuntime {
     this.registry.register("scarFlowInteractionSystem", this.scarFlowInteractionSystem, regionScoped);
     this.registry.register("secondLocalCellMorphSystem", this.secondLocalCellMorphSystem, regionScoped);
     this.registry.register("morphReadabilitySystem", this.morphReadabilitySystem, regionScopedSoft);
+    // CONNECTION30: sample authored chemistry after early morph writers, before Bond.
+    // Guarded readers reject later same-frame boundary/cell changes.
+    this.registry.register("localChemistryContextSystem", this.localChemistryContextSystem);
     this.registry.register("targetFocusRegistry", this.targetFocusRegistry, regionScoped);
     this.registry.register("targetingSystem", this.targetingSystem, regionScoped);
     // HC029C resolves simultaneous verb intent only after HC029A has published the
@@ -3320,6 +3331,8 @@ export class GameRuntime {
 
     this.updateCameraReadabilitySafely(dt);
     this.inspectionOcclusionSystem?.update(dt, this.frameState, this.camera, this.playerCore);
+    // CONNECTION42: final Core Work palette follows existing camera material fading.
+    this.coreEmbodimentSystem?.workReadability?.apply(this.frameState);
 
     this.camera.getWorldDirection(this.inspectionDirection);
     const cameraWorldForward = {

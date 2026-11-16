@@ -1,0 +1,91 @@
+{
+  "pass": "VASCULAR-II1",
+  "scope": "Real recipes, route, normalized InputSystem, ReturnRegionEngine and CoreEngine; controlled positions and retained first-return checkpoint. Does not establish ordinary navigation or human feel.",
+  "checks": [
+    {
+      "name": "First visit remains unchanged and cannot start Vascular II",
+      "status": "PASS"
+    },
+    {
+      "name": "Retained first completion alone cannot award or start phase two",
+      "status": "PASS"
+    },
+    {
+      "name": "Qualified revisit displays both valve cues and keeps original return fold",
+      "status": "PASS"
+    },
+    {
+      "name": "Receiver-only stabilization and idle waiting do not complete",
+      "status": "PASS"
+    },
+    {
+      "name": "Pulse without a held source relationship creates no handoff",
+      "status": "PASS"
+    },
+    {
+      "name": "Real normalized held Pulse release launches one fresh handoff",
+      "status": "PASS"
+    },
+    {
+      "name": "Unmount pauses travel and preserves the accepted send",
+      "status": "PASS"
+    },
+    {
+      "name": "Passive response arrival stays pending without receiver input",
+      "status": "PASS"
+    },
+    {
+      "name": "Partial receiving settle relaxes without erasing source progress",
+      "status": "PASS"
+    },
+    {
+      "name": "Core Work suspends goal state and cannot settle or complete",
+      "status": "PASS"
+    },
+    {
+      "name": "Active receiver stabilization publishes actual canonical completion once",
+      "status": "PASS"
+    },
+    {
+      "name": "Remounts and repeated input cannot duplicate the phase-two credit",
+      "status": "PASS"
+    },
+    {
+      "name": "A queued completion cannot overwrite another owner in the same frame",
+      "status": "PASS"
+    },
+    {
+      "name": "Previously awarded vascular phase two cannot open a new fresh goal",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 14,
+    "failed": 0
+  },
+  "final": {
+    "goal": {
+      "pass": "VASCULAR-II1",
+      "eligible": true,
+      "active": true,
+      "stage": "completed",
+      "completed": true,
+      "completionPublished": true,
+      "handoffId": "vascular:handoff:1",
+      "sourcePulseId": 3,
+      "sourceHoldSeconds": 0,
+      "sourceHoldAtProjection": 0.18,
+      "travelProgress": 1,
+      "settleProgress": 1,
+      "completionSequence": 1,
+      "sourceRole": "branch",
+      "receiverRole": "intake",
+      "completionKey": "vascular:phase_2",
+      "materialTransfer": false,
+      "offRouteSimulation": false,
+      "crossingAuthority": false
+    },
+    "credits": 5,
+    "engine": 3
+  }
+}

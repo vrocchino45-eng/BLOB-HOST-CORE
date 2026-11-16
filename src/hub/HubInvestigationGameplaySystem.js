@@ -70,7 +70,11 @@ export class HubInvestigationGameplaySystem {
       this.convergenceLastAngle = null;
       this.convergenceHasLastPosition = false;
       this.commitCandidate = null;
-      this.commitLatch = null;
+      this.releaseOwnedCommitRequest(frameState, "left_hub");
+      const event = frameState.deliberateCommitmentEvent;
+      if (event?.kind === "hub_route_destination" && event.sourceId === "hub_chamber") {
+        this.lastCommitEventId = event.eventId;
+      }
       if (frameState.commitmentOpportunity?.sourceId === "hub_chamber") {
         frameState.commitmentOpportunity = null;
       }
@@ -154,17 +158,18 @@ export class HubInvestigationGameplaySystem {
       return;
     }
 
-    const foundation = frameState.hubChamberFoundation ?? {};
-    const firstDestinationInvitation = foundation.firstDestinationInvitation ?? {};
-    const firstDestinationWindow = Boolean(
-      firstDestinationInvitation.active
-      && !frameState.act1RouteHistory?.graveEntered
-    );
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    if (inspection.coreWorkActive || frameState.input?.coreWorkViewPressed
+      || frameState.input?.primaryActionContext === "core_work" || frameState.input?.cancelPressed) {
+      this.commitCandidate = null;
+      return;
+    }
 
-    // HC031P1: the first Grave commitment no longer waits on the stricter whole-Hub
-    // screen-composition validator. That validator remains presentation truth only.
-    // Later Hub destinations keep the established foundation.completed requirement.
-    if (!foundation.completed && !firstDestinationWindow) {
+    const foundation = frameState.hubChamberFoundation ?? {};
+    // CONNECTION15: whole-junction screen verification is presentation truth.
+    // A mounted Hub's route bodies publish the actual destination permissions;
+    // those, proximity and the crossing latch determine commitment availability.
+    if (frameState.activeCellId !== HUB_CELL_ID || !foundation.active) {
       this.commitCandidate = null;
       return;
     }
@@ -175,15 +180,114 @@ export class HubInvestigationGameplaySystem {
     ];
 
     const candidates = bodies
-      .filter((body) => body?.activeRoute)
-      .filter((body) => body?.destinationMounted !== false)
-      .filter((body) => body?.playableReady !== false)
-      .filter((body) => !body?.gameplayPending)
-      .filter((body) => Number.isFinite(body?.distanceToPlayer))
-      .filter((body) => body.distanceToPlayer <= this.commitSelectionRadius)
+      .filter((body) => this.routeEntryBlocker(body, frameState) === "none")
       .sort((a, b) => a.distanceToPlayer - b.distanceToPlayer);
 
     this.commitCandidate = candidates[0] ?? null;
+  }
+
+  // The candidate and its explanation use the same owner guards. This method
+  // observes published bodies only; it cannot awaken, prepare or open a route.
+  routeEntryBlocker(body, frameState, { ignoreRange = false } = {}) {
+    if (!body?.activeRoute) return "dormant";
+    if (body.destinationMounted === false) return "destination_preparing";
+    if (body.playableReady === false || body.gameplayPending) return "destination_not_playable";
+    // CONNECTION55: a Hub tour or first-entry invitation never owns permission.
+    if (!Number.isFinite(body.distanceToPlayer)) return "distance_unavailable";
+    if (!ignoreRange && body.distanceToPlayer > this.commitSelectionRadius) return "out_of_range";
+    return "none";
+  }
+
+  createEntryGuidance(active) {
+    const f = this.frameState;
+    const foundation = f.hubChamberFoundation ?? {};
+    const result = {
+      revision: "CONNECTION54", active: Boolean(active && f.activeCellId === HUB_CELL_ID && foundation.active), reason: "inactive",
+      routeId: "none", suggestedRouteId: "none", distance: null,
+      selectionRadius: this.commitSelectionRadius,
+      invitationBlocker: foundation.firstDestinationInvitation?.blocker ?? "unknown",
+      guideLine: "", nextAction: "", observationOnly: true
+    };
+    if (!result.active) return result;
+    const bodies = [...(foundation.routes ?? []), ...(foundation.thresholds ?? [])];
+    const ordered = bodies.filter((body) => body && Number.isFinite(body.distanceToPlayer))
+      .sort((a, b) => a.distanceToPlayer - b.distanceToPlayer);
+    const candidate = this.commitCandidate;
+    // Preserve the earned Combward direction after all three returns. Nearby
+    // deliberate revisit offers still keep their original candidate priority.
+    const comb = this.convergenceCompleted && !candidate
+      ? ordered.find((body) => body.id === "comb_threshold") ?? null
+      : null;
+    const nearest = comb ?? ordered[0] ?? null;
+    const suggested = comb && this.routeEntryBlocker(comb, f, { ignoreRange: true }) === "none"
+      ? comb
+      : ordered.find((body) => this.routeEntryBlocker(body, f, { ignoreRange: true }) === "none") ?? null;
+    const label = (body) => body?.displayName ?? "This route";
+    const direction = (body) => body?.altitudeBand ? ` (${body.altitudeBand} route)` : "";
+    result.routeId = candidate?.id ?? nearest?.id ?? "none";
+    result.suggestedRouteId = suggested?.id ?? "none";
+    result.distance = candidate?.distanceToPlayer ?? nearest?.distanceToPlayer ?? null;
+    if (this.commitLatch) {
+      const destination = bodies.find((body) => body.id === this.commitLatch.routeId);
+      result.reason = "commit_in_flight";
+      result.routeId = this.commitLatch.routeId;
+      result.guideLine = "The chosen route is carrying you through the tissue.";
+      result.nextAction = `Entering ${label(destination)}. Let the passage finish.`;
+    } else if ((f.inspectionCamera ?? f.tightInspectionCamera)?.coreWorkActive
+      || f.input?.coreWorkViewPressed || f.input?.primaryActionContext === "core_work") {
+      result.reason = "core_work";
+      result.guideLine = "Route entry waits while you arrange retained anatomy.";
+      result.nextAction = "B returns to Core inspection; Y / F returns to the world.";
+    } else if (f.input?.cancelPressed) {
+      result.reason = "await_new_choice";
+      result.guideLine = "Cancel does not select a destination.";
+      result.nextAction = "Approach an available route and press A / E again to choose it.";
+    } else if (candidate) {
+      const holdingStabilize = Boolean(f.input?.stabilizeHeld || f.input?.resonanceHeld);
+      result.reason = holdingStabilize ? "release_stabilize" : "ready";
+      result.guideLine = `${label(candidate)} is awake and within entry reach.`;
+      result.nextAction = holdingStabilize
+        ? `Release Stabilize, then press A / E to enter ${label(candidate)}.`
+        : `Press A / E to enter ${label(candidate)}.`;
+    } else if (nearest) {
+      result.reason = this.routeEntryBlocker(nearest, f);
+      if (result.reason === "out_of_range") {
+        result.guideLine = `${label(nearest)} is awake, but you are outside its entry reach.`;
+        result.nextAction = `Move closer to ${label(suggested ?? nearest)}${direction(suggested ?? nearest)}; press A / E when offered.`;
+      } else if (result.reason === "dormant") {
+        result.guideLine = `${label(nearest)} is dormant. Pulse can read it without opening it.`;
+        result.nextAction = suggested
+          ? `${label(nearest)} is dormant; approach ${label(suggested)}${direction(suggested)}. A / E when offered.`
+          : "No route is ready yet. Watch the living route bodies as they unfold.";
+      } else if (result.reason === "first_destination_revealing") {
+        result.guideLine = "The first Grave route is still revealing its entry invitation.";
+        result.nextAction = "Stay near Grave Memory while its body unfolds; press A / E when offered.";
+      } else {
+        result.guideLine = `${label(nearest)} is still preparing its destination.`;
+        result.nextAction = suggested
+          ? `Move toward ${label(suggested)}${direction(suggested)}; press A / E when offered.`
+          : `Wait for ${label(nearest)} to finish preparing; entry is not available yet.`;
+      }
+    } else {
+      result.reason = "no_route_body";
+      result.guideLine = "The Hub has not published a reachable route body yet.";
+      result.nextAction = "Wait for the Hub route bodies to appear.";
+    }
+    return result;
+  }
+
+  releaseOwnedCommitRequest(frameState, reason) {
+    const latch = this.commitLatch;
+    if (!latch) return;
+    // Match the private event identity: never erase a replacement/foreign request.
+    const request = frameState.hubRouteCommitRequest;
+    if (request?.eventId === latch.eventId && request.routeId === latch.routeId
+      && request.gateId === latch.gateId && request.sourceCellId === HUB_CELL_ID
+      && request.consequenceAuthority === "LocalCellBoundaryMorphSystem") {
+      frameState.hubRouteCommitRequest = null;
+    }
+    this.commitLatch = null;
+    this.lastAction = `${latch.routeId}_destination_choice_released_${reason}`;
   }
 
   updateCommitLatch(frameState) {
@@ -199,7 +303,19 @@ export class HubInvestigationGameplaySystem {
       && flight.gateId === latch.gateId
     );
 
-    if (matchingFlight && flight.active) latch.ownerStarted = true;
+    const publishedBoundary = frameState.localCellBoundaryMorphById?.[boundary?.activeRecipeId];
+    const matchingBoundaryClaim = Boolean(boundary?.active && publishedBoundary?.active
+      && publishedBoundary.owner === "LocalCellBoundaryMorphSystem"
+      && publishedBoundary.routeId === latch.routeId && publishedBoundary.gateId === latch.gateId);
+    if ((matchingFlight && flight.active) || matchingBoundaryClaim) latch.ownerStarted = true;
+
+    const inspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
+    const workIntent = inspection.coreWorkActive || frameState.input?.coreWorkViewPressed
+      || frameState.input?.primaryActionContext === "core_work";
+    if (!latch.ownerStarted && (workIntent || frameState.input?.cancelPressed)) {
+      this.releaseOwnedCommitRequest(frameState, workIntent ? "core_work" : "cancel");
+      return;
+    }
 
     // Once the boundary owner has claimed the route, only an explicit cancel while
     // still in the Hub may release the latch. Normal completion changes activeCellId,
@@ -313,7 +429,8 @@ export class HubInvestigationGameplaySystem {
       role: "deliberate_destination_commit",
       status: pending ? "commit_in_flight" : candidate ? "ready_for_deliberate_commit" : "no_commit_candidate",
       guidedApproach: true,
-      genericInteract: false
+      genericInteract: false,
+      entryGuidance: this.createEntryGuidance(active)
     };
   }
 
@@ -396,7 +513,7 @@ export class HubInvestigationGameplaySystem {
       && this.convergenceContinuity >= (config.requiredContinuity ?? 0.38)
     );
     return {
-      available: this.threeRouteReadingsRetained(frameState) && this.investigationReady,
+      available: this.threeRouteReadingsRetained(frameState),
       centerDistance,
       orbitProgress,
       readyForPulse
@@ -483,17 +600,10 @@ export class HubInvestigationGameplaySystem {
       .sort((a, b) => b[1] - a[1])[0] ?? null;
     const convergence = this.getConvergenceState(this.frameState);
     const config = this.recipe?.threeRouteConvergence ?? {};
-    if (active && this.convergenceCompleted) {
-      guideLine = "The three returned conditions have resolved into the Combward selector without another Hub puzzle.";
-      objectiveLine = commit.available
-        ? `Press A to commit to ${commit.displayName}.`
-        : "Move to the Combward body; it will brighten when passage is ready.";
-    } else if (active && commit.available) {
-      guideLine = `${commit.displayName} is awake and close enough to accept a deliberate destination choice.`;
-      objectiveLine = `Press A to commit to ${commit.displayName}.`;
-    } else if (active) {
-      guideLine = "Awake route bodies are destinations. Reading them with Pulse is optional; entering them is a deliberate choice.";
-      objectiveLine = "Move to the route body you want to enter.";
+    const entryGuidance = this.createEntryGuidance(active);
+    if (entryGuidance.active) {
+      guideLine = entryGuidance.guideLine;
+      objectiveLine = entryGuidance.nextAction;
     }
 
     return {
@@ -518,6 +628,8 @@ export class HubInvestigationGameplaySystem {
       memoryRead: Boolean(this.memoryRead),
       returnedToCenter: Boolean(this.returnedToCenter),
       investigationReady: Boolean(active && this.investigationReady),
+      investigationOptional: true,
+      departureRequiresInvestigation: false,
       nearestRouteId: active ? this.nearestRouteId : "none",
       nearestRouteDistance: active && Number.isFinite(this.nearestRouteDistance) ? this.nearestRouteDistance : 0,
       firstRouteRead: this.firstRouteRead,

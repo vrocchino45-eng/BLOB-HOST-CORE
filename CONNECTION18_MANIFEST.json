@@ -1,0 +1,55 @@
+{
+  "pass": "CONNECTION18",
+  "baseline": "CONNECTION17 playable build",
+  "states": [
+    {
+      "id": "CONNECTION17",
+      "files": {
+        "src/player/CoreVerbPhysicalizationSystem.js": "e9c065babde52756b68ac16f3e401a93ed3cb1a107d9c73334856473c8151848",
+        "CONNECTION18_CONTACT_CHECK.mjs": null,
+        "CONNECTION18_CONTACT_BROWSER.mjs": null,
+        "CONNECTION18_BEFORE_FIXTURE.mjs": null
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "after": "09cccb91a06fa0759e06c646936d57cb1aff7a70e6505ec18cb2b1f7f4bdbd30"
+    },
+    {
+      "path": "CONNECTION18_CONTACT_CHECK.mjs",
+      "after": "125f07bb40f57dc7247c6fc07f39beb1ad64c776680cac036d2db07881cd05ff"
+    },
+    {
+      "path": "CONNECTION18_CONTACT_BROWSER.mjs",
+      "after": "79349a691ca6d05f3dd4986ab03770222bbac884f057a117c6e377c7522cdf7f"
+    },
+    {
+      "path": "CONNECTION18_BEFORE_FIXTURE.mjs",
+      "after": "e9c065babde52756b68ac16f3e401a93ed3cb1a107d9c73334856473c8151848"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/presentation/CoreSightlinePresentation.js",
+      "sha256": "382a3664f86cadb068d1d860cf61812014b4101e034a565c9a73d94a456b41c6"
+    },
+    {
+      "path": "src/presentation/VisualHierarchyCompressionSystem.js",
+      "sha256": "abe35b351526d8d197e8ac7eb35a41737afd58d581a6c09299636d3bb1bfa62f"
+    },
+    {
+      "path": "src/hub/HubInvestigationGameplaySystem.js",
+      "sha256": "ef41a6fa557911413e29f21927d9a39df4b50718c71408a78980a5a8e0d0d9a5"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}

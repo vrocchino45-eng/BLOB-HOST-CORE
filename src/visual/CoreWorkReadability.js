@@ -1,0 +1,52 @@
+import * as THREE from 'three';
+import {CORE_VISUAL_PALETTE as palette} from './CoreVisualPalette.js';
+
+// Runs after embodiment/engine animation and camera material fading. Restores its previous
+// presentation overrides BEFORE the next owner update, including view exits.
+// Never changes transforms, placement classification, simulation or input.
+export class CoreWorkReadability {
+  constructor(owner) {
+    this.owner=owner;this.saved=new Map();this.engineVisible=null;this.active=false;
+    const geometry=new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(.22,0));
+    this.selection=new THREE.LineSegments(geometry,new THREE.LineBasicMaterial({color:palette.selection,transparent:true,opacity:.86,depthTest:false,depthWrite:false}));
+    this.selection.name='core_work_selected_anchor_contour';
+    Object.assign(this.selection.userData,{targetingSuppressed:true,presentationOnly:true,objectDefiningRing:false});
+    this.selection.visible=false;this.selection.renderOrder=12;
+    owner.bodyFrame.add(this.selection);
+  }
+  remember(material) {
+    let s=this.saved.get(material);
+    if(!s){s={color:material.color?.clone(),emissive:material.emissive?.clone(),active:false};this.saved.set(material,s);}
+    if(s.active)return;
+    s.color?.copy(material.color);s.emissive?.copy(material.emissive);
+    s.opacity=material.opacity;s.emissiveIntensity=material.emissiveIntensity;s.depthWrite=material.depthWrite;s.active=true;
+  }
+  restore() {
+    for(const [m,s] of this.saved)if(s.active){s.color&&m.color.copy(s.color);s.emissive&&m.emissive.copy(s.emissive);m.opacity=s.opacity;m.emissiveIntensity=s.emissiveIntensity;m.depthWrite=s.depthWrite;s.active=false;}
+    if(this.engineVisible!==null&&this.owner.coreEnginePhaseRoot)this.owner.coreEnginePhaseRoot.visible=this.engineVisible;
+    this.engineVisible=null;this.selection.visible=false;this.active=false;
+  }
+  apply(frame) {
+    if(!(frame.inspectionCamera?.coreWorkActive||frame.tightInspectionCamera?.coreWorkActive))return;
+    const owner=this.owner,selectedId=frame.coreWorkManipulation?.selectedPieceId;
+    this.active=true;
+    for(const piece of [owner.memoryImprintRoot,owner.vascularFilamentRoot,owner.siltAdaptationRoot]) {
+      const color=palette.families[piece?.userData?.coreWorkFamily];
+      if(!piece?.visible||color===undefined)continue;
+      const selected=piece.name===selectedId;
+      owner.forEachCoreWorkMaterial(piece,m=>{
+        this.remember(m);m.color?.setHex(color);m.emissive?.setHex(color);
+        if(Number.isFinite(m.emissiveIntensity))m.emissiveIntensity=selected ? .18 : .10;
+        if(Number.isFinite(m.opacity))m.opacity=Math.min(.9,Math.max(m.opacity,selected ? .72 : .58));
+      });
+      if(selected){owner.getCoreWorkAnchorLocal(piece,this.selection.position);this.selection.visible=true;}
+    }
+    for(const [mesh,cap] of [[owner.outerShell,.08],[owner.innerMantle,.05],[owner.nucleus,.26],[owner.directionalProw,.05],[owner.rearLobe,.05]]) {
+      const m=mesh?.material;if(!m||Array.isArray(m))continue;this.remember(m);
+      if(Number.isFinite(m.opacity))m.opacity=Math.min(m.opacity,cap);
+      if(Number.isFinite(m.emissiveIntensity))m.emissiveIntensity=Math.min(m.emissiveIntensity,.12);
+      m.depthWrite=false;
+    }
+    if(owner.coreEnginePhaseRoot){this.engineVisible=owner.coreEnginePhaseRoot.visible;owner.coreEnginePhaseRoot.visible=false;}
+  }
+}

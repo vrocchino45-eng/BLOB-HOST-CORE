@@ -1,0 +1,24 @@
+--- CONNECTION55/src/morph/LocalCellBoundaryMorphSystem.js
++++ CONNECTION56/src/morph/LocalCellBoundaryMorphSystem.js
+@@ -155,7 +155,11 @@
+         if (!proximityReturn) state.returnTriggerArmed = false;
+       }
+ 
+-      const freshInput = this.consumeFreshTrigger(recipe.trigger, frameState, recipe);
++      // A committed destination is persistent intent. Do not consume its request
++      // until this owner can start the crossing; preparation may change in flight.
++      const freshInput = recipe.trigger === "commit" && !readiness.ready
++        ? false
++        : this.consumeFreshTrigger(recipe.trigger, frameState, recipe);
+       const acceptedInput = freshInput && (
+         proximityReturn
+           ? state.returnTriggerArmed
+@@ -975,7 +979,7 @@
+ 
+     return {
+       ready: Boolean(
+-        foundation.completed &&
++        foundation.active &&
+         convergenceComplete &&
+         destinationPrepared &&
+         distance <= recipe.interactionRange

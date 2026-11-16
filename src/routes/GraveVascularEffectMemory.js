@@ -25,6 +25,9 @@ export class GraveVascularEffectMemory {
     this.lastParentSiltReceiptId = null;
     this.lastVascularEffectId = null;
     this.lastSubjectId = null;
+    // CONNECTION27: observation of a measured positive local retention change.
+    // This is not another receipt and is intentionally outside legacy snapshots.
+    this.lastPositiveReception = null;
   }
 
   /** Called only from Grave I's mounted update, never by an off-route tick. */
@@ -88,7 +91,14 @@ export class GraveVascularEffectMemory {
     this.records.push(record);
     this.lastHostSequence = e.sequence;
     this.receivedTotal++;
+    const memoryPressureBefore = this.memoryPressure;
     this.memoryPressure = boundedAdd(this.memoryPressure, e.appliedDelta, {upper: 1});
+    if (this.memoryPressure > memoryPressureBefore) {
+      this.lastPositiveReception = Object.freeze({
+        record, memoryPressureBefore, memoryPressureAfter: this.memoryPressure,
+        memoryDelta: this.memoryPressure - memoryPressureBefore
+      });
+    }
     this.lastVascularEffectId = e.id;
     this.lastParentSiltReceiptId = e.parentSiltReceiptId;
     this.lastSubjectId = e.subjectId;

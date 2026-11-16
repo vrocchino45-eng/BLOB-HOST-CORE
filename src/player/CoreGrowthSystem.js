@@ -1,3 +1,4 @@
+import { deriveCoreEarnedEvolution } from "./CoreEarnedEvolution.js";
 const RECIPE_ID = "FIRST_VISIBLE_CORE_GROWTH_HC009D";
 const SAFE_SEED_ID = "dormant_seed_nutrient_001";
 
@@ -37,6 +38,8 @@ export class CoreGrowthSystem {
     this.biasTarget = 0;
     this.safeSeedAbsorbed = false;
     this.firstGrowthCommitted = false;
+    this.surfaceFoundationRetained = false;
+    this.surfaceFoundationCause = "none";
     this.nurseryAgencyProven = false;
     this.guidePressureTested = false;
     this.hubReflectionObserved = false;
@@ -103,6 +106,7 @@ export class CoreGrowthSystem {
 
   update(dt, frameState = this.frameState) {
     this.captureNurseryHistory(frameState.nurseryCircuit);
+    this.captureSurfaceFoundation(frameState);
     this.captureGraveMemoryHistory(
       frameState.graveMemoryRoute,
       frameState.act1RouteHistory
@@ -132,9 +136,7 @@ export class CoreGrowthSystem {
     const commitProgress = this.recipe.growth?.commitProgress ?? 0.85;
     this.firstGrowthCommitted = this.firstGrowthCommitted
       || Boolean(
-        this.nurseryAgencyProven
-        && this.safeSeedAbsorbed
-        && this.successfulCycleCount > 0
+        (this.surfaceFoundationRetained || (this.nurseryAgencyProven && this.safeSeedAbsorbed && this.successfulCycleCount > 0))
         && this.growthProgress >= commitProgress
       );
 
@@ -227,6 +229,26 @@ export class CoreGrowthSystem {
         }
       }
     }
+  }
+
+  captureSurfaceFoundation(frameState) {
+    if (this.surfaceFoundationRetained) return;
+    const surface = frameState.surfaceWakeGameplay ?? {};
+    const lesson = frameState.surfaceWakeLayeredInteraction ?? {};
+    const invitation = surface.hostContinuationInvitation ?? {};
+    const nurserySafe = this.nurseryAgencyProven && this.successfulCycleCount > 0;
+    const currentSurface = frameState.activeCellId === "CELL_MEMBRANE_NURSERY_001" && surface.active === true;
+    const relationship = invitation.relationshipProof === true && invitation.surfaceRelationshipProven === true
+      && invitation.communityMemoryProven === true && invitation.hostMatterAnswerProven === true;
+    const learnedSurface = currentSurface && lesson.completed === true && invitation.open === true
+      && invitation.revealOwner === "SurfaceWakeGameplaySystem"
+      && (invitation.chemistryPassageOpen === true || relationship);
+    if (!nurserySafe && !learnedSurface) return;
+    this.surfaceFoundationRetained = true;
+    this.surfaceFoundationCause = nurserySafe ? "player_authored_safe_nursery_outcome"
+      : invitation.chemistryPassageOpen ? "completed_surface_safe_matter_lesson" : "completed_surface_host_relationship_lesson";
+    this.eventSequence += 1;
+    this.lastEvent = `surface_foundation_retained:${this.surfaceFoundationCause}`;
   }
 
   captureGraveMemoryHistory(route = {}, routeHistory = {}) {
@@ -394,6 +416,7 @@ export class CoreGrowthSystem {
 
   resolveGrowthTarget() {
     const growth = this.recipe.growth ?? {};
+    if (this.surfaceFoundationRetained) return growth.surfaceFoundationTarget ?? 1;
     if (!this.nurseryAgencyProven) return 0;
     if (this.resolvedCycleCount <= 0 && !this.safeSeedAbsorbed) return 0;
     if (this.successfulCycleCount <= 0) {
@@ -406,7 +429,17 @@ export class CoreGrowthSystem {
       : (growth.successfulCircuitTarget ?? 0.64);
   }
 
+  earnedEvolution() {
+    return deriveCoreEarnedEvolution({owner:"CoreGrowthSystem",firstGrowthCommitted:this.firstGrowthCommitted,
+      surfaceFoundationRetained:this.surfaceFoundationRetained,surfaceFoundationCause:this.surfaceFoundationCause,
+      graveMemoryImprintCommitted:this.graveMemoryImprintCommitted,safeMemoryTransferComplete:this.safeMemoryTransferComplete,graveRouteReturned:this.graveRouteReturned,
+      vascularRhythmRetained:this.vascularRhythmRetained,vascularRouteReturned:this.vascularRouteReturned,vascularCadenceReads:this.vascularCadenceReads,
+      siltPressureRetained:this.siltPressureRetained,siltRouteReturned:this.siltRouteReturned,siltPressureRead:this.siltPressureRead,
+      siltRibsReleased:this.siltRibsReleased,siltSafeMatterAbsorbed:this.siltSafeMatterAbsorbed,siltDenseMatterLeftIntact:this.siltDenseMatterLeftIntact});
+  }
+
   resolveStage() {
+    if (this.earnedEvolution().integrated) return { id: "integrated_core", displayName: "Integrated Core" };
     const stages = this.recipe.stages ?? {};
     const boundMinimum = stages.bound?.minimumProgress ?? 0.85;
     const emergingMinimum = stages.emerging?.minimumProgress ?? 0.18;
@@ -490,10 +523,16 @@ export class CoreGrowthSystem {
       displayStage: stage.displayName,
       growthProgress: this.growthProgress,
       growthTarget: this.growthTarget,
+      earnedEvolution: this.earnedEvolution(),
+      surfaceFoundationRetained: this.surfaceFoundationRetained,
+      surfaceFoundationCause: this.surfaceFoundationCause,
+      surfaceFoundationOwner: "SurfaceWakeGameplaySystem / SurfaceWakeLayeredInteractionSystem",
       firstGrowthCommitted: this.firstGrowthCommitted,
       protectedSeedMassIntegrated: this.safeSeedAbsorbed,
       nurseryAgencyProven: this.nurseryAgencyProven,
-      growthRequiresPlayerAuthoredNurserySuccess: true,
+      growthRequiresPlayerAuthoredNurserySuccess: false,
+      growthRequiresPlayerAuthoredSurfaceConsequence: true,
+      protectedSeedRequiredForSurfaceMaturity: false,
       nurseryConsequenceRetained: this.resolvedCycleCount > 0,
       resolvedCycleCount: this.resolvedCycleCount,
       successfulCycleCount: this.successfulCycleCount,
@@ -516,8 +555,8 @@ export class CoreGrowthSystem {
         balanced: visual.balancedColor ?? "#b8e9e2",
         scar: visual.scarColor ?? "#e89268"
       },
-      visibleShellRestructuring: this.nurseryAgencyProven,
-      anatomicalPhase: !this.nurseryAgencyProven
+      visibleShellRestructuring: this.nurseryAgencyProven || this.surfaceFoundationRetained,
+      anatomicalPhase: this.earnedEvolution().integrated ? "integrated_regional_core" : !(this.nurseryAgencyProven || this.surfaceFoundationRetained)
         ? "primitive"
         : !this.guidePressureTested
           ? "membrane_differentiating"
@@ -649,8 +688,10 @@ export class CoreGrowthSystem {
           : "Let the memory pearl settle, then carry it through the existing return fold."
         : this.firstGrowthCommitted
         ? "Carry the retained Binding Core form into the next living system."
-        : this.successfulCycleCount > 0 && !this.safeSeedAbsorbed
-          ? "Complete the existing Fold lesson and absorb the protected seed so the new shell can bind."
+        : this.surfaceFoundationRetained
+          ? "Surface experience is binding into the Core; the protected seed is optional. Continue the existing Fold lesson when ready."
+          : this.successfulCycleCount > 0
+          ? "Continue the existing Fold lesson; a safe Surface outcome can bind the shell without consuming the protected seed."
           : this.resolvedCycleCount > 0
             ? "Recover or nourish the nursery; the Core is beginning to answer."
             : "Live through a nursery cycle so the Core has something to become."

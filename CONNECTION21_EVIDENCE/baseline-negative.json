@@ -1,0 +1,77 @@
+{
+  "scope": "Actual presentation methods with declared bond/grip/progress and nested-transform fixtures. No gameplay absorption, completion receipt, mass transfer, controller or perceptual claim.",
+  "summary": {
+    "passed": 2,
+    "failed": 12
+  },
+  "checks": [
+    {
+      "name": "held zero-progress bond stays quiet and creates no intake fragments",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n11 !== 0\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:5:135\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:5:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "current owner progress advance permits intake fragments",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'bond_progress'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:6:143\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:6:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "stalled or decaying progress emits no new fragments",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 2\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:7:179\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:7:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "inactive or incompatible bond cannot authorize intake visuals",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 0\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:8:254\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:8:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "first observation and target switch do not interpret existing progress as fresh",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:9:158\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:9:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "line connects target world position to Core world position",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: 1,0,-1 versus 5.560087513571352,0.5,-5.756787402374419\n    at near (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:4:27)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:10:156\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:10:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "funnel and filament endpoints use the Core world position",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: 0.8,0,-0.8 versus 4.0480700108570815,0.6,-4.005429921899536\n    at near (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:4:27)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:11:218\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:11:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "traveling fragments converge on Core world position",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: 0,0,0 versus -2,1,3\n    at near (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:4:27)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:12:196\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:12:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "grip preview clears a stale legacy stream and never counts as absorption",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 0\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:13:320\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:13:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "hidden and absorbed bodies cannot retain an intake stream",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'inactive'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:14:274\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:14:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "release hides graphics; rehold does not replay stored progress",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 2\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:15:295\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:15:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "unknown progress cannot establish a false advance on recovery",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 0\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:16:191\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:2:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection21/baseline/CONNECTION21_ABSORB_CHECK.mjs:16:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "waiting freezes directional flow phase",
+      "status": "PASS"
+    },
+    {
+      "name": "presentation never changes owner progress, target transform, mass or credit",
+      "status": "PASS"
+    }
+  ]
+}

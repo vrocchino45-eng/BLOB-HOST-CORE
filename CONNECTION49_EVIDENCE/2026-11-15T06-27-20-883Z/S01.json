@@ -1,0 +1,94 @@
+{
+  "pass": "CONNECTION36",
+  "scope": "Actual publisher/guard and old-source physiology parity with explicit clock/topology/context fixtures. No material repair consumer.",
+  "checks": [
+    {
+      "name": "Previous callback sample accepted without mutating frame",
+      "status": "PASS"
+    },
+    {
+      "name": "Publication and nested counts are immutable",
+      "status": "PASS"
+    },
+    {
+      "name": "Same callback preceding catch-up substep accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject same step",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject stale frame",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject wrong host",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject wrong cell",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject inspection",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject work",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject held piece",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject transition",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject missing context",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject incomplete anatomy",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject changed topology",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject invalid factor",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject invalid time",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject zero time",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject foreign owner",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject malformed substep",
+      "status": "PASS"
+    },
+    {
+      "name": "Reject skipped last substep",
+      "status": "PASS"
+    },
+    {
+      "name": "Adding metadata preserves every prior physics/reserve/userData field over matched runs",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 21,
+    "failed": 0
+  }
+}

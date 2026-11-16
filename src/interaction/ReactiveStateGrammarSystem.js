@@ -1,3 +1,6 @@
+import { materialInScope, materialVisible, materialScopeActive } from './MaterialResponseScope.js';
+import { readPriorCoreStabilizeSample } from '../player/CoreStabilizeSample.js';
+
 const clamp = (value, min, max) => Math.max(min, Math.min(max, Number.isFinite(value) ? value : min));
 const clamp01 = (value) => clamp(value, 0, 1);
 
@@ -35,11 +38,14 @@ const CHORD_RESPONSE = Object.freeze({
  * invariant prop.
  */
 export class ReactiveStateGrammarSystem {
-  constructor({ frameState, chemObjectSystem }) {
+  constructor({ frameState, chemObjectSystem, scope = null, repairTrialEnabled = false }) {
     if (!frameState) throw new Error("[ReactiveStateGrammarSystem] frameState is required.");
     if (!chemObjectSystem) throw new Error("[ReactiveStateGrammarSystem] chemObjectSystem is required.");
     this.frameState = frameState;
     this.chemObjectSystem = chemObjectSystem;
+    this.scope = scope;
+    Object.defineProperty(this, 'repairTrialEnabled', { value: repairTrialEnabled === true, writable: false });
+    this.lastRepairFactor = 1;
     this.states = new Map();
     this.lastPulseEventId = 0;
     this.stageEventSequence = 0;
@@ -48,20 +54,52 @@ export class ReactiveStateGrammarSystem {
 
   init() {
     this.ensureObjectStates();
-    this.publish(this.frameState, "none", "idle");
+    this.publish(this.frameState, "none", "idle", !this.scope);
+  }
+
+  // Retain condition history, but never leave a live focus in another region.
+  // Unmounted time is paused; no catch-up or zero-dt Pulse is applied on return.
+  onRuntimePrepare(frameState) { if (this.scope) this.neutralize(frameState); }
+  onRuntimeMount(frameState) { if (this.scope) this.neutralize(frameState); }
+  onRuntimeUnmount(frameState) { if (this.scope) this.neutralize(frameState); }
+
+  neutralize(frameState) {
+    const pulseId = frameState.input?.pulseEventId;
+    if (Number.isFinite(pulseId)) this.lastPulseEventId = Math.max(this.lastPulseEventId, pulseId);
+    for (const item of this.chemObjectSystem.objects) {
+      if (!materialInScope(item, this.scope)) continue;
+      const state = this.states.get(item.recipe.id);
+      if (state) { state.activeChord = 'idle'; state.containment01 = 0; }
+      delete item.root.userData.reactiveState;
+      delete item.root.userData.reactivePulseAnswer;
+      delete item.root.userData.reactiveAbsorbAnswer;
+    }
+    frameState.reactiveStateGrammarLastEvent = null;
+    this.publish(frameState, 'none', 'idle', false);
   }
 
   update(dt, frameState = this.frameState) {
+    this.lastRepairFactor = 1;
+    if (this.scope && (!Number.isFinite(dt) || dt <= 0 || !materialScopeActive(frameState, this.scope))) {
+      this.neutralize(frameState);
+      return;
+    }
     const safeDt = Math.max(0, Math.min(dt ?? 0, 0.08));
     this.ensureObjectStates();
 
     const composition = frameState.verbComposition ?? {};
     const targeting = frameState.targeting ?? {};
-    const targetId = composition.relationshipBound
+    let targetId = composition.relationshipBound
       ? (composition.targetId ?? "none")
       : targeting.relationshipActive
         ? (targeting.relationshipTargetId ?? targeting.targetId ?? "none")
         : "none";
+    if (this.scope) {
+      const target = this.chemObjectSystem.objects.find(item => item.recipe.id === targetId);
+      const retainedId = targeting.relationshipTargetId ?? targeting.targetId;
+      if (!materialInScope(target, this.scope) || !materialVisible(target)
+        || !targeting.relationshipActive || retainedId !== targetId) targetId = 'none';
+    }
     const chord = composition.relationshipBound && composition.targetId === targetId
       ? (composition.chord ?? "idle")
       : this.resolvePrimitiveChord(frameState.input ?? {});
@@ -75,6 +113,10 @@ export class ReactiveStateGrammarSystem {
     for (const item of this.chemObjectSystem.objects) {
       const state = this.ensureState(item);
       if (!state || item.absorbed || item.root.userData.absorbed) continue;
+      if (this.scope && !materialVisible(item)) {
+        delete item.root.userData.reactiveState;
+        continue;
+      }
 
       const ownsRelationship = targetId !== "none" && item.recipe.id === targetId;
       this.relaxTowardDisposition(state, safeDt);
@@ -86,7 +128,7 @@ export class ReactiveStateGrammarSystem {
       if (ownsRelationship) {
         if (pulseReleased) this.applyPulse(state, item, input, profile, chord);
         if (input.absorbHeld) this.applyAbsorb(state, item, safeDt, profile, chord);
-        if (input.stabilizeHeld || input.resonanceHeld) this.applyStabilize(state, safeDt, profile, chord);
+        if (input.stabilizeHeld || input.resonanceHeld) this.applyStabilize(state, safeDt, profile, chord, frameState);
         state.activeChord = chord;
         state.lastRelationshipAge = 0;
       } else {
@@ -133,6 +175,7 @@ export class ReactiveStateGrammarSystem {
 
   ensureState(item) {
     if (!item?.recipe?.id) return null;
+    if (!materialInScope(item, this.scope)) return null;
     const id = item.recipe.id;
     if (this.states.has(id)) return this.states.get(id);
 
@@ -202,8 +245,13 @@ export class ReactiveStateGrammarSystem {
       : "resistant_tension";
   }
 
-  applyStabilize(state, dt, profile, chord) {
-    const repairRate = 0.205 * profile.stabilizeRepair;
+  applyStabilize(state, dt, profile, chord, frameState = this.frameState) {
+    // CONNECTION38: opt-in comparison only; normal play keeps factor 1.
+    const sample = this.repairTrialEnabled && this.scope?.cellId === 'CELL_MEMBRANE_NURSERY_001'
+      && state.objectId === 'scar_contamination_plate_001' && frameState.activeCellId === this.scope.cellId
+      ? readPriorCoreStabilizeSample(frameState, dt) : null;
+    this.lastRepairFactor = sample?.coherenceMultiplier ?? 1;
+    const repairRate = 0.205 * profile.stabilizeRepair * this.lastRepairFactor;
     const floor = Math.max(0.035, state.baseline01 * 0.22);
     state.condition01 = Math.max(floor, state.condition01 - repairRate * dt);
     state.liveStress01 = Math.max(0, state.liveStress01 - dt * 0.48);
@@ -281,10 +329,12 @@ export class ReactiveStateGrammarSystem {
     };
   }
 
-  publish(frameState, targetId, chord) {
+  publish(frameState, targetId, chord, includeStates = true) {
     const objects = {};
     const stageCounts = { coherent: 0, strained: 0, unstable: 0, failing: 0 };
     for (const [id, state] of this.states.entries()) {
+      if (!includeStates) continue;
+      if (this.scope && !materialVisible(this.chemObjectSystem.objects.find(item => item.recipe.id === id))) continue;
       const snapshot = {
         stage: state.stage,
         condition01: Number(state.condition01.toFixed(4)),

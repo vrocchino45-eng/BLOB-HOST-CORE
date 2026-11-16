@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "summary": {
+    "passed": 6,
+    "failed": 0
+  },
+  "scope": "Full production source/data copies for each recognized state. Guarded installation yields the exact normalized production fingerprint already covered by CONNECTION25; restore recovers each starting fingerprint. No new gameplay execution or human perception claim.",
+  "expectedSourceFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+  "checks": [
+    {
+      "state": "CONNECTION20",
+      "status": "PASS",
+      "beforeFingerprint": "8acd004cd972ba32aac5ea416750b48ca7abb80622474fd98b015109caaa2c21",
+      "installedFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "exactProductionRestored": true,
+      "message": "Installed CONNECTION26 consolidated playable checkpoint from CONNECTION20. Originals: CONNECTION26_BACKUP. Reload the game if production files changed."
+    },
+    {
+      "state": "CONNECTION21",
+      "status": "PASS",
+      "beforeFingerprint": "fcfe5f360e0a56415e9fea28bda99ea93926d366cab18403ec8db0dd4ebfdf3b",
+      "installedFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "exactProductionRestored": true,
+      "message": "Installed CONNECTION26 consolidated playable checkpoint from CONNECTION21. Originals: CONNECTION26_BACKUP. Reload the game if production files changed."
+    },
+    {
+      "state": "CONNECTION22_FROM20",
+      "status": "PASS",
+      "beforeFingerprint": "8e66402df49b13088ef15e01c5cf1712b4a86b19e745f45e90265e341c401f24",
+      "installedFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "exactProductionRestored": true,
+      "message": "Installed CONNECTION26 consolidated playable checkpoint from CONNECTION22_FROM20. Originals: CONNECTION26_BACKUP. Reload the game if production files changed."
+    },
+    {
+      "state": "CONNECTION22_FROM21",
+      "status": "PASS",
+      "beforeFingerprint": "1917a1bc6c2cd42454e365b52fbca3ee6fd2f1a87f4e22310961239127b182ce",
+      "installedFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "exactProductionRestored": true,
+      "message": "Installed CONNECTION26 consolidated playable checkpoint from CONNECTION22_FROM21. Originals: CONNECTION26_BACKUP. Reload the game if production files changed."
+    },
+    {
+      "state": "CONNECTION23",
+      "status": "PASS",
+      "beforeFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "installedFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "exactProductionRestored": true,
+      "message": "Installed CONNECTION26 consolidated playable checkpoint from CONNECTION23. Originals: CONNECTION26_BACKUP. Reload the game if production files changed."
+    },
+    {
+      "state": "CONNECTION24",
+      "status": "PASS",
+      "beforeFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "installedFingerprint": "79045524a5b0cef234056c80cc0b58065a6cdf3acd09bc3a32b1ad0a2fe1797c",
+      "exactProductionRestored": true,
+      "message": "CONNECTION26 consolidated playable checkpoint already present. No files changed."
+    }
+  ]
+}

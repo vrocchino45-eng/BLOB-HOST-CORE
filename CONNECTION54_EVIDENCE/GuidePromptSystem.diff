@@ -1,0 +1,11 @@
+--- CONNECTION53/src/guide/GuidePromptSystem.js
++++ CONNECTION54/src/guide/GuidePromptSystem.js
+@@ -445,7 +445,7 @@
+ 
+   hubInvestigationPrompt(frameState) {
+     const gameplay = frameState.hubInvestigationGameplay ?? {};
+-    if (!gameplay.active || gameplay.investigationReady) return null;
++    if (!gameplay.active) return null;
+     return {
+       id: "GUIDE_PROMPT_HUB_INVESTIGATION_GAMEPLAY_HC007C",
+       beat: gameplay.status ?? "hub_systemic_investigation",

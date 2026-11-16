@@ -1,3 +1,4 @@
+import { resolveCoreFamilyColor } from "../visual/CoreVisualPalette.js";
 import * as THREE from "three";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 
@@ -149,12 +150,12 @@ export class HubChamberFoundationSystem {
     this.inheritedLivingStateAge = 0;
     this.inheritedLivingQualities = { vitality: 0.72, trust: 0.5, stress: 0.3, growthMemory: 0 };
     this.graveMemoryColor = new THREE.Color(0xb9a0bd);
-    this.vascularSignalColor = new THREE.Color(0x78e3ff);
+    this.vascularSignalColor = new THREE.Color(resolveCoreFamilyColor("vascular_rhythm_retention", 0x78e3ff));
     this.vascularReturnColor = new THREE.Color(0xffc96d);
     this.siltColor = new THREE.Color(0x57442f);
     this.siltDeepColor = new THREE.Color(0x251d1b);
     this.siltPorousColor = new THREE.Color(0xd29b6b);
-    this.siltReturnColor = new THREE.Color(0xc99d55);
+    this.siltReturnColor = new THREE.Color(resolveCoreFamilyColor("silt_pressure_retention", 0xc99d55));
     this.lastActiveCell = "none";
     this.spatialTruth = this.createEmptySpatialTruth();
     this.suppressedRootNames = [];
@@ -549,7 +550,7 @@ export class HubChamberFoundationSystem {
     });
 
     const routeColors = Object.fromEntries(
-      (this.recipe.routes ?? []).map((route) => [route.id, route.color ?? 0xffffff])
+      (this.recipe.routes ?? []).map((route) => [route.id, resolveCoreFamilyColor(route.id, route.color ?? 0xffffff)])
     );
     const leafOrder = ["vascular_route", "grave_memory_route", "silt_burrow_route"];
     leafOrder.forEach((routeId, index) => {
@@ -647,7 +648,7 @@ export class HubChamberFoundationSystem {
 
   composeCorridorSegments(corridor, curve, route) {
     const segments = [];
-    const routeColor = route.color ?? 0xffffff;
+    const routeColor = resolveCoreFamilyColor(route.id, route.color ?? 0xffffff);
     const tangent = new THREE.Vector3();
     const localForward = new THREE.Vector3(0, 0, 1);
     const count = route.id === "grave_memory_route" ? 8 : 7;
@@ -712,7 +713,7 @@ export class HubChamberFoundationSystem {
   createTerritoryBackdrop(corridor, end, route) {
     const color = route.secondaryColor ?? route.color ?? 0xffffff;
     const material = this.createTissueMaterial(color, {
-      emissive: route.color ?? color,
+      emissive: resolveCoreFamilyColor(route.id, route.color ?? color),
       emissiveIntensity: 0.025,
       opacity: 0,
       roughness: 0.82
@@ -747,7 +748,7 @@ export class HubChamberFoundationSystem {
   }
 
   createGateMaterials(route) {
-    return [route.color, route.secondaryColor].map((color, index) => this.createTissueMaterial(
+    return [resolveCoreFamilyColor(route.id, route.color ?? 0xffffff), route.secondaryColor].map((color, index) => this.createTissueMaterial(
       color ?? (index ? 0xffd9a0 : 0xffffff),
       {
         emissive: color ?? (index ? 0xffd9a0 : 0xffffff),
@@ -2824,6 +2825,7 @@ export class HubChamberFoundationSystem {
       distanceToPlayer: graveFirstDestination?.distanceToPlayer ?? 0,
       bodyCue: "existing_corridor_wave_from_hub_center_to_grave",
       bodyRevealProgress: Math.min(this.reveal, this.routeIdentityReveal),
+      invitationRequiredForCommit: false,
       wholeHubScreenTruthVerified: Boolean(this.spatialTruth.verified),
       screenTruthRequiredForCommit: false,
       commitControl: "A / E",
@@ -3054,7 +3056,8 @@ export class HubChamberFoundationSystem {
       ),
       activeRouteReadable: Boolean(complete),
       activeRouteCrossable: Boolean(fullHubComplete),
-      departurePrerequisite: "hub_world_investigation_complete",
+      departurePrerequisite: "mounted_hub_prepared_available_destination_and_deliberate_commit",
+      hubInvestigationRequired: false,
       newRouteContentActivated: false,
       targetRequired: false,
       inputRequired: false,
@@ -3147,7 +3150,7 @@ export class HubChamberFoundationSystem {
         : fullHubComplete
         ? "The three territories and the core now read together. Grave Memory can be crossed."
         : complete
-          ? "Three route bodies stand apart. Read each territory, the suspended memory, then yourself."
+          ? "Three route bodies stand apart. Choose an available destination; route and memory readings are optional."
           : (language.revealingGuide ?? "The Chorus is becoming a junction."),
       objectiveLine: routeCommit.available
         ? `Press A to enter ${routeCommit.displayName}.`
@@ -3196,7 +3199,7 @@ export class HubChamberFoundationSystem {
       blocker: fullHubComplete
         ? "none_detected"
         : complete
-            ? "hub_spatial_investigation_pending"
+            ? "hub_presentation_complete_optional_readings_available"
             : routeIdentityReady ? "hub_layout_still_revealing" : "hub_route_identity_readiness_pending",
       noTeleport: true,
       noBranchMenu: true,

@@ -1,0 +1,406 @@
+{
+  "suite": "BLOB-BOT-SERIES1",
+  "baseline": "CONNECTION38-GAMEPLAY-CONNECTION39-REGRESSION-CATALOG",
+  "cases": [
+    {
+      "id": "D01",
+      "name": "Data profiles and invalid archive data",
+      "file": "cases/D01.mjs",
+      "expectedChecks": 15,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "M01",
+      "name": "Conserved Silt material loop",
+      "file": "cases/M01.mjs",
+      "expectedChecks": 9,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "M02",
+      "name": "Core Work grip handoff",
+      "file": "cases/M02.mjs",
+      "expectedChecks": 8,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "G01",
+      "name": "Vascular paired handoff",
+      "file": "cases/G01.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "G02",
+      "name": "Silt goal negative receipts",
+      "file": "cases/G02.mjs",
+      "expectedChecks": 13,
+      "tier": "synthetic_receipts",
+      "mode": "quick"
+    },
+    {
+      "id": "G03",
+      "name": "Six-credit owner integration",
+      "file": "cases/G03.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "H01",
+      "name": "Host cycle owner and hidden-region handling",
+      "file": "cases/H01.mjs",
+      "expectedChecks": 34,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "H02",
+      "name": "Six-cycle recovery against neutral twin",
+      "file": "cases/H02.mjs",
+      "expectedChecks": 1,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "T01",
+      "name": "Read-only Host telemetry export",
+      "file": "cases/T01.mjs",
+      "expectedChecks": 10,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "P01",
+      "name": "Paired reserve and credit boundary",
+      "file": "cases/P01.mjs",
+      "expectedChecks": 69,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "B01",
+      "name": "Host cycle and real telemetry download",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "B02",
+      "name": "Held-grain mode interruption and reacquisition",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "B03",
+      "name": "Regional goals, six-phase, Hub and reserve arc",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "W01",
+      "name": "Vascular coherence consumer guards",
+      "file": "cases/W01.mjs",
+      "expectedChecks": 26,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "W02",
+      "name": "Coherence and actual movement/reserve comparisons",
+      "file": "cases/W02.mjs",
+      "expectedChecks": 28,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "W03",
+      "name": "Live coherence/current and mode boundaries",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "W04",
+      "name": "Continuous coherence-driven particle travel and physics parity",
+      "file": "cases/W04.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "W05",
+      "name": "Live continuous current particle contribution and lifecycle",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "C01",
+      "name": "Silt\u2013Vascular\u2013Grave\u2013Silt consequence loop",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "C02",
+      "name": "Consequence attribution, saturation and provenance",
+      "file": "cases/C02.mjs",
+      "expectedChecks": 6,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "L01",
+      "name": "Territory Pulse freshness across region gaps",
+      "file": "cases/L01.mjs",
+      "expectedChecks": 32,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "L02",
+      "name": "Live input, territory remount and Core Work Pulse isolation",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "K01",
+      "name": "Player-input Core placement to Vascular and reserve",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "U01",
+      "name": "Hub readiness, Grave phase guidance and Core Work controls",
+      "file": "cases/U01.mjs",
+      "expectedChecks": 31,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "U02",
+      "name": "Live Hub commitments with incomplete presentation and Grave II guide",
+      "file": "cases/browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "R01",
+      "name": "Preparation ownership race and dormant-root regression",
+      "file": "../CONNECTION22_PREPARATION_CHECK.mjs",
+      "expectedChecks": 9,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "R02",
+      "name": "Live Silt visibility across late warmup success and failure",
+      "file": "../CONNECTION22_PREPARATION_BROWSER.mjs",
+      "expectedChecks": 2,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "V01",
+      "name": "Confirmed arrival identity, fold travel and saturation guards",
+      "file": "../CONNECTION23_ARRIVAL_VISUAL_CHECK.mjs",
+      "expectedChecks": 8,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "V02",
+      "name": "Live confirmed fold wave and spatial audio alignment",
+      "file": "../CONNECTION23_ARRIVAL_VISUAL_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "J01",
+      "name": "Silt foreground sightline owner guards",
+      "file": "../CONNECTION17_VISIBILITY_CHECK.mjs",
+      "expectedChecks": 15,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "J02",
+      "name": "Silt foreground sightline live browser",
+      "file": "../CONNECTION17_VISIBILITY_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "J03",
+      "name": "Stabilize contact condition owner guards",
+      "file": "../CONNECTION18_CONTACT_CHECK.mjs",
+      "expectedChecks": 16,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "J04",
+      "name": "Stabilize contact condition live browser",
+      "file": "../CONNECTION18_CONTACT_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "J05",
+      "name": "Confirmed arrival audio owner guards",
+      "file": "../CONNECTION19_ARRIVAL_AUDIO_CHECK.mjs",
+      "expectedChecks": 21,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "J06",
+      "name": "Confirmed arrival audio live browser",
+      "file": "../CONNECTION19_ARRIVAL_AUDIO_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "J07",
+      "name": "Absorb progress feedback owner guards",
+      "file": "../CONNECTION21_ABSORB_CHECK.mjs",
+      "expectedChecks": 14,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "J08",
+      "name": "Absorb progress feedback live browser",
+      "file": "../CONNECTION21_ABSORB_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "E01",
+      "name": "Positive Grave memory witness, parity and localized audio guards",
+      "file": "../CONNECTION27_GRAVE_MEMORY_CHECK.mjs",
+      "expectedChecks": 23,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "E02",
+      "name": "Live Grave memory echo anatomy and spatial reply",
+      "file": "../CONNECTION27_GRAVE_MEMORY_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "F01",
+      "name": "Measured Silt relief, old-source parity and reply guards",
+      "file": "../CONNECTION28_PRESSURE_REPLY_CHECK.mjs",
+      "expectedChecks": 24,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "F02",
+      "name": "Live Grave II result to applied Silt relief and localized reply",
+      "file": "../CONNECTION28_PRESSURE_REPLY_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "N01",
+      "name": "Current-cell authored chemistry, provenance and neutral guards",
+      "file": "../CONNECTION30_CHEMISTRY_CONTEXT_CHECK.mjs",
+      "expectedChecks": 27,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "N02",
+      "name": "Live chemistry context across debug mounts and actual commitments",
+      "file": "../CONNECTION30_CHEMISTRY_CONTEXT_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "Q01",
+      "name": "Surface material execution scope, retained state and lifecycle",
+      "file": "../CONNECTION33_SURFACE_RESPONSE_CHECK.mjs",
+      "expectedChecks": 22,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "Q02",
+      "name": "Live Surface material input, targeting, recovery and remount",
+      "file": "../CONNECTION33_SURFACE_RESPONSE_BROWSER.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "S01",
+      "name": "Core capability publication, prior-step guard and old-source parity",
+      "file": "../CONNECTION36_CORE_SAMPLE_CHECK.mjs",
+      "expectedChecks": 21,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "S02",
+      "name": "Opt-in material repair, matched control and catch-up equivalence",
+      "file": "../BLOB_CORE_REPAIR_PLAYTEST/run-owner.mjs",
+      "expectedChecks": 13,
+      "tier": "owner_fixture",
+      "mode": "quick"
+    },
+    {
+      "id": "S03",
+      "name": "Core repair control URL, live input and opening continuation",
+      "file": "cases/core-repair-control-browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "S04",
+      "name": "Core repair trial URL, live input and opening continuation",
+      "file": "cases/core-repair-trial-browser.mjs",
+      "expectedChecks": 1,
+      "tier": "running_browser",
+      "mode": "browser"
+    },
+    {
+      "id": "S05",
+      "name": "Trial-enabled inspection, Core Work, held exits and handoff",
+      "file": "cases/core-repair-interruptions-browser.mjs",
+      "expectedChecks": 7,
+      "tier": "running_browser",
+      "mode": "browser"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "case": "U01",
+  "scope": "Actual production methods and Grave II owner with declared body/history/landmark fixtures. No ordinary navigation, human readability or physical gamepad claim.",
+  "summary": {
+    "passed": 15,
+    "failed": 16
+  },
+  "checks": [
+    {
+      "name": "grave_memory_route can commit with incomplete presentation and genuine prerequisites",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ null\n- {\n-   activeRoute: true,\n-   destinationMounted: true,\n-   distanceToPlayer: 1,\n-   gameplayPending: false,\n-   gateId: 'gate_grave_memory_route',\n-   id: 'grave_memory_route',\n-   playableReady: true,\n-   position: [\n-     0,\n-     0,\n-     0\n-   ]\n- }\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:21:83\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:20:77\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "vascular_route can commit with incomplete presentation and genuine prerequisites",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ null\n- {\n-   activeRoute: true,\n-   destinationMounted: true,\n-   distanceToPlayer: 1,\n-   gameplayPending: false,\n-   gateId: 'gate_vascular_route',\n-   id: 'vascular_route',\n-   playableReady: true,\n-   position: [\n-     0,\n-     0,\n-     0\n-   ]\n- }\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:21:83\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:20:77\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "silt_burrow_route can commit with incomplete presentation and genuine prerequisites",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ null\n- {\n-   activeRoute: true,\n-   destinationMounted: true,\n-   distanceToPlayer: 1,\n-   gameplayPending: false,\n-   gateId: 'gate_silt_burrow_route',\n-   id: 'silt_burrow_route',\n-   playableReady: true,\n-   position: [\n-     0,\n-     0,\n-     0\n-   ]\n- }\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:21:83\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:20:77\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "candidate rejects activeRoute=false",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate rejects destinationMounted=false",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate rejects playableReady=false",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate rejects gameplayPending=true",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate rejects distanceToPlayer=2.11",
+      "status": "PASS"
+    },
+    {
+      "name": "candidate rejects distanceToPlayer=NaN",
+      "status": "PASS"
+    },
+    {
+      "name": "inactive Hub and another cell cannot offer a candidate",
+      "status": "PASS"
+    },
+    {
+      "name": "nearest eligible body wins; unavailable nearest is skipped",
+      "status": "FAIL",
+      "error": "TypeError: Cannot read properties of null (reading 'id')\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:26:302\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:26:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "boundary retains return restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "boundary retains objective restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "boundary retains prepared restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "boundary retains range restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "boundary retains body restriction",
+      "status": "PASS"
+    },
+    {
+      "name": "first Grave entry still needs its revealed invitation",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated Grave compatibility does not depend on screen completion",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:29:141\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:29:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "one deliberate event latches once and leaves crossing to boundary owner",
+      "status": "FAIL",
+      "error": "TypeError: Cannot read properties of undefined (reading 'consequenceAuthority')\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:30:538\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:30:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "active Grave II owns guide and both HUD fallback instructions",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'GraveMemoryRouteSystem'\n- 'GraveResonanceGameplaySystem'\n        ^\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:35:101\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:35:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "initial Grave II asks for multiple landmarks without granting completion",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'explore_landmarks'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:36:104\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:36:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "retained legacy prompt flags cannot override the active Grave II owner",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'OLD RETURN'\n- undefined\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:37:229\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:37:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "candidate band alone does not claim lived interaction or resolution",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'explore_landmarks'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:38:153\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:38:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "lived candidate shows forming; losing the band restores balance guidance",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'forming'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:39:197\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:39:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "real sustained owner resolution changes instruction and emits only one completion",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'resolved'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:40:325\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:40:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "Grave I instruction returns when regional owner is inactive",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'OLD RETURN'\n- 'OLD PEARL RETURN'\n       ^\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:41:114\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:41:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "another cell cannot use retained Grave II guidance",
+      "status": "PASS"
+    },
+    {
+      "name": "unresolved Grave II never blocks the original safe return fold",
+      "status": "PASS"
+    },
+    {
+      "name": "gamepad world controls expose the two-step Core Work entry",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Y inspect Core → D-Pad Down Core Work/. Input:\n\n'Left Stick/WASD move · A interact · X pulse · RT absorb · LT stabilize · Y Core inspect · View/Tab Status · F1 trace · F2 systems · F3 clean'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:44:221\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:44:44\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "keyboard world controls expose the two-step Core Work entry",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /F inspect Core → G Core Work/. Input:\n\n'WASD move · Mouse/IJKL camera · F inspect Core · E interact · Left Mouse/X/Space pulse · Right Mouse absorb · Q stabilize · R reframe'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:44:221\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:44:44\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "inspection and Core Work controls retain interact, grab and exit mappings",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /A interact.*Core Work.*Y world/. Input:\n\n'Left Stick/WASD move · A interact · X pulse · RT absorb · LT stabilize · Y Core inspect · View/Tab Status · F1 trace · F2 systems · F3 clean'\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:45:95\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:11:29)\n    at file:///workspace/scratch/5e2510728e07/audit/connection15/baseline/BLOB_BOT_SERIES1/cases/U01.mjs:45:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    }
+  ]
+}

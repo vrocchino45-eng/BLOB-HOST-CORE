@@ -1,0 +1,41 @@
+--- CONNECTION43/src/player/CoreGrowthSystem.js
++++ CONNECTION44/src/player/CoreGrowthSystem.js
+@@ -1,3 +1,4 @@
++import { deriveCoreEarnedEvolution } from "./CoreEarnedEvolution.js";
+ const RECIPE_ID = "FIRST_VISIBLE_CORE_GROWTH_HC009D";
+ const SAFE_SEED_ID = "dormant_seed_nutrient_001";
+ 
+@@ -406,7 +407,16 @@
+       : (growth.successfulCircuitTarget ?? 0.64);
+   }
+ 
++  earnedEvolution() {
++    return deriveCoreEarnedEvolution({owner:"CoreGrowthSystem",firstGrowthCommitted:this.firstGrowthCommitted,
++      graveMemoryImprintCommitted:this.graveMemoryImprintCommitted,safeMemoryTransferComplete:this.safeMemoryTransferComplete,graveRouteReturned:this.graveRouteReturned,
++      vascularRhythmRetained:this.vascularRhythmRetained,vascularRouteReturned:this.vascularRouteReturned,vascularCadenceReads:this.vascularCadenceReads,
++      siltPressureRetained:this.siltPressureRetained,siltRouteReturned:this.siltRouteReturned,siltPressureRead:this.siltPressureRead,
++      siltRibsReleased:this.siltRibsReleased,siltSafeMatterAbsorbed:this.siltSafeMatterAbsorbed,siltDenseMatterLeftIntact:this.siltDenseMatterLeftIntact});
++  }
++
+   resolveStage() {
++    if (this.earnedEvolution().integrated) return { id: "integrated_core", displayName: "Integrated Core" };
+     const stages = this.recipe.stages ?? {};
+     const boundMinimum = stages.bound?.minimumProgress ?? 0.85;
+     const emergingMinimum = stages.emerging?.minimumProgress ?? 0.18;
+@@ -490,6 +500,7 @@
+       displayStage: stage.displayName,
+       growthProgress: this.growthProgress,
+       growthTarget: this.growthTarget,
++      earnedEvolution: this.earnedEvolution(),
+       firstGrowthCommitted: this.firstGrowthCommitted,
+       protectedSeedMassIntegrated: this.safeSeedAbsorbed,
+       nurseryAgencyProven: this.nurseryAgencyProven,
+@@ -517,7 +528,7 @@
+         scar: visual.scarColor ?? "#e89268"
+       },
+       visibleShellRestructuring: this.nurseryAgencyProven,
+-      anatomicalPhase: !this.nurseryAgencyProven
++      anatomicalPhase: this.earnedEvolution().integrated ? "integrated_regional_core" : !this.nurseryAgencyProven
+         ? "primitive"
+         : !this.guidePressureTested
+           ? "membrane_differentiating"

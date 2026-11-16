@@ -1,0 +1,55 @@
+--- CONNECTION54/src/opening/OpeningPacingSystem.js
++++ CONNECTION55/src/opening/OpeningPacingSystem.js
+@@ -42,7 +42,9 @@
+       preferredTargetBoost: stage === "find_safe_seed" ? this.config.safeSeedTuning?.focusBoost ?? 12 : 0,
+       promptMinHoldSeconds: this.promptHoldSeconds(stage),
+       cameraBias: this.cameraBias(frameState, stage),
+-      worldFacingObjective: this.objectiveForStage(stage),
++      worldFacingObjective: stage === "choose_hub_route"
++        ? frameState.hubInvestigationGameplay?.nextAction ?? this.objectiveForStage(stage)
++        : this.objectiveForStage(stage),
+       debugNote: "HC-003F cleans blueprint translation/readouts only; it does not add cells, gates, or new morphs."
+     };
+   }
+@@ -102,11 +104,7 @@
+ 
+     if (activeCellId === "CELL_SCAR_FLOW_FOLD_001") return "stabilize_scar_flow";
+     if (activeCellId === "CELL_SIGNAL_CHORUS_NERVE_001") {
+-      const investigation = frameState.hubInvestigationGameplay ?? {};
+-      const graveGate = frameState.firstSliceGates?.hub_to_grave_memory_route ?? {};
+-      if (!investigation.investigationReady) return "investigate_hub";
+-      if (graveGate.crossable || frameState.firstSliceCohesion?.sliceLockReady) return "first_slice_locked";
+-      return "hold_hub_convergence";
++      return "choose_hub_route";
+     }
+     if (activeCellId === "CELL_BLOOM_RESIDUE_FORK_001") return "beyond_minute_fork";
+     return "unknown";
+@@ -179,8 +177,8 @@
+       );
+       return 0.48 + Math.min(guideProgress, 1) * 0.2;
+     }
+-    if (stage === "investigate_hub") {
+-      return 0.7 + Math.min(frameState.hubInvestigationGameplay?.progress ?? 0, 1) * 0.22;
++    if (stage === "choose_hub_route") {
++      return frameState.firstMinuteExperience?.complete ? 1 : 0.7;
+     }
+         if (stage === "hold_hub_convergence") return 0.98;
+     if (stage === "first_slice_locked") return 1;
+@@ -222,7 +220,7 @@
+     if (stage === "read_scar_response") return "Follow the Host's scar/signal pressure and pulse it; the safe seed is nourishment, not a route gate.";
+     if (stage === "pulse_first_fold") return "Pulse when the tissue answers.";
+     if (stage === "stabilize_scar_flow") return "Read memory, follow pressure, respect the clot.";
+-    if (stage === "investigate_hub") return "Read all three route territories and the memory fragment, then return to center.";
++    if (stage === "choose_hub_route") return "Approach an available route body and press A / E to enter. Readings are optional.";
+     if (stage === "hold_hub_convergence") return "Hold the completed Hub reading while Grave Memory becomes crossable.";
+     if (stage === "first_slice_locked") return "Living Core vertical slice complete. Grave Memory remains the only crossable route; two mounted rhythms wait beyond it.";
+     if (stage === "beyond_minute_fork") return "Bloom Residue is beyond the opening minute.";
+@@ -243,7 +241,7 @@
+       read_scar_response: "Read the scar response",
+       pulse_first_fold: "Pulse the first tissue fold",
+       stabilize_scar_flow: "Stabilize Scar-Flow",
+-      investigate_hub: "Compare the Hub territories",
++      choose_hub_route: "Choose a Hub destination",
+       hold_hub_convergence: "Hold the Hub convergence",
+       first_slice_locked: "Living Core vertical slice locked",
+       beyond_minute_fork: "Beyond-minute fork",

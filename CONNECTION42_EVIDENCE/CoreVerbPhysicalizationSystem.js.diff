@@ -1,0 +1,11 @@
+--- CONNECTION41/src/player/CoreVerbPhysicalizationSystem.js
++++ CONNECTION42/src/player/CoreVerbPhysicalizationSystem.js
+@@ -228,6 +228,8 @@
+     this.updatePulse(dt, frameState);
+     this.updateAbsorb(dt, frameState);
+     this.updateStabilize(dt, frameState);
++    // CONNECTION42: effects keep aging while Core Work owns visual attention.
++    this.group.visible = !(frameState.inspectionCamera?.coreWorkActive || frameState.tightInspectionCamera?.coreWorkActive);
+ 
+     const composition = frameState.interactionComposition ?? {};
+     const effectSuppression = Math.min(0.42, Math.max(0, composition.effectSuppression ?? 0));

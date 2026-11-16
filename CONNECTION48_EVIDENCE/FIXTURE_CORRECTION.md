@@ -1,0 +1,1 @@
+Initial browser attempts used the controller Y name as a keyboard key. The current keyboard inspection binding is F/V. Corrected the browser fixture to F with a registry tick while held. No production change was made to address those failures. All six new browser groups then passed.

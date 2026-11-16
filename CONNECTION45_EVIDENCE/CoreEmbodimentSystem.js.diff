@@ -1,0 +1,11 @@
+--- CONNECTION44/src/player/CoreEmbodimentSystem.js
++++ CONNECTION45/src/player/CoreEmbodimentSystem.js
+@@ -264,7 +264,7 @@
+ 
+     // HC021C anatomical chronology. Gameplay radius/collision are untouched:
+     // the Core begins as membrane + nucleus, then earns visible organization.
+-    const mantleTarget = frameState.coreGrowth?.nurseryAgencyProven ? 1 : 0;
++    const mantleTarget = (frameState.coreGrowth?.nurseryAgencyProven || frameState.coreGrowth?.surfaceFoundationRetained) ? 1 : 0;
+     const locomotorTarget = frameState.coreGrowth?.guidePressureTested ? 1 : 0;
+     const hubTarget = frameState.coreGrowth?.hubReflectionObserved ? 1 : 0;
+     this.mantleReveal += (mantleTarget - this.mantleReveal) * (1 - Math.exp(-dt * 2.2));

@@ -1,0 +1,38 @@
+--- CONNECTION54/src/hub/HubChamberFoundationSystem.js
++++ CONNECTION55/src/hub/HubChamberFoundationSystem.js
+@@ -2825,6 +2825,7 @@
+       distanceToPlayer: graveFirstDestination?.distanceToPlayer ?? 0,
+       bodyCue: "existing_corridor_wave_from_hub_center_to_grave",
+       bodyRevealProgress: Math.min(this.reveal, this.routeIdentityReveal),
++      invitationRequiredForCommit: false,
+       wholeHubScreenTruthVerified: Boolean(this.spatialTruth.verified),
+       screenTruthRequiredForCommit: false,
+       commitControl: "A / E",
+@@ -3055,7 +3056,8 @@
+       ),
+       activeRouteReadable: Boolean(complete),
+       activeRouteCrossable: Boolean(fullHubComplete),
+-      departurePrerequisite: "hub_world_investigation_complete",
++      departurePrerequisite: "mounted_hub_prepared_available_destination_and_deliberate_commit",
++      hubInvestigationRequired: false,
+       newRouteContentActivated: false,
+       targetRequired: false,
+       inputRequired: false,
+@@ -3148,7 +3150,7 @@
+         : fullHubComplete
+         ? "The three territories and the core now read together. Grave Memory can be crossed."
+         : complete
+-          ? "Three route bodies stand apart. Read each territory, the suspended memory, then yourself."
++          ? "Three route bodies stand apart. Choose an available destination; route and memory readings are optional."
+           : (language.revealingGuide ?? "The Chorus is becoming a junction."),
+       objectiveLine: routeCommit.available
+         ? `Press A to enter ${routeCommit.displayName}.`
+@@ -3197,7 +3199,7 @@
+       blocker: fullHubComplete
+         ? "none_detected"
+         : complete
+-            ? "hub_spatial_investigation_pending"
++            ? "hub_presentation_complete_optional_readings_available"
+             : routeIdentityReady ? "hub_layout_still_revealing" : "hub_route_identity_readiness_pending",
+       noTeleport: true,
+       noBranchMenu: true,

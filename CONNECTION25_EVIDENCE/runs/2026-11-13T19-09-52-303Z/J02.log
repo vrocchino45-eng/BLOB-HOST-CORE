@@ -1,0 +1,430 @@
+{
+  "setup": {
+    "rock": "silt_reservoir_stone_inclusion_1",
+    "core": [
+      -3.1963501050350125,
+      0.6999299789929976,
+      -13.134350105035011
+    ],
+    "camera": [
+      2.0547002100700245,
+      1.750140042014005,
+      -7.883299789929974
+    ],
+    "drawCalls": 119,
+    "mass": 8,
+    "credits": 0,
+    "receipts": 0
+  },
+  "after": {
+    "state": {
+      "pass": "CONNECTION17",
+      "active": true,
+      "owner": "CoreSightlinePresentation",
+      "candidateCount": 15,
+      "attenuatedCount": 1,
+      "sampleIntervalSeconds": 0.1,
+      "rayCount": 5,
+      "scope": "decorative_silt_geology_only",
+      "gameplayAuthority": false
+    },
+    "drawCalls": 119,
+    "inspection": {
+      "pass": "HC-024C2",
+      "id": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+      "architecture": "persistent_core_inspection_plus_guide_physical_piece_manipulation",
+      "active": false,
+      "available": true,
+      "mode": "player_tethered_orbit",
+      "status": "core_inspection_available_globally",
+      "justActivated": false,
+      "justDeactivated": false,
+      "justFocusChanged": false,
+      "justWorkActivated": false,
+      "justWorkDeactivated": false,
+      "toggleCount": 0,
+      "lastToggleAt": -1,
+      "lastEvent": "hc027g1_test_platform_6_world_view",
+      "deniedReason": "none",
+      "focusMode": "player_forward",
+      "focusProviderId": "InspectionCameraSystem",
+      "focusObjectId": "player_core_self_inspection",
+      "focusLabel": "Core self-inspection",
+      "selfInspection": false,
+      "coreCentered": false,
+      "coreWorkActive": false,
+      "coreWorkBlend": 0,
+      "coreWorkAvailable": false,
+      "guideWorkAvailable": true,
+      "workEntryCount": 0,
+      "lastWorkAt": -1,
+      "lastWorkEvent": "core_work_available_from_self_inspection",
+      "coreWorkInput": "D-Pad Down controller / G keyboard while in Core Inspection",
+      "coreWorkExitInput": "B controller / Escape keyboard returns to external Core inspection; Y/F exits to world view",
+      "worldInteractSuppressedDuringSelfInspection": false,
+      "targetOwnedPrimaryAction": true,
+      "intentionalCoreWorkEntry": true,
+      "coreWorkEntryButton": "dpad_down",
+      "guideHoneRequiredForCoreWorkEntry": false,
+      "chemistryEnabled": true,
+      "pieceManipulationEnabled": false,
+      "traversalPaused": false,
+      "traversalInputSuppressed": false,
+      "guideComposition": {
+        "sideOffset": 0.76,
+        "lift": 0.34,
+        "cameraTowardOffset": 0.18,
+        "minimumCoreSeparation": 0.54
+      },
+      "membraneTransparencyTarget": 0.58,
+      "focusPosition": {
+        "x": 0.3332901140122975,
+        "y": -0.6074103285209334,
+        "z": -0.11706238913865522
+      },
+      "focusDistance": 0,
+      "authoredFocusReadable": false,
+      "authoredFocusAvailable": false,
+      "authoredFocusDistance": null,
+      "authoredFocusAssistRange": 5.9,
+      "authoredFocusIntentAlignment": 0.7139876888432946,
+      "authoredFocusIntentDot": 0.72,
+      "authoredFocusIntentAligned": false,
+      "authoredFocusTargetMatches": false,
+      "manualFocusOverrideSeconds": 0,
+      "focusIntentReason": "authored_focus_not_where_player_is_looking",
+      "authoredLockPolicy": "Y enters tight view; authored object lock requires view intent; Core Work keeps the focus on the player Core",
+      "showFocusMarker": false,
+      "constrainYaw": false,
+      "toggleRange": null,
+      "autoExitRange": null,
+      "controllerButtonIndex": 3,
+      "controllerButtonLabel": "Y",
+      "keyboardCode": "KeyF",
+      "keyboardLabel": "F",
+      "toggleHint": "Press Y to inspect the Core; look toward an authored interaction to let the camera adopt it.",
+      "distance": 2.65,
+      "fieldOfView": 48,
+      "targetBlendTowardFocus": 0.2,
+      "targetLift": 0.04,
+      "baseHeight": 0.18,
+      "pitch": 0.18,
+      "shoulderOffset": 0,
+      "forwardOffset": 0,
+      "yawSensitivityScale": 0.46,
+      "pitchSensitivityScale": 0.44,
+      "maxYawOffset": 3.14,
+      "pitchMin": -1,
+      "pitchMax": 1.22,
+      "occlusionPullbackScale": 0.3,
+      "followSmoothing": 7.2,
+      "fovSmoothing": 6.4,
+      "focusMarkerScale": 0.72,
+      "blockerOpacity": 0.08,
+      "ambientDensityScale": 0.58,
+      "nearCameraFadeRadius": 1.55,
+      "corridorRadius": 0.38,
+      "preserveEntryAngle": true,
+      "optional": true,
+      "forced": false,
+      "firstPerson": false,
+      "reusableFromOpening": true,
+      "persistentAcrossCells": true,
+      "persistsWithoutAuthoredFocus": true,
+      "playerSelectedMode": true,
+      "authoredFocusAssistOnly": true,
+      "cameraRelativeMovementPreserved": true,
+      "rightStickOrbitPreserved": true,
+      "r3RecentersInspection": true,
+      "instantReturnAvailable": true,
+      "targetRequired": false,
+      "routeActivated": false,
+      "activeCellChanges": false,
+      "interactionStateChanged": false,
+      "blocker": "none_detected"
+    },
+    "coreWorld": [
+      -3.1963501050350125,
+      0.6999299789929976,
+      -13.134350105035011
+    ],
+    "candidateVisibility": [
+      [
+        [
+          "silt_reservoir_sediment_catchment_bed",
+          true
+        ],
+        [
+          "silt_contiguous_pore_reservoir",
+          true
+        ],
+        [
+          "silt_contained_geologic_medium_LS1A2",
+          true
+        ],
+        [
+          "silt_pressure_route_authority_HC012A",
+          true
+        ],
+        [
+          "",
+          true
+        ]
+      ],
+      [
+        [
+          "silt_reservoir_stone_inclusion_1",
+          true
+        ],
+        [
+          "silt_contiguous_pore_reservoir",
+          true
+        ],
+        [
+          "silt_contained_geologic_medium_LS1A2",
+          true
+        ],
+        [
+          "silt_pressure_route_authority_HC012A",
+          true
+        ],
+        [
+          "",
+          true
+        ]
+      ]
+    ],
+    "materials": [
+      {
+        "name": "silt_reservoir_stone_inclusion_1",
+        "from": 0.68,
+        "to": 0.18,
+        "visible": true
+      }
+    ],
+    "mass": 8,
+    "credits": 0,
+    "receipts": 0
+  }
+}
+{
+  "setup": {
+    "rock": "silt_reservoir_stone_inclusion_1",
+    "core": [
+      -3.1963501050350125,
+      0.6999299789929976,
+      -13.134350105035011
+    ],
+    "camera": [
+      2.0547002100700245,
+      1.750140042014005,
+      -7.883299789929974
+    ],
+    "drawCalls": 119,
+    "mass": 8,
+    "credits": 0,
+    "receipts": 0
+  },
+  "after": {
+    "state": {
+      "pass": "CONNECTION17",
+      "active": true,
+      "owner": "CoreSightlinePresentation",
+      "candidateCount": 15,
+      "attenuatedCount": 1,
+      "sampleIntervalSeconds": 0.1,
+      "rayCount": 5,
+      "scope": "decorative_silt_geology_only",
+      "gameplayAuthority": false
+    },
+    "drawCalls": 119,
+    "inspection": {
+      "pass": "HC-024C2",
+      "id": "FOUNDATIONAL_INSPECTION_CAMERA_HC006D",
+      "architecture": "persistent_core_inspection_plus_guide_physical_piece_manipulation",
+      "active": false,
+      "available": true,
+      "mode": "player_tethered_orbit",
+      "status": "core_inspection_available_globally",
+      "justActivated": false,
+      "justDeactivated": false,
+      "justFocusChanged": false,
+      "justWorkActivated": false,
+      "justWorkDeactivated": false,
+      "toggleCount": 0,
+      "lastToggleAt": -1,
+      "lastEvent": "hc027g1_test_platform_6_world_view",
+      "deniedReason": "none",
+      "focusMode": "player_forward",
+      "focusProviderId": "InspectionCameraSystem",
+      "focusObjectId": "player_core_self_inspection",
+      "focusLabel": "Core self-inspection",
+      "selfInspection": false,
+      "coreCentered": false,
+      "coreWorkActive": false,
+      "coreWorkBlend": 0,
+      "coreWorkAvailable": false,
+      "guideWorkAvailable": true,
+      "workEntryCount": 0,
+      "lastWorkAt": -1,
+      "lastWorkEvent": "core_work_available_from_self_inspection",
+      "coreWorkInput": "D-Pad Down controller / G keyboard while in Core Inspection",
+      "coreWorkExitInput": "B controller / Escape keyboard returns to external Core inspection; Y/F exits to world view",
+      "worldInteractSuppressedDuringSelfInspection": false,
+      "targetOwnedPrimaryAction": true,
+      "intentionalCoreWorkEntry": true,
+      "coreWorkEntryButton": "dpad_down",
+      "guideHoneRequiredForCoreWorkEntry": false,
+      "chemistryEnabled": true,
+      "pieceManipulationEnabled": false,
+      "traversalPaused": false,
+      "traversalInputSuppressed": false,
+      "guideComposition": {
+        "sideOffset": 0.76,
+        "lift": 0.34,
+        "cameraTowardOffset": 0.18,
+        "minimumCoreSeparation": 0.54
+      },
+      "membraneTransparencyTarget": 0.58,
+      "focusPosition": {
+        "x": 0.3332901140122975,
+        "y": -0.6074103285209334,
+        "z": -0.11706238913865522
+      },
+      "focusDistance": 0,
+      "authoredFocusReadable": false,
+      "authoredFocusAvailable": false,
+      "authoredFocusDistance": null,
+      "authoredFocusAssistRange": 5.9,
+      "authoredFocusIntentAlignment": 0.7139876888432946,
+      "authoredFocusIntentDot": 0.72,
+      "authoredFocusIntentAligned": false,
+      "authoredFocusTargetMatches": false,
+      "manualFocusOverrideSeconds": 0,
+      "focusIntentReason": "authored_focus_not_where_player_is_looking",
+      "authoredLockPolicy": "Y enters tight view; authored object lock requires view intent; Core Work keeps the focus on the player Core",
+      "showFocusMarker": false,
+      "constrainYaw": false,
+      "toggleRange": null,
+      "autoExitRange": null,
+      "controllerButtonIndex": 3,
+      "controllerButtonLabel": "Y",
+      "keyboardCode": "KeyF",
+      "keyboardLabel": "F",
+      "toggleHint": "Press Y to inspect the Core; look toward an authored interaction to let the camera adopt it.",
+      "distance": 2.65,
+      "fieldOfView": 48,
+      "targetBlendTowardFocus": 0.2,
+      "targetLift": 0.04,
+      "baseHeight": 0.18,
+      "pitch": 0.18,
+      "shoulderOffset": 0,
+      "forwardOffset": 0,
+      "yawSensitivityScale": 0.46,
+      "pitchSensitivityScale": 0.44,
+      "maxYawOffset": 3.14,
+      "pitchMin": -1,
+      "pitchMax": 1.22,
+      "occlusionPullbackScale": 0.3,
+      "followSmoothing": 7.2,
+      "fovSmoothing": 6.4,
+      "focusMarkerScale": 0.72,
+      "blockerOpacity": 0.08,
+      "ambientDensityScale": 0.58,
+      "nearCameraFadeRadius": 1.55,
+      "corridorRadius": 0.38,
+      "preserveEntryAngle": true,
+      "optional": true,
+      "forced": false,
+      "firstPerson": false,
+      "reusableFromOpening": true,
+      "persistentAcrossCells": true,
+      "persistsWithoutAuthoredFocus": true,
+      "playerSelectedMode": true,
+      "authoredFocusAssistOnly": true,
+      "cameraRelativeMovementPreserved": true,
+      "rightStickOrbitPreserved": true,
+      "r3RecentersInspection": true,
+      "instantReturnAvailable": true,
+      "targetRequired": false,
+      "routeActivated": false,
+      "activeCellChanges": false,
+      "interactionStateChanged": false,
+      "blocker": "none_detected"
+    },
+    "coreWorld": [
+      -3.1963501050350125,
+      0.6999299789929976,
+      -13.134350105035011
+    ],
+    "candidateVisibility": [
+      [
+        [
+          "silt_reservoir_sediment_catchment_bed",
+          true
+        ],
+        [
+          "silt_contiguous_pore_reservoir",
+          true
+        ],
+        [
+          "silt_contained_geologic_medium_LS1A2",
+          true
+        ],
+        [
+          "silt_pressure_route_authority_HC012A",
+          true
+        ],
+        [
+          "",
+          true
+        ]
+      ],
+      [
+        [
+          "silt_reservoir_stone_inclusion_1",
+          true
+        ],
+        [
+          "silt_contiguous_pore_reservoir",
+          true
+        ],
+        [
+          "silt_contained_geologic_medium_LS1A2",
+          true
+        ],
+        [
+          "silt_pressure_route_authority_HC012A",
+          true
+        ],
+        [
+          "",
+          true
+        ]
+      ]
+    ],
+    "materials": [
+      {
+        "name": "silt_reservoir_stone_inclusion_1",
+        "from": 0.68,
+        "to": 0.18,
+        "visible": true
+      }
+    ],
+    "mass": 8,
+    "credits": 0,
+    "receipts": 0
+  },
+  "timing": {
+    "sampleCount": 100,
+    "p50ms": 0.19999999995343387,
+    "p95ms": 2.300000000046566,
+    "maxMs": 7.399999999906868,
+    "materialCopiesStable": true
+  },
+  "restored": {
+    "allReferencesRestored": true,
+    "remaining": 0,
+    "cellUnchanged": true
+  }
+}

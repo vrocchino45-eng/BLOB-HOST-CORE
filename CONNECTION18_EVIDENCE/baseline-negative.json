@@ -1,0 +1,85 @@
+{
+  "scope": "Actual presentation methods with declared target/condition/transform fixtures. No gameplay repair, progression, navigation or human-perception acceptance.",
+  "summary": {
+    "passed": 4,
+    "failed": 12
+  },
+  "checks": [
+    {
+      "name": "focused field anchors to actual world position beneath transformed parent",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: 1,0.5,-1 versus 5.613251778740775,2.45,-5.8878353360055735\n    at near (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:6:27)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:7:133\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:7:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "tether starts at Core world position and ends at target world position",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: 0,0,0 versus -2,1,3\n    at near (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:6:27)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:8:191\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:8:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "one sustained contact may finish visual acquisition",
+      "status": "PASS"
+    },
+    {
+      "name": "an unstable contacted body retains disagreement after long hold",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nundefined !== 0.8\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:10:111\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:10:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "improved actual material condition permits alignment without restarting contact",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nundefined !== 1\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:11:206\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:11:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "target switch cannot inherit the previous acquisition",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(x.v.stabilizeProgress<.1)\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:12:211\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:12:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "release hides field and forgets material condition; rehold begins new acquisition",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- null\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:13:279\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:13:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "another focus condition cannot leak into the current target",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nundefined !== 0.8\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:14:152\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:14:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "missing condition stays explicit and uses visual-acquisition fallback",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- null\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:15:159\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:15:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "nonfinite condition cannot contaminate geometry",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- null\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:16:146\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:16:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "material condition and gameplay snapshot are never mutated",
+      "status": "PASS"
+    },
+    {
+      "name": "interaction assist uses the target world position",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: 2,0.5,-1 versus 6.810631070944526,2.45,-6.394079181006819\n    at near (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:6:27)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:18:171\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:18:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "unparented targets retain their existing coordinates",
+      "status": "PASS"
+    },
+    {
+      "name": "committed Silt visual target retains its explicit published position",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- null\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:20:279\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:20:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    },
+    {
+      "name": "presentation retains the same three gyro bands",
+      "status": "PASS"
+    },
+    {
+      "name": "an ambient fallback cannot borrow a stale material condition by id",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- null\n\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:22:157\n    at check (file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:3:45)\n    at file:///workspace/scratch/5e2510728e07/audit/connection18/baseline/CONNECTION18_CONTACT_CHECK.mjs:22:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+    }
+  ]
+}

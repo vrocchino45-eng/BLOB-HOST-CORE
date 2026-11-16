@@ -373,10 +373,31 @@ export class GraveResonanceGameplaySystem {
       };
     }
 
+    // Guidance follows this phase's actual regional condition, never the retained
+    // first-visit pearl objective. Publishing it grants no credit or crossing.
+    const livedInteraction = this.interactionCount >= 3 && this.touchedNodes.size >= 2;
+    const guidanceStage = !this.active ? "inactive"
+      : this.completed ? "resolved"
+        : !livedInteraction ? "explore_landmarks"
+          : candidate ? "forming" : "balance_landmarks";
+    const guideLine = this.completed
+      ? "The Grave's landmarks hold a shared resonance."
+      : "Memory silt, scar plate, and seed remnant answer as one connected body.";
+    const nextAction = this.completed
+      ? "Grave II resonance is retained. Return through the entry fold when ready."
+      : !livedInteraction
+        ? "Visit at least two Grave landmarks. Pulse, Absorb, or Stabilize them and watch the others answer."
+        : candidate
+          ? "A shared resonance is forming. Let it settle; Stabilize a landmark to bring their responses together."
+          : "Bring the landmarks into balance. Pulse and Absorb reshape their responses; Stabilize brings them together.";
+
     frameState.graveResonanceGameplay = {
       pass: "HC-031B",
       active: this.active,
       owner: "GraveResonanceGameplaySystem",
+      guidanceStage,
+      guideLine,
+      nextAction,
       law: "touch_one_part_of_the_octave_and_other_parts_answer",
       nodes,
       regional: {

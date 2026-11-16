@@ -1,5 +1,7 @@
 # BLOB: HOST CORE — Bot Series 1
 
+Current catalog: CONNECTION39 on CONNECTION38 gameplay. `plan.json` is the executable catalog; older counts and identities below remain historical. The catalog has 28 quick cases / 537 checks and 22 browser scenarios. S05 contains seven verification groups in one browser session.
+
 Repeatable scripted regression bots for CONNECTION13 Core Work input coverage on CONNECTION12 gameplay, retaining prior identities and checks. This adds a separate test folder and reports; no production game file or existing package script is replaced.
 
 ## Run
@@ -141,3 +143,190 @@ K01 adds one browser scenario from actual keyboard/mouse through selection, grab
 The earlier returned-piece/four-credit checkpoint and in-current sampling pose are fixtures; this does not earn those pieces from zero. The test waits for the supplied checkpoint's actual four-credit publication before measuring, rather than changing registry order. Core Work suppresses world verbs/local coherence; world mode uses the resulting placement. Material mass, credits, architecture phase and accepted Host causes are preserved. Reserve samples are observed, not reset.
 
 Current catalog: 23 cases, 293 quick checks and eight browser scenarios; a complete future pass totals 301 machine-summary checks. CONNECTION13 validation runs the quick catalog and K01 only. The prior 22-case/300-check full run remains CONNECTION12 evidence; it is not recounted as a fresh full run. K01 is selectable with `--case=K01`. Physical gamepad delivery and naturally earned campaigns remain separate evidence.
+
+
+## CONNECTION15 — Hub readiness and phase-correct guidance
+
+Convergence repair on CONNECTION14's consolidated CONNECTION13 harness / CONNECTION12 gameplay. U01 adds 31 actual-owner checks for candidate availability, boundary prerequisites, first invitation, commitment latch, Grave II guidance transitions and Core Work controls. U02 runs real keyboard E commitments with prior-history, near-body and forced-false screen-verification fixtures, followed by live Grave II Guide/HUD publication. It does not earn history from zero or establish physical controller delivery or human readability.
+
+The catalog now contains 25 cases: 324 quick checks and nine browser scenarios (333 machine-summary checks if every case passes). Historical counts above remain checkpoint history. Select U01/U02 with --case=U01 / --case=U02. Source identity must be taken from each current run; the five changed production files deliberately differ from CONNECTION14.
+
+
+## CONNECTION20 — consolidated integration checkpoint
+
+Consolidates the CONNECTION15 Hub/guidance repair, CONNECTION17 Silt visibility, CONNECTION18 Stabilize contact presentation and CONNECTION19 Vascular arrival audio. Production gameplay is byte-for-byte CONNECTION19. The catalog remains 25 cases: 324 quick checks and nine browser scenarios (333 machine-summary checks for a passing full run). Root-level CONNECTION17/18/19 utilities provide additional declared owner and controlled browser checks; these are not silently counted as catalog cases.
+
+The plan's baseline field remains its historical CONNECTION15 harness label. Use each run's portable source identity to identify actual production files. CONNECTION20 records a fresh full-catalog integration run. Historical results above remain evidence of their own checkpoints. Human controller delivery, in-motion readability, critical listening and naturally earned Core Work comparison remain separate acceptance.
+
+
+## CONNECTION22 — late preparation cannot hide live Silt
+
+R01 adds nine preparation-ownership checks, including expected reproduction on the exact old coordinator, success/failure guards and unchanged synchronous dormancy. R02 adds two running-browser race scenarios: actual registry/InputSystem Silt mount while an existing asynchronous shader job is delayed at a declared promise gate, followed by late success or failure and at least five normal callbacks. Assertions require a visible Silt root and drawable meshes as well as active actor/HUD; mass alone is insufficient.
+
+The catalog now has 27 cases: 333 quick summary checks and ten browser cases (the browser cases total eleven summary checks), for 344 total summary checks if all pass. The current plan baseline label becomes CONNECTION22. Older labels and counts above remain checkpoint history. Select with --case=R01 and --case=R02. Controlled overlap is a fault-injection fixture, not a claim that every historical disappearance had this cause.
+
+## CONNECTION23 — confirmed arrival
+
+V01 adds eight owner checks; V02 checks the actual mounted fold wave and audio witness with declared Silt-decision fixtures. Catalog: 29 cases / 353 summary checks. Visual arrival now requires a Host-confirmed positive tissue effect and retires on unmount; received counts alone cannot restart it. The CONNECTION19 browser freshness assertion reads its audio witness, rather than requiring an old visual wave to resume on revisit. Human readability and listening remain separate.
+
+## CONNECTION24 — presentation regression coverage
+
+The existing CONNECTION17/18/19/21 checks are now catalog cases J01–J08: owner and browser coverage for Silt sightlines, Stabilize contact, confirmed arrival audio and Absorb progress. They retain their fixtures and assertions. Each test honors BLOB_BOT_REPORT after its dedicated report override, so the catalog can collect results without changing standalone use.
+
+Catalog: 37 cases / 423 machine-summary checks (quick: 22 cases / 407 checks; browser: 15 cases / 16 checks). Production remains CONNECTION23; this coverage checkpoint changes no src/public files or gameplay. Current-source run reports, rather than case registration alone, establish which cases passed. Human perception, physical controller feel and natural playthrough acceptance remain separate.
+
+## CONNECTION27 — Grave memory reply
+
+E01 adds 23 owner/old-source parity/audio guards; E02 checks the actual mounted route's existing silt-memory echo and Web Audio graph. New sound and echo onset follow the memory owner's measured positive retention change, not raw receipt counts or recovery completion. Existing pressure/recovery/progression behavior is unchanged.
+
+Catalog: 39 cases / 447 summary checks (quick: 23 cases / 430 checks; browser: 16 cases / 17 checks). Machine registration is separate from executed current-source evidence and human listening/readability acceptance. The BEFORE_MEMORY file is an exact old-source comparison fixture read by E01; gameplay never imports it.
+
+## CONNECTION28 — measured Silt pressure reply
+
+F01 adds 24 checks, including 72 exact old-source gameplay comparisons. F02 follows the existing C01 owner/evaluator/Host chain into actual completed-Silt pressure settling, then checks the published reply, existing rib materials and real spatial audio graph. Receipt consumption alone, incomplete Silt, failure and held bracing cannot announce applied relief.
+
+Catalog: 41 cases / 472 summary checks (quick: 24 cases / 454 checks; browser: 17 cases / 18 checks). BEFORE_SILT is an exact old-source comparison fixture read only by F01, never imported by gameplay. Current-source execution and human perception remain separate from registration.
+
+## CONNECTION30 — current-cell chemistry provenance
+
+N01 adds 27 checks over all ten authored cells, freshness/schema/transition guards and matched Bond owner behavior. N02 verifies single registry placement before Bond, current-cell fields after debug mounts, actual input/commitment/boundary changes, late-frame neutral reads and a real session export. This is read-only authored context, not mutable Host metabolism or a new interaction modifier.
+
+Catalog: 43 cases / 500 summary checks (quick: 25 cases / 481 checks; browser: 18 cases / 19 checks). Future consumers must call readLocalChemistryContext instead of trusting a raw snapshot's active bit. A boundary can change cells after the publisher's slot; guarded reads are neutral until the next sample. Session export uses the guard under developerTruth, with the existing v1.52 perceptual schema unchanged.
+
+## CONNECTION33 — bounded Surface response restoration
+
+Q01 adds 22 scoped-owner/lifecycle checks. Q02 uses actual Q/X/right-mouse input, normal targeting acquisition, registered condition/personality owners, release and debug Hub/Surface remounts on the visible Surface scar plate. Camera/player poses, deterministic registry steps, paused animation/preparation, and an earlier safe-material passage for the actual Listening Fold / Guide morph are declared fixtures. No relationship or condition is injected in Q02. Protected-seed lock and an actual optional nutrient absorption are checked separately.
+
+J04 retains its original geometry/contact regression using a standalone unscoped condition fixture. The production registered owner is now restricted to the Surface plate, so the historical Grave geometry fixture no longer calls that scoped owner. Q02 is the current runtime integration proof.
+
+No new chemistry coefficient or broader region response is enabled by this pass. Other seed/material/entity profiles remain outside the new production scope. Human feel and a naturally earned full campaign remain separate acceptance.
+
+## CONNECTION39 — repeatable repair-trial regressions
+
+S01 retains the 21 Core publication/guard/parity checks. S02 adds the 13 registered-owner comparison groups, including 486 runs / 243 pairs and catch-up equivalence. Its report now obeys BLOB_BOT_REPORT so the suite records a fresh per-case result instead of reading an old standalone file. It intentionally pins the reviewed CONNECTION38 production fingerprint; a future source change requires reviewing and rebasing that comparison.
+
+S03 explicitly selects the normal URL; S04 explicitly selects the trial URL, regardless of inherited environment settings. S05 routes the existing trial-interruption report into the current suite run. These wrappers do not change gameplay, relax assertions or replace registered owners. Reports retain all fixture declarations, including debug anatomy, target-near poses, deterministic registry steps and prior passage for opening continuation.
+
+Run the normal/trial pair and interruptions separately with --case=S03, --case=S04 and --case=S05. They remain opt-in browser runs; --quick does not pretend they passed. Older case IDs and report history are retained. The trial is still enabled only by coreRepairTrial=1 in normal game use; adding it to tests does not promote it.
+
+## CONNECTION40 — Core / Guide / world explanation layer
+
+T01 adds 7 owner groups, including 729 single-piece move previews across all 27 arrangements, 3 selections, 3 destinations and 3 reserve levels. T02 exercises label and census shortcuts, live selection, hold/move/place, note expansion, read-only toggle parity and Vascular/Silt/Hub/Surface mounts in a running browser.
+
+Catalog: 29 quick cases / 544 checks and 23 browser scenarios, 52 case IDs total. Older reports remain historical evidence. T02 uses explicit debug anatomy/region fixtures and deterministic steps; it does not claim naturally earned progression or human feel.
+
+The S02 and S05 production identities are rebased to CONNECTION40 after reviewing only presentation changes: new explanation module, Quick Look labels, runtime UI binding and F8 diagnostic shortcut. Core physiology and material repair owners are unchanged. The Surface repair trial remains opt-in.
+
+Run `node BLOB_BOT_SERIES1/run.mjs --case=T01` or `--case=T02`. Labels use F4 / hold LB+RB; Shift+F4 shows design notes. Diagnostic census now uses F8, resolving the old F4 overlap; F5 exports it when open.
+
+## CONNECTION41 — readable default explanations
+
+The default label card uses percentages relative to neutral, while each of the two alternative-zone previews compares with NOW at the same reserve. Current-zone placement remains identified once. Full multipliers, role descriptions and limits are retained in expanded notes via Shift+F4 / DESIGN NOTES; notes refresh with selection and preserve scroll.
+
+U01 adds six presentation-contract groups across 81 layout/selection fixtures. T02 retains 13 live browser groups and now verifies full-detail refresh/scroll as well as the compact display. Catalog: 30 quick cases / 550 checks, 23 browser scenarios, 53 case IDs total. S02/S05 identity pins are rebased for the two reviewed UI modules only; physiology, placement, repair and runtime bindings remain unchanged from CONNECTION40.
+
+## CONNECTION42 — bounded Core Work palette proof
+
+V01 adds eight presentation-owner groups covering 81 layout/selection cases, exact material/engine restoration, mode scope, hidden/unknown families and 300 repeated entries with bounded objects and a 240-step matched CONNECTION41 embodiment/physiology run. T02 adds three live groups for family colors, quiet shell/engine/verb graphics and world-view restoration (16 groups total). Catalog: 31 quick cases / 558 checks, 23 browser scenarios, 54 IDs.
+
+S02/S05 pins are rebased after reviewing the Core embodiment integration, verb-group visibility and two new visual modules and final camera-composition binding. Core Work colors and material visibility are presentation only; physiology, repair, input mapping and progression retain their existing owners. Normal/trial label runs and existing interruption checks are required for this pass.
+
+## CONNECTION43 — persistent family accents across Core, Hub and Comb
+
+X01 adds eight groups: safe alias resolution, actual Hub gate/corridor colors with authored secondary tissue, Comb imprints/lobes/return accents, matched old-source Hub and Comb publications across 90 steps each, label descriptor colors, independent materials and explicit retention of background morph cues in Core Work. T02 now checks family/neutral label colors and live repeated Hub/Comb mounts, with 17 groups total.
+
+Catalog: 32 quick cases / 566 checks; 23 browser scenarios; 55 IDs. S02/S05 pins are rebased for five presentation-source changes only. Region tissue, background/ring visibility, controls, physiology and progression remain under existing owners. No new suppression pass is included.
+
+## CONNECTION44 — first functional earned evolution
+
+Y01 adds eight real-owner groups: debug/visit rejection; mature Binding Core plus retained Vascular return; measured 8% faster idle reserve recovery; unchanged held-demand drain; no stacking across returns; all-three earned Integrated Core stage without phase credit; all ten arrangement previews; exact non-earned radial parity; and HUD cause. T02 includes two explicit pre-earned nursery/route-history fixtures to verify registered growth/recovery/HUD consumers and the Integrated Core stage (19 groups total). These fixtures do not represent naturally completed campaign outcomes.
+
+Catalog: 33 quick cases / 574 checks, 23 browser scenarios, 56 IDs. S02/S05 source identities are rebased for the reviewed growth/recovery change. Existing unearned repair fixtures retain their prior behavior. Background/rings and input remain at CONNECTION43. The 8% earned idle-recovery tuning awaits human feel review; it never stacks and does not directly modify repair, damage, held drain, architecture or route progress.
+
+## CONNECTION45 — Surface-first growth handoff
+
+Z01 adds nine growth-owner groups for safe nursery and completed Surface lesson paths, passive/debug rejection, optional seed, retained foundations and later Vascular extension. Z02 starts fresh in Surface and uses actual Pulse / optional Stabilize / safe Absorb, then Listening Fold and Guide morph. Only player-near-packet/fold/scar poses and deterministic time are fixtures: no P anatomy, debug region jump, injected histories, passage/completion flags or seed mass.
+
+Catalog: 34 quick cases / 583 checks; 24 browser scenarios; 58 IDs. T02 pre-earned-history fixtures no longer inject seed composition. Existing unearned repair fixtures remain unchanged; their source pins are rebased for reviewed Surface growth/feedback/body-eligibility changes. Background/rings, controls, route gates and Vascular recovery tuning stay as shipped.
+
+## CONNECTION46 — Surface growth feedback closeout
+
+AA01 adds six groups for optional-seed guidance during binding, live handling values without debug pieces, malformed-output guards, read-only parity, regional retention and growing/mature wording. Z02 additionally checks actual registered Guide pressure/bracing consumers against retained Surface growth and verifies the label row after the continuous transition. Physics remains unchanged.
+
+Catalog: 35 quick cases / 589 checks, 24 browser scenarios, 59 IDs. Earlier counts remain historical.
+
+## CONNECTION47 — Surface / Guide / Hub earned-growth continuity
+
+AA02 adds a fresh-start nine-group browser arc: actual Surface nourishment and seed-optional maturity, continuous Guide entry, real Guide pressure reading and held-bracing exposure, actual observation / forward path trajectory / held resonance / settling release, second continuous morph, Hub recognition and retained first growth without a Vascular adaptation. Spatial path trajectories and deterministic stepping are explicit fixtures, not autonomous navigation. No progression, history or completion flags are injected.
+
+Catalog: 35 quick cases / 589 checks; 25 browser scenarios; 60 IDs. Production gameplay identity remains CONNECTION46. This is verification coverage, not new gameplay or human acceptance.
+
+## CONNECTION48 — earned Grave recovery
+
+AB01 adds nine owner groups for genuine earned eligibility, exact unearned rates, shared 15% ceiling, no stacking, hold/read/range guards, inspection suppression, off-route pause, damage/transfer parity and truthful labels. AB02 measures actual protected-remains recoil and held recovery in the registered browser owner, using declared debug mounts, spatial/time fixtures and canonical pre-earned growth/history fixtures. It does not naturally earn the Grave campaign return. AA02 preserves the fresh Surface → Guide → Hub arc.
+
+Catalog: 36 quick cases / 598 checks; 26 browser scenarios; 62 IDs. Existing Host/Vascular receipt memory is unchanged and separate. Core history grants no fabricated receipt or route credit. S02/S05 source pins are rebased for the reviewed local recovery and label change.
+
+## CONNECTION49 — earn Grave recovery through actual transfer and return
+
+AB03 adds a fourteen-group browser arc. It starts with actual Surface nourishment and maturity, completes the existing Guide lesson and continuous Hub handoff, then uses a declared Grave debug entry. Four actual object Pulse reads, residue Stabilize, safe Absorb and the authored proximity-return boundary create the imprint and return history. A declared debug revisit then causes protected-remains recoil and measures assisted recovery. No Surface/Grave history, completion or growth flags are injected. Entry/revisit navigation remains a test fixture, not a campaign navigation claim.
+
+Catalog: 36 quick cases / 598 checks; 27 browser cases; 63 IDs. Production remains CONNECTION48.
+
+## CONNECTION50 — live Grave recovery feedback
+
+AC01 adds six groups for read-only owner reasons, actual-frame contribution witnesses, guards against stale/unowned/unearned data, state explanations and nonmutation. AB03 adds two actual enabled-label checks after earning the real Grave return: contributing held recovery, released availability, and inspection pause. Recovery laws remain CONNECTION48.
+
+Catalog: 37 quick cases / 604 checks; 27 browser cases; 64 IDs. S02/S05 source pins reflect reviewed publication and presentation changes only.
+
+## CONNECTION51 — earned circulation beside Grave recovery
+
+AC02 adds a nineteen-group browser arc with actual Surface growth, Grave safe transfer and authored return, actual three Vascular held-current Pulse reads and authored return, measured idle reserve recovery, then measured Grave recovery while both adaptations are earned. No progression/history/completion flags are injected. Region entry/revisit navigation and near-target poses remain explicit spatial fixtures. The Vascular region-only debug queue avoids the anatomy-seeding test platform; only two genuinely earned organs are present. Reserve starts at 0.2 for the idle measurement.
+
+Catalog: 37 quick cases / 604 checks; 28 browser cases; 65 IDs. Production remains CONNECTION50. The Vascular 8% idle rate and Grave 15% local recovery ceiling remain separate.
+
+## CONNECTION52 — actual earned triad and Silt boundary placement
+
+AC03 adds a twenty-five-group browser arc. Following actual Surface/Guide and earned Grave/Vascular outcomes, it uses the region-only Silt debug queue, actual held-pressure Pulse, rib brace, selective porous intake, deep release and authored return. It checks all-three Integrated Core recognition without engine-phase inflation, intact dense matter and eight-unit material ownership. Actual Core Work moves the earned Silt piece to Membrane and verifies the chemistry and attachment-consumer publication. It does not claim physical adhesion engagement. No earned history, route completion or debug anatomy is injected. Spatial/time/entry fixtures remain declared.
+
+Catalog: 37 quick cases / 604 checks; 29 browser cases; 66 IDs. Production remains CONNECTION50.
+
+## CONNECTION53 — cumulative earned-growth review checkpoint
+
+One guarded package collects the CONNECTION44–52 changes and accepts exact CONNECTION43–52 starting checkpoints. Gameplay remains CONNECTION50; the catalog remains CONNECTION52 (37 quick cases / 604 checks, 29 browser cases, 66 IDs). It preserves prior pass names, scripts, reports and backups. No new gameplay or test cases are added.
+
+## CONNECTION54 — explain Hub entry readiness
+
+AD01 adds 15 method-level groups, including 1,800 candidate comparisons against CONNECTION53. It verifies dormant, preparing, reveal, distance, held-Stabilize, in-flight and Core Work reasons; Guide/HUD ownership after optional investigation; the separate return-crease option; nonmutation; and the existing deliberate-commit owner. Candidate permissions, entry radius, input mapping and boundary owner are unchanged.
+
+Catalog: 38 quick cases / 619 checks; all earlier cases and historical reports remain indexed. Running-browser checks were blocked in the authoring environment; no live navigation, appearance, physical-controller or feel acceptance is claimed. Broader Core occlusion/selection work remains deferred.
+
+## CONNECTION55 — direct Hub destination choice
+
+Retires the first-Grave invitation as an entry prerequisite in both the Hub candidate and boundary owner. Local route readings, memory and return-to-center remain optional observations; they are never auto-completed. Opening pacing now follows destination choice, and the ordinary HUD no longer presents the optional route/memory checklist. Region preparation, distance, deliberate commitment, earned Grave-return unlocks and three earned returns for Comb remain required.
+
+AE01 adds eight method-level groups, including 128 combinations with no mandatory local tour and a reproduction of the prior false-invitation candidate block. U01/AD01 now expect the intentional removal of the invitation prerequisite; all remaining guard assertions remain. X01 explicitly accounts for the changed checklist metadata/text while retaining its geometry, palette and other publication comparisons. Repair source pins track this reviewed source.
+
+Catalog: 39 quick cases / 627 checks, plus the existing 29 browser cases. Running-browser and human navigation acceptance remain open.
+
+## CONNECTION56 — registered Hub handoff and readiness recovery
+
+AF01 adds 12 groups using SystemRegistry with the production commitment, Hub investigation and boundary owners in their runtime-relative order. Hub publication/preparation, logical input, poses and regional history are declared fixtures; this does not run InputSystem, full GameRuntime or rendering. It reproduces the prior Comb presentation-dependent stall and the request-consumed-before-readiness stall, then verifies cell changes, one-time entry history, no local-tour requirement, preparation/range recovery, and unchanged unearned-route/Core Work/Stabilize guards.
+
+Comb now uses mounted Hub readiness, preserving its regional-return and destination-preparation prerequisites. Persistent committed requests are consumed only when the boundary owner can start them. Other trigger modes and route laws remain unchanged. Repair assertions are retained with the reviewed source pin.
+
+Catalog: 40 quick cases / 639 checks, plus existing browser cases. Live browser and human navigation/readability acceptance remain open.
+
+## CONNECTION57 — pending Hub choice lifetime
+
+AG01 adds 12 registered-owner groups. Prior Hub source reproduces a pending request firing after departure/re-entry and queued travel starting while Core Work is active. Unstarted choices now retire on leaving Hub, existing Cancel input, or Core Work entry. Matching boundary claims are recognized before the first flight publication, so already-started crossings remain under their boundary owner. Normal completion cleans up the old request. Matching inactive Hub events are acknowledged to prevent stale-offer replay. Cancellation clears only the exact privately owned request.
+
+Preparation loss and external inspection still preserve waiting intent. Exiting Core Work or returning to Hub requires a fresh destination choice after cancellation. Source pins change; repair assertions do not. Logical input, readiness, mode/foreign-cell and geometry/history publications are declared fixtures, not physical input, full camera lifecycle, full GameRuntime, browser rendering or human proof.
+
+Catalog: 41 quick cases / 651 checks, plus existing browser cases. Human interruption/return feel remains open.
+
+## CONNECTION59
+42 quick cases / 663 checks. AH01 compares actual body and verb owners with CONNECTION58 presentation across charge, quick/charged release, Absorb and Stabilize; checks fallback, ownership, replacement and world preservation. Comparison fixture changes its relative import only. CPU tests do not establish human visual acceptance.
+
+## CONNECTION60
+Verification-only follow-up to CONNECTION59; production fingerprint unchanged. 43 quick cases / 669 checks. AI01 covers repeated mixed verbs and Core Work, bounded Pulse fronts and expiry, detach/remount recovery, absent legacy mesh, and synthetic sensory contact/return visuals using actual owners. Browser/human visual acceptance remains open.
