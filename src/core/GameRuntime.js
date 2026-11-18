@@ -2682,6 +2682,11 @@ export class GameRuntime {
     // HC031G expresses the existing HC029C Stabilize + Pulse chord as a focused
     // projection. Free space self-braces; authored surface anchors only enhance it.
     this.registry.register("stabilizedProjectionSystem", this.stabilizedProjectionSystem);
+    // Chemistry publishes Pulse contacts before discovery readers and applies the
+    // response here, once targeting, composition and the projection brace are current.
+    this.registry.register("chemPulseResponse", {
+      update: (_dt, frameState) => this.chemObjectSystem.applyPulseToObjects(frameState)
+    });
     // HC031I consumes the same-frame H3 contact/brace state and gives the authored
     // membrane/scar/residue continuation a visible ecological answer only.
     this.registry.register("hostContactEcologyContinuationSystem", this.hostContactEcologyContinuationSystem);

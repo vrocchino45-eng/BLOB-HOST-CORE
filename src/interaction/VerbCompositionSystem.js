@@ -20,7 +20,7 @@ const PROFILES = Object.freeze({
   idle: { ...NEUTRAL, mode: "idle", meaning: "no_composed_intent" },
   project: { ...NEUTRAL, mode: "project", meaning: "pulse_outward" },
   draw: { ...NEUTRAL, mode: "draw", meaning: "absorb_inward" },
-  cohere: { ...NEUTRAL, mode: "cohere", meaning: "stabilize_order" },
+  cohere: { ...NEUTRAL, mode: "cohere", meaning: "stabilize_order", targetMotionDamping01: 0.46 },
   cohere_project: {
     ...NEUTRAL,
     mode: "cohere_project",
@@ -136,12 +136,28 @@ export class VerbCompositionSystem {
       : "none";
     const relationshipBound = targetId !== "none";
 
+    const control = this.resolveControl(safeDt, frameState, stabilize && relationshipBound, targetId);
     this.publish(frameState, chord, relationshipBound, targetId, {
       pulse,
       absorb,
       stabilize,
       pulseReleaseEnvelope
-    });
+    }, control);
+  }
+
+  resolveControl(dt, frameState, active, targetId) {
+    if (!active) return null;
+
+    const relationshipSequence = frameState.targeting.relationshipSequence;
+    const previous = frameState.verbComposition?.control;
+    const previousStrength = previous?.targetId === targetId && previous.relationshipSequence === relationshipSequence
+      ? previous.strength01
+      : 0;
+    // Radial performance runs later in the step and already factors reserve into coherence.
+    const coherence = clamp(frameState.corePerformance?.verbModifiers?.stabilize?.coherenceMultiplier ?? 1, 0.66, 1.48);
+    const settledStrength = clamp01(coherence * 0.78);
+    const strength01 = previousStrength + (settledStrength - previousStrength) * (1 - Math.exp(-dt * 7));
+    return { targetId, relationshipSequence, strength01 };
   }
 
   resolveChord({ pulse, absorb, stabilize }) {
@@ -155,12 +171,16 @@ export class VerbCompositionSystem {
     return "idle";
   }
 
-  publish(frameState, chord, relationshipBound, targetId, intent = {}) {
+  publish(frameState, chord, relationshipBound, targetId, intent = {}, control = null) {
     const profile = PROFILES[chord] ?? PROFILES.idle;
     const composed = chord === "cohere_project"
       || chord === "cohere_draw"
       || chord === "exchange"
       || chord === "full_system";
+    const uncontrolled = PROFILES[this.resolveChord({ ...intent, stabilize: false })];
+    const controlledEffect = (key) => control
+      ? uncontrolled[key] + (profile[key] - uncontrolled[key]) * control.strength01
+      : profile[key];
 
     frameState.verbComposition = {
       pass: "HC-031L",
@@ -174,6 +194,7 @@ export class VerbCompositionSystem {
       composed,
       relationshipBound,
       targetId,
+      control,
       intent: {
         pulse: Boolean(intent.pulse),
         absorb: Boolean(intent.absorb),
@@ -181,15 +202,15 @@ export class VerbCompositionSystem {
         pulseReleaseEnvelope: clamp01(intent.pulseReleaseEnvelope ?? 0)
       },
       effects: {
-        pulseFocusedMultiplier: clamp(profile.pulseFocusedMultiplier, 0.2, 1.2),
-        pulseAmbientMultiplier: clamp(profile.pulseAmbientMultiplier, 0.1, 1.2),
-        absorbProgressMultiplier: clamp(profile.absorbProgressMultiplier, 0.2, 1.2),
-        absorbPullMultiplier: clamp(profile.absorbPullMultiplier, 0.1, 1.2),
-        absorbSpinMultiplier: clamp(profile.absorbSpinMultiplier, 0.1, 1.2),
+        pulseFocusedMultiplier: clamp(controlledEffect("pulseFocusedMultiplier"), 0.2, 1.2),
+        pulseAmbientMultiplier: clamp(controlledEffect("pulseAmbientMultiplier"), 0.1, 1.2),
+        absorbProgressMultiplier: clamp(controlledEffect("absorbProgressMultiplier"), 0.2, 1.2),
+        absorbPullMultiplier: clamp(controlledEffect("absorbPullMultiplier"), 0.1, 1.2),
+        absorbSpinMultiplier: clamp(controlledEffect("absorbSpinMultiplier"), 0.1, 1.2),
         stabilizeRateMultiplier: clamp(profile.stabilizeRateMultiplier, 0.6, 1.3),
         stabilizeWobbleMultiplier: clamp(profile.stabilizeWobbleMultiplier, 0.1, 1.2),
         stabilizeLineOpacityMultiplier: clamp(profile.stabilizeLineOpacityMultiplier, 0.8, 1.3),
-        targetMotionDamping01: clamp01(profile.targetMotionDamping01),
+        targetMotionDamping01: relationshipBound ? clamp01(controlledEffect("targetMotionDamping01")) : 0,
         tension01: clamp01(profile.tension01),
         equilibrium01: clamp01(profile.equilibrium01),
         enduranceDemandMultiplier: clamp(profile.enduranceDemandMultiplier, 1, 1.4)

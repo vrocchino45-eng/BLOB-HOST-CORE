@@ -15,6 +15,7 @@ export class ChemObjectSystem {
 
     this.objects = [];
     this.pulseWaves = [];
+    this.pendingPulseContacts = null;
     this.tempVector = new THREE.Vector3();
     this.absorbProgress = new Map();
 
@@ -120,18 +121,18 @@ export class ChemObjectSystem {
     return this.responseState.get(item.recipe.id) ?? null;
   }
 
-  registerPulseResponse(item, strength = 1, reactive = null) {
+  registerPulseResponse(item, offset, strength, reactive) {
     const state = this.getResponseState(item);
     if (!state) return;
 
-    this.responseTemp.copy(item.root.position).sub(this.playerRoot.position);
+    this.responseTemp.copy(offset);
     if (this.responseTemp.lengthSq() < 0.0001) this.responseTemp.set(0, 0.12, -1);
     this.responseTemp.normalize();
 
     // HC029B: Pulse still asks the whole nearby field a question, but the retained
     // relationship owns the strong directional push. HC030A then lets the target's
     // current condition determine whether that displacement is clean or irregular.
-    const responseStrength = Math.max(0, Math.min(1, strength));
+    const responseStrength = Math.max(0, Math.min(1.30, strength));
     const condition01 = Math.max(0, Math.min(1, reactive?.presentedCondition01 ?? reactive?.condition01 ?? 0));
     const personality = item.root.userData.responsePersonality ?? {};
     const pulsePushMultiplier = Math.max(0.65, Math.min(1.35, personality.pulsePushMultiplier ?? 1));
@@ -277,9 +278,9 @@ export class ChemObjectSystem {
   }
 
   update(dt, frameState) {
-    if (frameState.input?.pulsePressed) {
+    if (dt > 0 && frameState.input?.pulsePressed) {
       this.emitPulse(frameState);
-      this.applyPulseToObjects(frameState);
+      this.capturePulseContacts(frameState);
     }
 
     this.updateObjects(dt, frameState);
@@ -336,8 +337,30 @@ export class ChemObjectSystem {
     this.pulseWaves.push({ root: null, age: 0, maxAge: 0.68 });
   }
 
+  capturePulseContacts(frameState) {
+    const contacts = [];
+    for (const item of this.objects) {
+      if (item.absorbed || item.root.userData.absorbed || !item.root.visible) continue;
+
+      const offset = item.root.position.clone().sub(this.playerRoot.position);
+      if (offset.lengthSq() > 4.25 ** 2) continue;
+
+      item.pulseAge = 0;
+      item.root.userData.lastPulseResponse = item.recipe.behavior?.onPulse ?? "none";
+      contacts.push({ item, offset });
+    }
+
+    const affected = contacts.map(({ item }) => item.recipe.id);
+    frameState.pulse.affectedObjects = affected;
+    frameState.chemObjectState.pulseResponse = affected.length ? affected.join(", ") : "pulse_dissipated";
+    this.pendingPulseContacts = contacts;
+  }
+
   applyPulseToObjects(frameState) {
-    const affected = [];
+    const contacts = this.pendingPulseContacts;
+    if (!contacts) return;
+    this.pendingPulseContacts = null;
+
     const ambient = [];
     const targeting = frameState.targeting ?? {};
     const relationshipTargetId = targeting.relationshipActive
@@ -359,12 +382,10 @@ export class ChemObjectSystem {
       if (forward.lengthSq() < 0.0001) forward.set(0, 0, -1);
       forward.normalize();
       let bestScore = -Infinity;
-      for (const item of this.objects) {
-        if (item.absorbed || item.root.userData.absorbed || !item.root.visible) continue;
-        const offset = new THREE.Vector3().copy(item.root.position).sub(this.playerRoot.position);
+      for (const { item, offset } of contacts) {
         const distance = offset.length();
-        if (!Number.isFinite(distance) || distance < 0.001 || distance > 4.25) continue;
-        const alignment = offset.multiplyScalar(1 / distance).dot(forward);
+        if (!Number.isFinite(distance) || distance < 0.001) continue;
+        const alignment = offset.dot(forward) / distance;
         if (alignment < 0.58) continue;
         const score = alignment * 1.22 + (1 - distance / 4.25) * 0.34;
         if (score > bestScore) {
@@ -395,16 +416,12 @@ export class ChemObjectSystem {
       : 1;
     const focusedCompositionMultiplier = Math.max(0.2, Math.min(1.3, baseFocusedCompositionMultiplier * projectionFocusedMultiplier));
     const ambientCompositionMultiplier = Math.max(0.08, Math.min(1.2, baseAmbientCompositionMultiplier * projectionAmbientMultiplier));
+    const radialPulseStrength = THREE.MathUtils.clamp(
+      frameState.corePerformance?.verbModifiers?.pulse?.responseStrengthMultiplier ?? 1, 0.76, 1.30
+    );
     let focusedObject = "none";
 
-    for (const item of this.objects) {
-      if (item.absorbed || item.root.userData.absorbed || !item.root.visible) continue;
-
-      const distance = this.playerRoot.position.distanceTo(item.root.position);
-      if (distance > 4.25) continue;
-
-      item.pulseAge = 0;
-      item.root.userData.lastPulseResponse = item.recipe.behavior?.onPulse ?? "none";
+    for (const { item, offset } of contacts) {
       const focused = focusedTargetId !== "none" && item.recipe.id === focusedTargetId;
       const baseResponseStrength = focused ? 1 : projectionActive ? 0.16 : 0.22;
       const compositionMultiplier = focused
@@ -413,15 +430,14 @@ export class ChemObjectSystem {
       const reactive = frameState.reactiveStateGrammar?.objects?.[item.recipe.id]
         ?? item.root.userData.reactiveState
         ?? null;
-      this.registerPulseResponse(item, baseResponseStrength * compositionMultiplier, reactive);
-      affected.push(item.recipe.id);
+      const strength = baseResponseStrength * compositionMultiplier;
+      const physiology = focused && compositionBoundToFocus ? radialPulseStrength : 1;
+      this.registerPulseResponse(item, offset, strength * physiology, reactive);
       if (focused) focusedObject = item.recipe.id;
       else ambient.push(item.recipe.id);
     }
 
-    // Pulse remains a broad inquiry for inherited discovery readers. HC031G changes
-    // force concentration, not the fact that the local field can still answer.
-    frameState.pulse.affectedObjects = affected;
+    // Discovery was published before the focused response was resolved.
     frameState.pulse.focusedObject = focusedObject;
     frameState.pulse.ambientObjects = ambient;
     frameState.pulse.relationshipTargetId = relationshipTargetId;
@@ -446,9 +462,6 @@ export class ChemObjectSystem {
     frameState.pulse.stabilizedProjectionMode = projectionActive ? (projection.mode ?? "self_braced") : "inactive";
     frameState.pulse.stabilizedProjectionFocus01 = projectionActive ? (projection.focus01 ?? 0) : 0;
     frameState.pulse.stabilizedProjectionRequiresAnchor = false;
-    frameState.chemObjectState.pulseResponse = affected.length
-      ? affected.join(", ")
-      : "pulse_dissipated";
   }
 
   applyAbsorb(dt, nearest, frameState) {
