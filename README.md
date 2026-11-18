@@ -1,5 +1,3 @@
-# Connection 62 validation patch
+# C63 Pass 5 — supervised browser traversal launcher
 
-Extract over the BLOB game root (next to package.json). Double-click RUN_BLOB_C62.bat. Upload C62_RESULTS if validation fails. Commit .github/workflows and tools/connection62 for GitHub Actions.
-
-This patch changes no game source and leaves C61 validation and historical contracts intact. It accepts only CRLF-to-LF equivalent content as a fallback when verifying historical hashes; other byte changes fail.
+Extract both files into the existing BLOB-HOST-CORE root (beside package.json). Requires prior C63 static and route-readiness test scripts already installed, Node/npm and project dependencies. Double-click RUN_C63_BROWSER_TRAVERSAL.bat. It first runs the two logic checks, saves their outputs to C63_TRAVERSAL_RESULTS, opens localhost and starts the Vite dev server. This does not automate keyboard/controller input and does not certify browser traversal. Follow C63_TRAVERSAL_CHECKLIST.md; upload checklist, results and optional short video. No game source files are changed.

@@ -834,7 +834,7 @@ export class LocalCellBoundaryMorphSystem {
         });
       case "hub_post_grave_route_entry":
         return this.hubEntryReadiness(recipe, frameState, {
-          requireGraveReturn: true,
+          requireGraveReturn: false,
           preparationFlag: recipe.preparationFlag
         });
       case "grave_return":
@@ -1500,8 +1500,8 @@ export class LocalCellBoundaryMorphSystem {
       owner: "LocalCellBoundaryMorphSystem",
       destinationOwner: "Act1RouteContractSystem",
       persistenceOwner: "LocalCellBoundaryMorphSystem",
-      wakeCondition: "graveReturned",
-      wakeConditionMet: Boolean(frameState.act1RouteHistory?.graveReturned),
+      wakeCondition: "hubActiveAndDestinationPrepared",
+      wakeConditionMet: Boolean(frameState.hubChamberFoundation?.active),
       mountedDestinationCount: [vascular, silt].filter((item) => item.destinationMounted).length,
       playableDestinationCount: [vascular, silt].filter((item) => item.playableReady).length,
       gameplayPendingCount: [vascular, silt].filter((item) => item.gameplayPending).length,
@@ -1524,10 +1524,9 @@ export class LocalCellBoundaryMorphSystem {
       return Boolean(frameState.hubChamberFoundation?.active && readiness.destinationPrepared);
     }
     if (recipe.id === "hub_to_vascular" || recipe.id === "hub_to_silt") {
-      return Boolean(
-        frameState.act1RouteHistory?.graveReturned &&
-        frameState.firstSliceObjectives?.grave_memory_read_and_stabilize?.complete
-      );
+      // C63: visiting Grave is not a prerequisite for choosing another Hub route.
+      // Compatibility visibility follows the same mounted-destination contract.
+      return Boolean(frameState.hubChamberFoundation?.active && readiness.destinationPrepared);
     }
     if (recipe.id === "hub_to_comb") {
       const history = frameState.act1RouteHistory ?? {};

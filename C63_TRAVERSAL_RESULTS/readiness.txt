@@ -1,0 +1,20 @@
+PASS hub_to_grave direct entry without Grave
+PASS hub_to_grave compatibility awake
+PASS hub_to_grave rejects unprepared destination
+PASS hub_to_grave rejects distant interaction
+PASS hub_to_grave rejects inactive Hub
+PASS hub_to_vascular direct entry without Grave
+PASS hub_to_vascular compatibility awake
+PASS hub_to_vascular rejects unprepared destination
+PASS hub_to_vascular rejects distant interaction
+PASS hub_to_vascular rejects inactive Hub
+PASS hub_to_silt direct entry without Grave
+PASS hub_to_silt compatibility awake
+PASS hub_to_silt rejects unprepared destination
+PASS hub_to_silt rejects distant interaction
+PASS hub_to_silt rejects inactive Hub
+PASS grave_return retains owner
+PASS vascular_return retains owner
+PASS silt_return retains owner
+PASS hub_comb_entry retains owner
+C63 readiness integration: PASS (19 assertions). This is a logic-level test, not a browser traversal test.
