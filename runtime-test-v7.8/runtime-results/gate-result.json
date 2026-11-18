@@ -1,0 +1,28 @@
+{
+  "gate": "C61-v7.8",
+  "root": "C:\\Users\\vrocc_000\\Documents\\GitHub\\BLOB-HOST-CORE",
+  "checks": {
+    "checkpoint_provenance": {
+      "exit": 1,
+      "stdout": "{\n  \"gate\": \"C61-v7.5-later-checkpoint-compatibility\",\n  \"root\": \"C:\\\\Users\\\\vrocc_000\\\\Documents\\\\GitHub\\\\BLOB-HOST-CORE\",\n  \"checks\": {\n    \"historical_contract_identity\": true,\n    \"historical_unchanged:src/input/InputSystem.js\": true,\n    \"historical_unchanged:src/ecology/EntityRelationshipGrammarSystem.js\": true,\n    \"historical_unchanged:src/fields/ApertureAdjacentTerritorySystem.js\": false,\n    \"historical_unchanged:src/fields/MembraneRidgeGameplaySystem.js\": false,\n    \"historical_unchanged:src/world/CrawlableSurfaceRegistry.js\": true,\n    \"authorized_chain:src/player/PlayerMovementController.js\": true,\n    \"authorized_chain:src/player/CoreSurfaceTruthSystem.js\": false,\n    \"movement_backup_matches_historical\": false\n  },\n  \"passed\": 5,\n  \"total\": 9,\n  \"success\": false\n}\n",
+      "stderr": ""
+    },
+    "undefined_methods": {
+      "exit": 0,
+      "stdout": "Undefined this.method() audit passed.\n",
+      "stderr": ""
+    },
+    "dependencies": {
+      "exit": 0,
+      "stdout": "three/vite available\n",
+      "stderr": ""
+    },
+    "build": {
+      "exit": 0,
+      "stdout": "\n> blob-host-core-rebuild@0.31.54 build\n> node node_modules/vite/bin/vite.js build\n\n\u001b[36mvite v7.1.0 \u001b[32mbuilding for production...\u001b[36m\u001b[39m\ntransforming...\n\u001b[32m\u00e2\u0153\u201c\u001b[39m 176 modules transformed.\nrendering chunks...\ncomputing gzip size...\n\u001b[2mdist/\u001b[22m\u001b[32mindex.html                                   \u001b[39m\u001b[1m\u001b[2m    0.66 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m \u00e2\u201d\u201a gzip:   0.39 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/RuntimeDiagnosticSummary-fcfSmrce.js  \u001b[39m\u001b[1m\u001b[2m   10.27 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m \u00e2\u201d\u201a gzip:   3.89 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/ChemistryDebugPanel-CDft9NTm.js       \u001b[39m\u001b[1m\u001b[2m   26.49 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m \u00e2\u201d\u201a gzip:   8.33 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/RecipeDebugOverlay-TcGViGkB.js        \u001b[39m\u001b[1m\u001b[2m   45.63 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m \u00e2\u201d\u201a gzip:  14.18 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/index-Dx7v8QZe.js                     \u001b[39m\u001b[1m\u001b[33m2,768.34 kB\u001b[39m\u001b[22m\u001b[2m \u00e2\u201d\u201a gzip: 718.36 kB\u001b[22m\n\u001b[32m\u00e2\u0153\u201c built in 32.04s\u001b[39m\n",
+      "stderr": "\u001b[33m\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\u001b[39m\n"
+    }
+  },
+  "lock_sha256": "140ebe81458d2f8c0f3bc4e369967d08fc02225682a47786a6c476849a0e79d6",
+  "status": "FAIL"
+}
