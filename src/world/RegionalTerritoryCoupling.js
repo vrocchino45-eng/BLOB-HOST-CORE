@@ -12,6 +12,26 @@ const DELTAS = Object.freeze({
   grave: {pulse:[0,.23,0], stabilize:[.25,-.06,0], absorb:[.05,-.04,.15]},
   hub: {pulse:[0,.14,0], stabilize:[.22,-.11,0], absorb:[0,-.05,.18]}
 });
+
+// Local chemistry accentuates one existing response component per verb.
+const HOST_RESPONSES = Object.freeze({
+  grave: {
+    pulse: { component: 'imprint', domain: 'residue', gain: 0.16 },
+    absorb: { component: 'imprint', domain: 'residue', gain: 0.08 },
+    stabilize: { component: 'imprint', domain: 'scar', gain: 0.14 }
+  },
+  vascular: {
+    pulse: { component: 'strain', domain: 'flux', gain: 0.18 },
+    absorb: { component: 'strain', domain: 'flux', gain: -0.16 },
+    stabilize: { component: 'strain', domain: 'signal', gain: -0.19 }
+  },
+  silt: {
+    pulse: { component: 'strain', domain: 'form', gain: 0.15 },
+    absorb: { component: 'void', domain: 'residue', gain: 0.16 },
+    stabilize: { component: 'imprint', domain: 'form', gain: 0.15 }
+  }
+});
+
 const KEYS = ['imprint','strain','void'];
 const clamp = x => Math.max(0, Math.min(1, Number.isFinite(x) ? x : 0));
 const finite = x => Number.isFinite(x) ? x : 0;
@@ -20,11 +40,15 @@ const finite = x => Number.isFinite(x) ? x : 0;
 // independent directions). Positive verb response splits into a local component
 // and two neighbors. Overflow at a saturated source redistributes within fixed
 // bounds; any blocked transfer dissipates. No autonomous generation or runaway.
-export function c0e2bApplyLocalCoupling(kind, sites, sourceIndex, verb) {
+export function c0e2bApplyLocalCoupling(kind, sites, sourceIndex, verb, hostResponse = null) {
   const contract = C0E2B_CIRCUIT[kind];
   const delta = DELTAS[kind]?.[verb];
   if (!contract || !delta || sites.length !== 3 || !Number.isInteger(sourceIndex)
       || sourceIndex < 0 || sourceIndex > 2) throw new Error('C0E2B_INVALID_LOCAL_EXPERIMENT');
+  const response = hostResponse && HOST_RESPONSES[kind]?.[verb];
+  const chemistryDelta = response
+    ? response.gain * clamp(hostResponse.domains?.[response.domain]) * clamp(hostResponse.strength01)
+    : 0;
   const before = sites.map(site => Object.fromEntries(KEYS.map(key => [key,clamp(site[key])])));
   const after = before.map(state => ({...state}));
   const neighbors = [0,1,2].filter(i=>i!==sourceIndex);
@@ -33,7 +57,7 @@ export function c0e2bApplyLocalCoupling(kind, sites, sourceIndex, verb) {
   let saturated = false;
   for (let k=0;k<KEYS.length;k++) {
     const key = KEYS[k];
-    const amount = finite(delta[k]);
+    const amount = finite(delta[k]) + (key === response?.component ? chemistryDelta : 0);
     if (amount <= 0) {
       after[sourceIndex][key] = clamp(after[sourceIndex][key] + amount);
       continue;
