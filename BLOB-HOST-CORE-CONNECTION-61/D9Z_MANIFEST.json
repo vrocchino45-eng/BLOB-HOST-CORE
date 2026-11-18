@@ -1,0 +1,39 @@
+{
+  "revision": "BOT1-D9Z",
+  "date": "2026-10-31",
+  "mode": "test-only",
+  "status": "offline-verified-live-pending",
+  "sourceHistory": "D9Y and D9X results preserved; Golden replay unchanged from D9Y",
+  "liveRec1UsedInSteering": false,
+  "gameplayFilesModified": 0,
+  "dependsOn": [
+    "Existing BLOB_BOT1_REAL_INPUT_HARNESS",
+    "Installed D9Y scripts and two JSON files"
+  ],
+  "unitTests": {
+    "bot1d9z": 15,
+    "bot1d9y_regression": 15
+  },
+  "files": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9z_policy.py",
+      "sha256": "6ffa2b92e264ca942acbc05b481c44a7d3510f6caa2e3a9ab870bf65aafec391",
+      "bytes": 2627
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d9z_browser.py",
+      "sha256": "6ba9c4e9f7dd127700376be57ae5a8f4e369a9d9c3f281d64010942a9dafe3b3",
+      "bytes": 17169
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d9z.py",
+      "sha256": "4d169465af74004fce242b71cd5841308673aa5a120b67d7dd749ae94e0a6370",
+      "bytes": 8380
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d9z.py",
+      "sha256": "df6838ec8b209c89b356ef33c6090059850b2684bc784c254aa1c48be5b6d4a4",
+      "bytes": 6970
+    }
+  ]
+}

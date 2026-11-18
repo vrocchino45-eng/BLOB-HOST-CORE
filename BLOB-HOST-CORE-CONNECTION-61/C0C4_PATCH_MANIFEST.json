@@ -1,0 +1,55 @@
+{
+  "pass": "C0C4",
+  "mode": "CONVERGENCE",
+  "base": "LS1E2 original VascularSiltSignalReceiver + installed C0C2 utility + C0C3 Silt adapter",
+  "status": "OFFLINE_VASCULAR_OWNER_PARITY_PASS_LOCAL_REGRESSION_PENDING",
+  "modifiedGameplayFiles": [
+    {
+      "path": "src/routes/VascularSiltSignalReceiver.js",
+      "operation": "modify",
+      "expectedPreinstallSha256": "6705ac01fd9e0b81a361092d54437b96ddee44f5de92df1cedff86848b00063f",
+      "newSha256": "618828692cc1d49248aa48275fa35c4ff948d6e91ba0730c8f56185da5805bf9",
+      "change": "C01 boundedAdd and boundedRecovery calls only, receipt and flow logic unchanged"
+    }
+  ],
+  "reusedNotIncluded": [
+    "src/hostCircuit/BoundedAccumulatorBehavior.js"
+  ],
+  "newTestFiles": [
+    "scripts/validateC0C4Vascular.mjs",
+    "scripts/fixtures/C0C4_VascularSiltSignalReceiver_LS1E2_REFERENCE.mjs"
+  ],
+  "newDocs": [
+    "README_C0C4.md",
+    "C0C5_PLAYTEST_CARD.md",
+    "C0C4_PASS_REPORT.md"
+  ],
+  "deletedFiles": [],
+  "disabledFiles": [],
+  "offlineEvidence": {
+    "ownerUpdatesCompared": 12397,
+    "assertions": 117393,
+    "receiptProbes": 5820,
+    "recoveryProbes": 6531,
+    "C0C3RegressionAssertions": 36450,
+    "C0C2RegressionAssertions": 24234
+  },
+  "locked": [
+    "HostConnectionReceiptLedger",
+    "SiltCompressionContact",
+    "VascularRhythmRouteSystem",
+    "receipt validation",
+    "mount lifecycle",
+    "flowScale",
+    "targeting",
+    "chemistry",
+    "movement",
+    "progression",
+    "REC1"
+  ],
+  "warnings": [
+    "Local current receiver hash must match expected before overwrite",
+    "C0C2 legacy hardcoded kernelUnusedByGameplay field outdated after adapters installed",
+    "No local Vite build or browser test performed by this pack"
+  ]
+}

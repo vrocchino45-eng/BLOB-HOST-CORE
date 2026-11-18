@@ -1,0 +1,85 @@
+{
+  "pass": "CONNECTION15",
+  "baseline": "CONNECTION14 consolidated / CONNECTION13 harness with CONNECTION12 gameplay",
+  "states": [
+    {
+      "id": "CONNECTION14",
+      "files": {
+        "src/hub/HubInvestigationGameplaySystem.js": "9149874d90bcff0d521aee35b40d6d88a0e82e11b2e1e5d6990093c34ebb4d07",
+        "src/morph/LocalCellBoundaryMorphSystem.js": "d474229dc4be053e1921b95bf69023fa73d817b97b444e355f4cf836372a95e0",
+        "src/routes/GraveResonanceGameplaySystem.js": "4d1f8579fd9ad11d0f9cfe73081534887052e66d520c962a42f9da8c18cc08ae",
+        "src/guide/GuidePromptSystem.js": "ff05abcb6b79f9ded6b579b78bce4f2e64ee09b52935ff0998acd5240f94f715",
+        "src/ui/PlaytestHudSystem.js": "7fa9db1059fe988c5293c039de165e80f871ea350f815d61364364de3294a8b0",
+        "BLOB_BOT_SERIES1/plan.json": "ba4daab01c147c104134036c683a9e1dc7ce13d8f6e7cbe77189799355d8188e",
+        "BLOB_BOT_SERIES1/README.md": "e65b73ae130f47726a2fa222cf11a2e4c969dcacc2ffc4686ebeab18bfcb304a",
+        "BLOB_BOT_SERIES1/cases/browser.mjs": "f2395a28abc920b0e7c10d41467606ca0b7c05e05b2e15f38bbf8f1dcb19f1e6",
+        "BLOB_BOT_SERIES1/cases/U01.mjs": null,
+        "BLOB_BOT_SERIES1/cases/review-fix-browser.mjs": null
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/hub/HubInvestigationGameplaySystem.js",
+      "after": "ef41a6fa557911413e29f21927d9a39df4b50718c71408a78980a5a8e0d0d9a5"
+    },
+    {
+      "path": "src/morph/LocalCellBoundaryMorphSystem.js",
+      "after": "0bf36c680b8d31067019d710eafaa5fa5c6e7dd384fadfaf879c1d43ba60a30b"
+    },
+    {
+      "path": "src/routes/GraveResonanceGameplaySystem.js",
+      "after": "fe148b7040a3caa90ebef22cb3660ed644707e4b7eecf7a2647d09a35daa7f02"
+    },
+    {
+      "path": "src/guide/GuidePromptSystem.js",
+      "after": "a09d93f160eac8c3c28be2e2ce66169ed37206b36462ff94891f35ad35d1728c"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "after": "af4496115a293716f9fd2fe47479359f1568c3a43522cefbb383f645a77f88c2"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/plan.json",
+      "after": "9a09b4f75f3c0c3ff8a3adbc715d44f9ef0ec1b267bfa257b1f5005582b52326"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/README.md",
+      "after": "f7c2e0fb6f9c8f8883cc2dead97583a4532a32d14e26c4f1371bd454a5b60421"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/cases/browser.mjs",
+      "after": "639ca1fec3a2a6acc664a6fcb464c74ec9193494d31d237b4b9b7cdd678b3244"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/cases/U01.mjs",
+      "after": "04beed2fe1892ecbd857eee4cd2f7703ed057d4a1e5e7a0a314d8f76a035ba32"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/cases/review-fix-browser.mjs",
+      "after": "b2e9d6e312c8b0b4cef63b24a386d87a80a91fd35193aa2a4f0d5b090d1ca549"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/input/InputSystem.js",
+      "sha256": "5117dc831d6dcc5be0fd9f38fc58c6a8eb125dd6f30a34c910d6ea07e669c0f1"
+    },
+    {
+      "path": "src/world/RegionalTerritoryExpansion.js",
+      "sha256": "26c2012e80a6405baf0fce942349bd986cda4bc47b48e1251c59fb2c409babf2"
+    },
+    {
+      "path": "src/core/HostConnectionReceiptLedger.js",
+      "sha256": "13c95fd61ccec296ef1942bd7f7c912cfb43f89056b12e58925654162ed0dda6"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}

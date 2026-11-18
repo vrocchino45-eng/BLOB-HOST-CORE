@@ -1,0 +1,134 @@
+{
+  "schema": "BLOB-GSL4B-BASELINE-COMPARISON-v1",
+  "source": "uploaded GSL4 telemetry",
+  "metrics": {
+    "legacy": {
+      "samples": 283,
+      "durationMs": 4700,
+      "maxSampleDisplacementPx": 134.715,
+      "maxVelocityDeltaPerSample": 0.0,
+      "boundaries": [
+        {
+          "ms": 510.1999999999971,
+          "from": "idle",
+          "to": "curiosity",
+          "displacementPx": 11.036,
+          "deltaMs": 16.8
+        },
+        {
+          "ms": 993.3999999999978,
+          "from": "curiosity",
+          "to": "idle",
+          "displacementPx": 134.715,
+          "deltaMs": 16.6
+        },
+        {
+          "ms": 1710.2999999999993,
+          "from": "idle",
+          "to": "support",
+          "displacementPx": 121.309,
+          "deltaMs": 16.8
+        },
+        {
+          "ms": 2126.899999999998,
+          "from": "support",
+          "to": "idle",
+          "displacementPx": 121.282,
+          "deltaMs": 16.7
+        },
+        {
+          "ms": 2610.199999999997,
+          "from": "idle",
+          "to": "concern",
+          "displacementPx": 94.066,
+          "deltaMs": 16.5
+        },
+        {
+          "ms": 3160.2999999999993,
+          "from": "concern",
+          "to": "idle",
+          "displacementPx": 95.018,
+          "deltaMs": 16.6
+        },
+        {
+          "ms": 3710.5999999999985,
+          "from": "idle",
+          "to": "support",
+          "displacementPx": 113.325,
+          "deltaMs": 16.9
+        },
+        {
+          "ms": 4127.5,
+          "from": "support",
+          "to": "idle",
+          "displacementPx": 121.739,
+          "deltaMs": 17.0
+        }
+      ]
+    },
+    "continuous": {
+      "samples": 283,
+      "durationMs": 4700,
+      "maxSampleDisplacementPx": 7.322,
+      "maxVelocityDeltaPerSample": 1.989,
+      "boundaries": [
+        {
+          "ms": 510.0999999999767,
+          "from": "idle",
+          "to": "curiosity",
+          "displacementPx": 0.149,
+          "deltaMs": 16.5
+        },
+        {
+          "ms": 993.7999999999884,
+          "from": "curiosity",
+          "to": "idle",
+          "displacementPx": 1.65,
+          "deltaMs": 16.7
+        },
+        {
+          "ms": 1710.2999999999884,
+          "from": "idle",
+          "to": "support",
+          "displacementPx": 1.713,
+          "deltaMs": 16.4
+        },
+        {
+          "ms": 2127,
+          "from": "support",
+          "to": "idle",
+          "displacementPx": 1.121,
+          "deltaMs": 16.4
+        },
+        {
+          "ms": 2610.4000000000233,
+          "from": "idle",
+          "to": "concern",
+          "displacementPx": 0.224,
+          "deltaMs": 16.6
+        },
+        {
+          "ms": 3160.7000000000116,
+          "from": "concern",
+          "to": "idle",
+          "displacementPx": 5.589,
+          "deltaMs": 16.9
+        },
+        {
+          "ms": 3710.5,
+          "from": "idle",
+          "to": "support",
+          "displacementPx": 0.881,
+          "deltaMs": 16.6
+        },
+        {
+          "ms": 4127.200000000012,
+          "from": "support",
+          "to": "idle",
+          "displacementPx": 0.871,
+          "deltaMs": 16.5
+        }
+      ]
+    }
+  }
+}

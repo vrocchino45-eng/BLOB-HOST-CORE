@@ -1,0 +1,260 @@
+{
+  "pass": "ENGINE-UNLOCK1",
+  "checks": [
+    {
+      "name": "Fresh engine starts with zero credits and triadic 3-phase",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Unreturned completed first routes do not award credits",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Three completed first returns award exactly three credits",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual Grave II evaluator emits its canonical phase-two completion",
+      "scope": "real_completion_evaluator_with_near_resolution_fixture",
+      "status": "PASS"
+    },
+    {
+      "name": "Grave II completion adds the fourth credit without unlocking 6-phase",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated publication of the same completion cannot add credits",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated first-return flags and visit counts cannot add credits",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid route name cannot award an unlock credit",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Counter fixture: fifth credit remains at 3-phase",
+      "scope": "synthetic_future_completion_counter_only",
+      "status": "PASS"
+    },
+    {
+      "name": "Counter fixture: sixth credit unlocks paired 6-phase",
+      "scope": "synthetic_future_completion_counter_only",
+      "status": "PASS"
+    },
+    {
+      "name": "Alternate key for the same route/phase does not duplicate credit",
+      "scope": "synthetic_counter_duplicate_probe",
+      "status": "PASS"
+    },
+    {
+      "name": "Counter fixture: credits seven through eleven remain at 6-phase",
+      "scope": "synthetic_future_completion_counter_only",
+      "status": "PASS"
+    },
+    {
+      "name": "Counter fixture: twelfth credit unlocks four-per-function 12-phase",
+      "scope": "synthetic_future_completion_counter_only",
+      "status": "PASS"
+    },
+    {
+      "name": "Repeated phase-two through phase-four completions stay capped at twelve credits",
+      "scope": "synthetic_future_completion_counter_only",
+      "status": "PASS"
+    },
+    {
+      "name": "Every architecture preserves balanced Pulse/Absorb/Stabilize firing ordinals",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Engine physiology consumer does not mutate progression, material, or player position",
+      "scope": "controlled_contract",
+      "status": "PASS"
+    },
+    {
+      "name": "Debug architecture cycle changes engine display without adding earned credits",
+      "scope": "explicit_existing_debug_override",
+      "status": "PASS"
+    }
+  ],
+  "stages": [
+    {
+      "label": "fresh",
+      "creditCount": 0,
+      "unlocked": 3,
+      "renderedPhases": 3,
+      "phase2": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      }
+    },
+    {
+      "label": "first three completed returns fixture",
+      "creditCount": 3,
+      "unlocked": 3,
+      "renderedPhases": 3,
+      "phase2": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      }
+    },
+    {
+      "label": "implemented credit ceiling: Grave II after three first returns",
+      "creditCount": 4,
+      "unlocked": 3,
+      "renderedPhases": 3,
+      "phase2": {
+        "grave": true,
+        "vascular": false,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      }
+    },
+    {
+      "label": "synthetic fifth credit",
+      "creditCount": 5,
+      "unlocked": 3,
+      "renderedPhases": 3,
+      "phase2": {
+        "grave": true,
+        "vascular": true,
+        "silt": false
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      }
+    },
+    {
+      "label": "synthetic sixth credit",
+      "creditCount": 6,
+      "unlocked": 6,
+      "renderedPhases": 6,
+      "phase2": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase3": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      },
+      "phase4": {
+        "grave": false,
+        "vascular": false,
+        "silt": false
+      }
+    },
+    {
+      "label": "synthetic eleventh credit",
+      "creditCount": 11,
+      "unlocked": 6,
+      "renderedPhases": 6,
+      "phase2": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase3": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase4": {
+        "grave": true,
+        "vascular": true,
+        "silt": false
+      }
+    },
+    {
+      "label": "synthetic twelfth credit",
+      "creditCount": 12,
+      "unlocked": 12,
+      "renderedPhases": 12,
+      "phase2": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase3": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      },
+      "phase4": {
+        "grave": true,
+        "vascular": true,
+        "silt": true
+      }
+    }
+  ],
+  "summary": {
+    "passed": 17,
+    "failed": 0
+  },
+  "finding": {
+    "counterAndArchitectureContracts": "PASS",
+    "naturallyEarnableSixPhase": "NOT_IMPLEMENTED_IN_CURRENT_SOURCE",
+    "naturallyEarnableTwelvePhase": "NOT_IMPLEMENTED_IN_CURRENT_SOURCE",
+    "implementedCredits": 4,
+    "sixPhaseThreshold": 6,
+    "twelvePhaseThreshold": 12,
+    "currentCompletionPublishers": [
+      "GraveResonanceGameplaySystem -> grave:phase_2"
+    ],
+    "qualification": "The four-credit ceiling also relies on the separately recorded whole-source writer inventory. Counter fixtures above six credits do not establish playable completion content."
+  },
+  "notVerified": [
+    "earning first route objectives or Grave II puzzle without fixtures",
+    "unimplemented Vascular/Silt phase two and all phase three/four gameplay",
+    "human feel, audio or rendering of higher engine phases"
+  ]
+}

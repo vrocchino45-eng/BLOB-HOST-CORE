@@ -1,0 +1,42 @@
+{
+  "schema": "BLOB.C0C1.contract-fixture.v0.1",
+  "status": "PROPOSAL_OFFLINE_ONLY",
+  "baseline": "assembled_LS1E2_plus_D2M_contact_helper",
+  "componentFamily": "HostCircuitBehavior.C01.bounded_accumulator",
+  "instances": [
+    {
+      "instanceId": "C01.SILT.GARDEN_CONTACT",
+      "owner": "SiltCompressionContact",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "site": "silt-garden-catchment-contact",
+      "inputType": "local.contact_pulse_accepted",
+      "stateName": "pressure",
+      "min": 0,
+      "max": 1,
+      "incrementPolicy": {"kind":"fixed","amount":0.42},
+      "relaxationPolicy": {"kind":"linear","ratePerSecond":0.8,"rateWhileAbsorbing":1.4,"dtClamp":0.1,"condition":"not_braced_or_absorb_held"},
+      "resetPolicy": "held_id_changed_resets_immediately",
+      "consumer": "SiltPressureRouteSystem.updateSiltContact",
+      "evidence": "SOURCE; earlier interaction FIELD",
+      "notAllowed": ["signal_to_material","host_event_from_contact_press","progression_credit"]
+    },
+    {
+      "instanceId": "C01.VASCULAR.SILT_RECEIVER",
+      "owner": "VascularSiltSignalReceiver",
+      "cell": "CELL_VASCULAR_RHYTHM_ROUTE_001",
+      "site": "existing_vascular_receiving_membrane",
+      "inputType": "signal.provenance_receipt",
+      "stateName": "membraneLoad",
+      "min": 0,
+      "max": 0.85,
+      "incrementPolicy": {"kind":"velocity_derived","base":0.14,"gain":0.055,"speedNorm":2.5},
+      "relaxationPolicy": {"kind":"exponential","ratePerSecond":0.018,"dtClamp":0.25,"condition":"vascular_mounted"},
+      "resetPolicy": "retained_across_mounts_not_reload",
+      "consumer": "VascularRhythmRouteSystem.applyDynamicCurrent",
+      "evidence": "SOURCE+FIELD",
+      "notAllowed": ["physical_silt_arrival","progression_credit","off_route_tick"]
+    }
+  ],
+  "typeRule": "Distinct input types. No implicit type coercion or state sharing.",
+  "proofLimit": "This JSON is a design fixture, not registered in GameRuntime."
+}

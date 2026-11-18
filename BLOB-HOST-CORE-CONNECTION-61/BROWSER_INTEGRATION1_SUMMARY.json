@@ -1,0 +1,56 @@
+{
+  "pass": "BLOB-BROWSER-INTEGRATION1",
+  "baselineArchive": "BLOB_INTEGRATION_BASE_1794185675218.zip",
+  "unchangedExportedFiles": 703,
+  "scope": "headless browser rendered startup and Silt debug staging, real keyboard release; not normal navigation or human acceptance",
+  "environment": {
+    "browserPackage": "153.0.0",
+    "playwright": "1.62.1",
+    "rendering": "headless software WebGL / SwiftShader",
+    "server": "Vite 7.1.0 development server"
+  },
+  "renderedStartup": {
+    "canvasCount": 1,
+    "cell": "CELL_MEMBRANE_NURSERY_001"
+  },
+  "siltCell": "CELL_SILT_PRESSURE_ROUTE_001",
+  "mechanicalStatus": "OBSERVED",
+  "keyboardRelease": "C upward movement",
+  "recoveryToDeliberateReleaseSeconds": 0.1796500000001391,
+  "recoveryInterpretation": {
+    "event": "attachment_recovered",
+    "intention": "support",
+    "movementOwner": "gsl_response",
+    "expressionAllowed": true
+  },
+  "releaseInterpretation": {
+    "event": "deliberate_release",
+    "intention": "companion",
+    "movementOwner": "companion_available",
+    "expressionAllowed": false
+  },
+  "shelfVisibleAfterRelease": true,
+  "runtimeErrorCount": 0,
+  "consoleWarnings": [
+    "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio"
+  ],
+  "failedRequestCount": 0,
+  "liveObserverStatus": "INCOMPLETE",
+  "liveObserverCoverage": {
+    "deliberate": 1,
+    "unexpected": 0,
+    "recovery": 1
+  },
+  "liveObserverErrors": 0,
+  "pairedSamples": 13,
+  "interpretation": "Rapid recovery -> deliberate release case verified in controlled live browser runtime. Observer overall INCOMPLETE because unexpected loss absent.",
+  "setupCorrection": "Initial late observer installation collided with an older debug movement wrapper. Corrected run imports existing observer before boot via test-only browser interception of main.js; original source file unchanged.",
+  "remaining": [
+    "normal player navigation into Silt",
+    "physical gamepad",
+    "human camera/controller/audio feel",
+    "unexpected loss in this same browser session",
+    "intermittent disappearance recurrence or resolution",
+    "hardware GPU/performance parity"
+  ]
+}

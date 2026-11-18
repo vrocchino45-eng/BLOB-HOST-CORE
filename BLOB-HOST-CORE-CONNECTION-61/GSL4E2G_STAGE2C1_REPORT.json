@@ -1,0 +1,68 @@
+{
+  "pass": "GSL-4E2G-STAGE2C1",
+  "scope": "production adapter only; seven existing Stage 2B adapter checks plus six regression checks",
+  "checks": [
+    {
+      "name": "B05 unexpected loss holds concern 1.8s then companion",
+      "status": "PASS"
+    },
+    {
+      "name": "B05 recovery holds support 1.3s then companion",
+      "status": "PASS"
+    },
+    {
+      "name": "B02 deliberate_away_input suppresses concern",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 rapid loss -> recovery -> loss transitions deterministically",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 stable attachment does not re-trigger event",
+      "status": "PASS"
+    },
+    {
+      "name": "B09 missing reason never fabricates concern",
+      "status": "PASS"
+    },
+    {
+      "name": "Adapter never mutates LS1 playerAttachment",
+      "status": "PASS"
+    },
+    {
+      "name": "Recovery -> deliberate release after 0.448s cancels support",
+      "status": "PASS"
+    },
+    {
+      "name": "Recovery -> deliberate release after 0.497s cancels support",
+      "status": "PASS"
+    },
+    {
+      "name": "Recovery -> deliberate release after 0.474s cancels support",
+      "status": "PASS"
+    },
+    {
+      "name": "Recovery -> deliberate release after 0.309s cancels support",
+      "status": "PASS"
+    },
+    {
+      "name": "Deliberate release -> fresh recovery starts full support window",
+      "status": "PASS"
+    },
+    {
+      "name": "Unexpected loss concern is canceled by subsequent deliberate release",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 13,
+    "failed": 0
+  },
+  "notVerified": [
+    "installed Guide integration rerun",
+    "live Stage 2C rerun",
+    "LS1 Silt area coverage",
+    "visual quality and human feel"
+  ]
+}

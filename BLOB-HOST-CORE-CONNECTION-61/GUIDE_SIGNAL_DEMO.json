@@ -1,0 +1,128 @@
+{
+  "status": "ISOLATED_MOCK_ONLY",
+  "schema": "hc.perception.v0",
+  "signals": [
+    {
+      "eventId": "1",
+      "kind": "unfamiliar_material_observed",
+      "message": "curious_new_material",
+      "meaning": "Unfamiliar material noticed",
+      "atMs": 500,
+      "channels": {
+        "audio": {
+          "rhythmUnits": [
+            1,
+            2
+          ],
+          "toneShape": "short then held questioning interval"
+        },
+        "light": {
+          "rhythmUnits": [
+            1,
+            2
+          ],
+          "visualExpression": "short then sustained light pulse"
+        },
+        "movement": {
+          "gesture": "approach, investigate, hover"
+        }
+      },
+      "personality": "curious",
+      "accessibleText": "Unfamiliar material noticed",
+      "ownerAuthority": "read_only_expression_no_movement_or_physics_control"
+    },
+    {
+      "eventId": "2",
+      "kind": "support_confirmed",
+      "message": "stable_support",
+      "meaning": "Support confirmed",
+      "atMs": 1700,
+      "channels": {
+        "audio": {
+          "rhythmUnits": [
+            3
+          ],
+          "toneShape": "low-to-gentle-rise"
+        },
+        "light": {
+          "rhythmUnits": [
+            3
+          ],
+          "visualExpression": "one soft sustained glow"
+        },
+        "movement": {
+          "gesture": "settle into close relaxed orbit"
+        }
+      },
+      "personality": "relieved",
+      "accessibleText": "Support confirmed",
+      "ownerAuthority": "read_only_expression_no_movement_or_physics_control"
+    },
+    {
+      "eventId": "3",
+      "kind": "support_lost_unexpected",
+      "message": "concern_contact_lost",
+      "meaning": "Unexpected support lost",
+      "atMs": 2600,
+      "channels": {
+        "audio": {
+          "rhythmUnits": [
+            1,
+            1,
+            1
+          ],
+          "toneShape": "three descending brief chirps"
+        },
+        "light": {
+          "rhythmUnits": [
+            1,
+            1,
+            1
+          ],
+          "visualExpression": "three brief brightness dips"
+        },
+        "movement": {
+          "gesture": "small recoil then cautious return"
+        }
+      },
+      "personality": "startled",
+      "accessibleText": "Unexpected support lost",
+      "ownerAuthority": "read_only_expression_no_movement_or_physics_control"
+    },
+    {
+      "eventId": "4",
+      "kind": "support_confirmed",
+      "message": "stable_support",
+      "meaning": "Support confirmed",
+      "atMs": 3700,
+      "channels": {
+        "audio": {
+          "rhythmUnits": [
+            3
+          ],
+          "toneShape": "low-to-gentle-rise"
+        },
+        "light": {
+          "rhythmUnits": [
+            3
+          ],
+          "visualExpression": "one soft sustained glow"
+        },
+        "movement": {
+          "gesture": "settle into close relaxed orbit"
+        }
+      },
+      "personality": "careful",
+      "accessibleText": "Support confirmed",
+      "ownerAuthority": "read_only_expression_no_movement_or_physics_control"
+    }
+  ],
+  "eventsProvided": 5,
+  "signalsProduced": 4,
+  "limits": [
+    "No live Guide hook",
+    "No audio generated",
+    "No gameplay movement effect",
+    "Authoritative runtime perception events still to be designed"
+  ]
+}

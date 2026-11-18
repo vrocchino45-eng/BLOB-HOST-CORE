@@ -1,0 +1,58 @@
+{
+  "pass": "CONNECTION21",
+  "baseline": "CONNECTION20 or byte-identical CONNECTION19 production",
+  "states": [
+    {
+      "id": "CONNECTION19_OR20",
+      "files": {
+        "src/player/CoreVerbPhysicalizationSystem.js": "09cccb91a06fa0759e06c646936d57cb1aff7a70e6505ec18cb2b1f7f4bdbd30",
+        "CONNECTION21_ABSORB_CHECK.mjs": null,
+        "CONNECTION21_ABSORB_BROWSER.mjs": null
+      }
+    },
+    {
+      "id": "CONNECTION21",
+      "files": {
+        "src/player/CoreVerbPhysicalizationSystem.js": "1a6053589b775c3678cf01f7afadc364ee33bedb6e0fe6c4d4dbc0c9ee094c10",
+        "CONNECTION21_ABSORB_CHECK.mjs": "5ed56ce89144306e98cfa220d48e41fda1ec06069d77a5ab0b64f7badea16b5d",
+        "CONNECTION21_ABSORB_BROWSER.mjs": "21bc33864479eee4cdc6c4297660e023e0a0d7be38cff0c24ef869282b6c90f1"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "after": "1a6053589b775c3678cf01f7afadc364ee33bedb6e0fe6c4d4dbc0c9ee094c10"
+    },
+    {
+      "path": "CONNECTION21_ABSORB_CHECK.mjs",
+      "after": "5ed56ce89144306e98cfa220d48e41fda1ec06069d77a5ab0b64f7badea16b5d"
+    },
+    {
+      "path": "CONNECTION21_ABSORB_BROWSER.mjs",
+      "after": "21bc33864479eee4cdc6c4297660e023e0a0d7be38cff0c24ef869282b6c90f1"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/audio/EventAnchoredHostAudioSystem.js",
+      "sha256": "01b760aaa7e0e9cdccf60593b20efad7ab235a679d3b201eaa4ba95caef075e1"
+    },
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "sha256": "acc17c6a8834a9dbe2504d5dd2839e819d6f43190ed8e0d6b234bf0cd28350cd"
+    },
+    {
+      "path": "src/presentation/CoreSightlinePresentation.js",
+      "sha256": "382a3664f86cadb068d1d860cf61812014b4101e034a565c9a73d94a456b41c6"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}

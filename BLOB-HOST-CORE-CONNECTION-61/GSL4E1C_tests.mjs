@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {createEmbodiment} from './GSL4E1C_Embodiment.mjs';
+const b=createEmbodiment();
+let v=b.step(10,{state:'idle',phase:'drift',attentionAngle:0});
+assert.ok(Number.isFinite(v.scaleX)&&Number.isFinite(v.scaleY));
+for(let i=0;i<70;i++)v=b.step(10,{state:'curiosity',phase:'approach',attentionAngle:1});
+assert.ok(v.scaleX>v.scaleY,'curiosity elongated');
+for(let i=0;i<70;i++)v=b.step(10,{state:'support',phase:'accompany',attentionAngle:2});
+assert.ok(v.scaleY>v.scaleX&&v.halo>.5,'support wide/open');
+for(let i=0;i<70;i++)v=b.step(10,{state:'concern',phase:'recoil',attentionAngle:-1});
+assert.ok(v.tension>.8&&v.scaleX<1,'concern contracted');
+const previous=v.scaleX;v=b.step(10,{state:'idle',phase:'drift',attentionAngle:0});
+assert.ok(Math.abs(v.scaleX-previous)<.12,'no instantaneous pose snap');
+console.log('PASS: finite pose, curiosity lean, support openness, concern contraction, continuous recovery');

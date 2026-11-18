@@ -1,0 +1,45 @@
+{
+  "pass": "ENGINE-UNLOCK1-SOURCE",
+  "javascriptFilesScanned": 163,
+  "completionEventReferences": [
+    {
+      "path": "src/core/HostConnectionReceiptLedger.js",
+      "line": 209,
+      "text": "const validEvent = frameState?.returnRegionCompletionEvent === event"
+    },
+    {
+      "path": "src/routes/GraveResonanceGameplaySystem.js",
+      "line": 300,
+      "text": "frameState.returnRegionCompletionEvent = {"
+    },
+    {
+      "path": "src/routes/GraveResonanceGameplaySystem.js",
+      "line": 313,
+      "text": "frameState.returnRegionCompletionEvent, { source: this, frameState }"
+    },
+    {
+      "path": "src/routes/ReturnRegionEngineSystem.js",
+      "line": 29,
+      "text": "this.consumeCompletionEvent(frameState.returnRegionCompletionEvent);"
+    }
+  ],
+  "literalCompletionEventWriters": [
+    {
+      "path": "src/routes/GraveResonanceGameplaySystem.js",
+      "line": 300,
+      "text": "frameState.returnRegionCompletionEvent = {"
+    }
+  ],
+  "firstPhaseCreditKinds": [
+    "grave returned with committed memory imprint",
+    "vascular returned and completed",
+    "silt returned and completed"
+  ],
+  "observedAdditionalCompletionKind": "grave:phase_2",
+  "implementedCreditCeiling": 4,
+  "qualifier": "Static inventory of this source tree; runtime fixtures separately verify its implemented publisher and consumer. Root audit fixtures and debug-only events are not counted as playable content.",
+  "lockedSourceHashes": {
+    "src/player/CoreEngineSystem.js": "65121f0fe4b9eb4aaa894b71017536da17d5077ea256c0f52f9eaecfd1410db3",
+    "src/routes/ReturnRegionEngineSystem.js": "c6954d73411112d86084afc74401a920fbbe7f84947ce0ee9d1558502389a121"
+  }
+}

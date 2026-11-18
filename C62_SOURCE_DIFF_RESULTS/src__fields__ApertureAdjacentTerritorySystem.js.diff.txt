@@ -1,0 +1,1165 @@
+--- Connection61/src/fields/ApertureAdjacentTerritorySystem.js
++++ Windows/src/fields/ApertureAdjacentTerritorySystem.js
+@@ -1,581 +1,581 @@
+-import * as THREE from "three";
+-
+-const CELL_ID = "CELL_APERTURE_FIELDS_ARRIVAL_001";
+-const TERRITORY_ID = "gathering_ground_cluster";
+-
+-const clamp01 = (value) => Math.max(0, Math.min(1, value));
+-
+-/**
+- * HC031T5 — Ridge trace + canonical Gathering Ground lock.
+- *
+- * Converts the existing Gathering Ground background landmark into a three-ring
+- * world-space relationship without creating a new level or teleport:
+- *   Ring C: distant unresolved Host silhouette
+- *   Ring B: remotely observable/reactive neighboring territory
+- *   Ring A: local high-detail territory after continuous physical approach
+- *
+- * This system owns only the neighboring territory's presentation + read-only
+- * interaction state. ApertureFieldsArrivalSystem remains movement-bound owner;
+- * PlayerMovementController remains player movement owner; no active-cell,
+- * route-history, targeting, chemistry, or crossing truth is mutated here.
+- */
+-export class ApertureAdjacentTerritorySystem {
+-  constructor({ scene, camera, playerRoot, frameState, apertureFieldsArrivalSystem }) {
+-    if (!scene || !camera || !playerRoot || !frameState || !apertureFieldsArrivalSystem) {
+-      throw new Error("[ApertureAdjacentTerritorySystem] scene, camera, playerRoot, frameState and apertureFieldsArrivalSystem are required.");
+-    }
+-    this.scene = scene;
+-    this.camera = camera;
+-    this.playerRoot = playerRoot;
+-    this.frameState = frameState;
+-    this.apertureFieldsArrivalSystem = apertureFieldsArrivalSystem;
+-
+-    this.root = null;
+-    this.entryAnchor = new THREE.Vector3();
+-    // HC031T5: one visible noun = one gameplay noun. This is the original Aperture landmark.
+-    this.territoryLocal = new THREE.Vector3(3.5, 8.5, -56.0);
+-    this.territoryWorld = new THREE.Vector3();
+-    this.cameraWorld = new THREE.Vector3();
+-    this.cameraDirection = new THREE.Vector3();
+-    this.toTerritory = new THREE.Vector3();
+-    this.aimPointWorld = new THREE.Vector3();
+-    this.aimVector = new THREE.Vector3();
+-    this.acquisitionBodies = [];
+-
+-    this.canonicalLandmark = null;
+-    this.canonicalLandmarkBaseScale = new THREE.Vector3(3.8, 3.8, 3.8);
+-    this.canonicalLandmarkBaseOpacity = 0.58;
+-    this.canonicalLandmarkBaseEmissive = 0.12;
+-    this.detailBodies = [];
+-    this.connectiveBodies = [];
+-    this.responseHalos = [];
+-
+-    this.lastPulseEventId = -1;
+-    this.observationCount = 0;
+-    this.observationSequence = 0;
+-    this.relationshipSeconds = 0;
+-    this.relationshipEstablished = false;
+-    this.relationshipSequence = 0;
+-    this.traversalOpened = false;
+-    this.traversalSequence = 0;
+-    this.enteredTerritory = false;
+-    this.entrySequence = 0;
+-    this.absorbEcho = 0;
+-    this.pulseResponse = 0;
+-    this.openResponse = 0;
+-    this.openResponseAge = 99;
+-    this.releaseRings = [];
+-  }
+-
+-  init() {
+-    if (this.root) return;
+-
+-    this.root = new THREE.Group();
+-    this.root.name = "aperture_adjacent_gathering_territory_HC031T5";
+-    this.root.visible = false;
+-    this.scene.add(this.root);
+-
+-    // HC031T5 deletes the second Gathering Ground ghost body. The canonical visible
+-    // landmark is owned by ApertureFieldsArrivalSystem and is resolved on mount.
+-    // This system adds only local detail/response anatomy around that same noun.
+-    const membraneMat = new THREE.MeshStandardMaterial({
+-      color: 0x597a72,
+-      emissive: 0x17362f,
+-      emissiveIntensity: 0.14,
+-      roughness: 0.88,
+-      transparent: true,
+-      opacity: 0.08,
+-      depthWrite: false,
+-      side: THREE.DoubleSide
+-    });
+-    for (let i = 0; i < 5; i += 1) {
+-      const body = new THREE.Mesh(
+-        new THREE.SphereGeometry(3.2 + i * 0.35, 18, 10, 0, Math.PI * 2, 0.36, 0.74),
+-        membraneMat.clone()
+-      );
+-      const a = -0.9 + i * 0.45;
+-      body.position.copy(this.territoryLocal).add(new THREE.Vector3(
+-        Math.sin(a) * (4.8 + i * 0.35),
+-        -1.8 + i * 0.92,
+-        Math.cos(a) * (2.2 + i * 0.25) - i * 0.8
+-      ));
+-      body.scale.set(1.15 + i * 0.08, 0.16 + (i % 2) * 0.08, 2.0 - i * 0.12);
+-      body.rotation.set(Math.PI * 0.46, a * 0.36, a * 0.72);
+-      body.name = `gathering_ground_neighbor_membrane_${i + 1}`;
+-      body.userData.objectId = TERRITORY_ID;
+-      body.userData.label = "Gathering Ground";
+-      body.userData.worldAttentionKind = "host_territory";
+-      body.userData.baseScale = body.scale.clone();
+-      body.userData.baseOpacity = body.material.opacity;
+-      this.root.add(body);
+-      this.detailBodies.push(body);
+-      this.acquisitionBodies.push(body);
+-    }
+-
+-    const haloMat = new THREE.MeshBasicMaterial({
+-      color: 0x9bc9bc,
+-      transparent: true,
+-      opacity: 0.0,
+-      depthWrite: false
+-    });
+-    for (let i = 0; i < 3; i += 1) {
+-      const halo = new THREE.Mesh(
+-        new THREE.TorusGeometry(6.4 + i * 1.1, 0.045 + i * 0.012, 6, 48),
+-        haloMat.clone()
+-      );
+-      halo.position.copy(this.territoryLocal);
+-      halo.position.y += -1.1 + i * 1.25;
+-      halo.rotation.set(Math.PI / 2.1, 0.18 * i, 0.28 * i);
+-      halo.name = `gathering_ground_remote_response_halo_${i + 1}`;
+-      halo.userData.objectId = TERRITORY_ID;
+-      halo.userData.label = "Gathering Ground";
+-      halo.userData.worldAttentionKind = "host_territory";
+-      this.root.add(halo);
+-      this.responseHalos.push(halo);
+-      this.acquisitionBodies.push(halo);
+-    }
+-
+-    // Low-cost connective anatomy from the already-playable Membrane Ridge toward
+-    // the neighboring territory. It is faint while unresolved and becomes legible
+-    // when the ridge has been read. It is visual guidance, never a rail.
+-    const connectionMat = new THREE.MeshStandardMaterial({
+-      color: 0x4f7e78,
+-      emissive: 0x143b37,
+-      emissiveIntensity: 0.14,
+-      roughness: 0.9,
+-      transparent: true,
+-      opacity: 0.025,
+-      depthWrite: false
+-    });
+-    for (let i = 0; i < 3; i += 1) {
+-      const curve = new THREE.CatmullRomCurve3([
+-        new THREE.Vector3(18.0 - i * 1.6, 1.2 + i * 0.45, -45.0 - i * 0.6),
+-        new THREE.Vector3(13.0 - i * 1.2, 3.1 + i * 0.65, -50.5 - i * 1.1),
+-        new THREE.Vector3(8.2 - i * 0.8, 5.4 + i * 0.75, -56.4 - i * 0.9),
+-        this.territoryLocal.clone().add(new THREE.Vector3(-2.2 + i * 2.1, -1.2 + i * 0.6, 1.8 - i * 0.7))
+-      ]);
+-      const conduit = new THREE.Mesh(
+-        new THREE.TubeGeometry(curve, 44, 0.14 + i * 0.035, 7, false),
+-        connectionMat.clone()
+-      );
+-      conduit.name = `membrane_to_gathering_connective_${i + 1}`;
+-      conduit.userData.baseOpacity = conduit.material.opacity;
+-      this.root.add(conduit);
+-      this.connectiveBodies.push(conduit);
+-    }
+-
+-    // HC031T3: completion must read as a world event, not a quiet boolean flip.
+-    // These waves originate at the Membrane Ridge and expand toward the newly
+-    // traversable connective anatomy. They carry no collision or progression authority.
+-    const releaseMat = new THREE.MeshBasicMaterial({
+-      color: 0xc9ead7,
+-      transparent: true,
+-      opacity: 0,
+-      depthWrite: false,
+-      side: THREE.DoubleSide
+-    });
+-    const ridgeReleaseLocal = new THREE.Vector3(20.0, 1.7, -46.0);
+-    for (let i = 0; i < 3; i += 1) {
+-      const ring = new THREE.Mesh(
+-        new THREE.TorusGeometry(2.7 + i * 0.55, 0.07 + i * 0.012, 7, 56),
+-        releaseMat.clone()
+-      );
+-      ring.position.copy(ridgeReleaseLocal);
+-      ring.rotation.set(Math.PI / 2.35, 0.08 * i, -0.35 + i * 0.18);
+-      ring.visible = false;
+-      ring.name = `membrane_ridge_completion_release_${i + 1}`;
+-      ring.userData.delay = i * 0.11;
+-      this.root.add(ring);
+-      this.releaseRings.push(ring);
+-    }
+-  }
+-
+-  resetState() {
+-    this.lastPulseEventId = -1;
+-    this.observationCount = 0;
+-    this.observationSequence = 0;
+-    this.relationshipSeconds = 0;
+-    this.relationshipEstablished = false;
+-    this.relationshipSequence = 0;
+-    this.traversalOpened = false;
+-    this.traversalSequence = 0;
+-    this.enteredTerritory = false;
+-    this.entrySequence = 0;
+-    this.absorbEcho = 0;
+-    this.pulseResponse = 0;
+-    this.openResponse = 0;
+-    this.openResponseAge = 99;
+-    for (const ring of this.releaseRings) {
+-      ring.visible = false;
+-      ring.material.opacity = 0;
+-      ring.scale.setScalar(1);
+-    }
+-  }
+-
+-  onRuntimeMount(frameState) {
+-    this.init();
+-    this.canonicalLandmark = this.apertureFieldsArrivalSystem.getLandmarkMesh(TERRITORY_ID);
+-    if (!this.canonicalLandmark) {
+-      throw new Error("[ApertureAdjacentTerritorySystem] canonical Gathering Ground landmark is missing.");
+-    }
+-    this.canonicalLandmark.userData.objectId = TERRITORY_ID;
+-    this.canonicalLandmark.userData.label = "Gathering Ground";
+-    this.canonicalLandmark.userData.worldAttentionKind = "host_territory";
+-    this.canonicalLandmark.userData.canonicalGatheringGround = true;
+-    this.canonicalLandmarkBaseScale.copy(this.canonicalLandmark.userData.baseScale ?? this.canonicalLandmark.scale);
+-    this.canonicalLandmarkBaseOpacity = Number.isFinite(this.canonicalLandmark.userData.baseOpacity)
+-      ? this.canonicalLandmark.userData.baseOpacity
+-      : (Number.isFinite(this.canonicalLandmark.material?.opacity) ? this.canonicalLandmark.material.opacity : 0.58);
+-    this.canonicalLandmarkBaseEmissive = Number.isFinite(this.canonicalLandmark.userData.baseEmissiveIntensity)
+-      ? this.canonicalLandmark.userData.baseEmissiveIntensity
+-      : (Number.isFinite(this.canonicalLandmark.material?.emissiveIntensity) ? this.canonicalLandmark.material.emissiveIntensity : 0.12);
+-    this.acquisitionBodies = [this.canonicalLandmark, ...this.detailBodies, ...this.responseHalos].filter(Boolean);
+-    // HC031T2: ApertureFieldsArrivalSystem owns the region's canonical world anchor.
+-    // Debug staging may reposition the player during this same mount frame, so later
+-    // systems must never derive authored world geometry from the player's live position.
+-    const canonicalAnchor = frameState.apertureFieldsArrival?.entryAnchor;
+-    if (Number.isFinite(canonicalAnchor?.x) && Number.isFinite(canonicalAnchor?.y) && Number.isFinite(canonicalAnchor?.z)) {
+-      this.entryAnchor.set(canonicalAnchor.x, canonicalAnchor.y, canonicalAnchor.z);
+-    } else {
+-      this.entryAnchor.copy(this.playerRoot.position);
+-    }
+-    this.root.position.copy(this.entryAnchor);
+-    this.root.visible = true;
+-    this.resetState();
+-    this.publish(frameState, "distant_unresolved");
+-  }
+-
+-  onRuntimeUnmount(frameState) {
+-    if (this.root) this.root.visible = false;
+-    if (this.canonicalLandmark?.material) {
+-      this.canonicalLandmark.scale.copy(this.canonicalLandmarkBaseScale);
+-      this.canonicalLandmark.material.opacity = this.canonicalLandmarkBaseOpacity;
+-      if (Number.isFinite(this.canonicalLandmark.material.emissiveIntensity)) {
+-        this.canonicalLandmark.material.emissiveIntensity = this.canonicalLandmarkBaseEmissive;
+-      }
+-    }
+-    if (frameState.worldAttentionCandidates?.provider === "ApertureAdjacentTerritorySystem") {
+-      frameState.worldAttentionCandidates = {
+-        pass: "HC-031T5",
+-        provider: "ApertureAdjacentTerritorySystem",
+-        active: false,
+-        items: []
+-      };
+-    }
+-    frameState.adjacentHostTerritory = {
+-      ...(frameState.adjacentHostTerritory ?? {}),
+-      active: false,
+-      stage: this.enteredTerritory ? "local_territory_retained" : "distant_territory_retained"
+-    };
+-  }
+-
+-  onRuntimePrepare(frameState) {
+-    this.init();
+-    frameState.adjacentHostTerritoryPreparation = {
+-      pass: "HC-031T5",
+-      status: "prepared_hidden",
+-      mutatesProgression: false,
+-      mutatesActiveCell: false
+-    };
+-  }
+-
+-  update(dt, frameState) {
+-    if (frameState.activeCellId !== CELL_ID) return;
+-    if (!this.root) this.init();
+-    this.root.visible = true;
+-
+-    this.territoryWorld.copy(this.entryAnchor).add(this.territoryLocal);
+-    this.camera.getWorldPosition(this.cameraWorld);
+-    this.camera.getWorldDirection(this.cameraDirection).normalize();
+-    const playerDistance = this.playerRoot.position.distanceTo(this.territoryWorld);
+-
+-    // HC031T1: Gathering Ground is a macro body, not a point target. Acquire against
+-    // the visible ghost body, membranes, and response rings, then keep the best
+-    // camera alignment. This does not replace TargetingSystem or create a new noun owner.
+-    let aimDot = -1;
+-    let cameraDistance = Infinity;
+-    let aimSource = "none";
+-    for (const body of this.acquisitionBodies) {
+-      if (!body) continue;
+-      if (body.getWorldPosition) body.getWorldPosition(this.aimPointWorld);
+-      else this.aimPointWorld.copy(this.entryAnchor).add(body.position);
+-      this.aimVector.copy(this.aimPointWorld).sub(this.cameraWorld);
+-      const distance = Math.max(0.001, this.aimVector.length());
+-      const dot = this.aimVector.multiplyScalar(1 / distance).dot(this.cameraDirection);
+-      if (dot > aimDot) {
+-        aimDot = dot;
+-        cameraDistance = distance;
+-        aimSource = body.name || "gathering_ground_macro_body";
+-      }
+-    }
+-    const aimThreshold = 0.62;
+-    const aimed = aimDot >= aimThreshold;
+-    const targeting = frameState.targeting ?? {};
+-    const attentionOwned = targeting.attentionTargetId === TERRITORY_ID;
+-    const relationshipOwned = targeting.relationshipTargetId === TERRITORY_ID;
+-    const interactionAimed = Boolean(aimed || attentionOwned || relationshipOwned);
+-
+-    const input = frameState.input ?? {};
+-    const pulseEventId = Number.isFinite(input.pulseEventId)
+-      ? input.pulseEventId
+-      : (input.pulsePressed ? (frameState.frame ?? 0) : -1);
+-    const freshPulse = Boolean(input.pulsePressed && pulseEventId !== this.lastPulseEventId);
+-    if (freshPulse) this.lastPulseEventId = pulseEventId;
+-
+-    // Pulse can interrogate the large neighboring body before it is reachable.
+-    // Distance affects response strength, but not by turning this into a hidden gate.
+-    if (freshPulse && interactionAimed && playerDistance <= 86.0) {
+-      const previousObservationCount = this.observationCount;
+-      this.observationCount = Math.min(3, this.observationCount + 1);
+-      // HC031U: telemetry should represent observation-stage gain, not every
+-      // redundant Pulse after OBS3. The visible Pulse answer still occurs.
+-      if (this.observationCount > previousObservationCount) this.observationSequence += 1;
+-      this.pulseResponse = 1;
+-    }
+-    this.pulseResponse = Math.max(0, this.pulseResponse - dt * 0.72);
+-
+-    const stabilizeHeld = Boolean(input.stabilizeHeld || input.resonanceHeld);
+-    if (stabilizeHeld && interactionAimed && this.observationCount > 0 && playerDistance <= 82.0) {
+-      this.relationshipSeconds = Math.min(2.0, this.relationshipSeconds + dt);
+-      if (!this.relationshipEstablished && this.relationshipSeconds >= 0.72) {
+-        this.relationshipEstablished = true;
+-        this.relationshipSequence += 1;
+-      }
+-    } else if (!this.relationshipEstablished) {
+-      this.relationshipSeconds = Math.max(0, this.relationshipSeconds - dt * 1.8);
+-    }
+-
+-    // Absorb does not pull a massive territory across the map. It receives a weak
+-    // inward answer once the remote relationship exists, preserving verb meaning.
+-    const absorbHeld = Boolean(input.absorbHeld);
+-    const absorbAnswering = Boolean(absorbHeld && interactionAimed && this.relationshipEstablished && playerDistance <= 78.0);
+-    this.absorbEcho += ((absorbAnswering ? 1 : 0) - this.absorbEcho) * Math.min(1, dt * 3.4);
+-
+-    const ridgeComplete = Boolean(frameState.membraneRidgeGameplay?.completed);
+-    if (ridgeComplete && !this.traversalOpened) {
+-      this.traversalOpened = true;
+-      this.traversalSequence += 1;
+-      this.openResponse = 1;
+-      this.openResponseAge = 0;
+-      for (const ring of this.releaseRings) ring.visible = true;
+-    }
+-
+-    if (this.traversalOpened && this.openResponseAge < 2.4) {
+-      this.openResponseAge += dt;
+-      this.openResponse = 1 - clamp01(this.openResponseAge / 2.4);
+-    } else if (this.traversalOpened) {
+-      this.openResponse = 0;
+-    }
+-
+-    const entryRadius = 13.5;
+-    if (this.traversalOpened && !this.enteredTerritory && playerDistance <= entryRadius) {
+-      this.enteredTerritory = true;
+-      this.entrySequence += 1;
+-    }
+-
+-    const time = frameState.runtimeSeconds ?? 0;
+-    const observation01 = this.observationCount / 3;
+-    const relationship01 = this.relationshipEstablished ? 1 : clamp01(this.relationshipSeconds / 0.72);
+-    const local01 = this.enteredTerritory
+-      ? 1
+-      : this.traversalOpened
+-        ? clamp01((30.0 - playerDistance) / 20.0)
+-        : 0;
+-
+-    if (this.canonicalLandmark?.material) {
+-      const breath = 1 + Math.sin(time * (0.32 + relationship01 * 0.55)) * (0.018 + relationship01 * 0.035);
+-      const releaseLift = this.openResponse * 0.16;
+-      this.canonicalLandmark.scale.set(
+-        this.canonicalLandmarkBaseScale.x * breath * (1 + releaseLift),
+-        this.canonicalLandmarkBaseScale.y * (1 + relationship01 * 0.025 + releaseLift * 0.55),
+-        this.canonicalLandmarkBaseScale.z * breath * (1 + releaseLift)
+-      );
+-      this.canonicalLandmark.material.opacity = Math.min(0.94,
+-        this.canonicalLandmarkBaseOpacity + observation01 * 0.10 + local01 * 0.10 + this.openResponse * 0.18);
+-      if (Number.isFinite(this.canonicalLandmark.material.emissiveIntensity)) {
+-        this.canonicalLandmark.material.emissiveIntensity = this.canonicalLandmarkBaseEmissive
+-          + observation01 * 0.16 + relationship01 * 0.24 + this.pulseResponse * 0.22 + this.openResponse * 0.95;
+-      }
+-    }
+-
+-    this.detailBodies.forEach((body, index) => {
+-      const base = body.userData.baseScale;
+-      const pulse = 1 + Math.sin(time * (0.44 + relationship01 * 0.68) - index * 0.52) * (0.018 + relationship01 * 0.045);
+-      body.scale.set(base.x * pulse, base.y * (1 + relationship01 * 0.18 + this.absorbEcho * 0.08), base.z * pulse);
+-      body.material.opacity = (body.userData.baseOpacity ?? 0.08)
+-        + observation01 * 0.12
+-        + relationship01 * 0.15
+-        + local01 * 0.30;
+-      body.material.emissiveIntensity = 0.10 + observation01 * 0.12 + relationship01 * 0.22 + this.absorbEcho * 0.14;
+-    });
+-
+-    this.responseHalos.forEach((halo, index) => {
+-      halo.rotation.z += dt * (0.05 + relationship01 * (0.12 + index * 0.025));
+-      halo.material.opacity = observation01 * (0.04 + index * 0.012)
+-        + this.pulseResponse * (0.12 - index * 0.018)
+-        + relationship01 * 0.055
+-        + this.openResponse * Math.max(0.18, 0.56 - index * 0.11);
+-    });
+-
+-    this.connectiveBodies.forEach((body, index) => {
+-      const baseOpacity = body.userData.baseOpacity ?? 0.025;
+-      body.material.opacity = this.traversalOpened
+-        ? 0.30 + relationship01 * 0.12 + local01 * 0.14 + index * 0.014 + this.openResponse * Math.max(0.24, 0.56 - index * 0.08)
+-        : baseOpacity + observation01 * 0.025 + relationship01 * 0.055;
+-      body.material.emissiveIntensity = this.traversalOpened
+-        ? 0.46 + relationship01 * 0.26 + this.openResponse * 0.92
+-        : 0.10 + relationship01 * 0.12;
+-    });
+-
+-    this.releaseRings.forEach((ring, index) => {
+-      if (!this.traversalOpened) {
+-        ring.visible = false;
+-        ring.material.opacity = 0;
+-        return;
+-      }
+-      const delay = ring.userData.delay ?? index * 0.11;
+-      const progress = clamp01((this.openResponseAge - delay) / 1.45);
+-      const envelope = progress <= 0 || progress >= 1 ? 0 : Math.sin(progress * Math.PI);
+-      ring.visible = envelope > 0.001;
+-      ring.material.opacity = envelope * 0.82;
+-      ring.scale.setScalar(0.72 + progress * 2.65);
+-      ring.rotation.z += dt * (0.18 + index * 0.05);
+-    });
+-
+-    const stage = this.enteredTerritory
+-      ? "local_high_detail_territory"
+-      : this.traversalOpened
+-        ? "continuous_approach_open"
+-        : this.relationshipEstablished
+-          ? "remote_relationship_established"
+-          : this.observationCount > 0
+-            ? "neighbor_remotely_observed"
+-            : "distant_unresolved";
+-
+-    this.publish(frameState, stage, {
+-      aimDot,
+-      aimed,
+-      aimSource,
+-      aimThreshold,
+-      playerDistance,
+-      cameraDistance,
+-      attentionOwned,
+-      relationshipOwned,
+-      interactionAimed,
+-      absorbAnswering,
+-      entryRadius,
+-      openingResponse01: this.openResponse,
+-      openingResponseAge: this.openResponseAge
+-    });
+-  }
+-
+-  publish(frameState, stage, metrics = {}) {
+-    const ridge = frameState.membraneRidgeGameplay ?? {};
+-    const signalPlain = frameState.signalPlainEcology ?? {};
+-    const attentionEligible = Boolean(
+-      frameState.activeCellId === CELL_ID
+-      && this.root?.visible
+-      && (ridge.active || ridge.completed || signalPlain.completed)
+-    );
+-    frameState.worldAttentionCandidates = {
+-      pass: "HC-031T5",
+-      provider: "ApertureAdjacentTerritorySystem",
+-      active: attentionEligible,
+-      items: attentionEligible
+-        ? [{
+-            id: TERRITORY_ID,
+-            label: "Gathering Ground",
+-            cellId: CELL_ID,
+-            targetKind: "host_territory",
+-            root: this.canonicalLandmark,
+-            focusRoots: this.acquisitionBodies.filter(Boolean),
+-            domains: ["host", "territory", "membrane"],
+-            externalPriority: ridge.completed ? 2.2 : 1.2,
+-            source: "ApertureAdjacentTerritorySystem"
+-          }]
+-        : []
+-    };
+-
+-    const observationStage = this.observationCount <= 0
+-      ? "silhouette"
+-      : this.observationCount === 1
+-        ? "contour"
+-        : this.observationCount === 2
+-          ? "living_motion"
+-          : "territory_function";
+-    const detailTier = this.enteredTerritory
+-      ? "ring_a_local"
+-      : (this.observationCount > 0 || this.traversalOpened)
+-        ? "ring_b_neighbor"
+-        : "ring_c_distant";
+-
+-    frameState.adjacentHostTerritory = {
+-      pass: "HC-031T5",
+-      active: true,
+-      territoryId: TERRITORY_ID,
+-      canonicalVisualId: TERRITORY_ID,
+-      canonicalVisualSource: "ApertureFieldsArrivalSystem",
+-      canonicalLocalPosition: { x: this.territoryLocal.x, y: this.territoryLocal.y, z: this.territoryLocal.z },
+-      regionId: "aperture_fields",
+-      runtimeCellId: CELL_ID,
+-      stage,
+-      detailTier,
+-      observationStage,
+-      observationCount: this.observationCount,
+-      observationSequence: this.observationSequence,
+-      relationshipSeconds: this.relationshipSeconds,
+-      relationshipEstablished: this.relationshipEstablished,
+-      relationshipSequence: this.relationshipSequence,
+-      absorbEcho01: this.absorbEcho,
+-      traversalOpen: this.traversalOpened,
+-      traversalSequence: this.traversalSequence,
+-      connectiveAnatomyVisible: this.traversalOpened,
+-      worldReleaseReadable: this.traversalOpened,
+-      openingResponse01: Number.isFinite(metrics.openingResponse01) ? metrics.openingResponse01 : this.openResponse,
+-      openingResponseAge: Number.isFinite(metrics.openingResponseAge) ? metrics.openingResponseAge : this.openResponseAge,
+-      completionReaction: this.traversalOpened ? "ridge_release_wave_connective_flare_gathering_answer" : "pending",
+-      enteredTerritory: this.enteredTerritory,
+-      entrySequence: this.entrySequence,
+-      distance: Number.isFinite(metrics.playerDistance) ? metrics.playerDistance : null,
+-      cameraDistance: Number.isFinite(metrics.cameraDistance) ? metrics.cameraDistance : null,
+-      aimDot: Number.isFinite(metrics.aimDot) ? metrics.aimDot : -1,
+-      aimed: Boolean(metrics.aimed),
+-      attentionOwned: Boolean(metrics.attentionOwned),
+-      relationshipOwned: Boolean(metrics.relationshipOwned),
+-      interactionAimed: Boolean(metrics.interactionAimed || metrics.aimed),
+-      attentionTargetId: frameState.targeting?.attentionTargetId ?? "none",
+-      relationshipTargetId: frameState.targeting?.relationshipTargetId ?? "none",
+-      aimSource: metrics.aimSource ?? "none",
+-      aimThreshold: Number.isFinite(metrics.aimThreshold) ? metrics.aimThreshold : 0.62,
+-      observationReady: Boolean((metrics.interactionAimed || metrics.aimed) && Number.isFinite(metrics.playerDistance) && metrics.playerDistance <= 86.0),
+-      entryRadius: metrics.entryRadius ?? 13.5,
+-      macroInteraction: {
+-        pulse: "remote_contour_and_function_read",
+-        stabilize: "remote_relationship_hold",
+-        absorb: "weak_inward_answer_only_after_relationship"
+-      },
+-      mapRing: detailTier,
+-      movementBoundsExpansionRequested: this.traversalOpened,
+-      activeCellChangesRequired: false,
+-      teleportRequired: false,
+-      targetingAuthorityChanged: "world_attention_candidate_only",
+-      movementAuthority: "PlayerMovementController",
+-      movementBoundsOwner: "ApertureFieldsArrivalSystem",
+-      nextAction: this.enteredTerritory
+-        ? "explore_the_now_local_gathering_territory_and_look_back_across_aperture"
+-        : this.traversalOpened && !metrics.attentionOwned && this.observationCount <= 0
+-          ? "look_toward_the_large_gathering_body_beyond_the_released_ridge"
+-          : this.traversalOpened && this.observationCount <= 0
+-            ? "pulse_the_attention_owned_gathering_body"
+-            : this.traversalOpened
+-              ? "follow_the_living_connective_anatomy_into_the_neighboring_territory"
+-              : this.relationshipEstablished
+-                ? "finish_reading_membrane_ridge_to_make_the_physical_connection_traversable"
+-                : this.observationCount > 0
+-                  ? "hold_stabilize_toward_the_answering_large_body"
+-                  : metrics.attentionOwned
+-                    ? "pulse_the_attention_owned_gathering_body"
+-                    : "look_toward_the_distant_gathering_body_then_pulse"
+-    };
+-  }
+-}
++import * as THREE from "three";
++
++const CELL_ID = "CELL_APERTURE_FIELDS_ARRIVAL_001";
++const TERRITORY_ID = "gathering_ground_cluster";
++
++const clamp01 = (value) => Math.max(0, Math.min(1, value));
++
++/**
++ * HC031T5 — Ridge trace + canonical Gathering Ground lock.
++ *
++ * Converts the existing Gathering Ground background landmark into a three-ring
++ * world-space relationship without creating a new level or teleport:
++ *   Ring C: distant unresolved Host silhouette
++ *   Ring B: remotely observable/reactive neighboring territory
++ *   Ring A: local high-detail territory after continuous physical approach
++ *
++ * This system owns only the neighboring territory's presentation + read-only
++ * interaction state. ApertureFieldsArrivalSystem remains movement-bound owner;
++ * PlayerMovementController remains player movement owner; no active-cell,
++ * route-history, targeting, chemistry, or crossing truth is mutated here.
++ */
++export class ApertureAdjacentTerritorySystem {
++  constructor({ scene, camera, playerRoot, frameState, apertureFieldsArrivalSystem }) {
++    if (!scene || !camera || !playerRoot || !frameState || !apertureFieldsArrivalSystem) {
++      throw new Error("[ApertureAdjacentTerritorySystem] scene, camera, playerRoot, frameState and apertureFieldsArrivalSystem are required.");
++    }
++    this.scene = scene;
++    this.camera = camera;
++    this.playerRoot = playerRoot;
++    this.frameState = frameState;
++    this.apertureFieldsArrivalSystem = apertureFieldsArrivalSystem;
++
++    this.root = null;
++    this.entryAnchor = new THREE.Vector3();
++    // HC031T5: one visible noun = one gameplay noun. This is the original Aperture landmark.
++    this.territoryLocal = new THREE.Vector3(3.5, 8.5, -56.0);
++    this.territoryWorld = new THREE.Vector3();
++    this.cameraWorld = new THREE.Vector3();
++    this.cameraDirection = new THREE.Vector3();
++    this.toTerritory = new THREE.Vector3();
++    this.aimPointWorld = new THREE.Vector3();
++    this.aimVector = new THREE.Vector3();
++    this.acquisitionBodies = [];
++
++    this.canonicalLandmark = null;
++    this.canonicalLandmarkBaseScale = new THREE.Vector3(3.8, 3.8, 3.8);
++    this.canonicalLandmarkBaseOpacity = 0.58;
++    this.canonicalLandmarkBaseEmissive = 0.12;
++    this.detailBodies = [];
++    this.connectiveBodies = [];
++    this.responseHalos = [];
++
++    this.lastPulseEventId = -1;
++    this.observationCount = 0;
++    this.observationSequence = 0;
++    this.relationshipSeconds = 0;
++    this.relationshipEstablished = false;
++    this.relationshipSequence = 0;
++    this.traversalOpened = false;
++    this.traversalSequence = 0;
++    this.enteredTerritory = false;
++    this.entrySequence = 0;
++    this.absorbEcho = 0;
++    this.pulseResponse = 0;
++    this.openResponse = 0;
++    this.openResponseAge = 99;
++    this.releaseRings = [];
++  }
++
++  init() {
++    if (this.root) return;
++
++    this.root = new THREE.Group();
++    this.root.name = "aperture_adjacent_gathering_territory_HC031T5";
++    this.root.visible = false;
++    this.scene.add(this.root);
++
++    // HC031T5 deletes the second Gathering Ground ghost body. The canonical visible
++    // landmark is owned by ApertureFieldsArrivalSystem and is resolved on mount.
++    // This system adds only local detail/response anatomy around that same noun.
++    const membraneMat = new THREE.MeshStandardMaterial({
++      color: 0x597a72,
++      emissive: 0x17362f,
++      emissiveIntensity: 0.14,
++      roughness: 0.88,
++      transparent: true,
++      opacity: 0.08,
++      depthWrite: false,
++      side: THREE.DoubleSide
++    });
++    for (let i = 0; i < 5; i += 1) {
++      const body = new THREE.Mesh(
++        new THREE.SphereGeometry(3.2 + i * 0.35, 18, 10, 0, Math.PI * 2, 0.36, 0.74),
++        membraneMat.clone()
++      );
++      const a = -0.9 + i * 0.45;
++      body.position.copy(this.territoryLocal).add(new THREE.Vector3(
++        Math.sin(a) * (4.8 + i * 0.35),
++        -1.8 + i * 0.92,
++        Math.cos(a) * (2.2 + i * 0.25) - i * 0.8
++      ));
++      body.scale.set(1.15 + i * 0.08, 0.16 + (i % 2) * 0.08, 2.0 - i * 0.12);
++      body.rotation.set(Math.PI * 0.46, a * 0.36, a * 0.72);
++      body.name = `gathering_ground_neighbor_membrane_${i + 1}`;
++      body.userData.objectId = TERRITORY_ID;
++      body.userData.label = "Gathering Ground";
++      body.userData.worldAttentionKind = "host_territory";
++      body.userData.baseScale = body.scale.clone();
++      body.userData.baseOpacity = body.material.opacity;
++      this.root.add(body);
++      this.detailBodies.push(body);
++      this.acquisitionBodies.push(body);
++    }
++
++    const haloMat = new THREE.MeshBasicMaterial({
++      color: 0x9bc9bc,
++      transparent: true,
++      opacity: 0.0,
++      depthWrite: false
++    });
++    for (let i = 0; i < 3; i += 1) {
++      const halo = new THREE.Mesh(
++        new THREE.TorusGeometry(6.4 + i * 1.1, 0.045 + i * 0.012, 6, 48),
++        haloMat.clone()
++      );
++      halo.position.copy(this.territoryLocal);
++      halo.position.y += -1.1 + i * 1.25;
++      halo.rotation.set(Math.PI / 2.1, 0.18 * i, 0.28 * i);
++      halo.name = `gathering_ground_remote_response_halo_${i + 1}`;
++      halo.userData.objectId = TERRITORY_ID;
++      halo.userData.label = "Gathering Ground";
++      halo.userData.worldAttentionKind = "host_territory";
++      this.root.add(halo);
++      this.responseHalos.push(halo);
++      this.acquisitionBodies.push(halo);
++    }
++
++    // Low-cost connective anatomy from the already-playable Membrane Ridge toward
++    // the neighboring territory. It is faint while unresolved and becomes legible
++    // when the ridge has been read. It is visual guidance, never a rail.
++    const connectionMat = new THREE.MeshStandardMaterial({
++      color: 0x4f7e78,
++      emissive: 0x143b37,
++      emissiveIntensity: 0.14,
++      roughness: 0.9,
++      transparent: true,
++      opacity: 0.025,
++      depthWrite: false
++    });
++    for (let i = 0; i < 3; i += 1) {
++      const curve = new THREE.CatmullRomCurve3([
++        new THREE.Vector3(18.0 - i * 1.6, 1.2 + i * 0.45, -45.0 - i * 0.6),
++        new THREE.Vector3(13.0 - i * 1.2, 3.1 + i * 0.65, -50.5 - i * 1.1),
++        new THREE.Vector3(8.2 - i * 0.8, 5.4 + i * 0.75, -56.4 - i * 0.9),
++        this.territoryLocal.clone().add(new THREE.Vector3(-2.2 + i * 2.1, -1.2 + i * 0.6, 1.8 - i * 0.7))
++      ]);
++      const conduit = new THREE.Mesh(
++        new THREE.TubeGeometry(curve, 44, 0.14 + i * 0.035, 7, false),
++        connectionMat.clone()
++      );
++      conduit.name = `membrane_to_gathering_connective_${i + 1}`;
++      conduit.userData.baseOpacity = conduit.material.opacity;
++      this.root.add(conduit);
++      this.connectiveBodies.push(conduit);
++    }
++
++    // HC031T3: completion must read as a world event, not a quiet boolean flip.
++    // These waves originate at the Membrane Ridge and expand toward the newly
++    // traversable connective anatomy. They carry no collision or progression authority.
++    const releaseMat = new THREE.MeshBasicMaterial({
++      color: 0xc9ead7,
++      transparent: true,
++      opacity: 0,
++      depthWrite: false,
++      side: THREE.DoubleSide
++    });
++    const ridgeReleaseLocal = new THREE.Vector3(20.0, 1.7, -46.0);
++    for (let i = 0; i < 3; i += 1) {
++      const ring = new THREE.Mesh(
++        new THREE.TorusGeometry(2.7 + i * 0.55, 0.07 + i * 0.012, 7, 56),
++        releaseMat.clone()
++      );
++      ring.position.copy(ridgeReleaseLocal);
++      ring.rotation.set(Math.PI / 2.35, 0.08 * i, -0.35 + i * 0.18);
++      ring.visible = false;
++      ring.name = `membrane_ridge_completion_release_${i + 1}`;
++      ring.userData.delay = i * 0.11;
++      this.root.add(ring);
++      this.releaseRings.push(ring);
++    }
++  }
++
++  resetState() {
++    this.lastPulseEventId = -1;
++    this.observationCount = 0;
++    this.observationSequence = 0;
++    this.relationshipSeconds = 0;
++    this.relationshipEstablished = false;
++    this.relationshipSequence = 0;
++    this.traversalOpened = false;
++    this.traversalSequence = 0;
++    this.enteredTerritory = false;
++    this.entrySequence = 0;
++    this.absorbEcho = 0;
++    this.pulseResponse = 0;
++    this.openResponse = 0;
++    this.openResponseAge = 99;
++    for (const ring of this.releaseRings) {
++      ring.visible = false;
++      ring.material.opacity = 0;
++      ring.scale.setScalar(1);
++    }
++  }
++
++  onRuntimeMount(frameState) {
++    this.init();
++    this.canonicalLandmark = this.apertureFieldsArrivalSystem.getLandmarkMesh(TERRITORY_ID);
++    if (!this.canonicalLandmark) {
++      throw new Error("[ApertureAdjacentTerritorySystem] canonical Gathering Ground landmark is missing.");
++    }
++    this.canonicalLandmark.userData.objectId = TERRITORY_ID;
++    this.canonicalLandmark.userData.label = "Gathering Ground";
++    this.canonicalLandmark.userData.worldAttentionKind = "host_territory";
++    this.canonicalLandmark.userData.canonicalGatheringGround = true;
++    this.canonicalLandmarkBaseScale.copy(this.canonicalLandmark.userData.baseScale ?? this.canonicalLandmark.scale);
++    this.canonicalLandmarkBaseOpacity = Number.isFinite(this.canonicalLandmark.userData.baseOpacity)
++      ? this.canonicalLandmark.userData.baseOpacity
++      : (Number.isFinite(this.canonicalLandmark.material?.opacity) ? this.canonicalLandmark.material.opacity : 0.58);
++    this.canonicalLandmarkBaseEmissive = Number.isFinite(this.canonicalLandmark.userData.baseEmissiveIntensity)
++      ? this.canonicalLandmark.userData.baseEmissiveIntensity
++      : (Number.isFinite(this.canonicalLandmark.material?.emissiveIntensity) ? this.canonicalLandmark.material.emissiveIntensity : 0.12);
++    this.acquisitionBodies = [this.canonicalLandmark, ...this.detailBodies, ...this.responseHalos].filter(Boolean);
++    // HC031T2: ApertureFieldsArrivalSystem owns the region's canonical world anchor.
++    // Debug staging may reposition the player during this same mount frame, so later
++    // systems must never derive authored world geometry from the player's live position.
++    const canonicalAnchor = frameState.apertureFieldsArrival?.entryAnchor;
++    if (Number.isFinite(canonicalAnchor?.x) && Number.isFinite(canonicalAnchor?.y) && Number.isFinite(canonicalAnchor?.z)) {
++      this.entryAnchor.set(canonicalAnchor.x, canonicalAnchor.y, canonicalAnchor.z);
++    } else {
++      this.entryAnchor.copy(this.playerRoot.position);
++    }
++    this.root.position.copy(this.entryAnchor);
++    this.root.visible = true;
++    this.resetState();
++    this.publish(frameState, "distant_unresolved");
++  }
++
++  onRuntimeUnmount(frameState) {
++    if (this.root) this.root.visible = false;
++    if (this.canonicalLandmark?.material) {
++      this.canonicalLandmark.scale.copy(this.canonicalLandmarkBaseScale);
++      this.canonicalLandmark.material.opacity = this.canonicalLandmarkBaseOpacity;
++      if (Number.isFinite(this.canonicalLandmark.material.emissiveIntensity)) {
++        this.canonicalLandmark.material.emissiveIntensity = this.canonicalLandmarkBaseEmissive;
++      }
++    }
++    if (frameState.worldAttentionCandidates?.provider === "ApertureAdjacentTerritorySystem") {
++      frameState.worldAttentionCandidates = {
++        pass: "HC-031T5",
++        provider: "ApertureAdjacentTerritorySystem",
++        active: false,
++        items: []
++      };
++    }
++    frameState.adjacentHostTerritory = {
++      ...(frameState.adjacentHostTerritory ?? {}),
++      active: false,
++      stage: this.enteredTerritory ? "local_territory_retained" : "distant_territory_retained"
++    };
++  }
++
++  onRuntimePrepare(frameState) {
++    this.init();
++    frameState.adjacentHostTerritoryPreparation = {
++      pass: "HC-031T5",
++      status: "prepared_hidden",
++      mutatesProgression: false,
++      mutatesActiveCell: false
++    };
++  }
++
++  update(dt, frameState) {
++    if (frameState.activeCellId !== CELL_ID) return;
++    if (!this.root) this.init();
++    this.root.visible = true;
++
++    this.territoryWorld.copy(this.entryAnchor).add(this.territoryLocal);
++    this.camera.getWorldPosition(this.cameraWorld);
++    this.camera.getWorldDirection(this.cameraDirection).normalize();
++    const playerDistance = this.playerRoot.position.distanceTo(this.territoryWorld);
++
++    // HC031T1: Gathering Ground is a macro body, not a point target. Acquire against
++    // the visible ghost body, membranes, and response rings, then keep the best
++    // camera alignment. This does not replace TargetingSystem or create a new noun owner.
++    let aimDot = -1;
++    let cameraDistance = Infinity;
++    let aimSource = "none";
++    for (const body of this.acquisitionBodies) {
++      if (!body) continue;
++      if (body.getWorldPosition) body.getWorldPosition(this.aimPointWorld);
++      else this.aimPointWorld.copy(this.entryAnchor).add(body.position);
++      this.aimVector.copy(this.aimPointWorld).sub(this.cameraWorld);
++      const distance = Math.max(0.001, this.aimVector.length());
++      const dot = this.aimVector.multiplyScalar(1 / distance).dot(this.cameraDirection);
++      if (dot > aimDot) {
++        aimDot = dot;
++        cameraDistance = distance;
++        aimSource = body.name || "gathering_ground_macro_body";
++      }
++    }
++    const aimThreshold = 0.62;
++    const aimed = aimDot >= aimThreshold;
++    const targeting = frameState.targeting ?? {};
++    const attentionOwned = targeting.attentionTargetId === TERRITORY_ID;
++    const relationshipOwned = targeting.relationshipTargetId === TERRITORY_ID;
++    const interactionAimed = Boolean(aimed || attentionOwned || relationshipOwned);
++
++    const input = frameState.input ?? {};
++    const pulseEventId = Number.isFinite(input.pulseEventId)
++      ? input.pulseEventId
++      : (input.pulsePressed ? (frameState.frame ?? 0) : -1);
++    const freshPulse = Boolean(input.pulsePressed && pulseEventId !== this.lastPulseEventId);
++    if (freshPulse) this.lastPulseEventId = pulseEventId;
++
++    // Pulse can interrogate the large neighboring body before it is reachable.
++    // Distance affects response strength, but not by turning this into a hidden gate.
++    if (freshPulse && interactionAimed && playerDistance <= 86.0) {
++      const previousObservationCount = this.observationCount;
++      this.observationCount = Math.min(3, this.observationCount + 1);
++      // HC031U: telemetry should represent observation-stage gain, not every
++      // redundant Pulse after OBS3. The visible Pulse answer still occurs.
++      if (this.observationCount > previousObservationCount) this.observationSequence += 1;
++      this.pulseResponse = 1;
++    }
++    this.pulseResponse = Math.max(0, this.pulseResponse - dt * 0.72);
++
++    const stabilizeHeld = Boolean(input.stabilizeHeld || input.resonanceHeld);
++    if (stabilizeHeld && interactionAimed && this.observationCount > 0 && playerDistance <= 82.0) {
++      this.relationshipSeconds = Math.min(2.0, this.relationshipSeconds + dt);
++      if (!this.relationshipEstablished && this.relationshipSeconds >= 0.72) {
++        this.relationshipEstablished = true;
++        this.relationshipSequence += 1;
++      }
++    } else if (!this.relationshipEstablished) {
++      this.relationshipSeconds = Math.max(0, this.relationshipSeconds - dt * 1.8);
++    }
++
++    // Absorb does not pull a massive territory across the map. It receives a weak
++    // inward answer once the remote relationship exists, preserving verb meaning.
++    const absorbHeld = Boolean(input.absorbHeld);
++    const absorbAnswering = Boolean(absorbHeld && interactionAimed && this.relationshipEstablished && playerDistance <= 78.0);
++    this.absorbEcho += ((absorbAnswering ? 1 : 0) - this.absorbEcho) * Math.min(1, dt * 3.4);
++
++    const ridgeComplete = Boolean(frameState.membraneRidgeGameplay?.completed);
++    if (ridgeComplete && !this.traversalOpened) {
++      this.traversalOpened = true;
++      this.traversalSequence += 1;
++      this.openResponse = 1;
++      this.openResponseAge = 0;
++      for (const ring of this.releaseRings) ring.visible = true;
++    }
++
++    if (this.traversalOpened && this.openResponseAge < 2.4) {
++      this.openResponseAge += dt;
++      this.openResponse = 1 - clamp01(this.openResponseAge / 2.4);
++    } else if (this.traversalOpened) {
++      this.openResponse = 0;
++    }
++
++    const entryRadius = 13.5;
++    if (this.traversalOpened && !this.enteredTerritory && playerDistance <= entryRadius) {
++      this.enteredTerritory = true;
++      this.entrySequence += 1;
++    }
++
++    const time = frameState.runtimeSeconds ?? 0;
++    const observation01 = this.observationCount / 3;
++    const relationship01 = this.relationshipEstablished ? 1 : clamp01(this.relationshipSeconds / 0.72);
++    const local01 = this.enteredTerritory
++      ? 1
++      : this.traversalOpened
++        ? clamp01((30.0 - playerDistance) / 20.0)
++        : 0;
++
++    if (this.canonicalLandmark?.material) {
++      const breath = 1 + Math.sin(time * (0.32 + relationship01 * 0.55)) * (0.018 + relationship01 * 0.035);
++      const releaseLift = this.openResponse * 0.16;
++      this.canonicalLandmark.scale.set(
++        this.canonicalLandmarkBaseScale.x * breath * (1 + releaseLift),
++        this.canonicalLandmarkBaseScale.y * (1 + relationship01 * 0.025 + releaseLift * 0.55),
++        this.canonicalLandmarkBaseScale.z * breath * (1 + releaseLift)
++      );
++      this.canonicalLandmark.material.opacity = Math.min(0.94,
++        this.canonicalLandmarkBaseOpacity + observation01 * 0.10 + local01 * 0.10 + this.openResponse * 0.18);
++      if (Number.isFinite(this.canonicalLandmark.material.emissiveIntensity)) {
++        this.canonicalLandmark.material.emissiveIntensity = this.canonicalLandmarkBaseEmissive
++          + observation01 * 0.16 + relationship01 * 0.24 + this.pulseResponse * 0.22 + this.openResponse * 0.95;
++      }
++    }
++
++    this.detailBodies.forEach((body, index) => {
++      const base = body.userData.baseScale;
++      const pulse = 1 + Math.sin(time * (0.44 + relationship01 * 0.68) - index * 0.52) * (0.018 + relationship01 * 0.045);
++      body.scale.set(base.x * pulse, base.y * (1 + relationship01 * 0.18 + this.absorbEcho * 0.08), base.z * pulse);
++      body.material.opacity = (body.userData.baseOpacity ?? 0.08)
++        + observation01 * 0.12
++        + relationship01 * 0.15
++        + local01 * 0.30;
++      body.material.emissiveIntensity = 0.10 + observation01 * 0.12 + relationship01 * 0.22 + this.absorbEcho * 0.14;
++    });
++
++    this.responseHalos.forEach((halo, index) => {
++      halo.rotation.z += dt * (0.05 + relationship01 * (0.12 + index * 0.025));
++      halo.material.opacity = observation01 * (0.04 + index * 0.012)
++        + this.pulseResponse * (0.12 - index * 0.018)
++        + relationship01 * 0.055
++        + this.openResponse * Math.max(0.18, 0.56 - index * 0.11);
++    });
++
++    this.connectiveBodies.forEach((body, index) => {
++      const baseOpacity = body.userData.baseOpacity ?? 0.025;
++      body.material.opacity = this.traversalOpened
++        ? 0.30 + relationship01 * 0.12 + local01 * 0.14 + index * 0.014 + this.openResponse * Math.max(0.24, 0.56 - index * 0.08)
++        : baseOpacity + observation01 * 0.025 + relationship01 * 0.055;
++      body.material.emissiveIntensity = this.traversalOpened
++        ? 0.46 + relationship01 * 0.26 + this.openResponse * 0.92
++        : 0.10 + relationship01 * 0.12;
++    });
++
++    this.releaseRings.forEach((ring, index) => {
++      if (!this.traversalOpened) {
++        ring.visible = false;
++        ring.material.opacity = 0;
++        return;
++      }
++      const delay = ring.userData.delay ?? index * 0.11;
++      const progress = clamp01((this.openResponseAge - delay) / 1.45);
++      const envelope = progress <= 0 || progress >= 1 ? 0 : Math.sin(progress * Math.PI);
++      ring.visible = envelope > 0.001;
++      ring.material.opacity = envelope * 0.82;
++      ring.scale.setScalar(0.72 + progress * 2.65);
++      ring.rotation.z += dt * (0.18 + index * 0.05);
++    });
++
++    const stage = this.enteredTerritory
++      ? "local_high_detail_territory"
++      : this.traversalOpened
++        ? "continuous_approach_open"
++        : this.relationshipEstablished
++          ? "remote_relationship_established"
++          : this.observationCount > 0
++            ? "neighbor_remotely_observed"
++            : "distant_unresolved";
++
++    this.publish(frameState, stage, {
++      aimDot,
++      aimed,
++      aimSource,
++      aimThreshold,
++      playerDistance,
++      cameraDistance,
++      attentionOwned,
++      relationshipOwned,
++      interactionAimed,
++      absorbAnswering,
++      entryRadius,
++      openingResponse01: this.openResponse,
++      openingResponseAge: this.openResponseAge
++    });
++  }
++
++  publish(frameState, stage, metrics = {}) {
++    const ridge = frameState.membraneRidgeGameplay ?? {};
++    const signalPlain = frameState.signalPlainEcology ?? {};
++    const attentionEligible = Boolean(
++      frameState.activeCellId === CELL_ID
++      && this.root?.visible
++      && (ridge.active || ridge.completed || signalPlain.completed)
++    );
++    frameState.worldAttentionCandidates = {
++      pass: "HC-031T5",
++      provider: "ApertureAdjacentTerritorySystem",
++      active: attentionEligible,
++      items: attentionEligible
++        ? [{
++            id: TERRITORY_ID,
++            label: "Gathering Ground",
++            cellId: CELL_ID,
++            targetKind: "host_territory",
++            root: this.canonicalLandmark,
++            focusRoots: this.acquisitionBodies.filter(Boolean),
++            domains: ["host", "territory", "membrane"],
++            externalPriority: ridge.completed ? 2.2 : 1.2,
++            source: "ApertureAdjacentTerritorySystem"
++          }]
++        : []
++    };
++
++    const observationStage = this.observationCount <= 0
++      ? "silhouette"
++      : this.observationCount === 1
++        ? "contour"
++        : this.observationCount === 2
++          ? "living_motion"
++          : "territory_function";
++    const detailTier = this.enteredTerritory
++      ? "ring_a_local"
++      : (this.observationCount > 0 || this.traversalOpened)
++        ? "ring_b_neighbor"
++        : "ring_c_distant";
++
++    frameState.adjacentHostTerritory = {
++      pass: "HC-031T5",
++      active: true,
++      territoryId: TERRITORY_ID,
++      canonicalVisualId: TERRITORY_ID,
++      canonicalVisualSource: "ApertureFieldsArrivalSystem",
++      canonicalLocalPosition: { x: this.territoryLocal.x, y: this.territoryLocal.y, z: this.territoryLocal.z },
++      regionId: "aperture_fields",
++      runtimeCellId: CELL_ID,
++      stage,
++      detailTier,
++      observationStage,
++      observationCount: this.observationCount,
++      observationSequence: this.observationSequence,
++      relationshipSeconds: this.relationshipSeconds,
++      relationshipEstablished: this.relationshipEstablished,
++      relationshipSequence: this.relationshipSequence,
++      absorbEcho01: this.absorbEcho,
++      traversalOpen: this.traversalOpened,
++      traversalSequence: this.traversalSequence,
++      connectiveAnatomyVisible: this.traversalOpened,
++      worldReleaseReadable: this.traversalOpened,
++      openingResponse01: Number.isFinite(metrics.openingResponse01) ? metrics.openingResponse01 : this.openResponse,
++      openingResponseAge: Number.isFinite(metrics.openingResponseAge) ? metrics.openingResponseAge : this.openResponseAge,
++      completionReaction: this.traversalOpened ? "ridge_release_wave_connective_flare_gathering_answer" : "pending",
++      enteredTerritory: this.enteredTerritory,
++      entrySequence: this.entrySequence,
++      distance: Number.isFinite(metrics.playerDistance) ? metrics.playerDistance : null,
++      cameraDistance: Number.isFinite(metrics.cameraDistance) ? metrics.cameraDistance : null,
++      aimDot: Number.isFinite(metrics.aimDot) ? metrics.aimDot : -1,
++      aimed: Boolean(metrics.aimed),
++      attentionOwned: Boolean(metrics.attentionOwned),
++      relationshipOwned: Boolean(metrics.relationshipOwned),
++      interactionAimed: Boolean(metrics.interactionAimed || metrics.aimed),
++      attentionTargetId: frameState.targeting?.attentionTargetId ?? "none",
++      relationshipTargetId: frameState.targeting?.relationshipTargetId ?? "none",
++      aimSource: metrics.aimSource ?? "none",
++      aimThreshold: Number.isFinite(metrics.aimThreshold) ? metrics.aimThreshold : 0.62,
++      observationReady: Boolean((metrics.interactionAimed || metrics.aimed) && Number.isFinite(metrics.playerDistance) && metrics.playerDistance <= 86.0),
++      entryRadius: metrics.entryRadius ?? 13.5,
++      macroInteraction: {
++        pulse: "remote_contour_and_function_read",
++        stabilize: "remote_relationship_hold",
++        absorb: "weak_inward_answer_only_after_relationship"
++      },
++      mapRing: detailTier,
++      movementBoundsExpansionRequested: this.traversalOpened,
++      activeCellChangesRequired: false,
++      teleportRequired: false,
++      targetingAuthorityChanged: "world_attention_candidate_only",
++      movementAuthority: "PlayerMovementController",
++      movementBoundsOwner: "ApertureFieldsArrivalSystem",
++      nextAction: this.enteredTerritory
++        ? "explore_the_now_local_gathering_territory_and_look_back_across_aperture"
++        : this.traversalOpened && !metrics.attentionOwned && this.observationCount <= 0
++          ? "look_toward_the_large_gathering_body_beyond_the_released_ridge"
++          : this.traversalOpened && this.observationCount <= 0
++            ? "pulse_the_attention_owned_gathering_body"
++            : this.traversalOpened
++              ? "follow_the_living_connective_anatomy_into_the_neighboring_territory"
++              : this.relationshipEstablished
++                ? "finish_reading_membrane_ridge_to_make_the_physical_connection_traversable"
++                : this.observationCount > 0
++                  ? "hold_stabilize_toward_the_answering_large_body"
++                  : metrics.attentionOwned
++                    ? "pulse_the_attention_owned_gathering_body"
++                    : "look_toward_the_distant_gathering_body_then_pulse"
++    };
++  }
++}

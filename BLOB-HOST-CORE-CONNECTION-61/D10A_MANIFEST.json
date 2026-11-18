@@ -1,0 +1,44 @@
+{
+  "revision": "BOT1-D10A",
+  "packageType": "NEW_FILES_ONLY_TEST_HARNESS",
+  "createdOn": "2026-10-31",
+  "base": "BOT1-D9Z installed + D9Y fixture/reference installed",
+  "scopeAllowed": [
+    "four new Python scripts",
+    "README_START_HERE.md",
+    "D10A_MANIFEST.json"
+  ],
+  "gameplayFilesChanged": false,
+  "browserRunsDone": false,
+  "offlinePolicyTestsPassed": 15,
+  "d9zRegressionTestsPassed": 15,
+  "d9yRegressionTestsPassed": 15,
+  "changedFiles": [
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/analyze_bot1d10a.py",
+      "sha256": "3e72680000a984ac32640fd5917d72aab55f8a0ddaf99cb749e75e5d9588d1c9"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d10a_browser.py",
+      "sha256": "4ed1b64cd94dd78303ed2f4644af943bcf29fa4c47c65336fa2235289b61a453"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/bot1d10a_policy.py",
+      "sha256": "2bfcc42a57ddfdca740c32829c258e1aea207478ea6b624a5451ae0a098af314"
+    },
+    {
+      "path": "BLOB_BOT1_REAL_INPUT_HARNESS/scripts/test_bot1d10a.py",
+      "sha256": "ca6c524c91ab81f79c52f12145a8355906b0a91f6e771a5e20e80cbd4ce0affb"
+    },
+    {
+      "path": "README_START_HERE.md",
+      "sha256": "bf174169d6fef987e0db048535872af28f665a473af4500b173689d4e8a9ec65"
+    }
+  ],
+  "notes": [
+    "Profiles are input policies, not world seeds",
+    "REC1 only used by offline referee",
+    "Golden itinerary unchanged",
+    "Recovery A/B one pair not causal proof"
+  ]
+}

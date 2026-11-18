@@ -1,0 +1,2154 @@
+{
+  "pass": "GUIDE-CONTACT1",
+  "scope": "Actual running Silt producer -> C1 adapter -> Guide with controlled shelf visibility fault injection and explicit re-approach placement; explicit player-transform staging for separation/re-approach; no attachment publication, movement-owner internal state or Guide result written.",
+  "outcome": "COMPLETE",
+  "interruption": null,
+  "stages": [
+    {
+      "label": "controlled initial shelf approach",
+      "intervention": {
+        "kind": "controlled_start",
+        "ms": 655,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "position": {
+          "x": -0.18,
+          "y": -0.17,
+          "z": -2.65
+        },
+        "reason": "debug_mechanical_pose_not_a_navigation_success"
+      }
+    },
+    {
+      "label": "attached before geometry removal",
+      "snapshot": {
+        "ms": 1260,
+        "frame": 35,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1716,
+          "y": -0.1509,
+          "z": -2.6647
+        },
+        "shelf": {
+          "present": true,
+          "visible": true,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": true,
+          "eligible": true,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "profile": "residue_weak",
+          "distance": 0.3341,
+          "reason": "none",
+          "point": {
+            "x": -0.1738,
+            "y": -0.5103,
+            "z": -2.6605
+          },
+          "normal": {
+            "x": 0.0077,
+            "y": 0.9996,
+            "z": -0.0265
+          },
+          "candidateCount": 1,
+          "probeCandidates": 1
+        },
+        "capability": {
+          "authoredCount": 1,
+          "surfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "finding": "authored_surface_mechanically_reachable",
+          "nearestValid": true
+        },
+        "contact": {
+          "state": "attached",
+          "requested": "attached",
+          "suppressed": false,
+          "sealed": 1,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": true,
+          "truthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "locomotionActive": true,
+          "supportCount": 1,
+          "carriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "anchors": [
+            {
+              "phase": "sealed",
+              "sealed": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": true,
+          "supportCount": 1,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "reason": "none",
+          "quality": 0.273,
+          "normal": {
+            "x": -0.02,
+            "y": 0.9998,
+            "z": 0.0037
+          }
+        },
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 1
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": true,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": true,
+          "liveTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "playerWorld": {
+            "x": -0.1716,
+            "y": -0.1509,
+            "z": -2.6647
+          },
+          "playerToCarriedMesh": {
+            "status": "measured",
+            "distance": 0.3594,
+            "point": {
+              "x": -0.1752,
+              "y": -0.5102,
+              "z": -2.6558
+            },
+            "triangles": 624,
+            "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+            "meshUuid": "f2678f61-e02d-4f39-b4f9-58d11e504da8"
+          },
+          "availableSurfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "sealed",
+              "planted": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9505
+              },
+              "playerToAnchor": 0.4582,
+              "geometry": {
+                "status": "measured",
+                "distance": 0.0149,
+                "point": {
+                  "x": -0.18,
+                  "y": -0.5238,
+                  "z": -2.9492
+                },
+                "triangles": 624,
+                "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+                "meshUuid": "f2678f61-e02d-4f39-b4f9-58d11e504da8"
+              }
+            },
+            {
+              "index": 1,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 1,
+          "measuredCount": 1,
+          "maxPlantedAnchorToMesh": 0.0149,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "attached"
+        }
+      },
+      "guide": {
+        "pass": "GSL-4E2F",
+        "enabled": true,
+        "source": "LS1.playerAttachment",
+        "observed": true,
+        "attachmentActive": false,
+        "detachReason": "none",
+        "event": "none",
+        "intention": "companion",
+        "expressionAllowed": false,
+        "expressionSuppression": "no_active_response",
+        "movementOwner": "companion_available"
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": true,
+        "state": "attached",
+        "authority": "authored_suction_support",
+        "adhesionStrength": 0.627,
+        "authoredSuctionSupportActive": true,
+        "authoredSuctionSupportCount": 1,
+        "authoredSuctionSupportStrength": 0.627,
+        "authoredSuctionSupportSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceIdentityActive": true,
+        "anchorCarriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceProfileId": "residue_weak",
+        "anchorCarriedSurfaceMaterialFamily": "residue_silt",
+        "anchorCarriedSurfaceAdhesion": 0.46,
+        "anchorCarriedSurfaceLoadTolerance": 0.32,
+        "anchorCarriedSurfaceCompliance": 0.92,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0.3,
+          "absorb": 0.86,
+          "stabilize": 0.58
+        },
+        "siltSurfaceAlignment": 0.722,
+        "releaseTension": 0,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "none",
+        "reacquireBlocked": false,
+        "reacquireCandidateSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "reacquireUnblockReason": "none",
+        "reacquireUnblockFromSurfaceId": "none",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "none",
+        "releaseClearance": 0,
+        "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "ownerAuthority": "authored_suction_support",
+        "acquireAge": 0.05,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.363,
+        "continuityMode": "attachment_acquired",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.08,
+        "momentumHandoffMode": "landing_tangent_carry",
+        "landingHandoffAge": 0,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 1,
+        "landingEntrySpeed": 0.091,
+        "landingEntryTangentialSpeed": 0.081,
+        "landingRetainedTangentialSpeed": 0.085,
+        "releaseInheritedTangentialSpeed": 0,
+        "releaseNormalImpulse": 0,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "idle",
+        "verbPhysicalRelationshipSource": "surface_attachment",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": true,
+        "tendrilSupportCount": 1,
+        "tendrilTraction01": 0.5,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.3528,
+        "tendrilSupportPlaneActive": true,
+        "tendrilSupportPlaneQuality01": 0.273,
+        "tendrilSupportPlaneCount": 1,
+        "tendrilSupportPlaneSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "tendrilSupportRideHeightError": 0.019,
+        "surfaceTruthActive": true,
+        "surfaceTruthDistance": 0.334,
+        "surfaceTruthMeshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+        "surfaceTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "surfaceTruthProfileId": "residue_weak",
+        "surfaceTruthMaterialFamily": "residue_silt",
+        "surfaceTruthAdhesion": 0.46,
+        "surfaceTruthLoadTolerance": 0.32,
+        "surfaceTruthCompliance": 0.92,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.3,
+          "absorb": 0.86,
+          "stabilize": 0.58
+        },
+        "boundaryProximity": 0,
+        "boundaryNormalizedDistance": 0.104,
+        "shellNormalizedDistance": 0.9,
+        "releaseCooldown": 0,
+        "siltZoneId": "none",
+        "surfaceCoverageClass": "authored_ecological_surface_truth",
+        "surfaceCoverageLabel": "authored ecological surface",
+        "surfaceCoverageRegionId": "silt_burrow_route",
+        "surfaceCoverageTuningOwner": "residue_weak",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      }
+    },
+    {
+      "kind": "controlled_geometry_unavailable",
+      "mesh": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+      "property": "visible",
+      "before": true,
+      "after": false,
+      "attachmentStateWritten": false,
+      "time": 1.137
+    },
+    {
+      "label": "visibility gap before forced separation",
+      "snapshot": {
+        "ms": 2768,
+        "frame": 41,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1589,
+          "y": -0.155,
+          "z": -2.7674
+        },
+        "shelf": {
+          "present": true,
+          "visible": false,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": false,
+          "eligible": false,
+          "surfaceId": "none",
+          "profile": "none",
+          "distance": null,
+          "reason": "no_authored_crawlable_surface_within_probe",
+          "point": null,
+          "normal": null,
+          "candidateCount": 0,
+          "probeCandidates": 0
+        },
+        "capability": {
+          "authoredCount": 0,
+          "surfaceIds": [],
+          "finding": "no_authored_crawlable_surfaces_in_active_cell",
+          "nearestValid": false
+        },
+        "contact": {
+          "state": "attached",
+          "requested": "attached",
+          "suppressed": false,
+          "sealed": 3,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": false,
+          "truthSurfaceId": "none",
+          "locomotionActive": true,
+          "supportCount": 3,
+          "carriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "anchors": [
+            {
+              "phase": "sealed",
+              "sealed": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            },
+            {
+              "phase": "sealed",
+              "sealed": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            },
+            {
+              "phase": "sealed",
+              "sealed": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            }
+          ]
+        },
+        "plane": {
+          "active": true,
+          "supportCount": 3,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "reason": "none",
+          "quality": 0.853,
+          "normal": {
+            "x": -0.0023,
+            "y": 0.9999,
+            "z": -0.012
+          }
+        },
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 3
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": true,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": false,
+          "liveTruthSurfaceId": "none",
+          "playerWorld": {
+            "x": -0.1589,
+            "y": -0.155,
+            "z": -2.7674
+          },
+          "playerToCarriedMesh": {
+            "status": "surface_mesh_missing",
+            "distance": null,
+            "point": null
+          },
+          "availableSurfaceIds": [],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "sealed",
+              "planted": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9505
+              },
+              "playerToAnchor": 0.399,
+              "geometry": {
+                "status": "surface_mesh_missing",
+                "distance": null,
+                "point": null
+              }
+            },
+            {
+              "index": 1,
+              "phase": "sealed",
+              "planted": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.4692,
+                "y": -0.5072,
+                "z": -2.6273
+              },
+              "playerToAnchor": 0.4899,
+              "geometry": {
+                "status": "surface_mesh_missing",
+                "distance": null,
+                "point": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "sealed",
+              "planted": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.0554,
+                "y": -0.5041,
+                "z": -2.3882
+              },
+              "playerToAnchor": 0.5257,
+              "geometry": {
+                "status": "surface_mesh_missing",
+                "distance": null,
+                "point": null
+              }
+            }
+          ],
+          "plantedCount": 3,
+          "measuredCount": 0,
+          "maxPlantedAnchorToMesh": null,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 3,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "attached"
+        }
+      },
+      "guide": {
+        "pass": "GSL-4E2F",
+        "enabled": true,
+        "source": "LS1.playerAttachment",
+        "observed": true,
+        "attachmentActive": true,
+        "detachReason": "none",
+        "event": "attachment_recovered",
+        "intention": "support",
+        "expressionAllowed": true,
+        "expressionSuppression": "none",
+        "movementOwner": "gsl_response"
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": true,
+        "state": "attached",
+        "authority": "authored_suction_support",
+        "adhesionStrength": 0.694,
+        "authoredSuctionSupportActive": true,
+        "authoredSuctionSupportCount": 3,
+        "authoredSuctionSupportStrength": 0.694,
+        "authoredSuctionSupportSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceIdentityActive": true,
+        "anchorCarriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceProfileId": "residue_weak",
+        "anchorCarriedSurfaceMaterialFamily": "residue_silt",
+        "anchorCarriedSurfaceAdhesion": 0.46,
+        "anchorCarriedSurfaceLoadTolerance": 0.32,
+        "anchorCarriedSurfaceCompliance": 0.92,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0.3,
+          "absorb": 0.86,
+          "stabilize": 0.58
+        },
+        "siltSurfaceAlignment": 0.641,
+        "releaseTension": 0,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "none",
+        "reacquireBlocked": false,
+        "reacquireCandidateSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "reacquireUnblockReason": "none",
+        "reacquireUnblockFromSurfaceId": "none",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "none",
+        "releaseClearance": 0,
+        "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "ownerAuthority": "authored_suction_support",
+        "acquireAge": 0.05,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.369,
+        "continuityMode": "attached_contact_resolved",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.048,
+        "momentumHandoffMode": "attached_settled",
+        "landingHandoffAge": 0.9,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 0,
+        "landingEntrySpeed": 0.091,
+        "landingEntryTangentialSpeed": 0.081,
+        "landingRetainedTangentialSpeed": 0.065,
+        "releaseInheritedTangentialSpeed": 0,
+        "releaseNormalImpulse": 0,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "idle",
+        "verbPhysicalRelationshipSource": "surface_attachment",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": true,
+        "tendrilSupportCount": 3,
+        "tendrilTraction01": 1,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.3528,
+        "tendrilSupportPlaneActive": true,
+        "tendrilSupportPlaneQuality01": 0.853,
+        "tendrilSupportPlaneCount": 3,
+        "tendrilSupportPlaneSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "tendrilSupportRideHeightError": 0,
+        "surfaceTruthActive": false,
+        "surfaceTruthDistance": null,
+        "surfaceTruthMeshName": "none",
+        "surfaceTruthSurfaceId": "none",
+        "surfaceTruthProfileId": "none",
+        "surfaceTruthMaterialFamily": "none",
+        "surfaceTruthAdhesion": 0.75,
+        "surfaceTruthLoadTolerance": 0.7,
+        "surfaceTruthCompliance": 0.5,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.5,
+          "absorb": 0.5,
+          "stabilize": 0.5
+        },
+        "boundaryProximity": 0,
+        "boundaryNormalizedDistance": 0.107,
+        "shellNormalizedDistance": 0.9,
+        "releaseCooldown": 0,
+        "siltZoneId": "none",
+        "surfaceCoverageClass": "region_local_envelope",
+        "surfaceCoverageLabel": "route-local",
+        "surfaceCoverageRegionId": "silt_burrow_route",
+        "surfaceCoverageTuningOwner": "Act1RouteContractSystem",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      }
+    },
+    {
+      "kind": "controlled_pose_separation",
+      "before": [
+        -0.1588587646675208,
+        -0.15504506245347413,
+        -2.7674318749780467
+      ],
+      "after": [
+        -0.1588587646675208,
+        -0.15504506245347413,
+        -5.767431874978047
+      ],
+      "reason": "Explicit test staging beyond planted-anchor reach with no away input; not a naturally occurring gameplay loss.",
+      "attachmentPublicationWritten": false
+    },
+    {
+      "label": "unexpected loss after geometry removal",
+      "snapshot": {
+        "ms": 3468,
+        "frame": 44,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1779,
+          "y": -0.1308,
+          "z": -5.7984
+        },
+        "shelf": {
+          "present": true,
+          "visible": false,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": false,
+          "eligible": false,
+          "surfaceId": "none",
+          "profile": "none",
+          "distance": null,
+          "reason": "no_authored_crawlable_surface_within_probe",
+          "point": null,
+          "normal": null,
+          "candidateCount": 0,
+          "probeCandidates": 0
+        },
+        "capability": {
+          "authoredCount": 0,
+          "surfaceIds": [],
+          "finding": "no_authored_crawlable_surfaces_in_active_cell",
+          "nearestValid": false
+        },
+        "contact": {
+          "state": "releasing",
+          "requested": "releasing",
+          "suppressed": false,
+          "sealed": 0,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": false,
+          "truthSurfaceId": "none",
+          "locomotionActive": false,
+          "supportCount": 0,
+          "carriedSurfaceId": "none",
+          "anchors": [
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": false,
+          "supportCount": 0,
+          "surfaceId": "none",
+          "reason": "no_sealed_anchor_with_carried_surface_identity",
+          "quality": 0,
+          "normal": null
+        },
+        "attachment": {
+          "active": false,
+          "state": "releasing",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "sustained_contact_loss",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 0
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": false,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": false,
+          "liveTruthSurfaceId": "none",
+          "playerWorld": {
+            "x": -0.1779,
+            "y": -0.1308,
+            "z": -5.7984
+          },
+          "playerToCarriedMesh": {
+            "status": "surface_mesh_missing",
+            "distance": null,
+            "point": null
+          },
+          "availableSurfaceIds": [],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9505
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 1,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.4692,
+                "y": -0.5072,
+                "z": -2.6273
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.0554,
+                "y": -0.5041,
+                "z": -2.3882
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 0,
+          "measuredCount": 0,
+          "maxPlantedAnchorToMesh": null,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "releasing"
+        }
+      },
+      "guide": {
+        "pass": "GSL-4E2F",
+        "enabled": true,
+        "source": "LS1.playerAttachment",
+        "observed": true,
+        "attachmentActive": false,
+        "detachReason": "sustained_contact_loss",
+        "event": "unexpected_loss",
+        "intention": "concern",
+        "expressionAllowed": true,
+        "expressionSuppression": "none",
+        "movementOwner": "gsl_response"
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": false,
+        "state": "releasing",
+        "authority": "none",
+        "adhesionStrength": 0,
+        "authoredSuctionSupportActive": false,
+        "authoredSuctionSupportCount": 0,
+        "authoredSuctionSupportStrength": 0,
+        "authoredSuctionSupportSurfaceId": "none",
+        "anchorCarriedSurfaceIdentityActive": false,
+        "anchorCarriedSurfaceId": "none",
+        "anchorCarriedSurfaceProfileId": "none",
+        "anchorCarriedSurfaceMaterialFamily": "none",
+        "anchorCarriedSurfaceAdhesion": 0,
+        "anchorCarriedSurfaceLoadTolerance": 0,
+        "anchorCarriedSurfaceCompliance": 0,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0,
+          "absorb": 0,
+          "stabilize": 0
+        },
+        "siltSurfaceAlignment": 0.903,
+        "releaseTension": 0,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "sustained_contact_loss",
+        "reacquireBlocked": true,
+        "reacquireCandidateSurfaceId": "none",
+        "reacquireUnblockReason": "none",
+        "reacquireUnblockFromSurfaceId": "none",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "releaseClearance": 0.02,
+        "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "ownerAuthority": "authored_suction_support",
+        "acquireAge": 0,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.3,
+        "continuityMode": "released_sustained_contact_loss",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.399,
+        "momentumHandoffMode": "surface_to_free_forced",
+        "landingHandoffAge": 1.299,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 0,
+        "landingEntrySpeed": 0.091,
+        "landingEntryTangentialSpeed": 0.081,
+        "landingRetainedTangentialSpeed": 0.065,
+        "releaseInheritedTangentialSpeed": 0.099,
+        "releaseNormalImpulse": 0.54,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "idle",
+        "verbPhysicalRelationshipSource": "none",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": false,
+        "tendrilSupportCount": 0,
+        "tendrilTraction01": 0,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.3,
+        "tendrilSupportPlaneActive": false,
+        "tendrilSupportPlaneQuality01": 0,
+        "tendrilSupportPlaneCount": 0,
+        "tendrilSupportPlaneSurfaceId": "none",
+        "tendrilSupportRideHeightError": 0,
+        "surfaceTruthActive": false,
+        "surfaceTruthDistance": null,
+        "surfaceTruthMeshName": "none",
+        "surfaceTruthSurfaceId": "none",
+        "surfaceTruthProfileId": "none",
+        "surfaceTruthMaterialFamily": "none",
+        "surfaceTruthAdhesion": 0.75,
+        "surfaceTruthLoadTolerance": 0.7,
+        "surfaceTruthCompliance": 0.5,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.5,
+          "absorb": 0.5,
+          "stabilize": 0.5
+        },
+        "boundaryProximity": 0,
+        "boundaryNormalizedDistance": 0.218,
+        "shellNormalizedDistance": 0.9,
+        "releaseCooldown": 0.5,
+        "siltZoneId": "none",
+        "surfaceCoverageClass": "region_local_envelope",
+        "surfaceCoverageLabel": "route-local",
+        "surfaceCoverageRegionId": "silt_burrow_route",
+        "surfaceCoverageTuningOwner": "Act1RouteContractSystem",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      }
+    },
+    {
+      "label": "normal clearance before re-approach",
+      "snapshot": {
+        "ms": 4272,
+        "frame": 48,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.2203,
+          "y": 0.6141,
+          "z": -5.8515
+        },
+        "shelf": {
+          "present": true,
+          "visible": false,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": false,
+          "eligible": false,
+          "surfaceId": "none",
+          "profile": "none",
+          "distance": null,
+          "reason": "no_authored_crawlable_surface_within_probe",
+          "point": null,
+          "normal": null,
+          "candidateCount": 0,
+          "probeCandidates": 0
+        },
+        "capability": {
+          "authoredCount": 0,
+          "surfaceIds": [],
+          "finding": "no_authored_crawlable_surfaces_in_active_cell",
+          "nearestValid": false
+        },
+        "contact": {
+          "state": "suspended",
+          "requested": "suspended",
+          "suppressed": false,
+          "sealed": 0,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": false,
+          "truthSurfaceId": "none",
+          "locomotionActive": false,
+          "supportCount": 0,
+          "carriedSurfaceId": "none",
+          "anchors": [
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": false,
+          "supportCount": 0,
+          "surfaceId": "none",
+          "reason": "no_sealed_anchor_with_carried_surface_identity",
+          "quality": 0,
+          "normal": null
+        },
+        "attachment": {
+          "active": false,
+          "state": "free",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "sustained_contact_loss",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 0
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": false,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": false,
+          "liveTruthSurfaceId": "none",
+          "playerWorld": {
+            "x": -0.2203,
+            "y": 0.6141,
+            "z": -5.8515
+          },
+          "playerToCarriedMesh": {
+            "status": "surface_mesh_missing",
+            "distance": null,
+            "point": null
+          },
+          "availableSurfaceIds": [],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9505
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 1,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.4692,
+                "y": -0.5072,
+                "z": -2.6273
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.0554,
+                "y": -0.5041,
+                "z": -2.3882
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 0,
+          "measuredCount": 0,
+          "maxPlantedAnchorToMesh": null,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "suspended"
+        }
+      },
+      "guide": {
+        "pass": "GSL-4E2F",
+        "enabled": true,
+        "source": "LS1.playerAttachment",
+        "observed": true,
+        "attachmentActive": false,
+        "detachReason": "sustained_contact_loss",
+        "event": "unexpected_loss",
+        "intention": "concern",
+        "expressionAllowed": true,
+        "expressionSuppression": "none",
+        "movementOwner": "gsl_response"
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": false,
+        "state": "free",
+        "authority": "none",
+        "adhesionStrength": 0,
+        "authoredSuctionSupportActive": false,
+        "authoredSuctionSupportCount": 0,
+        "authoredSuctionSupportStrength": 0,
+        "authoredSuctionSupportSurfaceId": "none",
+        "anchorCarriedSurfaceIdentityActive": false,
+        "anchorCarriedSurfaceId": "none",
+        "anchorCarriedSurfaceProfileId": "none",
+        "anchorCarriedSurfaceMaterialFamily": "none",
+        "anchorCarriedSurfaceAdhesion": 0,
+        "anchorCarriedSurfaceLoadTolerance": 0,
+        "anchorCarriedSurfaceCompliance": 0,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0,
+          "absorb": 0,
+          "stabilize": 0
+        },
+        "siltSurfaceAlignment": 0.992,
+        "releaseTension": 0.771,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "sustained_contact_loss",
+        "reacquireBlocked": false,
+        "reacquireCandidateSurfaceId": "none",
+        "reacquireUnblockReason": "release_clearance_reached",
+        "reacquireUnblockFromSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "none",
+        "releaseClearance": 0,
+        "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "ownerAuthority": "authored_suction_support",
+        "acquireAge": 0,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.3,
+        "continuityMode": "none",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.736,
+        "momentumHandoffMode": "surface_to_free_forced",
+        "landingHandoffAge": 1.299,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 0,
+        "landingEntrySpeed": 0.091,
+        "landingEntryTangentialSpeed": 0.081,
+        "landingRetainedTangentialSpeed": 0.065,
+        "releaseInheritedTangentialSpeed": 0.099,
+        "releaseNormalImpulse": 0.54,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "idle",
+        "verbPhysicalRelationshipSource": "none",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": false,
+        "tendrilSupportCount": 0,
+        "tendrilTraction01": 0,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.3,
+        "tendrilSupportPlaneActive": false,
+        "tendrilSupportPlaneQuality01": 0,
+        "tendrilSupportPlaneCount": 0,
+        "tendrilSupportPlaneSurfaceId": "none",
+        "tendrilSupportRideHeightError": 0,
+        "surfaceTruthActive": false,
+        "surfaceTruthDistance": null,
+        "surfaceTruthMeshName": "none",
+        "surfaceTruthSurfaceId": "none",
+        "surfaceTruthProfileId": "none",
+        "surfaceTruthMaterialFamily": "none",
+        "surfaceTruthAdhesion": 0.75,
+        "surfaceTruthLoadTolerance": 0.7,
+        "surfaceTruthCompliance": 0.5,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.5,
+          "absorb": 0.5,
+          "stabilize": 0.5
+        },
+        "boundaryProximity": 0,
+        "boundaryNormalizedDistance": 0.24,
+        "shellNormalizedDistance": 0.9,
+        "releaseCooldown": 0,
+        "siltZoneId": "none",
+        "surfaceCoverageClass": "region_local_envelope",
+        "surfaceCoverageLabel": "route-local",
+        "surfaceCoverageRegionId": "silt_burrow_route",
+        "surfaceCoverageTuningOwner": "Act1RouteContractSystem",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      }
+    },
+    {
+      "label": "geometry restored; controlled re-approach",
+      "intervention": {
+        "kind": "controlled_start",
+        "ms": 4279,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "position": {
+          "x": -0.18,
+          "y": -0.17,
+          "z": -2.65
+        },
+        "reason": "debug_mechanical_pose_not_a_navigation_success"
+      }
+    },
+    {
+      "label": "recovered attachment",
+      "snapshot": {
+        "ms": 4869,
+        "frame": 51,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1695,
+          "y": -0.1396,
+          "z": -2.6684
+        },
+        "shelf": {
+          "present": true,
+          "visible": true,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": true,
+          "eligible": true,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "profile": "residue_weak",
+          "distance": 0.3595,
+          "reason": "none",
+          "point": {
+            "x": -0.1716,
+            "y": -0.5105,
+            "z": -2.6647
+          },
+          "normal": {
+            "x": 0.0077,
+            "y": 0.9996,
+            "z": -0.0265
+          },
+          "candidateCount": 1,
+          "probeCandidates": 1
+        },
+        "capability": {
+          "authoredCount": 1,
+          "surfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "finding": "authored_surface_mechanically_reachable",
+          "nearestValid": true
+        },
+        "contact": {
+          "state": "attached",
+          "requested": "attached",
+          "suppressed": false,
+          "sealed": 1,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": true,
+          "truthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "locomotionActive": true,
+          "supportCount": 1,
+          "carriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "anchors": [
+            {
+              "phase": "sealed",
+              "sealed": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": true,
+          "supportCount": 1,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "reason": "none",
+          "quality": 0.273,
+          "normal": {
+            "x": -0.02,
+            "y": 0.9998,
+            "z": 0.0037
+          }
+        },
+        "attachment": {
+          "active": true,
+          "state": "attached",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "none",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 1
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": true,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": true,
+          "liveTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "playerWorld": {
+            "x": -0.1695,
+            "y": -0.1396,
+            "z": -2.6684
+          },
+          "playerToCarriedMesh": {
+            "status": "measured",
+            "distance": 0.3708,
+            "point": {
+              "x": -0.1728,
+              "y": -0.5103,
+              "z": -2.6588
+            },
+            "triangles": 624,
+            "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+            "meshUuid": "f2678f61-e02d-4f39-b4f9-58d11e504da8"
+          },
+          "availableSurfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "sealed",
+              "planted": true,
+              "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9518
+              },
+              "playerToAnchor": 0.4656,
+              "geometry": {
+                "status": "measured",
+                "distance": 0.0151,
+                "point": {
+                  "x": -0.18,
+                  "y": -0.5239,
+                  "z": -2.9505
+                },
+                "triangles": 624,
+                "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+                "meshUuid": "f2678f61-e02d-4f39-b4f9-58d11e504da8"
+              }
+            },
+            {
+              "index": 1,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.4692,
+                "y": -0.5072,
+                "z": -2.6273
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.0554,
+                "y": -0.5041,
+                "z": -2.3882
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 1,
+          "measuredCount": 1,
+          "maxPlantedAnchorToMesh": 0.0151,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "attached"
+        }
+      },
+      "guide": {
+        "pass": "GSL-4E2F",
+        "enabled": true,
+        "source": "LS1.playerAttachment",
+        "observed": true,
+        "attachmentActive": true,
+        "detachReason": "none",
+        "event": "attachment_recovered",
+        "intention": "support",
+        "expressionAllowed": true,
+        "expressionSuppression": "none",
+        "movementOwner": "gsl_response"
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": true,
+        "state": "attached",
+        "authority": "authored_suction_support",
+        "adhesionStrength": 0.627,
+        "authoredSuctionSupportActive": true,
+        "authoredSuctionSupportCount": 1,
+        "authoredSuctionSupportStrength": 0.627,
+        "authoredSuctionSupportSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceIdentityActive": true,
+        "anchorCarriedSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceProfileId": "residue_weak",
+        "anchorCarriedSurfaceMaterialFamily": "residue_silt",
+        "anchorCarriedSurfaceAdhesion": 0.46,
+        "anchorCarriedSurfaceLoadTolerance": 0.32,
+        "anchorCarriedSurfaceCompliance": 0.92,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0.3,
+          "absorb": 0.86,
+          "stabilize": 0.58
+        },
+        "siltSurfaceAlignment": 0,
+        "releaseTension": 0,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "none",
+        "reacquireBlocked": false,
+        "reacquireCandidateSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "reacquireUnblockReason": "release_clearance_reached",
+        "reacquireUnblockFromSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "none",
+        "releaseClearance": 0,
+        "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "ownerAuthority": "authored_suction_support",
+        "acquireAge": 0.05,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.363,
+        "continuityMode": "attached_contact_resolved",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.078,
+        "momentumHandoffMode": "landing_tangent_carry",
+        "landingHandoffAge": 0.05,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 0.868,
+        "landingEntrySpeed": 0.09,
+        "landingEntryTangentialSpeed": 0.079,
+        "landingRetainedTangentialSpeed": 0.084,
+        "releaseInheritedTangentialSpeed": 0.099,
+        "releaseNormalImpulse": 0.54,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "idle",
+        "verbPhysicalRelationshipSource": "surface_attachment",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": true,
+        "tendrilSupportCount": 1,
+        "tendrilTraction01": 0.5,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.3528,
+        "tendrilSupportPlaneActive": true,
+        "tendrilSupportPlaneQuality01": 0.273,
+        "tendrilSupportPlaneCount": 1,
+        "tendrilSupportPlaneSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "tendrilSupportRideHeightError": -0.006,
+        "surfaceTruthActive": true,
+        "surfaceTruthDistance": 0.359,
+        "surfaceTruthMeshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+        "surfaceTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "surfaceTruthProfileId": "residue_weak",
+        "surfaceTruthMaterialFamily": "residue_silt",
+        "surfaceTruthAdhesion": 0.46,
+        "surfaceTruthLoadTolerance": 0.32,
+        "surfaceTruthCompliance": 0.92,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.3,
+          "absorb": 0.86,
+          "stabilize": 0.58
+        },
+        "boundaryProximity": 0,
+        "boundaryNormalizedDistance": 0.103,
+        "shellNormalizedDistance": 0.9,
+        "releaseCooldown": 0,
+        "siltZoneId": "none",
+        "surfaceCoverageClass": "authored_ecological_surface_truth",
+        "surfaceCoverageLabel": "authored ecological surface",
+        "surfaceCoverageRegionId": "silt_burrow_route",
+        "surfaceCoverageTuningOwner": "residue_weak",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      }
+    },
+    {
+      "label": "deliberate release after recovery",
+      "snapshot": {
+        "ms": 5275,
+        "frame": 53,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "player": {
+          "x": -0.1578,
+          "y": 0.0857,
+          "z": -2.6922
+        },
+        "shelf": {
+          "present": true,
+          "visible": true,
+          "center": {
+            "x": -0.18,
+            "y": -0.75,
+            "z": -2.65
+          },
+          "scale": {
+            "x": 1.35,
+            "y": 0.24,
+            "z": 0.95
+          }
+        },
+        "surface": {
+          "valid": true,
+          "eligible": true,
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "profile": "residue_weak",
+          "distance": 0.5671,
+          "reason": "none",
+          "point": {
+            "x": -0.16,
+            "y": -0.5112,
+            "z": -2.6878
+          },
+          "normal": {
+            "x": 0.0077,
+            "y": 0.9996,
+            "z": -0.0265
+          },
+          "candidateCount": 1,
+          "probeCandidates": 1
+        },
+        "capability": {
+          "authoredCount": 1,
+          "surfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "finding": "authored_surface_mechanically_reachable",
+          "nearestValid": true
+        },
+        "contact": {
+          "state": "releasing",
+          "requested": "releasing",
+          "suppressed": false,
+          "sealed": 0,
+          "reaching": 0,
+          "peeling": 0,
+          "truthActive": true,
+          "truthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "locomotionActive": false,
+          "supportCount": 0,
+          "carriedSurfaceId": "none",
+          "anchors": [
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            },
+            {
+              "phase": "retracted",
+              "sealed": false,
+              "surfaceId": "none"
+            }
+          ]
+        },
+        "plane": {
+          "active": false,
+          "supportCount": 0,
+          "surfaceId": "none",
+          "reason": "no_sealed_anchor_with_carried_surface_identity",
+          "quality": 0,
+          "normal": null
+        },
+        "attachment": {
+          "active": false,
+          "state": "releasing",
+          "surfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "detachReason": "deliberate_away_input",
+          "releaseArmed": false,
+          "peelIntent": 0,
+          "contactGap": false,
+          "supportCount": 0
+        },
+        "continuity": {
+          "revision": "BOT1-D11F-1",
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attached": false,
+          "carriedId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "liveTruthEligible": true,
+          "liveTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+          "playerWorld": {
+            "x": -0.1578,
+            "y": 0.0857,
+            "z": -2.6922
+          },
+          "playerToCarriedMesh": {
+            "status": "measured",
+            "distance": 0.5968,
+            "point": {
+              "x": -0.1624,
+              "y": -0.5108,
+              "z": -2.6764
+            },
+            "triangles": 624,
+            "meshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+            "meshUuid": "f2678f61-e02d-4f39-b4f9-58d11e504da8"
+          },
+          "availableSurfaceIds": [
+            "SILT_ENTRY_SEDIMENT_SHELF_D11B"
+          ],
+          "anchors": [
+            {
+              "index": 0,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.18,
+                "y": -0.5089,
+                "z": -2.9518
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 1,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": 0.1106,
+                "y": -0.5156,
+                "z": -2.7758
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            },
+            {
+              "index": 2,
+              "phase": "retracted",
+              "planted": false,
+              "surfaceId": "none",
+              "anchorWorld": {
+                "x": -0.3464,
+                "y": -0.5157,
+                "z": -2.9127
+              },
+              "geometry": {
+                "status": "not_planted",
+                "distance": null
+              }
+            }
+          ],
+          "plantedCount": 0,
+          "measuredCount": 0,
+          "maxPlantedAnchorToMesh": null,
+          "anchorsBeyond035": 0,
+          "unmeasurablePlanted": 0,
+          "readOnly": true
+        },
+        "coreContactLanguage": {
+          "state": "releasing"
+        }
+      },
+      "guide": {
+        "pass": "GSL-4E2F",
+        "enabled": true,
+        "source": "LS1.playerAttachment",
+        "observed": true,
+        "attachmentActive": false,
+        "detachReason": "deliberate_away_input",
+        "event": "deliberate_release",
+        "intention": "companion",
+        "expressionAllowed": false,
+        "expressionSuppression": "no_active_response",
+        "movementOwner": "companion_available"
+      },
+      "attachment": {
+        "pass": "HC-031L",
+        "active": false,
+        "state": "releasing",
+        "authority": "none",
+        "adhesionStrength": 0.627,
+        "authoredSuctionSupportActive": true,
+        "authoredSuctionSupportCount": 1,
+        "authoredSuctionSupportStrength": 0.627,
+        "authoredSuctionSupportSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "anchorCarriedSurfaceIdentityActive": false,
+        "anchorCarriedSurfaceId": "none",
+        "anchorCarriedSurfaceProfileId": "none",
+        "anchorCarriedSurfaceMaterialFamily": "none",
+        "anchorCarriedSurfaceAdhesion": 0,
+        "anchorCarriedSurfaceLoadTolerance": 0,
+        "anchorCarriedSurfaceCompliance": 0,
+        "anchorCarriedSurfaceVerbTransmission": {
+          "pulse": 0,
+          "absorb": 0,
+          "stabilize": 0
+        },
+        "siltSurfaceAlignment": 0.717,
+        "releaseTension": 0,
+        "peelIntent01": 0,
+        "peelHoldAge": 0,
+        "releaseArmed": false,
+        "detachReason": "deliberate_away_input",
+        "reacquireBlocked": true,
+        "reacquireCandidateSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "reacquireUnblockReason": "none",
+        "reacquireUnblockFromSurfaceId": "none",
+        "reacquireUnblockToSurfaceId": "none",
+        "releaseSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "releaseClearance": 0.17,
+        "ownerSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "ownerAuthority": "authored_suction_support",
+        "acquireAge": 0,
+        "contactGapActive": false,
+        "contactGapAge": 0,
+        "contactGapTolerance": 0.363,
+        "continuityMode": "released_deliberate_away_input",
+        "supportIdentityTransferCount": 0,
+        "surfaceTangentSpeed": 0.738,
+        "momentumHandoffMode": "surface_to_free_deliberate",
+        "landingHandoffAge": 0.2,
+        "landingHandoffDuration": 0.38,
+        "landingCarry01": 0,
+        "landingEntrySpeed": 0.09,
+        "landingEntryTangentialSpeed": 0.079,
+        "landingRetainedTangentialSpeed": 0.352,
+        "releaseInheritedTangentialSpeed": 0.092,
+        "releaseNormalImpulse": 1.097,
+        "pulsePeelAssist": 0,
+        "verbPhysicalGrammarMode": "idle",
+        "verbPhysicalRelationshipSource": "none",
+        "verbEnvironmentalFlowMultiplier": 1,
+        "verbSurfaceTractionMultiplier": 1,
+        "tendrilLocomotionActive": false,
+        "tendrilSupportCount": 0,
+        "tendrilTraction01": 0,
+        "tendrilLeadingAnchorIndex": -1,
+        "tendrilLoadPulse01": 0,
+        "tendrilPullAcceleration": 0,
+        "tendrilLeadingAnchorWorld": null,
+        "standOffDistance": 0.38,
+        "tendrilSupportPlaneActive": false,
+        "tendrilSupportPlaneQuality01": 0,
+        "tendrilSupportPlaneCount": 0,
+        "tendrilSupportPlaneSurfaceId": "none",
+        "tendrilSupportRideHeightError": 0,
+        "surfaceTruthActive": true,
+        "surfaceTruthDistance": 0.567,
+        "surfaceTruthMeshName": "silt_crawlable_silt_entry_sediment_shelf_d11b",
+        "surfaceTruthSurfaceId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+        "surfaceTruthProfileId": "residue_weak",
+        "surfaceTruthMaterialFamily": "residue_silt",
+        "surfaceTruthAdhesion": 0.46,
+        "surfaceTruthLoadTolerance": 0.32,
+        "surfaceTruthCompliance": 0.92,
+        "surfaceTruthVerbTransmission": {
+          "pulse": 0.3,
+          "absorb": 0.86,
+          "stabilize": 0.58
+        },
+        "boundaryProximity": 0,
+        "boundaryNormalizedDistance": 0.102,
+        "shellNormalizedDistance": 0.9,
+        "releaseCooldown": 0.4,
+        "siltZoneId": "none",
+        "surfaceCoverageClass": "authored_ecological_surface_truth",
+        "surfaceCoverageLabel": "authored ecological surface",
+        "surfaceCoverageRegionId": "silt_burrow_route",
+        "surfaceCoverageTuningOwner": "residue_weak",
+        "interiorDecorativeGeometryContactable": false,
+        "usesTrustedMovementBoundaryOnly": false,
+        "visibleSurfaceTruthPreferred": false,
+        "authoredEcologicalSurfaceTruthPreferred": true,
+        "genericVisibleMeshSurfaceTruthAllowed": false,
+        "authoredBoundaryFallback": true,
+        "requiresSiltMembrane": false,
+        "legacySiltMembraneAttachmentSupported": true,
+        "authoredSuctionSupportCanAttach": true,
+        "governingContactLaw": "surface_truth_authorizes_seal_anchor_carries_identity_and_support_plane_drives_physical_contact",
+        "usesSiltWorldAlignment": true,
+        "addsCollider": false,
+        "addsRaycast": false,
+        "progressionAuthority": false
+      }
+    }
+  ],
+  "chain": {
+    "pass": "GSL-4E2G-STAGE2C",
+    "scope": "live production movement publication -> actual adapter call -> Guide interpretation",
+    "status": "PASS",
+    "pairedSamples": 77,
+    "producerPublications": 95,
+    "coverage": {
+      "deliberate": 1,
+      "unexpected": 1,
+      "recovery": 2
+    },
+    "errors": 0,
+    "issues": [],
+    "transitions": [
+      {
+        "sequence": 18,
+        "t": 0.642899999999907,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "attachment": {
+          "active": false,
+          "reason": "none"
+        },
+        "adapter": {
+          "mode": "companion",
+          "event": "none",
+          "active": false,
+          "reason": "none"
+        },
+        "guide": {
+          "event": "none",
+          "intention": "companion",
+          "movementOwner": "companion_available",
+          "expressionAllowed": false
+        }
+      },
+      {
+        "sequence": 43,
+        "t": 1.187,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "attachment": {
+          "active": true,
+          "reason": "none"
+        },
+        "adapter": {
+          "mode": "support",
+          "event": "attachment_recovered",
+          "active": true,
+          "reason": "none"
+        },
+        "guide": {
+          "event": "attachment_recovered",
+          "intention": "support",
+          "movementOwner": "gsl_response",
+          "expressionAllowed": true
+        }
+      },
+      {
+        "sequence": 69,
+        "t": 2.4858999999999067,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "attachment": {
+          "active": false,
+          "reason": "sustained_contact_loss"
+        },
+        "adapter": {
+          "mode": "concern",
+          "event": "unexpected_loss",
+          "active": false,
+          "reason": "sustained_contact_loss"
+        },
+        "guide": {
+          "event": "unexpected_loss",
+          "intention": "concern",
+          "movementOwner": "gsl_response",
+          "expressionAllowed": true
+        }
+      },
+      {
+        "sequence": 88,
+        "t": 3.4003000000002763,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "attachment": {
+          "active": true,
+          "reason": "none"
+        },
+        "adapter": {
+          "mode": "support",
+          "event": "attachment_recovered",
+          "active": true,
+          "reason": "none"
+        },
+        "guide": {
+          "event": "attachment_recovered",
+          "intention": "support",
+          "movementOwner": "gsl_response",
+          "expressionAllowed": true
+        }
+      },
+      {
+        "sequence": 92,
+        "t": 3.6003000000002756,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "attachment": {
+          "active": false,
+          "reason": "deliberate_away_input"
+        },
+        "adapter": {
+          "mode": "companion",
+          "event": "deliberate_release",
+          "active": false,
+          "reason": "deliberate_away_input"
+        },
+        "guide": {
+          "event": "deliberate_release",
+          "intention": "companion",
+          "movementOwner": "companion_available",
+          "expressionAllowed": false
+        }
+      }
+    ],
+    "droppedTransitions": 0,
+    "notVerified": [
+      "browser visual quality and human feel",
+      "separate Guide cooldown",
+      "unobserved attachment loss branches"
+    ],
+    "note": "PASS requires observed deliberate release, reason-bearing unexpected loss, recovery, and no recorded chain errors. Authored movement ownership may legitimately suppress Guide movement."
+  },
+  "restoration": {
+    "shelfVisible": true,
+    "observer": {
+      "pass": "GSL-4E2G-STAGE2C",
+      "scope": "live production movement publication -> actual adapter call -> Guide interpretation",
+      "status": "PASS",
+      "pairedSamples": 77,
+      "producerPublications": 95,
+      "coverage": {
+        "deliberate": 1,
+        "unexpected": 1,
+        "recovery": 2
+      },
+      "errors": 0,
+      "issues": [],
+      "transitions": [
+        {
+          "sequence": 18,
+          "t": 0.642899999999907,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attachment": {
+            "active": false,
+            "reason": "none"
+          },
+          "adapter": {
+            "mode": "companion",
+            "event": "none",
+            "active": false,
+            "reason": "none"
+          },
+          "guide": {
+            "event": "none",
+            "intention": "companion",
+            "movementOwner": "companion_available",
+            "expressionAllowed": false
+          }
+        },
+        {
+          "sequence": 43,
+          "t": 1.187,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attachment": {
+            "active": true,
+            "reason": "none"
+          },
+          "adapter": {
+            "mode": "support",
+            "event": "attachment_recovered",
+            "active": true,
+            "reason": "none"
+          },
+          "guide": {
+            "event": "attachment_recovered",
+            "intention": "support",
+            "movementOwner": "gsl_response",
+            "expressionAllowed": true
+          }
+        },
+        {
+          "sequence": 69,
+          "t": 2.4858999999999067,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attachment": {
+            "active": false,
+            "reason": "sustained_contact_loss"
+          },
+          "adapter": {
+            "mode": "concern",
+            "event": "unexpected_loss",
+            "active": false,
+            "reason": "sustained_contact_loss"
+          },
+          "guide": {
+            "event": "unexpected_loss",
+            "intention": "concern",
+            "movementOwner": "gsl_response",
+            "expressionAllowed": true
+          }
+        },
+        {
+          "sequence": 88,
+          "t": 3.4003000000002763,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attachment": {
+            "active": true,
+            "reason": "none"
+          },
+          "adapter": {
+            "mode": "support",
+            "event": "attachment_recovered",
+            "active": true,
+            "reason": "none"
+          },
+          "guide": {
+            "event": "attachment_recovered",
+            "intention": "support",
+            "movementOwner": "gsl_response",
+            "expressionAllowed": true
+          }
+        },
+        {
+          "sequence": 92,
+          "t": 3.6003000000002756,
+          "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+          "attachment": {
+            "active": false,
+            "reason": "deliberate_away_input"
+          },
+          "adapter": {
+            "mode": "companion",
+            "event": "deliberate_release",
+            "active": false,
+            "reason": "deliberate_away_input"
+          },
+          "guide": {
+            "event": "deliberate_release",
+            "intention": "companion",
+            "movementOwner": "companion_available",
+            "expressionAllowed": false
+          }
+        }
+      ],
+      "droppedTransitions": 0,
+      "notVerified": [
+        "browser visual quality and human feel",
+        "separate Guide cooldown",
+        "unobserved attachment loss branches"
+      ],
+      "note": "PASS requires observed deliberate release, reason-bearing unexpected loss, recovery, and no recorded chain errors. Authored movement ownership may legitimately suppress Guide movement."
+    }
+  },
+  "errors": [],
+  "naturalUnexpectedLossCoverage": false
+}

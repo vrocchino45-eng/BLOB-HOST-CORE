@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {createChoreography} from './GSL4E1B_Choreography.mjs';
+const core={x:300,y:200},position={x:380,y:130},target={x:450,y:120};
+const c=createChoreography(),run=(state,n=1)=>{let r;for(let i=0;i<n;i++)r=c.step(10,{state,core,position,target});return r};
+assert.equal(run('idle').phase,'drift');
+assert.equal(run('curiosity').phase,'notice');
+assert.equal(run('curiosity',27).phase,'orient');
+assert.equal(run('curiosity',24).phase,'anticipate');
+assert.equal(run('curiosity',22).phase,'approach');
+assert.equal(run('concern').phase,'startle');
+assert.equal(run('concern',19).phase,'recoil');
+assert.equal(run('support').phase,'notice');
+assert.equal(run('support',17).phase,'orient');
+assert.ok(Math.hypot(c.snapshot().target.x-core.x,c.snapshot().target.y-core.y)<=165.0001);
+const x=c.step(10,{state:'curiosity',core,position,target:{x:1000,y:1000}});
+assert.ok(Math.hypot(x.target.x-core.x,x.target.y-core.y)<=165.0001);
+console.log('PASS GSL4E1B: idle, notice, orientation, anticipation, approach, concern interrupt, recoil, support, bounded targets');

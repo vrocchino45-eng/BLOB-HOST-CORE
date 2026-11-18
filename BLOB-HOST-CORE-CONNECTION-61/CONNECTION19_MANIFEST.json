@@ -1,0 +1,55 @@
+{
+  "pass": "CONNECTION19",
+  "baseline": "CONNECTION18 playable build",
+  "states": [
+    {
+      "id": "CONNECTION18",
+      "files": {
+        "src/audio/EventAnchoredHostAudioSystem.js": "1aca02b5326966750baf78739c16dfd8dce8cc54db78aa7852cb936a124f1972",
+        "src/routes/VascularRhythmRouteSystem.js": "48a422c200329e20d3d114d054988d9bba71efd3c6528ea5df32655c1fb7674d",
+        "CONNECTION19_ARRIVAL_AUDIO_CHECK.mjs": null,
+        "CONNECTION19_ARRIVAL_AUDIO_BROWSER.mjs": null
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/audio/EventAnchoredHostAudioSystem.js",
+      "after": "01b760aaa7e0e9cdccf60593b20efad7ab235a679d3b201eaa4ba95caef075e1"
+    },
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "after": "acc17c6a8834a9dbe2504d5dd2839e819d6f43190ed8e0d6b234bf0cd28350cd"
+    },
+    {
+      "path": "CONNECTION19_ARRIVAL_AUDIO_CHECK.mjs",
+      "after": "32598e93e2c693ea501127945eb3056b2b6b1b9baaf9d9108949bc784cc5d216"
+    },
+    {
+      "path": "CONNECTION19_ARRIVAL_AUDIO_BROWSER.mjs",
+      "after": "761d48c16f96049ab315097aba5cce410e98609502ba55f72e897a259649d7fd"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "sha256": "09cccb91a06fa0759e06c646936d57cb1aff7a70e6505ec18cb2b1f7f4bdbd30"
+    },
+    {
+      "path": "src/presentation/CoreSightlinePresentation.js",
+      "sha256": "382a3664f86cadb068d1d860cf61812014b4101e034a565c9a73d94a456b41c6"
+    },
+    {
+      "path": "src/core/HostConnectionReceiptLedger.js",
+      "sha256": "13c95fd61ccec296ef1942bd7f7c912cfb43f89056b12e58925654162ed0dda6"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}

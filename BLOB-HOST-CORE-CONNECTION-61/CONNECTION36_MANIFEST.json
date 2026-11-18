@@ -1,0 +1,144 @@
+{
+  "pass": "CONNECTION36",
+  "baseline": "CONNECTION33; 34/35 verification only",
+  "states": [
+    {
+      "id": "CONNECTION33",
+      "files": {
+        "src/player/CoreRadialPerformanceSystem.js": "a263c0782349c7cb7d03e974517d0c894e3c6a877d114c8f847bf879c33f7f5a",
+        "src/player/CoreStabilizeSample.js": null,
+        "BLOB_BOT_SERIES1/cases/P01.mjs": "90bcab0617604c687bd06bf4edc1ef1fa5b0e8cd018aff7e44a1add86f2c1a3d",
+        "CONNECTION36_CORE_SAMPLE_CHECK.mjs": null,
+        "CONNECTION36_CORE_SAMPLE_BROWSER.mjs": null,
+        "BLOB_CORE_SAMPLE_LAB_BASE.mjs": null
+      }
+    },
+    {
+      "id": "CONNECTION36",
+      "files": {
+        "src/player/CoreRadialPerformanceSystem.js": "c1ce2e2b68ead46428dc5fa8f517ca9d71826f825f81791d1c443214bfd2ad9e",
+        "src/player/CoreStabilizeSample.js": "eaee62d6ab7fba15319a9203c49b1fccde99b80cd99884794f4e7a1795677b43",
+        "BLOB_BOT_SERIES1/cases/P01.mjs": "7839deecd272d644a0f0fb2126737436054bcd8e94a859f86257e0e74b85efce",
+        "CONNECTION36_CORE_SAMPLE_CHECK.mjs": "32b6f7ae0837b51a244fe251aeaf2427489a22a175fa788d0abe1da38ba672ea",
+        "CONNECTION36_CORE_SAMPLE_BROWSER.mjs": "860ffd497e3b2c1f949e0f8f46c73e392ba9833721384666939a17ac6a6b1bde",
+        "BLOB_CORE_SAMPLE_LAB_BASE.mjs": "a263c0782349c7cb7d03e974517d0c894e3c6a877d114c8f847bf879c33f7f5a"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/player/CoreRadialPerformanceSystem.js",
+      "after": "c1ce2e2b68ead46428dc5fa8f517ca9d71826f825f81791d1c443214bfd2ad9e"
+    },
+    {
+      "path": "src/player/CoreStabilizeSample.js",
+      "after": "eaee62d6ab7fba15319a9203c49b1fccde99b80cd99884794f4e7a1795677b43"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/cases/P01.mjs",
+      "after": "7839deecd272d644a0f0fb2126737436054bcd8e94a859f86257e0e74b85efce"
+    },
+    {
+      "path": "CONNECTION36_CORE_SAMPLE_CHECK.mjs",
+      "after": "32b6f7ae0837b51a244fe251aeaf2427489a22a175fa788d0abe1da38ba672ea"
+    },
+    {
+      "path": "CONNECTION36_CORE_SAMPLE_BROWSER.mjs",
+      "after": "860ffd497e3b2c1f949e0f8f46c73e392ba9833721384666939a17ac6a6b1bde"
+    },
+    {
+      "path": "BLOB_CORE_SAMPLE_LAB_BASE.mjs",
+      "after": "a263c0782349c7cb7d03e974517d0c894e3c6a877d114c8f847bf879c33f7f5a"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/SystemRegistry.js",
+      "sha256": "0c983cdc9374e996d7cd59a17b3e8f8872522740e1756f4cd2ebc17fc72e1207"
+    },
+    {
+      "path": "src/core/FirstSliceTransitionCoordinator.js",
+      "sha256": "e4dd502047da841ea96ee468f9f3909080f1bb512ad4c3ae4a395a86162f88df"
+    },
+    {
+      "path": "src/chemistry/BondSystem.js",
+      "sha256": "c99058bec04e5d945b607acd4fe9352002366a7036df2b54259cb6899a08c43e"
+    },
+    {
+      "path": "src/player/CoreGrowthSystem.js",
+      "sha256": "d67b036201919defe629e45302bca6c3cc8c52c6b26eaec67ba1de5952a22684"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "b9c34cab3cdbd75ca7c72fc788c5a1a4b29a4a0e2f7c8daab307c934d2cb7b63"
+    },
+    {
+      "path": "src/routes/GraveMemoryRouteSystem.js",
+      "sha256": "6666a4cfc45b10a4c3f8da1062d8b9f1b2f62bb0c63d5eeebbd681286536735e"
+    },
+    {
+      "path": "src/audio/EventAnchoredHostAudioSystem.js",
+      "sha256": "422947c9573b4a64fd944c82b4e0ab73aa4245aec51a34873d5063c3aa0a7813"
+    },
+    {
+      "path": "src/data/RecipeDataSystem.js",
+      "sha256": "f970f8c9a1271f1845d5001397270a9bca2e82766c7d583748300085e99dc81a"
+    },
+    {
+      "path": "public/data/world/localCellRecipes.json",
+      "sha256": "ae2f8694859c9e3b1ee199584ccdcb63b19921889c450e78b56817e14f2cb3fe"
+    },
+    {
+      "path": "public/data/hosts/HOST_ALPHA_WOUNDED_NURSERY.json",
+      "sha256": "c0a0a3a525571948b5e43fcbc74b10a19c7bd5978eab7f412c9c33f55ea49fb2"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/source-identity.mjs",
+      "sha256": "0208acc12c04f589a745d939376e7804de936674eb9f0766a100711fe2b2ff69"
+    },
+    {
+      "path": "CONNECTION28_BEFORE_SILT.mjs",
+      "sha256": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132"
+    },
+    {
+      "path": "CONNECTION28_PRESSURE_REPLY_CHECK.mjs",
+      "sha256": "d62e237118041a12ab2049f1825c3c002c1e5792c16e5630b55544f0acb5a073"
+    },
+    {
+      "path": "CONNECTION28_PRESSURE_REPLY_BROWSER.mjs",
+      "sha256": "bf27b2cb19617f9ab10509a93a410bd3dd3a8f9a7c787309c35b126a5b649a70"
+    },
+    {
+      "path": "src/chemistry/LocalChemistryContextSystem.js",
+      "sha256": "4c57daa0fae0f6c78ddfd8a0ba363bbaf867f933adddabd0cf5560bbbe4e6807"
+    },
+    {
+      "path": "src/core/SessionTelemetrySystem.js",
+      "sha256": "d67e2ae586ab22a28cfa18aeff7baf0871305df9f2dca42f66f2c5342f3e33f3"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "490b0cf38691251cbe580becb89a825b6c925120b252fab7b3d877862b8a1b1d"
+    },
+    {
+      "path": "src/interaction/MaterialResponseScope.js",
+      "sha256": "a7ca144261337e7b5f23379ee807b5e4ae5f80abf60e4ec7215aa2603dae0873"
+    },
+    {
+      "path": "src/interaction/ReactiveStateGrammarSystem.js",
+      "sha256": "567f30272b2bd26ad4eb91e39887b6dab9b0b010e1685de3dd4c838332d4a28f"
+    },
+    {
+      "path": "src/interaction/ResponsePersonalitySystem.js",
+      "sha256": "f444669eb849f3b53f46f467d95d4154a05c6e049488f82e2ecaf1fc83008ebe"
+    },
+    {
+      "path": "public/data/runtime/act1RuntimeProfile_HC016M.json",
+      "sha256": "0056e8c5aca904283eb924bd85a83b460d45137e9916f3a02f7c5fbf81082979"
+    }
+  ]
+}

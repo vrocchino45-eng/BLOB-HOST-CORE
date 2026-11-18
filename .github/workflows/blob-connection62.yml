@@ -1,0 +1,38 @@
+name: BLOB Connection 62 validation
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Run C62 gate (same checks, normalized provenance)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force C62_RESULTS | Out-Null
+          python tools/connection62/run_gate.py . > C62_RESULTS/gate-result.json
+          $code = $LASTEXITCODE
+          "exit_code=$code" | Out-File C62_RESULTS/status.txt
+          if ($code -ne 0) { exit $code }
+      - name: Upload validation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLOB-C62-validation-${{ github.run_number }}
+          path: C62_RESULTS/
+          if-no-files-found: warn

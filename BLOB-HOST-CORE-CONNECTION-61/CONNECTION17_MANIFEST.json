@@ -1,0 +1,55 @@
+{
+  "pass": "CONNECTION17",
+  "baseline": "CONNECTION15 playable build; CONNECTION16 was audit only",
+  "states": [
+    {
+      "id": "CONNECTION15",
+      "files": {
+        "src/presentation/VisualHierarchyCompressionSystem.js": "f1566fa8ac7694d33582825a385205cd7f4b9a2aeea9f8da10f95f5e666b1722",
+        "src/presentation/CoreSightlinePresentation.js": null,
+        "CONNECTION17_VISIBILITY_CHECK.mjs": null,
+        "CONNECTION17_VISIBILITY_BROWSER.mjs": null
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/presentation/VisualHierarchyCompressionSystem.js",
+      "after": "abe35b351526d8d197e8ac7eb35a41737afd58d581a6c09299636d3bb1bfa62f"
+    },
+    {
+      "path": "src/presentation/CoreSightlinePresentation.js",
+      "after": "382a3664f86cadb068d1d860cf61812014b4101e034a565c9a73d94a456b41c6"
+    },
+    {
+      "path": "CONNECTION17_VISIBILITY_CHECK.mjs",
+      "after": "019f915ceb2af142b96f96e07788732f3ffc10b783b11dd88ecd142fa8c89248"
+    },
+    {
+      "path": "CONNECTION17_VISIBILITY_BROWSER.mjs",
+      "after": "73be7658101da80e1eb1dd15543f669fc4da54185197159d50ddf4b88821a3d5"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132"
+    },
+    {
+      "path": "src/hub/HubInvestigationGameplaySystem.js",
+      "sha256": "ef41a6fa557911413e29f21927d9a39df4b50718c71408a78980a5a8e0d0d9a5"
+    },
+    {
+      "path": "src/guide/GuidePromptSystem.js",
+      "sha256": "a09d93f160eac8c3c28be2e2ce66169ed37206b36462ff94891f35ad35d1728c"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}

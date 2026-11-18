@@ -1,0 +1,32 @@
+{
+  "pass": "C0C2",
+  "status": "OFFLINE_NUMERICAL_PASS_LIVE_TREE_NOT_YET_VERIFIED",
+  "baseline": "LS1E2 + C0C-REC1",
+  "source_file_operations": [
+    {
+      "operation": "CREATE",
+      "path": "src/hostCircuit/BoundedAccumulatorBehavior.js"
+    },
+    {
+      "operation": "CREATE",
+      "path": "scripts/validateC0C2Accumulator.mjs"
+    }
+  ],
+  "modified_files": [],
+  "deleted_files": [],
+  "disabled_files": [],
+  "offline_validation": {
+    "assertions": 24234,
+    "result": "PASS",
+    "native_audited_source_imports": true,
+    "test_tree": "archived source fixtures; not user installation"
+  },
+  "regressions_not_run": [
+    "browser Vite build of user local worktree",
+    "Silt->Vascular gameplay field test after active adapter wiring"
+  ],
+  "source_hashes": {
+    "src/hostCircuit/BoundedAccumulatorBehavior.js": "a9914c3dd954ddd5aac1cd09d3ada7fc6bf4f041c3b6009378e591c78b9a5338",
+    "scripts/validateC0C2Accumulator.mjs": "6c106f3f01f956ede4958004ac5f2f6a70de73c72668d6051f346b8ed787df7a"
+  }
+}

@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {GSL4E2BReadOnlyAdapter} from './GSL4E2B_ReadOnlyAdapter.mjs';
+const a=new GSL4E2BReadOnlyAdapter();
+const frame=(active,detachReason='none')=>Object.freeze({playerAttachment:Object.freeze({active,detachReason})});
+assert.equal(a.sample(frame(true),0).mode,'companion');
+assert.equal(a.sample(frame(false,'deliberate_away_input'),.1).mode,'companion');
+assert.equal(a.sample(frame(true),1).mode,'support');
+assert.equal(a.sample(frame(false,'sustained_contact_loss'),1.1).mode,'concern');
+assert.equal(a.sample(frame(false,'sustained_contact_loss'),3).mode,'companion');
+assert.equal(new GSL4E2BReadOnlyAdapter().sample({},0).mode,'companion');
+console.log('PASS GSL4E2B: read-only, deliberate release, support, unexpected loss, timeout, missing telemetry');

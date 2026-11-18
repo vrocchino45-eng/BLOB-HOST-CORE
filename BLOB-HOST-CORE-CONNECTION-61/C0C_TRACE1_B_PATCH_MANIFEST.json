@@ -1,0 +1,21 @@
+{
+  "pass": "C0C-TRACE1-B",
+  "packageType": "new-files-only guarded patcher",
+  "gameplayFilesToModifyAfterUserApproval": [
+    "src/routes/VascularRhythmRouteSystem.js",
+    "src/debug/WorldObjectCensusSystem.js"
+  ],
+  "deletions": [],
+  "installer": "node scripts/applyC0CTrace1B.mjs --apply",
+  "rollback": "node scripts/applyC0CTrace1B.mjs --revert",
+  "test": "node scripts/validateC0CTrace1B.mjs",
+  "ownerBaseHashes": {
+    "src/routes/VascularRhythmRouteSystem.js": "0ed9698e90625401e14d86f2f8da970590aed0d0bff7a6f6a44c194d98a9dfbe",
+    "src/debug/WorldObjectCensusSystem.js": "05d8eea702871d844b046917b10717ce1512156c31c48d5fcf200958efc93844"
+  },
+  "ownerPatchedHashes": {
+    "src/routes/VascularRhythmRouteSystem.js": "0399843208349c4a6315d4b339f3bc71de859594c0dc07b376a0f6f89cac385d",
+    "src/debug/WorldObjectCensusSystem.js": "2a3e0c4b7a62eeba28ca75b23287ebada3d8068526210a41314fe0675b365d42"
+  },
+  "limitations": "Offline validated only; requires user-local browser/REC1 field test"
+}

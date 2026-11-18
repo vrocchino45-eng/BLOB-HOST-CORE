@@ -1,0 +1,35 @@
+{
+  "pass": "C0C-TRACE1-A",
+  "mode": "read_only_observability",
+  "baseline": "C0C5 accepted REC1 mechanics",
+  "modifiedGameplayFiles": [],
+  "deletedFiles": [],
+  "newFiles": [
+    {
+      "path": "scripts/traceC0CCircuit.mjs",
+      "sha256": "d6961dcc25441f64f855177927055537eccc8a9bac31ec32693191d5c1557735"
+    },
+    {
+      "path": "scripts/testC0CTrace.mjs",
+      "sha256": "1f1b138e364cacb26f5d8a409cd39205f85067904f2b0139874df50da83b7c50"
+    },
+    {
+      "path": "reports/C0C_TRACE1_A_FIELD_TRACE.json",
+      "sha256": "e5e5f74576a7776600fcdfce8a2db6a57184fb1b039cda9548ce41d88c77c3f9"
+    },
+    {
+      "path": "README_C0C_TRACE1_A.md",
+      "sha256": "5b2508e34ec427f6470f90c19f6f16e4d0a3876051afecac8f17aebbbcc8aaf8"
+    },
+    {
+      "path": "C0C_TRACE1_A_TEST_REPORT.md",
+      "sha256": "2e18b960474e764fae60f8bf39e4072d44b611ff9c1a367b100ab0146d971d7d"
+    }
+  ],
+  "sourceAuditReference": "LS1E2 archived VascularRhythmRouteSystem.js; user must rerun --source locally",
+  "limitations": [
+    "No browser runtime trace instrumentation in this pass",
+    "Source signatures are not proof of perception",
+    "No physical material or progression claims"
+  ]
+}

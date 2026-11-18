@@ -1,0 +1,88 @@
+{
+  "pass": "CONNECTION23",
+  "baseline": "CONNECTION22 with CONNECTION21 Absorb feedback",
+  "states": [
+    {
+      "id": "CONNECTION22_WITH21",
+      "files": {
+        "src/routes/VascularRhythmRouteSystem.js": "acc17c6a8834a9dbe2504d5dd2839e819d6f43190ed8e0d6b234bf0cd28350cd",
+        "BLOB_BOT_SERIES1/plan.json": "a20c4036201de37a0ced9f8b30f3b9cb01fda1402f3035b661a36c89f44edd0b",
+        "BLOB_BOT_SERIES1/README.md": "f88258721155bf5617f324c9cd17f8335fd6da68a8f6933e4a831e7a477f6630",
+        "CONNECTION19_ARRIVAL_AUDIO_BROWSER.mjs": "761d48c16f96049ab315097aba5cce410e98609502ba55f72e897a259649d7fd",
+        "CONNECTION23_ARRIVAL_VISUAL_CHECK.mjs": null,
+        "CONNECTION23_ARRIVAL_VISUAL_BROWSER.mjs": null
+      }
+    },
+    {
+      "id": "CONNECTION23",
+      "files": {
+        "src/routes/VascularRhythmRouteSystem.js": "b708e26e71fa8bc1522c4058eec62e220f728ab02054b50ecdfaf94488fcc9f8",
+        "BLOB_BOT_SERIES1/plan.json": "4e54703e22e77af5265452eb36955da774853218073fed31eb53662e75d1ceb2",
+        "BLOB_BOT_SERIES1/README.md": "f53e63fa8f4757585a2c2100af9134893c520f560688c9b084c25e1110bfa70c",
+        "CONNECTION19_ARRIVAL_AUDIO_BROWSER.mjs": "ee687f79f5a7e553b6e6073b912dfb4aa17835f51bf4331f6bad537b8557f2bc",
+        "CONNECTION23_ARRIVAL_VISUAL_CHECK.mjs": "e31ff655eb1ba7d97b8e229108580a27677c07b4d3f23bf0deeea401538e20b1",
+        "CONNECTION23_ARRIVAL_VISUAL_BROWSER.mjs": "9c7e6caf6d2baafd638059c9a5aab6b851712765229852f36aa5320c7acd3bd0"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "path": "src/routes/VascularRhythmRouteSystem.js",
+      "after": "b708e26e71fa8bc1522c4058eec62e220f728ab02054b50ecdfaf94488fcc9f8"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/plan.json",
+      "after": "4e54703e22e77af5265452eb36955da774853218073fed31eb53662e75d1ceb2"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/README.md",
+      "after": "f53e63fa8f4757585a2c2100af9134893c520f560688c9b084c25e1110bfa70c"
+    },
+    {
+      "path": "CONNECTION19_ARRIVAL_AUDIO_BROWSER.mjs",
+      "after": "ee687f79f5a7e553b6e6073b912dfb4aa17835f51bf4331f6bad537b8557f2bc"
+    },
+    {
+      "path": "CONNECTION23_ARRIVAL_VISUAL_CHECK.mjs",
+      "after": "e31ff655eb1ba7d97b8e229108580a27677c07b4d3f23bf0deeea401538e20b1"
+    },
+    {
+      "path": "CONNECTION23_ARRIVAL_VISUAL_BROWSER.mjs",
+      "after": "9c7e6caf6d2baafd638059c9a5aab6b851712765229852f36aa5320c7acd3bd0"
+    }
+  ],
+  "anchors": [
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "e1b4f761221789c78663589d57b5babc68d61532eb53958a5f8a245699214c74"
+    },
+    {
+      "path": "src/core/FirstSliceTransitionCoordinator.js",
+      "sha256": "e4dd502047da841ea96ee468f9f3909080f1bb512ad4c3ae4a395a86162f88df"
+    },
+    {
+      "path": "src/core/HostConnectionReceiptLedger.js",
+      "sha256": "13c95fd61ccec296ef1942bd7f7c912cfb43f89056b12e58925654162ed0dda6"
+    },
+    {
+      "path": "src/routes/VascularSiltSignalReceiver.js",
+      "sha256": "59f3d12d06ff80f9d00d7c056c792b611807a78d74a89c89341dc551c18dfcf4"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "bb462f1da7f65ff9ef727af1658b0847a7df838cbc3448fb3d5bdc03e38ea132"
+    },
+    {
+      "path": "src/audio/EventAnchoredHostAudioSystem.js",
+      "sha256": "01b760aaa7e0e9cdccf60593b20efad7ab235a679d3b201eaa4ba95caef075e1"
+    },
+    {
+      "path": "src/player/CoreVerbPhysicalizationSystem.js",
+      "sha256": "1a6053589b775c3678cf01f7afadc364ee33bedb6e0fe6c4d4dbc0c9ee094c10"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/run.mjs",
+      "sha256": "23421c1153c186b8165695a1c825de1801dbc9e7a98131cee3290fa91f0df9e1"
+    }
+  ]
+}
