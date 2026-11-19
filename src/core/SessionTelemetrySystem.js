@@ -3361,6 +3361,7 @@ export class SessionTelemetrySystem {
   }
 
   exportSession() {
+    const { playtestHud, quickLookInspector } = this.frameState;
     return {
       schemaVersion: this.schemaVersion,
       session: {
@@ -3385,6 +3386,8 @@ export class SessionTelemetrySystem {
       coreSnapshots: this.coreSnapshots,
       developerTruth: {
         localChemistryContext: inspectLocalChemistryContext(this.frameState),
+        wave1Feedback: playtestHud?.active && quickLookInspector?.coreLabelsEnabled
+          ? playtestHud.languageRead?.feedback ?? null : null,
         hostCycle: {
           pass: "HOST-TRACE1", observer: "SessionTelemetrySystem",
           capacity: this.hostCycleDiagnosticCapacity, prunedCount: this.hostCycleDiagnosticPruned,
