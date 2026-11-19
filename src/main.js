@@ -10,11 +10,13 @@ if (!appRoot) {
   throw new Error("[BLOB BOOT] Missing #app root element.");
 }
 
-const coreRepairTrial = new URLSearchParams(window.location.search).get('coreRepairTrial') === '1';
-if (coreRepairTrial) document.title += ' [Core repair trial]';
+// Use the guarded scar repair coupling in standard play. The query value 0
+// selects the original repair rate and 1 keeps the explicit trial marker.
+const coreRepairComparison = new URLSearchParams(window.location.search).get('coreRepairTrial');
+if (coreRepairComparison === '1') document.title += ' [Core repair trial]';
 const runtime = new GameRuntime({
   appRoot,
-  coreRepairTrial,
+  coreRepairTrial: coreRepairComparison !== '0',
   buildId: "HC-031W1",
   buildLabel: "Stabilized Aim + Local Contact Proof"
 });
