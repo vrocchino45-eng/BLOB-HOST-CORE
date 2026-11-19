@@ -23,6 +23,10 @@ export class BondSystem {
     this.resetFrameBondState(this.frameState);
   }
 
+  onRuntimeUnmount(frameState) {
+    this.clearBond(frameState);
+  }
+
   update(dt, frameState) {
     this.recoverFirstSliceScar(dt, frameState);
     const safeSeedLocked = Boolean(frameState.surfaceWakeLayeredInteraction?.blocksSafeSeedAbsorb);
@@ -94,13 +98,14 @@ export class BondSystem {
     const readiness = this.clamp01((this.strength - absorbThreshold * 0.55) / Math.max(absorbThreshold, 0.01));
 
     if (inputAbsorbHeld) {
-      this.applyAbsorbHold(dt, nearest, bondRecipe, {
+      const completed = this.applyAbsorbHold(dt, nearest, bondRecipe, {
         canAbsorb,
         inAbsorbRange: nearest.distance <= effectiveAbsorbRange || Boolean(frameState.interactionAssist?.active && canAbsorb),
         absorbThreshold,
         readiness,
         frameState
       });
+      if (completed) return;
     } else {
       const absorbTuning = frameState.controllerOnboarding?.tuning?.absorbAssist ?? {};
       this.absorbProgress = Math.max(0, this.absorbProgress - dt * (absorbTuning.progressDecayWhenNotHeld ?? 0.55));
@@ -322,6 +327,7 @@ export class BondSystem {
 
     if (this.absorbProgress >= 1) {
       this.finishAbsorb(nearest, frameState);
+      return true;
     }
   }
 
@@ -350,13 +356,25 @@ export class BondSystem {
     this.chemObjectSystem.markAbsorbed(recipe.id);
     frameState.chemObjectState.absorbedObjects += 1;
     frameState.chemObjectState.pulseResponse = `${recipe.id}: absorbed_via_${this.activeBondId}`;
+    frameState.chemObjectState.lastBondAbsorption = {
+      owner: "BondSystem",
+      objectId: recipe.id,
+      cellId: frameState.activeCellId,
+      frame: frameState.frame,
+      substep: frameState.runtimeSimulationSubstepIndex ?? 0
+    };
+    this.clearBond(frameState);
+  }
 
+  clearBond(frameState) {
     this.strength = 0;
     this.absorbProgress = 0;
     this.activeTargetId = null;
     this.activeBondId = "none";
     frameState.currentBond = "none";
-    frameState.currentChemTarget = "none";
+    frameState.chemObjectState.absorbProgress = 0;
+    this.updateNearestReadout(null, frameState);
+    this.resetFrameBondState(frameState);
     this.clearInteractionAssist(frameState);
     this.updateBondVFX(null, frameState);
   }

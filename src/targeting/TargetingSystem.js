@@ -73,6 +73,8 @@ export class TargetingSystem {
     this.explicitLockId = "none";
     this.explicitLockSequence = 0;
     this.explicitLockReason = "not_locked";
+    this.publishedSelectedObject = null;
+    this.worldTargetingSuspended = false;
     this.openAimGlyph = null;
     this.reticle = null;
     this.pointerLine = null;
@@ -125,10 +127,13 @@ export class TargetingSystem {
 
   update(dt, frameState) {
     const ownershipChanged = this.clearForOwnershipChange(frameState);
-    if (ownershipChanged) {
-      this.updateFrameState(frameState, this.resolveRelationshipIntent(frameState.input));
-      return;
+    const coreWorkActive = Boolean(frameState.inspectionCamera?.coreWorkActive
+      || frameState.tightInspectionCamera?.coreWorkActive);
+    if (coreWorkActive && !this.worldTargetingSuspended && !ownershipChanged) {
+      this.clearTargetState(frameState, "targeting_suspended_core_work", { regionOwnership: false });
     }
+    this.worldTargetingSuspended = coreWorkActive;
+    if (ownershipChanged || coreWorkActive) return;
 
     const intent = this.resolveRelationshipIntent(frameState.input);
     const safeDt = Math.max(0, dt ?? 0);
@@ -138,6 +143,7 @@ export class TargetingSystem {
     this.updateRelationship(safeDt, frameState, intent);
     this.target = this.relationshipTarget ?? this.attentionTarget ?? this.candidate;
 
+    this.publishSelectedObject(frameState, this.relationshipTarget ?? this.attentionTarget);
     this.updateFrameState(frameState, intent);
     this.updateReticle(frameState);
     this.updatePointerLine(frameState);
@@ -165,9 +171,7 @@ export class TargetingSystem {
     return cellChanged || mountChanged;
   }
 
-  clearTargetState(frameState, reason = "explicit_target_clear") {
-    this.explicitLockId = "none";
-    this.explicitLockReason = reason;
+  clearTargetState(frameState, reason = "explicit_target_clear", { regionOwnership = true } = {}) {
     this.candidate = null;
     this.target = null;
     this.availableBest = null;
@@ -181,22 +185,33 @@ export class TargetingSystem {
     this.attentionReleaseAge = 0;
     this.attentionCandidateDwellId = "none";
     this.attentionCandidateDwellAge = 0;
-    this.relationshipTarget = null;
-    this.relationshipTargetId = "none";
-    this.relationshipAge = 0;
-    this.relationshipReleaseGraceRemaining = 0;
+    this.releaseRelationship(reason, frameState);
     this.stabilizeSteerDwellId = "none";
     this.stabilizeSteerDwellAge = 0;
     this.candidateSnapshotsById.clear();
     this.clearVisualArtifacts();
-    this.regionClearSequence += 1;
-    this.lastRegionClearReason = reason;
-
-    if (this.playerRoot?.userData) {
-      frameState.selectedObject = this.playerRoot.userData;
+    if (regionOwnership) {
+      this.regionClearSequence += 1;
+      this.lastRegionClearReason = reason;
     }
 
-    frameState.targeting = this.createEmptyTargetingState(frameState, "target_cleared_for_region_ownership");
+    this.publishSelectedObject(frameState, null);
+    const message = regionOwnership ? "target_cleared_for_region_ownership" : reason;
+    frameState.targeting = this.createEmptyTargetingState(frameState, message);
+    frameState.controllerTargetingAudit = this.buildControllerTargetingAudit(
+      frameState, this.resolveRelationshipIntent(frameState.input),
+      { candidate: null, attentionTarget: null, relationshipTarget: null }
+    );
+  }
+
+  publishSelectedObject(frameState, target) {
+    const selected = target?.root?.userData ?? null;
+    if (selected) {
+      frameState.selectedObject = selected;
+    } else if (this.publishedSelectedObject && frameState.selectedObject === this.publishedSelectedObject) {
+      frameState.selectedObject = this.playerRoot.userData;
+    }
+    this.publishedSelectedObject = selected;
   }
 
   createEmptyTargetingState(frameState, message = "no_target") {
@@ -248,6 +263,7 @@ export class TargetingSystem {
 
   clearVisualArtifacts() {
     if (this.reticle) this.reticle.visible = false;
+    if (this.openAimGlyph) this.openAimGlyph.visible = false;
     if (this.pointerLine) this.pointerLine.visible = false;
     if (this.selectedHalo) this.selectedHalo.visible = false;
     if (this.relationshipGlyphRoot) this.relationshipGlyphRoot.visible = false;
@@ -276,10 +292,6 @@ export class TargetingSystem {
       this.releaseAttention("attention_target_invalid");
     } else if (currentSnapshot) {
       this.attentionTarget = currentSnapshot;
-    }
-
-    if (this.attentionTarget?.root?.userData) {
-      frameState.selectedObject = this.attentionTarget.root.userData;
     }
 
     if (!this.attentionTarget) {
@@ -372,9 +384,6 @@ export class TargetingSystem {
       this.releaseAttention("aim_left_hold_cone");
     }
 
-    if (this.attentionTarget?.root?.userData) {
-      frameState.selectedObject = this.attentionTarget.root.userData;
-    }
   }
 
   getTargetScope(target) {
@@ -509,7 +518,7 @@ export class TargetingSystem {
         || this.relationshipTargetId !== this.attentionTargetId
       )
     ) {
-      this.releaseRelationship("attention_owner_released");
+      this.releaseRelationship("attention_owner_released", frameState);
     }
 
     if (intent.active && this.attentionTarget) {
@@ -519,7 +528,7 @@ export class TargetingSystem {
 
       if (!stabilizeEligible) {
         if (this.relationshipTarget) {
-          this.releaseRelationship("stabilize_macro_relationship_suppressed_local_context");
+          this.releaseRelationship("stabilize_macro_relationship_suppressed_local_context", frameState);
           this.stabilizeMacroSuppressionSequence += 1;
         }
       } else {
@@ -537,15 +546,10 @@ export class TargetingSystem {
       this.relationshipReleaseGraceRemaining = Math.max(0, this.relationshipReleaseGraceRemaining - dt);
       this.relationshipAge += dt;
       if (this.relationshipReleaseGraceRemaining <= 0) {
-        this.releaseRelationship("verb_released");
+        this.releaseRelationship("verb_released", frameState);
       }
     }
 
-    if (this.relationshipTarget?.root?.userData) {
-      frameState.selectedObject = this.relationshipTarget.root.userData;
-    } else if (this.attentionTarget?.root?.userData) {
-      frameState.selectedObject = this.attentionTarget.root.userData;
-    }
   }
 
   setRelationshipTarget(target, reason) {
@@ -560,12 +564,15 @@ export class TargetingSystem {
     this.lastRelationshipReason = reason;
   }
 
-  releaseRelationship(reason) {
+  releaseRelationship(reason, frameState) {
     this.relationshipTarget = null;
     this.relationshipTargetId = "none";
     this.relationshipAge = 0;
     this.relationshipReleaseGraceRemaining = 0;
     this.lastRelationshipReason = reason;
+    this.explicitLockId = "none";
+    this.explicitLockReason = reason;
+    this.publishAimLock(frameState, false);
   }
 
   pickTarget(incumbent = null) {
@@ -1106,6 +1113,11 @@ export class TargetingSystem {
       }
       this.explicitLockSequence += 1;
     }
+    this.publishAimLock(frameState, aiming, candidate);
+  }
+
+  publishAimLock(frameState, aiming, candidate = null) {
+    const candidateId = candidate?.recipe?.id ?? "none";
     frameState.cameraAimLock = {
       pass: "LS1D1C", aiming, candidateId,
       candidateAimDot: candidate?.aimDot ?? -1,

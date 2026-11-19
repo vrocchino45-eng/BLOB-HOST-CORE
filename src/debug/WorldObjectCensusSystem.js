@@ -1,5 +1,10 @@
 // LS1D1D2B: read-only identity bridge diagnostic. Does not register targets or alter progression.
+import { SURFACE_MATERIAL_RESPONSE_SCOPE } from '../interaction/MaterialResponseScope.js';
+import { territoryDefinition } from '../world/RegionalTerritoryDefinitions.js';
+
 const safe = value => String(value ?? 'none').slice(0, 100);
+const knownId = value => typeof value === 'string' && value && value !== 'none' ? value : null;
+const STABILIZE_RESPONSES = new Set(['equilibrium_hold', 'stabilized_projection', 'stabilized_draw', 'stabilize_settle']);
 export class WorldObjectCensusSystem {
   constructor({ scene, frameState, hostConnectionReceiptLedger = null }) {
     this.scene = scene;
@@ -1174,6 +1179,85 @@ export class WorldObjectCensusSystem {
     this.updateRecordIndicator('JSON DOWNLOAD REQUESTED · upload observation file');
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+  readVerbDelivery(frameState) {
+    const { input, targeting, verbComposition, pulse, bondState, reactiveStateGrammar, siltPressureRoute, territoryExploration } = frameState;
+    const retainedId = targeting?.relationshipActive === true ? knownId(targeting.relationshipTargetId) : null;
+    const delivery = Object.fromEntries(['pulse', 'absorb', 'stabilize'].map(verb => [verb, {
+      intendedTargetId: retainedId && verbComposition?.owner === 'VerbCompositionSystem'
+        && verbComposition.relationshipBound === true && verbComposition.targetId === retainedId
+        && verbComposition.intent?.[verb] === true ? retainedId : null,
+      recipients: [], ambientEffects: [], status: 'unknown'
+    }]));
+
+    if (pulse?.active === true && Array.isArray(pulse.affectedObjects) && Array.isArray(pulse.ambientObjects)) {
+      // These fields describe the resolved wave. They can outlive the initiating input.
+      delivery.pulse.intendedTargetId = knownId(pulse.relationshipTargetId);
+      const focusedId = knownId(pulse.focusedObject);
+      if (focusedId && pulse.affectedObjects.includes(focusedId)) {
+        delivery.pulse.recipients.push({ owner: 'ChemObjectSystem', targetId: focusedId, effect: 'focused_recoil', scope: 'active_wave' });
+      }
+      for (const id of pulse.ambientObjects) {
+        if (!knownId(id) || id === focusedId || !pulse.affectedObjects.includes(id)) continue;
+        delivery.pulse.ambientEffects.push({ owner: 'ChemObjectSystem', targetId: id, effect: 'ambient_recoil', scope: 'active_wave' });
+      }
+    }
+
+    const completion = frameState.chemObjectState?.lastBondAbsorption;
+    if (completion?.owner === 'BondSystem' && knownId(completion.objectId)) {
+      delivery.absorb.lastCompletion = { ...completion };
+      if (Number.isSafeInteger(completion.frame) && completion.cellId === frameState.activeCellId && completion.frame === frameState.frame
+        && completion.substep === (frameState.runtimeSimulationSubstepIndex ?? 0)) {
+        delivery.absorb.recipients.push({ owner: 'BondSystem', targetId: completion.objectId, effect: 'absorbed', scope: 'current_step' });
+      }
+    }
+    if (input?.absorbHeld && bondState?.active === true && bondState.blockReason === 'absorbing'
+      && bondState.absorbProgress > 0 && knownId(bondState.objectId)) {
+      delivery.absorb.recipients.push({ owner: 'BondSystem', targetId: bondState.objectId, effect: 'drawing', scope: 'current_bond' });
+    }
+
+    const inspecting = [frameState.inspectionCamera, frameState.tightInspectionCamera]
+      .some(camera => camera?.active || camera?.coreWorkActive);
+    if (!inspecting && (input?.stabilizeHeld || input?.resonanceHeld) && retainedId
+      && frameState.activeCellId === SURFACE_MATERIAL_RESPONSE_SCOPE.cellId
+      && reactiveStateGrammar?.owner === 'ReactiveStateGrammarSystem' && reactiveStateGrammar.active === true
+      && reactiveStateGrammar.targetId === retainedId && STABILIZE_RESPONSES.has(reactiveStateGrammar.focus?.lastCause)) {
+      delivery.stabilize.recipients.push({ owner: 'ReactiveStateGrammarSystem', targetId: retainedId, effect: 'stabilize_response', scope: 'current_relationship' });
+    }
+
+    const siltEvents = siltPressureRoute?.transactionTrace?.events;
+    if (siltPressureRoute?.active === true && frameState.activeCellId === territoryDefinition('silt').cell
+      && Array.isArray(siltEvents) && Number.isSafeInteger(frameState.frame)) {
+      for (const event of siltEvents) {
+        if (event.frame !== frameState.frame) continue;
+        if (event.kind === 'held-material-motion' && knownId(event.heldGrainId) && event.appliedDisplacement > 0) {
+          if (event.verb === 'pulse' && event.pulseEventId > 0 && event.pulseEventId === input?.pulseEventId) {
+            delivery.pulse.recipients.push({ owner: 'SiltPressureRouteSystem', targetId: event.heldGrainId, effect: 'held_grain_push', scope: 'current_frame' });
+          } else if (event.verb === 'absorb') {
+            delivery.absorb.recipients.push({ owner: 'SiltPressureRouteSystem', targetId: event.heldGrainId, effect: 'held_grain_pull', scope: 'current_frame' });
+          }
+        } else if (event.kind === 'absorb-route' && event.decision === 'porous-packet-committed' && knownId(event.appetiteObject)) {
+          delivery.absorb.recipients.push({ owner: 'SiltPressureRouteSystem', targetId: event.appetiteObject, effect: 'appetite_committed', scope: 'current_frame' });
+        }
+      }
+    }
+
+    const read = territoryExploration?.lastRead;
+    const region = territoryExploration?.region;
+    if (territoryExploration?.active === true && territoryExploration.owner === `${region}:RegionalTerritoryExpansion`
+      && territoryDefinition(region)?.cell === frameState.activeCellId && read?.region === region
+      && read.kind === 'c0e1_local_exploratory_read' && Object.hasOwn(delivery, read.verb) && knownId(read.siteId)) {
+      delivery[read.verb].lastTerritoryEffect = {
+        owner: territoryExploration.owner, targetId: read.siteId, effect: 'ambient_site_response',
+        scope: 'last_regional_read', sequence: read.localSequence
+      };
+    }
+
+    for (const entry of Object.values(delivery)) {
+      if (entry.recipients.length || entry.ambientEffects.length) entry.status = 'observed';
+    }
+    return delivery;
+  }
+
   snapshot() {
     const groups = new Map();
     let meshes = 0, excluded = 0, named = 0;
@@ -1195,6 +1279,16 @@ export class WorldObjectCensusSystem {
     const candidates = providers.flatMap(p => p?.active && Array.isArray(p.items) ? p.items : []).map(item => ({ id: safe(item.id), label: safe(item.label ?? item.id), source: safe(item.source), kind: safe(item.targetKind) }));
     const silt = fs.siltPressureRoute ?? {};
     const aim = fs.siltMaterialAim ?? {};
+    const targeting = fs.targeting ?? {};
+    const canonicalTargeting = {
+      availableTargetCount: targeting.availableTargetCount ?? 0,
+      candidateId: knownId(targeting.candidateId), candidateScope: targeting.candidateScope ?? 'none',
+      attentionTargetId: knownId(targeting.attentionTargetId),
+      relationshipTargetId: knownId(targeting.relationshipTargetId), relationshipSequence: targeting.relationshipSequence ?? 0,
+      targetId: knownId(targeting.targetId), targetScope: targeting.targetScope ?? 'none'
+    };
+    const externalAttentionCandidates = candidates.slice(0, 300);
+    const verbDelivery = this.readVerbDelivery(fs);
     const knownFamilies = [
       ['guide', /guide_orbiter|guide_path|guide_surface|hub_guide/i],
       ['silt_material', /^silt_LS1B_silt-grain/i],
@@ -1209,24 +1303,29 @@ export class WorldObjectCensusSystem {
       }))
     }));
     const effectiveId = aim.heldId ?? aim.lockedId ?? aim.candidateId ?? null;
-    const materialTarget = {
+    const siltGrip = {
       candidateId: aim.candidateId ?? null,
       lockedId: aim.lockedId ?? null,
       heldId: aim.heldId ?? null,
       effectiveId,
       authority: aim.heldId || aim.lockedId ? 'silt-committed' : aim.candidateId ? 'silt-candidate' : 'none',
       position: silt.siltGrip?.position ?? null,
-      positionMeaning: silt.siltGrip?.position ? 'grip-snapshot-only' : 'unavailable',
-      verbDestinations: {
-        pulse: 'unverified-legacy-route', absorb: 'unverified-legacy-route',
-        stabilize: 'unverified-legacy-route'
-      }
+      positionMeaning: silt.siltGrip?.position ? 'grip-snapshot-only' : 'unavailable'
+    };
+    const materialTarget = {
+      ...siltGrip,
+      // The legacy string can represent a single direct recipient only.
+      verbDestinations: Object.fromEntries(Object.entries(verbDelivery).map(([verb, delivery]) => {
+        const ids = [...new Set(delivery.recipients.map(effect => effect.targetId))];
+        return [verb, ids.length === 1 ? ids[0] : 'unverified-legacy-route'];
+      }))
     };
     return {
       pass: 'LS1D1D2B', timestamp: new Date().toISOString(),
       summary: { renderedPrimitives: meshes, namedPrimitives: named, targetingSuppressedPrimitives: excluded, groupedOwners: groups.size, registeredAttentionCandidates: candidates.length },
       selected: { legacyTarget: fs.targeting?.targetId ?? 'none', legacyLabel: fs.targeting?.targetLabel ?? 'none', legacySource: fs.targeting?.worldAttentionSource ?? 'none', siltGrip: silt.siltGrip ?? null },
-      attentionCandidates: candidates.slice(0, 300),
+      attentionCandidates: externalAttentionCandidates,
+      externalAttentionCandidates, canonicalTargeting, siltGrip, verbDelivery,
       entityBridge: { materialTarget, entityFamilies, note: 'Diagnostic association only. No registration, target routing, or verb behavior modified.' },
       hostConnections: { source: fs.hostConnections ?? null, vascularObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null, vascularLocalResponse: fs.vascularRhythmRoute?.siltSignalResponse ?? null },
       progression: { silt: { active: !!silt.active, completed: !!silt.completed, returnFoldReady: !!silt.returnFoldReady, pressureRead: !!silt.pressureRead, ribsReleased: !!silt.ribsReleased, safeMatterAbsorbed: !!silt.safeMatterAbsorbed, status: safe(silt.status) } },
@@ -1248,7 +1347,22 @@ export class WorldObjectCensusSystem {
     const signalText = response?.receivedTotal > 0
       ? `Silt: ${response.lastSubjectId} / ${response.receivedTotal} received\nVascular membrane: ${response.membraneLoad.toFixed(3)}, flow: ×${response.directionalFlowScale.toFixed(3)}\nNo grain transfer / no route credit`
       : signal?.observedCount > 0 ? `Silt cause: ${signal.mostRecentGrainId} / ${signal.observedCount}\nSignal-only · no material transfer` : `Silt cause: none`;
-    panel.textContent = `WORLD OBJECT CENSUS / LS1E1\nF8 close · F5 export JSON\n\nPrimitives: ${r.summary.renderedPrimitives}\nGrouped owners: ${r.summary.groupedOwners}\nRegistered attention candidates: ${r.summary.registeredAttentionCandidates}\nSuppressed primitives: ${r.summary.targetingSuppressedPrimitives}\n\nLegacy target: ${r.selected.legacyTarget}\nSilt candidate: ${r.entityBridge.materialTarget.candidateId ?? "none"}\nSilt committed: ${r.entityBridge.materialTarget.heldId ?? "none"}\nGuide owners: ${r.entityBridge.entityFamilies[0].owners.length}\nSilt completed: ${r.progression.silt.completed}\nReturn fold ready: ${r.progression.silt.returnFoldReady}\n${signalText}\n\nSCENE GROUPS (top 16)\n${preview}\n\nSnapshot only; no gameplay changes.`;
+    panel.textContent = [
+      'WORLD OBJECT CENSUS / LS1E1', 'F8 close · F5 export JSON', '',
+      `Primitives: ${r.summary.renderedPrimitives}`,
+      `Grouped owners: ${r.summary.groupedOwners}`,
+      `External attention candidates: ${r.summary.registeredAttentionCandidates}`,
+      `Available world targets: ${r.canonicalTargeting.availableTargetCount}`,
+      `Suppressed primitives: ${r.summary.targetingSuppressedPrimitives}`, '',
+      `World target: ${r.canonicalTargeting.targetId ?? 'none'}`,
+      `Retained relationship: ${r.canonicalTargeting.relationshipTargetId ?? 'none'}`,
+      `Silt candidate: ${r.siltGrip.candidateId ?? 'none'}`,
+      `Silt held: ${r.siltGrip.heldId ?? 'none'}`,
+      `Guide owners: ${r.entityBridge.entityFamilies[0].owners.length}`,
+      `Silt completed: ${r.progression.silt.completed}`,
+      `Return fold ready: ${r.progression.silt.returnFoldReady}`, signalText, '',
+      'SCENE GROUPS (top 16)', preview, '', 'Snapshot only'
+    ].join('\n');
     document.body.appendChild(panel); this.panel = panel;
   }
   exportReport() {
