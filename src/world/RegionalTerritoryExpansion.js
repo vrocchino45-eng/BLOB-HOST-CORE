@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { readLocalChemistryContext } from '../chemistry/LocalChemistryContextSystem.js';
 import { c0e2TerritoryPockets } from './RegionalTerritoryVolume.js';
 import { territoryDefinition } from './RegionalTerritoryDefinitions.js';
 import { c0e2bApplyLocalCoupling } from './RegionalTerritoryCoupling.js';
@@ -357,7 +358,8 @@ export class RegionalTerritoryExpansion {
     site.response = Math.min(1, site.response + (verb === 'pulse' ? 0.8 : 0.5));
     const before = {imprint: site.imprint, strain: site.strain, void: site.void};
     const sourceIndex=this.sites.indexOf(site);
-    const result=c0e2bApplyLocalCoupling(this.kind,this.sites,sourceIndex,verb);
+    const hostResponse = this.readHostResponse(verb, frameState);
+    const result = c0e2bApplyLocalCoupling(this.kind, this.sites, sourceIndex, verb, hostResponse);
     const relief=c0e3ApplyPressureRelief(this.kind,this.sites,sourceIndex,result);
     if(relief.applied) this.c0e3ReliefCount++;
     const packets=c0e3CreatePackets(this.kind,sourceIndex,result);
@@ -396,6 +398,22 @@ export class RegionalTerritoryExpansion {
     this.experiments.push(event);
     if (this.experiments.length > 12) this.experiments.shift();
     if (frameState) frameState.territoryExplorationLastRead = event;
+  }
+
+  readHostResponse(verb, frameState) {
+    if (this.kind === 'hub' || frameState?.activeCellId !== this.spec.cell) return null;
+    const composition = frameState.verbComposition;
+    if (composition?.owner !== 'VerbCompositionSystem' || composition.intent?.[verb] !== true) return null;
+    const chemistry = readLocalChemistryContext(frameState);
+    if (!chemistry) return null;
+
+    // observe() has already accepted the release edge or held verb at a site.
+    // Sites are ambient material, so the released Pulse uses its ambient strength.
+    const strength01 = verb === 'pulse'
+      ? (0.65 + 0.35 * territoryClamp01(frameState.input?.pulseReleaseCharge01))
+        * territoryClamp01(composition.effects?.pulseAmbientMultiplier ?? 1)
+      : 1;
+    return { domains: chemistry.domains, strength01 };
   }
 
   snapshot({ signal01 = 0, circuitStatus = 'local', nearestDistance = Infinity, localPosition = null } = {}) {
