@@ -246,7 +246,8 @@ export class ReactiveStateGrammarSystem {
   }
 
   applyStabilize(state, dt, profile, chord, frameState = this.frameState) {
-    // CONNECTION38: opt-in comparison only; normal play keeps factor 1.
+    // Use the prior accepted Core sample for the scoped scar repair. The
+    // baseline comparison and rejected samples keep the original rate.
     const sample = this.repairTrialEnabled && this.scope?.cellId === 'CELL_MEMBRANE_NURSERY_001'
       && state.objectId === 'scar_contamination_plate_001' && frameState.activeCellId === this.scope.cellId
       ? readPriorCoreStabilizeSample(frameState, dt) : null;
