@@ -3,6 +3,7 @@ import { CoreRadialPerformanceSystem } from '../player/CoreRadialPerformanceSyst
 
 export const CORE_LABEL_ZONES = Object.freeze(['deep_core', 'inner_body', 'membrane']);
 const zoneName = id => ({deep_core:'Deep Core', inner_body:'Inner Body', membrane:'Membrane'})[id] ?? 'Unknown zone';
+const zoneGuide = 'Membrane (outer) charges Pulse quickest. Inner Body (middle) balances the tradeoffs. Deep Core (innermost) favors endurance, recovery and stability.';
 const familyName = id => ({grave_memory_retention:'Grave', vascular_rhythm_retention:'Vascular', silt_pressure_retention:'Silt'})[id] ?? 'Unidentified piece';
 const metrics = p => ({
   charge: p.verbModifiers.pulse.chargeRateMultiplier,
@@ -10,7 +11,8 @@ const metrics = p => ({
   absorb: p.verbModifiers.absorb.progressMultiplier,
   coherence: p.verbModifiers.stabilize.coherenceMultiplier,
   recovery: p.traits.recovery,
-  endurance: p.traits.enduranceCapacity
+  endurance: p.traits.enduranceCapacity,
+  stability: p.traits.stability
 });
 const validCounts = c => c && CORE_LABEL_ZONES.every(z => Number.isInteger(c[z]) && c[z] >= 0)
   && CORE_LABEL_ZONES.reduce((sum,z) => sum+c[z],0) === 3;
@@ -82,7 +84,7 @@ export function buildCoreArrangementLabels(f = {}, {repairTrialEnabled = false} 
     selectedId:selected?.pieceId ?? null, current, previews, local,
     guide:inWork ? work.held ? 'Guide holding: movement changes the live arrangement; place to release.'
       : 'Guide selecting: grab a piece to reposition it.' : 'Inspect the Core, then enter Core Work to rearrange it.',
-    scope:'Pulse: charge speed / charged visual echo reach (action range unchanged). Absorb: progress on eligible bonds after committing the hold. Stabilize: coherence / ring acquisition. Higher factors mean faster response or more reserve capacity/recovery. Neutral is ×1.00; these are not completion times.',
+    scope:'Pulse factors describe charge speed and charged visual echo reach. Absorb progress applies after committing to an eligible bond. Stabilize coherence governs ring acquisition. Core stability helps sustain verb performance as reserve drops. Neutral is ×1.00.',
     previewScope:'Move only the selected piece. Preview uses current reserve with no held verb; it does not predict future fatigue, exact geometry patterns or local repair time.',
     suspension:inWork || inInspection ? 'World repair is suspended during inspection and Core Work.' : ''
   };
@@ -140,10 +142,11 @@ export function coreArrangementLabelRows(s) {
   rows.push(...s.pieces.map(p=>({title:`${p.selected?'SELECTED · ':''}${p.family} · ${p.zone}`, text:s.inWork && p.selected ? `Authored role: ${p.meaning}` : ''})));
   if (s.current) {
     rows.push({title:'LIVE VERB FACTORS',text:`Pulse charge ${factor(s.current.charge)} / echo reach ${factor(s.current.reach)} · Absorb progress ${factor(s.current.absorb)} · Stabilize coherence ${factor(s.current.coherence)}`});
-    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${factor(s.current.recovery)} · endurance capacity ${factor(s.current.endurance)}`});
+    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${factor(s.current.recovery)} · endurance capacity ${factor(s.current.endurance)} · Core stability ${factor(s.current.stability)}`});
   }
   if (s.inWork) {
-    for (const p of s.previews) rows.push({title:`${p.current?'CURRENT ZONE':'IF MOVED TO'} · ${p.zoneLabel}`,text:`Pulse charge ${factor(p.charge)} / echo reach ${factor(p.reach)} · Absorb ${factor(p.absorb)} · Stabilize ${factor(p.coherence)} · recovery ${factor(p.recovery)} / endurance ${factor(p.endurance)}`});
+    for (const p of s.previews) rows.push({title:`${p.current?'CURRENT ZONE':'IF MOVED TO'} · ${p.zoneLabel}`,text:`Pulse charge ${factor(p.charge)} / echo reach ${factor(p.reach)} · Absorb ${factor(p.absorb)} · Stabilize ${factor(p.coherence)} · recovery ${factor(p.recovery)} · endurance ${factor(p.endurance)} · stability ${factor(p.stability)}`});
+    rows.push({title:'ZONE TRADEOFFS',text:zoneGuide});
     rows.push({title:'GUIDE / PREVIEW',text:`${s.guide} ${s.previewScope}`});
   }
   rows.push({title:'HERE',text:s.local});
@@ -172,11 +175,12 @@ export function compactCoreArrangementLabelRows(s) {
   else if (s.inWork) rows.push({title:'GUIDE',text:s.pieces.length ? 'Select a retained piece to compare moves.' : 'No retained pieces available to rearrange yet.'});
   if (s.current) {
     rows.push({title:'NOW · COMPARED WITH NEUTRAL',text:`Pulse charge ${percentChange(s.current.charge)} · Absorb progress ${percentChange(s.current.absorb)} · Stabilize coherence ${percentChange(s.current.coherence)}`});
-    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${percentChange(s.current.recovery)} · endurance capacity ${percentChange(s.current.endurance)}`});
+    rows.push({title:'RESERVE TRADEOFF',text:`Recovery ${percentChange(s.current.recovery)} · endurance capacity ${percentChange(s.current.endurance)} · Core stability ${percentChange(s.current.stability)}`});
     if (s.inWork) for (const p of s.previews.filter(p=>!p.current)) {
-      rows.push({title:`IF MOVED TO · ${p.zoneLabel} · VS NOW`,text:`Pulse ${percentChange(p.charge,s.current.charge)} · Absorb ${percentChange(p.absorb,s.current.absorb)} · Stabilize ${percentChange(p.coherence,s.current.coherence)}. Recovery ${percentChange(p.recovery,s.current.recovery)}; endurance ${percentChange(p.endurance,s.current.endurance)}.`});
+      rows.push({title:`IF MOVED TO · ${p.zoneLabel} · VS NOW`,text:`Pulse charge ${percentChange(p.charge,s.current.charge)} · recovery ${percentChange(p.recovery,s.current.recovery)} · endurance ${percentChange(p.endurance,s.current.endurance)} · stability ${percentChange(p.stability,s.current.stability)}`});
     }
   } else rows.push({title:'EFFECTS',text:'Complete, matching Core data is unavailable; no effect estimate shown.'});
+  if (s.inWork) rows.push({title:'ZONE TRADEOFFS',text:zoneGuide});
   rows.push({title:'HERE',text:s.local});
   if (s.suspension) rows.push({title:'WORLD',text:s.suspension});
   rows.push({title:'DETAILS · SHIFT+F4 / DESIGN NOTES',text:'Previews use current reserve with no verb held. Pulse action range is unchanged. Full factors, authored roles and limits are in notes.'});
