@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { GraveVascularEffectMemory } from "./GraveVascularEffectMemory.js";
-import { graveRecoveryCoupling, coreGraveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
+import { coreGraveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
+import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
 
 const ROUTE_CELL_ID = "CELL_GRAVE_MEMORY_RESIDUE_BED_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -48,6 +49,7 @@ export class GraveMemoryRouteSystem {
     this.vascularEffectMemory = new GraveVascularEffectMemory();
     this.c0d2AssistedRecoveryTicks = 0;
     this.c0d2AssistedRecoverySeconds = 0;
+    this.memoryRecoveryWitness = null;
     this.vascularMemoryPresentationSequence = 0;
     this.vascularMemoryPresentationAt = -999;
 
@@ -152,6 +154,7 @@ export class GraveMemoryRouteSystem {
   }
 
   onRuntimeMount(frameState) {
+    this.memoryRecoveryWitness = null;
     this.active = true;
     this.mountCount += 1;
     this.entryAnchor.copy(this.playerRoot.position);
@@ -167,6 +170,7 @@ export class GraveMemoryRouteSystem {
   }
 
   onRuntimeUnmount(frameState) {
+    this.memoryRecoveryWitness = null;
     this.vascularMemoryPresentationAt = -999;
     this.active = false;
     this.setVisible(false);
@@ -215,11 +219,12 @@ export class GraveMemoryRouteSystem {
 
   readVascularMemoryEcho() {
     const age = Math.max(0, this.elapsed - this.vascularMemoryPresentationAt);
-    const arrivalStrength = this.active && age < 2.5
-      ? Math.exp(-age * 1.7) * (0.55 + 0.45 * Math.cos(age * 8)) : 0;
+    const crests = CASCADE_CRESTS.map(crest =>
+      sampleCascadeCrest(this.active ? age : Infinity, crest, 1.18).strength);
+    const arrivalStrength = Math.max(...crests);
     const pressure = THREE.MathUtils.clamp(this.vascularEffectMemory.memoryPressure, 0, 1);
-    const retainedStrength = this.active && pressure > 0 ? 0.06 + pressure * 0.08 : 0;
-    return {arrivalStrength, retainedStrength, strength: Math.max(arrivalStrength, retainedStrength)};
+    const retainedStrength = this.active && pressure > 0 ? 0.07 + Math.sqrt(pressure) * 0.15 : 0;
+    return {arrivalStrength, retainedStrength, strength: Math.max(arrivalStrength, retainedStrength), crests};
   }
 
   readVascularMemoryPresentation(active) {
@@ -726,6 +731,7 @@ export class GraveMemoryRouteSystem {
   }
 
   updateInteractions(dt, frameState) {
+    this.memoryRecoveryWitness = null;
     const input = frameState.input ?? {};
     const pulseEventId = input.pulseEventId ?? (frameState.frame ?? 0);
     const freshPulse = Boolean(input.pulsePressed && pulseEventId !== this.lastPulseEventId);
@@ -760,16 +766,24 @@ export class GraveMemoryRouteSystem {
         && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)
       ) {
         // CONNECTION48: earned Core memory shares, rather than stacks, the existing ceiling.
-        const worldCoupling = graveRecoveryCoupling(this.vascularEffectMemory);
+        const suspended = this.coreRecoverySuspended(frameState);
         const coupling = coreGraveRecoveryCoupling(this.vascularEffectMemory, frameState.coreGrowth,
-          {suspended:this.coreRecoverySuspended(frameState) || !Number.isFinite(dt) || dt<=0});
-        const recoveryRate = (this.recipe?.interaction?.recoveryPerSecond ?? 0.42) * coupling.multiplier;
-        const integrityRate = (this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3) * coupling.multiplier;
-        this.residueRecoilRisk = Math.max(0, this.residueRecoilRisk - dt * recoveryRate);
-        this.traceIntegrity = Math.min(1, this.traceIntegrity + dt * integrityRate);
-        if (worldCoupling.assisted && dt > 0) {
-          this.c0d2AssistedRecoveryTicks = Math.min(1000000, this.c0d2AssistedRecoveryTicks + 1);
-          this.c0d2AssistedRecoverySeconds = Math.min(3600, this.c0d2AssistedRecoverySeconds + dt);
+          { suspended: suspended || !Number.isFinite(dt) || dt <= 0 });
+        const recoilBefore = this.residueRecoilRisk;
+        const integrityBefore = this.traceIntegrity;
+        const recoilRate = this.recipe?.interaction?.recoveryPerSecond ?? 0.42;
+        const integrityRate = this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3;
+        this.residueRecoilRisk = Math.max(0, recoilBefore - dt * (recoilRate * coupling.multiplier));
+        this.traceIntegrity = Math.min(1, integrityBefore + dt * (integrityRate * coupling.multiplier));
+        if (!suspended && input.stabilizeHeld === true && coupling.worldMultiplier > coupling.coreMultiplier && dt > 0) {
+          // Compare the two clamped outcomes so finishing a trace cannot overclaim healing.
+          const recoilWithoutMemory = Math.max(0, recoilBefore - dt * (recoilRate * coupling.coreMultiplier));
+          const integrityWithoutMemory = Math.min(1, integrityBefore + dt * (integrityRate * coupling.coreMultiplier));
+          this.recordMemoryRecovery(frameState, dt, {
+            recoilReduction: recoilWithoutMemory - this.residueRecoilRisk,
+            traceRecovery: this.traceIntegrity - integrityWithoutMemory,
+            baseRecoveryBudget: dt * (recoilRate + integrityRate)
+          });
         }
         if (coupling.coreContributing && dt > 0) {
           this.coreGraveLastAppliedFrame = Number.isSafeInteger(frameState.frame) ? frameState.frame : -1;
@@ -868,6 +882,36 @@ export class GraveMemoryRouteSystem {
       this.warning = "none";
       this.lastInteraction = "grave_memory_preview_completed_without_consuming_remains";
     }
+  }
+
+  recordMemoryRecovery(frameState, dt, { recoilReduction, traceRecovery, baseRecoveryBudget }) {
+    const mount = frameState.firstSliceRuntimeMount;
+    const { activeHostId, frame, runtimeSimulationSubstepIndex: substep } = frameState;
+    const record = this.vascularEffectMemory.records.at(-1);
+    if (!this.active || frameState.activeCellId !== ROUTE_CELL_ID
+      || mount?.activeRuntimeCellId !== ROUTE_CELL_ID || !Array.isArray(mount.activeSystemIds)
+      || !mount.activeSystemIds.includes('graveMemoryRouteSystem')
+      || !Number.isSafeInteger(mount.mountSequence) || mount.mountSequence < 1
+      || !activeHostId || activeHostId !== this.cellRecipe?.derivation?.host
+      || !Number.isSafeInteger(frame) || frame < 0 || !Number.isSafeInteger(substep) || substep < 0
+      || !Number.isSafeInteger(frameState.runtimeSimulationSubstepCount)
+      || substep >= frameState.runtimeSimulationSubstepCount || dt !== frameState.runtimeSimulationSubstepSeconds
+      || frameState.coreWorkManipulation?.held || !record
+      || !Number.isFinite(recoilReduction) || recoilReduction < 0
+      || !Number.isFinite(traceRecovery) || traceRecovery < 0 || !(recoilReduction + traceRecovery > 0)
+      || !Number.isFinite(baseRecoveryBudget) || baseRecoveryBudget <= 0) return;
+
+    this.memoryRecoveryWitness = Object.freeze({
+      owner: 'GraveMemoryRouteSystem', hostId: activeHostId, cellId: ROUTE_CELL_ID,
+      mountSequence: mount.mountSequence, frame, substep, stepSeconds: dt,
+      // The newest accepted record identifies the cumulative memory used here.
+      hostSequence: record.sequence, vascularEffectId: record.vascularEffectId,
+      parentSiltReceiptId: record.parentSiltReceiptId, subjectId: record.subjectId,
+      memoryPressure: this.vascularEffectMemory.memoryPressure,
+      recoilReduction, traceRecovery, baseRecoveryBudget
+    });
+    this.c0d2AssistedRecoveryTicks = Math.min(1000000, this.c0d2AssistedRecoveryTicks + 1);
+    this.c0d2AssistedRecoverySeconds = Math.min(3600, this.c0d2AssistedRecoverySeconds + dt);
   }
 
   applyResidueRisk(sourceId, protectedAttempt) {
@@ -1071,6 +1115,7 @@ export class GraveMemoryRouteSystem {
     });
 
     const siltId = "residue_silt_cloud_001";
+    const memoryEcho = this.readVascularMemoryEcho();
     const siltPulse = pulseStrength(siltId, 1.75);
     const siltRead = this.siltRead ? 1 : 0;
     const align = THREE.MathUtils.clamp(
@@ -1101,9 +1146,11 @@ export class GraveMemoryRouteSystem {
     });
     partsFor(siltId, "silt_threaded_void").forEach((part, index) => {
       restoreTransform(part);
+      const crest = memoryEcho.crests[index % memoryEcho.crests.length];
       part.rotation.z += t * (index % 2 === 0 ? 0.08 : -0.07);
-      part.scale.multiplyScalar(1 + siltPulse * 0.08 + align * 0.045);
-      setOpacity(part, 0.24 + siltRead * 0.08 + siltPulse * 0.12);
+      part.position.y += crest * 0.09;
+      part.scale.multiplyScalar(1 + siltPulse * 0.08 + align * 0.045 + crest * 0.24);
+      setOpacity(part, 0.24 + siltRead * 0.08 + siltPulse * 0.12 + crest * 0.23);
     });
     partsFor(siltId, "silt_signal_thread").forEach((part, index) => {
       restoreTransform(part);
@@ -1116,13 +1163,13 @@ export class GraveMemoryRouteSystem {
       setOpacity(part, 0.18 + siltRead * 0.12 + align * 0.32 + siltPulse * 0.18);
     });
     partsFor(siltId, "silt_memory_echo").forEach((part) => {
-      const echoStrength = Math.max(siltPulse, this.recoveryVisualStrength * 0.38,
-        this.readVascularMemoryEcho().strength);
+      const transient = Math.max(siltPulse, this.recoveryVisualStrength * 0.38, memoryEcho.arrivalStrength);
+      const echoStrength = Math.max(transient, memoryEcho.retainedStrength);
       restoreTransform(part);
       part.visible = this.active && echoStrength > 0.025;
-      part.position.y += echoStrength * 0.32;
-      part.scale.multiplyScalar(0.82 + echoStrength * 0.3);
-      setOpacity(part, echoStrength * 0.3);
+      part.position.y += transient * 0.32;
+      part.scale.multiplyScalar(0.82 + echoStrength * 0.30 + memoryEcho.arrivalStrength * 0.18);
+      setOpacity(part, Math.max(transient * 0.30, memoryEcho.retainedStrength * 0.57));
     });
 
     const scarId = "scar_lock_plate_001";
@@ -1519,23 +1566,22 @@ export class GraveMemoryRouteSystem {
 
     // C0D2 consequence stays in the Grave-owned sidecar. Legacy Grave
     // objectives/stages and Host/Vascular snapshots remain unchanged.
-    const coupling = graveRecoveryCoupling(this.vascularEffectMemory);
+    const coreCoupling = coreGraveRecoveryCoupling(this.vascularEffectMemory, frameState.coreGrowth,
+      {suspended:this.coreRecoverySuspended(frameState)});
+    const memoryCanContribute = coreCoupling.worldMultiplier > coreCoupling.coreMultiplier;
     frameState.graveVascularEffectMemory = {
       ...this.vascularEffectMemory.snapshot({active}),
       gameplayConsequenceApplied: this.c0d2AssistedRecoveryTicks > 0,
       recoveryCoupling: {
         pass: "C0D2", owner: "GraveMemoryRouteSystem",
         mode: "stabilize_recoil_and_trace_recovery_only",
-        multiplier: coupling.multiplier,
+        multiplier: memoryCanContribute ? coreCoupling.worldMultiplier : 1,
         assistedRecoveryTicks: this.c0d2AssistedRecoveryTicks,
         assistedRecoverySeconds: this.c0d2AssistedRecoverySeconds,
-        eligibleNow: Boolean(active && this.circuitEnabled && this.siltRead
-          && this.siltStabilized && (this.residueRecoilRisk > 0 || this.traceIntegrity < 1)
-          && coupling.assisted)
+        eligibleNow: active && this.memoryRecoveryWitness !== null,
+        witness: active ? this.memoryRecoveryWitness : null
       }
     };
-    const coreCoupling = coreGraveRecoveryCoupling(this.vascularEffectMemory, frameState.coreGrowth,
-      {suspended:this.coreRecoverySuspended(frameState)});
     frameState.coreGraveRecovery = {
       pass:"CONNECTION50", owner:"GraveMemoryRouteSystem", active:Boolean(active),
       publishedFrame:Number.isSafeInteger(frameState.frame)?frameState.frame:null,
@@ -1543,7 +1589,8 @@ export class GraveMemoryRouteSystem {
       status:this.coreRecoveryStatus(active,frameState,coreCoupling),
       earned:coreCoupling.earned, multiplier:active?coreCoupling.multiplier:1,
       coreMultiplier:coreCoupling.coreMultiplier, worldMultiplier:coreCoupling.worldMultiplier,
-      source:active?coreCoupling.source:"none", ceiling:1.15,
+      source: !active ? "none" : !memoryCanContribute && coreCoupling.coreMultiplier > 1
+        ? "earned_grave_core" : coreCoupling.source, ceiling:1.15,
       eligibleNow:Boolean(active && this.circuitEnabled && this.siltRead && this.siltStabilized
         && (this.residueRecoilRisk>0 || this.traceIntegrity<1) && frameState.input?.stabilizeHeld
         && this.distanceToObject("residue_silt_cloud_001") <= (this.recipe?.interaction?.stabilizeRange ?? 1.8)

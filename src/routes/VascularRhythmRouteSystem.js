@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { readVascularHostPressure } from "../world/HostConditionSystem.js";
 import { VascularReturnHandoff } from "./VascularReturnHandoff.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
+import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
 import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
 
 const ROUTE_CELL_ID = "CELL_VASCULAR_RHYTHM_ROUTE_001";
@@ -1653,6 +1654,14 @@ export class VascularRhythmRouteSystem {
   applySiltPressureAnatomy() {
     const load = THREE.MathUtils.clamp(this.siltSignalReceiver.membraneLoad, 0, 0.85);
     const age = this.vis1WaveAge;
+    const appliedDelta = this.siltArrivalPresentationEvent?.appliedDelta ?? 0;
+    const [lead, echo] = CASCADE_CRESTS.map(crest => sampleCascadeCrest(age, crest, 5));
+    const leadFold = lead.progress * 13.75;
+    const echoFold = echo.progress * 13.75;
+    // Small committed changes still deserve a visible arrival. This gain is
+    // applied only to mesh transforms and materials, independently of load.
+    const arrivalDrive = appliedDelta > 0 && age < 5
+      ? 0.25 + Math.sqrt(Math.min(1, appliedDelta / 0.195)) * 0.29 : 0;
     const warmth = Math.max(0, 1 - age / 5);
     this.siltArrivalAccent.setRGB(
       0.28 + warmth * 0.64, 0.72 - warmth * 0.15, 0.80 - warmth * 0.55);
@@ -1669,11 +1678,11 @@ export class VascularRhythmRouteSystem {
       for (const [index, fold] of this.wallFolds.entries()) {
         if (!fold) continue;
         const band = Math.pow(0.5 + 0.5 * Math.cos(this.elapsed * 2.05 - index * 0.62), 3);
-        const arrival = age < 5
-          ? Math.max(0, 1 - Math.abs(index - age * 2.15) / 1.35) * (1 - age / 5)
-          : 0;
-        const compression = Math.min(0.26, load * (0.07 + 0.23 * band) + arrival * load * 0.20);
-        const expansion = Math.min(0.33, load * (0.11 + 0.23 * band) + arrival * load * 0.15);
+        const leadingCrest = lead.strength * Math.max(0, 1 - Math.abs(index - leadFold) / 1.06);
+        const trailingCrest = echo.strength * Math.max(0, 1 - Math.abs(index - echoFold) / 0.91);
+        const arrival = arrivalDrive * Math.max(leadingCrest, trailingCrest);
+        const compression = Math.min(0.26, load * (0.07 + 0.23 * band) + arrival * 0.44);
+        const expansion = Math.min(0.33, load * (0.11 + 0.23 * band) + arrival * 0.51);
         fold.scale.x *= 1 - compression;
         fold.scale.z *= 1 - compression * 0.74;
         fold.scale.y *= 1 + expansion;
@@ -1689,12 +1698,12 @@ export class VascularRhythmRouteSystem {
           // A short warm-to-cyan accent travels on the existing folds; ordinary
           // pressure circulation retains its cyan palette. No new geometry.
           if (arrival > 0) {
-            fold.material.emissive?.lerp?.(this.siltArrivalAccent, arrival * 0.72);
+            fold.material.emissive?.lerp?.(this.siltArrivalAccent, arrival * 1.22);
           }
           fold.material.emissiveIntensity = Math.min(1.15,
-            fold.material.emissiveIntensity + load * (0.36 + 0.49 * band) + arrival * load * 0.17);
+            fold.material.emissiveIntensity + load * (0.36 + 0.49 * band) + arrival * 0.56);
           fold.material.opacity = Math.min(0.83,
-            fold.material.opacity + load * (0.16 + 0.32 * band) + arrival * load * 0.07);
+            fold.material.opacity + load * (0.16 + 0.32 * band) + arrival * 0.19);
         }
         peakCompression = Math.max(peakCompression, compression);
         strongestArrival = Math.max(strongestArrival, arrival);
@@ -1732,7 +1741,9 @@ export class VascularRhythmRouteSystem {
       arrivalReceiptId: age < 5 ? this.siltArrivalPresentationEvent?.id ?? null : null,
       arrivalParentSiltReceiptId: age < 5 ? this.siltArrivalPresentationEvent?.parentSiltReceiptId ?? null : null,
       arrivalFrontFold: age < 5 && load > 0
-        ? this.wallFolds[Math.min(this.wallFolds.length - 1, Math.round(age * 2.15))]?.name ?? null : null,
+        ? this.wallFolds[Math.min(this.wallFolds.length - 1, Math.round(leadFold))]?.name ?? null : null,
+      arrivalEchoFold: arrivalDrive > 0 && load > 0 && echo.strength > 0
+        ? this.wallFolds[Math.min(this.wallFolds.length - 1, Math.round(echoFold))]?.name ?? null : null,
       mode: load > 0 ? 'local_pressure_band_and_envelope_reveal' : 'unloaded_no_op',
       tissueState,
       membraneLoad: Number(load.toFixed(5)),
@@ -2091,6 +2102,7 @@ export class VascularRhythmRouteSystem {
     if (typeof document === 'undefined' || !document.body) return;
     if (!this.hostCauseNotice) {
       const notice = document.createElement('div');
+      notice.id = 'vascular-host-cause-notice';
       notice.setAttribute('role', 'status');
       notice.setAttribute('aria-label', 'Vascular remote cause diagnostic');
       notice.style.cssText = 'position:fixed;right:12px;bottom:16px;z-index:99980;pointer-events:none;max-width:min(370px,85vw);padding:8px 10px;background:rgba(8,16,22,.88);border:1px solid rgba(124,181,177,.56);border-radius:7px;color:#bde6da;font:11px/1.45 monospace;white-space:pre-wrap';

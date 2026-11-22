@@ -12,7 +12,7 @@ const W2B3_STAGE_STRESS = Object.freeze({ coherent: 0.08, strained: 0.36, unstab
 const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
 export class TargetingSystem {
-  constructor({ scene, camera, playerRoot, chemObjectSystem, frameState }) {
+  constructor({ scene, camera, playerRoot, chemObjectSystem, frameState, readSiltFlowCandidate = null }) {
     if (!scene) throw new Error("[TargetingSystem] scene is required.");
     if (!camera) throw new Error("[TargetingSystem] camera is required.");
     if (!playerRoot) throw new Error("[TargetingSystem] playerRoot is required.");
@@ -23,6 +23,7 @@ export class TargetingSystem {
     this.playerRoot = playerRoot;
     this.chemObjectSystem = chemObjectSystem;
     this.frameState = frameState;
+    this.readSiltFlowCandidate = readSiltFlowCandidate;
 
     // HC031M: attention owns the noun; verbs only modify the held relationship.
     // AVAILABLE -> CANDIDATE -> ENGAGED -> HELD -> RELEASED is aim-driven.
@@ -650,7 +651,10 @@ export class TargetingSystem {
     const entityProvider = this.frameState.entityAttentionCandidates ?? {};
     const world = worldProvider.active && Array.isArray(worldProvider.items) ? worldProvider.items : [];
     const entities = entityProvider.active && Array.isArray(entityProvider.items) ? entityProvider.items : [];
-    return [...world, ...entities];
+    const candidates = [...world, ...entities];
+    const flow = this.readSiltFlowCandidate?.(this.frameState);
+    if (flow) candidates.push(flow);
+    return candidates;
   }
 
   getWorldAttentionCandidates() {

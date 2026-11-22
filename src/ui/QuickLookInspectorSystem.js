@@ -1,5 +1,6 @@
 import { CORE_VISUAL_PALETTE, resolveCoreFamilyColor, corePaletteHex } from "../visual/CoreVisualPalette.js";
 import { buildCoreArrangementLabels, coreArrangementLabelRows, compactCoreArrangementLabelRows } from './CoreArrangementLabels.js';
+import { readCascadeLabel } from './ContextualWorldLabels.js';
 
 /**
  * LS1C0 — optional, read-only world-design quick look.
@@ -70,6 +71,9 @@ export function buildQuickLookSnapshot(frameState = {}) {
     gap: ['Visual correspondence is NOT automatically measured. Review in gameplay before prescribing a percentage.'],
     status: 'Region identification only; detailed local design sheet not authored yet.'
   };
+  const cascade = readCascadeLabel(frameState);
+  base.history = cascade ? [cascade.history, ...cascade.details] : [];
+  base.flowReadout = frameState.playtestHud?.flowLine ?? '';
 
   if (frameState.activeCellId !== 'CELL_SILT_PRESSURE_ROUTE_001') return base;
 
@@ -245,7 +249,7 @@ export class QuickLookInspectorSystem {
     this.root.tabIndex = 0;
     Object.assign(this.root.style, {
       position: 'fixed', right: '14px', bottom: '51px',
-      width: 'min(375px, calc(100vw - 28px))',
+      width: 'var(--silt-flow-inspector-width, min(375px, calc(100vw - 28px)))',
       maxHeight: 'min(62vh, 560px)', overflowY: 'auto', display: 'none',
       color: '#e8f6ed', background: 'rgba(5,12,17,.95)',
       border: '1px solid rgba(151,220,204,.55)', borderRadius: '12px',
@@ -260,7 +264,8 @@ export class QuickLookInspectorSystem {
     this.coreLabels.id = 'blob-core-arrangement-labels';
     this.coreLabels.setAttribute('aria-label', 'Core arrangement and verb effects');
     Object.assign(this.coreLabels.style, {
-      position:'fixed', right:'14px', top:'14px', width:'min(350px, calc(100vw - 28px))',
+      position:'fixed', right:'14px', top:'14px',
+      width:'var(--silt-flow-inspector-width, min(350px, calc(100vw - 28px)))',
       maxHeight:'calc(100vh - 82px)', overflowY:'auto', boxSizing:'border-box',
       display:'none', padding:'10px 12px', border:'1px solid #9ee9da', borderRadius:'12px',
       background:'rgba(5,16,22,.95)', color:'#e8f6ed', zIndex:'47', pointerEvents:'auto',
@@ -366,6 +371,7 @@ export class QuickLookInspectorSystem {
   // A label is shown only for a live scene owner within camera view. A Silt
   // 'habitat' is an authored zone, NOT a raycast-targetable material object.
   resolveBubbles(snapshot) {
+    if (this.frameState.playtestHud?.contextualLabel) return [];
     const { playerRoot, siltRoute, targetingSystem } = this.sceneRefs ?? {};
     const live = this.frameState.siltPressureRoute ?? {};
     const cycle = live.livingMaterialCycle;
@@ -431,9 +437,9 @@ export class QuickLookInspectorSystem {
 
   // Called after camera update once per rendered frame, not per simulation
   // substep. Update positions only; content is refreshed at 5 Hz by update().
-  syncCamera() {
-    if (!this.open || !this.bubbleLayer || !this.sceneRefs?.camera) return;
-    const { camera, viewportElement } = this.sceneRefs;
+  syncCamera(camera = this.sceneRefs?.camera) {
+    if (!this.open || !this.bubbleLayer || !camera) return;
+    const { viewportElement } = this.sceneRefs;
     const rect = viewportElement?.getBoundingClientRect?.() ?? {
       left: 0, top: 0, width: window.innerWidth, height: window.innerHeight
     };
@@ -517,7 +523,7 @@ export class QuickLookInspectorSystem {
     header.textContent = `WORLD DESIGN // ${snapshot.region}`;
     const hint = document.createElement('div');
     hint.style.cssText = 'font-size:10px;color:#93b4bb';
-    hint.textContent = 'F4 / LB+RB to close · Shift+F4 to hide notes · labels ON · Core arrangement at right · Shift+F4 for notes';
+    hint.textContent = 'F4 / LB+RB to close · Shift+F4 to hide notes';
     const loc = document.createElement('div');
     loc.style.cssText = 'color:#fae4af;font-size:12px;margin-top:9px';
     loc.textContent = `LANDMARK: ${snapshot.landmark}`;
@@ -527,6 +533,8 @@ export class QuickLookInspectorSystem {
     b.append(header, hint, loc, focus);
     const core = buildCoreArrangementLabels(this.frameState, {repairTrialEnabled:this.repairTrialEnabled});
     for (const row of coreArrangementLabelRows(core)) line(b, row.title, row.text ? [row.text] : []);
+    if (snapshot.history.length) line(b, 'WORLD HISTORY', snapshot.history);
+    if (snapshot.flowReadout) line(b, 'FLOW RECEIVER READOUT', [snapshot.flowReadout]);
     line(b, 'HOW TO INTERACT · ACTUAL CONTROLS', snapshot.actions);
     line(b, 'WHAT THE RUNTIME SAYS · IMPLEMENTED', snapshot.live.length ? snapshot.live : [snapshot.status]);
     line(b, '3 → 6 → 12 · CORE ENGINE', [snapshot.phaseExplanation, snapshot.phaseDetail, snapshot.phaseScope]);

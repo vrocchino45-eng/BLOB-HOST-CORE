@@ -490,6 +490,7 @@ export class StatusPageSystem {
         ["Core / authored focus", controller.guideFocus ?? "Y"],
         ["Boost", controller.boost ?? "L3"],
         ["Recenter", controller.recenter ?? "R3"],
+        ...(frameState.cameraControl?.nearWorld ? [["Far / Near World", "D-Pad Left in world"]] : []),
         ["Status Page", controller.statusPage ?? "View / Select"],
         ["Tabs", controller.statusTabs ?? "LB / RB"],
         ["Menu navigation", controller.menuNavigation ?? "D-Pad"]
@@ -505,6 +506,7 @@ export class StatusPageSystem {
         ["Core Work entry", keyboard.coreWorkView ?? "G while in Core Inspection"],
         ["Boost", keyboard.boost ?? "Shift"],
         ["Recenter", keyboard.recenter ?? "R"],
+        ...(frameState.cameraControl?.nearWorld ? [["Far / Near World", "N in world"]] : []),
         ["Status Page", keyboard.statusPage ?? "Tab"]
       ], "") }
       <div style="height:18px"></div>

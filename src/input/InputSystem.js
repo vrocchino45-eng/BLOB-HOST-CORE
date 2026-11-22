@@ -1,8 +1,12 @@
 import { ControlMap, HOST_CORE_CONTROL_MAP_ID } from "./ControlMap.js";
+import { hasSiltFlowTarget, inSiltFlowWorld, SiltFlowTrigger } from "../interaction/SiltFlowContract.js";
 
 export class InputSystem {
-  constructor({ controlMap = new ControlMap() } = {}) {
+  constructor({ controlMap = new ControlMap(), flowExperiment = false, nearWorldExperiment = false } = {}) {
     this.controlMap = controlMap;
+    this.siltFlowTrigger = flowExperiment ? new SiltFlowTrigger() : null;
+    this.nearWorldExperiment = nearWorldExperiment;
+    this.nearWorldToggleSequence = 0;
     this.keys = new Set();
     this.mouseButtons = new Set();
     this.frameInput = this.createEmptyInput();
@@ -16,6 +20,7 @@ export class InputSystem {
       coreWorkView: false,
       guideFocus: false,
       recenter: false,
+      nearWorld: false,
       cancel: false,
       statusPage: false,
       statusPageSource: "none",
@@ -172,6 +177,12 @@ export class InputSystem {
 
     if (event.code === "KeyR" && !event.repeat) {
       this.queued.recenter = true;
+      event.preventDefault();
+    }
+
+    if (this.nearWorldExperiment && event.code === "KeyN" && !event.repeat
+      && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+      this.queued.nearWorld = true;
       event.preventDefault();
     }
 
@@ -376,6 +387,11 @@ export class InputSystem {
     const menuDownPressed = gamepad.menuDownPressed || keyboard.menuDownPressed;
     const menuLeftPressed = gamepad.menuLeftPressed || keyboard.menuLeftPressed;
     const menuRightPressed = gamepad.menuRightPressed || keyboard.menuRightPressed;
+    if (this.nearWorldExperiment && !statusOpen && !inspectionContext && !priorInspection.coreWorkActive
+      && !guideFocusPressed && !statusPageTogglePressed
+      && (gamepad.menuLeftPressed || this.queued.nearWorld)) {
+      this.nearWorldToggleSequence += 1;
+    }
     const coreWorkViewPressed = Boolean(
       coreInspectionContext
       && !statusOpen
@@ -384,7 +400,10 @@ export class InputSystem {
     const coreWorkViewSource = coreWorkViewPressed
       ? (gamepad.coreWorkViewPressed ? "gamepad_dpad_down" : "keyboard_g")
       : "none";
-    const rawAbsorbHeld = keyboard.absorbHeld || gamepad.absorbHeld;
+    const flow = this.siltFlowTrigger?.update(gamepad.absorbTriggerValue,
+      gamepad.connected ? `${this.activeGamepadIndex}:${gamepad.name}` : null,
+      inSiltFlowWorld(frameState) && hasSiltFlowTarget(frameState) && !guideFocusPressed && !statusPageTogglePressed);
+    const rawAbsorbHeld = keyboard.absorbHeld || (gamepad.absorbHeld && !flow?.flowOwnsTrigger);
     const rawStabilizeHeld = keyboard.stabilizeHeld || gamepad.stabilizeHeld;
     const coreWorkManipDepth = coreWorkContext
       ? this.clamp(
@@ -459,6 +478,7 @@ export class InputSystem {
       pulseEffectiveChargeThresholdSeconds: effectivePulseChargeThresholdSeconds,
       pulseEffectiveFullChargeSeconds: effectivePulseFullChargeSeconds,
       absorbHeld,
+      ...(flow ? { flowDemand01: flow.flowDemand01, flowActionSequence: flow.flowActionSequence } : {}),
       stabilizeHeld,
       // Compatibility alias while existing authored interactions are rebound.
       resonanceHeld: stabilizeHeld,
@@ -469,6 +489,7 @@ export class InputSystem {
       recenterCameraPressed,
       // Y/F retains the canonical focus action and now toggles Core self-inspection when no authored focus is adopted.
       toggleInspectionCameraPressed: guideFocusPressed,
+      nearWorldToggleSequence: this.nearWorldToggleSequence,
       statusPageTogglePressed,
       statusPageEventId: this.statusPageSequence,
       statusPageSource,
@@ -704,6 +725,7 @@ export class InputSystem {
     this.queued.coreWorkView = false;
     this.queued.guideFocus = false;
     this.queued.recenter = false;
+    this.queued.nearWorld = false;
     this.queued.cancel = false;
     this.queued.statusPage = false;
     this.queued.statusPageSource = "none";

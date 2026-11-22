@@ -27,6 +27,7 @@ export class WorldObjectCensusSystem {
     this.captureTick = 0;
     this.authorityPrevious = null;
     this.lastSiltDecisionSequence = null;
+    this.lastSiltHeldMotionSequence = null;
     this.lastVascularPresentationSampleMs = null;
     this.lastCircuitState = null;
     this.bot1cLastWitnessSignature = null;
@@ -417,6 +418,7 @@ export class WorldObjectCensusSystem {
         pulseCount: Number(motion.pulseCount ?? 0),
         cumulativePullDistance: Number(motion.cumulativePullDistance ?? 0),
         lastReceipt: motion.lastReceipt ?? null,
+        acceptedMotion: motion.acceptedMotion ?? null,
         transferPerformed: !!motion.transferPerformed
       },
       hostConnections: fs.hostConnections ?? null,
@@ -704,6 +706,29 @@ export class WorldObjectCensusSystem {
     for (const decision of recent) {
       this.recordEvent('silt-authoritative-route-decision', { decision });
       this.lastSiltDecisionSequence = decision.sequence;
+    }
+  }
+  sampleSiltHeldMotion() {
+    const trace = this.frameState?.siltPressureRoute?.heldMaterialMotion?.acceptedMotion;
+    if (!Array.isArray(trace?.samples) || !Number.isSafeInteger(trace.lastSequence)) {
+      this.lastSiltHeldMotionSequence ??= 0;
+      return;
+    }
+    if (this.lastSiltHeldMotionSequence === null) {
+      this.lastSiltHeldMotionSequence = trace.lastSequence;
+      this.recordEvent('silt-accepted-held-motion-baseline', { sequence: trace.lastSequence });
+      return;
+    }
+    const fresh = trace.samples.filter(sample => sample.sequence > this.lastSiltHeldMotionSequence);
+    if (fresh.length && fresh[0].sequence > this.lastSiltHeldMotionSequence + 1) {
+      this.recordEvent('silt-accepted-held-motion-gap', {
+        firstAvailableSequence: fresh[0].sequence,
+        lastRecordedSequence: this.lastSiltHeldMotionSequence
+      });
+    }
+    for (const motion of fresh) {
+      this.recordEvent('silt-accepted-held-motion', { motion });
+      this.lastSiltHeldMotionSequence = motion.sequence;
     }
   }
   timelineSummary() {
@@ -1097,6 +1122,7 @@ export class WorldObjectCensusSystem {
     this.sampleAuthority();
     this.sampleGuide0Witness();
     this.sampleSiltDecisions();
+    this.sampleSiltHeldMotion();
     this.sampleHostConnections();
     this.sampleVascularSiltResponse();
     this.sampleVascularPresentation();
@@ -1131,6 +1157,7 @@ export class WorldObjectCensusSystem {
     this.lastHostConnectionSequence = this.frameState?.hostConnections?.sequence ?? 0;
     this.lastVascularReceivedSequence = this.frameState?.vascularRhythmRoute?.siltSignalResponse?.receivedTotal ?? 0;
     this.capturePrevious = null; this.inputPrevious = null; this.authorityPrevious = null; this.lastSiltDecisionSequence = null;
+    this.lastSiltHeldMotionSequence = null;
     this.lastVascularPresentationSampleMs = null;
     this.lastCircuitVascularSequence = this.hostConnectionReceiptLedger?.vascularEffectSnapshot?.({withRecords:false})?.sequence ?? 0;
     this.lastCircuitGraveSequence = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.({withRecords:false})?.sequence ?? 0;
@@ -1224,15 +1251,29 @@ export class WorldObjectCensusSystem {
       delivery.stabilize.recipients.push({ owner: 'ReactiveStateGrammarSystem', targetId: retainedId, effect: 'stabilize_response', scope: 'current_relationship' });
     }
 
-    const siltEvents = siltPressureRoute?.transactionTrace?.events;
     if (siltPressureRoute?.active === true && frameState.activeCellId === territoryDefinition('silt').cell
-      && Array.isArray(siltEvents) && Number.isSafeInteger(frameState.frame)) {
-      for (const event of siltEvents) {
+      && Number.isSafeInteger(frameState.frame)) {
+      const samples = siltPressureRoute.heldMaterialMotion?.acceptedMotion?.samples;
+      const hasAcceptedMotion = Array.isArray(samples);
+      if (hasAcceptedMotion) {
+        const mountSequence = frameState.firstSliceRuntimeMount?.mountSequence;
+        const currentFrame = samples.filter(sample => sample.frame === frameState.frame && sample.mountSequence === mountSequence);
+        for (const [verb, field, effect] of [['pulse', 'appliedOutward', 'held_grain_push'], ['absorb', 'appliedInward', 'held_grain_pull']]) {
+          const recipients = new Set(currentFrame.filter(sample => sample[verb][field] > 0).map(sample => sample.unitId));
+          for (const targetId of recipients) {
+            if (knownId(targetId)) delivery[verb].recipients.push({ owner: 'SiltPressureRouteSystem', targetId, effect, scope: 'current_frame' });
+          }
+        }
+      }
+      const siltEvents = siltPressureRoute.transactionTrace?.events;
+      for (const event of Array.isArray(siltEvents) ? siltEvents : []) {
         if (event.frame !== frameState.frame) continue;
-        if (event.kind === 'held-material-motion' && knownId(event.heldGrainId) && event.appliedDisplacement > 0) {
+        if (!hasAcceptedMotion && event.kind === 'held-material-motion' && knownId(event.heldGrainId) && event.appliedDisplacement > 0) {
+          // Older publications offer receipt-based evidence. A flush is an
+          // earlier pull even though the receipt carries this frame.
           if (event.verb === 'pulse' && event.pulseEventId > 0 && event.pulseEventId === input?.pulseEventId) {
             delivery.pulse.recipients.push({ owner: 'SiltPressureRouteSystem', targetId: event.heldGrainId, effect: 'held_grain_push', scope: 'current_frame' });
-          } else if (event.verb === 'absorb') {
+          } else if (event.verb === 'absorb' && !event.receiptReason) {
             delivery.absorb.recipients.push({ owner: 'SiltPressureRouteSystem', targetId: event.heldGrainId, effect: 'held_grain_pull', scope: 'current_frame' });
           }
         } else if (event.kind === 'absorb-route' && event.decision === 'porous-packet-committed' && knownId(event.appetiteObject)) {
@@ -1326,6 +1367,7 @@ export class WorldObjectCensusSystem {
       selected: { legacyTarget: fs.targeting?.targetId ?? 'none', legacyLabel: fs.targeting?.targetLabel ?? 'none', legacySource: fs.targeting?.worldAttentionSource ?? 'none', siltGrip: silt.siltGrip ?? null },
       attentionCandidates: externalAttentionCandidates,
       externalAttentionCandidates, canonicalTargeting, siltGrip, verbDelivery,
+      ...(fs.coreFlow ? { siltFlow: fs.coreFlow } : {}),
       entityBridge: { materialTarget, entityFamilies, note: 'Diagnostic association only. No registration, target routing, or verb behavior modified.' },
       hostConnections: { source: fs.hostConnections ?? null, vascularObservation: fs.vascularRhythmRoute?.hostConnectionObservation ?? null, vascularLocalResponse: fs.vascularRhythmRoute?.siltSignalResponse ?? null },
       progression: { silt: { active: !!silt.active, completed: !!silt.completed, returnFoldReady: !!silt.returnFoldReady, pressureRead: !!silt.pressureRead, ribsReleased: !!silt.ribsReleased, safeMatterAbsorbed: !!silt.safeMatterAbsorbed, status: safe(silt.status) } },

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { NearWorldFraming } from "../camera/NearWorldFraming.js";
 import { SystemRegistry } from "./SystemRegistry.js";
 import { FirstSliceTransitionCoordinator } from "./FirstSliceTransitionCoordinator.js";
 import { RuntimeStateLedgerSystem } from "./RuntimeStateLedgerSystem.js";
@@ -29,6 +30,7 @@ import { CoreSurfaceTruthSystem } from "../player/CoreSurfaceTruthSystem.js";
 import { CoreTendrilSupportPlaneSystem } from "../player/CoreTendrilSupportPlaneSystem.js";
 import { CoreEngineSystem } from "../player/CoreEngineSystem.js";
 import { CoreRadialPerformanceSystem } from "../player/CoreRadialPerformanceSystem.js";
+import { CoreFlowSystem } from "../player/CoreFlowSystem.js";
 import { CoreTopologyResonanceSystem } from "../player/CoreTopologyResonanceSystem.js";
 import { CoreTopologyEnvironmentalHandlingSystem } from "../player/CoreTopologyEnvironmentalHandlingSystem.js";
 import { CoreTopologyVerbCharacterSystem } from "../player/CoreTopologyVerbCharacterSystem.js";
@@ -114,11 +116,16 @@ import { ApertureAdjacentTerritorySystem } from "../fields/ApertureAdjacentTerri
 import { GatheringGroundAliveSystem } from "../fields/GatheringGroundAliveSystem.js";
 
 export class GameRuntime {
-  constructor({ appRoot, buildId, buildLabel, coreRepairTrial = false }) {
+  constructor({ appRoot, buildId, buildLabel, coreRepairTrial = false, flowExperiment = false,
+    nearWorldExperiment = false, siltResistanceExperiment = false }) {
     this.appRoot = appRoot;
     this.buildId = buildId;
     this.buildLabel = buildLabel;
     Object.defineProperty(this, 'coreRepairTrial', { value: coreRepairTrial === true, writable: false });
+    this.flowExperiment = flowExperiment === true;
+    this.siltResistanceExperiment = siltResistanceExperiment === true;
+    this.nearWorldFraming = nearWorldExperiment === true ? new NearWorldFraming() : null;
+    this.renderCamera = null;
 
     this.registry = new SystemRegistry();
     this.recipeDataSystem = new RecipeDataSystem({
@@ -2013,7 +2020,10 @@ export class GameRuntime {
   }
 
   createGameplaySystems() {
-    this.inputSystem = new InputSystem();
+    this.inputSystem = new InputSystem({
+      flowExperiment: this.flowExperiment,
+      nearWorldExperiment: Boolean(this.nearWorldFraming)
+    });
     this.deliberateCommitmentSystem = new DeliberateCommitmentSystem({ frameState: this.frameState });
     this.controllerComfortSystem = new ControllerComfortSystem({
       recipeDataSystem: this.recipeDataSystem,
@@ -2299,7 +2309,9 @@ export class GameRuntime {
       camera: this.camera,
       playerRoot: this.playerCore,
       chemObjectSystem: this.chemObjectSystem,
-      frameState: this.frameState
+      frameState: this.frameState,
+      readSiltFlowCandidate: this.flowExperiment ? frameState => this.siltPressureRouteSystem?.territoryExpansion
+        ?.readFlowCandidate(frameState, this.playerCore.position) : null
     });
 
     this.visualHierarchyCompressionSystem = new VisualHierarchyCompressionSystem({
@@ -2403,8 +2415,20 @@ export class GameRuntime {
       scene: this.scene,
       playerRoot: this.playerCore,
       frameState: this.frameState,
-      camera: this.camera
+      camera: this.camera,
+      flowExperiment: this.flowExperiment,
+      siltResistanceExperiment: this.siltResistanceExperiment
     });
+    if (this.flowExperiment) {
+      const silt = this.siltPressureRouteSystem;
+      this.coreFlowSystem = new CoreFlowSystem({
+        playerRoot: this.playerCore,
+        readPatch: frameState => silt.active ? silt.territoryExpansion.readFlowPatch(frameState) : null,
+        acceptFlow: (request, frameState) => silt.active ? silt.territoryExpansion.acceptFlow(request, frameState) : null,
+        readContactSurfaces: () => silt.hcCrawlableSurfaceMeshes,
+        renderReceiver: (state, deliveryProgress) => silt.territoryExpansion?.renderFlowFeedback(state, deliveryProgress)
+      });
+    }
     this.combThresholdFoundationSystem = new CombThresholdFoundationSystem({
       recipeDataSystem: this.recipeDataSystem,
       scene: this.scene,
@@ -2694,6 +2718,12 @@ export class GameRuntime {
     // PlayerMovementController consumes these modifiers on the following frame, preserving
     // movement ownership and preventing radial physiology from moving the player directly.
     this.registry.register("coreRadialPerformanceSystem", this.coreRadialPerformanceSystem);
+    if (this.flowExperiment === true) {
+      this.registry.register("coreFlowSystem", this.coreFlowSystem);
+      this.registry.register("coreFlowReserveSettlement", {
+        update: (dt, frameState) => this.coreRadialPerformanceSystem.settleFlowReserve(dt, frameState)
+      });
+    }
     // HC028H2 translates the canonical topology physiology into presentation/audio
     // character only. It owns no verb strength, range, cost, input or progression.
     this.registry.register("coreTopologyVerbCharacterSystem", this.coreTopologyVerbCharacterSystem);
@@ -2828,7 +2858,7 @@ export class GameRuntime {
     const cameraStart = presentationEnd;
     this.updateCamera(catchUp.simulatedSeconds);
     // LS1C0.1: render-cadence world labels follow the actual camera/Core anchors.
-    this.quickLookInspectorSystem?.syncCamera();
+    this.quickLookInspectorSystem?.syncCamera(this.renderCamera ?? this.camera);
     const cameraEnd = performance.now();
     const cameraUpdateMs = cameraEnd - cameraStart;
 
@@ -2861,7 +2891,7 @@ export class GameRuntime {
     const renderStart = performance.now();
     let renderEnd = renderStart;
     try {
-      this.renderer.render(this.scene, this.camera);
+      this.renderer.render(this.scene, this.renderCamera ?? this.camera);
     } finally {
       renderEnd = performance.now();
       this.firstSliceTransitionCoordinator?.restoreLiveChildAdmission?.();
@@ -3351,6 +3381,15 @@ export class GameRuntime {
       z: this.camera.position.z
     };
 
+    const nearAllowed = !inspectionActive && !hubEstablishing && !inApertureArrival
+      && !signalPlainDebugFramingActive
+      && !(openingCameraBias.active && !manualOverrideActive)
+      && !(cinematicCameraBias.active && !manualOverrideActive);
+    this.renderCamera = this.nearWorldFraming?.update(
+      dt, input.nearWorldToggleSequence, nearAllowed, this.camera, this.playerCore.position,
+      this.coreSurfaceTruthSystem?.candidates ?? []
+    ) ?? this.camera;
+
     this.frameState.cameraControl = {
       mode: inspectionActive ? (inspection.mode ?? "core_self_inspection_orbit") : "player_tethered_orbit",
       yaw: this.cameraYaw,
@@ -3359,6 +3398,14 @@ export class GameRuntime {
       fieldOfView: this.camera.fov,
       worldPosition: cameraWorldPosition,
       worldForward: cameraWorldForward,
+      ...(this.nearWorldFraming && {
+        nearWorld: {
+          selected: this.nearWorldFraming.nearRequested,
+          active: this.renderCamera !== this.camera,
+          obstructed: this.nearWorldFraming.obstructed,
+          eyeDistance: this.renderCamera.position.distanceTo(this.playerCore.position)
+        }
+      }),
       lookX,
       lookY,
       inspectionActive,

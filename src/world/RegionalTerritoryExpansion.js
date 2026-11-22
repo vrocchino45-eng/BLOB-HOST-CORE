@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { readLocalChemistryContext } from '../chemistry/LocalChemistryContextSystem.js';
+import { clampFlow, contactFlowPatch, inSiltFlowWorld, MAX_FLOW_STEP, readFlowAim, readFlowCoreProfile, readFlowStep } from '../interaction/SiltFlowContract.js';
 import { c0e2TerritoryPockets } from './RegionalTerritoryVolume.js';
 import { territoryDefinition } from './RegionalTerritoryDefinitions.js';
 import { c0e2bApplyLocalCoupling } from './RegionalTerritoryCoupling.js';
@@ -39,7 +40,7 @@ const suppress = (object, kind) => {
  * discoveries but never consume input, choose targets or mint Host receipts.
  */
 export class RegionalTerritoryExpansion {
-  constructor({ kind, parent, offset = [0, 0, 0] }) {
+  constructor({ kind, parent, offset = [0, 0, 0], flowExperiment = false }) {
     const spec = territoryDefinition(kind);
     if (!spec || !parent) throw new Error('C0E1 territory requires an existing regional root');
     this.kind = kind;
@@ -54,6 +55,8 @@ export class RegionalTerritoryExpansion {
     };
     this.materials = [];
     this.sites = [];
+    this.flowPatch = null;
+    this.lastFlowResult = null;
     this.elapsed = 0;
     this.lastPulseEventId = null;
     this.lastLocalExperiment = null;
@@ -165,6 +168,8 @@ export class RegionalTerritoryExpansion {
         c0e3Cooldown:0, c0e3ReliefFlash:0,
         pocketVisited: false, pocketBody: null, passage: null });
     });
+    const receiver = flowExperiment && this.sites.find(site => site.flowReceiver);
+    if (receiver) this.createFlowPatch(receiver);
     // C0E2-B: three local site pairs, each with two directed tissue strands.
     // The six directions represent bounded local coupling, NOT Host signal flow.
     this.localLinks = [];
@@ -239,6 +244,136 @@ export class RegionalTerritoryExpansion {
   }
 
   register(material) { this.materials.push(material); return material; }
+
+  createFlowPatch(site) {
+    const spec = site.flowReceiver;
+    const geometry = new THREE.CircleGeometry(spec.radius, 24);
+    const uniforms = {
+      shelfContact: { value: 0 },
+      shelfPressure: { value: 0 },
+      shelfDeliveryProgress: { value: 0 }
+    };
+    const material = this.register(new THREE.MeshBasicMaterial({ color: 0x6dbea9, side: THREE.DoubleSide }));
+    material.onBeforeCompile = shader => {
+      Object.assign(shader.uniforms, uniforms);
+      shader.vertexShader = 'varying vec2 vShelfUv;\n' + shader.vertexShader.replace(
+        '#include <uv_vertex>', '#include <uv_vertex>\nvShelfUv = uv;'
+      );
+      shader.fragmentShader = `
+        varying vec2 vShelfUv;
+        uniform float shelfContact;
+        uniform float shelfPressure;
+        uniform float shelfDeliveryProgress;
+      ` + shader.fragmentShader.replace('#include <color_fragment>', `
+        #include <color_fragment>
+        float shelfRadius = length(vShelfUv * 2.0 - 1.0);
+        float contactRim = smoothstep(0.73, 0.82, shelfRadius) * (1.0 - smoothstep(0.94, 1.0, shelfRadius));
+        float pressure = clamp(shelfPressure / 0.22, 0.0, 1.0);
+        float pressureSpot = 1.0 - smoothstep(0.10, 0.50 + pressure * 0.22, shelfRadius);
+        float arrival = 0.72 + 0.28 * smoothstep(0.58, 1.0, shelfDeliveryProgress);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.42, 1.0, 0.79), pressureSpot * pressure * arrival);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.95, 0.83, 0.56), contactRim * shelfContact * 0.68);
+      `);
+    };
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = spec.id;
+    mesh.position.copy(site.point).add(new THREE.Vector3(...spec.offset));
+    const normal = new THREE.Vector3(...spec.normal).normalize();
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+    // The collar carries the exposed contact face back into the animated shelf.
+    const backingDepth = 0.22;
+    const backing = new THREE.CylinderGeometry(spec.radius, spec.radius * 0.8, backingDepth, 24, 1, true);
+    const collarColor = new THREE.Color(0x46695e);
+    const imprintColor = new THREE.Color(0xb2a075);
+    const collarMaterial = this.register(new THREE.MeshBasicMaterial({ color: collarColor, side: THREE.DoubleSide }));
+    const collar = new THREE.Mesh(backing, collarMaterial);
+    collar.name = spec.id + '_mount';
+    collar.position.copy(mesh.position).addScaledVector(normal, -backingDepth * 0.5);
+    collar.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal);
+    this.root.add(collar, mesh);
+    this.geometries.push(geometry, backing);
+    this.flowPatch = { site, mesh, uniforms, collarMaterial, collarColor, imprintColor };
+  }
+
+  renderFlowFeedback(flow, deliveryProgress) {
+    if (!this.flowPatch) return;
+    const { site, uniforms, collarMaterial, collarColor, imprintColor } = this.flowPatch;
+    const touching = flow?.contactValid && flow.receiverId === site.flowReceiver.id;
+    const result = touching && flow.result === this.lastFlowResult && flow.result?.acceptedCurrent01 > 0 ? flow.result : null;
+    uniforms.shelfContact.value = touching ? 1 : 0;
+    uniforms.shelfPressure.value = result?.pressure01 ?? 0;
+    uniforms.shelfDeliveryProgress.value = result ? deliveryProgress : 0;
+    collarMaterial.color.copy(collarColor).lerp(imprintColor, 0.72 * Math.sqrt(clampFlow(site.imprint)));
+  }
+
+  readFlowPatch(frameState) {
+    if (!this.flowPatch || !inSiltFlowWorld(frameState)) return null;
+    for (let node = this.flowPatch.mesh; node; node = node.parent) {
+      if (!node.visible) return null;
+    }
+    const { site, mesh } = this.flowPatch;
+    const { id, radius, conductivity, resistance } = site.flowReceiver;
+    return {
+      id, siteId: site.id, radius, conductivity, resistance, root: mesh,
+      center: mesh.getWorldPosition(new THREE.Vector3()),
+      normal: new THREE.Vector3(0, 0, 1).applyQuaternion(mesh.getWorldQuaternion(new THREE.Quaternion()))
+    };
+  }
+
+  readFlowCandidate(frameState, playerPosition) {
+    const patch = this.readFlowPatch(frameState);
+    if (!patch || patch.center.distanceTo(playerPosition) > 3.2) return null;
+    return { id: patch.siteId, label: this.flowPatch.site.name, cellId: this.spec.cell, root: patch.root,
+      attentionScope: 'local_object', targetKind: 'silt_flow_receiver', source: 'silt:RegionalTerritoryExpansion' };
+  }
+
+  acceptFlow(request, frameState) {
+    const patch = this.readFlowPatch(frameState);
+    const step = readFlowStep(frameState);
+    const aim = readFlowAim(frameState);
+    const profile = readFlowCoreProfile(frameState);
+    if (!patch || !step || !aim || request.receiverId !== patch.id
+      || Object.keys(step).some(key => request[key] !== step[key])
+      || Object.keys(aim).some(key => request[key] !== aim[key])
+      || Object.keys(profile).some(key => request.profile?.[key] !== profile[key])
+      || !Number.isSafeInteger(request.actionSequence) || request.actionSequence <= 0
+      || request.actionSequence !== frameState.input?.flowActionSequence
+      || !(request.demand01 > 0 && request.demand01 <= 1) || request.demand01 !== frameState.input.flowDemand01
+      || !Number.isFinite(request.dt) || request.dt <= 0 || request.dt > MAX_FLOW_STEP
+      || (frameState.runtimeSimulationSubstepSeconds != null && request.dt !== frameState.runtimeSimulationSubstepSeconds)) return null;
+
+    const last = this.lastFlowResult;
+    if (last && (request.actionSequence < last.actionSequence || step.frame < last.frame
+      || (request.actionSequence === last.actionSequence && (step.mountSequence !== last.mountSequence
+        || step.hostId !== last.hostId || aim.attentionSequence !== last.attentionSequence))
+      || (step.frame === last.frame && step.substep <= last.substep))) return null;
+    const contact = contactFlowPatch(patch, request.origin, request.direction, request.reach);
+    if (!contact) return null;
+
+    const site = this.flowPatch.site;
+    const before = { imprint: site.imprint, strain: site.strain, void: site.void };
+    const resistance01 = clampFlow(patch.resistance + before.imprint * 0.28 + (1 - contact.facing) * 0.28);
+    const acceptedCurrent01 = Math.min(0.55, request.demand01, clampFlow(request.requestedCurrent01))
+      * patch.conductivity * (1 - resistance01);
+    const pressure01 = Math.min(0.22, acceptedCurrent01 * 0.7);
+    site.imprint = clampFlow(before.imprint + pressure01 * request.dt * 0.42);
+    const after = { ...before, imprint: site.imprint };
+    const result = {
+      ...step, ...aim, actionSequence: request.actionSequence, receiverId: patch.id, siteId: site.id,
+      owner: 'silt:RegionalTerritoryExpansion', conductivity01: patch.conductivity, resistance01,
+      profile,
+      acceptedCurrent01, pressure01, before, after, retainedDuringSession: true,
+      materialTransferred: 0, progressionCredit: false, hostReceipt: false
+    };
+    this.lastFlowResult = result;
+    const snapshot = frameState.territoryExploration;
+    if (snapshot?.owner === result.owner && snapshot.active) {
+      frameState.territoryExploration = { ...snapshot, lastFlowResult: result,
+        siteStates: snapshot.siteStates.map(value => value.id === site.id
+          ? { ...value, imprint: Number(site.imprint.toFixed(3)) } : value) };
+    }
+    return result;
+  }
 
   update({ dt = 0, time = 0, playerPosition = null, input = {}, signal01 = 0,
     circuitStatus = 'local', frameState = null } = {}) {
@@ -430,6 +565,7 @@ export class RegionalTerritoryExpansion {
       nearestSiteDistance: Number.isFinite(nearestDistance) ? Number(nearestDistance.toFixed(2)) : null,
       observations: { ...this.observationCount },
       lastRead: this.lastLocalExperiment,
+      ...(this.lastFlowResult ? { lastFlowResult: this.lastFlowResult } : {}),
       c0e2b: {pass:'C0E2-B', links:this.localLinks.length, mechanism:'bounded_local_three_node_coupling',
         lastResponse:this.lastLocalCircuit?.localResponse ?? 'none',
         lastTransmitted:this.lastLocalCircuit?.transmitted ?? 0,

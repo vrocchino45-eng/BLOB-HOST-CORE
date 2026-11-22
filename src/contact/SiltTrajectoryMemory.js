@@ -58,7 +58,7 @@ export class SiltTrajectoryMemory {
     track.position=[...position];
   }
   cancelHold(id){ this.held.delete(id); }
-  release(id, position, {reason='deliberate-release'}={}) {
+  release(id, position, {reason='deliberate-release', releaseContext=null}={}) {
     if(typeof id!=='string'||!finite3(position)||!this.history.has(id)||!this.held.has(id))return null;
     const track=this.held.get(id);
     const heldVelocity=track?.velocity??[0,0,0];
@@ -68,25 +68,45 @@ export class SiltTrajectoryMemory {
     this.held.delete(id);
     // No duplicated records: one unit has exactly one trajectory authority.
     if(!this.free.has(id)&&this.free.size>=this.maxUnits)return null;
-    this.free.set(id,{position:[...position],velocity,seconds:0,nearNative:false,nativeError:null,releaseReason:reason});
+    const record = {position:[...position],velocity,seconds:0,nearNative:false,nativeError:null,releaseReason:reason};
+    if (releaseContext && reason === 'deliberate-release') record.releaseContext = releaseContext;
+    this.free.set(id, record);
     this.history.get(id).releases++;
     this.releases++;this.sequence++;this.lastEvent='released';
     return {outcome:'released-with-trajectory',unitId:id,
       position:roundVec(position),velocity:roundVec(velocity),reason,
       noMaterialTransfer:true,progressionCredit:false};
   }
-  advance(id,dt,nativePoint){
+  readCurrentReleasePosition(id, generation, mountCount) {
+    const record = this.free.get(id);
+    const context = record?.releaseContext;
+    return context && context.generation === generation && context.mountCount === mountCount
+      ? [...record.position] : null;
+  }
+
+  advance(id,dt,nativePoint,resistance=null){
     const record=this.free.get(id);
     if(!record||!finite3(nativePoint))return null;
     // World-space simulation, never an offset drawn from a changing phase.
     // When LS1B changes phase, its native target changes, but the *grain* does
     // not jump. Apply bounded acceleration and a speed limit for any dt.
     let left=Number.isFinite(dt)?Math.max(0,Math.min(dt,0.25)):0;
+    const radiusSquared = resistance ? resistance.radius ** 2 : 0;
     while(left>1e-8){
       const step=Math.min(left,0.025);left-=step;
       const delta=subtract(nativePoint,record.position);
       const accel=limit(subtract(scale(delta,this.spring),scale(record.velocity,this.drag)),this.maxAcceleration);
       record.velocity=limit(vec(record.velocity,scale(accel,step)),this.maxSpeed);
+      if (resistance) {
+        const offset = subtract(record.position, resistance.center);
+        const separationSquared = offset[0] ** 2 + offset[1] ** 2 + offset[2] ** 2;
+        if (separationSquared < radiusSquared) {
+          // Extra drag falls to zero at the boundary. A positive scalar
+          // preserves heading and leaves the native spring and speed cap intact.
+          const rate = resistance.rate * (1 - separationSquared / radiusSquared);
+          record.velocity = scale(record.velocity, Math.exp(-rate * step));
+        }
+      }
       const stepMove=scale(record.velocity,step);
       record.position=vec(record.position,stepMove);
       this.history.get(id).travelDistance+=length(stepMove);

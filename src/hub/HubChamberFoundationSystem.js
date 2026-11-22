@@ -2871,6 +2871,9 @@ export class HubChamberFoundationSystem {
     const complete = Boolean(junctionReadable && layoutReadable && memoryReadable && activeRouteDistinguished);
     const fullHubComplete = Boolean(complete);
     const routeCommit = this.frameState.hubRouteCommit ?? {};
+    const readyRouteNames = active ? routes.filter((route) =>
+      route.activeRoute && route.destinationMounted && route.playableReady && !route.gameplayPending
+    ).map((route) => route.displayName) : [];
     const cameraMode = !active
       ? "inactive"
       : this.reveal < 0.78
@@ -3134,7 +3137,7 @@ export class HubChamberFoundationSystem {
         silt_burrow_route: "lower"
       },
       guideLine: routeCommit.available
-        ? `${routeCommit.displayName} is awake. A commits to this destination and the Hub carries the Core into its mouth.`
+        ? `${routeCommit.displayName} is awake. A / E commits to this destination and the Hub carries the Core into its mouth.`
         : convergenceCompleted
         ? (convergence.guideLine ?? "Memory, rhythm, and pressure now move as one reading without losing their differences.")
         : convergenceActive
@@ -3148,54 +3151,26 @@ export class HubChamberFoundationSystem {
         : returnedGraveImprint
         ? "The Grave did not return as cargo. Its pearl now wakes two different rhythms in the Hub."
         : fullHubComplete
-        ? "The three territories and the core now read together. Grave Memory can be crossed."
-        : complete
-          ? "Three route bodies stand apart. Choose an available destination; route and memory readings are optional."
-          : (language.revealingGuide ?? "The Chorus is becoming a junction."),
+        ? "The three territories and the Core now read together. Route and memory readings are optional."
+        : (language.revealingGuide ?? "The Chorus is becoming a junction."),
       objectiveLine: routeCommit.available
-        ? `Press A to enter ${routeCommit.displayName}.`
+        ? `Press A / E to enter ${routeCommit.displayName}.`
         : convergenceCompleted
         ? "The combined reading has opened the Comb Threshold foundation. Aperture remains sealed beyond it."
         : convergenceActive
         ? (convergence.objectiveLine ?? "Approach the Combward body when it wakes and press A to commit.")
-        : returnedSiltPressure
-        ? (this.recipeDataSystem.data.siltPressureReturnConsequence?.playerFacingLanguage?.objectiveLine
-          ?? "All three route readings are retained separately in the Hub.")
-        : returnedVascularCadence
-        ? siltPlayable
-          ? "Vascular Rhythm is retained. Silt Pressure now accepts passage."
-          : (this.recipeDataSystem.data.vascularRhythmReturnConsequence?.playerFacingLanguage?.objectiveLine
-            ?? "Vascular Rhythm is retained. Silt Pressure remains awake but closed.")
-        : returnedGraveImprint
-        ? "Grave Memory is retained. Vascular Rhythm accepts passage; Silt Pressure answers but remains closed."
-        : fullHubComplete
-        ? "First-slice Hub reading complete. Grave Memory is crossable; the two dormant routes remain closed."
-        : complete
-          ? "Move among the separated route bodies; Pulse is optional inquiry, not a departure requirement."
-          : (language.revealingObjective ?? "Let the anatomical route territories finish separating."),
+        : readyRouteNames.length
+          ? `Routes ready to approach: ${readyRouteNames.join(", ")}.`
+          : "Wait for a route body to finish preparing.",
       nextAction: routeCommit.available
-        ? `Press A to commit to ${routeCommit.displayName}.`
+        ? `Press A / E to enter ${routeCommit.displayName}.`
         : convergenceCompleted
         ? "Move to the six-rib Combward body; press A when it brightens to commit to passage."
         : convergenceActive
         ? (convergence.nextAction ?? convergence.objectiveLine ?? "Let the returned route consequences resolve; then approach the Combward destination.")
-        : returnedSiltPressure
-        ? (this.recipeDataSystem.data.siltPressureReturnConsequence?.playerFacingLanguage?.nextAction
-          ?? "Observe the three retained route readings; convergence is the next pass.")
-        : returnedVascularCadence
-        ? siltPlayable
-          ? "Enter the lower Silt body. Pulse its compression, brace the ribs, and choose porous matter carefully."
-          : (this.recipeDataSystem.data.vascularRhythmReturnConsequence?.playerFacingLanguage?.nextAction
-            ?? "Observe the shared cadence; no additional Vascular trigger is required.")
-        : returnedGraveImprint
-        ? "Enter the upper Vascular body, follow its moving charge, and pulse when each valve brightens."
-        : fullHubComplete
-        ? "Approach Grave Memory; press A when its body brightens to commit to passage."
-        : hubInvestigation.investigationReady
-          ? "The Hub reading is complete. Choose which living condition draws your attention."
-          : complete
-            ? "Approach the awake route body you want to enter and press A when it brightens."
-            : (language.nextAction ?? "Let the junction finish separating its route identities."),
+        : readyRouteNames.length
+          ? "Approach an available route body. Press A / E when offered."
+          : "No Hub route is ready yet.",
       blocker: fullHubComplete
         ? "none_detected"
         : complete

@@ -2,7 +2,9 @@
 const SPECS = Object.freeze({
   silt: { cell: 'CELL_SILT_PRESSURE_ROUTE_001', palette: [0x8c6943, 0xb68b52, 0xe1b980],
     sites: [
-      { id: 'silt_porosity_shelf', name: 'Porosity Shelf', point: [-2.45, -0.72, -5.8], question: 'How does loosened matter settle?' },
+      { id: 'silt_porosity_shelf', name: 'Porosity Shelf', point: [-2.45, -0.72, -5.8], question: 'How does loosened matter settle?',
+        flowReceiver: { id: 'silt_porosity_shelf_front', offset: [0, 0.18, 0.95], normal: [0, 0.36, 0.93],
+          radius: 0.22, conductivity: 0.72, resistance: 0.31 } },
       { id: 'silt_catchment_bowl', name: 'Catchment Bowl', point: [2.65, -0.9, -10.45], question: 'Can pressure leave a persistent shape?' },
       { id: 'silt_deep_reservoir', name: 'Deep Reservoir', point: [-2.35, -0.6, -15.35], question: 'Which material returns after release?' }
     ] },

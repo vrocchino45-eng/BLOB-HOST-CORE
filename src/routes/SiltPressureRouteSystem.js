@@ -9,10 +9,16 @@ import { SiltPlateSeat } from "../contact/SiltPlateSeat.js";
 import { SiltTrajectoryMemory } from "../contact/SiltTrajectoryMemory.js";
 import { SiltTrajectoryFieldProbe } from "../contact/SiltTrajectoryFieldProbe.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
+import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
 const RECIPE_ID = "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A";
+const RELEASE_CREST_NORMAL = new THREE.Vector3(0, 0, 1);
+const GARDEN_SEEP_IMPRINT_PER_ARRIVAL = 1 / 8;
+const GARDEN_SEEP_ARRIVAL_SECONDS = 1.2;
+const SILT_BUD_RESISTANCE = Object.freeze({ radius: 0.85, rate: 0.28 });
+const HELD_MOTION_SAMPLE_LIMIT = 64;
 
 /**
  * HC-012A owns Silt Pressure gameplay and presentation while the route is
@@ -22,7 +28,10 @@ const RECIPE_ID = "SILT_PRESSURE_PLAYABLE_CIRCUIT_HC012A";
  * player or mutates objective, gate, active-cell, or route-history truth.
  */
 export class SiltPressureRouteSystem {
-  constructor({ recipeDataSystem, scene, playerRoot, frameState, camera, hostConnectionReceiptLedger = null }) {
+  constructor({ recipeDataSystem, scene, playerRoot, frameState, camera, hostConnectionReceiptLedger = null,
+    flowExperiment = false, siltResistanceExperiment = false }) {
+    this.flowExperiment = flowExperiment;
+    this.siltResistanceExperiment = siltResistanceExperiment;
     if (!recipeDataSystem) throw new Error("[SiltPressureRouteSystem] recipeDataSystem is required.");
     if (!scene) throw new Error("[SiltPressureRouteSystem] scene is required.");
     if (!playerRoot) throw new Error("[SiltPressureRouteSystem] playerRoot is required.");
@@ -59,6 +68,7 @@ export class SiltPressureRouteSystem {
     // D2O1: independent native-path attraction for deliberately released
     // unseated units. No new material and no mutation to the LS1B phase clock.
     this.siltTrajectory = new SiltTrajectoryMemory();
+    this.siltResolvedTrajectories = new Map();
     // D2P1: read-only evidence for travel between existing Silt cavities.
     this.siltTrajectoryField = new SiltTrajectoryFieldProbe();
     this.siltTrajectoryTrails = [];
@@ -93,6 +103,8 @@ export class SiltPressureRouteSystem {
     this.habitatDriftPositions = null;
     this.habitatDriftSeeds = [];
     this.livingCycle = null;
+    this.gardenSeepBed = null;
+    this.gardenSeep = { imprint: 0, lastSeenSequence: 0, lastDelivery: null, arrivalAt: null };
     this.siltGrip = new SiltGripAuthority();
     this.materialIdentity = null;
     this.siltGripLocalOffset = new THREE.Vector3(0, 0.1, -0.9);
@@ -103,6 +115,7 @@ export class SiltPressureRouteSystem {
     this.heldAbsorbReportSeconds = 0;
     this.heldAbsorbReportDistance = 0;
     this.heldMotionLast = null;
+    this.heldMotionSamples = [];
     this.heldMotionPulseCount = 0;
     this.heldMotionPullDistance = 0;
     this.heldMotionFeedbackKind = 'none';
@@ -193,6 +206,9 @@ export class SiltPressureRouteSystem {
 
     // HC018D: retained consequence presentation only.
     this.retainedDepletionStrength = 0;
+    this.releaseCrestReceipt = null;
+    this.releaseCrestAt = 0;
+    this.releaseCrestDirection = new THREE.Vector3();
   }
 
   init() {
@@ -243,6 +259,8 @@ export class SiltPressureRouteSystem {
 
   onRuntimeUnmount(frameState) {
     this.returnRoundTrip.suspend();
+    this.gardenSeep.arrivalAt = null;
+    this.animateGardenSeepBed();
     // LS1D1D2K: region exit is a real release transaction. There may not be
     // another Silt update after unmount to reconcile the grip with the ledger.
     // Flush the pending pull and restore any stranded grip owner first.
@@ -263,6 +281,7 @@ export class SiltPressureRouteSystem {
     }
     this.active = false;
     this.gravePressureReliefPresentationAt = -999;
+    this.clearReleaseCrests();
     this.siltGrip.release();
     this.heldPulsePending = false;
     this.heldAbsorbId = null;
@@ -321,6 +340,7 @@ export class SiltPressureRouteSystem {
         this.materialIdentity.transfer(unit.id, unit.id === this.siltGrip.heldId ? "grip" : "environment", "individual");
       }
     }
+    const gardenStep = this.readGardenSeepStep(frameState, dt);
     this.livingCycle?.update(dt, {
       heldUnitId: this.siltGrip.heldId,
       withheldUnitIds: [this.siltGrip.heldId, this.siltPlateSeat.unitId].filter(Boolean),
@@ -329,7 +349,9 @@ export class SiltPressureRouteSystem {
       pulseEventId: frameState.input?.pulseEventId ?? frameState.frame,
       stabilizeHeld: Boolean(frameState.input?.stabilizeHeld)
     });
-    this.animateLivingMatter(dt);
+    this.advanceSiltTrajectories(dt, frameState);
+    this.animateLivingMatter();
+    this.receiveGardenSeepArrivals(frameState, dt, gardenStep);
     this.updateReturnRoundTrip(frameState);
     this.siltTrajectoryField.sample(dt, this.siltTrajectory.snapshot().units,
       this.recipe?.habitatFoundation?.habitats ?? []);
@@ -341,6 +363,7 @@ export class SiltPressureRouteSystem {
     this.animateHabitatFoundation(frameState);
     this.applyHostRhythmVisual(frameState);
     this.applyGravePressureReplyVisual();
+    this.updateReleaseCrests();
     this.territoryExpansion?.update({dt, time: this.elapsed, playerPosition: this.playerRoot.position,
       input: frameState.input, signal01: territorySignal("silt", {siltPressureEcho: this.graveIIPressureEcho}),
       circuitStatus: this.graveIIReceiptId ? "grave_ii_outcome_consumed" : "no_return_outcome_yet", frameState});
@@ -595,6 +618,7 @@ export class SiltPressureRouteSystem {
       genericRings: 0,
       triggerMarkers: 0
     });
+    this.createReleaseCrests();
 
     const visual = this.recipe.visual ?? {};
     const envelopeMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
@@ -661,7 +685,9 @@ export class SiltPressureRouteSystem {
     this.createHCCrawlableSurfaces();
     this.createDeepOrgan();
     this.createReturnFold();
-    this.territoryExpansion = new RegionalTerritoryExpansion({kind: "silt", parent: this.root});
+    this.territoryExpansion = new RegionalTerritoryExpansion({
+      kind: "silt", parent: this.root, flowExperiment: this.flowExperiment
+    });
     this.scene.add(this.root);
   }
 
@@ -911,12 +937,19 @@ export class SiltPressureRouteSystem {
 
       // Deposited stone/silt sits low and outboard. The center stays open;
       // a viewer can recognize a cavern rather than a spherical membrane.
-      const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+      const bed = new THREE.Mesh(bedGeometry,
+        habitat.id === "garden" ? this.trackMaterial(bedMaterial.clone()) : bedMaterial);
       bed.name = `silt_${habitat.id}_sediment_catchment_bed`;
       bed.position.set(0, -habitat.radii[1] * 0.96, 0);
       bed.scale.set(habitat.radii[0] * 0.83, 0.24, habitat.radii[2] * 0.81);
       bed.userData.targetingSuppressed = true;
       body.add(bed);
+      if (habitat.id === "garden") {
+        this.gardenSeepBed = {
+          mesh: bed, area: habitat, restY: bed.position.y, restHeight: bed.scale.y,
+          restOpacity: bed.material.opacity, restEmissive: bed.material.emissiveIntensity
+        };
+      }
 
       // Big displaced inclusions: an overhead rock mass, two opposing
       // shoulders, and lateral accumulated silt. Never place across a
@@ -1070,6 +1103,11 @@ export class SiltPressureRouteSystem {
         reservoirToGarden.from, reservoirToGarden.bend, reservoirToGarden.to]),
       returning: makeCurve([reservoirToGarden.to, reservoirToGarden.bend, reservoirToGarden.from])
     };
+    if (this.gardenSeepBed) {
+      const direction = this.livingMatterPaths.garden_transit.getTangentAt(1);
+      direction.y = 0;
+      this.gardenSeepBed.direction = direction.normalize();
+    }
     this.livingMatterLocations = { reservoir: v(byId.reservoir), garden: v(byId.garden) };
     const fragmentMaterial = this.trackMaterial(new THREE.MeshStandardMaterial({
       color: 0xcaa36c, emissive: 0x725038, emissiveIntensity: 0.22,
@@ -1107,7 +1145,7 @@ export class SiltPressureRouteSystem {
       bud.userData.targetingSuppressed = true;
       body.add(fragment, bud);
       this.livingMatterGroup.add(body);
-      this.livingMatterMeshes.push({ body, fragment, bud });
+      this.livingMatterMeshes.push({ unitId: unit.id, body, fragment, bud });
       // Each existing identity gets a minimal *visual-only* directional wake.
       // This is not another grain, pickup, contact, or targeting candidate.
       const trailGeometry = new THREE.BufferGeometry();
@@ -1444,7 +1482,9 @@ export class SiltPressureRouteSystem {
           this.siltTrajectory.cancelHold(held.id);
         } else if (this.siltGrip.position) {
           const trajectory = this.siltTrajectory.release(held.id, this.siltGrip.position, {
-            reason: coreWorkSuspended ? 'core-work-suspended' : 'deliberate-release'
+            reason: coreWorkSuspended ? 'core-work-suspended' : 'deliberate-release',
+            releaseContext: this.siltResistanceExperiment
+              ? { generation: held.generation, mountCount: this.mountCount } : null
           });
           if (trajectory) this.recordSiltDecision('silt-trajectory', trajectory, frameState);
         }
@@ -1457,14 +1497,11 @@ export class SiltPressureRouteSystem {
         this.heldMotionFeedbackKind = 'none';
         this.heldGripInitialRadius = null;
       } else {
-        this.updateHeldMaterialMotion(dt, frameState);
+        const pulseDisplacement = this.updateHeldMaterialMotion(dt, frameState, held.generation) ?? 0;
         if (this.siltGrip.position) {
-          const last = this.heldMotionLast;
-          const pulseMoved = input.pulsePressed && last?.verb === 'pulse'
-            && last?.pulseEventId === input.pulseEventId ? last.appliedDisplacement : 0;
           this.siltTrajectory.sampleHeld(held.id, this.siltGrip.position, dt, {
-            pulseDirection: pulseMoved > 0 ? this.siltGripLocalOffset.toArray() : null,
-            pulseDisplacement: pulseMoved,
+            pulseDirection: pulseDisplacement > 0 ? this.siltGripLocalOffset.toArray() : null,
+            pulseDisplacement,
             braced: Boolean(this.siltContact?.braced)
           });
         }
@@ -1499,6 +1536,12 @@ export class SiltPressureRouteSystem {
           const seatedPosition = this.localPlayer.clone().add(seatedOffset).toArray();
           if (this.siltGrip.moveTo(seatedPosition, coreLocal)) {
             this.siltGripLocalOffset.copy(seatedOffset);
+            this.recordAcceptedHeldMotion(frameState, dt, {
+              kind: 'grip-acquisition', unitId: best.unit.id, generation: best.unit.generation,
+              corePosition: coreLocal, startPosition: best.position,
+              pulse: { eventId: null, requestedOutward: 0, appliedOutward: 0, braced: false },
+              absorb: { requestedInward: 0, appliedInward: 0, receiptMode: 'none' }
+            });
           }
         }
         this.heldGripInitialRadius = Number(this.siltGripLocalOffset.length().toFixed(4));
@@ -1534,7 +1577,8 @@ export class SiltPressureRouteSystem {
   flushHeldAbsorbMotion(frameState, reason = 'absorb-ended') {
     const id = this.siltGrip.heldId;
     const amount = this.heldAbsorbReportDistance;
-    if (id && amount > 0.0001) {
+    const flushed = Boolean(id && amount > 0.0001);
+    if (flushed) {
       const receipt = {
         verb: 'absorb', heldGrainId: id, outcome: 'inward-displacement',
         resultingRadius: Number(this.siltGripLocalOffset.length().toFixed(4)),
@@ -1548,15 +1592,17 @@ export class SiltPressureRouteSystem {
     this.heldAbsorbReportDistance = 0;
     this.heldAbsorbReportSeconds = 0;
     this.heldAbsorbId = null;
+    return flushed;
   }
 
   // D2H: the lock, not the camera candidate, owns local kinematic movement.
   // Positional response is deliberately not a force/impulse or Core intake.
-  updateHeldMaterialMotion(dt, frameState) {
+  updateHeldMaterialMotion(dt, frameState, generation) {
     const id = this.siltGrip.heldId;
     if (!id) return;
     const input = frameState.input ?? {};
     const coreLocal = this.localPlayer.toArray();
+    const startPosition = this.siltGrip.position?.slice();
     const minRadius = 0.38;
     // Leave a tiny margin for floating-point comparison in grip.moveTo().
     const maxRadius = Math.max(minRadius, this.siltGrip.maxOffset - 0.0001);
@@ -1566,10 +1612,10 @@ export class SiltPressureRouteSystem {
     const startingRadius = Math.min(maxRadius, originalRadius);
     const push = Boolean(this.heldPulsePending);
     const absorbing = Boolean(input.absorbHeld);
-    const pushRadius = push ? Math.min(maxRadius, startingRadius + 0.28) : startingRadius;
-    const pullRadius = absorbing
-      ? Math.max(minRadius, pushRadius - Math.max(0, Math.min(dt, 0.1)) * 0.72)
-      : pushRadius;
+    const requestedOutward = push ? 0.28 : 0;
+    const requestedInward = absorbing ? Math.max(0, Math.min(dt, 0.1)) * 0.72 : 0;
+    const pushRadius = push ? Math.min(maxRadius, startingRadius + requestedOutward) : startingRadius;
+    const pullRadius = absorbing ? Math.max(minRadius, pushRadius - requestedInward) : pushRadius;
     let proposedOffset = offset.clone().multiplyScalar(pullRadius / originalRadius);
     let desired = this.localPlayer.clone().add(proposedOffset).toArray();
     const brace = this.siltContact;
@@ -1643,8 +1689,10 @@ export class SiltPressureRouteSystem {
     }
     offset.copy(proposedOffset);
     this.siltGrip.update({ corePosition: coreLocal, stabilizeHeld: true, unitExists: true });
+    const appliedOutward = bracedPressurePulse ? 0 : Math.max(0, pushRadius - startingRadius);
+    const appliedInward = Math.max(0, pushRadius - pullRadius);
     if (push) {
-      const displacement = bracedPressurePulse ? 0 : Math.max(0, pushRadius - startingRadius);
+      const displacement = appliedOutward;
       this.heldMotionFeedbackKind = bracedPressurePulse ? 'brace-pressure'
         : displacement > 0.0001 ? 'pulse-outward' : 'outer-bound';
       this.heldMotionFeedbackAt = this.elapsed;
@@ -1662,8 +1710,10 @@ export class SiltPressureRouteSystem {
       this.heldMotionLast = receipt;
       this.recordSiltDecision('held-material-motion', receipt, frameState);
     }
+    let receiptMode = 'none';
     if (absorbing) {
-      const displacement = Math.max(0, pushRadius - pullRadius);
+      const displacement = appliedInward;
+      const hasEarlierSteps = this.heldAbsorbReportSeconds > 0;
       this.heldMotionFeedbackKind = displacement > 0.0001 ? 'absorb-inward' : 'inner-bound';
       this.heldMotionFeedbackAt = this.elapsed;
       this.heldMotionPullDistance += displacement;
@@ -1680,13 +1730,72 @@ export class SiltPressureRouteSystem {
         };
         this.heldMotionLast = receipt;
         this.recordSiltDecision('held-material-motion', receipt, frameState);
+        receiptMode = hasEarlierSteps ? 'batched' : 'current-step';
         this.heldAbsorbReportDistance = 0;
         this.heldAbsorbReportSeconds = 0;
+      } else {
+        receiptMode = 'deferred';
       }
       this.heldAbsorbId = id;
-    } else {
-      this.flushHeldAbsorbMotion(frameState);
+    } else if (this.flushHeldAbsorbMotion(frameState)) {
+      receiptMode = 'prior-step-flush';
     }
+    this.recordAcceptedHeldMotion(frameState, dt, {
+      kind: 'held-update', unitId: id, generation, corePosition: coreLocal, startPosition,
+      pulse: { eventId: push ? input.pulseEventId ?? null : null, requestedOutward, appliedOutward,
+        braced: bracedPressurePulse },
+      absorb: { requestedInward, appliedInward, receiptMode }
+    });
+    // Release memory uses the accepted Pulse contribution, separate from
+    // net pose changes and the cadence of component receipts.
+    return appliedOutward;
+  }
+
+  readHeldMotionStep(frameState) {
+    const mount = frameState.firstSliceRuntimeMount;
+    const { frame } = frameState;
+    const substep = frameState.runtimeSimulationSubstepIndex ?? 0;
+    if (!this.active || frameState.activeCellId !== ROUTE_CELL_ID || mount?.activeRuntimeCellId !== ROUTE_CELL_ID
+      || !mount.activeSystemIds?.includes("siltPressureRouteSystem")
+      || ![mount.mountSequence, frame, substep].every(value => Number.isSafeInteger(value) && value >= 0)
+      || substep >= (frameState.runtimeSimulationSubstepCount ?? 1)) return null;
+    return { hostId: frameState.activeHostId ?? null, cellId: ROUTE_CELL_ID,
+      mountSequence: mount.mountSequence, mountCount: this.mountCount, frame, substep };
+  }
+
+  recordAcceptedHeldMotion(frameState, dt, motion) {
+    const endPosition = this.siltGrip.position;
+    if (motion.unitId !== this.siltGrip.heldId || !motion.startPosition || !endPosition
+      || !Number.isSafeInteger(motion.generation) || !Number.isFinite(dt) || dt <= 0
+      || (frameState.runtimeSimulationSubstepSeconds ?? dt) !== dt) return;
+    const step = this.readHeldMotionStep(frameState);
+    if (!step) return;
+    const last = this.heldMotionSamples.at(-1);
+    // One grip resolves one grain per step. This cursor is independent of the
+    // route decisions that supply legacy receipt identities and release memory.
+    if (last?.mountCount === step.mountCount && (last.frame > step.frame
+      || (last.frame === step.frame && last.substep >= step.substep))) return;
+    const { startPosition, corePosition } = motion;
+    const delta = endPosition.map((coordinate, axis) => coordinate - startPosition[axis]);
+    const radius = position => Math.hypot(...position.map((coordinate, axis) => coordinate - corePosition[axis]));
+    this.heldMotionSamples.push({
+      sequence: (last?.sequence ?? 0) + 1, ...step, ...motion,
+      endPosition: [...endPosition], radialDisplacement: radius(endPosition) - radius(startPosition),
+      netDisplacement: delta, netDistance: Math.hypot(...delta)
+    });
+    if (this.heldMotionSamples.length > HELD_MOTION_SAMPLE_LIMIT) this.heldMotionSamples.shift();
+  }
+
+  readAcceptedHeldMotion(frameState, active) {
+    const last = this.heldMotionSamples.at(-1);
+    const step = active && last ? this.readHeldMotionStep(frameState) : null;
+    return {
+      lastSequence: last?.sequence ?? 0,
+      current: step && last.unitId === this.siltGrip.heldId
+        && last.mountCount === step.mountCount && last.mountSequence === step.mountSequence
+        && last.frame === step.frame && last.substep === step.substep ? last : null,
+      samples: this.heldMotionSamples.slice()
+    };
   }
 
   updateSiltAimMarker() {
@@ -1734,7 +1843,73 @@ export class SiltPressureRouteSystem {
     }
   }
 
-  animateLivingMatter(dt = 0) {
+  copyNativeGrainPosition(unit, index, position) {
+    const fraction = (index * 2.399963) % (2 * Math.PI);
+    const small = 0.24 + (index % 3) * 0.15;
+    if (unit.phase === "reservoir") {
+      position.copy(this.livingMatterLocations.reservoir);
+      position.x += Math.cos(fraction) * small;
+      position.y -= 0.2 + 0.12 * (index % 2);
+      position.z += Math.sin(fraction) * small;
+    } else if (unit.phase === "settled" || unit.phase === "growing" || unit.phase === "mature") {
+      position.copy(this.livingMatterLocations.garden);
+      position.x += Math.cos(fraction) * (0.65 + small);
+      position.z += Math.sin(fraction) * (0.65 + small);
+      position.y -= 1.14;
+    } else {
+      const path = this.livingMatterPaths[unit.phase];
+      const duration = unit.phase === "veins" ? 6 : unit.phase === "garden_transit" ? 8 : 10;
+      const alpha = THREE.MathUtils.clamp(unit.age / duration, 0, 1);
+      path.getPointAt(alpha, position);
+      position.y += 0.18 * Math.sin(alpha * Math.PI * 3 + fraction);
+      position.x += 0.12 * Math.sin(alpha * 8 + fraction);
+    }
+    return position;
+  }
+
+  selectSiltBudResistance(frameState) {
+    const mount = frameState.firstSliceRuntimeMount;
+    if (!this.siltResistanceExperiment || !this.active || !this.livingCycle?.active
+      || frameState.activeCellId !== ROUTE_CELL_ID || mount?.activeRuntimeCellId !== ROUTE_CELL_ID
+      || !mount.activeSystemIds?.includes("siltPressureRouteSystem")) return null;
+    const units = this.livingCycle.units;
+    const eligible = unit => unit.id !== this.siltGrip.heldId && !this.siltPlateSeat.isSeated(unit.id)
+      && this.materialIdentity.get(unit.id)?.owner === "environment";
+    const goalId = this.returnRoundTrip.completed ? null : this.returnRoundTrip.grainId;
+    const receivers = units.filter(unit => unit.id !== goalId && eligible(unit))
+      .map(unit => ({ id: unit.id,
+        position: this.siltTrajectory.readCurrentReleasePosition(unit.id, unit.generation, this.mountCount) }))
+      .filter(receiver => receiver.position);
+    if (!receivers.length) return null;
+
+    // LS1B keeps the array in grain ID order. Use the first eligible bud and
+    // adjacent receiver in that order, independent of mesh order or visibility.
+    const { radius } = SILT_BUD_RESISTANCE;
+    for (const [index, bud] of units.entries()) {
+      if (bud.phase !== "mature" || this.siltTrajectory.has(bud.id) || !eligible(bud)) continue;
+      const center = this.copyNativeGrainPosition(bud, index, this.livingMatterV).toArray();
+      const receiver = receivers.find(({ position }) => Math.hypot(
+        position[0] - center[0], position[1] - center[1], position[2] - center[2]) < radius);
+      if (receiver) return { receiverId: receiver.id, center, ...SILT_BUD_RESISTANCE };
+    }
+    return null;
+  }
+
+  advanceSiltTrajectories(dt, frameState) {
+    const resolved = this.siltResolvedTrajectories;
+    resolved.clear();
+    if (!this.livingCycle?.active) return;
+    const resistance = this.selectSiltBudResistance(frameState);
+    for (const [index, unit] of this.livingCycle.units.entries()) {
+      if (!this.siltTrajectory.has(unit.id) || (unit.id === this.siltGrip.heldId && this.siltGrip.position)
+        || this.siltPlateSeat.isSeated(unit.id)) continue;
+      const nativePoint = this.copyNativeGrainPosition(unit, index, this.livingMatterV).toArray();
+      resolved.set(unit.id, this.siltTrajectory.advance(unit.id, dt, nativePoint,
+        resistance?.receiverId === unit.id ? resistance : null));
+    }
+  }
+
+  animateLivingMatter() {
     const cycle = this.livingCycle;
     if (!cycle || !this.livingMatterGroup) return;
     this.livingMatterGroup.visible = cycle.active;
@@ -1747,7 +1922,6 @@ export class SiltPressureRouteSystem {
       const unit = cycle.units[index];
       const mesh = this.livingMatterMeshes[index];
       const fraction = (index * 2.399963) % (2 * Math.PI);
-      const small = 0.24 + (index % 3) * 0.15;
       const p = mesh.body.position;
       const trail = this.siltTrajectoryTrails?.[index];
       if (trail) trail.visible = false;
@@ -1773,29 +1947,7 @@ export class SiltPressureRouteSystem {
         mesh.body.visible = true;
         continue;
       }
-      if (unit.phase === "reservoir") {
-        p.copy(this.livingMatterLocations.reservoir);
-        p.x += Math.cos(fraction) * small;
-        p.y -= 0.2 + 0.12 * (index % 2);
-        p.z += Math.sin(fraction) * small;
-      } else if (unit.phase === "settled" || unit.phase === "growing" || unit.phase === "mature") {
-        p.copy(this.livingMatterLocations.garden);
-        p.x += Math.cos(fraction) * (0.65 + small);
-        p.z += Math.sin(fraction) * (0.65 + small);
-        p.y -= 1.14;
-      } else {
-        const path = this.livingMatterPaths[unit.phase];
-        const duration = unit.phase === "veins" ? 6 : unit.phase === "garden_transit" ? 8 : 10;
-        const alpha = THREE.MathUtils.clamp(unit.age / duration, 0, 1);
-        path.getPointAt(alpha, this.livingMatterV);
-        p.copy(this.livingMatterV);
-        p.y += 0.18 * Math.sin(alpha * Math.PI * 3 + fraction);
-        p.x += 0.12 * Math.sin(alpha * 8 + fraction);
-      }
-      // The authored point above is the grain's North Star, not a hard reset.
-      // A disturbed free grain integrates from its real release position and
-      // can wander across native phase changes without instant relocation.
-      const remembered = this.siltTrajectory.advance(unit.id, dt, p.toArray());
+      const remembered = this.siltResolvedTrajectories.get(unit.id);
       if (remembered) {
         p.fromArray(remembered.position);
         if (trail && remembered.nativeError > 0.16) {
@@ -1810,6 +1962,8 @@ export class SiltPressureRouteSystem {
             trail.visible = true;
           }
         }
+      } else {
+        this.copyNativeGrainPosition(unit, index, p);
       }
       const growing = unit.phase === "growing" || unit.phase === "mature";
       const growth = unit.phase === "growing" ? Math.min(1, unit.age / 9) : 1;
@@ -1838,6 +1992,85 @@ export class SiltPressureRouteSystem {
     return closest;
   }
 
+  gardenSeepMount(frameState, dt) {
+    const mount = frameState.firstSliceRuntimeMount;
+    const substep = frameState.runtimeSimulationSubstepIndex ?? 0;
+    if (!this.active || !this.livingCycle?.active || !this.gardenSeepBed
+      || frameState.activeCellId !== ROUTE_CELL_ID || mount?.activeRuntimeCellId !== ROUTE_CELL_ID
+      || !mount.activeSystemIds?.includes("siltPressureRouteSystem")
+      || !Number.isFinite(dt) || dt <= 0
+      || (frameState.runtimeSimulationSubstepSeconds ?? dt) !== dt
+      || ![mount.mountSequence, frameState.frame, substep].every(n => Number.isSafeInteger(n) && n >= 0)
+      || substep >= (frameState.runtimeSimulationSubstepCount ?? 1)) return null;
+    return { hostId: frameState.activeHostId ?? null, cellId: ROUTE_CELL_ID,
+      mountSequence: mount.mountSequence, frame: frameState.frame, substep };
+  }
+
+  readGardenGrainPosition(unitId, mesh) {
+    if (mesh?.unitId !== unitId || !mesh.body.visible
+      || unitId === this.siltGrip.heldId || this.siltPlateSeat.isSeated(unitId)
+      || this.siltTrajectory.has(unitId)) return null;
+    const { center, radii } = this.gardenSeepBed.area;
+    // Grain and Garden share the route's authored local coordinates.
+    const { x, y, z } = mesh.body.position;
+    const distance = Math.hypot(
+      (x - center[0]) / radii[0], (y - center[1]) / radii[1], (z - center[2]) / radii[2]);
+    return distance <= 1 ? [x, y, z] : null;
+  }
+
+  readGardenSeepStep(frameState, dt) {
+    const mount = this.gardenSeepMount(frameState, dt);
+    if (!mount) return null;
+    // Remember the resolved approach before LS1B switches to its settled pose.
+    const approaches = [];
+    for (const [index, unit] of this.livingCycle.units.entries()) {
+      if (unit.phase !== "garden_transit") continue;
+      const position = this.readGardenGrainPosition(unit.id, this.livingMatterMeshes[index]);
+      if (position) approaches.push({ unit, index, generation: unit.generation, position });
+    }
+    return approaches.length ? { mount, mountCount: this.mountCount, approaches,
+      beforeSequence: this.livingCycle.eventSequence } : null;
+  }
+
+  receiveGardenSeepArrivals(frameState, dt, step) {
+    if (!step || step.mountCount !== this.mountCount) return;
+    const mount = this.gardenSeepMount(frameState, dt);
+    if (!mount || Object.keys(mount).some(key => mount[key] !== step.mount[key])) return;
+    const state = this.gardenSeep;
+    for (const event of this.livingCycle.events) {
+      if (event.kind !== "settled" || event.sequence <= Math.max(step.beforeSequence, state.lastSeenSequence)) continue;
+      state.lastSeenSequence = event.sequence;
+      const approach = step.approaches.find(item => item.unit.id === event.unitId);
+      if (!approach || approach.unit.phase !== "settled" || approach.unit.generation !== approach.generation) continue;
+      const position = this.readGardenGrainPosition(event.unitId, this.livingMatterMeshes[approach.index]);
+      if (!position || state.imprint >= 1) continue;
+      const before = state.imprint;
+      state.imprint = Math.min(1, before + GARDEN_SEEP_IMPRINT_PER_ARRIVAL);
+      state.lastDelivery = { sequence: event.sequence, unitId: event.unitId, generation: approach.generation,
+        approachPosition: approach.position, position, imprintBefore: before, imprintAfter: state.imprint, ...mount };
+      state.arrivalAt = this.elapsed;
+    }
+  }
+
+  gardenSeepArrivalRemaining() {
+    const at = this.gardenSeep.arrivalAt;
+    return at === null ? 0 : Math.max(0, GARDEN_SEEP_ARRIVAL_SECONDS - (this.elapsed - at));
+  }
+
+  animateGardenSeepBed() {
+    const bed = this.gardenSeepBed;
+    if (!bed?.direction) return;
+    const { mesh, direction } = bed;
+    const progress = 1 - this.gardenSeepArrivalRemaining() / GARDEN_SEEP_ARRIVAL_SECONDS;
+    const sweep = Math.sin(progress * Math.PI) * (1 - progress);
+    const imprint = this.gardenSeep.imprint;
+    mesh.position.set(direction.x * 0.85 * progress * sweep,
+      bed.restY + 0.13 * imprint + 0.37 * sweep, direction.z * 0.85 * progress * sweep);
+    mesh.scale.y = bed.restHeight + 0.25 * imprint + 0.15 * sweep;
+    mesh.material.opacity = bed.restOpacity + 0.22 * imprint + 0.28 * sweep;
+    mesh.material.emissiveIntensity = bed.restEmissive + 0.18 * imprint + 0.55 * sweep;
+  }
+
   animateHabitatFoundation(frameState) {
     const t = frameState.runtimeSeconds ?? this.elapsed;
     const p = this.localPlayer;
@@ -1856,6 +2089,7 @@ export class SiltPressureRouteSystem {
       lobe.shell.material.opacity = lobe.wallOpacity *
         (1 - 0.62 * THREE.MathUtils.smoothstep(near, 0.76, 1.25));
     }
+    this.animateGardenSeepBed();
     if (this.habitatDrift && this.habitatDriftPositions) {
       const out = this.habitatDriftPositions;
       for (let i = 0; i < this.habitatDriftSeeds.length; i += 1) {
@@ -2012,6 +2246,64 @@ export class SiltPressureRouteSystem {
     }
   }
 
+  createReleaseCrests() {
+    this.releaseCrestRoot = new THREE.Group();
+    this.releaseCrestRoot.name = "silt_release_pressure_crests";
+    this.releaseCrestRoot.userData.targetingSuppressed = true;
+    this.releaseCrestRoot.visible = false;
+    const geometry = new THREE.RingGeometry(0.87, 1, 28, 1, 0.2, Math.PI * 1.46);
+    this.releaseCrests = CASCADE_CRESTS.map((_, index) => {
+      const crest = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+        color: index === 0 ? 0xeac68c : 0xbdad84,
+        transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide
+      }));
+      crest.name = `silt_release_crest_${index + 1}`;
+      crest.userData.targetingSuppressed = true;
+      crest.raycast = () => {};
+      crest.visible = false;
+      this.releaseCrestRoot.add(crest);
+      return crest;
+    });
+    this.root.add(this.releaseCrestRoot);
+  }
+
+  startReleaseCrests(receipt) {
+    this.releaseCrestReceipt = receipt;
+    this.releaseCrestAt = this.elapsed;
+    this.releaseCrestRoot.position.fromArray(receipt.origin);
+    this.releaseCrestDirection.fromArray(receipt.releaseVelocity);
+    if (this.releaseCrestDirection.lengthSq() < 1e-8) this.releaseCrestDirection.set(0, 0, -1);
+    this.releaseCrestRoot.quaternion.setFromUnitVectors(RELEASE_CREST_NORMAL, this.releaseCrestDirection.normalize());
+  }
+
+  clearReleaseCrests() {
+    this.releaseCrestReceipt = null;
+    if (!this.releaseCrestRoot) return;
+    this.releaseCrestRoot.visible = false;
+    for (const crest of this.releaseCrests) {
+      crest.visible = false;
+      crest.material.opacity = 0;
+    }
+  }
+
+  updateReleaseCrests() {
+    if (!this.releaseCrestReceipt) return;
+    const age = this.elapsed - this.releaseCrestAt;
+    this.releaseCrestRoot.visible = true;
+    let visible = false;
+    this.releaseCrests.forEach((mesh, index) => {
+      const { progress, strength } = sampleCascadeCrest(age, CASCADE_CRESTS[index], 0.94);
+      mesh.visible = strength > 0.01;
+      mesh.material.opacity = mesh.visible ? strength * 0.68 : 0;
+      if (!mesh.visible) return;
+      visible = true;
+      const radius = 0.24 + progress * 0.75 - index * 0.06;
+      mesh.scale.set(radius, radius * 0.77, 1);
+      mesh.position.z = 0.10 + progress * 0.69;
+    });
+    if (!visible) this.clearReleaseCrests();
+  }
+
   recordSiltDecision(kind, details = {}, frameState = this.frameState) {
     const entry = {
       sequence: ++this.transactionSequence,
@@ -2033,6 +2325,7 @@ export class SiltPressureRouteSystem {
       const cause = this.hostConnectionReceiptLedger?.observeSiltRelease(entry);
       if (cause && frameState) {
         frameState.hostConnections = this.hostConnectionReceiptLedger.snapshot();
+        if (this.active && this.releaseCrestRoot) this.startReleaseCrests(cause);
       }
     }
   }
@@ -2612,6 +2905,11 @@ export class SiltPressureRouteSystem {
       pathDistance: active ? this.pathDistance : 0,
       compression: this.compression,
       gravePressureReliefPresentation: this.readGravePressureReliefPresentation(active),
+      cascadeReleasePresentation: active && this.releaseCrestReceipt ? {
+        receiptId: this.releaseCrestReceipt.id,
+        ageSeconds: this.elapsed - this.releaseCrestAt,
+        activeCrests: this.releaseCrests.filter(crest => crest.visible).length
+      } : null,
       graveIIPressureFeedback: {
         pass: 'C0D3-C', active: Boolean(active && this.graveIIConsumedSequence),
         receiptId: this.graveIIReceiptId, sourceSequence: this.graveIIConsumedSequence,
@@ -2659,6 +2957,16 @@ export class SiltPressureRouteSystem {
         newProgression: false
       },
       livingMaterialCycle: this.livingCycle?.snapshot() ?? null,
+      gardenSeepExchange: this.gardenSeepBed ? {
+        receiverId: "silt_sediment_garden",
+        imprint: this.gardenSeep.imprint,
+        lastDelivery: this.gardenSeep.lastDelivery ? {
+          ...this.gardenSeep.lastDelivery,
+          approachPosition: [...this.gardenSeep.lastDelivery.approachPosition],
+          position: [...this.gardenSeep.lastDelivery.position]
+        } : null,
+        arrivalSecondsRemaining: active ? this.gardenSeepArrivalRemaining() : 0
+      } : null,
       siltContact: this.siltContact?.snapshot() ?? null,
       siltPlateSeat: this.siltPlateSeat.snapshot(),
       siltTrajectory: this.siltTrajectory.snapshot(),
@@ -2683,6 +2991,7 @@ export class SiltPressureRouteSystem {
         pulseCount: this.heldMotionPulseCount,
         cumulativePullDistance: Number(this.heldMotionPullDistance.toFixed(4)),
         lastReceipt: this.heldMotionLast,
+        acceptedMotion: this.readAcceptedHeldMotion(frameState, active),
         transferPerformed: false,
         contract: "Pulse pushes, Absorb pulls, neither consumes the held grain"
       },

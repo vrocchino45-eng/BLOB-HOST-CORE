@@ -1,5 +1,10 @@
 import { deriveCoreEarnedEvolution } from "./CoreEarnedEvolution.js";
 import { publishCoreStabilizeSample } from './CoreStabilizeSample.js';
+import { GRAVE_MAX_RECOVERY_ASSIST } from '../routes/GraveRecoveryCoupling.js';
+import { inSiltFlowWorld, MAX_FLOW_STEP, readFlowAim, readFlowStep, SILT_FLOW_SITE } from '../interaction/SiltFlowContract.js';
+
+const GRAVE_CELL = 'CELL_GRAVE_MEMORY_RESIDUE_BED_001';
+const RADIAL_DRAIN_RATE = 0.09;
 
 const ZONE_TRAITS = {
   deep_core: {
@@ -63,6 +68,8 @@ export class CoreRadialPerformanceSystem {
     this.lastTopologyId = "forming_topology";
     this.topologyChangeCount = 0;
     this.lastEvent = "radial_performance_initialized";
+    this.lastGraveRecoveryStep = null;
+    this.lastFlowSettlementStep = null;
   }
 
   init() {
@@ -217,24 +224,30 @@ export class CoreRadialPerformanceSystem {
       1,
       1.4
     );
-    const verbDemandTotal = (absorbDemand + stabilizeDemand + pulseDemand) * compositionDemandMultiplier;
-    const demand01 = clamp01(boostDemand + verbDemandTotal);
+    const memoryContribution = this.consumeGraveRecoveryContribution(dt, frameState);
+    const effectiveStabilizeDemand = stabilizeDemand / (1 + memoryContribution);
+    const verbSum = absorbDemand + stabilizeDemand + pulseDemand;
+    const nominalDemand01 = clamp01(boostDemand + verbSum * compositionDemandMultiplier);
+    const demand01 = clamp01(boostDemand
+      + (absorbDemand + effectiveStabilizeDemand + pulseDemand) * compositionDemandMultiplier);
 
     const drainPerSecond = profile.active
-      ? 0.09 / Math.max(0.2, profile.enduranceCapacity * profile.efficiency)
+      ? RADIAL_DRAIN_RATE / Math.max(0.2, profile.enduranceCapacity * profile.efficiency)
       : 0.075;
     const recoveryPerSecond = 0.10 * profile.recovery;
 
     // PAIRED-DEMAND2: counterpart coordination saves only shared verb drain.
     // Read the earned ceiling, never the O-key architecture preview.
-    const verbSum = absorbDemand + stabilizeDemand + pulseDemand;
+    // Regional relief changes the Stabilize term only. Keep the existing
+    // coordination factor based on the unmodified verb mix.
     const sharedFraction = verbSum > 0
       ? clamp01((verbSum - Math.max(absorbDemand, stabilizeDemand, pulseDemand)) / verbSum)
       : 0;
     const earnedPhaseCeiling = frameState.returnRegionEngine?.unlockedPhaseCount ?? 3;
     const coordinationEligible = profile.active && earnedPhaseCeiling >= 6 && !input.boostHeld;
     const coordinationFactor = coordinationEligible ? 1 - 0.20 * sharedFraction : 1;
-    const baseDrainRate = demand01 > 0.02 ? drainPerSecond * demand01 : 0;
+    const draining = nominalDemand01 > 0.02;
+    const baseDrainRate = draining ? drainPerSecond * demand01 : 0;
     const effectiveDrainRate = baseDrainRate * coordinationFactor;
     const reserveBefore = this.reserve01;
     const reserveSaved = Math.max(0,
@@ -248,12 +261,12 @@ export class CoreRadialPerformanceSystem {
       reserveSavedThisUpdate: round(reserveSaved, 9),
       reason: !profile.active ? "incomplete_topology" : earnedPhaseCeiling < 6 ? "not_earned"
         : input.boostHeld ? "boost_priority" : sharedFraction <= 0 ? "no_overlap"
-          : demand01 <= 0.02 ? "below_drain_threshold" : dt <= 0 ? "no_elapsed_time"
+        : !draining ? "below_drain_threshold" : dt <= 0 ? "no_elapsed_time"
             : reserveBefore <= 0 ? "reserve_empty" : reserveSaved > 1e-9 ? "coordinating" : "no_realized_saving",
       progressionAuthority: false, architectureAuthority: false
     };
 
-    if (demand01 > 0.02) {
+    if (draining) {
       this.reserve01 = clamp01(this.reserve01 - effectiveDrainRate * dt);
       if (this.reserve01 <= 0.001) this.lastEvent = "endurance_reserve_depleted";
     } else {
@@ -268,7 +281,7 @@ export class CoreRadialPerformanceSystem {
     profile.verbDemand = {
       pulse: round(pulseDemand),
       absorb: round(absorbDemand),
-      stabilize: round(stabilizeDemand),
+      stabilize: round(effectiveStabilizeDemand),
       absorbCommitment01: round(absorbCommitment01),
       stabilizeCommitment01: round(stabilizeCommitment01),
       pulseCostMultiplier: round(pulseCostMultiplier),
@@ -277,6 +290,114 @@ export class CoreRadialPerformanceSystem {
       compositionDemandMultiplier: round(compositionDemandMultiplier),
       compositionChord: frameState.verbComposition?.chord ?? "idle"
     };
+  }
+
+  settleFlowReserve(dt, frameState = this.frameState) {
+    frameState.siltFlowReserveSettlement = null;
+    const flow = frameState.coreFlow;
+    if (flow?.owner !== 'CoreFlowSystem') return;
+    const delivery = flow.result;
+    if (!delivery && !(frameState.input?.flowDemand01 > 0)) return;
+
+    const step = readFlowStep(frameState);
+    const rejection = this.flowSettlementRejection(dt, frameState, flow, delivery, step);
+    const reserveBefore = this.reserve01;
+    // Current and resistance are normalized. The radial rate is reserve fraction per second.
+    const requestedDebit = rejection ? 0 : RADIAL_DRAIN_RATE * delivery.acceptedCurrent01 * delivery.resistance01 * dt;
+    if (!rejection) {
+      this.reserve01 = Math.max(0, reserveBefore - requestedDebit);
+      this.lastFlowSettlementStep = step;
+    }
+    const reserveAfter = this.reserve01;
+    // Keep the published profile used by this step intact. The normal radial update reads
+    // the settled reserve on the next substep.
+    frameState.siltFlowReserveSettlement = Object.freeze({
+      ...step, owner: 'CoreRadialPerformanceSystem', status: rejection ? 'rejected' : 'settled',
+      reason: rejection ?? (requestedDebit > reserveBefore ? 'reserve_limited'
+        : requestedDebit > 0 ? 'applied' : 'no_resistive_work'),
+      receiverId: delivery?.receiverId ?? flow.receiverId ?? null,
+      actionSequence: delivery?.actionSequence ?? flow.actionSequence ?? null,
+      deliveryFrame: delivery?.frame ?? null, deliverySubstep: delivery?.substep ?? null,
+      stepSeconds: Number.isFinite(dt) ? dt : null,
+      acceptedCurrent01: Number.isFinite(delivery?.acceptedCurrent01) ? delivery.acceptedCurrent01 : null,
+      resistance01: Number.isFinite(delivery?.resistance01) ? delivery.resistance01 : null,
+      requestedDebit, actualDebit: reserveBefore - reserveAfter, reserveBefore, reserveAfter
+    });
+  }
+
+  flowSettlementRejection(dt, frameState, flow, delivery, step) {
+    if (!inSiltFlowWorld(frameState)) return 'ineligible_context';
+    if (!step || !Number.isFinite(dt) || dt <= 0 || dt > MAX_FLOW_STEP || dt !== frameState.runtimeSimulationSubstepSeconds
+      || !Number.isSafeInteger(frameState.runtimeSimulationSubstepCount)
+      || step.substep >= frameState.runtimeSimulationSubstepCount) return 'invalid_step';
+    if (!delivery) return flow.reason === 'contact' ? 'contact_dwell' : flow.reason ?? 'no_delivery';
+
+    if (Object.entries(step).some(([key, value]) => flow.step?.[key] !== value || delivery[key] !== value)) {
+      return 'stale_delivery';
+    }
+    const aim = readFlowAim(frameState);
+    if (delivery.owner !== 'silt:RegionalTerritoryExpansion' || delivery.siteId !== SILT_FLOW_SITE
+      || !delivery.receiverId || delivery.receiverId !== flow.receiverId
+      || !aim || Object.entries(aim).some(([key, value]) => delivery[key] !== value)
+      || !Number.isSafeInteger(delivery.actionSequence) || delivery.actionSequence <= 0
+      || delivery.actionSequence !== flow.actionSequence
+      || delivery.actionSequence !== frameState.input?.flowActionSequence) return 'delivery_identity_mismatch';
+    if (delivery.acceptedCurrent01 === 0) return 'zero_current';
+    if (!Number.isFinite(delivery.acceptedCurrent01) || delivery.acceptedCurrent01 < 0 || delivery.acceptedCurrent01 > 0.55
+      || !Number.isFinite(delivery.resistance01) || delivery.resistance01 < 0 || delivery.resistance01 > 1) return 'invalid_delivery';
+
+    const last = this.lastFlowSettlementStep;
+    if (last && step.frame === last.frame && step.substep === last.substep) return 'duplicate_step';
+    if (last && (step.frame < last.frame || (step.frame === last.frame && step.substep < last.substep))) return 'stale_delivery';
+    return null;
+  }
+
+  consumeGraveRecoveryContribution(dt, frameState) {
+    const memory = frameState.graveVascularEffectMemory;
+    const witness = memory?.recoveryCoupling?.witness;
+    if (!witness || memory.active !== true || memory.recoveryCoupling.eligibleNow !== true
+      || memory.owner !== 'GraveMemoryRouteSystem' || memory.cellId !== GRAVE_CELL
+      || memory.mode !== 'bounded_retained_vascular_effect_memory'
+      || witness.owner !== memory.owner || frameState.input?.stabilizeHeld !== true
+      || frameState.coreWorkManipulation?.held || frameState.inspectionCamera?.active
+      || frameState.inspectionCamera?.coreWorkActive || frameState.tightInspectionCamera?.active
+      || frameState.tightInspectionCamera?.coreWorkActive) return 0;
+
+    const mount = frameState.firstSliceRuntimeMount;
+    const { activeHostId, activeCellId, frame, runtimeSimulationSubstepIndex: substep } = frameState;
+    if (typeof activeHostId !== 'string' || !activeHostId || witness.hostId !== activeHostId
+      || activeCellId !== GRAVE_CELL || witness.cellId !== activeCellId
+      || mount?.activeRuntimeCellId !== activeCellId || !Array.isArray(mount.activeSystemIds)
+      || !mount.activeSystemIds.includes('graveMemoryRouteSystem')
+      || !Number.isSafeInteger(mount.mountSequence) || mount.mountSequence < 1
+      || witness.mountSequence !== mount.mountSequence
+      || !Number.isSafeInteger(frame) || frame < 0 || witness.frame !== frame
+      || !Number.isSafeInteger(substep) || substep < 0 || witness.substep !== substep
+      || !Number.isSafeInteger(frameState.runtimeSimulationSubstepCount)
+      || substep >= frameState.runtimeSimulationSubstepCount
+      || !(dt > 0) || dt !== witness.stepSeconds || dt !== frameState.runtimeSimulationSubstepSeconds) return 0;
+
+    const lastStep = this.lastGraveRecoveryStep;
+    if (lastStep && (frame < lastStep.frame || (frame === lastStep.frame && substep <= lastStep.substep))) return 0;
+
+    const record = Array.isArray(memory.records) ? memory.records.at(-1) : null;
+    if (!record || !Number.isFinite(record.appliedDelta) || record.appliedDelta <= 0
+      || record.materialTransfer !== false || record.routeCredit !== false
+      || !Number.isSafeInteger(record.sequence) || record.sequence < 1 || record.sequence !== memory.lastHostSequence
+      || witness.hostSequence !== record.sequence || witness.vascularEffectId !== record.vascularEffectId
+      || witness.parentSiltReceiptId !== record.parentSiltReceiptId || witness.subjectId !== record.subjectId
+      || witness.memoryPressure !== memory.memoryPressure || !Number.isFinite(memory.memoryPressure)
+      || memory.memoryPressure <= 0 || memory.memoryPressure > 1) return 0;
+
+    const { recoilReduction, traceRecovery, baseRecoveryBudget } = witness;
+    if (!Number.isFinite(recoilReduction) || recoilReduction < 0 || !Number.isFinite(traceRecovery) || traceRecovery < 0
+      || !Number.isFinite(baseRecoveryBudget) || baseRecoveryBudget <= 0) return 0;
+    const contribution = (recoilReduction + traceRecovery) / baseRecoveryBudget;
+    const maximum = GRAVE_MAX_RECOVERY_ASSIST * memory.memoryPressure;
+    if (!(contribution > 0 && contribution <= maximum + 1e-9)) return 0;
+
+    this.lastGraveRecoveryStep = { frame, substep };
+    return Math.min(contribution, maximum);
   }
 
   publish(frameState, profile) {

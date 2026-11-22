@@ -144,6 +144,9 @@ export class SessionTelemetrySystem {
     this.maxEvents = 16000;
     this.maxMovementSamples = 7200;
     this.maxCoreSnapshots = 720;
+    this.previousSiltFlow = null;
+    this.lastSiltFlowReserveSettlement = null;
+    this.lastSiltFlowReserveRejection = null;
 
     // HC031N1 — read-only physical-language causal continuity repair. This does not
     // feed back into gameplay. It keeps the HC031N chain observer alive through
@@ -210,6 +213,7 @@ export class SessionTelemetrySystem {
     this.observeRouteResolution(frameState);
     this.observeVascularCurrentization(frameState);
     this.observeSiltCurrentization(frameState);
+    this.observeSiltFlow(frameState);
     this.observeMembraneRidge(frameState);
     this.observeAdjacentTerritory(frameState);
     this.observeGatheringGroundAlive(frameState);
@@ -3319,6 +3323,48 @@ export class SessionTelemetrySystem {
     this.lastCoreSnapshotAt = this.wallTime();
   }
 
+  observeSiltFlow(frameState) {
+    const flow = frameState.coreFlow;
+    const settlement = frameState.siltFlowReserveSettlement;
+    if (settlement?.owner === 'CoreRadialPerformanceSystem') {
+      if (settlement.status === 'settled') this.lastSiltFlowReserveSettlement = settlement;
+      if (settlement.status === 'rejected') this.lastSiltFlowReserveRejection = settlement;
+    }
+    const previous = this.previousSiltFlow;
+    if (flow?.owner !== "CoreFlowSystem" || (!flow.receiverId && !previous?.receiverId)) return;
+
+    const { step } = flow;
+    const hostId = step?.hostId ?? frameState.activeHostId ?? null;
+    const cellId = step?.cellId ?? frameState.activeCellId ?? null;
+    const mountSequence = step?.mountSequence ?? frameState.firstSliceRuntimeMount?.mountSequence ?? null;
+    const sameMount = previous?.hostId === hostId && previous.cellId === cellId && previous.mountSequence === mountSequence;
+    const current = {
+      phase: flow.phase,
+      reason: flow.reason,
+      receiverId: flow.receiverId ?? (sameMount ? previous.receiverId : null),
+      actionSequence: flow.actionSequence,
+      hostId, cellId, mountSequence
+    };
+    if (previous && Object.keys(current).every(key => current[key] === previous[key])) return;
+    this.previousSiltFlow = current;
+
+    this.record("flow.silt_contact_transition", "internal", {
+      developer: {
+        previousPhase: previous?.phase ?? null,
+        newPhase: current.phase,
+        reason: current.reason,
+        receiverId: current.receiverId ?? previous?.receiverId ?? null,
+        actionSequence: current.actionSequence,
+        hostId: current.hostId,
+        cellId: current.cellId,
+        mountSequence: current.mountSequence,
+        frame: step?.frame ?? frameState.frame ?? null,
+        substep: step?.substep ?? frameState.runtimeSimulationSubstepIndex ?? null,
+        ...(settlement ? { reserveSettlement: settlement } : {})
+      }
+    });
+  }
+
   record(type, channel, { percept = {}, developer = {} } = {}) {
     const wallT = this.wallTime();
     const simT = this.simTime();
@@ -3386,6 +3432,14 @@ export class SessionTelemetrySystem {
       coreSnapshots: this.coreSnapshots,
       developerTruth: {
         localChemistryContext: inspectLocalChemistryContext(this.frameState),
+        ...(this.frameState.coreFlow ? { siltFlow: {
+          ...this.frameState.coreFlow,
+          reserveSettlement: {
+            current: this.frameState.siltFlowReserveSettlement ?? null,
+            lastSettled: this.lastSiltFlowReserveSettlement,
+            lastRejected: this.lastSiltFlowReserveRejection
+          }
+        } } : {}),
         wave1Feedback: playtestHud?.active && quickLookInspector?.coreLabelsEnabled
           ? playtestHud.languageRead?.feedback ?? null : null,
         hostCycle: {

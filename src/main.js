@@ -17,6 +17,9 @@ if (coreRepairComparison === '1') document.title += ' [Core repair trial]';
 const runtime = new GameRuntime({
   appRoot,
   coreRepairTrial: coreRepairComparison !== '0',
+  flowExperiment: new URLSearchParams(window.location.search).get('flow') === '1',
+  nearWorldExperiment: new URLSearchParams(window.location.search).get('nearWorld') === '1',
+  siltResistanceExperiment: new URLSearchParams(window.location.search).get('b3') === '1',
   buildId: "HC-031W1",
   buildLabel: "Stabilized Aim + Local Contact Proof"
 });

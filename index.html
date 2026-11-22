@@ -13,6 +13,46 @@
         overflow: hidden;
         background: #07080d;
       }
+      @media (max-width: 720px) {
+        body:has(#playtest-hud-panel[data-silt-flow-labels]) {
+          --silt-flow-hud-display: flex;
+          --silt-flow-hud-width: 39vw;
+          --silt-flow-inspector-width: 30vw;
+        }
+        #playtest-hud-panel[data-silt-flow-labels] {
+          flex-direction: column;
+        }
+        #playtest-hud-panel[data-silt-flow-labels] #playtest-flow-readout {
+          order: -1;
+          flex: none;
+        }
+        #playtest-hud-panel[data-silt-flow-labels],
+        body:has(#playtest-hud-panel[data-silt-flow-labels]) #blob-quick-look-design-inspector {
+          box-sizing: border-box;
+          overflow-wrap: anywhere;
+        }
+      }
+      body:has(#playtest-hud-panel[data-contextual-labels]) {
+        --silt-flow-hud-width: min(330px, 41vw);
+        --silt-flow-inspector-width: min(375px, 38vw);
+      }
+      #playtest-hud-panel[data-contextual-labels] {
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+      }
+      #playtest-hud-panel[data-contextual-labels] #playtest-flow-readout {
+        order: initial;
+        margin-bottom: 0;
+      }
+      body:has(#playtest-hud-panel[data-contextual-labels]) :is(
+        #vascular-host-cause-notice, #blob-core-arrangement-labels, #blob-quick-look-world-mute
+      ) {
+        display: none !important;
+      }
+      body:has(#playtest-hud-panel[data-contextual-labels]) #blob-quick-look-design-inspector {
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+      }
     </style>
   </head>
   <body>

@@ -1,4 +1,34 @@
 import { readHostLanguage } from '../language/HostLanguageGrammar.js';
+import { inSiltFlowWorld, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
+import { HUB_RETURN_BOUNDARY_BY_CELL, readCascadeLabel, readContextualWorldLabel } from './ContextualWorldLabels.js';
+
+const SILT_FLOW_GUIDANCE = {
+  aim_at_shelf: 'No receiver selected · aim at the round shelf patch',
+  ready: 'Shelf selected · release, then hold RT',
+  receiver_unavailable: 'Shelf receiver unavailable',
+  extending: 'Crown extending · hold facing the patch',
+  out_of_reach: 'Out of reach · move closer to the patch',
+  align_core: 'Crown misaligned · steer the Core toward the patch',
+  wrong_face: 'Approach the exposed face of the patch',
+  missed_patch: 'Crown missed · steer toward the center of the patch',
+  obstructed: 'Contact obstructed · move to a clear angle',
+  contact: 'Valid contact · waiting for current',
+  receiver_rejected: 'Contact made · current declined',
+  invalid_contact: 'Contact unavailable · release and try again'
+};
+
+function describeSiltFlow(flow) {
+  if (flow.result?.acceptedCurrent01 > 0) {
+    const { acceptedCurrent01, pressure01, resistance01, after } = flow.result;
+    const state = flow.overloaded ? 'Overload · current limited' : 'Current accepted';
+    return `Flow · ${state} ${acceptedCurrent01.toFixed(2)} · pressure ${pressure01.toFixed(2)} · resistance ${resistance01.toFixed(2)} · shelf imprint ${after.imprint.toFixed(2)}`;
+  }
+  if (flow.phase === 'recovering' || flow.phase === 'retracting') {
+    const cause = flow.reason === 'target_changed' ? 'Shelf aim lost' : 'Released';
+    return `Flow · ${cause} · ${flow.phase}`;
+  }
+  return `Flow · ${SILT_FLOW_GUIDANCE[flow.reason] ?? 'Waiting for the receiver'}`;
+}
 // CORE-READ1: describe the active architecture separately from its earned ceiling.
 // Presentation only; the progression and Core owners retain all authority.
 export function describeCoreArchitecture(engine = {}, progression = {}) {
@@ -28,11 +58,12 @@ export class PlaytestHudSystem {
     this.el = null;
     this.titleEl = null;
     this.objectiveEl = null;
-    this.actionEl = null;
+    this.flowEl = null;
     this.statusEl = null;
     this.auditEl = null;
     this.controlsEl = null;
     this.audioGateEl = null;
+    this.cascadeCues = new Map();
   }
 
   init() {
@@ -60,7 +91,7 @@ export class PlaytestHudSystem {
       position: "fixed",
       left: "14px",
       top: "14px",
-      width: "min(360px, calc(100vw - 28px))",
+      width: "var(--silt-flow-hud-width, min(360px, calc(100vw - 28px)))",
       padding: "10px 12px",
       fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
       fontSize: "12px",
@@ -90,9 +121,12 @@ export class PlaytestHudSystem {
       marginBottom: "5px"
     });
 
-    this.actionEl = document.createElement("div");
-    Object.assign(this.actionEl.style, {
-      color: "#dffcff",
+    this.flowEl = document.createElement("div");
+    this.flowEl.id = "playtest-flow-readout";
+    Object.assign(this.flowEl.style, {
+      color: "#ffe0a8",
+      fontSize: "10px",
+      lineHeight: "1.32",
       marginBottom: "5px"
     });
 
@@ -120,7 +154,7 @@ export class PlaytestHudSystem {
       opacity: "0.70"
     });
 
-    this.el.append(this.titleEl, this.objectiveEl, this.actionEl, this.statusEl, this.auditEl, this.controlsEl);
+    this.el.append(this.titleEl, this.objectiveEl, this.statusEl, this.flowEl, this.auditEl, this.controlsEl);
     document.body.appendChild(this.el);
 
     this.audioGateEl = document.createElement("div");
@@ -159,6 +193,20 @@ export class PlaytestHudSystem {
     this.audioGateEl.addEventListener("mousedown", (event) => { event.preventDefault(); event.stopPropagation(); });
     this.audioGateEl.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); });
     document.body.appendChild(this.audioGateEl);
+  }
+
+  observeCascadeCue(frameState, cascade) {
+    if (!cascade) return false;
+    const cell = frameState.activeCellId;
+    const mount = frameState.firstSliceRuntimeMount?.mountSequence;
+    const now = frameState.runtimeSeconds;
+    if (!Number.isFinite(now) || !Number.isSafeInteger(mount)) return false;
+    let cue = this.cascadeCues.get(cell);
+    if (cue?.receiptId !== cascade.receiptId && cascade.cueSeconds > 0) {
+      cue = { receiptId: cascade.receiptId, mount, expiresAt: now + cascade.cueSeconds };
+      this.cascadeCues.set(cell, cue);
+    }
+    return cue?.receiptId === cascade.receiptId && cue.mount === mount && now < cue.expiresAt;
   }
 
   resolveHudState(frameState, visible) {
@@ -247,7 +295,11 @@ export class PlaytestHudSystem {
     // One player-facing vocabulary shared across Silt, Vascular, Grave and Hub.
     // This readout does not act as an input owner or progress/receipt signal.
     const languageRead = readHostLanguage(frameState);
-    const languageLine = languageRead?.lines?.join("\n") ?? "";
+    const siltFlowLabelsOpen = Boolean(frameState.coreFlow && frameState.quickLookInspector?.coreLabelsEnabled
+      && frameState.activeCellId === SILT_FLOW_CELL);
+    const flowLine = siltFlowLabelsOpen && inSiltFlowWorld(frameState)
+      ? describeSiltFlow(frameState.coreFlow) : '';
+    const languageLine = languageRead?.lines?.join("\n") ?? '';
 
     const selectedChemistry = coreWorkManipulation.selectedChemistry ?? spatialCoreChemistry.selectedPlacement ?? null;
     const topology = coreWorkManipulation.topology ?? spatialCoreChemistry.topology ?? null;
@@ -406,7 +458,14 @@ export class PlaytestHudSystem {
     );
     const interactionRhythm = interactionComposition.rhythm ?? {};
     const worldLedBeat = ["consequence", "reorient", "discover", "follow_answer", "quiet"].includes(interactionRhythm.beat);
-    const primaryInstruction = actionHint || objective;
+    const cascade = readCascadeLabel(frameState);
+    const freshConsequence = this.observeCascadeCue(frameState, cascade);
+    const contextualLabel = visible ? readContextualWorldLabel(frameState, {
+      action: actionHint || objective,
+      targetLabel: target.targetLabel && target.targetLabel !== target.targetId ? target.targetLabel : targetLabel,
+      cascade, freshConsequence
+    }) : null;
+    const primaryInstruction = contextualLabel?.text ?? (actionHint || objective);
     const testPlatformToast = Boolean(testPlatform.active && (testPlatform.elapsedSeconds ?? 999) <= 5.0)
       ? `TEST ${testPlatform.slot ?? "?"}/8 · ${testPlatform.label ?? "platform"} · ~${testPlatform.suggestedSeconds ?? 60}s · next ${testPlatform.nextShortcut ?? "Shift+1"} · `
       : "";
@@ -473,6 +532,9 @@ export class PlaytestHudSystem {
       primaryInstruction,
       statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
       auditLine: [auditLine, languageLine].filter(Boolean).join("\n"),
+      flowLine,
+      siltFlowLabelsOpen,
+      contextualLabel,
       languageRead,
       controlLine: testPlatformToast ? `${this.controlLine(frameState)} · Shift+1..8 test platforms` : this.controlLine(frameState),
       technicalIdsPlayerFacing: false,
@@ -629,19 +691,26 @@ export class PlaytestHudSystem {
 
   applyPanel(state, visible) {
     this.applyAudioGate(state);
-    this.el.style.display = visible ? "block" : "none";
+    this.el.style.display = visible ? "var(--silt-flow-hud-display, block)" : "none";
+    this.el.toggleAttribute('data-silt-flow-labels', visible && state.siltFlowLabelsOpen);
+    const context = visible ? state.contextualLabel : null;
+    this.el.toggleAttribute('data-contextual-labels', Boolean(context));
     if (!visible) return;
 
     this.titleEl.textContent = state.title;
     this.objectiveEl.textContent = state.primaryInstruction ?? state.actionHint ?? state.objective;
-    this.objectiveEl.style.opacity = state.worldLedBeat ? "0.50" : "1";
-    this.objectiveEl.style.transform = state.worldLedBeat ? "translateY(1px)" : "translateY(0)";
-    this.actionEl.textContent = "";
-    this.actionEl.style.display = "none";
+    this.objectiveEl.style.opacity = !context && state.worldLedBeat ? "0.50" : "1";
+    this.objectiveEl.style.transform = !context && state.worldLedBeat ? "translateY(1px)" : "translateY(0)";
+    this.objectiveEl.style.fontWeight = context?.tier === 'consequence' ? '700' : '';
+    const secondaryLine = context ? context.history : state.flowLine;
+    this.flowEl.textContent = secondaryLine ?? "";
+    this.flowEl.style.display = secondaryLine ? "block" : "none";
     this.statusEl.textContent = state.statusLine;
+    this.statusEl.style.display = context ? "none" : "";
     this.auditEl.textContent = state.auditLine ?? "";
-    this.auditEl.style.display = state.auditLine ? "block" : "none";
+    this.auditEl.style.display = !context && state.auditLine ? "block" : "none";
     this.controlsEl.textContent = state.controlLine;
+    this.controlsEl.style.display = context ? "none" : "";
     this.statusEl.style.opacity = state.worldLedBeat ? "0.68" : "1";
     this.controlsEl.style.opacity = state.worldLedBeat ? "0.42" : "0.78";
     this.el.style.maxHeight = "calc(100vh - 156px)";
@@ -790,8 +859,8 @@ export class PlaytestHudSystem {
       if (layeredInteraction.active && !(layeredInteraction.completed && frameState.hubChamberFoundation?.active)) return layeredInteraction.objectiveLine ?? "Follow the layered resonance sequence.";
       const hubFoundation = frameState.hubChamberFoundation ?? {};
       const hubInvestigation = frameState.hubInvestigationGameplay ?? {};
-      if (hubInvestigation.active) return hubInvestigation.objectiveLine ?? "Investigate all three routes and the memory fragment.";
-      if (hubFoundation.active) return hubFoundation.objectiveLine ?? "Read one active route and two dormant routes around the junction.";
+      if (hubInvestigation.active) return hubInvestigation.objectiveLine ?? "Route and memory readings are optional.";
+      if (hubFoundation.active) return hubFoundation.objectiveLine ?? "Choose an available route around the junction.";
       const nextRoutePressure = frameState.signalChorusNextRoutePressure ?? {};
       if (nextRoutePressure.active) return nextRoutePressure.objectiveLine ?? "Observe the combward pressure. It is readable, but it is not open.";
       const signalReturnState = frameState.signalChorusReturnState ?? {};
@@ -887,6 +956,19 @@ export class PlaytestHudSystem {
         ? "Move through the lit tissue crease. No button is required."
         : "Move away from the arrival crease once; returning to it will arm the physical revisit path.";
     }
+    const returnBoundary = frameState.localCellBoundaryMorphById?.[HUB_RETURN_BOUNDARY_BY_CELL[cellId]];
+    const returnGuard = returnBoundary?.proximityReturnGuard;
+    const readingGraveII = returnBoundary?.recipeId === "grave_to_hub" && frameState.graveResonanceGameplay?.active;
+    if (frameState.quickLookInspector?.coreLabelsEnabled
+      && !inspectionCamera.active && !frameState.inspectionCamera?.active
+      && !frameState.statusPage?.open && frameState.input?.primaryActionContext !== "core_work"
+      && returnBoundary?.returnPrerequisitesMet && !returnBoundary.active && returnGuard
+      && Number.isFinite(returnBoundary.distance)
+      && (!readingGraveII || returnBoundary.distance <= returnGuard.departureDistance)) {
+      return returnGuard.armed
+        ? "Swim through to Hub"
+        : "Move away, then approach the fold again";
+    }
     if (cellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001" && frameState.graveResonanceGameplay?.active) {
       return frameState.graveResonanceGameplay.nextAction;
     }
@@ -949,7 +1031,7 @@ export class PlaytestHudSystem {
       return action;
     }
     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubInvestigation.active) return hubInvestigation.nextAction ?? "Approach an awake route body and press A to commit.";
-    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active) return hubFoundation.nextAction ?? "Read the active route and remember the two dormant routes.";
+    if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && hubFoundation.active) return hubFoundation.nextAction ?? "Approach an available route body. Press A / E when offered.";
     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && nextRoutePressure.active) return nextRoutePressure.nextAction ?? "Hold the reading and learn the direction. No route input is accepted.";
     if (cellId === "CELL_SIGNAL_CHORUS_NERVE_001" && signalReturnState.active) return signalReturnState.nextAction ?? "Hold the returned Grave reading.";
     if (cellId === "CELL_GRAVE_MEMORY_RESIDUE_BED_001" && graveReturn.active) return graveReturn.nextAction ?? "Follow the remembered return current.";

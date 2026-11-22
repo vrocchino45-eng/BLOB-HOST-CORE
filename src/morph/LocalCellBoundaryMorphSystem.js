@@ -918,17 +918,15 @@ export class LocalCellBoundaryMorphSystem {
       : Number.POSITIVE_INFINITY;
     const interactionRange = grave.returnFoldInteractionRange ?? recipe.interactionRange;
     const returnRegion = frameState.graveReturnRegion ?? {};
+    const returnPrerequisitesMet = Boolean(grave.returnFoldReady && grave.graveMemoryImprintCommitted);
     // HC031A1: phase-2 return grammar earns progression credit but never owns
     // permission to leave. The authored Grave fold remains safe whenever Grave I
     // itself says it is ready, including on unresolved return visits.
     return {
-      ready: Boolean(
-        grave.returnFoldReady &&
-        grave.graveMemoryImprintCommitted &&
-        distance <= interactionRange
-      ),
+      ready: returnPrerequisitesMet && distance <= interactionRange,
       distance,
       interactionRange,
+      returnPrerequisitesMet,
       returnReady: Boolean(grave.returnFoldReady),
       returnRegionActive: Boolean(returnRegion.active),
       returnRegionResolved: Boolean(!returnRegion.active || returnRegion.completed),
@@ -949,11 +947,13 @@ export class LocalCellBoundaryMorphSystem {
       contract.returnFoldInteractionRange ??
       route.returnFoldInteractionRange ??
       recipe.interactionRange;
+    const returnPrerequisitesMet = Boolean(route.returnFoldReady && route.completed);
 
     return {
-      ready: Boolean(route.returnFoldReady && route.completed && distance <= interactionRange),
+      ready: returnPrerequisitesMet && distance <= interactionRange,
       distance,
       interactionRange,
+      returnPrerequisitesMet,
       returnReady: Boolean(route.returnFoldReady)
     };
   }
@@ -1312,6 +1312,8 @@ export class LocalCellBoundaryMorphSystem {
   }
 
   publishBoundary(recipe, state, frameState, phase, details = {}) {
+    const hubReturnFold = recipe.trigger === "proximity"
+      && ["grave_return", "vascular_return", "silt_return"].includes(recipe.readiness);
     const snapshot = {
       pass: "HC-016I",
       recipeId: recipe.id,
@@ -1336,6 +1338,12 @@ export class LocalCellBoundaryMorphSystem {
             rule: "return requires ready dwell + released interact + fresh interact"
           }
         : null,
+      ...(hubReturnFold && {
+        proximityReturnGuard: {
+          armed: state.proximityReturnArmed,
+          departureDistance: (details.interactionRange ?? recipe.interactionRange) + this.proximityReturnDepartureMargin
+        }
+      }),
       mutatesActiveCell: true,
       legacyGateMutationRequired: false,
       samePlayerPositionRetained: true,
