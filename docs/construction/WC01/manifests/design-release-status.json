@@ -1,0 +1,77 @@
+{
+  "schema": "BLOB-WC01/design-release-status/1",
+  "revision": "WC01 v0.2",
+  "gate": "reference/DESIGN_AND_CANON_REVIEW.md",
+  "register": "reference/DESIGN_RFI_REGISTER.md",
+  "authorization": "planning-only",
+  "authorizedOrders": [],
+  "packages": [
+    {
+      "id": "P01",
+      "issue": "held",
+      "subscopes": [
+        {
+          "rfi": "S01",
+          "disposition": "Ready for construction",
+          "decision": "reference/REGION_BLUEPRINTS/silt_burrow_route.md#s-dec-01"
+        },
+        {
+          "rfi": "S02",
+          "disposition": "Ready for independent verification",
+          "construction": "Blocked by dependency",
+          "dependency": "Identify redundant Shelf-local emitter from matched evidence"
+        },
+        {
+          "rfi": "S03",
+          "disposition": "Ready for independent verification",
+          "construction": "out of scope"
+        }
+      ]
+    },
+    {
+      "id": "P02",
+      "issue": "held",
+      "subscopes": [
+        {
+          "rfi": "V01",
+          "disposition": "Ready for construction",
+          "decision": "reference/REGION_BLUEPRINTS/vascular_route.md#v-dec-01"
+        },
+        {
+          "rfi": "V02",
+          "disposition": "Requires game design",
+          "construction": "out of scope"
+        },
+        {
+          "rfi": "E01",
+          "disposition": "Requires game design",
+          "construction": "out of scope"
+        }
+      ]
+    },
+    {
+      "id": "P03",
+      "issue": "held",
+      "subscopes": [
+        {
+          "rfi": "H01",
+          "disposition": "Ready for independent verification",
+          "construction": "Blocked by dependency",
+          "decision": "reference/REGION_BLUEPRINTS/hub_chamber.md#h-dec-01",
+          "dependency": "Prove the stale copy reaches an active guidance consumer"
+        }
+      ]
+    },
+    {
+      "id": "P04",
+      "issue": "held",
+      "subscopes": [
+        {
+          "rfi": "C01",
+          "disposition": "Blocked by dependency",
+          "dependency": "Accepted candidate trades and matched owner traces"
+        }
+      ]
+    }
+  ]
+}

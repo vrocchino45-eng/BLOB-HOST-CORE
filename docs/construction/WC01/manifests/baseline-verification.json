@@ -1,0 +1,192 @@
+{
+  "source": "WC01 baseline-canonical results.json",
+  "sha256OfSourceRecord": "66149fb4157492dab5ef8bb4d7e9ede73da97b0481c68c6e5d529c803e71a477",
+  "checkedSnapshotSha256": "9aeec9e118531623e3044fbf5be0a474edf107081ac4940e96832387d3275b9f",
+  "nodeVersion": "v24.14.0",
+  "npmVersion": "11.19.1",
+  "passed": true,
+  "buildParity": true,
+  "buildFileCount": 541,
+  "results": [
+    {
+      "label": "focused",
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "scripts/testWave1CoreEngine.mjs",
+        "scripts/testWave1VerbInteraction.mjs",
+        "scripts/testWave1HostResponse.mjs",
+        "scripts/testWave1FeedbackState.mjs",
+        "scripts/testWave1TargetLifecycle.mjs",
+        "scripts/testF1SiltFlow.mjs",
+        "scripts/testC2CascadeVisuals.mjs",
+        "scripts/testC2ContextualLabels.mjs",
+        "scripts/testLocalSiltSeepExchange.mjs",
+        "scripts/testLocalSiltEcologicalResistance.mjs",
+        "scripts/testSiltHeldMotionReporting.mjs",
+        "scripts/testB5FlowReserveSettlement.mjs",
+        "scripts/testB5GraveCoreFeedback.mjs",
+        "scripts/testC63RouteReadiness.mjs",
+        "scripts/testT1ReturnReadout.mjs"
+      ],
+      "status": 0,
+      "classification": "gate",
+      "tests": 128,
+      "pass": 128,
+      "fail": 0
+    },
+    {
+      "label": "verifyWave1CoreProfiles",
+      "args": [
+        "scripts/verifyWave1CoreProfiles.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "checkC63HubRouteAccess",
+      "args": [
+        "scripts/checkC63HubRouteAccess.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "validateRecipeDataLoad",
+      "args": [
+        "scripts/validateRecipeDataLoad.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "smokeHC031W1StabilizedAimLocalContact",
+      "args": [
+        "scripts/smokeHC031W1StabilizedAimLocalContact.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "smokeHC031U21RelationshipIntentLatch",
+      "args": [
+        "scripts/smokeHC031U21RelationshipIntentLatch.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "validateLS1BLivingSiltMaterialCycle",
+      "args": [
+        "scripts/validateLS1BLivingSiltMaterialCycle.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "validateHC016QTenderCompanion",
+      "args": [
+        "scripts/validateHC016QTenderCompanion.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "validateHC031C2FragmentFieldCapture",
+      "args": [
+        "scripts/validateHC031C2FragmentFieldCapture.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "validateHC031DRuptureConsequence",
+      "args": [
+        "scripts/validateHC031DRuptureConsequence.mjs"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "smokeHC031UGatheringGroundEncounters",
+      "args": [
+        "scripts/smokeHC031UGatheringGroundEncounters.mjs"
+      ],
+      "status": 1,
+      "classification": "historical observation"
+    },
+    {
+      "label": "smokeHC031U2PersistentEcology",
+      "args": [
+        "scripts/smokeHC031U2PersistentEcology.mjs"
+      ],
+      "status": 1,
+      "classification": "historical observation"
+    },
+    {
+      "label": "validateHC031T5RidgeTraceCanonicalGatheringGround",
+      "args": [
+        "scripts/validateHC031T5RidgeTraceCanonicalGatheringGround.mjs"
+      ],
+      "status": 1,
+      "classification": "historical observation"
+    },
+    {
+      "label": "validateHC028I1CombReentryReturnArming",
+      "args": [
+        "scripts/validateHC028I1CombReentryReturnArming.mjs"
+      ],
+      "status": 1,
+      "classification": "historical observation"
+    },
+    {
+      "label": "validateCombThresholdPlayableHC013B",
+      "args": [
+        "scripts/validateCombThresholdPlayableHC013B.mjs"
+      ],
+      "status": 1,
+      "classification": "historical observation"
+    },
+    {
+      "label": "validateHC016IApertureBoundaryMigration",
+      "args": [
+        "scripts/validateHC016IApertureBoundaryMigration.mjs"
+      ],
+      "status": 1,
+      "classification": "historical observation"
+    },
+    {
+      "label": "npm-version",
+      "args": [
+        "/d",
+        "/s",
+        "/c",
+        "npm.cmd --version"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "production-build",
+      "args": [
+        "/d",
+        "/s",
+        "/c",
+        "npm.cmd run build"
+      ],
+      "status": 0,
+      "classification": "gate"
+    },
+    {
+      "label": "production-build-replay",
+      "args": [
+        "/d",
+        "/s",
+        "/c",
+        "npm.cmd run build -- --outDir dist-replay"
+      ],
+      "status": 0,
+      "classification": "gate"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema": "BLOB-WC01/trade-allowlist/1",
+  "trade": "P01",
+  "authorization": "setup-only",
+  "production": [
+    "src/player/CoreFlowSystem.js",
+    "src/targeting/TargetingSystem.js",
+    "src/player/CoreVerbPhysicalizationSystem.js",
+    "src/world/RegionalTerritoryExpansion.js"
+  ],
+  "tests": [
+    "scripts/testF1SiltFlow.mjs",
+    "scripts/testWave1TargetLifecycle.mjs"
+  ],
+  "deletions": []
+}
