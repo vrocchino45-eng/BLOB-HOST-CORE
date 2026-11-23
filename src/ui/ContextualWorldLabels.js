@@ -169,6 +169,9 @@ export function readContextualWorldLabel(frame, { action, targetLabel, cascade, 
     return { tier: 'interaction', text: 'Crown extending · keep facing the Shelf' };
   }
   if (silt?.pressureRelationshipHeld) return { tier: 'interaction', text: 'Silt ribs · bracing pressure' };
+  if (vascular?.stage === 'project_through_stabilized_current' && vascular.currentRelationshipReady) {
+    return { tier: 'interaction', text: 'Vascular current · ready to Pulse' };
+  }
   if (vascular?.currentRelationshipHeld) return { tier: 'interaction', text: 'Vascular current · Stabilize holding' };
   const control = frame.verbComposition?.control;
   if (target?.relationshipActive && control?.strength01 > 0 && control.targetId === target.relationshipTargetId

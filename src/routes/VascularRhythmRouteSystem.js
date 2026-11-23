@@ -1342,15 +1342,21 @@ export class VascularRhythmRouteSystem {
     this.retainedSynchronizationStrength += (retainedTarget - this.retainedSynchronizationStrength)
       * (1 - Math.exp(-dt * 4.2));
     const visual = this.recipe.visual ?? {};
-    const ready = this.pulseWindowOpen() && this.chargeDistance <= (this.recipe.cadence?.pulseRange ?? 1.3) * 1.35;
-    const chargeColor = this.desynchronized
-      ? this.stabilizing
-        ? visual.recoveryColor ?? 0x82ffcf
-        : visual.desyncColor ?? 0xf95b61
-      : this.completed
-        ? visual.returnColor ?? 0xffc96d
-        : ready
-          ? visual.readyColor ?? 0xffd9b8
+    // V01: the native held current owns readiness; cadence, C2 arrival and
+    // independently answering Relays do not grant permission to project.
+    const ready = !this.completed && this.currentRelationshipReady;
+    const bracing = !this.completed && this.currentRelationshipHeld && !ready
+      && !this.lastInteraction.endsWith("_projected_through_valve");
+    const scattered = !this.completed
+      && (this.desynchronized || this.warning.includes("desynchronization"));
+    const chargeColor = this.completed
+      ? visual.returnColor ?? 0xffc96d
+      : ready
+        ? visual.readyColor ?? 0xffd9b8
+        : scattered
+          ? this.stabilizing
+            ? visual.recoveryColor ?? 0x82ffcf
+            : visual.desyncColor ?? 0xf95b61
           : visual.signalColor ?? 0x78e3ff;
 
     const remoteSiltLoad = this.siltSignalReceiver.membraneLoad;
@@ -1425,9 +1431,11 @@ export class VascularRhythmRouteSystem {
           : (worldBarPhase + index * 0.19) % 1;
       const opening = this.completed
         ? 0.86
-        : activeValve && this.pulseWindowOpen()
+        : activeValve && ready
           ? 1
-          : locked ? 0.72 : 0.18 + (Math.sin(valveBeat * Math.PI * 2) + 1) * 0.12;
+          : activeValve && bracing
+            ? 0.62
+            : locked ? 0.72 : 0.18 + (Math.sin(valveBeat * Math.PI * 2) + 1) * 0.12;
       for (const lobe of valve.children) {
         if (!lobe.isMesh) continue;
         const basePosition = lobe.userData.basePosition;
@@ -1461,13 +1469,14 @@ export class VascularRhythmRouteSystem {
         + Math.sin(t * 7.2) * 0.055
         + worldBeatPulse * 0.07
         + (ready ? 0.22 : 0)
+        + (bracing ? 0.1 : 0)
         + (this.pulseFlashAge < 0.25 ? 0.25 : 0);
       this.chargeCore.scale.setScalar(chargePulse);
       this.chargeCore.material.color.setHex(chargeColor);
       this.chargeCore.material.emissive.setHex(chargeColor);
-      this.chargeCore.material.emissiveIntensity = ready ? 1.35 : this.desynchronized ? 1.1 : 0.76;
+      this.chargeCore.material.emissiveIntensity = ready ? 1.35 : this.desynchronized ? 1.1 : bracing ? 1 : 0.76;
       this.chargeLight.color.setHex(chargeColor);
-      this.chargeLight.intensity = ready ? 1.85 : this.desynchronized ? 1.28 : 0.84;
+      this.chargeLight.intensity = ready ? 1.85 : this.desynchronized ? 1.28 : bracing ? 1.1 : 0.84;
     }
 
     for (const trail of this.chargeTrail) {
@@ -1612,14 +1621,19 @@ export class VascularRhythmRouteSystem {
     if (readsComplete) {
       return "All three current reads are retained. Hold Stabilize long enough for the circulation to settle and reverse.";
     }
-    if (this.desynchronized || this.warning.includes("desynchronization")) {
-      return "The current scattered, but the relationship is recoverable. Hold Stabilize inside the living flow.";
-    }
     if (this.currentRelationshipReady) {
       return "The current is held against the next valve. Pulse through that relationship; the beat changes strength, not permission.";
     }
+    if (this.lastInteraction === `current_relationship_${this.lockedCadenceReads}_projected_through_valve`) {
+      return `Current read ${this.lockedCadenceReads}/${requiredReads} retained. Follow the bright charge toward the next valve.`;
+    }
+    if (this.desynchronized || this.warning.includes("desynchronization")) {
+      return this.stabilizing
+        ? `The scattered flow is reweaving. ${this.lockedCadenceReads}/${requiredReads} current reads remain retained. Keep Stabilize held.`
+        : `The current scattered. ${this.lockedCadenceReads}/${requiredReads} current reads remain retained. Return to the flow and hold Stabilize.`;
+    }
     if (this.currentRelationshipHeld) {
-      return "Keep Stabilize held for a moment so the next valve and Core settle into one current.";
+      return "The current relationship is forming at the next valve. Keep Stabilize held until it is ready to project.";
     }
     return "Move with the bright charge to the next valve, then Stabilize to establish the current relationship.";
   }
@@ -1635,14 +1649,21 @@ export class VascularRhythmRouteSystem {
         ? "Hold Stabilize until the retained current settles and reverses toward the Hub."
         : "Move back inside the braided current, then hold Stabilize to settle it.";
     }
-    if (this.desynchronized || this.warning.includes("desynchronization")) {
-      return "Hold Stabilize near the center current until the scattered flow reweaves.";
-    }
     if (this.currentRelationshipReady) {
       return "Pulse while Stabilize is held. Rhythm alignment strengthens the read but is not a timing gate.";
     }
+    if (this.lastInteraction === `current_relationship_${this.lockedCadenceReads}_projected_through_valve`) {
+      return "Follow the bright charge to the next valve, then hold Stabilize to form the next current relationship.";
+    }
+    if (this.desynchronized || this.warning.includes("desynchronization")) {
+      return !this.stabilizationInRange
+        ? "Move back inside the braided current, then hold Stabilize to reweave the scattered flow."
+        : this.stabilizing
+          ? "Keep Stabilize held while the scattered flow reweaves; earned current reads are retained."
+          : "Hold Stabilize near the center current until the scattered flow reweaves.";
+    }
     if (this.currentRelationshipHeld) {
-      return "Keep Stabilize held briefly; then Pulse through the next valve.";
+      return "Keep Stabilize held to finish forming the current relationship at this valve.";
     }
     return "Ride to the next valve and hold Stabilize to establish a relationship with the current.";
   }

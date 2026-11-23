@@ -8,6 +8,7 @@ import { ModeController } from '../src/modes/ModeController.js';
 import { LocalCellBoundaryMorphSystem } from '../src/morph/LocalCellBoundaryMorphSystem.js';
 import { LOCAL_CELL_BOUNDARY_RECIPES_HC016G } from '../src/morph/LocalCellBoundaryRecipeRegistry.js';
 import { PlaytestHudSystem } from '../src/ui/PlaytestHudSystem.js';
+import { StatusPageSystem } from '../src/ui/StatusPageSystem.js';
 
 const HUB_CELL = 'CELL_SIGNAL_CHORUS_NERVE_001';
 const REAPPROACH = 'Move away, then approach the fold again';
@@ -241,3 +242,107 @@ for (const spoke of spokes) {
     assert.deepEqual(exerciseSpoke(spoke, true), exerciseSpoke(spoke, false));
   });
 }
+
+function setupStatusReadout(spoke) {
+  const { frameState, playerRoot, hub, picker, commit, boundary } = setup(true, [spoke]);
+  const status = new StatusPageSystem({ appRoot: {}, frameState });
+  const routeLine = (distance) => {
+    playerRoot.position.set(14 - distance, 0, 12);
+    for (let pass = 0; pass < 2; pass++) {
+      boundary.publishCompatibilityReadModel(frameState);
+      frameState.hubChamberFoundation = hub.createState(true, true);
+      picker.updateCommitCandidate(frameState);
+      picker.publishCommitmentOpportunity(frameState);
+    }
+    const markup = status.renderRegion(frameState);
+    return markup.match(new RegExp('>' + spoke.name + '</span> — ([^<]+)'))?.[1];
+  };
+  return { frameState, hub, picker, commit, status, boundary, routeLine };
+}
+
+for (const spoke of spokes) {
+  test('C1 Status follows the actual ' + spoke.name + ' offer through the commit boundary', () => {
+    const { frameState, picker, commit, status, boundary, routeLine } = setupStatusReadout(spoke);
+    assert.equal(routeLine(2.12), 'Available — approach');
+    assert.equal(frameState.firstSliceGates[spoke.entry.gateId].crossable, true);
+    assert.equal(frameState.hubChamberFoundation.routes[0].runtimeStatus, 'crossable');
+    assert.equal(frameState.hubRouteCommit.available, false);
+    assert.equal(frameState.commitmentOpportunity, undefined);
+    frameState.input = { interactPressed: true, interactEventId: 1 };
+    commit.update(0, frameState);
+    picker.handleCommitEvent(frameState);
+    assert.equal(frameState.deliberateCommitment.committed, false);
+    assert.equal(frameState.hubRouteCommitRequest, undefined);
+
+    assert.equal(routeLine(2.101), 'Available — approach');
+    assert.equal(routeLine(2.099), 'Ready — enter');
+    assert.equal(frameState.commitmentOpportunity.targetId, spoke.entry.routeId);
+    const body = frameState.hubChamberFoundation.routes[0];
+    // Test the exact published distance independently of world-coordinate rounding.
+    body.distanceToPlayer = 2.1;
+    picker.updateCommitCandidate(frameState);
+    picker.publishCommitmentOpportunity(frameState);
+    assert.equal(frameState.hubRouteCommit.available, true);
+    assert.match(status.renderRegion(frameState), new RegExp('>' + spoke.name + '</span> — Ready — enter'));
+
+    frameState.input = { stabilizeHeld: true, interactPressed: true, interactEventId: 2 };
+    assert.equal(routeLine(2.099), 'Ready — release Stabilize, then enter');
+    commit.update(0, frameState);
+    assert.equal(frameState.deliberateCommitment.committed, false);
+
+    frameState.input = { interactPressed: true, interactEventId: 3 };
+    assert.equal(routeLine(2.099), 'Ready — enter');
+    commit.update(0, frameState);
+    picker.handleCommitEvent(frameState);
+    assert.equal(frameState.hubRouteCommitRequest.routeId, spoke.entry.routeId);
+    boundary.update(1 / 60, frameState);
+    assert.equal(boundary.activeRecipeId, spoke.entry.id);
+  });
+}
+
+test('C1 Status optional investigation is separate from preparation, approach and entry', () => {
+  const spoke = spokes[1];
+  const { frameState, status, routeLine } = setupStatusReadout(spoke);
+  frameState.hubInvestigationGameplay = { investigationReady: false };
+  assert.equal(routeLine(4), 'Available — approach');
+  assert.match(status.renderRegion(frameState), /Optional investigation — incomplete/);
+  frameState.input = { statusPageTogglePressed: true, statusPageEventId: 1 };
+  status.update(0, frameState);
+  assert.equal(status.firstHubUseComplete, false);
+
+  frameState.input = {};
+  frameState.hubInvestigationGameplay.investigationReady = true;
+  status.update(0, frameState);
+  assert.equal(status.firstHubUseComplete, true);
+  assert.equal(routeLine(4), 'Available — approach');
+  assert.equal(frameState.hubChamberFoundation.routes[0].runtimeStatus, 'crossable');
+  assert.match(status.renderRegion(frameState), /Optional investigation — complete/);
+
+  frameState.input = { cancelPressed: true };
+  status.update(0, frameState);
+  frameState.input = {};
+  assert.equal(routeLine(2), 'Ready — enter');
+  frameState.transitionContinuity[spoke.flag] = false;
+  assert.equal(routeLine(2), 'Unavailable');
+  assert.equal(frameState.hubRouteCommit.available, false);
+});
+
+test('C1 Status preserves inactive historical rows and withholds unplayable or unmatched offers', () => {
+  const spoke = spokes[0];
+  const { frameState, picker, status, routeLine } = setupStatusReadout(spoke);
+  assert.equal(routeLine(2), 'Ready — enter');
+  frameState.hubRouteCommit.routeId = 'different_route';
+  assert.match(status.renderRegion(frameState), /Grave<\/span> — Unavailable/);
+
+  const body = frameState.hubChamberFoundation.routes[0];
+  body.gameplayPending = true;
+  body.distanceToPlayer = 4;
+  picker.updateCommitCandidate(frameState);
+  picker.publishCommitmentOpportunity(frameState);
+  assert.match(status.renderRegion(frameState), /Grave<\/span> — Unavailable/);
+
+  frameState.hubChamberFoundation.active = false;
+  body.runtimeStatus = 'not_visible';
+  assert.match(status.renderRegion(frameState), /Grave<\/span> — not_visible/);
+  assert.doesNotMatch(status.renderRegion(frameState), /Optional investigation/);
+});

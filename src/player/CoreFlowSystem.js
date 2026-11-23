@@ -5,6 +5,7 @@ import { clampFlow, inspectFlowPatchContact, MAX_FLOW_REACH, MAX_FLOW_STEP, read
 const CROWN_ROOT = new THREE.Vector3(0, 0, -0.43);
 const REAR_ROOT = new THREE.Vector3(0, 0, 0.43);
 const RETURN_RADIUS = 0.43;
+const BLOCKED_PLANE_CLEARANCE = 0.1; // In body space, beyond the crown head's 0.085 radius.
 const UP = new THREE.Vector3(0, 1, 0);
 const FORWARD = new THREE.Vector3(0, 0, -1);
 const COLORS = { disconnected: 0xa4b6bb, contact: 0xf9d994, conducting: 0x6af8cb,
@@ -27,6 +28,7 @@ export class CoreFlowSystem {
     this.overloaded = false;
     this.circulation = 0;
     this.lastResult = null;
+    this.obstructionHit = null;
     this.view = null;
   }
 
@@ -37,6 +39,7 @@ export class CoreFlowSystem {
       && step.mountSequence === last.mountSequence
       && (step.frame < last.frame || (step.frame === last.frame && step.substep <= last.substep))) return;
     this.lastStep = step;
+    this.obstructionHit = null;
     const aim = readFlowAim(frameState);
     const unavailable = siltFlowUnavailableReason(frameState);
     const patch = unavailable === null ? this.readPatch(frameState) : null;
@@ -140,7 +143,8 @@ export class CoreFlowSystem {
     this.ray.far = origin.distanceTo(point) - 0.015;
     const surfaces = this.readContactSurfaces().filter(mesh => mesh.visible);
     for (const mesh of surfaces) mesh.updateWorldMatrix(true, false);
-    return this.ray.intersectObjects(surfaces, false).length > 0;
+    this.obstructionHit = this.ray.intersectObjects(surfaces, false)[0] ?? null;
+    return this.obstructionHit !== null;
   }
 
   createView(body) {
@@ -196,8 +200,13 @@ export class CoreFlowSystem {
     crown.visible = head.visible = hasCrown;
     if (hasCrown) {
       const tip = body.worldToLocal(new THREE.Vector3(...state.tip));
-      placeRod(crown, CROWN_ROOT, tip);
-      head.position.copy(tip);
+      if (state.reason === 'obstructed') {
+        crown.visible = head.visible = placeBlockedTip(body, this.obstructionHit, tip);
+      }
+      if (crown.visible) {
+        placeRod(crown, CROWN_ROOT, tip);
+        head.position.copy(tip);
+      }
     }
     loop.scale.x = 1.28 + state.strain01 * 0.09;
     if (result) {
@@ -207,6 +216,19 @@ export class CoreFlowSystem {
       returnAccent.position.set(Math.cos(angle) * RETURN_RADIUS * loop.scale.x, 0, Math.sin(angle) * RETURN_RADIUS);
     }
   }
+}
+
+function placeBlockedTip(body, hit, tip) {
+  if (!hit?.face?.normal) return false;
+  tip.copy(body.worldToLocal(hit.point.clone()));
+  const blockerToBody = body.matrixWorld.clone().invert().multiply(hit.object.matrixWorld);
+  const normal = hit.face.normal.clone().applyNormalMatrix(new THREE.Matrix3().getNormalMatrix(blockerToBody));
+  const rootClearance = Math.abs(normal.dot(CROWN_ROOT.clone().sub(tip)));
+  // A setback along the ray alone can leave the head across an angled face.
+  // Hide the blocked crown if the face is already too close to fit its head.
+  if (!(rootClearance > BLOCKED_PLANE_CLEARANCE)) return false;
+  tip.lerp(CROWN_ROOT, BLOCKED_PLANE_CLEARANCE / rootClearance);
+  return true;
 }
 
 function stepToward(value, target, amount) {

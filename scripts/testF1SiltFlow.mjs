@@ -32,7 +32,7 @@ function makeFrame() {
   };
 }
 
-function makeCircuit({ framesPerBatch = 1, zone = 'inner_body' } = {}) {
+function makeCircuit({ framesPerBatch = 1, zone = 'inner_body', settle = false } = {}) {
   const frame = makeFrame();
   const root = new THREE.Group();
   const playerRoot = new THREE.Group();
@@ -64,6 +64,7 @@ function makeCircuit({ framesPerBatch = 1, zone = 'inner_body' } = {}) {
   function tick(demand = 1, actionSequence = 1) {
     frame.frame = 1 + Math.floor(index / framesPerBatch);
     frame.runtimeSimulationSubstepIndex = index++ % framesPerBatch;
+    if (settle) frame.runtimeSimulationSubstepCount = framesPerBatch;
     frame.runtimeSimulationSubstepSeconds = step;
     frame.runtimeSeconds += step;
     frame.input = { flowDemand01: demand, flowActionSequence: actionSequence };
@@ -71,9 +72,10 @@ function makeCircuit({ framesPerBatch = 1, zone = 'inner_body' } = {}) {
     radial.update(step);
     territory.update({ dt: step, playerPosition: playerRoot.position, input: frame.input, frameState: frame });
     flow.update(step, frame);
+    if (settle) radial.settleFlowReserve(step, frame);
     return frame.coreFlow;
   }
-  return { frame, root, playerRoot, territory, patch, obstacles, flow, tick, get request() { return request; } };
+  return { frame, root, playerRoot, territory, patch, obstacles, flow, radial, tick, get request() { return request; } };
 }
 
 test('The opt-in InputSystem latches calibrated RT, preserves B Cancel and requires release on reconnect', () => {
@@ -271,6 +273,206 @@ test('The crown only reaches the authored disc from its exposed face and rejects
   assert.deepEqual(game.frame.coreFlow.tip, game.frame.coreFlow.contactPoint);
   for (const name of ['flow_forward_crown', 'flow_axial_tendril', 'flow_rear_conductor', 'flow_toroidal_return']) {
     assert.ok(game.playerRoot.getObjectByName(name)?.visible, name);
+  }
+});
+
+function assertRenderedCrownEndsAt(game, worldTip) {
+  const { crown, head } = game.flow.view;
+  const body = game.playerRoot.getObjectByName('player_seed_body_frame');
+  const origin = body.localToWorld(new THREE.Vector3(0, 0, -0.43));
+  assert.ok(head.getWorldPosition(new THREE.Vector3()).distanceTo(worldTip) < 1e-10);
+  assert.ok(crown.localToWorld(new THREE.Vector3(0, 0.5, 0)).distanceTo(worldTip) < 1e-10);
+  assert.ok(crown.localToWorld(new THREE.Vector3(0, -0.5, 0)).distanceTo(origin) < 1e-10);
+}
+
+function nearestVertexClearance(mesh, point, normal) {
+  mesh.updateWorldMatrix(true, false);
+  const positions = mesh.geometry.getAttribute('position');
+  const vertex = new THREE.Vector3();
+  let clearance = Infinity;
+  for (let index = 0; index < positions.count; index++) {
+    vertex.fromBufferAttribute(positions, index).applyMatrix4(mesh.matrixWorld).sub(point);
+    clearance = Math.min(clearance, vertex.dot(normal));
+  }
+  return clearance;
+}
+
+test('S01 blocked Shelf geometry stops before the nearest hit while the physical tip stays extended', () => {
+  for (const transformed of [false, true]) {
+    const game = makeCircuit();
+    const body = game.playerRoot.getObjectByName('player_seed_body_frame');
+    if (transformed) {
+      body.rotation.set(0.1, 0.2, 0.07);
+      body.scale.setScalar(1.15);
+    }
+    const walls = [0.15, 0.35, 0.5].map(offset => {
+      const wall = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.03));
+      wall.position.copy(game.patch.center).add(new THREE.Vector3(0, 0, offset));
+      game.root.add(wall);
+      game.obstacles.push(wall);
+      return wall;
+    });
+    walls[2].visible = false;
+    for (let i = 0; i < 30; i++) game.tick();
+    let casts = 0;
+    let hits;
+    const intersect = game.flow.ray.intersectObjects.bind(game.flow.ray);
+    game.flow.ray.intersectObjects = (...args) => {
+      casts++;
+      hits = intersect(...args);
+      return hits;
+    };
+    const state = game.tick();
+    assert.equal(casts, 1, 'presentation reuses the contact obstruction query');
+    assert.equal(hits[0].object, walls[1], 'nearest visible blocker wins regardless of surface order');
+    assert.equal(state.reason, 'obstructed');
+    assert.equal(state.contactValid, false);
+    assert.equal(state.contactPoint, null);
+    assert.equal(state.result, null);
+    assert.equal(game.territory.lastFlowResult, null);
+    const origin = body.localToWorld(new THREE.Vector3(0, 0, -0.43));
+    const direction = game.patch.center.clone().sub(origin).normalize();
+    const physicalTip = origin.clone().addScaledVector(direction, state.extension);
+    assert.ok(new THREE.Vector3(...state.tip).distanceTo(physicalTip) < 1e-10);
+    assert.ok(origin.distanceTo(physicalTip) > hits[0].distance);
+    assert.equal(game.flow.ray.near, 0.015);
+    assert.ok(Math.abs(game.flow.ray.far - origin.distanceTo(game.patch.center) + 0.015) < 1e-10);
+    const localHit = body.worldToLocal(hits[0].point.clone());
+    const localTip = game.flow.view.head.position;
+    const normal = hits[0].face.normal.clone().applyNormalMatrix(new THREE.Matrix3().getNormalMatrix(walls[1].matrixWorld));
+    const view = game.flow.view;
+    assert.ok(nearestVertexClearance(view.head, hits[0].point, normal) > 0);
+    assert.ok(nearestVertexClearance(view.crown, hits[0].point, normal) > 0);
+    assert.ok(localTip.distanceTo(new THREE.Vector3(0, 0, -0.43))
+      < localHit.distanceTo(new THREE.Vector3(0, 0, -0.43)));
+    assertRenderedCrownEndsAt(game, body.localToWorld(localTip.clone()));
+    assert.equal(game.flow.view.outboundAccent.visible, false);
+    assert.equal(game.flow.view.returnAccent.visible, false);
+
+    for (const wall of walls) wall.visible = false;
+    const touching = game.tick();
+    assert.equal(touching.phase, 'contact');
+    assertRenderedCrownEndsAt(game, new THREE.Vector3(...touching.tip));
+    for (let i = 0; i < 5; i++) game.tick();
+    const accepted = game.frame.coreFlow;
+    assert.ok(accepted.result.acceptedCurrent01 > 0);
+    assert.deepEqual(accepted.tip, accepted.contactPoint);
+    assertRenderedCrownEndsAt(game, new THREE.Vector3(...accepted.contactPoint));
+    assert.equal(game.flow.view.outboundAccent.visible, true);
+    assert.equal(game.flow.view.returnAccent.visible, true);
+  }
+});
+
+test('S01 angled obstructions clear every visible crown vertex in Far and Near World', () => {
+  for (const yaw of [0, 30, 45, 60, 75, 85]) {
+    const game = makeCircuit({ settle: true });
+    const wall = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }));
+    // Negative angles also exercise a hit on the reverse side of the face.
+    wall.rotation.y = THREE.MathUtils.degToRad(yaw - (yaw === 45 ? 180 : 0));
+    wall.position.copy(game.patch.center).add(new THREE.Vector3(0, 0, 0.45));
+    game.root.add(wall);
+    game.obstacles.push(wall);
+    const camera = new THREE.PerspectiveCamera(58, 16 / 9, 0.06, 80);
+    camera.position.copy(game.playerRoot.position).add(new THREE.Vector3(2, 1, 7));
+    camera.lookAt(game.playerRoot.position);
+    camera.updateMatrixWorld();
+    const framing = new NearWorldFraming();
+    const normal = new THREE.Vector3(0, 0, 1).applyQuaternion(wall.quaternion);
+    if (normal.dot(game.playerRoot.position.clone().sub(wall.position)) < 0) normal.negate();
+    for (let i = 0; i < 30; i++) game.tick();
+    const state = game.frame.coreFlow;
+    const { crown, head, outboundAccent, returnAccent } = game.flow.view;
+    assert.equal(state.reason, 'obstructed');
+    assert.equal(state.contactValid, false);
+    assert.equal(state.result, null);
+    assert.equal(game.territory.lastFlowResult, null);
+    assert.equal(outboundAccent.visible, false);
+    assert.equal(returnAccent.visible, false);
+    const far = framing.update(1, 0, true, camera, game.playerRoot.position, []);
+    const near = framing.update(1, 1, true, camera, game.playerRoot.position, []);
+    assert.equal(far, camera);
+    assert.notEqual(near, far);
+    assert.ok(Math.abs(near.position.distanceTo(game.playerRoot.position) - 3.8) < 0.001);
+    for (const view of [far, near]) {
+      assert.equal(crown.visible, yaw <= 60);
+      assert.equal(head.visible, crown.visible);
+      if (!head.visible) continue;
+      assert.ok(nearestVertexClearance(head, wall.position, normal) > 0.014, String(yaw));
+      assert.ok(nearestVertexClearance(crown, wall.position, normal) > 0.075, String(yaw));
+      const projected = head.getWorldPosition(new THREE.Vector3()).project(view);
+      assert.ok(Math.abs(projected.x) < 1 && Math.abs(projected.y) < 1);
+    }
+    assert.equal(game.frame.coreFlow, state);
+    wall.visible = false;
+    for (let i = 0; i < 5; i++) game.tick();
+    const accepted = game.frame.coreFlow;
+    assert.ok(accepted.result.acceptedCurrent01 > 0);
+    assertRenderedCrownEndsAt(game, new THREE.Vector3(...accepted.contactPoint));
+    assert.equal(head.visible, true);
+  }
+});
+
+test('S01 rendering preserves blocked and accepted state, reserve, receiver and telemetry across context exits', t => {
+  t.mock.method(SessionTelemetrySystem.prototype, 'makeSessionId', () => 'wc01-s01-parity');
+  for (const framesPerBatch of [1, 4]) {
+    const rendered = makeCircuit({ framesPerBatch, settle: true });
+    const reference = makeCircuit({ framesPerBatch, settle: true });
+    reference.flow.render = () => {};
+    const games = [rendered, reference];
+    const telemetry = games.map(game => new SessionTelemetrySystem({ frameState: game.frame, monotonicNowMs: () => 0 }));
+    const accepts = games.map(game => game.territory.acceptFlow);
+    const walls = games.map(game => {
+      game.radial.reserve01 = 0.6;
+      const wall = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.03));
+      wall.position.copy(game.patch.center).add(new THREE.Vector3(0, 0, 0.35));
+      game.root.add(wall);
+      game.obstacles.push(wall);
+      return wall;
+    });
+    const reasons = new Set();
+    let debit = 0;
+    for (let i = 0; i < 270; i++) {
+      const demand = i === 0 || (i >= 100 && i < 110) || i >= 260 ? 0 : 0.44;
+      const action = i === 0 ? 0 : i < 110 ? 1 : i < 125 ? 2 : i < 176 ? 3 : i < 211 ? 4 : i < 245 ? 5 : 6;
+      games.forEach((game, index) => {
+        walls[index].visible = (i >= 35 && i < 55) || (i >= 95 && i < 110);
+        game.territory.acceptFlow = i >= 55 && i < 65 ? () => null : accepts[index];
+        if (i === 115) game.frame.targeting.targetId = 'other_target';
+        if (i === 125) {
+          game.frame.targeting.targetId = SILT_FLOW_SITE;
+          game.frame.targeting.attentionSequence++;
+        }
+        if (i === 165) game.frame.inspectionCamera = { active: true };
+        if (i === 175 || i === 210) game.frame.inspectionCamera = null;
+        if (i === 200) game.frame.inspectionCamera = { active: true, coreWorkActive: true };
+        if (i === 235 || i === 245) {
+          game.frame.activeCellId = i === 235 ? 'CELL_SIGNAL_CHORUS_NERVE_001' : SILT_FLOW_CELL;
+          game.frame.firstSliceRuntimeMount.activeRuntimeCellId = game.frame.activeCellId;
+          game.frame.firstSliceRuntimeMount.mountSequence++;
+        }
+        game.tick(demand, action);
+        telemetry[index].update(step);
+      });
+      assert.deepEqual(rendered.frame, reference.frame);
+      assert.deepEqual(rendered.flow.binding, reference.flow.binding);
+      assert.equal(rendered.flow.contactAge, reference.flow.contactAge);
+      assert.equal(rendered.radial.reserve01, reference.radial.reserve01);
+      assert.deepEqual(rendered.request, reference.request);
+      assert.deepEqual(rendered.territory.snapshot().siteStates, reference.territory.snapshot().siteStates);
+      const exports = telemetry.map(owner => owner.exportSession());
+      assert.deepEqual(exports[0].developerTruth.siltFlow, exports[1].developerTruth.siltFlow);
+      assert.deepEqual(exports[0].events.map(event => [event.type, event.developer]),
+        exports[1].events.map(event => [event.type, event.developer]));
+      const state = rendered.frame.coreFlow;
+      if (rendered.flow.view?.root.visible && rendered.flow.view.head.visible && state.reason !== 'obstructed') {
+        assertRenderedCrownEndsAt(rendered, new THREE.Vector3(...state.tip));
+      }
+      reasons.add(state.reason);
+      debit += rendered.frame.siltFlowReserveSettlement?.actualDebit ?? 0;
+    }
+    for (const reason of ['obstructed', 'contact', 'receiver_rejected', 'current_accepted',
+      'released', 'target_changed', 'inspection', 'core_work', 'outside_silt']) assert.ok(reasons.has(reason), reason);
+    assert.ok(debit > 0);
   }
 });
 

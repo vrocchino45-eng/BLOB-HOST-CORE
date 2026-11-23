@@ -448,8 +448,19 @@ export class StatusPageSystem {
     const objective = frameState.objectiveState ?? {};
     const hub = frameState.hubChamberFoundation ?? {};
     const routes = Array.isArray(hub.routes) ? hub.routes : [];
+    const commit = frameState.hubRouteCommit;
+    const routeStatus = (route) => {
+      if (!hub.active) return route.runtimeStatus ?? "unknown";
+      if (commit?.active && commit.available && commit.routeId === route.id) {
+        return commit.entryGuidance?.reason === "release_stabilize"
+          ? "Ready — release Stabilize, then enter"
+          : "Ready — enter";
+      }
+      if (commit?.active && commit.approachRouteIds?.includes(route.id)) return "Available — approach";
+      return "Unavailable";
+    };
     const routeLines = routes.length
-      ? routes.map((route) => `<div style="margin-top:7px"><span style="color:${route.activeRoute ? "#ffe3a8" : "#9cc8d0"}">${this.escape(route.displayName ?? route.id)}</span> — ${this.escape(route.runtimeStatus ?? "unknown")}</div>`).join("")
+      ? routes.map((route) => `<div style="margin-top:7px"><span style="color:${route.activeRoute ? "#ffe3a8" : "#9cc8d0"}">${this.escape(route.displayName ?? route.id)}</span> — ${this.escape(routeStatus(route))}</div>`).join("")
       : '<div style="margin-top:7px;color:#9cc8d0">No Hub route layout active in this region.</div>';
 
     return `
@@ -464,6 +475,7 @@ export class StatusPageSystem {
       <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,224,169,.16);border-radius:12px;background:rgba(255,224,169,.035)">
         <div style="font-size:10px;letter-spacing:.14em;color:#ffdca8">HUB ROUTE READINGS</div>
         ${routeLines}
+        ${hub.active ? `<div style="margin-top:10px;color:#9cc8d0">Optional investigation — ${frameState.hubInvestigationGameplay?.investigationReady ? "complete" : "incomplete"}</div>` : ""}
       </div>
     `;
   }

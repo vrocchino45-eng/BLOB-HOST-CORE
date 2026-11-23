@@ -412,10 +412,18 @@ export class HubInvestigationGameplaySystem {
   createCommitState(active) {
     const candidate = active && !this.commitLatch ? this.commitCandidate : null;
     const pending = Boolean(active && this.commitLatch);
+    const frame = this.frameState;
+    const foundation = frame.hubChamberFoundation ?? {};
+    const approachRouteIds = active && !pending
+      ? (foundation.routes ?? [])
+        .filter((route) => this.routeEntryBlocker(route, frame) === "out_of_range")
+        .map((route) => route.id)
+      : [];
     return {
       pass: "HC-031P1-HF1",
       active: Boolean(active),
       available: Boolean(candidate),
+      approachRouteIds,
       pending,
       routeId: candidate?.id ?? this.commitLatch?.routeId ?? "none",
       gateId: candidate?.gateId ?? this.commitLatch?.gateId ?? "none",
