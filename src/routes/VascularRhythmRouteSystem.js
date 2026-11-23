@@ -4,6 +4,7 @@ import { VascularReturnHandoff } from "./VascularReturnHandoff.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
 import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
+import { readCoreStabilizeMountSequence, readPriorCoreStabilizeSample } from "../player/CoreStabilizeSample.js";
 
 const ROUTE_CELL_ID = "CELL_VASCULAR_RHYTHM_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -52,6 +53,10 @@ export function readCurrentMoteCoherenceRatio(frameState, response) {
   const ratio = response.directionalCalm / response.neutralDirectionalCalm;
   return Number.isFinite(ratio) && ratio >= 0.92 && ratio <= 1.08 ? ratio : 1;
 }
+
+const neutralCoreReweave = (neutralReason) => ({
+  eligible: false, factor: 1, turbulenceRemoved: 0, integrityRestored: 0, neutralReason
+});
 
 export class VascularRhythmRouteSystem {
   constructor({ recipeDataSystem, scene, playerRoot, frameState, hostConnectionReceiptLedger = null }) {
@@ -138,6 +143,8 @@ export class VascularRhythmRouteSystem {
     this.riskEventCount = 0;
     this.offBeatPulseCount = 0;
     this.recoverySeconds = 0;
+    this.coreReweave = neutralCoreReweave("not_mounted");
+    this.coreSampleAtMount = null;
     this.desynchronizationRecovered = false;
     this.desynchronized = false;
     this.stabilizing = false;
@@ -230,6 +237,10 @@ export class VascularRhythmRouteSystem {
   onRuntimeMount(frameState) {
     this.active = true;
     this.mountCount += 1;
+    // The producer replaces this sample at the end of each simulation step.
+    // Reject the sample already present when this route begins a new lifetime.
+    this.coreSampleAtMount = frameState.corePerformance?.stabilizeSample ?? null;
+    this.coreReweave = neutralCoreReweave("awaiting_mount_sample");
     this.entryAnchor.copy(this.playerRoot.position);
     this.previousPlayerPosition.copy(this.playerRoot.position);
     this.root.position.copy(this.entryAnchor);
@@ -249,6 +260,8 @@ export class VascularRhythmRouteSystem {
     this.returnHandoff.suspend();
     this.currentMoteVisualRate = 0;
     this.currentMoteCoherenceRatio = 1;
+    this.coreSampleAtMount = null;
+    this.coreReweave = neutralCoreReweave("not_mounted");
     this.active = false;
     this.setVisible(false);
     this.lastInteraction = frameState.activeCellId === HUB_CELL_ID
@@ -985,13 +998,19 @@ export class VascularRhythmRouteSystem {
       && this.currentRelationshipSeconds >= minimumRelationshipHoldSeconds
     );
 
+    const needsRecovery = this.turbulence > 0 || this.circulationIntegrity < 1;
+    this.coreReweave = this.resolveCoreReweave(dt, frameState, {
+      readsComplete, withinCurrent, needsRecovery
+    });
     if (stabilizing && !this.completed) {
       this.stabilizeSeconds += dt;
       if (readsComplete) {
         this.synchronization += dt
           * (stabilization.postReadSynchronizationPerSecond ?? 0.34);
       }
-      if (this.turbulence > 0 || this.circulationIntegrity < 1) {
+      if (needsRecovery) {
+        const turbulenceBefore = this.turbulence;
+        const integrityBefore = this.circulationIntegrity;
         const recoveryMultiplier = readsComplete
           ? (stabilization.postReadRecoveryMultiplier ?? 2.4)
           : 1;
@@ -1001,6 +1020,7 @@ export class VascularRhythmRouteSystem {
             - dt
             * (stabilization.turbulenceRecoveryPerSecond ?? 0.46)
             * recoveryMultiplier
+            * this.coreReweave.factor
         );
         this.circulationIntegrity = Math.min(
           1,
@@ -1008,7 +1028,11 @@ export class VascularRhythmRouteSystem {
             + dt
             * (stabilization.integrityRecoveryPerSecond ?? 0.34)
             * recoveryMultiplier
+            * this.coreReweave.factor
         );
+        // Measure the clamped recovery branch before Pulse and scatter can change it.
+        this.coreReweave.turbulenceRemoved = turbulenceBefore - this.turbulence;
+        this.coreReweave.integrityRestored = this.circulationIntegrity - integrityBefore;
         this.recoverySeconds += dt;
         this.lastInteraction = "stabilize_reweaving_scattered_circulation";
         this.warning = "recoverable_desynchronization_settling";
@@ -1116,6 +1140,39 @@ export class VascularRhythmRouteSystem {
       this.lastInteraction = "circulation_synchronized_relationship_reversed_toward_hub";
       this.warning = "none";
     }
+  }
+
+  resolveCoreReweave(dt, frameState, { readsComplete, withinCurrent, needsRecovery }) {
+    if (!this.active || frameState.activeCellId !== ROUTE_CELL_ID) return neutralCoreReweave("not_mounted");
+    if (this.completed || readsComplete) return neutralCoreReweave("post_read");
+    const input = frameState.input ?? {};
+    if (input.primaryActionContext === "core_work" || input.coreWorkViewPressed
+      || frameState.inspectionCamera?.active || frameState.inspectionCamera?.coreWorkActive
+      || frameState.tightInspectionCamera?.active || frameState.tightInspectionCamera?.coreWorkActive
+      || frameState.coreWorkManipulation?.held || frameState.statusPage?.open) {
+      return neutralCoreReweave("world_action_suspended");
+    }
+    if (input.stabilizeHeld !== true) return neutralCoreReweave("stabilize_released");
+    if (!withinCurrent || !this.stabilizing) return neutralCoreReweave("outside_current");
+    if (!this.desynchronized || !needsRecovery) return neutralCoreReweave("not_scattered");
+
+    const topology = frameState.spatialCoreChemistry;
+    if (topology?.retainedPieceCount !== 3 || topology.topology?.complete !== true) {
+      return neutralCoreReweave("forming_topology");
+    }
+    const sample = readPriorCoreStabilizeSample(frameState, dt);
+    if (!sample) return neutralCoreReweave("invalid_or_stale_sample");
+    if (sample.debugAnatomy !== false || frameState.coreGrowth?.debugCoreWorkRetainedAnatomySeeded) {
+      return neutralCoreReweave("debug_anatomy");
+    }
+    const mountSequence = readCoreStabilizeMountSequence(frameState);
+    if (mountSequence === null || sample.mountSequence !== mountSequence || sample === this.coreSampleAtMount) {
+      return neutralCoreReweave("mount_mismatch");
+    }
+
+    const factor = THREE.MathUtils.clamp(sample.coherenceMultiplier, 1, 1.10);
+    return { eligible: true, factor, turbulenceRemoved: 0, integrityRestored: 0,
+      neutralReason: factor === 1 ? "coherence_at_or_below_neutral" : null };
   }
 
   registerDesynchronization(cadence, source) {
@@ -2068,6 +2125,7 @@ export class VascularRhythmRouteSystem {
       offBeatPulseCount: this.offBeatPulseCount,
       postReadPulseIgnoredCount: this.postReadPulseIgnoredCount,
       recoverySeconds: this.recoverySeconds,
+      coreReweave: active ? { ...this.coreReweave } : neutralCoreReweave("not_mounted"),
       recoveryCount: Number(this.desynchronizationRecovered),
       desynchronizationRecovered: this.desynchronizationRecovered,
       failureRecoverable: true,

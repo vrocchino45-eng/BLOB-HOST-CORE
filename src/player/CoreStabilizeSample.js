@@ -13,6 +13,14 @@ const validCounts = c => c && ['deep_core','inner_body','membrane'].every(k=>Num
   && c.deep_core+c.inner_body+c.membrane===3;
 const distribution = c => `${c.deep_core}:${c.inner_body}:${c.membrane}`;
 
+export function readCoreStabilizeMountSequence(frameState) {
+  const mount = frameState.firstSliceRuntimeMount;
+  if (mount?.active !== true || mount.mountStatus !== 'active_region_mounted'
+    || mount.activeRuntimeCellId !== frameState.activeCellId
+    || !Number.isSafeInteger(mount.mountSequence) || mount.mountSequence < 0) return null;
+  return mount.mountSequence;
+}
+
 // CONNECTION36: metadata only. This neither changes nor applies capability.
 export function publishCoreStabilizeSample(f) {
   const p=f.corePerformance??{},chem=f.spatialCoreChemistry??{},counts=Object.freeze({...chem.counts});
@@ -24,6 +32,7 @@ export function publishCoreStabilizeSample(f) {
     sampledFrame:f.frame??null,sampledRuntimeSeconds:f.runtimeSeconds??null,
     sampledSubstep:f.runtimeSimulationSubstepIndex??0,sampledSubstepCount:f.runtimeSimulationSubstepCount??1,
     hostId:f.activeHostId??null,cellId:f.activeCellId??null,worldMode:world(f),
+    mountSequence:readCoreStabilizeMountSequence(f),
     debugAnatomy:Boolean(f.coreGrowth?.debugCoreWorkRetainedAnatomySeeded),
     topologyId:p.topologyId??null,distribution:p.distribution??null,counts,
     coherenceMultiplier:p.verbModifiers?.stabilize?.coherenceMultiplier??null,
