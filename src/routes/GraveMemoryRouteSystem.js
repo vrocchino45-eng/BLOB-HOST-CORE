@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GraveVascularEffectMemory } from "./GraveVascularEffectMemory.js";
 import { coreGraveRecoveryCoupling } from "./GraveRecoveryCoupling.js";
+import { readCoreStabilizeMountSequence, readPriorCoreStabilizeSample } from "../player/CoreStabilizeSample.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
 
@@ -155,6 +156,7 @@ export class GraveMemoryRouteSystem {
 
   onRuntimeMount(frameState) {
     this.memoryRecoveryWitness = null;
+    this.coreSampleAtMount = frameState.corePerformance?.stabilizeSample ?? null;
     this.active = true;
     this.mountCount += 1;
     this.entryAnchor.copy(this.playerRoot.position);
@@ -171,6 +173,7 @@ export class GraveMemoryRouteSystem {
 
   onRuntimeUnmount(frameState) {
     this.memoryRecoveryWitness = null;
+    this.coreSampleAtMount = null;
     this.vascularMemoryPresentationAt = -999;
     this.active = false;
     this.setVisible(false);
@@ -771,6 +774,7 @@ export class GraveMemoryRouteSystem {
           { suspended: suspended || !Number.isFinite(dt) || dt <= 0 });
         const recoilBefore = this.residueRecoilRisk;
         const integrityBefore = this.traceIntegrity;
+        const canReuseTraceBudget = coupling.coreContributing && integrityBefore === 1 && this.safeTransferRiskCleared();
         const recoilRate = this.recipe?.interaction?.recoveryPerSecond ?? 0.42;
         const integrityRate = this.recipe?.interaction?.traceRecoveryPerSecond ?? 0.3;
         this.residueRecoilRisk = Math.max(0, recoilBefore - dt * (recoilRate * coupling.multiplier));
@@ -784,6 +788,14 @@ export class GraveMemoryRouteSystem {
             traceRecovery: this.traceIntegrity - integrityWithoutMemory,
             baseRecoveryBudget: dt * (recoilRate + integrityRate)
           });
+        }
+        if (canReuseTraceBudget && this.residueRecoilRisk > 0 && this.canSettleResidualRecoil(dt, frameState)) {
+          // A full trace clips the entire earned trace increment. The world-memory witness
+          // above is exclusive to a stronger world contribution and never counts this work.
+          const unusedEarnedTraceRecovery = dt * integrityRate * (coupling.coreMultiplier - 1);
+          if (Number.isFinite(unusedEarnedTraceRecovery) && unusedEarnedTraceRecovery > 0) {
+            this.residueRecoilRisk = Math.max(0, this.residueRecoilRisk - unusedEarnedTraceRecovery);
+          }
         }
         if (coupling.coreContributing && dt > 0) {
           this.coreGraveLastAppliedFrame = Number.isSafeInteger(frameState.frame) ? frameState.frame : -1;
@@ -882,6 +894,36 @@ export class GraveMemoryRouteSystem {
       this.warning = "none";
       this.lastInteraction = "grave_memory_preview_completed_without_consuming_remains";
     }
+  }
+
+  canSettleResidualRecoil(dt, frameState) {
+    const input = frameState.input;
+    const mount = frameState.firstSliceRuntimeMount;
+    const resonance = frameState.graveResonanceGameplay;
+    if (!this.active || !this.returnFoldReady || !this.safeMemoryTransferComplete
+      || frameState.activeCellId !== ROUTE_CELL_ID || frameState.activeHostId !== this.cellRecipe?.derivation?.host
+      || !mount?.activeSystemIds?.includes("graveMemoryRouteSystem")
+      || input?.stabilizeHeld !== true || input.primaryActionContext === "core_work" || input.coreWorkViewPressed
+      || frameState.statusPage?.open || frameState.coreGrowth?.debugCoreWorkRetainedAnatomySeeded
+      || frameState.graveReturnRegion?.active !== true
+      || resonance?.owner !== "GraveResonanceGameplaySystem" || resonance.active !== true
+      || resonance.completed !== true) return false;
+
+    const sample = readPriorCoreStabilizeSample(frameState, dt);
+    const mountSequence = readCoreStabilizeMountSequence(frameState);
+    if (!sample || sample.debugAnatomy !== false || mountSequence === null
+      || sample.mountSequence !== mountSequence || sample === this.coreSampleAtMount) return false;
+
+    const placements = frameState.spatialCoreChemistry.placements;
+    if (!Array.isArray(placements) || !placements.some(piece =>
+      piece?.family === "grave_memory_retention" && piece.zoneId === "deep_core"
+      && piece.interactionId === "grave_memory_knot")) return false;
+
+    // A completed presentation is insufficient without an accepted Host resolution.
+    const history = this.hostConnectionReceiptLedger?.graveIIResolutionSnapshot?.();
+    const receipt = history?.records?.at(-1);
+    return Boolean(history?.pass === "C0D3-B" && receipt && receipt.id === history.lastReceiptId
+      && receipt.resolutionId === resonance.resolutionId && receipt.completedAtFrame <= frameState.frame);
   }
 
   recordMemoryRecovery(frameState, dt, { recoilReduction, traceRecovery, baseRecoveryBudget }) {
