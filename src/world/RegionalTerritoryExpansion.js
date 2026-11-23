@@ -356,7 +356,8 @@ export class RegionalTerritoryExpansion {
     const acceptedCurrent01 = Math.min(0.55, request.demand01, clampFlow(request.requestedCurrent01))
       * patch.conductivity * (1 - resistance01);
     const pressure01 = Math.min(0.22, acceptedCurrent01 * 0.7);
-    site.imprint = clampFlow(before.imprint + pressure01 * request.dt * 0.42);
+    const remainingImprintCapacity = 1 - before.imprint;
+    site.imprint = clampFlow(before.imprint + pressure01 * request.dt * 0.42 * remainingImprintCapacity);
     const after = { ...before, imprint: site.imprint };
     const result = {
       ...step, ...aim, actionSequence: request.actionSequence, receiverId: patch.id, siteId: site.id,
