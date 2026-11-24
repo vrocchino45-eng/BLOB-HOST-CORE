@@ -5,6 +5,7 @@ import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTe
 import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
 import { VascularSiltSignalReceiver } from "./VascularSiltSignalReceiver.js";
 import { readCoreStabilizeMountSequence, readPriorCoreStabilizeSample } from "../player/CoreStabilizeSample.js";
+import { deriveCoreEarnedEvolution } from "../player/CoreEarnedEvolution.js";
 
 const ROUTE_CELL_ID = "CELL_VASCULAR_RHYTHM_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -145,6 +146,7 @@ export class VascularRhythmRouteSystem {
     this.recoverySeconds = 0;
     this.coreReweave = neutralCoreReweave("not_mounted");
     this.coreSampleAtMount = null;
+    this.lastResidualRecoveryStep = null;
     this.desynchronizationRecovered = false;
     this.desynchronized = false;
     this.stabilizing = false;
@@ -241,6 +243,7 @@ export class VascularRhythmRouteSystem {
     // Reject the sample already present when this route begins a new lifetime.
     this.coreSampleAtMount = frameState.corePerformance?.stabilizeSample ?? null;
     this.coreReweave = neutralCoreReweave("awaiting_mount_sample");
+    this.lastResidualRecoveryStep = null;
     this.entryAnchor.copy(this.playerRoot.position);
     this.previousPlayerPosition.copy(this.playerRoot.position);
     this.root.position.copy(this.entryAnchor);
@@ -261,6 +264,7 @@ export class VascularRhythmRouteSystem {
     this.currentMoteVisualRate = 0;
     this.currentMoteCoherenceRatio = 1;
     this.coreSampleAtMount = null;
+    this.lastResidualRecoveryStep = null;
     this.coreReweave = neutralCoreReweave("not_mounted");
     this.active = false;
     this.setVisible(false);
@@ -905,6 +909,7 @@ export class VascularRhythmRouteSystem {
     const composition = frameState.verbComposition ?? {};
     const requiredReads = cadence.requiredReads ?? 3;
     const readsComplete = this.lockedCadenceReads >= requiredReads;
+    const returnCurrentAtStepStart = this.completed;
     const valveProgress = this.recipe.anatomy?.valveProgress ?? [0.28, 0.55, 0.82];
     const corridorRadius = this.recipe.anatomy?.corridorRadius ?? 1.18;
 
@@ -1140,11 +1145,36 @@ export class VascularRhythmRouteSystem {
       this.lastInteraction = "circulation_synchronized_relationship_reversed_toward_hub";
       this.warning = "none";
     }
+    // A step that finishes the objective still belongs entirely to native recovery.
+    if (returnCurrentAtStepStart && readsComplete && Number.isFinite(sample.distance) && sample.distance >= 0) {
+      this.settleReturnCurrentResidual(dt, frameState, withinCurrent);
+    }
   }
 
-  resolveCoreReweave(dt, frameState, { readsComplete, withinCurrent, needsRecovery }) {
+  settleReturnCurrentResidual(dt, frameState, withinCurrent) {
+    if (!(this.turbulence > 0) || !this.returnFoldReady || !withinCurrent || !this.stabilizing) return;
+    const history = frameState.act1RouteHistory?.routeStates?.vascular_route;
+    if (history?.transitionOwner !== "LocalCellBoundaryMorphSystem" || history.completed !== true
+      || history.returned !== true || !Number.isSafeInteger(history.returnCount) || history.returnCount < 1
+      || !deriveCoreEarnedEvolution(frameState.coreGrowth).integrated) return;
+
+    const recovery = this.resolveCoreReweave(dt, frameState, { withinCurrent, returnResidual: true });
+    if (!recovery.eligible) return;
+    const frame = frameState.frame;
+    const substep = frameState.runtimeSimulationSubstepIndex ?? 0;
+    const last = this.lastResidualRecoveryStep;
+    if (last && (frame < last.frame || (frame === last.frame && substep <= last.substep))) return;
+
+    const before = this.turbulence;
+    const rate = this.recipe.stabilization?.turbulenceRecoveryPerSecond ?? 0.46;
+    this.turbulence = Math.max(0, before - dt * rate * recovery.factor);
+    this.lastResidualRecoveryStep = { frame, substep };
+    this.coreReweave = { ...recovery, mode: "return_current_residual", turbulenceRemoved: before - this.turbulence };
+  }
+
+  resolveCoreReweave(dt, frameState, { readsComplete, withinCurrent, needsRecovery, returnResidual = false }) {
     if (!this.active || frameState.activeCellId !== ROUTE_CELL_ID) return neutralCoreReweave("not_mounted");
-    if (this.completed || readsComplete) return neutralCoreReweave("post_read");
+    if (!returnResidual && (this.completed || readsComplete)) return neutralCoreReweave("post_read");
     const input = frameState.input ?? {};
     if (input.primaryActionContext === "core_work" || input.coreWorkViewPressed
       || frameState.inspectionCamera?.active || frameState.inspectionCamera?.coreWorkActive
@@ -1154,7 +1184,7 @@ export class VascularRhythmRouteSystem {
     }
     if (input.stabilizeHeld !== true) return neutralCoreReweave("stabilize_released");
     if (!withinCurrent || !this.stabilizing) return neutralCoreReweave("outside_current");
-    if (!this.desynchronized || !needsRecovery) return neutralCoreReweave("not_scattered");
+    if (!returnResidual && (!this.desynchronized || !needsRecovery)) return neutralCoreReweave("not_scattered");
 
     const topology = frameState.spatialCoreChemistry;
     if (topology?.retainedPieceCount !== 3 || topology.topology?.complete !== true) {
