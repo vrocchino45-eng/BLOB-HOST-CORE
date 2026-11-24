@@ -1,5 +1,5 @@
 import { ControlMap, HOST_CORE_CONTROL_MAP_ID } from "./ControlMap.js";
-import { hasSiltFlowTarget, inSiltFlowWorld, SiltFlowTrigger } from "../interaction/SiltFlowContract.js";
+import { hasSiltFlowTarget, inSiltFlowWorld, readFlowStep, siltFlowUnavailableReason, SiltFlowTrigger } from "../interaction/SiltFlowContract.js";
 
 export class InputSystem {
   constructor({ controlMap = new ControlMap(), flowExperiment = false, nearWorldExperiment = false } = {}) {
@@ -43,6 +43,8 @@ export class InputSystem {
     // HC027J1: Pulse becomes a tap/hold/release verb. A quick release emits the
     // established local Pulse; holding commits the Core and releases a deeper Pulse.
     this.pulsePhysicalWasDown = false;
+    this.siltLaunchHold = null;
+    this.siltLaunchSequence = 0;
     this.pulseHoldSeconds = 0;
     this.pulseCharge01 = 0;
     this.pulseLastReleaseCharge01 = 0;
@@ -335,7 +337,10 @@ export class InputSystem {
     const pulseReleaseKind = pulseReleased
       ? (releasedHoldSeconds >= effectivePulseChargeThresholdSeconds ? "charged" : "quick")
       : "none";
-    const rawPulsePressed = pulseReleased;
+    // The route confirms consumption in its existing snapshot before the next input step.
+    const consumedLaunch = !pulseStarted && this.siltLaunchHold !== null
+      && frameState.siltPressureRoute?.materialLaunch?.lastCommitment?.chargeSequence === this.siltLaunchHold.sequence;
+    const rawPulsePressed = pulseReleased && !consumedLaunch;
     const rawInteractPressed = gamepad.interactPressed || keyboard.interactPressed;
     const priorInspection = frameState.inspectionCamera ?? frameState.tightInspectionCamera ?? {};
     const inspectionContext = Boolean(priorInspection.active);
@@ -363,9 +368,9 @@ export class InputSystem {
         : "commit_reserved";
     const primaryActionSuppressed = Boolean(statusOpen && rawInteractPressed);
     const coreWorkPressed = Boolean(rawInteractPressed && !statusOpen && coreWorkContext);
-    const interactPressed = Boolean(rawInteractPressed && !statusOpen && !coreWorkContext);
+    let interactPressed = Boolean(rawInteractPressed && !statusOpen && !coreWorkContext);
     const pulsePressed = Boolean(rawPulsePressed && !coreWorkContext);
-    const pulseHeld = Boolean(physicalPulseDown && !coreWorkContext);
+    const pulseHeld = Boolean(physicalPulseDown && !coreWorkContext && !consumedLaunch);
     const pulseReleaseCharge01 = pulsePressed ? releasedCharge01 : 0;
     const pulseCommitment = pulseHeld
       ? (this.pulseHoldSeconds < effectivePulseChargeThresholdSeconds ? "priming" : this.pulseCharge01 >= 0.98 ? "full_charge" : "charging")
@@ -415,6 +420,13 @@ export class InputSystem {
       : 0;
     const absorbHeld = Boolean(rawAbsorbHeld && !coreWorkContext);
     const stabilizeHeld = Boolean(rawStabilizeHeld && !coreWorkContext);
+    const siltLaunchCharge = this.readSiltLaunchCharge(frameState, {
+      pulseStarted, physicalPulseDown, pulseReleased, pulseSource, consumedLaunch,
+      charged: this.pulseHoldSeconds >= effectivePulseChargeThresholdSeconds,
+      stabilizeHeld, interactPressed,
+      contextAction: guideFocusPressed || statusPageTogglePressed || cancelPressed
+    });
+    if (siltLaunchCharge?.commitPressed) interactPressed = false;
     const coreWorkSelectPrevPressed = Boolean(coreWorkContext && menuLeftPressed);
     const coreWorkSelectNextPressed = Boolean(coreWorkContext && menuRightPressed);
 
@@ -468,6 +480,7 @@ export class InputSystem {
       pulseEventId: this.pulseSequence,
       pulseSource,
       pulseHeld,
+      ...(siltLaunchCharge ? { siltLaunchCharge } : {}),
       pulseReleased: pulsePressed,
       pulseHoldSeconds: pulseHeld ? this.pulseHoldSeconds : releasedHoldSeconds,
       pulseCharge01: pulseHeld ? this.pulseCharge01 : 0,
@@ -746,6 +759,39 @@ export class InputSystem {
     return frameState.controllerOnboarding?.tuning ?? {
       deadZones: { leftStick: 0.13, rightStick: 0.11, trigger: 0.08 },
       responseCurves: { leftStick: 1.18, rightStick: 1.32, trigger: 1.05 }
+    };
+  }
+
+  readSiltLaunchCharge(frameState, input) {
+    if (!input.physicalPulseDown) {
+      this.siltLaunchHold = null;
+      return null;
+    }
+    if (input.consumedLaunch) return null;
+
+    const step = readFlowStep(frameState);
+    const held = frameState.siltPressureRoute?.materialLaunch?.held;
+    const currentGrip = step && held && ['hostId', 'cellId', 'mountSequence'].every(key => held[key] === step[key]);
+    if (input.pulseStarted) {
+      this.siltLaunchHold = currentGrip ? {
+        held, sequence: ++this.siltLaunchSequence, source: input.pulseSource, interruption: null
+      } : null;
+    }
+    const hold = this.siltLaunchHold;
+    if (!hold) return null;
+
+    hold.interruption ??= siltFlowUnavailableReason(frameState)
+      ?? (input.contextAction ? 'context_interrupted' : null)
+      ?? (!currentGrip || held.unitId !== hold.held.unitId || held.generation !== hold.held.generation
+        || held.mountSequence !== hold.held.mountSequence || held.hostId !== hold.held.hostId ? 'grip_changed' : null)
+      ?? (!input.stabilizeHeld ? 'stabilize_released' : null)
+      ?? (input.pulseReleased || input.pulseSource !== hold.source ? 'pulse_input_changed' : null);
+
+    if (!currentGrip || !input.stabilizeHeld || input.pulseReleased) return null;
+    return {
+      ...step, unitId: hold.held.unitId, generation: hold.held.generation, sequence: hold.sequence,
+      validCharge: input.charged, charge01: this.pulseCharge01, rejectionReason: hold.interruption,
+      commitPressed: input.charged && input.interactPressed && inSiltFlowWorld(frameState)
     };
   }
 

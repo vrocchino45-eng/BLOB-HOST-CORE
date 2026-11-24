@@ -10,6 +10,7 @@ import { SiltTrajectoryMemory } from "../contact/SiltTrajectoryMemory.js";
 import { SiltTrajectoryFieldProbe } from "../contact/SiltTrajectoryFieldProbe.js";
 import { RegionalTerritoryExpansion, territorySignal } from "../world/RegionalTerritoryExpansion.js";
 import { CASCADE_CRESTS, sampleCascadeCrest } from "../visual/CascadeCrests.js";
+import { readFlowStep, siltFlowUnavailableReason } from "../interaction/SiltFlowContract.js";
 
 const ROUTE_CELL_ID = "CELL_SILT_PRESSURE_ROUTE_001";
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
@@ -19,6 +20,7 @@ const GARDEN_SEEP_IMPRINT_PER_ARRIVAL = 1 / 8;
 const GARDEN_SEEP_ARRIVAL_SECONDS = 1.2;
 const SILT_BUD_RESISTANCE = Object.freeze({ radius: 0.85, rate: 0.28 });
 const HELD_MOTION_SAMPLE_LIMIT = 64;
+const TETHER_PULSE_DISTANCE = 0.28;
 
 /**
  * HC-012A owns Silt Pressure gameplay and presentation while the route is
@@ -106,6 +108,8 @@ export class SiltPressureRouteSystem {
     this.gardenSeepBed = null;
     this.gardenSeep = { imprint: 0, lastSeenSequence: 0, lastDelivery: null, arrivalAt: null };
     this.siltGrip = new SiltGripAuthority();
+    this.materialLaunchRejection = null;
+    this.lastMaterialLaunch = null;
     this.materialIdentity = null;
     this.siltGripLocalOffset = new THREE.Vector3(0, 0.1, -0.9);
     // D2H: movement of committed matter only, with no changes to Silt
@@ -1408,6 +1412,7 @@ export class SiltPressureRouteSystem {
     // SILT-MODE1: mode suspension is not a deliberate world release/seat.
     // Current mode also wins over world input normalized before mode entry.
     const coreWorkSuspended = Boolean(inspection.coreWorkActive);
+    this.materialLaunchRejection = null;
     this.heldContactPulseApproachFrame = 0;
     this.heldContactPulseResistedFrame = 0;
     this.heldContactPulseAttemptedFrame = false;
@@ -1457,7 +1462,11 @@ export class SiltPressureRouteSystem {
     this.siltAimCandidateId = best?.unit.id ?? null;
     const held = units.find(unit => unit.id === this.siltGrip.heldId);
     if (held) {
-      if (input.interactPressed || !aiming) {
+      const launch = input.siltLaunchCharge?.commitPressed ? this.readMaterialLaunch(frameState, held) : null;
+      const launched = launch?.ready && this.launchHeldGrain(frameState, held, launch);
+      if (launched) {
+        this.finishGripRelease(frameState);
+      } else if ((!launch && input.interactPressed) || !aiming) {
         // Intentional release of a proven imprint hands this specific grain
         // to the receiving site. RT withdrawal or an unpressed contact never seats.
         let seatingReceipt = null;
@@ -1488,14 +1497,7 @@ export class SiltPressureRouteSystem {
           });
           if (trajectory) this.recordSiltDecision('silt-trajectory', trajectory, frameState);
         }
-        this.flushHeldAbsorbMotion(frameState, 'grip-released');
-        this.siltGrip.release();
-        this.siltAimLockedId = null;
-        this.heldAbsorbId = null;
-        this.heldAbsorbReportSeconds = 0;
-        this.heldAbsorbReportDistance = 0;
-        this.heldMotionFeedbackKind = 'none';
-        this.heldGripInitialRadius = null;
+        this.finishGripRelease(frameState);
       } else {
         const pulseDisplacement = this.updateHeldMaterialMotion(dt, frameState, held.generation) ?? 0;
         if (this.siltGrip.position) {
@@ -1512,7 +1514,7 @@ export class SiltPressureRouteSystem {
       this.heldMotionFeedbackKind = 'none';
       this.heldGripInitialRadius = null;
       this.siltAimLockedId = null;
-    } else if (aiming && input.interactPressed && best) {
+    } else if (aiming && input.interactPressed && !input.siltLaunchCharge?.commitPressed && best) {
       const coreLocal = this.localPlayer.toArray();
       if (this.siltGrip.tryGrip({ unit: best.unit, unitPosition: best.position,
         corePosition: coreLocal, stabilizeHeld: true, aPressed: true })) {
@@ -1571,6 +1573,69 @@ export class SiltPressureRouteSystem {
     };
   }
 
+  readMaterialLaunch(frameState, held) {
+    const step = readFlowStep(frameState);
+    const input = frameState.input ?? {};
+    const charge = input.siltLaunchCharge;
+    const aim = frameState.targeting?.siltLaunchAim;
+    const fresh = sample => step && sample && Object.keys(step).every(key => sample[key] === step[key]);
+    const aimFresh = Boolean(fresh(aim));
+    const direction = aimFresh ? aim.direction : null;
+    const aimValid = Array.isArray(direction) && direction.length === 3 && direction.every(Number.isFinite)
+      && Math.abs(Math.hypot(...direction) - 1) <= 1e-6;
+    const validCharge = Boolean(fresh(charge) && charge.unitId === held.id && charge.generation === held.generation
+      && charge.sequence > (this.lastMaterialLaunch?.chargeSequence ?? 0) && Number.isSafeInteger(charge.sequence)
+      && charge.validCharge === true && Number.isFinite(charge.charge01) && charge.charge01 >= 0 && charge.charge01 <= 1
+      && input.pulseHeld && !input.pulsePressed && !charge.rejectionReason);
+    const rejectionReason = siltFlowUnavailableReason(frameState)
+      ?? (!input.stabilizeHeld ? 'stabilize_released' : null)
+      ?? (input.guideFocusPressed || input.statusPageTogglePressed || input.cancelPressed ? 'context_interrupted' : null)
+      ?? charge?.rejectionReason
+      ?? (!validCharge ? 'charge_unavailable' : !aimFresh ? 'stale_aim' : !aimValid ? 'invalid_aim' : null);
+    return {
+      held: step ? { hostId: step.hostId, cellId: step.cellId, mountSequence: step.mountSequence,
+        unitId: held.id, generation: held.generation } : null,
+      validCharge, aimValid, ready: rejectionReason === null, rejectionReason
+    };
+  }
+
+  launchHeldGrain(frameState, held, status) {
+    const charge = frameState.input.siltLaunchCharge;
+    const aim = frameState.targeting.siltLaunchAim;
+    this.root.updateWorldMatrix(true, false);
+    const direction = new THREE.Vector3().fromArray(aim.direction)
+      .transformDirection(this.root.matrixWorld.clone().invert()).toArray();
+    const released = this.siltTrajectory.release(held.id, this.siltGrip.position, {
+      releaseContext: this.siltResistanceExperiment ? { generation: held.generation, mountCount: this.mountCount } : null,
+      directedPulse: { direction, displacement: TETHER_PULSE_DISTANCE * charge.charge01 }
+    });
+    if (!released) {
+      this.materialLaunchRejection = 'trajectory_rejected';
+      return false;
+    }
+
+    const launch = {
+      ...status.held, frame: charge.frame, substep: charge.substep,
+      chargeSequence: charge.sequence, charge01: charge.charge01,
+      intendedTargetId: aim.intendedTargetId, actualRecipientId: null, releaseDirection: direction,
+      releasePosition: released.position, releaseVelocity: released.velocity
+    };
+    this.recordSiltDecision('silt-trajectory', { ...released, launch }, frameState);
+    this.lastMaterialLaunch = { ...launch, releaseDecisionSequence: this.transactionSequence };
+    return true;
+  }
+
+  finishGripRelease(frameState) {
+    this.flushHeldAbsorbMotion(frameState, 'grip-released');
+    this.siltGrip.release();
+    this.siltAimLockedId = null;
+    this.heldAbsorbId = null;
+    this.heldAbsorbReportSeconds = 0;
+    this.heldAbsorbReportDistance = 0;
+    this.heldMotionFeedbackKind = 'none';
+    this.heldGripInitialRadius = null;
+  }
+
   // Flush sub-0.25s pull remainders on release or when RT ends. This
   // reconciles event-receipt totals with the continuous authoritative counter
   // when all receipts are retained by the recorder.
@@ -1612,7 +1677,7 @@ export class SiltPressureRouteSystem {
     const startingRadius = Math.min(maxRadius, originalRadius);
     const push = Boolean(this.heldPulsePending);
     const absorbing = Boolean(input.absorbHeld);
-    const requestedOutward = push ? 0.28 : 0;
+    const requestedOutward = push ? TETHER_PULSE_DISTANCE : 0;
     const requestedInward = absorbing ? Math.max(0, Math.min(dt, 0.1)) * 0.72 : 0;
     const pushRadius = push ? Math.min(maxRadius, startingRadius + requestedOutward) : startingRadius;
     const pullRadius = absorbing ? Math.max(minRadius, pushRadius - requestedInward) : pushRadius;
@@ -1684,7 +1749,7 @@ export class SiltPressureRouteSystem {
       this.heldContactPulseApproachFrame = bracedPressurePulse ? 0 : Math.max(0, acceptedApproach);
       if (!bracedPressurePulse && pushRadius <= startingRadius + 0.0001) {
         this.heldContactPulseResistedFrame = Math.max(0,
-          near(startingRadius) - near(startingRadius + 0.28));
+          near(startingRadius) - near(startingRadius + TETHER_PULSE_DISTANCE));
       }
     }
     offset.copy(proposedOffset);
@@ -2841,6 +2906,13 @@ export class SiltPressureRouteSystem {
 
   publish(frameState, active) {
     const returnDistance = this.playerRoot.position.distanceTo(this.returnPosition);
+    const held = active && this.siltGrip.heldId && this.livingCycle?.units.find(unit => unit.id === this.siltGrip.heldId);
+    const materialLaunch = held ? this.readMaterialLaunch(frameState, held)
+      : { held: null, validCharge: false, aimValid: false, ready: false, rejectionReason: null };
+    if (held && this.materialLaunchRejection) {
+      materialLaunch.ready = false;
+      materialLaunch.rejectionReason = this.materialLaunchRejection;
+    }
     frameState.siltPressureRoute = {
       returnRoundTrip: this.returnRoundTrip.snapshot(),
       pass: "HC-031S",
@@ -2969,6 +3041,11 @@ export class SiltPressureRouteSystem {
       } : null,
       siltContact: this.siltContact?.snapshot() ?? null,
       siltPlateSeat: this.siltPlateSeat.snapshot(),
+      materialLaunch: {
+        ...materialLaunch,
+        attempted: Boolean(active && frameState.input?.siltLaunchCharge?.commitPressed),
+        lastCommitment: this.lastMaterialLaunch
+      },
       siltTrajectory: this.siltTrajectory.snapshot(),
       siltTrajectoryField: this.siltTrajectoryField.snapshot(),
       interactionMatrix: {

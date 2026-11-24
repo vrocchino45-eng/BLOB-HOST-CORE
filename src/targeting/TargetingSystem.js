@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { inSiltFlowWorld, readFlowStep } from "../interaction/SiltFlowContract.js";
 
 const HUB_CELL_ID = "CELL_SIGNAL_CHORUS_NERVE_001";
 const COHERENCE_SEGMENTS = 40;
@@ -146,6 +147,16 @@ export class TargetingSystem {
 
     this.publishSelectedObject(frameState, this.relationshipTarget ?? this.attentionTarget);
     this.updateFrameState(frameState, intent);
+    if (frameState.input?.siltLaunchCharge && inSiltFlowWorld(frameState)) {
+      const step = readFlowStep(frameState);
+      if (step && this.camera) {
+        this.camera.getWorldDirection(this.tmpCameraDirection);
+        const intendedTarget = this.relationshipTarget ?? this.attentionTarget;
+        frameState.targeting.siltLaunchAim = {
+          ...step, direction: this.tmpCameraDirection.toArray(), intendedTargetId: intendedTarget?.recipe?.id ?? null
+        };
+      }
+    }
     this.updateReticle(frameState);
     this.updatePointerLine(frameState);
     this.updateRelationshipGlyphs(frameState);

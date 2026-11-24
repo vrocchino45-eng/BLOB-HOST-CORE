@@ -61,6 +61,7 @@ export class CoreRadialPerformanceSystem {
     this.playerRoot = playerRoot;
     this.reserve01 = 1;
     this.lastPulseEventId = 0;
+    this.lastMaterialLaunchSequence = 0;
     this.pulseDemandAge = 99;
     this.pulseDemandPeak = 0;
     this.absorbHoldSeconds = 0;
@@ -190,8 +191,15 @@ export class CoreRadialPerformanceSystem {
     const input = frameState.input ?? {};
     const pulseEventId = Number.isFinite(input.pulseEventId) ? input.pulseEventId : 0;
     const freshPulseEvent = pulseEventId > this.lastPulseEventId;
-    if (freshPulseEvent) {
-      this.lastPulseEventId = pulseEventId;
+    const launch = frameState.siltPressureRoute?.materialLaunch?.lastCommitment;
+    const charge = input.siltLaunchCharge;
+    const freshLaunch = launch && charge?.commitPressed && launch.chargeSequence > this.lastMaterialLaunchSequence
+      && launch.chargeSequence === charge.sequence && launch.frame === frameState.frame
+      && launch.substep === (frameState.runtimeSimulationSubstepIndex ?? 0)
+      && ['hostId', 'cellId', 'mountSequence', 'unitId', 'generation'].every(key => launch[key] === charge[key]);
+    if (freshPulseEvent) this.lastPulseEventId = pulseEventId;
+    if (freshLaunch) this.lastMaterialLaunchSequence = launch.chargeSequence;
+    if (freshPulseEvent || freshLaunch) {
       this.pulseDemandAge = 0;
     } else {
       this.pulseDemandAge += dt;
@@ -211,8 +219,8 @@ export class CoreRadialPerformanceSystem {
     const absorbCommitment01 = clamp01((this.absorbHoldSeconds - 0.20) / 1.45);
     const stabilizeCommitment01 = clamp01((this.stabilizeHoldSeconds - 0.18) / 1.30);
 
-    if (freshPulseEvent) {
-      const releaseCharge01 = clamp01(input.pulseReleaseCharge01 ?? 0);
+    if (freshPulseEvent || freshLaunch) {
+      const releaseCharge01 = clamp01(freshLaunch ? launch.charge01 : input.pulseReleaseCharge01 ?? 0);
       this.pulseDemandPeak = clamp(0.22 + releaseCharge01 * 0.86, 0.22, 1.08) * pulseCostMultiplier;
     }
     const pulseDemand = Math.max(0, 1 - this.pulseDemandAge / 0.62) * this.pulseDemandPeak;

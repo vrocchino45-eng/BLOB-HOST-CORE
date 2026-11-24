@@ -14,6 +14,7 @@ const scale = (a,s)=>a.map(n=>n*s);
 const limit = (v,max) => {const n=length(v);return n>max ? scale(v,max/n):v;};
 const round = n=>Number(n.toFixed(4));
 const roundVec = a => a.map(round);
+const pulseImpulse = displacement => Math.min(1.35, 0.55 + displacement * 2.1);
 
 export class SiltTrajectoryMemory {
   constructor({ maxUnits=8, spring=0.44, drag=0.74, maxSpeed=2.1, maxAcceleration=1.8 }={}) {
@@ -52,22 +53,26 @@ export class SiltTrajectoryMemory {
     if(!braced&&pulseDisplacement>0.001&&finite3(pulseDirection)&&length(pulseDirection)>.001){
       // A Pulse *already accepted* by the grip supplies directional release
       // memory. It does not impart a force to any other gameplay subsystem.
-      track.pulse=scale(limit(pulseDirection,1),Math.min(1.35,0.55 + pulseDisplacement*2.1));
+      track.pulse=scale(limit(pulseDirection,1),pulseImpulse(pulseDisplacement));
       track.pulseAge=0;
     }
     track.position=[...position];
   }
   cancelHold(id){ this.held.delete(id); }
-  release(id, position, {reason='deliberate-release', releaseContext=null}={}) {
+  release(id, position, {reason='deliberate-release', releaseContext=null, directedPulse=null}={}) {
     if(typeof id!=='string'||!finite3(position)||!this.history.has(id)||!this.held.has(id))return null;
+    if(!this.free.has(id)&&this.free.size>=this.maxUnits)return null;
+    if (directedPulse && (!finite3(directedPulse.direction) || Math.abs(length(directedPulse.direction) - 1) > 1e-6
+      || !Number.isFinite(directedPulse.displacement) || directedPulse.displacement < 0)) return null;
+
     const track=this.held.get(id);
-    const heldVelocity=track?.velocity??[0,0,0];
-    const recentPulse=track&&track.pulseAge<5 ?
-      scale(track.pulse,Math.exp(-Math.max(0,track.pulseAge)*0.25)) : [0,0,0];
-    const velocity=limit(vec(heldVelocity,recentPulse),this.maxSpeed);
+    const recentPulse=track.pulseAge<5
+      ? scale(track.pulse,Math.exp(-Math.max(0,track.pulseAge)*0.25)) : [0,0,0];
+    // An explicit launch supplies the one Pulse impulse for this release.
+    const impulse = directedPulse ? scale(directedPulse.direction, pulseImpulse(directedPulse.displacement)) : recentPulse;
+    const velocity=limit(vec(track.velocity,impulse),this.maxSpeed);
     this.held.delete(id);
     // No duplicated records: one unit has exactly one trajectory authority.
-    if(!this.free.has(id)&&this.free.size>=this.maxUnits)return null;
     const record = {position:[...position],velocity,seconds:0,nearNative:false,nativeError:null,releaseReason:reason};
     if (releaseContext && reason === 'deliberate-release') record.releaseContext = releaseContext;
     this.free.set(id, record);
