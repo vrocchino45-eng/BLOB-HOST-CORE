@@ -2,13 +2,13 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import path from 'node:path';
 import { buildCompatibility, readBuildIdentity } from './build-compatibility.mjs';
-import { CHECKPOINT, OUTCOMES, loadScenario, validateScenario } from './scenario-contract.mjs';
+import { ACTIVE_CHECKPOINT, CHECKPOINT, OUTCOMES, loadScenario, validateScenario } from './scenario-contract.mjs';
 
 const scenarioFile = layout => new URL(`./scenarios/${layout}.json`, import.meta.url);
-const identity = readBuildIdentity(path.resolve(import.meta.dirname, '../..'));
+const identity = readBuildIdentity(path.resolve(import.meta.dirname, '../..'), ACTIVE_CHECKPOINT);
 const valid = (await loadScenario(scenarioFile('deep'), identity)).scenario;
 
-test('version one definitions validate on compatible Director ancestry', async () => {
+test('admitted revision-two scenarios validate on PI03 ancestry', async () => {
   for (const layout of ['deep', 'balanced', 'membrane']) {
     assert.equal((await loadScenario(scenarioFile(layout), identity)).status, 'PASS');
   }
@@ -23,7 +23,7 @@ test('wrong build is incompatible', () => {
 test('malformed documents fail before setup', async () => {
   const malformed = [
     entry => { delete entry.initialize; },
-    entry => { entry.revision = 2; },
+    entry => { entry.revision = 3; },
     entry => { entry.id = 'dl-exp-001.membrane'; },
     entry => { entry.environment.facing = [0, 0, 0]; },
     entry => { entry.environment.seed = 42; },

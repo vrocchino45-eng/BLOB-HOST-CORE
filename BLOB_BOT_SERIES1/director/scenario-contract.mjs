@@ -4,6 +4,8 @@ import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compa
 
 export const SCHEMA = 'blob.dev-scenario.v1';
 export { CHECKPOINT };
+export const ACTIVE_CHECKPOINT = '1c86d1f5a2466e218bc667d4a969a24d2be08797';
+const scenarioCheckpoints = Object.freeze({ 1: CHECKPOINT, 2: ACTIVE_CHECKPOINT });
 const root = path.resolve(import.meta.dirname, '../..');
 export const OUTCOMES = Object.freeze(['PASS', 'FAIL', 'NOT_EXERCISED', 'INVALID_SETUP', 'INCOMPATIBLE_BUILD']);
 const text = value => typeof value === 'string' && value.length > 0;
@@ -42,7 +44,7 @@ function record(checks) {
 const validateShape = record({
   schema: exact(SCHEMA),
   id: value => typeof value === 'string' && /^dl-exp-001\.(deep|balanced|membrane)$/.test(value),
-  revision: exact(1),
+  revision: oneOf(1, 2),
   build: record({ checkpoint: sha }),
   environment: record({
     host: exact('HOST_ALPHA_WOUNDED_NURSERY'), cell: exact('CELL_SILT_PRESSURE_ROUTE_001'),
@@ -73,9 +75,9 @@ const validateShape = record({
   expectedDurationSeconds: integer
 });
 
-export function validateScenario(scenario, identity = readBuildIdentity(root)) {
-  if (scenario?.schema !== undefined && scenario.schema !== SCHEMA || scenario?.revision !== undefined && scenario.revision !== 1) {
-    return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_SCENARIO_REVISION', errors: ['The scenario schema and revision must be blob.dev-scenario.v1 revision 1'] };
+export function validateScenario(scenario, identity = readBuildIdentity(root, ACTIVE_CHECKPOINT)) {
+  if (scenario?.schema !== undefined && scenario.schema !== SCHEMA || scenario?.revision !== undefined && !Object.hasOwn(scenarioCheckpoints, scenario.revision)) {
+    return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_SCENARIO_REVISION', errors: ['The scenario schema must be blob.dev-scenario.v1 with an admitted revision'] };
   }
   const errors = [];
   if (!validateShape(scenario, errors)) return { status: 'INVALID_SETUP', errors };
@@ -94,7 +96,7 @@ export function validateScenario(scenario, identity = readBuildIdentity(root)) {
     errors.push('Duration and dose predicates are inconsistent');
   }
   if (errors.length) return { status: 'INVALID_SETUP', errors };
-  if (scenario.build.checkpoint !== CHECKPOINT) {
+  if (scenario.build.checkpoint !== scenarioCheckpoints[scenario.revision]) {
     return { status: 'INCOMPATIBLE_BUILD', code: 'UNSUPPORTED_SCENARIO_CHECKPOINT', errors: ['Scenario references an unadmitted gameplay checkpoint'] };
   }
   return buildCompatibility(identity, scenario.build.checkpoint);

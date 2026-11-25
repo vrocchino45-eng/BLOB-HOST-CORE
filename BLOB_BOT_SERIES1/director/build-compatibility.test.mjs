@@ -5,10 +5,10 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compatibility.mjs';
-import { loadScenario, validateScenario } from './scenario-contract.mjs';
+import { ACTIVE_CHECKPOINT, loadScenario, validateScenario } from './scenario-contract.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
-const actual = readBuildIdentity(root);
+const actual = readBuildIdentity(root, ACTIVE_CHECKPOINT);
 const scenario = (await loadScenario(new URL('./scenarios/balanced.json', import.meta.url), actual)).scenario;
 const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'director-authority-'));
 const git = (...args) => execFileSync('git', ['-C', fixture, '-c', 'user.name=Fixture', '-c',
@@ -46,12 +46,16 @@ const dirty = readBuildIdentity(fixture, baseline);
 write('.env.local', 'VITE_TEST_FLAG=true\n');
 const ignoredConfig = readBuildIdentity(fixture, baseline);
 
-test('PI02 topology accepts its exact scenario checkpoint and the actual working tree', () => {
-  assert.equal(actual.gameplayCheckpoint, CHECKPOINT);
+test('the integrated build accepts PI03 and rejects the old gameplay fingerprint', () => {
+  assert.equal(actual.gameplayCheckpoint, ACTIVE_CHECKPOINT);
   assert.equal(actual.gameplayAncestry, true);
   assert.deepEqual(actual.workingGameplayDifferences, []);
   assert.equal(validateScenario(scenario, actual).status, 'PASS');
-  assert.equal(buildCompatibility({ ...actual, commit: CHECKPOINT }).code, 'EXACT_CHECKPOINT');
+  assert.equal(buildCompatibility({ ...actual, commit: ACTIVE_CHECKPOINT }, ACTIVE_CHECKPOINT).code, 'EXACT_CHECKPOINT');
+  const original = readBuildIdentity(root, CHECKPOINT);
+  const oldScenario = { ...scenario, revision: 1, build: { checkpoint: CHECKPOINT } };
+  assert.equal(validateScenario(oldScenario, original).code, 'GAMEPLAY_FINGERPRINT_MISMATCH');
+  assert.equal(validateScenario({ ...scenario, build: { checkpoint: CHECKPOINT } }, actual).code, 'UNSUPPORTED_SCENARIO_CHECKPOINT');
   assert.equal(buildCompatibility(before, baseline).code, 'EXACT_CHECKPOINT');
 });
 test('compatible descendants preserve the gameplay fingerprint and their own exact source commit', () => {
@@ -76,7 +80,7 @@ test('diagnostics separate missing identity, unrelated ancestry and unknown scen
     assert.equal(validateScenario(scenario, { ...actual, gameplayFingerprint: value }).code, 'INVALID_BUILD_IDENTITY');
   }
   assert.equal(validateScenario(scenario, { ...actual, gameplayAncestry: false }).code, 'BASELINE_ANCESTRY_MISMATCH');
-  assert.equal(validateScenario({ ...scenario, revision: 2 }, actual).code, 'UNSUPPORTED_SCENARIO_REVISION');
+  assert.equal(validateScenario({ ...scenario, revision: 3 }, actual).code, 'UNSUPPORTED_SCENARIO_REVISION');
   assert.equal(validateScenario({ ...scenario, build: { checkpoint: '1'.repeat(40) } }, actual).code, 'UNSUPPORTED_SCENARIO_CHECKPOINT');
 });
 

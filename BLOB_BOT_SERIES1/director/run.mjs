@@ -5,7 +5,7 @@ import {pathToFileURL} from 'node:url';
 import { createServer } from 'vite';
 import { chromium } from 'playwright';
 import { sourceIdentity } from '../source-identity.mjs';
-import { loadScenario } from './scenario-contract.mjs';
+import { ACTIVE_CHECKPOINT, loadScenario } from './scenario-contract.mjs';
 import { buildCompatibility, readBuildIdentity } from './build-compatibility.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
@@ -233,10 +233,10 @@ async function execute(browser, origin, scenario, mode, out, { playable = false,
 
 async function main() {
   const { out, mode, layout } = parse(process.argv.slice(2));
-  const build = readBuildIdentity(root);
+  const build = readBuildIdentity(root, ACTIVE_CHECKPOINT);
   const { commit: head } = build;
   await mkdir(out);
-  const admission = buildCompatibility(build);
+  const admission = buildCompatibility(build, ACTIVE_CHECKPOINT);
   if (admission.status !== 'PASS') {
     await write(path.join(out, 'runs.json'), { ...admission, head, build });
     console.error(admission.code + ': ' + admission.errors.join(', '));

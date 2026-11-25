@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createServer} from 'vite';
 import {chromium} from 'playwright';
-import {loadScenario} from './scenario-contract.mjs';
+import {ACTIVE_CHECKPOINT,loadScenario} from './scenario-contract.mjs';
 import {buildCompatibility,readBuildIdentity} from './build-compatibility.mjs';
 import {verifyStart} from './run.mjs';
 import {decodeCapture} from './frame-mapping.mjs';
@@ -13,7 +13,7 @@ const [outputArg,flag]=process.argv.slice(2);
 const out=path.resolve(outputArg??'');
 assert.ok(outputArg&&path.relative(root,out).startsWith('..'),'Use a new evidence directory outside the repository');
 await fs.mkdir(out);
-const build=readBuildIdentity(root), admission=buildCompatibility(build);
+const build=readBuildIdentity(root,ACTIVE_CHECKPOINT), admission=buildCompatibility(build,ACTIVE_CHECKPOINT);
 if(admission.status!=='PASS'){
   await fs.writeFile(path.join(out,'failure.json'),JSON.stringify({...admission,build},null,2)+'\n');
   throw new Error(admission.code+': '+admission.errors.join(', '));
