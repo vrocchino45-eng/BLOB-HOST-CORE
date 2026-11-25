@@ -1,0 +1,39 @@
+{
+  "verdict": "PUBLISHED_AND_VERIFIED",
+  "refs": {
+    "integration/in01-c1": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "integration/pi03-p1": "1c86d1f5a2466e218bc667d4a969a24d2be08797",
+    "integration/dl-f02-p1": "bd8622941baac6fc74cc09f47438d205862bb053"
+  },
+  "clean": true,
+  "unchangedRemoteRefs": 41,
+  "manifestCounts": {
+    "IN01": 32,
+    "PI03": 4,
+    "DirectorRefinement": 11,
+    "DirectorCorrection": 7
+  },
+  "independentlyRebuiltFiles": 541,
+  "buildParity": "byte-identical to PI03",
+  "buildSHA256": "0d2ca92358011faecbb746440bd5a90d8fb40265875f609721f02556de285756",
+  "identity": {
+    "commit": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "gameplayCheckpoint": "1c86d1f5a2466e218bc667d4a969a24d2be08797",
+    "gameplayAncestry": true,
+    "gameplayFingerprint": "be387f952000bf5502337e42887390a3e811bf41af4e64d44744be9e9a7ddd79",
+    "requiredGameplayFingerprint": "be387f952000bf5502337e42887390a3e811bf41af4e64d44744be9e9a7ddd79",
+    "workingGameplayDifferences": [],
+    "toolingRevision": "9a85a4692f3a25fcf5096c4410fbeddbb0e8a3a30c3662f0d71e16fc70029419"
+  },
+  "admission": {
+    "status": "PASS",
+    "code": "COMPATIBLE_GAMEPLAY_DESCENDANT",
+    "errors": []
+  },
+  "revision": 2,
+  "parents": {
+    "merge": "a5361086923e32c76c2a6bc9a4050e339d655765",
+    "director": "bd8622941baac6fc74cc09f47438d205862bb053",
+    "pi03": "1c86d1f5a2466e218bc667d4a969a24d2be08797"
+  }
+}

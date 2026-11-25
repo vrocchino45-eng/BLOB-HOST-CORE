@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "baseline": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "acceptedDirectorScenarioRevision": 2,
+  "separateFromRuntimeScenarioAdmission": true,
+  "experiments": [
+    {
+      "id": "DL-EXP-010",
+      "title": "Fixed material launch contact",
+      "controls": "Same eligible grain, direction, charge, Silt mount, release provenance and collider placement. Compare actual intersection with geometrical near miss.",
+      "measure": [
+        "actual recipient",
+        "hit normal",
+        "approach velocity",
+        "outgoing velocity",
+        "tangential retention",
+        "positions",
+        "dedupCount",
+        "ledger units"
+      ],
+      "cases": [
+        {
+          "id": "fixed-stop-inward",
+          "authority": "src/contact/FreeMaterialContact.js; src/contact/SiltTrajectoryMemory.js",
+          "status": "supported",
+          "test": "scripts/testPI03FreeMaterialContact.mjs"
+        },
+        {
+          "id": "near-miss",
+          "status": "supported",
+          "test": "scripts/testPI03FreeMaterialContact.mjs"
+        },
+        {
+          "id": "elastic-recipient",
+          "status": "blocked",
+          "requires": "Authored material pair response and calibration. No accepted restitution profile."
+        },
+        {
+          "id": "separate-dissipative-recipient",
+          "status": "blocked",
+          "requires": "Second distinctly authored response, preserving identity. The baseline already removes inward velocity, so replaying it twice is no comparison."
+        }
+      ]
+    },
+    {
+      "id": "DL-EXP-011",
+      "title": "Surface and attachment",
+      "controls": "Identical support geometry, transform, load, approach velocity, camera and movement input; vary the authored profile only in a mounted controlled fixture.",
+      "measure": [
+        "support/attachment validity",
+        "effective authored adhesion",
+        "traction",
+        "slip",
+        "normal/support response"
+      ],
+      "cases": [
+        {
+          "id": "authored-silt-surface-registry",
+          "status": "supported",
+          "authority": "src/world/CrawlableSurfaceRegistry.js; src/player/CoreSurfaceTruthSystem.js",
+          "test": "scripts/validateBOT1D11BSiltSurface.mjs",
+          "observes": "Surface registration/availability. Observes authored adhesion, compliance and load tolerance where published."
+        },
+        {
+          "id": "matched-physical-friction",
+          "status": "blocked",
+          "requires": "A friction authority and calibrated pair coefficients; adhesion and material shader roughness cannot substitute."
+        }
+      ]
+    },
+    {
+      "id": "DL-EXP-012",
+      "title": "Same-identity material condition",
+      "controls": "Same live material identity, geometry, launch vector and receiver. Change only an owner-published condition with a recorded epoch.",
+      "measure": [
+        "held/free identity parity",
+        "condition before and after",
+        "acceptance",
+        "response",
+        "mass/receipt/progression"
+      ],
+      "cases": [
+        {
+          "id": "moisture-saturation-structure",
+          "status": "blocked",
+          "requires": "Same-identity authoring and dynamic condition publication. B1 Garden imprint, Vascular receipt capacity and Shelf Flow resistance cannot stand for moisture or saturation."
+        }
+      ]
+    }
+  ]
+}

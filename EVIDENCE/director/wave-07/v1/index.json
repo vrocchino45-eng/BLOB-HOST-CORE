@@ -1,0 +1,89 @@
+{
+  "wave": "07",
+  "version": 1,
+  "buildSHA": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "gameplaySHA": "1c86d1f5a2466e218bc667d4a969a24d2be08797",
+  "directorSHA": "bd8622941baac6fc74cc09f47438d205862bb053",
+  "gameplayFingerprint": "be387f952000bf5502337e42887390a3e811bf41af4e64d44744be9e9a7ddd79",
+  "productionBuildSHA256": "0d2ca92358011faecbb746440bd5a90d8fb40265875f609721f02556de285756",
+  "scenarios": [
+    {
+      "id": "dl-exp-001.deep",
+      "revision": 2,
+      "file": "scenarios/deep.json",
+      "source": "BLOB_BOT_SERIES1/director/scenarios/deep.json",
+      "sha256": "39bbe656d466d5a270ad76d91d9abc38ac27401145e728f54e7144f49c9c3b67"
+    },
+    {
+      "id": "dl-exp-001.balanced",
+      "revision": 2,
+      "file": "scenarios/balanced.json",
+      "source": "BLOB_BOT_SERIES1/director/scenarios/balanced.json",
+      "sha256": "bda9904496a904af9056195b26a6afe817b8e5b71a535a2c8b5c45c0e1dbf158"
+    },
+    {
+      "id": "dl-exp-001.membrane",
+      "revision": 2,
+      "file": "scenarios/membrane.json",
+      "source": "BLOB_BOT_SERIES1/director/scenarios/membrane.json",
+      "sha256": "ab9db706bd98ecf9bb5e8a7c80e7a3d1141b0e05126309b5ecbd68970cc2f24c"
+    }
+  ],
+  "tracks": {
+    "A": {
+      "verdict": "PASS",
+      "publish": {
+        "integration/in01-c1": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+        "integration/pi03-p1": "1c86d1f5a2466e218bc667d4a969a24d2be08797",
+        "integration/dl-f02-p1": "bd8622941baac6fc74cc09f47438d205862bb053"
+      },
+      "manifest": "IN01-P1-publication.json",
+      "buildFileParity": 541
+    },
+    "B": {
+      "verdict": "COMPLETE — PROPOSED CONTRACT",
+      "report": "MP01-MP02.md",
+      "schema": "material-properties.schema.json",
+      "schemaChecks": 11
+    },
+    "C": {
+      "verdict": "CONTRACT COMPLETE — CALIBRATION REQUIRED",
+      "report": "PI04-A1.md"
+    },
+    "D": {
+      "verdict": "ISOLATED PASS — DIRECTOR READMISSION REQUIRED",
+      "report": "UI03-I1.md",
+      "manifest": "UI03-I1-manifest.json"
+    },
+    "E": {
+      "verdict": "AUDIT COMPLETE",
+      "report": "PF03-A1.md",
+      "raw": "PF03-matrix.json"
+    },
+    "F": {
+      "verdict": "HOSTED PASS — MATERIAL EXPERIMENTS PARTIAL",
+      "report": "DL09-CI02.md",
+      "hosted": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45559971203",
+      "receiptChecks": 18
+    }
+  },
+  "hosted": {
+    "sha": "2b22593937f3b90af2fb8476a6426b6da0d7a5c8",
+    "run": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45559971203",
+    "artifact": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45559971203/artifacts/14997043656",
+    "authenticatedDownloadRequiresGitHub": true,
+    "retentionDays": 14,
+    "expiresAt": "2026-12-09T06:21:49Z",
+    "sha256": "a8f4d2a0d65805f5b6ecbead72ac9f3dd6d344e2f03549d565f088b5b6561ff8"
+  },
+  "recordings": "recordings.json",
+  "protected": "protected-state.json",
+  "unresolved": [
+    "PI04 inertial masses, shape scale, pair authorization and simultaneous-hit tie rule need approval",
+    "DL-EXP-010 elastic/distinct dissipative recipient",
+    "DL-EXP-011 friction calibration and a matched actual latch fixture",
+    "DL-EXP-012 same-identity condition owner",
+    "UI03 needs explicit Director compatibility admission before integration",
+    "No physical-controller Experience judgment"
+  ]
+}

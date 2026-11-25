@@ -1,0 +1,3283 @@
+[
+  {
+    "source": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "tag": "bot-telemetry-1",
+    "mode": "bot-telemetry",
+    "repeat": 1,
+    "recording": false,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "start": {
+      "pose": [
+        -2.45,
+        -0.54,
+        -3.67
+      ],
+      "reserve": 0.7,
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "facing": [
+        0,
+        0,
+        -1
+      ]
+    },
+    "sensors": {
+      "hud": true,
+      "telemetry": true,
+      "sceneTraversal": true
+    },
+    "visibility": {
+      "visible": 368,
+      "hidden": 692,
+      "visibleMeshes": 301,
+      "hiddenMeshes": 549
+    },
+    "instrumentation": {
+      "heapBefore": {
+        "Nodes": 564,
+        "LayoutDuration": 0.1906,
+        "ScriptDuration": 13.163297,
+        "TaskDuration": 14.874693,
+        "JSHeapUsedSize": 52643212,
+        "JSHeapTotalSize": 74891264
+      },
+      "heapAfter": {
+        "Nodes": 2118,
+        "LayoutDuration": 0.302222,
+        "ScriptDuration": 20.826773,
+        "TaskDuration": 23.271336,
+        "JSHeapUsedSize": 60868840,
+        "JSHeapTotalSize": 80302080
+      },
+      "gc": [
+        {
+          "name": "MinorGC",
+          "ms": 3.316
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.183
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.572
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.428
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.823
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.652
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.491
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.259
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.064
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.94
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.522
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.392
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.865
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.707
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.38
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.244
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.515
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.382
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.494
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.365
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.479
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.309
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.999
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.871
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.652
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.477
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.865
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.724
+        }
+      ],
+      "sampledAllocationBySource": [
+        [
+          "three (Vite dependency)",
+          232647028
+        ],
+        [
+          "native or unsymbolized",
+          103459896
+        ],
+        [
+          "/src/player/CoreEmbodimentSystem.js",
+          11279604
+        ],
+        [
+          "/src/routes/SiltPressureRouteSystem.js",
+          7344944
+        ],
+        [
+          "/src/presentation/RenderBudgetSystem.js",
+          5637508
+        ],
+        [
+          "/src/world/LiftFieldReadabilitySystem.js",
+          4201300
+        ],
+        [
+          "/src/camera/CameraReadabilitySystem.js",
+          3539428
+        ],
+        [
+          "/src/player/PlayerMovementController.js",
+          3409800
+        ],
+        [
+          "/src/morph/LocalCellBoundaryMorphSystem.js",
+          2886376
+        ],
+        [
+          "/src/ecology/EntityReciprocalMemorySystem.js",
+          2491136
+        ],
+        [
+          "/src/world/RegionalTerritoryExpansion.js",
+          2359680
+        ],
+        [
+          "/src/core/SessionTelemetrySystem.js",
+          2175348
+        ],
+        [
+          "/src/chemistry/ChemObjectSystem.js",
+          2097396
+        ],
+        [
+          "/src/ecology/EntityReciprocalBehaviorSystem.js",
+          1966876
+        ],
+        [
+          "/src/player/CoreTendrilSurfaceContactSystem.js",
+          1706740
+        ],
+        [
+          "/src/ui/PlaytestHudSystem.js",
+          1658444
+        ]
+      ]
+    },
+    "skippedRegionSystems": [
+      "hostRhythmSystem",
+      "regionalPhysicalEmbodimentSystem",
+      "ambientMaterialInteractionSystem",
+      "surfaceWakeGameplaySystem",
+      "openingPacingSystem",
+      "surfaceWakeLayeredInteractionSystem",
+      "surfaceWakeEcologicalCausalitySystem",
+      "cinematicAwakeningSystem",
+      "localCellMorphSystem",
+      "morphCompletionSystem",
+      "scarFlowArrivalSystem",
+      "guideThresholdGameplaySystem",
+      "guideThresholdLayeredInteractionSystem",
+      "scarFlowInteractionSystem",
+      "secondLocalCellMorphSystem",
+      "morphReadabilitySystem",
+      "reactiveStateGrammarSystem",
+      "responsePersonalitySystem",
+      "bondSystem",
+      "hubChamberFoundationSystem",
+      "hubInvestigationGameplaySystem",
+      "graveMemoryRouteSystem",
+      "vascularRhythmRouteSystem",
+      "combThresholdFoundationSystem",
+      "combThresholdPlayableSystem",
+      "apertureFieldsArrivalSystem",
+      "signalPlainEcologySystem",
+      "membraneRidgeGameplaySystem",
+      "apertureAdjacentTerritorySystem",
+      "gatheringGroundAliveSystem"
+    ],
+    "stats": {
+      "rawMs": {
+        "count": 71,
+        "min": 62.39999961853027,
+        "p50": 72.70000076293945,
+        "p90": 92.30000019073486,
+        "p95": 102.69999980926514,
+        "max": 115
+      },
+      "cpuFrame": {
+        "count": 71,
+        "min": 58.80000019073486,
+        "p50": 68.90000057220459,
+        "p90": 88.19999980926514,
+        "p95": 93.80000019073486,
+        "max": 104
+      },
+      "renderSubmission": {
+        "count": 71,
+        "min": 39.39999961853027,
+        "p50": 46.09999942779541,
+        "p90": 55.80000019073486,
+        "p95": 59.20000076293945,
+        "max": 60.19999980926514
+      },
+      "registry": {
+        "count": 71,
+        "min": 15.300000190734863,
+        "p50": 19.399999618530273,
+        "p90": 26.399999618530273,
+        "p95": 34.89999961853027,
+        "max": 40.89999961853027
+      },
+      "gpuMs": {
+        "count": 71,
+        "min": 13.674496,
+        "p50": 40.97536,
+        "p90": 50.361344,
+        "p95": 51.59936,
+        "max": 55.539712
+      },
+      "sceneTraversal": {
+        "count": 71,
+        "min": 1,
+        "p50": 1.1000003814697266,
+        "p90": 1.9000005722045898,
+        "p95": 2.1000003814697266,
+        "max": 2.700000762939453
+      },
+      "hud": {
+        "count": 71,
+        "min": 0.8000001907348633,
+        "p50": 1.1999998092651367,
+        "p90": 1.6999998092651367,
+        "p95": 2.0000009536743164,
+        "max": 2.5
+      },
+      "productionTelemetry": {
+        "count": 71,
+        "min": 0.3000011444091797,
+        "p50": 0.6999998092651367,
+        "p90": 1.3999996185302734,
+        "p95": 1.7000007629394531,
+        "max": 3.09999942779541
+      },
+      "directorTelemetry": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.40000057220458984,
+        "p90": 0.8000001907348633,
+        "p95": 0.9000005722045898,
+        "max": 1.3999996185302734
+      },
+      "drawCalls": {
+        "count": 71,
+        "min": 388,
+        "p50": 393,
+        "p90": 410,
+        "p95": 418,
+        "max": 418
+      },
+      "triangles": {
+        "count": 71,
+        "min": 111270,
+        "p50": 112214,
+        "p90": 114390,
+        "p95": 115894,
+        "max": 115894
+      },
+      "programs": {
+        "count": 71,
+        "min": 27,
+        "p50": 27,
+        "p90": 27,
+        "p95": 27,
+        "max": 27
+      },
+      "stepCount": {
+        "count": 71,
+        "min": 2,
+        "p50": 2,
+        "p90": 2,
+        "p95": 3,
+        "max": 3
+      },
+      "child:input": {
+        "count": 71,
+        "min": 0.4999990463256836,
+        "p50": 0.6999998092651367,
+        "p90": 0.9000005722045898,
+        "p95": 1.0999994277954102,
+        "max": 1.6999998092651367
+      },
+      "child:deliberateCommitmentSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.1999988555908203
+      },
+      "child:debugAreaJumpSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:controllerComfortSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.7000007629394531
+      },
+      "child:modeController": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.20000076293945312
+      },
+      "child:statusPageSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.3000001907348633
+      },
+      "child:debugDisplaySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:chemObjectSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.39999961853027344,
+        "p90": 0.7000007629394531,
+        "p95": 1.0000009536743164,
+        "max": 3.40000057220459
+      },
+      "child:interactionCompositionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000011444091797,
+        "max": 0.6000003814697266
+      },
+      "child:entitySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999961853027344,
+        "max": 1.0000009536743164
+      },
+      "child:localChemistryContextSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000001907348633,
+        "max": 0.39999866485595703
+      },
+      "child:targetFocusRegistry": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:targetingSystem": {
+        "count": 71,
+        "min": 0.2999992370605469,
+        "p50": 0.5999994277954102,
+        "p90": 1.1999998092651367,
+        "p95": 1.5999994277954102,
+        "max": 5.500000953674316
+      },
+      "child:verbCompositionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:orbiterSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000001907348633,
+        "max": 0.5999994277954102
+      },
+      "child:firstSliceCohesionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.39999961853027344,
+        "p95": 0.40000057220458984,
+        "max": 0.6999998092651367
+      },
+      "child:returnRegionEngineSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999961853027344,
+        "max": 0.5999994277954102
+      },
+      "child:graveReturnRegionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.20000076293945312,
+        "max": 0.6000003814697266
+      },
+      "child:graveResonanceGameplaySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.3000001907348633,
+        "max": 0.40000057220458984
+      },
+      "child:graveRuptureHarvestSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.2999992370605469
+      },
+      "child:graveRuptureConsequenceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999961853027344,
+        "max": 0.7999992370605469
+      },
+      "child:hostConditionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.19999980926513672
+      },
+      "child:act1RouteContractSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.20000076293945312
+      },
+      "child:siltPressureRouteSystem": {
+        "count": 71,
+        "min": 1.2000007629394531,
+        "p50": 2.1999998092651367,
+        "p90": 3.1999998092651367,
+        "p95": 4.399999618530273,
+        "max": 9.09999942779541
+      },
+      "child:localCellBoundaryMorphSystem": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.4999990463256836,
+        "p90": 0.6999998092651367,
+        "p95": 0.8000001907348633,
+        "max": 0.9000005722045898
+      },
+      "child:runtimeStateLedgerSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.19999980926513672
+      },
+      "child:objectiveSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000001907348633,
+        "max": 0.5
+      },
+      "child:inspectionCameraSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.1999988555908203,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000011444091797,
+        "max": 0.8999996185302734
+      },
+      "child:guidePromptSystem": {
+        "count": 71,
+        "min": 0.4999990463256836,
+        "p50": 0.6999998092651367,
+        "p90": 0.8999996185302734,
+        "p95": 1,
+        "max": 1.9000005722045898
+      },
+      "child:coreTopologyEnvironmentalHandlingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.1999988555908203,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:hostContactShelfSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.5999994277954102
+      },
+      "child:coreSurfaceTruthSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 1.1999998092651367,
+        "p95": 1.6000003814697266,
+        "max": 3.200000762939453
+      },
+      "child:coreTendrilSupportPlaneSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.09999942779541016,
+        "p95": 0.10000038146972656,
+        "max": 0.19999980926513672
+      },
+      "child:playerMovement": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.6999998092651367,
+        "p90": 0.9000005722045898,
+        "p95": 1,
+        "max": 1.4999990463256836
+      },
+      "child:liftFieldReadabilitySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.5999994277954102,
+        "p95": 0.6000003814697266,
+        "max": 0.8000011444091797
+      },
+      "child:coreEngineSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.5
+      },
+      "child:coreTopologyResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.20000076293945312,
+        "max": 0.3000011444091797
+      },
+      "child:coreWorldResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.19999980926513672
+      },
+      "child:temporalHistorySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.6999998092651367
+      },
+      "child:coreVerbEngineCouplingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:coreGrowthSystem": {
+        "count": 71,
+        "min": 1.6000003814697266,
+        "p50": 2.1000003814697266,
+        "p90": 3.299999237060547,
+        "p95": 3.5000009536743164,
+        "max": 5.300000190734863
+      },
+      "child:coreTendrilSurfaceContactSystem": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.40000057220458984,
+        "p90": 0.6000003814697266,
+        "p95": 0.6999998092651367,
+        "max": 1.1000003814697266
+      },
+      "child:stabilizedProjectionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000001907348633
+      },
+      "child:chemPulseResponse": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.09999942779541016,
+        "p95": 0.09999942779541016,
+        "max": 0.10000038146972656
+      },
+      "child:hostContactEcologyContinuationSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.4999990463256836,
+        "p95": 0.5,
+        "max": 0.6000003814697266
+      },
+      "child:coreRadialPerformanceSystem": {
+        "count": 71,
+        "min": 0.10000038146972656,
+        "p50": 0.39999961853027344,
+        "p90": 0.5999994277954102,
+        "p95": 0.6999998092651367,
+        "max": 1
+      },
+      "child:coreFlowSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.8999996185302734,
+        "p95": 1.1999998092651367,
+        "max": 6
+      },
+      "child:coreFlowReserveSettlement": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.2999992370605469,
+        "max": 0.7000007629394531
+      },
+      "child:coreTopologyVerbCharacterSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.39999961853027344,
+        "p95": 0.39999961853027344,
+        "max": 0.6000003814697266
+      },
+      "child:entityRelationshipGrammarSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.20000076293945312,
+        "max": 0.40000057220458984
+      },
+      "child:entityReciprocalMemorySystem": {
+        "count": 71,
+        "min": 0.10000038146972656,
+        "p50": 0.39999961853027344,
+        "p90": 0.6000003814697266,
+        "p95": 0.8000001907348633,
+        "max": 4.300000190734863
+      },
+      "child:entityReciprocalBehaviorSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.2999992370605469,
+        "p90": 0.4999990463256836,
+        "p95": 0.5,
+        "max": 0.8000001907348633
+      },
+      "child:entityResidueRecognitionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.1999988555908203,
+        "p95": 0.19999980926513672,
+        "max": 0.20000076293945312
+      },
+      "child:entityEcologyResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.40000057220458984
+      },
+      "child:entityEcologicalCrossInfluenceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.20000076293945312
+      },
+      "child:entityLocalMatterCouplingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.1999988555908203,
+        "p90": 0.3000001907348633,
+        "p95": 0.40000057220458984,
+        "max": 1.6999998092651367
+      },
+      "child:entityEcologicalResidueSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 1.6999998092651367
+      },
+      "child:coreSensoryResponseSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.3000011444091797
+      },
+      "child:eventAnchoredHostAudioSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.2999992370605469,
+        "p90": 1,
+        "p95": 1.3000001907348633,
+        "max": 3.3999996185302734
+      },
+      "child:visualComposer": {
+        "count": 71,
+        "min": 0.19999980926513672,
+        "p50": 0.39999961853027344,
+        "p90": 0.6000003814697266,
+        "p95": 0.6000022888183594,
+        "max": 0.7000007629394531
+      },
+      "child:motionSignatureSystem": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.5000009536743164,
+        "p90": 0.6999998092651367,
+        "p95": 0.8000001907348633,
+        "max": 0.8000001907348633
+      },
+      "child:playtestHudSystem": {
+        "count": 71,
+        "min": 0.8000001907348633,
+        "p50": 1.1999998092651367,
+        "p90": 1.6999998092651367,
+        "p95": 2.0000009536743164,
+        "max": 2.5
+      },
+      "child:quickLookInspectorSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.20000076293945312,
+        "max": 0.5000009536743164
+      },
+      "child:sessionTelemetrySystem": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.6999998092651367,
+        "p90": 1.3999996185302734,
+        "p95": 1.7000007629394531,
+        "max": 3.09999942779541
+      },
+      "child:recipeDebugOverlay": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.20000076293945312
+      },
+      "child:chemistryDebugPanel": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.1999988555908203
+      },
+      "count:pass:offscreen:opaque": {
+        "count": 71,
+        "min": 4,
+        "p50": 4,
+        "p90": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "submit:pass:offscreen:opaque": {
+        "count": 71,
+        "min": 0.4999990463256836,
+        "p50": 0.8000001907348633,
+        "p90": 1.1999998092651367,
+        "p95": 1.3000001907348633,
+        "max": 1.8000001907348633
+      },
+      "count:material:MeshStandardMaterial": {
+        "count": 71,
+        "min": 193,
+        "p50": 193,
+        "p90": 193,
+        "p95": 193,
+        "max": 193
+      },
+      "submit:material:MeshStandardMaterial": {
+        "count": 71,
+        "min": 19.300003051757812,
+        "p50": 22.700000762939453,
+        "p90": 27.99999713897705,
+        "p95": 29.199997901916504,
+        "max": 32.19999599456787
+      },
+      "count:material:MeshBasicMaterial": {
+        "count": 71,
+        "min": 179,
+        "p50": 184,
+        "p90": 195,
+        "p95": 201,
+        "max": 201
+      },
+      "submit:material:MeshBasicMaterial": {
+        "count": 71,
+        "min": 13.500000953674316,
+        "p50": 17.199997901916504,
+        "p90": 20.600001335144043,
+        "p95": 21.300004959106445,
+        "max": 24.69999885559082
+      },
+      "count:pass:offscreen:transmissive": {
+        "count": 71,
+        "min": 1,
+        "p50": 1,
+        "p90": 1,
+        "p95": 1,
+        "max": 1
+      },
+      "submit:pass:offscreen:transmissive": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.20000076293945312,
+        "p90": 0.39999961853027344,
+        "p95": 0.5,
+        "max": 0.5
+      },
+      "count:material:MeshPhysicalMaterial": {
+        "count": 71,
+        "min": 3,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "submit:material:MeshPhysicalMaterial": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.600001335144043,
+        "p90": 0.9000005722045898,
+        "p95": 1.0000009536743164,
+        "max": 1.1999988555908203
+      },
+      "count:pass:main:opaque": {
+        "count": 71,
+        "min": 4,
+        "p50": 4,
+        "p90": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "submit:pass:main:opaque": {
+        "count": 71,
+        "min": 0.3000001907348633,
+        "p50": 0.6000003814697266,
+        "p90": 0.8999996185302734,
+        "p95": 1.0999994277954102,
+        "max": 1.1999998092651367
+      },
+      "count:pass:main:transmissive": {
+        "count": 71,
+        "min": 2,
+        "p50": 2,
+        "p90": 2,
+        "p95": 2,
+        "max": 2
+      },
+      "submit:pass:main:transmissive": {
+        "count": 71,
+        "min": 0.2999992370605469,
+        "p50": 0.39999961853027344,
+        "p90": 0.5999994277954102,
+        "p95": 0.6999998092651367,
+        "max": 0.8999996185302734
+      },
+      "count:pass:main:transparent": {
+        "count": 71,
+        "min": 377,
+        "p50": 382,
+        "p90": 399,
+        "p95": 407,
+        "max": 407
+      },
+      "submit:pass:main:transparent": {
+        "count": 71,
+        "min": 32.59999752044678,
+        "p50": 37.799997329711914,
+        "p90": 45.29999828338623,
+        "p95": 47.900001525878906,
+        "max": 51.10000419616699
+      },
+      "count:material:PointsMaterial": {
+        "count": 71,
+        "min": 3,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "submit:material:PointsMaterial": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.40000057220458984,
+        "max": 0.5
+      },
+      "count:material:LineBasicMaterial": {
+        "count": 71,
+        "min": 10,
+        "p50": 10,
+        "p90": 18,
+        "p95": 18,
+        "max": 18
+      },
+      "submit:material:LineBasicMaterial": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.6999988555908203,
+        "p90": 1.100001335144043,
+        "p95": 1.3000001907348633,
+        "max": 2.1999998092651367
+      }
+    },
+    "wallMs": 5407.800000190735,
+    "simulationMs": 5407.800000190735,
+    "discardedMs": 0,
+    "actions": {
+      "canonical_selection": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 36,
+        "substep": 0
+      },
+      "analog_flow_request": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 39,
+        "substep": 0
+      },
+      "accepted_current": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 42,
+        "substep": 0
+      },
+      "release": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 50,
+        "substep": 0
+      }
+    },
+    "mapping": null
+  },
+  {
+    "source": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "tag": "bot-telemetry-2",
+    "mode": "bot-telemetry",
+    "repeat": 2,
+    "recording": false,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "start": {
+      "pose": [
+        -2.45,
+        -0.54,
+        -3.67
+      ],
+      "reserve": 0.7,
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "facing": [
+        0,
+        0,
+        -1
+      ]
+    },
+    "sensors": {
+      "hud": true,
+      "telemetry": true,
+      "sceneTraversal": true
+    },
+    "visibility": {
+      "visible": 368,
+      "hidden": 692,
+      "visibleMeshes": 301,
+      "hiddenMeshes": 549
+    },
+    "instrumentation": {
+      "heapBefore": {
+        "Nodes": 485,
+        "LayoutDuration": 0.173662,
+        "ScriptDuration": 4.469172,
+        "TaskDuration": 6.157201,
+        "JSHeapUsedSize": 38621396,
+        "JSHeapTotalSize": 71745536
+      },
+      "heapAfter": {
+        "Nodes": 2396,
+        "LayoutDuration": 0.312311,
+        "ScriptDuration": 15.575956,
+        "TaskDuration": 18.189748,
+        "JSHeapUsedSize": 44490080,
+        "JSHeapTotalSize": 78204928
+      },
+      "gc": [
+        {
+          "name": "MinorGC",
+          "ms": 3.294
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.123
+        },
+        {
+          "name": "MinorGC",
+          "ms": 4.705
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 4.57
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.582
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.452
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.631
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.494
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.761
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.559
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.182
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.044
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.477
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.341
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.572
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.393
+        },
+        {
+          "name": "MinorGC",
+          "ms": 4.006
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.159
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.485
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.272
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.191
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.051
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.267
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.084
+        },
+        {
+          "name": "MinorGC",
+          "ms": 5.217
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 5.093
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.87
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.688
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.568
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.426
+        }
+      ],
+      "sampledAllocationBySource": [
+        [
+          "three (Vite dependency)",
+          241538948
+        ],
+        [
+          "native or unsymbolized",
+          107558932
+        ],
+        [
+          "/src/player/CoreEmbodimentSystem.js",
+          10227272
+        ],
+        [
+          "/src/routes/SiltPressureRouteSystem.js",
+          7800116
+        ],
+        [
+          "/src/presentation/RenderBudgetSystem.js",
+          5047268
+        ],
+        [
+          "/src/camera/CameraReadabilitySystem.js",
+          3998284
+        ],
+        [
+          "/src/world/LiftFieldReadabilitySystem.js",
+          3801576
+        ],
+        [
+          "/src/chemistry/ChemObjectSystem.js",
+          2884084
+        ],
+        [
+          "/src/player/PlayerMovementController.js",
+          2753444
+        ],
+        [
+          "/src/core/SessionTelemetrySystem.js",
+          2569216
+        ],
+        [
+          "/src/morph/LocalCellBoundaryMorphSystem.js",
+          2427752
+        ],
+        [
+          "/src/ecology/EntityReciprocalMemorySystem.js",
+          2294580
+        ],
+        [
+          "/src/player/CoreRadialPerformanceSystem.js",
+          2098836
+        ],
+        [
+          "/src/player/CoreTendrilSurfaceContactSystem.js",
+          1966532
+        ],
+        [
+          "/src/ecology/EntityReciprocalBehaviorSystem.js",
+          1901556
+        ],
+        [
+          "/src/input/InputSystem.js",
+          1773228
+        ]
+      ]
+    },
+    "skippedRegionSystems": [
+      "hostRhythmSystem",
+      "regionalPhysicalEmbodimentSystem",
+      "ambientMaterialInteractionSystem",
+      "surfaceWakeGameplaySystem",
+      "openingPacingSystem",
+      "surfaceWakeLayeredInteractionSystem",
+      "surfaceWakeEcologicalCausalitySystem",
+      "cinematicAwakeningSystem",
+      "localCellMorphSystem",
+      "morphCompletionSystem",
+      "scarFlowArrivalSystem",
+      "guideThresholdGameplaySystem",
+      "guideThresholdLayeredInteractionSystem",
+      "scarFlowInteractionSystem",
+      "secondLocalCellMorphSystem",
+      "morphReadabilitySystem",
+      "reactiveStateGrammarSystem",
+      "responsePersonalitySystem",
+      "bondSystem",
+      "hubChamberFoundationSystem",
+      "hubInvestigationGameplaySystem",
+      "graveMemoryRouteSystem",
+      "vascularRhythmRouteSystem",
+      "combThresholdFoundationSystem",
+      "combThresholdPlayableSystem",
+      "apertureFieldsArrivalSystem",
+      "signalPlainEcologySystem",
+      "membraneRidgeGameplaySystem",
+      "apertureAdjacentTerritorySystem",
+      "gatheringGroundAliveSystem"
+    ],
+    "stats": {
+      "rawMs": {
+        "count": 71,
+        "min": 70.70000076293945,
+        "p50": 115.5,
+        "p90": 149.80000019073486,
+        "p95": 168.0999994277954,
+        "max": 202.5
+      },
+      "cpuFrame": {
+        "count": 71,
+        "min": 67.39999961853027,
+        "p50": 110.10000038146973,
+        "p90": 144.69999980926514,
+        "p95": 161.89999961853027,
+        "max": 195.30000019073486
+      },
+      "renderSubmission": {
+        "count": 71,
+        "min": 44.60000038146973,
+        "p50": 75.30000019073486,
+        "p90": 95.40000057220459,
+        "p95": 100.30000019073486,
+        "max": 159.4000005722046
+      },
+      "registry": {
+        "count": 71,
+        "min": 17.800000190734863,
+        "p50": 35.20000076293945,
+        "p90": 46.000000953674316,
+        "p95": 51.30000019073486,
+        "max": 63.20000076293945
+      },
+      "gpuMs": {
+        "count": 71,
+        "min": 16.459776,
+        "p50": 64.699392,
+        "p90": 86.250496,
+        "p95": 89.356288,
+        "max": 134.544384
+      },
+      "sceneTraversal": {
+        "count": 71,
+        "min": 1,
+        "p50": 1.9000005722045898,
+        "p90": 2.3999996185302734,
+        "p95": 2.6999998092651367,
+        "max": 3.1999998092651367
+      },
+      "hud": {
+        "count": 71,
+        "min": 0.9000005722045898,
+        "p50": 2.09999942779541,
+        "p90": 2.8000011444091797,
+        "p95": 3.200000762939453,
+        "max": 3.8999996185302734
+      },
+      "productionTelemetry": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 1.3000001907348633,
+        "p90": 2.6999998092651367,
+        "p95": 3.1999998092651367,
+        "max": 13.300000190734863
+      },
+      "directorTelemetry": {
+        "count": 71,
+        "min": 0.19999980926513672,
+        "p50": 0.600001335144043,
+        "p90": 0.9999990463256836,
+        "p95": 1.2999992370605469,
+        "max": 1.6000003814697266
+      },
+      "drawCalls": {
+        "count": 71,
+        "min": 385,
+        "p50": 395,
+        "p90": 415,
+        "p95": 416,
+        "max": 417
+      },
+      "triangles": {
+        "count": 71,
+        "min": 111142,
+        "p50": 112646,
+        "p90": 115414,
+        "p95": 115414,
+        "max": 115494
+      },
+      "programs": {
+        "count": 71,
+        "min": 27,
+        "p50": 27,
+        "p90": 27,
+        "p95": 27,
+        "max": 27
+      },
+      "stepCount": {
+        "count": 71,
+        "min": 2,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "child:input": {
+        "count": 71,
+        "min": 0.5999994277954102,
+        "p50": 1.2999992370605469,
+        "p90": 1.8000001907348633,
+        "p95": 2.1999998092651367,
+        "max": 3.5
+      },
+      "child:deliberateCommitmentSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.20000076293945312
+      },
+      "child:debugAreaJumpSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.39999961853027344,
+        "max": 0.7999992370605469
+      },
+      "child:controllerComfortSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.4999990463256836,
+        "max": 1.1999998092651367
+      },
+      "child:modeController": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.3000001907348633,
+        "max": 3.40000057220459
+      },
+      "child:statusPageSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.5,
+        "p95": 0.6000003814697266,
+        "max": 2.5
+      },
+      "child:debugDisplaySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000011444091797,
+        "max": 0.40000057220458984
+      },
+      "child:chemObjectSystem": {
+        "count": 71,
+        "min": 0.10000038146972656,
+        "p50": 0.5,
+        "p90": 1,
+        "p95": 1.100001335144043,
+        "max": 1.8999996185302734
+      },
+      "child:interactionCompositionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.3000001907348633,
+        "p90": 0.5,
+        "p95": 0.5000009536743164,
+        "max": 0.7000007629394531
+      },
+      "child:entitySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.3000001907348633,
+        "p90": 0.5000009536743164,
+        "p95": 0.6000003814697266,
+        "max": 2.3000001907348633
+      },
+      "child:localChemistryContextSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.40000057220458984,
+        "p95": 0.5000009536743164,
+        "max": 1.5000009536743164
+      },
+      "child:targetFocusRegistry": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999866485595703,
+        "max": 0.40000057220458984
+      },
+      "child:targetingSystem": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.9000005722045898,
+        "p90": 1.4000005722045898,
+        "p95": 2.1000003814697266,
+        "max": 5.800000190734863
+      },
+      "child:verbCompositionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.3000001907348633,
+        "max": 0.39999961853027344
+      },
+      "child:orbiterSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.40000057220458984,
+        "p95": 0.4999990463256836,
+        "max": 0.6999998092651367
+      },
+      "child:firstSliceCohesionSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.3000011444091797,
+        "p90": 0.6000003814697266,
+        "p95": 0.6999998092651367,
+        "max": 1.4000005722045898
+      },
+      "child:returnRegionEngineSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.40000057220458984,
+        "p95": 0.5000009536743164,
+        "max": 0.8000011444091797
+      },
+      "child:graveReturnRegionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.39999961853027344
+      },
+      "child:graveResonanceGameplaySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.40000057220458984,
+        "p95": 0.40000152587890625,
+        "max": 1.100001335144043
+      },
+      "child:graveRuptureHarvestSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.3000011444091797
+      },
+      "child:graveRuptureConsequenceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.40000057220458984,
+        "p95": 0.5999994277954102,
+        "max": 1.1000003814697266
+      },
+      "child:hostConditionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.19999980926513672
+      },
+      "child:act1RouteContractSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999961853027344,
+        "max": 0.8999996185302734
+      },
+      "child:siltPressureRouteSystem": {
+        "count": 71,
+        "min": 1.9000005722045898,
+        "p50": 3.700000762939453,
+        "p90": 5.09999942779541,
+        "p95": 7.199999809265137,
+        "max": 9.199999809265137
+      },
+      "child:localCellBoundaryMorphSystem": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.7000007629394531,
+        "p90": 1.1000003814697266,
+        "p95": 1.3000001907348633,
+        "max": 1.6000003814697266
+      },
+      "child:runtimeStateLedgerSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.29999828338623047
+      },
+      "child:objectiveSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.40000152587890625,
+        "p95": 0.5,
+        "max": 1
+      },
+      "child:inspectionCameraSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.40000152587890625,
+        "p95": 0.5,
+        "max": 0.7000007629394531
+      },
+      "child:guidePromptSystem": {
+        "count": 71,
+        "min": 0.5,
+        "p50": 1.2000007629394531,
+        "p90": 1.6000003814697266,
+        "p95": 2.3999996185302734,
+        "max": 5.5
+      },
+      "child:coreTopologyEnvironmentalHandlingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999961853027344,
+        "max": 0.39999961853027344
+      },
+      "child:hostContactShelfSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.40000057220458984
+      },
+      "child:coreSurfaceTruthSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.40000152587890625,
+        "p90": 1.9000005722045898,
+        "p95": 2.5000009536743164,
+        "max": 4.999999046325684
+      },
+      "child:coreTendrilSupportPlaneSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.20000076293945312
+      },
+      "child:playerMovement": {
+        "count": 71,
+        "min": 0.40000057220458984,
+        "p50": 1.2999992370605469,
+        "p90": 1.600001335144043,
+        "p95": 1.8999996185302734,
+        "max": 4.800000190734863
+      },
+      "child:liftFieldReadabilitySystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.39999961853027344,
+        "p90": 0.600001335144043,
+        "p95": 0.7000007629394531,
+        "max": 1.3000001907348633
+      },
+      "child:coreEngineSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.40000057220458984,
+        "p95": 0.5999994277954102,
+        "max": 1
+      },
+      "child:coreTopologyResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.39999961853027344,
+        "p95": 0.40000057220458984,
+        "max": 0.7000007629394531
+      },
+      "child:coreWorldResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.1999988555908203,
+        "max": 0.5999994277954102
+      },
+      "child:temporalHistorySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.39999961853027344
+      },
+      "child:coreVerbEngineCouplingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.5000019073486328,
+        "max": 1
+      },
+      "child:coreGrowthSystem": {
+        "count": 71,
+        "min": 2,
+        "p50": 4.19999885559082,
+        "p90": 5.100000381469727,
+        "p95": 7.5,
+        "max": 9.59999942779541
+      },
+      "child:coreTendrilSurfaceContactSystem": {
+        "count": 71,
+        "min": 0.3000001907348633,
+        "p50": 0.7000007629394531,
+        "p90": 1.0999994277954102,
+        "p95": 1.2999992370605469,
+        "max": 1.5999994277954102
+      },
+      "child:stabilizedProjectionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.1999988555908203,
+        "p90": 0.3000001907348633,
+        "p95": 0.4999990463256836,
+        "max": 0.600001335144043
+      },
+      "child:chemPulseResponse": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.1999988555908203
+      },
+      "child:hostContactEcologyContinuationSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.39999961853027344,
+        "p90": 0.6999998092651367,
+        "p95": 1,
+        "max": 5.09999942779541
+      },
+      "child:coreRadialPerformanceSystem": {
+        "count": 71,
+        "min": 0.19999980926513672,
+        "p50": 0.6999998092651367,
+        "p90": 1.0999994277954102,
+        "p95": 1.1999998092651367,
+        "max": 1.4999990463256836
+      },
+      "child:coreFlowSystem": {
+        "count": 71,
+        "min": 0.10000038146972656,
+        "p50": 0.4999990463256836,
+        "p90": 1,
+        "p95": 1.1999988555908203,
+        "max": 4.40000057220459
+      },
+      "child:coreFlowReserveSettlement": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.2999992370605469,
+        "max": 0.5
+      },
+      "child:coreTopologyVerbCharacterSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.3000001907348633,
+        "p90": 0.5,
+        "p95": 0.5999994277954102,
+        "max": 0.7000007629394531
+      },
+      "child:entityRelationshipGrammarSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.3000001907348633,
+        "max": 0.39999961853027344
+      },
+      "child:entityReciprocalMemorySystem": {
+        "count": 71,
+        "min": 0.2999992370605469,
+        "p50": 0.5999984741210938,
+        "p90": 0.9999990463256836,
+        "p95": 1.2999992370605469,
+        "max": 4.100000381469727
+      },
+      "child:entityReciprocalBehaviorSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.39999961853027344,
+        "p90": 0.6999998092651367,
+        "p95": 0.9000005722045898,
+        "max": 1.1000003814697266
+      },
+      "child:entityResidueRecognitionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.20000076293945312,
+        "max": 1.3999996185302734
+      },
+      "child:entityEcologyResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.20000076293945312
+      },
+      "child:entityEcologicalCrossInfluenceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.9000005722045898
+      },
+      "child:entityLocalMatterCouplingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.40000057220458984,
+        "p95": 0.5999994277954102,
+        "max": 2.59999942779541
+      },
+      "child:entityEcologicalResidueSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 1.5
+      },
+      "child:coreSensoryResponseSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000011444091797,
+        "max": 0.40000057220458984
+      },
+      "child:eventAnchoredHostAudioSystem": {
+        "count": 71,
+        "min": 0.10000038146972656,
+        "p50": 0.4999990463256836,
+        "p90": 1.6000003814697266,
+        "p95": 2,
+        "max": 4.199999809265137
+      },
+      "child:visualComposer": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.6999998092651367,
+        "p90": 1,
+        "p95": 1.3000001907348633,
+        "max": 3.1999998092651367
+      },
+      "child:motionSignatureSystem": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.8999996185302734,
+        "p90": 1.3000001907348633,
+        "p95": 1.5,
+        "max": 1.9000005722045898
+      },
+      "child:playtestHudSystem": {
+        "count": 71,
+        "min": 0.9000005722045898,
+        "p50": 2.100001335144043,
+        "p90": 2.9000015258789062,
+        "p95": 3.3000001907348633,
+        "max": 3.8999996185302734
+      },
+      "child:quickLookInspectorSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.40000057220458984,
+        "max": 0.5
+      },
+      "child:sessionTelemetrySystem": {
+        "count": 71,
+        "min": 0.5,
+        "p50": 1.3000001907348633,
+        "p90": 2.6999998092651367,
+        "p95": 3.1999998092651367,
+        "max": 13.399999618530273
+      },
+      "child:recipeDebugOverlay": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.3000001907348633
+      },
+      "child:chemistryDebugPanel": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.1999988555908203,
+        "max": 0.20000076293945312
+      },
+      "count:pass:offscreen:opaque": {
+        "count": 71,
+        "min": 4,
+        "p50": 4,
+        "p90": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "submit:pass:offscreen:opaque": {
+        "count": 71,
+        "min": 0.6000003814697266,
+        "p50": 1.1999988555908203,
+        "p90": 1.6999998092651367,
+        "p95": 1.9000005722045898,
+        "max": 4.700000762939453
+      },
+      "count:material:MeshStandardMaterial": {
+        "count": 71,
+        "min": 193,
+        "p50": 193,
+        "p90": 193,
+        "p95": 193,
+        "max": 193
+      },
+      "submit:material:MeshStandardMaterial": {
+        "count": 71,
+        "min": 21.200002670288086,
+        "p50": 37.30000114440918,
+        "p90": 48.899996757507324,
+        "p95": 54.80000114440918,
+        "max": 77.29999923706055
+      },
+      "count:material:MeshBasicMaterial": {
+        "count": 71,
+        "min": 176,
+        "p50": 186,
+        "p90": 198,
+        "p95": 199,
+        "max": 200
+      },
+      "submit:material:MeshBasicMaterial": {
+        "count": 71,
+        "min": 15.09999942779541,
+        "p50": 27.200002670288086,
+        "p90": 34.70000076293945,
+        "p95": 37.69999694824219,
+        "max": 89.00000476837158
+      },
+      "count:pass:offscreen:transmissive": {
+        "count": 71,
+        "min": 1,
+        "p50": 1,
+        "p90": 1,
+        "p95": 1,
+        "max": 1
+      },
+      "submit:pass:offscreen:transmissive": {
+        "count": 71,
+        "min": 0.19999980926513672,
+        "p50": 0.3000001907348633,
+        "p90": 0.5,
+        "p95": 0.6999998092651367,
+        "max": 1.1999998092651367
+      },
+      "count:material:MeshPhysicalMaterial": {
+        "count": 71,
+        "min": 3,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "submit:material:MeshPhysicalMaterial": {
+        "count": 71,
+        "min": 0.5000009536743164,
+        "p50": 1.0999994277954102,
+        "p90": 1.3999996185302734,
+        "p95": 1.7000007629394531,
+        "max": 2.09999942779541
+      },
+      "count:pass:main:opaque": {
+        "count": 71,
+        "min": 4,
+        "p50": 4,
+        "p90": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "submit:pass:main:opaque": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.9000005722045898,
+        "p90": 1.2999992370605469,
+        "p95": 1.7999992370605469,
+        "max": 2.1000003814697266
+      },
+      "count:pass:main:transmissive": {
+        "count": 71,
+        "min": 2,
+        "p50": 2,
+        "p90": 2,
+        "p95": 2,
+        "max": 2
+      },
+      "submit:pass:main:transmissive": {
+        "count": 71,
+        "min": 0.2999992370605469,
+        "p50": 0.6000003814697266,
+        "p90": 0.9000005722045898,
+        "p95": 1.1999998092651367,
+        "max": 1.3999996185302734
+      },
+      "count:pass:main:transparent": {
+        "count": 71,
+        "min": 374,
+        "p50": 384,
+        "p90": 404,
+        "p95": 405,
+        "max": 406
+      },
+      "submit:pass:main:transparent": {
+        "count": 71,
+        "min": 35.799997329711914,
+        "p50": 64.00000476837158,
+        "p90": 80.3000020980835,
+        "p95": 85.59999942779541,
+        "max": 144.00000095367432
+      },
+      "count:material:PointsMaterial": {
+        "count": 71,
+        "min": 3,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "submit:material:PointsMaterial": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.5,
+        "p95": 0.5999994277954102,
+        "max": 0.8000001907348633
+      },
+      "count:material:LineBasicMaterial": {
+        "count": 71,
+        "min": 10,
+        "p50": 10,
+        "p90": 18,
+        "p95": 18,
+        "max": 18
+      },
+      "submit:material:LineBasicMaterial": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 1.0999994277954102,
+        "p90": 1.399998664855957,
+        "p95": 1.4000015258789062,
+        "max": 3.5999984741210938
+      }
+    },
+    "wallMs": 8322.60000038147,
+    "simulationMs": 8178.200000762939,
+    "discardedMs": 144.39999961853033,
+    "actions": {
+      "canonical_selection": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 34,
+        "substep": 0
+      },
+      "analog_flow_request": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 37,
+        "substep": 0
+      },
+      "accepted_current": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 40,
+        "substep": 0
+      },
+      "release": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 48,
+        "substep": 1
+      }
+    },
+    "mapping": null
+  },
+  {
+    "source": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "tag": "bot-telemetry-3",
+    "mode": "bot-telemetry",
+    "repeat": 3,
+    "recording": false,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "start": {
+      "pose": [
+        -2.45,
+        -0.54,
+        -3.67
+      ],
+      "reserve": 0.7,
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "facing": [
+        0,
+        0,
+        -1
+      ]
+    },
+    "sensors": {
+      "hud": true,
+      "telemetry": true,
+      "sceneTraversal": true
+    },
+    "visibility": {
+      "visible": 368,
+      "hidden": 692,
+      "visibleMeshes": 301,
+      "hiddenMeshes": 549
+    },
+    "instrumentation": {
+      "heapBefore": {
+        "Nodes": 557,
+        "LayoutDuration": 0.176232,
+        "ScriptDuration": 5.083171,
+        "TaskDuration": 6.917176,
+        "JSHeapUsedSize": 52445260,
+        "JSHeapTotalSize": 74891264
+      },
+      "heapAfter": {
+        "Nodes": 2132,
+        "LayoutDuration": 0.291147,
+        "ScriptDuration": 13.18069,
+        "TaskDuration": 15.77204,
+        "JSHeapUsedSize": 55742532,
+        "JSHeapTotalSize": 80302080
+      },
+      "gc": [
+        {
+          "name": "MinorGC",
+          "ms": 2.601
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.468
+        },
+        {
+          "name": "MinorGC",
+          "ms": 4.326
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 4.169
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.682
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.546
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.201
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 3.073
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.862
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.723
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.566
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.435
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.372
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.241
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.922
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.796
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.946
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.812
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.241
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.107
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.298
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.163
+        },
+        {
+          "name": "MinorGC",
+          "ms": 2.361
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.23
+        },
+        {
+          "name": "MinorGC",
+          "ms": 4.305
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 4.174
+        },
+        {
+          "name": "MinorGC",
+          "ms": 3.051
+        },
+        {
+          "name": "V8.GCScavenger",
+          "ms": 2.918
+        }
+      ],
+      "sampledAllocationBySource": [
+        [
+          "three (Vite dependency)",
+          230576216
+        ],
+        [
+          "native or unsymbolized",
+          105329088
+        ],
+        [
+          "/src/player/CoreEmbodimentSystem.js",
+          10821560
+        ],
+        [
+          "/src/routes/SiltPressureRouteSystem.js",
+          8196892
+        ],
+        [
+          "/src/presentation/RenderBudgetSystem.js",
+          4850596
+        ],
+        [
+          "/src/world/LiftFieldReadabilitySystem.js",
+          4325964
+        ],
+        [
+          "/src/camera/CameraReadabilitySystem.js",
+          4195000
+        ],
+        [
+          "/src/player/PlayerMovementController.js",
+          2951856
+        ],
+        [
+          "/src/morph/LocalCellBoundaryMorphSystem.js",
+          2295124
+        ],
+        [
+          "/src/ecology/EntityReciprocalBehaviorSystem.js",
+          1901344
+        ],
+        [
+          "/src/world/RegionalTerritoryExpansion.js",
+          1900776
+        ],
+        [
+          "/src/core/SessionTelemetrySystem.js",
+          1838176
+        ],
+        [
+          "/src/player/CoreTendrilSurfaceContactSystem.js",
+          1835484
+        ],
+        [
+          "/src/core/GameRuntime.js",
+          1775244
+        ],
+        [
+          "/src/chemistry/ChemObjectSystem.js",
+          1769704
+        ],
+        [
+          "/src/player/CoreRadialPerformanceSystem.js",
+          1704308
+        ]
+      ]
+    },
+    "skippedRegionSystems": [
+      "hostRhythmSystem",
+      "regionalPhysicalEmbodimentSystem",
+      "ambientMaterialInteractionSystem",
+      "surfaceWakeGameplaySystem",
+      "openingPacingSystem",
+      "surfaceWakeLayeredInteractionSystem",
+      "surfaceWakeEcologicalCausalitySystem",
+      "cinematicAwakeningSystem",
+      "localCellMorphSystem",
+      "morphCompletionSystem",
+      "scarFlowArrivalSystem",
+      "guideThresholdGameplaySystem",
+      "guideThresholdLayeredInteractionSystem",
+      "scarFlowInteractionSystem",
+      "secondLocalCellMorphSystem",
+      "morphReadabilitySystem",
+      "reactiveStateGrammarSystem",
+      "responsePersonalitySystem",
+      "bondSystem",
+      "hubChamberFoundationSystem",
+      "hubInvestigationGameplaySystem",
+      "graveMemoryRouteSystem",
+      "vascularRhythmRouteSystem",
+      "combThresholdFoundationSystem",
+      "combThresholdPlayableSystem",
+      "apertureFieldsArrivalSystem",
+      "signalPlainEcologySystem",
+      "membraneRidgeGameplaySystem",
+      "apertureAdjacentTerritorySystem",
+      "gatheringGroundAliveSystem"
+    ],
+    "stats": {
+      "rawMs": {
+        "count": 71,
+        "min": 64.10000038146973,
+        "p50": 77,
+        "p90": 114.5,
+        "p95": 140.39999961853027,
+        "max": 230.60000038146973
+      },
+      "cpuFrame": {
+        "count": 71,
+        "min": 60.70000076293945,
+        "p50": 72.89999961853027,
+        "p90": 105.5,
+        "p95": 136.9000005722046,
+        "max": 225
+      },
+      "renderSubmission": {
+        "count": 71,
+        "min": 40.09999942779541,
+        "p50": 49.09999942779541,
+        "p90": 71.39999961853027,
+        "p95": 89.79999923706055,
+        "max": 142.5
+      },
+      "registry": {
+        "count": 71,
+        "min": 15.600001335144043,
+        "p50": 20.90000057220459,
+        "p90": 38.5,
+        "p95": 41.80000019073486,
+        "max": 54.60000038146973
+      },
+      "gpuMs": {
+        "count": 71,
+        "min": 13.385728,
+        "p50": 42.824704,
+        "p90": 65.340416,
+        "p95": 70.960128,
+        "max": 107.510784
+      },
+      "sceneTraversal": {
+        "count": 71,
+        "min": 1,
+        "p50": 1.1999998092651367,
+        "p90": 2,
+        "p95": 2.1000003814697266,
+        "max": 3.1000003814697266
+      },
+      "hud": {
+        "count": 71,
+        "min": 0.7999992370605469,
+        "p50": 1.1999998092651367,
+        "p90": 1.9999990463256836,
+        "p95": 2.40000057220459,
+        "max": 2.9999990463256836
+      },
+      "productionTelemetry": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.6999998092651367,
+        "p90": 1.6000003814697266,
+        "p95": 2.09999942779541,
+        "max": 7.399999618530273
+      },
+      "directorTelemetry": {
+        "count": 71,
+        "min": 0.19999980926513672,
+        "p50": 0.40000057220458984,
+        "p90": 0.9000005722045898,
+        "p95": 1.1000003814697266,
+        "max": 5.700000762939453
+      },
+      "drawCalls": {
+        "count": 71,
+        "min": 388,
+        "p50": 395,
+        "p90": 409,
+        "p95": 417,
+        "max": 417
+      },
+      "triangles": {
+        "count": 71,
+        "min": 111270,
+        "p50": 112646,
+        "p90": 114198,
+        "p95": 115494,
+        "max": 115654
+      },
+      "programs": {
+        "count": 71,
+        "min": 27,
+        "p50": 27,
+        "p90": 27,
+        "p95": 27,
+        "max": 27
+      },
+      "stepCount": {
+        "count": 71,
+        "min": 2,
+        "p50": 2,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "child:input": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.8000001907348633,
+        "p90": 1.4000005722045898,
+        "p95": 1.5999994277954102,
+        "max": 2.1000003814697266
+      },
+      "child:deliberateCommitmentSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.1999988555908203,
+        "max": 0.19999980926513672
+      },
+      "child:debugAreaJumpSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.5
+      },
+      "child:controllerComfortSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 5.700000762939453
+      },
+      "child:modeController": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.6000003814697266
+      },
+      "child:statusPageSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.3000001907348633,
+        "max": 0.39999961853027344
+      },
+      "child:debugDisplaySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.40000057220458984
+      },
+      "child:chemObjectSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.40000057220458984,
+        "p90": 0.9999990463256836,
+        "p95": 1.1999988555908203,
+        "max": 1.6000003814697266
+      },
+      "child:interactionCompositionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.39999961853027344,
+        "p95": 0.5,
+        "max": 0.6999998092651367
+      },
+      "child:entitySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.20000076293945312,
+        "p90": 0.39999961853027344,
+        "p95": 0.5000009536743164,
+        "max": 1.5999994277954102
+      },
+      "child:localChemistryContextSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.39999961853027344,
+        "p95": 0.40000152587890625,
+        "max": 1.0999994277954102
+      },
+      "child:targetFocusRegistry": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.40000057220458984
+      },
+      "child:targetingSystem": {
+        "count": 71,
+        "min": 0.3000001907348633,
+        "p50": 0.6000003814697266,
+        "p90": 1.6000003814697266,
+        "p95": 2.1999998092651367,
+        "max": 4.600001335144043
+      },
+      "child:verbCompositionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.39999961853027344
+      },
+      "child:orbiterSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000011444091797,
+        "p95": 0.40000057220458984,
+        "max": 0.5999994277954102
+      },
+      "child:firstSliceCohesionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.4999990463256836,
+        "p95": 0.5000009536743164,
+        "max": 0.7999992370605469
+      },
+      "child:returnRegionEngineSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000011444091797,
+        "p95": 0.40000057220458984,
+        "max": 0.5
+      },
+      "child:graveReturnRegionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.19999980926513672,
+        "p95": 0.19999980926513672,
+        "max": 0.3000001907348633
+      },
+      "child:graveResonanceGameplaySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.39999961853027344,
+        "max": 0.5999994277954102
+      },
+      "child:graveRuptureHarvestSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.3000001907348633
+      },
+      "child:graveRuptureConsequenceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.3000001907348633,
+        "p95": 0.40000057220458984,
+        "max": 0.6000003814697266
+      },
+      "child:hostConditionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.1999988555908203,
+        "max": 0.19999980926513672
+      },
+      "child:act1RouteContractSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.39999961853027344
+      },
+      "child:siltPressureRouteSystem": {
+        "count": 71,
+        "min": 1.3999996185302734,
+        "p50": 2.1999998092651367,
+        "p90": 4.59999942779541,
+        "p95": 5.90000057220459,
+        "max": 9.100000381469727
+      },
+      "child:localCellBoundaryMorphSystem": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.5,
+        "p90": 1.0000009536743164,
+        "p95": 1.3000001907348633,
+        "max": 1.5
+      },
+      "child:runtimeStateLedgerSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.20000076293945312
+      },
+      "child:objectiveSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000011444091797,
+        "p95": 0.39999961853027344,
+        "max": 4
+      },
+      "child:inspectionCameraSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999961853027344,
+        "max": 1.1000003814697266
+      },
+      "child:guidePromptSystem": {
+        "count": 71,
+        "min": 0.5,
+        "p50": 0.8000001907348633,
+        "p90": 1.5,
+        "p95": 2,
+        "max": 4.2000017166137695
+      },
+      "child:coreTopologyEnvironmentalHandlingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.3000001907348633
+      },
+      "child:hostContactShelfSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.3000001907348633,
+        "max": 0.40000057220458984
+      },
+      "child:coreSurfaceTruthSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 1.3999996185302734,
+        "p95": 1.6999988555908203,
+        "max": 2.6999988555908203
+      },
+      "child:coreTendrilSupportPlaneSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.09999942779541016,
+        "p95": 0.10000038146972656,
+        "max": 0.19999980926513672
+      },
+      "child:playerMovement": {
+        "count": 71,
+        "min": 0.40000057220458984,
+        "p50": 0.8000001907348633,
+        "p90": 1.399998664855957,
+        "p95": 1.4000005722045898,
+        "max": 2.6999988555908203
+      },
+      "child:liftFieldReadabilitySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 0.7999992370605469,
+        "p95": 0.9000005722045898,
+        "max": 1.3999996185302734
+      },
+      "child:coreEngineSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.1999988555908203,
+        "p90": 0.3000001907348633,
+        "p95": 0.40000152587890625,
+        "max": 0.600001335144043
+      },
+      "child:coreTopologyResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.2999992370605469,
+        "p95": 0.3000011444091797,
+        "max": 0.40000057220458984
+      },
+      "child:coreWorldResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.1999988555908203,
+        "max": 0.20000076293945312
+      },
+      "child:temporalHistorySystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 0.8999996185302734
+      },
+      "child:coreVerbEngineCouplingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.3000001907348633
+      },
+      "child:coreGrowthSystem": {
+        "count": 71,
+        "min": 1.6000003814697266,
+        "p50": 2.5,
+        "p90": 4.299999237060547,
+        "p95": 4.900001525878906,
+        "max": 6.700000762939453
+      },
+      "child:coreTendrilSurfaceContactSystem": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.4999990463256836,
+        "p90": 0.9000005722045898,
+        "p95": 1.0999984741210938,
+        "max": 1.1999998092651367
+      },
+      "child:stabilizedProjectionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.40000057220458984
+      },
+      "child:chemPulseResponse": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0,
+        "p95": 0.10000038146972656,
+        "max": 0.10000038146972656
+      },
+      "child:hostContactEcologyContinuationSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.3000001907348633,
+        "p90": 0.5999994277954102,
+        "p95": 0.7000007629394531,
+        "max": 0.9000005722045898
+      },
+      "child:coreRadialPerformanceSystem": {
+        "count": 71,
+        "min": 0.10000038146972656,
+        "p50": 0.40000057220458984,
+        "p90": 0.6999998092651367,
+        "p95": 0.8000001907348633,
+        "max": 1.9000005722045898
+      },
+      "child:coreFlowSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.2999992370605469,
+        "p90": 1,
+        "p95": 1.6000003814697266,
+        "max": 9.299999237060547
+      },
+      "child:coreFlowReserveSettlement": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.20000076293945312,
+        "max": 0.5999994277954102
+      },
+      "child:coreTopologyVerbCharacterSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.3000011444091797,
+        "p95": 0.39999961853027344,
+        "max": 0.40000057220458984
+      },
+      "child:entityRelationshipGrammarSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.3000011444091797
+      },
+      "child:entityReciprocalMemorySystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.39999961853027344,
+        "p90": 0.7999992370605469,
+        "p95": 0.8000011444091797,
+        "max": 1.6999988555908203
+      },
+      "child:entityReciprocalBehaviorSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.3000001907348633,
+        "p90": 0.5,
+        "p95": 0.5999994277954102,
+        "max": 0.8000001907348633
+      },
+      "child:entityResidueRecognitionSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.3000001907348633
+      },
+      "child:entityEcologyResonanceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.20000076293945312
+      },
+      "child:entityEcologicalCrossInfluenceSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.19999980926513672
+      },
+      "child:entityLocalMatterCouplingSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.19999980926513672,
+        "p90": 0.39999961853027344,
+        "p95": 0.5,
+        "max": 1.7000007629394531
+      },
+      "child:entityEcologicalResidueSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.19999980926513672,
+        "p95": 0.20000076293945312,
+        "max": 1.8999996185302734
+      },
+      "child:coreSensoryResponseSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.09999942779541016,
+        "p90": 0.20000076293945312,
+        "p95": 0.2999992370605469,
+        "max": 0.40000057220458984
+      },
+      "child:eventAnchoredHostAudioSystem": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.3000001907348633,
+        "p90": 0.9999990463256836,
+        "p95": 1.2999992370605469,
+        "max": 3.899998664855957
+      },
+      "child:visualComposer": {
+        "count": 71,
+        "min": 0.1999988555908203,
+        "p50": 0.39999961853027344,
+        "p90": 0.7000007629394531,
+        "p95": 0.8999996185302734,
+        "max": 1.0000009536743164
+      },
+      "child:motionSignatureSystem": {
+        "count": 71,
+        "min": 0.2999992370605469,
+        "p50": 0.5,
+        "p90": 0.9999990463256836,
+        "p95": 1.1999998092651367,
+        "max": 7.800000190734863
+      },
+      "child:playtestHudSystem": {
+        "count": 71,
+        "min": 0.7999992370605469,
+        "p50": 1.1999998092651367,
+        "p90": 1.9999990463256836,
+        "p95": 2.40000057220459,
+        "max": 2.9999990463256836
+      },
+      "child:quickLookInspectorSystem": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.10000038146972656,
+        "p90": 0.20000076293945312,
+        "p95": 0.3000001907348633,
+        "max": 0.39999961853027344
+      },
+      "child:sessionTelemetrySystem": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.7000007629394531,
+        "p90": 1.6999988555908203,
+        "p95": 2.09999942779541,
+        "max": 7.600000381469727
+      },
+      "child:recipeDebugOverlay": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.19999980926513672,
+        "max": 0.40000057220458984
+      },
+      "child:chemistryDebugPanel": {
+        "count": 71,
+        "min": 0,
+        "p50": 0,
+        "p90": 0.10000038146972656,
+        "p95": 0.10000038146972656,
+        "max": 0.20000076293945312
+      },
+      "count:pass:offscreen:opaque": {
+        "count": 71,
+        "min": 4,
+        "p50": 4,
+        "p90": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "submit:pass:offscreen:opaque": {
+        "count": 71,
+        "min": 0.5000009536743164,
+        "p50": 0.8000001907348633,
+        "p90": 1.3000001907348633,
+        "p95": 1.4000005722045898,
+        "max": 2.1999998092651367
+      },
+      "count:material:MeshStandardMaterial": {
+        "count": 71,
+        "min": 193,
+        "p50": 193,
+        "p90": 193,
+        "p95": 193,
+        "max": 193
+      },
+      "submit:material:MeshStandardMaterial": {
+        "count": 71,
+        "min": 19.400002479553223,
+        "p50": 24.300002098083496,
+        "p90": 34.70000171661377,
+        "p95": 44.599992752075195,
+        "max": 69.20000076293945
+      },
+      "count:material:MeshBasicMaterial": {
+        "count": 71,
+        "min": 179,
+        "p50": 186,
+        "p90": 194,
+        "p95": 200,
+        "max": 200
+      },
+      "submit:material:MeshBasicMaterial": {
+        "count": 71,
+        "min": 13.899993896484375,
+        "p50": 17.700000762939453,
+        "p90": 25.399995803833008,
+        "p95": 33.19999694824219,
+        "max": 53.39999866485596
+      },
+      "count:pass:offscreen:transmissive": {
+        "count": 71,
+        "min": 1,
+        "p50": 1,
+        "p90": 1,
+        "p95": 1,
+        "max": 1
+      },
+      "submit:pass:offscreen:transmissive": {
+        "count": 71,
+        "min": 0.09999942779541016,
+        "p50": 0.3000001907348633,
+        "p90": 0.39999961853027344,
+        "p95": 0.40000057220458984,
+        "max": 1.5
+      },
+      "count:material:MeshPhysicalMaterial": {
+        "count": 71,
+        "min": 3,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "submit:material:MeshPhysicalMaterial": {
+        "count": 71,
+        "min": 0.4999990463256836,
+        "p50": 0.6999998092651367,
+        "p90": 1.2999992370605469,
+        "p95": 1.6000003814697266,
+        "max": 2.3000001907348633
+      },
+      "count:pass:main:opaque": {
+        "count": 71,
+        "min": 4,
+        "p50": 4,
+        "p90": 4,
+        "p95": 4,
+        "max": 4
+      },
+      "submit:pass:main:opaque": {
+        "count": 71,
+        "min": 0.39999961853027344,
+        "p50": 0.6999988555908203,
+        "p90": 1.1000003814697266,
+        "p95": 1.1999998092651367,
+        "max": 2.3000001907348633
+      },
+      "count:pass:main:transmissive": {
+        "count": 71,
+        "min": 2,
+        "p50": 2,
+        "p90": 2,
+        "p95": 2,
+        "max": 2
+      },
+      "submit:pass:main:transmissive": {
+        "count": 71,
+        "min": 0.2999992370605469,
+        "p50": 0.40000057220458984,
+        "p90": 0.8999996185302734,
+        "p95": 1,
+        "max": 1.5
+      },
+      "count:pass:main:transparent": {
+        "count": 71,
+        "min": 377,
+        "p50": 384,
+        "p90": 398,
+        "p95": 406,
+        "max": 406
+      },
+      "submit:pass:main:transparent": {
+        "count": 71,
+        "min": 32.10000038146973,
+        "p50": 39.09999942779541,
+        "p90": 56.89999294281006,
+        "p95": 73.9000015258789,
+        "max": 111.59999465942383
+      },
+      "count:material:PointsMaterial": {
+        "count": 71,
+        "min": 3,
+        "p50": 3,
+        "p90": 3,
+        "p95": 3,
+        "max": 3
+      },
+      "submit:material:PointsMaterial": {
+        "count": 71,
+        "min": 0,
+        "p50": 0.1999988555908203,
+        "p90": 0.3000001907348633,
+        "p95": 0.39999866485595703,
+        "max": 0.40000057220458984
+      },
+      "count:material:LineBasicMaterial": {
+        "count": 71,
+        "min": 10,
+        "p50": 10,
+        "p90": 18,
+        "p95": 18,
+        "max": 18
+      },
+      "submit:material:LineBasicMaterial": {
+        "count": 71,
+        "min": 0.3000001907348633,
+        "p50": 0.7999992370605469,
+        "p90": 1.3999996185302734,
+        "p95": 1.5000019073486328,
+        "max": 3.3000001907348633
+      }
+    },
+    "wallMs": 6231.700000762939,
+    "simulationMs": 6142.300001144409,
+    "discardedMs": 89.39999961853027,
+    "actions": {
+      "canonical_selection": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 34,
+        "substep": 0
+      },
+      "analog_flow_request": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 37,
+        "substep": 0
+      },
+      "accepted_current": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 40,
+        "substep": 0
+      },
+      "release": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 47,
+        "substep": 1
+      }
+    },
+    "mapping": null
+  }
+]

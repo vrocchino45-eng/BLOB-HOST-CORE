@@ -1,0 +1,41 @@
+{
+  "branch": "integration/pi03-p1",
+  "head": "1c86d1f5a2466e218bc667d4a969a24d2be08797",
+  "parent": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "files": [
+    {
+      "path": "public/data/routes/siltPressureRouteCircuit_HC012A.json",
+      "wave05SHA256": "242cb4f8587a8d891ce08b4c0938a0b36619d0e30a0dfbe2e96ac554c4be8c4f",
+      "sha256": "242cb4f8587a8d891ce08b4c0938a0b36619d0e30a0dfbe2e96ac554c4be8c4f",
+      "bytes": 11325
+    },
+    {
+      "path": "scripts/testPI03FreeMaterialContact.mjs",
+      "wave05SHA256": "60b4a7cfc18e7fe7353ed1bc4624b22916581180caccf42fe7622f794e8304e7",
+      "sha256": "d8e6cfee7ac68299595398a98be6975d91353e6537d5647c405393577d9ea08d",
+      "bytes": 12653
+    },
+    {
+      "path": "src/contact/SiltTrajectoryMemory.js",
+      "wave05SHA256": "01be2618b4d1d334e3735b3345151d73434342dd41a6495529b1e9c88e70c893",
+      "sha256": "01be2618b4d1d334e3735b3345151d73434342dd41a6495529b1e9c88e70c893",
+      "bytes": 11793
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "wave05SHA256": "ca22b30ae96938456ba5c45483b30a4b7c03f64651a0e075d3603e8c717aac22",
+      "sha256": "ca22b30ae96938456ba5c45483b30a4b7c03f64651a0e075d3603e8c717aac22",
+      "bytes": 153910
+    }
+  ],
+  "patchSHA256": "8aa916d45cf2ffd4b5e25a4327c9c75bb575108898d83d3c6ab8d21a5792901c",
+  "build": {
+    "files": 541,
+    "digest": "40b2770fda3794f09a9be15e0dfdfcc2c581b6ff83e9035f928e81e2e726499a",
+    "byteIdentical": true
+  },
+  "focused": 9,
+  "independentReplay": true,
+  "remote": false,
+  "clean": true
+}

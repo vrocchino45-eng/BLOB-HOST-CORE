@@ -1,0 +1,258 @@
+diff --git a/.github/workflows/blob-ci02.yml b/.github/workflows/blob-ci02.yml
+new file mode 100644
+index 0000000..aae7d75
+--- /dev/null
++++ b/.github/workflows/blob-ci02.yml
+@@ -0,0 +1,33 @@
++name: BLOB CI02 IN01 deterministic verification
++on:
++  push:
++    branches: [candidate/ci02-i1]
++permissions:
++  contents: read
++jobs:
++  node-verification:
++    runs-on: ubuntu-24.04
++    timeout-minutes: 20
++    steps:
++      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
++        with:
++          persist-credentials: false
++          fetch-depth: 0
++      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
++        with:
++          node-version: '24.14.0'
++          cache: npm
++      - name: Install from the committed lockfile
++        run: node scripts/ci02-verify.mjs --install
++      - name: Run deterministic tests and build
++        run: node scripts/ci02-verify.mjs CI02_RESULTS
++      - name: Upload verification evidence
++        if: always()
++        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        with:
++          name: blob-ci02-${{ github.sha }}
++          path: |
++            CI02_RESULTS/*.log
++            CI02_RESULTS/summary.json
++          if-no-files-found: warn
++          retention-days: 14
+diff --git a/scripts/ci02-plan.json b/scripts/ci02-plan.json
+new file mode 100644
+index 0000000..f109bf2
+--- /dev/null
++++ b/scripts/ci02-plan.json
+@@ -0,0 +1,133 @@
++[
++  {
++    "id": "launch-focused",
++    "args": [
++      "--test",
++      "--test-reporter=tap",
++      "scripts/testPI02DirectedSiltLaunch.mjs"
++    ],
++    "count": 11
++  },
++  {
++    "id": "pi03-contact",
++    "count": 9,
++    "args": [
++      "--test",
++      "--test-reporter=tap",
++      "scripts/testPI03FreeMaterialContact.mjs"
++    ]
++  },
++  {
++    "id": "director-compatibility",
++    "args": [
++      "--test",
++      "--test-reporter=tap",
++      "BLOB_BOT_SERIES1/director/build-compatibility.test.mjs",
++      "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs",
++      "BLOB_BOT_SERIES1/director/frame-mapping.test.mjs"
++    ],
++    "count": 9
++  },
++  {
++    "id": "production-build",
++    "build": true
++  },
++  {
++    "id": "maintained",
++    "args": [
++      "--test",
++      "--test-reporter=tap",
++      "--test-concurrency=2",
++      "scripts/testB5FlowReserveSettlement.mjs",
++      "scripts/testB5GraveCoreFeedback.mjs",
++      "scripts/testC2CascadeVisuals.mjs",
++      "scripts/testC2ContextualLabels.mjs",
++      "scripts/testC63RouteReadiness.mjs",
++      "scripts/testCC01VascularResidualRecovery.mjs",
++      "scripts/testCH01VascularRecovery.mjs",
++      "scripts/testCH02SiltShelfConsequence.mjs",
++      "scripts/testCH03GraveRecoilSettling.mjs",
++      "scripts/testF1SiltFlow.mjs",
++      "scripts/testLocalSiltEcologicalResistance.mjs",
++      "scripts/testLocalSiltSeepExchange.mjs",
++      "scripts/testSiltHeldMotionReporting.mjs",
++      "scripts/testT1ReturnReadout.mjs",
++      "scripts/testWave1CoreEngine.mjs",
++      "scripts/testWave1FeedbackState.mjs",
++      "scripts/testWave1HostResponse.mjs",
++      "scripts/testWave1TargetLifecycle.mjs",
++      "scripts/testWave1VerbInteraction.mjs",
++      "scripts/testWC01VascularCaption.mjs",
++      "scripts/testWC01VascularReadability.mjs"
++    ],
++    "count": 245
++  },
++  {
++    "id": "verifyWave1CoreProfiles",
++    "args": [
++      "scripts/verifyWave1CoreProfiles.mjs"
++    ]
++  },
++  {
++    "id": "checkC63HubRouteAccess",
++    "args": [
++      "scripts/checkC63HubRouteAccess.mjs"
++    ]
++  },
++  {
++    "id": "validateRecipeDataLoad",
++    "args": [
++      "scripts/validateRecipeDataLoad.mjs"
++    ]
++  },
++  {
++    "id": "smokeHC031W1StabilizedAimLocalContact",
++    "args": [
++      "scripts/smokeHC031W1StabilizedAimLocalContact.mjs"
++    ]
++  },
++  {
++    "id": "smokeHC031U21RelationshipIntentLatch",
++    "args": [
++      "scripts/smokeHC031U21RelationshipIntentLatch.mjs"
++    ]
++  },
++  {
++    "id": "validateLS1BLivingSiltMaterialCycle",
++    "args": [
++      "scripts/validateLS1BLivingSiltMaterialCycle.mjs"
++    ]
++  },
++  {
++    "id": "validateHC016QTenderCompanion",
++    "args": [
++      "scripts/validateHC016QTenderCompanion.mjs"
++    ]
++  },
++  {
++    "id": "validateHC031C2FragmentFieldCapture",
++    "args": [
++      "scripts/validateHC031C2FragmentFieldCapture.mjs"
++    ]
++  },
++  {
++    "id": "validateHC031DRuptureConsequence",
++    "args": [
++      "scripts/validateHC031DRuptureConsequence.mjs"
++    ]
++  },
++  {
++    "id": "smokeLS1E1",
++    "args": [
++      "scripts/smokeLS1E1.mjs"
++    ],
++    "exception": "Cannot read properties of undefined (reading 'observe')"
++  },
++  {
++    "id": "smokeLS1E2",
++    "args": [
++      "scripts/smokeLS1E2.mjs"
++    ],
++    "exception": "ERR_UNSUPPORTED_RESOLVE_REQUEST"
++  }
++]
+diff --git a/scripts/ci02-verify.mjs b/scripts/ci02-verify.mjs
+new file mode 100644
+index 0000000..29e6d4a
+--- /dev/null
++++ b/scripts/ci02-verify.mjs
+@@ -0,0 +1,74 @@
++import assert from 'node:assert/strict';
++import { spawnSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
++import fs from 'node:fs';
++import path from 'node:path';
++
++function install() {
++  // The inherited mirror is private. Use public registry tarballs with exactly
++  // the same locked versions and integrity digests, then restore the lockfile.
++  const lockFile = 'package-lock.json';
++  const original = fs.readFileSync(lockFile);
++  const lock = JSON.parse(original.toString());
++  const mirrorPath = '/artifactory/api/npm/npm-public/';
++  for (const item of Object.values(lock.packages)) {
++    if (!item.resolved?.startsWith('https:')) continue;
++    const url = new URL(item.resolved);
++    if (!url.pathname.startsWith(mirrorPath)) continue;
++    assert.ok(item.integrity, 'Mirror replacement requires a locked integrity digest');
++    item.resolved = 'https://registry.npmjs.org/' + url.pathname.slice(mirrorPath.length);
++  }
++  try {
++    fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2) + '\n');
++    const command = process.platform === 'win32' ? 'cmd.exe' : 'npm';
++    const args = process.platform === 'win32' ? ['/d', '/s', '/c', 'npm ci --no-audit --no-fund'] : ['ci', '--no-audit', '--no-fund'];
++    const run = spawnSync(command, args, { stdio: 'inherit' });
++    process.exitCode = run.status ?? 1;
++  } finally {
++    fs.writeFileSync(lockFile, original);
++  }
++}
++
++if (process.argv[2] === '--install') {
++  install();
++  process.exit(process.exitCode);
++}
++
++const out = path.resolve(process.argv[2] ?? 'CI02_RESULTS');
++fs.mkdirSync(out, { recursive: true });
++const cwd = process.cwd();
++const git = (...args) => {
++  const result = spawnSync('git', args, { encoding: 'utf8' });
++  assert.equal(result.status, 0, result.stderr);
++  return result.stdout.trim();
++};
++const digest = bytes => createHash('sha256').update(bytes).digest('hex');
++const source = git('rev-parse', 'HEAD');
++if (process.env.GITHUB_SHA) assert.equal(process.env.GITHUB_SHA, source);
++const plan = JSON.parse(fs.readFileSync(new URL('./ci02-plan.json', import.meta.url)));
++const summary = { source, node: process.version, platform: process.platform, cases: [], verdict: 'PASS' };
++const scrub = value => value.split(cwd).join('<checkout>').split(out).join('<evidence>');
++for (const check of plan) {
++  const args = check.build ? ['node_modules/vite/bin/vite.js', 'build', '--outDir', path.join(out, 'dist')] : check.args;
++  const run = spawnSync(process.execPath, args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, timeout: 240000 });
++  const log = scrub((run.stdout ?? '') + (run.stderr ?? '') + (run.error?.message ?? ''));
++  const passed = Number(log.match(/^# pass (\d+)$/m)?.[1] ?? 0);
++  const expected = check.exception;
++  const verdict = expected ? (run.status === 1 && log.includes(expected) ? 'BASELINE_EXCEPTION' : 'FAIL')
++    : run.status === 0 && (check.count === undefined || passed === check.count) ? 'PASS' : 'FAIL';
++  const filename = check.id + '.log';
++  fs.writeFileSync(path.join(out, filename), log);
++  summary.cases.push({ id: check.id, exitCode: run.status, passed, verdict, expected, log: filename });
++  if (verdict === 'FAIL') summary.verdict = 'FAIL';
++  console.log(check.id, verdict, passed);
++}
++const dist = path.join(out, 'dist');
++if (fs.existsSync(dist)) {
++  const files = fs.readdirSync(dist, { recursive: true, withFileTypes: true }).filter(entry => entry.isFile());
++  summary.buildFiles = files.map(entry => {
++    const file = path.join(entry.parentPath, entry.name);
++    return { path: path.relative(dist, file).split(path.sep).join('/'), sha256: digest(fs.readFileSync(file)) };
++  }).sort((a, b) => a.path.localeCompare(b.path, 'en'));
++}
++fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify(summary, null, 2) + '\n');
++process.exitCode = Number(summary.verdict !== 'PASS');

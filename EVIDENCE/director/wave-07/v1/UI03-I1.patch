@@ -1,0 +1,378 @@
+diff --git a/scripts/testUI03PlayerInformation.mjs b/scripts/testUI03PlayerInformation.mjs
+new file mode 100644
+index 0000000..7fcb18a
+--- /dev/null
++++ b/scripts/testUI03PlayerInformation.mjs
+@@ -0,0 +1,170 @@
++import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
++import { registerHooks } from 'node:module';
++import { test } from 'node:test';
++import { Vector3 } from 'three';
++import { currentPlayerInformation, projectPlayerInformation } from '../src/ui/PlayerInformationModel.js';
++
++const HOST = 'HOST_ALPHA_WOUNDED_NURSERY';
++const SILT = 'CELL_SILT_PRESSURE_ROUTE_001';
++const HUB = 'CELL_SIGNAL_CHORUS_NERVE_001';
++const fixture = new URL('./testPI02DirectedSiltLaunch.mjs', import.meta.url);
++const code = readFileSync(fixture, 'utf8');
++const hudBinding = 'coreFlowSystem: flow, flowExperiment';
++assert.ok(code.includes(hudBinding));
++const end = code.indexOf("\ntest('keyboard and standard gamepad launch and retrieve");
++assert.ok(end > 0);
++const hook = registerHooks({ load(url, context, next) {
++  return url === fixture.href ? { format: 'module', shortCircuit: true,
++    source: "import {PlaytestHudSystem} from '../src/ui/PlaytestHudSystem.js';\n" + code.slice(0, end).replace(hudBinding,
++      hudBinding + ', playtestHudSystem: {update: PlaytestHudSystem.prototype.update}')
++      + '\nexport {makeGame,prepare,charge,commit,releasePulse,acquire};' } : next(url, context);
++} });
++let rig;
++try { rig = await import(fixture.href); } finally { hook.deregister(); }
++
++test('projection preserves owner bytes and separates unconfirmed candidates and retained history', () => {
++  const step = { hostId: HOST, cellId: SILT, mountSequence: 2, frame: 40, substep: 1 };
++  const stale = { ...step, mountSequence: 1, frame: 39, owner: 'silt:RegionalTerritoryExpansion',
++    targetId: 'silt_porosity_shelf', receiverId: 'silt_porosity_shelf_front', actionSequence: 1,
++    acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.1 } };
++  const input = { stabilizeHeld: true, flowDemand01: 0.4 };
++  const frame = {
++    activeHostId: HOST, activeCellId: SILT, input, frame: 40, runtimeSimulationSubstepIndex: 1,
++    firstSliceRuntimeMount: { mountSequence: 2, activeRuntimeCellId: SILT, activeSystemIds: ['targetingSystem'] },
++    runtimeExecution: { frame: 40, executedSystemIds: ['targetingSystem','coreFlowSystem'] },
++    targeting: { active: true, targetId: 'silt_porosity_shelf', candidateId: 'silt_porosity_shelf' },
++    coreFlow: { step, contactValid: true, ready: true, phase: 'contact', demand01: 0.4,
++      reason: 'contact', actionSequence: 1, result: stale, lastResult: stale },
++    corePerformance: { endurance: { reservePercent: 0, reserve01: 0 }, traits: { stability: 1.1 } },
++    spatialCoreChemistry: { placements: [{ pieceId: 'grip', zoneId: 'deep_core', family: 'silt' }] }
++  };
++  const baseline = structuredClone(frame);
++  const info = projectPlayerInformation(frame);
++  assert.deepEqual(frame, baseline);
++  assert.equal(info.target, null);
++  assert.equal(info.eligibility.flow.geometricContact, true);
++  assert.equal(info.accepted.flow, null);
++  assert.equal(info.history.lastFlowDelivery.step.mountSequence, 1);
++  assert.equal(info.history.lastFlowDelivery.retainedImprintAfter, 0.1);
++  assert.equal(info.core.reservePercent, 0);
++  assert.throws(() => { info.core.placements[0].zone = 'membrane'; }, TypeError);
++  assert.throws(() => { info.history.lastFlowDelivery.step.frame = 40; }, TypeError);
++  frame.playerInformation = info;
++  assert.equal(currentPlayerInformation(frame), info);
++  frame.runtimeSimulationSubstepIndex++;
++  assert.equal(currentPlayerInformation(frame), null);
++});
++
++test('ordinary RT remains Absorb and the Flow publication stays absent', t => {
++  const game = rig.makeGame(t, { padMode: true });
++  game.absorb(0.74);
++  game.step();
++  const model = currentPlayerInformation(game.frame);
++  assert.equal(model.intent.absorb, true);
++  assert.equal(model.intent.flowDemand01, 0);
++  assert.equal(model.eligibility.flow, null);
++  assert.equal(model.accepted.flow, null);
++  assert.equal(model.context.mode, 'world');
++});
++
++test('real Flow publishes only the current receiver-confirmed sample and retains its history', t => {
++  const game = rig.makeGame(t, { padMode: true, flowExperiment: true });
++  const patch = game.route.territoryExpansion.readFlowPatch(game.frame);
++  game.playerRoot.position.copy(patch.center).add(new Vector3(0, 0, 1.18));
++  game.aimAt(game.route.root.worldToLocal(patch.center.clone()).toArray());
++  game.stabilize(true);
++  game.steps(22);
++  assert.equal(game.frame.playerInformation.target.id, 'silt_porosity_shelf');
++  assert.equal(game.frame.playerInformation.accepted.flow, null);
++  game.absorb(0.65);
++  game.steps(40);
++  const model = game.frame.playerInformation;
++  assert.ok(game.frame.coreFlow.result?.acceptedCurrent01 > 0, game.frame.coreFlow.reason);
++  assert.equal(model.accepted.flow.actualRecipient, patch.id);
++  assert.equal(model.accepted.flow.current01, game.frame.coreFlow.result.acceptedCurrent01);
++  assert.equal(model.accepted.flow.pressure01, game.frame.coreFlow.result.pressure01);
++  assert.deepEqual(model.accepted.flow.step, model.context.step);
++  game.absorb(0);
++  game.step();
++  assert.equal(game.frame.playerInformation.accepted.flow, null);
++  assert.ok(game.frame.playerInformation.history.lastFlowDelivery.current01 > 0);
++  game.frame.statusPage = { open: true };
++  game.step();
++  assert.equal(game.frame.playerInformation.context.mode, 'menu');
++  assert.equal(game.frame.playerInformation.target, null);
++  assert.equal(game.frame.playerInformation.accepted.flow, null);
++});
++
++test('material acquisition, launch, actual contact, remount and retrieval keep their distinct truth', t => {
++  const { game, unit } = rig.prepare(t, { padMode: true });
++  const info = () => currentPlayerInformation(game.frame);
++  assert.equal(info().heldMaterial.id, unit.id);
++  game.step();
++  assert.equal(info().heldMaterial.generation, unit.generation);
++  const site = game.route.freeMaterialSurface;
++  const start = new Vector3().fromArray(site.center);
++  start.x -= site.radii[0] + 0.08;
++  const route = game.route;
++  game.playerRoot.position.copy(route.root.localToWorld(start.sub(route.siltGripLocalOffset)));
++  game.steps(10);
++  rig.charge(game, new Vector3(1, 0, 0));
++  const launch = rig.commit(game);
++  assert.equal(info().attempted.launch, true);
++  assert.equal(info().heldMaterial, null);
++  assert.equal(info().accepted.launch.grain, unit.id);
++  assert.equal(info().accepted.launch.actualRecipient, null);
++  assert.equal(info().accepted.launch.sequence, launch.chargeSequence);
++  rig.releasePulse(game);
++  game.stabilize(false);
++  assert.equal(info().accepted.launch, null);
++  let observed;
++  for (let i = 0; i < 60 && !observed; i++) {
++    game.step();
++    observed = info().accepted.freeMaterial[0];
++  }
++  assert.equal(observed?.actualRecipient, site.id);
++  assert.equal(observed.grain, unit.id);
++  assert.deepEqual(observed.step, info().context.step);
++  game.step(1 / 60, 0, 2);
++  game.step(1 / 60, 1, 2);
++  for (const contact of info().accepted.freeMaterial) {
++    assert.notEqual(contact.id, observed.id);
++    assert.deepEqual(contact.step, info().context.step);
++  }
++  const retainedId = info().history.lastFreeMaterialContact.id;
++  game.mount(HUB);
++  game.step();
++  assert.equal(info().heldMaterial, null);
++  assert.equal(info().accepted.freeMaterial.length, 0);
++  assert.equal(info().history.lastFreeMaterialContact.id, retainedId);
++  game.mount(SILT);
++  game.step();
++  for (const contact of info().accepted.freeMaterial) {
++    assert.notEqual(contact.id, retainedId);
++    assert.deepEqual(contact.step, info().context.step);
++    assert.ok(contact.step.mountSequence > observed.step.mountSequence);
++  }
++  rig.acquire(game, unit);
++  assert.equal(info().heldMaterial.id, unit.id);
++  assert.equal(route.materialIdentity.totalMass(), 8);
++});
++
++test('inspection and Core Work suppress live world information while retaining layout', t => {
++  const game = rig.makeGame(t, { padMode: true, flowExperiment: true });
++  game.frame.spatialCoreChemistry = { topology: { id: 'three_way_balance', distribution: '1:1:1' },
++    placements: [{ pieceId: 'test-memory', family: 'grave_memory_retention', zoneId: 'deep_core' }] };
++  game.frame.inspectionCamera = { active: true, coreWorkActive: false };
++  game.step();
++  assert.equal(game.frame.playerInformation.context.mode, 'inspection');
++  game.frame.inspectionCamera.coreWorkActive = true;
++  game.frame.coreWorkManipulation = { selectedPieceId: 'test-memory' };
++  game.step();
++  const info = game.frame.playerInformation;
++  assert.equal(info.context.mode, 'core_work');
++  assert.equal(info.core.distribution, '1:1:1');
++  assert.equal(info.core.selectedPiece, 'test-memory');
++  assert.equal(info.target, null);
++  assert.equal(info.heldMaterial, null);
++  assert.equal(info.accepted.flow, null);
++});
+diff --git a/src/ui/PlayerInformationModel.js b/src/ui/PlayerInformationModel.js
+new file mode 100644
+index 0000000..5185b47
+--- /dev/null
++++ b/src/ui/PlayerInformationModel.js
+@@ -0,0 +1,143 @@
++import { localChemistryTransitionReason } from '../chemistry/LocalChemistryContextSystem.js';
++import { readFlowStep } from '../interaction/SiltFlowContract.js';
++
++const id = value => typeof value === 'string' && value && value !== 'none' ? value : null;
++const number = value => Number.isFinite(value) ? value : null;
++const stampKeys = ['hostId', 'cellId', 'mountSequence', 'frame', 'substep'];
++const sameStep = (a, b) => Boolean(a && b && stampKeys.every(key => a[key] === b[key]));
++
++function observationStep(sample) {
++  return Object.freeze(Object.fromEntries(stampKeys.map(key => [key, sample[key]])));
++}
++
++function contextOf(frame) {
++  const step = readFlowStep(frame);
++  const cameras = [frame.inspectionCamera, frame.tightInspectionCamera];
++  const transition = localChemistryTransitionReason(frame);
++  let mode = 'world';
++  if (frame.statusPage?.open) mode = 'menu';
++  else if (transition) mode = 'transition';
++  else if (cameras.some(camera => camera?.coreWorkActive)) mode = 'core_work';
++  else if (cameras.some(camera => camera?.active)) mode = 'inspection';
++  else if (!step || frame.firstSliceRuntimeMount?.activeRuntimeCellId !== step.cellId) mode = 'unmounted';
++  return Object.freeze({ mode, transition: transition ?? null, step: step && Object.freeze(step),
++    frame: number(frame.frame), substep: frame.runtimeSimulationSubstepIndex ?? 0 });
++}
++
++function ownerRan(frame, name) {
++  const execution = frame.runtimeExecution;
++  return execution?.frame === frame.frame && execution.executedSystemIds?.includes(name);
++}
++
++function targetOf(frame, context) {
++  if (context.mode !== 'world' || !ownerRan(frame, 'targetingSystem')) return null;
++  const aim = frame.targeting;
++  const selected = aim?.relationshipActive ? aim.relationshipTargetId
++    : aim?.attentionActive ? aim.attentionTargetId : null;
++  if (!aim?.active || !id(selected) || aim.targetId !== selected) return null;
++  return Object.freeze({ owner: 'TargetingSystem', id: selected, label: aim.targetLabel ?? selected,
++    phase: aim.relationshipActive ? aim.relationshipPhase : aim.attentionPhase,
++    relationship: Boolean(aim.relationshipActive), attentionSequence: number(aim.attentionSequence),
++    relationshipSequence: aim.relationshipActive ? number(aim.relationshipSequence) : null });
++}
++
++function coreOf(frame, context) {
++  const core = frame.corePerformance;
++  const layout = frame.spatialCoreChemistry;
++  const placements = (layout?.placements ?? []).map(piece => Object.freeze({
++    id: piece.pieceId, family: piece.family, zone: piece.zoneId
++  }));
++  return Object.freeze({ owner: 'CoreRadialPerformanceSystem', reserve01: number(core?.endurance?.reserve01),
++    reservePercent: number(core?.endurance?.reservePercent), stability: number(core?.traits?.stability),
++    phaseCount: number(frame.coreEngine?.phaseCount), topologyId: id(layout?.topology?.id ?? core?.topologyId),
++    distribution: layout?.topology?.distribution ?? core?.distribution ?? null,
++    placements: Object.freeze(placements),
++    selectedPiece: context.mode === 'core_work' ? id(frame.coreWorkManipulation?.selectedPieceId) : null });
++}
++
++function flowDelivery(result) {
++  if (!result || !(result.acceptedCurrent01 > 0)) return null;
++  return Object.freeze({ owner: result.owner, step: observationStep(result),
++    actionSequence: result.actionSequence, intendedTarget: result.targetId, actualRecipient: result.receiverId,
++    current01: result.acceptedCurrent01, pressure01: result.pressure01, resistance01: result.resistance01,
++    retainedImprintAfter: result.after?.imprint ?? null });
++}
++
++function materialLaunch(event) {
++  if (!event) return null;
++  return Object.freeze({ owner: 'SiltPressureRouteSystem', step: observationStep(event), grain: event.unitId,
++    generation: event.generation, sequence: event.chargeSequence, intendedTarget: event.intendedTargetId,
++    actualRecipient: event.actualRecipientId });
++}
++
++function grainContacts(events) {
++  return Object.freeze(events.map(event => Object.freeze({ owner: 'SiltTrajectoryMemory',
++    step: observationStep(event), grain: event.unitId, generation: event.generation, releaseSequence: event.releaseSequence,
++    actualRecipient: event.receiverId, removedInwardSpeed: event.inwardSpeedRemoved, response: event.response,
++    id: event.deduplicationId })));
++}
++
++/** Read-only UI02 view. Scheduling and all action, physics, and history writes stay with their owners. */
++export function projectPlayerInformation(frame) {
++  const context = contextOf(frame);
++  const world = context.mode === 'world';
++  const { step } = context;
++  const input = world ? frame.input ?? {} : {};
++  const verb = world && ownerRan(frame, 'verbCompositionSystem') ? frame.verbComposition : null;
++  const target = targetOf(frame, context);
++  const mount = frame.firstSliceRuntimeMount;
++  const route = frame.siltPressureRoute;
++  const siltMounted = world && mount?.activeSystemIds?.includes('siltPressureRouteSystem')
++    && ownerRan(frame, 'siltPressureRouteSystem') && route?.active;
++  const launch = siltMounted ? route.materialLaunch : null;
++  const heldId = siltMounted ? id(route.siltGrip?.heldId) : null;
++  const custody = heldId && route.materialIdentity?.records?.find(record => record.id === heldId && record.owner === 'grip');
++  const heldMotion = route?.heldMaterialMotion?.acceptedMotion?.current;
++  const generation = heldMotion?.unitId === heldId && sameStep(heldMotion, step) ? number(heldMotion.generation) : null;
++  const flow = world && sameStep(frame.coreFlow?.step, step) ? frame.coreFlow : null;
++  const acceptedFlow = flow?.contactValid && sameStep(flow.result, step)
++    && flow.result.actionSequence === flow.actionSequence && flow.result.targetId === target?.id
++    ? flowDelivery(flow.result) : null;
++  const acceptedLaunch = sameStep(launch?.lastCommitment, step) ? materialLaunch(launch.lastCommitment) : null;
++  // History can remain available on remount, but only inside its original Host.
++  const sameHost = sample => Boolean(step && sample?.hostId === step.hostId);
++  const contactHistory = (route?.siltTrajectory?.freeMaterialContacts ?? []).filter(sameHost);
++  const liveContacts = siltMounted ? contactHistory.filter(event => sameStep(event, step)) : [];
++  const oldFlow = sameHost(frame.coreFlow?.lastResult) ? flowDelivery(frame.coreFlow.lastResult) : null;
++  const oldLaunch = sameHost(route?.materialLaunch?.lastCommitment) ? materialLaunch(route.materialLaunch.lastCommitment) : null;
++  const surface = world && ownerRan(frame, 'coreSurfaceTruthSystem') ? frame.coreSurfaceTruth : null;
++  const host = step && frame.hostCondition?.hostId === step.hostId
++    && frame.hostCondition.sampledAtSeconds === frame.runtimeSeconds ? frame.hostCondition : null;
++  const routeViscosity = world && ownerRan(frame, 'playerMovement') ? number(frame.playerKinematics?.viscosity) : null;
++  return Object.freeze({
++    schemaVersion: 1, context,
++    core: coreOf(frame, context),
++    target,
++    intent: Object.freeze({ owner: 'InputSystem', chord: verb?.chord ?? 'idle',
++      pulse: Boolean(input.pulseHeld || input.pulsePressed), absorb: Boolean(input.absorbHeld),
++      stabilize: Boolean(input.stabilizeHeld), flowDemand01: number(input.flowDemand01) ?? 0 }),
++    attempted: Object.freeze({ pulseEvent: input.pulsePressed ? number(input.pulseEventId) : null,
++      flowAction: flow?.demand01 > 0 ? number(flow.actionSequence) : null,
++      launch: Boolean(launch?.attempted) }),
++    heldMaterial: custody ? Object.freeze({ owner: 'SiltPressureRouteSystem', id: heldId,
++      generation, custody: custody.owner }) : null,
++    eligibility: Object.freeze({
++      flow: flow ? Object.freeze({ ready: flow.ready, reason: flow.reason, geometricContact: flow.contactValid }) : null,
++      launch: launch ? Object.freeze({ ready: launch.ready, reason: launch.rejectionReason }) : null
++    }),
++    accepted: Object.freeze({ flow: acceptedFlow, launch: acceptedLaunch, freeMaterial: grainContacts(liveContacts) }),
++    contact: surface?.valid ? Object.freeze({ owner: 'CoreSurfaceTruthSystem', surface: surface.surfaceId,
++      eligible: surface.mechanicalEligible, attached: Boolean(frame.playerAttachment?.active) }) : null,
++    localEnvironment: Object.freeze({ cell: step?.cellId ?? null, hostCondition: host?.phase ?? null,
++      hostPressure01: number(host?.amplitude), viscosityIndex: routeViscosity }),
++    history: Object.freeze({ lastFlowDelivery: oldFlow, lastDirectedRelease: oldLaunch,
++      lastFreeMaterialContact: grainContacts(contactHistory.slice(-1))[0] ?? null })
++  });
++}
++
++export function currentPlayerInformation(frame) {
++  const model = frame.playerInformation;
++  return model && model.context.frame === frame.frame && model.context.substep === (frame.runtimeSimulationSubstepIndex ?? 0)
++    && model.context.step?.hostId === frame.activeHostId && model.context.step?.cellId === frame.activeCellId
++    && model.context.step?.mountSequence === frame.firstSliceRuntimeMount?.mountSequence ? model : null;
++}
+diff --git a/src/ui/PlaytestHudSystem.js b/src/ui/PlaytestHudSystem.js
+index 7e94796..f1aa027 100644
+--- a/src/ui/PlaytestHudSystem.js
++++ b/src/ui/PlaytestHudSystem.js
+@@ -1,3 +1,4 @@
++import { currentPlayerInformation, projectPlayerInformation } from "./PlayerInformationModel.js";
+ import { readHostLanguage } from '../language/HostLanguageGrammar.js';
+ import { inSiltFlowWorld, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
+ import { HUB_RETURN_BOUNDARY_BY_CELL, readCascadeLabel, readContextualWorldLabel } from './ContextualWorldLabels.js';
+@@ -73,6 +74,7 @@ export class PlaytestHudSystem {
+   }
+ 
+   update(_dt, frameState) {
++    frameState.playerInformation = projectPlayerInformation(frameState);
+     if (!this.el) return;
+ 
+     const debugMode = frameState.debugDisplay?.mode ?? this.config?.defaultDebugMode ?? "hidden";
+@@ -258,6 +260,8 @@ export class PlaytestHudSystem {
+     const hostAudio = frameState.hostAudio ?? {};
+     const coreEngine = frameState.coreEngine ?? {};
+     const corePerformance = frameState.corePerformance ?? {};
++    const reservePercent = currentPlayerInformation(frameState)?.core.reservePercent
++      ?? corePerformance.endurance?.reservePercent ?? 100;
+     const coreSensoryResponse = frameState.coreSensoryResponse ?? {};
+     const interactionComposition = frameState.interactionComposition ?? {};
+     const testPlatform = frameState.debugTestPlatform ?? {};
+@@ -319,7 +323,7 @@ export class PlaytestHudSystem {
+           : "";
+     const pairedDemandRead = describePairedDemand(corePerformance);
+     const performanceRead = corePerformance.active
+-      ? ` / drive ${corePerformance.personality ?? "triadic balance"} · reserve ${corePerformance.endurance?.reservePercent ?? 100}% · boost x${corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1}${activeVerbPhysiology ? ` · ${activeVerbPhysiology}` : ""}${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}`
++      ? ` / drive ${corePerformance.personality ?? "triadic balance"} · reserve ${reservePercent}% · boost x${corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1}${activeVerbPhysiology ? ` · ${activeVerbPhysiology}` : ""}${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}`
+       : "";
+     const stateLabel = inspectionCamera.coreWorkActive
+       ? `Core Work: ${coreWorkManipulation.candidateCount ?? 0} pieces${topology ? ` / ${topology.label} ${topology.distribution}` : ""}${cloudRead}${engineRead}${performanceRead} / ${coreWorkManipulation.held ? "Guide holding" : "selected"} ${coreWorkManipulation.selectedPieceLabel ?? "none"}${selectedChemistry ? ` / ${selectedChemistry.zoneLabel} · ${selectedChemistry.interactionLabel}` : ((coreWorkManipulation.candidateCount ?? 0) > 0 ? ` / depth ${coreWorkManipulation.selectedDepthPercent ?? 0}%` : "")}`
+@@ -530,7 +534,7 @@ export class PlaytestHudSystem {
+       objective,
+       actionHint,
+       primaryInstruction,
+-      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
++      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${reservePercent}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
+       auditLine: [auditLine, languageLine].filter(Boolean).join("\n"),
+       flowLine,
+       siltFlowLabelsOpen,
+@@ -624,7 +628,7 @@ export class PlaytestHudSystem {
+       coreEngineDebugCycleCommand: coreEngine.architectureDebugCycleCommand ?? "O",
+       corePerformanceActive: Boolean(corePerformance.active),
+       corePerformancePersonality: corePerformance.personality ?? "forming / neutral",
+-      corePerformanceReservePercent: corePerformance.endurance?.reservePercent ?? 100,
++      corePerformanceReservePercent: reservePercent,
+       corePerformanceBoostAccelerationMultiplier: corePerformance.movementModifiers?.boostAccelerationMultiplier ?? 1,
+       corePerformanceBoostSpeedMultiplier: corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1,
+       coreSensoryActive: Boolean(coreSensoryResponse.active),

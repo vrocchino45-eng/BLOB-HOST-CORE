@@ -1,0 +1,93 @@
+{
+  "verdict": "PASS",
+  "browser": "153.0.4234.48",
+  "scope": "Matched browser DOM, native keyboard context, and actual Flow receipt with a staged pose and standard gamepad adapter. Video is a visual witness with no encoded simulation-frame synchronization or human acceptance.",
+  "readings": {
+    "base": {
+      "world": {
+        "cell": "CELL_MEMBRANE_NURSERY_001",
+        "label": "BLOB // HOST CORE // SURFACE WAKE",
+        "objective": "Move and let the nursery notice you. Y inspects the Core / readable focus.",
+        "position": [
+          "14px",
+          "14px"
+        ],
+        "visible": true,
+        "elements": 6,
+        "reserve": 100,
+        "model": null
+      },
+      "inspection": null,
+      "coreWork": null,
+      "flow": {
+        "start": {
+          "pose": [
+            -2.45,
+            -0.54,
+            -3.67
+          ],
+          "reserve": 0.7,
+          "facing": [
+            0,
+            0,
+            -1
+          ]
+        },
+        "receiver": "silt_porosity_shelf_front",
+        "current": 0.14806224329466602,
+        "target": "silt_porosity_shelf",
+        "shared": null,
+        "sharedTarget": null,
+        "frame": 28,
+        "flowLine": ""
+      },
+      "release": {
+        "live": null,
+        "prior": null
+      }
+    },
+    "candidate": {
+      "world": {
+        "cell": "CELL_MEMBRANE_NURSERY_001",
+        "label": "BLOB // HOST CORE // SURFACE WAKE",
+        "objective": "Move and let the nursery notice you. Y inspects the Core / readable focus.",
+        "position": [
+          "14px",
+          "14px"
+        ],
+        "visible": true,
+        "elements": 6,
+        "reserve": 100,
+        "model": "world"
+      },
+      "inspection": "inspection",
+      "coreWork": "core_work",
+      "flow": {
+        "start": {
+          "pose": [
+            -2.45,
+            -0.54,
+            -3.67
+          ],
+          "reserve": 0.7,
+          "facing": [
+            0,
+            0,
+            -1
+          ]
+        },
+        "receiver": "silt_porosity_shelf_front",
+        "current": 0.14818014450626027,
+        "target": "silt_porosity_shelf",
+        "shared": 0.14818014450626027,
+        "sharedTarget": "silt_porosity_shelf",
+        "frame": 22,
+        "flowLine": ""
+      },
+      "release": {
+        "live": null,
+        "prior": 0.03216475948060215
+      }
+    }
+  }
+}

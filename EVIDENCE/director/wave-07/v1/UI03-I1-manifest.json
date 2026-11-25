@@ -1,0 +1,37 @@
+{
+  "branch": "candidate/ui03-i1",
+  "parent": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "scope": "Isolated, uncommitted source. Existing HUD observer only.",
+  "files": [
+    {
+      "path": "scripts/testUI03PlayerInformation.mjs",
+      "checkoutSHA256": "256e349777fcf30ec386dcb5a0ff222146eeddbf426c12dfa48471aa1564e796",
+      "blobSHA256": "256e349777fcf30ec386dcb5a0ff222146eeddbf426c12dfa48471aa1564e796"
+    },
+    {
+      "path": "src/ui/PlayerInformationModel.js",
+      "checkoutSHA256": "ec8aa0c5e1b8bb717bbd2e83567f8b9938c54f7fc35d4417749fd696a28d5ad8",
+      "blobSHA256": "ec8aa0c5e1b8bb717bbd2e83567f8b9938c54f7fc35d4417749fd696a28d5ad8"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "checkoutSHA256": "e3716aea76f4bb7b4cec22f9e0aa4d477668130d359fa85778486b30e3db3a9a",
+      "blobSHA256": "e3716aea76f4bb7b4cec22f9e0aa4d477668130d359fa85778486b30e3db3a9a"
+    }
+  ],
+  "patch": {
+    "file": "UI03-I1.patch",
+    "sha256": "911bc732b1116c8a8ede3e7525acb350399047252a0e5e9668e7e5344e932370"
+  },
+  "directorCompatibility": {
+    "verdict": "INCOMPATIBLE_BUILD",
+    "code": "MODIFIED_GAMEPLAY_INPUTS",
+    "required": "be387f952000bf5502337e42887390a3e811bf41af4e64d44744be9e9a7ddd79",
+    "computed": "be387f952000bf5502337e42887390a3e811bf41af4e64d44744be9e9a7ddd79",
+    "worktreeDiff": [
+      "src/ui/PlayerInformationModel.js",
+      "src/ui/PlaytestHudSystem.js"
+    ],
+    "disposition": "Admit an explicit new Director source fingerprint before any future integration; rev.2 remains pinned to IN01."
+  }
+}

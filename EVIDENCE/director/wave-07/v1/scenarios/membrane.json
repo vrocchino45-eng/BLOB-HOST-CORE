@@ -1,0 +1,109 @@
+{
+  "schema": "blob.dev-scenario.v1",
+  "id": "dl-exp-001.membrane",
+  "revision": 2,
+  "build": {
+    "checkpoint": "1c86d1f5a2466e218bc667d4a969a24d2be08797"
+  },
+  "environment": {
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "receiver": "silt_porosity_shelf_front",
+    "seed": null,
+    "origin": "receiver-center-world",
+    "offset": [
+      0,
+      0,
+      1.18
+    ],
+    "facing": [
+      0,
+      0,
+      -1
+    ]
+  },
+  "authoritative": {
+    "core": {
+      "placements": [
+        "membrane",
+        "membrane",
+        "membrane"
+      ],
+      "reserve": 0.7,
+      "source": "existing-debug-anatomy"
+    },
+    "material": {
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02",
+        "silt-grain-03",
+        "silt-grain-04",
+        "silt-grain-05",
+        "silt-grain-06",
+        "silt-grain-07",
+        "silt-grain-08"
+      ],
+      "custody": "native-cycle",
+      "generation": 0,
+      "totalMass": 8,
+      "cycle": "dormant"
+    },
+    "regional": {
+      "progression": "fresh",
+      "receipts": 0,
+      "imprint": 0
+    },
+    "relationships": {
+      "flow": "released",
+      "attachment": "unattached",
+      "grip": "unheld"
+    }
+  },
+  "derived": {
+    "physiology": "derive-from-owner",
+    "chemistry": "derive-from-owner"
+  },
+  "presentation": {
+    "camera": "far-world",
+    "yaw": 0,
+    "pitch": 0.18,
+    "width": 768,
+    "height": 432
+  },
+  "input": {
+    "profile": "experimental-flow",
+    "standardPad": true,
+    "start": "neutral",
+    "stabilize": 0.82,
+    "demand": 0.46
+  },
+  "initialize": "mounted-silt-shelf-v1",
+  "requiredActions": [
+    "canonical_selection",
+    "analog_flow_request",
+    "accepted_current",
+    "release",
+    "recovery_window"
+  ],
+  "acceptance": {
+    "heldSeconds": 2.2,
+    "dose": 0.12,
+    "minimumDose": 0.03,
+    "objectiveLimitSeconds": 3.8,
+    "recoverySeconds": 1.3
+  },
+  "telemetry": [
+    "start",
+    "state",
+    "input",
+    "time",
+    "camera",
+    "reserve",
+    "flow",
+    "material",
+    "receipts",
+    "coverage"
+  ],
+  "reset": "fresh-disposable-browser-context",
+  "expectedDurationSeconds": 10
+}

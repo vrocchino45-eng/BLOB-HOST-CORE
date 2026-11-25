@@ -1,0 +1,669 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:blob:material-properties:proposal:v1",
+  "title": "BLOB Material Properties · MP02 Proposal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "blob.material-properties.proposal.v1"
+    },
+    "status": {
+      "const": "proposed"
+    },
+    "catalogRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "definitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/definition"
+      }
+    },
+    "conditionSamples": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/condition"
+      }
+    },
+    "organizationSamples": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/organization"
+      }
+    },
+    "contactProfiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contactProfile"
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "status",
+    "catalogRevision",
+    "definitions"
+  ],
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing owner, authoring reference or controlled test fixture"
+        },
+        "record": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable record ID within the authority"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Version or commit"
+        },
+        "status": {
+          "type": "string",
+          "description": "Evidence class",
+          "enum": [
+            "runtime-authoritative",
+            "presentation-only",
+            "disconnected",
+            "proposed",
+            "derived",
+            "deferred"
+          ]
+        }
+      },
+      "required": [
+        "authority",
+        "record",
+        "revision",
+        "status"
+      ]
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable definition ID separate from world instance identity"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "phase": {
+          "type": "string",
+          "description": "Authored physical state",
+          "enum": [
+            "solid",
+            "liquid",
+            "gas",
+            "gel",
+            "unknown"
+          ]
+        },
+        "composition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "recipeRef": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Reference to the composition authority"
+            },
+            "domainTags": {
+              "type": "array",
+              "description": "Chemistry domain IDs",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "basis": {
+              "type": "string",
+              "description": "Optional ratio convention",
+              "enum": [
+                "mass_fraction",
+                "mole_fraction",
+                "volume_fraction",
+                "inventory_share"
+              ]
+            },
+            "constituents": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Constituent ID"
+                  },
+                  "fraction01": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Ratio on the declared basis"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fraction01"
+                ]
+              }
+            }
+          },
+          "dependentRequired": {
+            "constituents": [
+              "basis"
+            ]
+          }
+        },
+        "intrinsic": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "densityKgM3": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Intrinsic density at stated reference conditions"
+            },
+            "referenceTemperatureK": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Reference temperature for authored measurements"
+            },
+            "hardnessPa": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Indentation pressure. The method belongs in the evidence reference."
+            },
+            "hardnessMethod": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Named test method required to compare hardness values"
+            },
+            "youngModulusPa": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Small-strain stiffness in a declared elastic regime"
+            },
+            "fractureEnergyJm2": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Fracture toughness expressed as critical energy release rate"
+            },
+            "cohesionPa": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Stated test-defined cohesive stress"
+            },
+            "strainToFailure": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Dimensionaless strain, may exceed one"
+            },
+            "recoveredStrainFraction01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Elastic recovery after the declared load cycle"
+            },
+            "failureMode": {
+              "type": "string",
+              "description": "Qualitative deformation category",
+              "enum": [
+                "ductile",
+                "brittle",
+                "viscoelastic",
+                "unknown"
+              ]
+            },
+            "permeabilityM2": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Intrinsic hydraulic permeability for the stated structure and direction"
+            },
+            "dynamicViscosityPas": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Fluid viscosity at reference conditions, not a drag multiplier"
+            },
+            "electricalConductivitySm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Electrical conductivity where the interaction genuinely represents charge transport"
+            },
+            "specificHeatJkgK": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Specific heat capacity"
+            },
+            "thermalConductivityWmK": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Thermal conductivity"
+            },
+            "resonanceFrequencyHz": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Frequency for the declared mode"
+            },
+            "dampingPerSecond": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Mode-scoped decay coefficient"
+            },
+            "toughnessJm3": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Energy absorbed per volume before failure under a named test"
+            }
+          },
+          "dependentRequired": {
+            "hardnessPa": [
+              "hardnessMethod"
+            ]
+          }
+        },
+        "sensory": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "renderMaterialRef": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Existing graphics recipe reference"
+            },
+            "audioRef": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Existing audio vocabulary reference"
+            },
+            "textureRef": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Presentation reference"
+            },
+            "renderRoughness01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Shader roughness, separate from mechanical friction"
+            },
+            "renderOpacity01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Renderer alpha, separate from physical transmittance"
+            },
+            "opticalSamples": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "wavelengthNm": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Wavelength"
+                  },
+                  "reflectance01": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Power reflected"
+                  },
+                  "transmittance01": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Power transmitted"
+                  },
+                  "absorptance01": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Power absorbed"
+                  },
+                  "emissiveRadianceWm2SrNm": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Independent spectral emission"
+                  }
+                },
+                "required": [
+                  "wavelengthNm"
+                ]
+              }
+            }
+          }
+        },
+        "propertySources": {
+          "type": "object",
+          "description": "Override source for a value keyed by JSON Pointer relative to this record",
+          "propertyNames": {
+            "pattern": "^/"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "source"
+      ]
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Authoritative material/cell/organism identity"
+        },
+        "definitionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Catalog definition reference"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing mutating owner"
+        },
+        "sampleTimeSeconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Simulation time in the reported clock domain"
+        },
+        "lifetime": {
+          "type": "string",
+          "description": "Retention policy",
+          "enum": [
+            "step",
+            "mount",
+            "session",
+            "owner-retained"
+          ]
+        },
+        "condition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "temperatureK": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Measured or authored condition"
+            },
+            "fluidWaterMassFraction01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Water mass share"
+            },
+            "poreSaturation01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Fill fraction of accessible pore volume"
+            },
+            "fluidRef": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Fluid filling the pores"
+            },
+            "structuralIntegrity01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Owner-specific normalized integrity"
+            },
+            "biologicalCondition": {
+              "type": "string",
+              "description": "Published biological condition",
+              "enum": [
+                "living",
+                "dormant",
+                "decaying",
+                "inert",
+                "unknown"
+              ]
+            },
+            "decompositionProgress01": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Progress within the owner's declared process"
+            },
+            "memoryObservationRef": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Authenticated owner observation reference"
+            }
+          },
+          "dependentRequired": {
+            "poreSaturation01": [
+              "fluidRef"
+            ]
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "propertySources": {
+          "type": "object",
+          "description": "Override source for a value keyed by JSON Pointer relative to this record",
+          "propertyNames": {
+            "pattern": "^/"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      },
+      "required": [
+        "instanceId",
+        "definitionId",
+        "owner",
+        "sampleTimeSeconds",
+        "lifetime",
+        "condition",
+        "source"
+      ]
+    },
+    "organization": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Authoritative material instance"
+        },
+        "form": {
+          "type": "string",
+          "description": "Current organization",
+          "enum": [
+            "bulk",
+            "particulate",
+            "fibrous",
+            "layered",
+            "porous",
+            "aggregate",
+            "unknown"
+          ]
+        },
+        "occupiedVolumeM3": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Calibrated geometry volume"
+        },
+        "contactRadiusWorldUnits": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Immutable authored contact radius for a scoped shape"
+        },
+        "porosity01": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Void divided by bulk volume"
+        },
+        "openPorosity01": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Connected void divided by bulk volume"
+        },
+        "geometryRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Contact geometry owner and shape ID"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "propertySources": {
+          "type": "object",
+          "description": "Override source for a value keyed by JSON Pointer relative to this record",
+          "propertyNames": {
+            "pattern": "^/"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "inertialMassKg": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Instance-specific physical mass; omitting it preserves the runtime's lack of inertial mass"
+        }
+      },
+      "required": [
+        "instanceId",
+        "form",
+        "source"
+      ],
+      "dependentRequired": {
+        "contactRadiusWorldUnits": [
+          "geometryRef"
+        ],
+        "inertialMassKg": [
+          "geometryRef"
+        ]
+      }
+    },
+    "contactProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Explicit profile ID"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing contextual interaction owner"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Allowed material pair or authored recipient capability"
+        },
+        "responseRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Owner-approved response capability"
+        },
+        "staticFrictionCoefficient": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Nonnegative pair coefficient"
+        },
+        "kineticFrictionCoefficient": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Nonnegative pair coefficient"
+        },
+        "adhesionEnergyJm2": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Pair-specific calibrated adhesion energy per area"
+        },
+        "adhesionIndex01": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Existing bounded gameplay index when separately identified"
+        },
+        "restitution01": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Normal relative-speed ratio for the approved contact pair"
+        },
+        "dragPerSecond": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Scoped linear drag rate"
+        },
+        "resistanceIndex01": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Explicit receiver-specific legacy response index"
+        },
+        "conditionRuleRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "An existing authorized decision rule"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "propertySources": {
+          "type": "object",
+          "description": "Override source for a value keyed by JSON Pointer relative to this record",
+          "propertyNames": {
+            "pattern": "^/"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "conductivityIndex01": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Evidence-backed receiver-specific gameplay index"
+        }
+      },
+      "required": [
+        "id",
+        "owner",
+        "scope",
+        "responseRef",
+        "source"
+      ]
+    }
+  }
+}

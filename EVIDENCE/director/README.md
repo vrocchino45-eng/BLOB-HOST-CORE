@@ -17,3 +17,7 @@
 ## Wave 06
 
 [Version 1](wave-06/v1/README.md) records the independently promoted Director and PI03 checkpoints, DL-EXP-009, PF02, hosted CI and the local IN01 candidate. [Machine index](wave-06/v1/index.json) and [recordings](wave-06/v1/recordings/manifest.json).
+
+## Wave 07
+
+[Version 1](wave-07/v1/README.md) presents the verified IN01 publication, material and momentum contracts, isolated HUD candidate, run profiling, and hosted CI evidence. [Machine index](wave-07/v1/index.json) · [Recordings](wave-07/v1/recordings.json).

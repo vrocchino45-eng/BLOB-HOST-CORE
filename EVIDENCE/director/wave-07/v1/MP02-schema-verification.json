@@ -1,0 +1,17 @@
+{
+  "schema": "urn:blob:material-properties:proposal:v1",
+  "validator": "4.25.1",
+  "cases": {
+    "No missing property is given a value": "PASS",
+    "Density is strictly positive": "PASS",
+    "Valid zero conductivity stays distinct from missing conductivity": "PASS",
+    "Hardness requires a matching test method": "PASS",
+    "Composition shares require definition of their basis": "PASS",
+    "Inventory shares are valid on their own basis": "PASS",
+    "Physical radius requires a sourced shape": "PASS",
+    "Particulate can be a constitutive organization": "PASS",
+    "Restitution stays within authored first-slice bounds": "PASS",
+    "Inelastic contact is representable": "PASS",
+    "Inertial mass belongs to the individual instance": "PASS"
+  }
+}

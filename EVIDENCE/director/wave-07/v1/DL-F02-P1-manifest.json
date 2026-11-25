@@ -1,0 +1,123 @@
+{
+  "branch": "integration/dl-f02-p1",
+  "head": "bd8622941baac6fc74cc09f47438d205862bb053",
+  "parent": "5988bcd7f1fe247e9dcea7ce04ab745a18689483",
+  "foundation": "d6b9b8ad13539d3be507c465ea3bb9782c718c9a",
+  "gameplay": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "compatibility": {
+    "commit": "bd8622941baac6fc74cc09f47438d205862bb053",
+    "gameplayCheckpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "gameplayAncestry": true,
+    "gameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "requiredGameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "workingGameplayDifferences": [],
+    "toolingRevision": "d524ad2f0dcb6981fa551a1c422a457a3ad5d5ff0ac7e7078c0b0e1a9da62f42"
+  },
+  "refinementFiles": [
+    {
+      "file": "BLOB_BOT_SERIES1/director/experiment-library.mjs",
+      "sha256": "365330d40b20f74eba049d66504177518ae6c8970968226005bd7b087ab26fa6",
+      "bytes": 5554,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/experiment-material.mjs",
+      "sha256": "b3ae73ea8f0292038ebe986235a93933aa27d401335ec82fd60d2569f77aa290",
+      "bytes": 3393,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/experimental-fixture.mjs",
+      "sha256": "532712e06587226cc4c425c4d548d7cda08f187aeb615fb3ed642f9381d62e2d",
+      "bytes": 2628,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/frame-capture.mjs",
+      "sha256": "1585cb6fd8ec32b4737be67eaad4ce21272d4d990494d74ae76ca26ea228667e",
+      "bytes": 4369,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/frame-mapping.mjs",
+      "sha256": "fb05ecc92f17bc500f036b6f09ac5ec444170e80100e599e587ea42dfe918223",
+      "bytes": 4349,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/frame-mapping.test.mjs",
+      "sha256": "03bd3805bbdf07d70c797595196a55dad4e80dc436c7e5b56fc508f1e4830ef8",
+      "bytes": 1582,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/handoff-browser.mjs",
+      "sha256": "ad107dc2196bfa94bd4385037be2213efb7a312ae63f66b34464d7c67195b504",
+      "bytes": 3027,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/handoff.mjs",
+      "sha256": "5ca7dace42719c1637265c989736b85906252690227324c752cd9a0a7218fedc",
+      "bytes": 10238,
+      "change": "added"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/run.mjs",
+      "sha256": "54a97d89328ac3eaad74b3daf339791aeb2ac0cd7220ea09913ffcdc1611c70f",
+      "bytes": 17096,
+      "change": "modified"
+    },
+    {
+      "file": "BLOB_BOT_SERIES1/director/scenarios/exp-002-004.json",
+      "sha256": "1628a83cf505fdd6a4bc8c6d85b2a161b0a1981f1489711ce8bd55f4af7eaa00",
+      "bytes": 712,
+      "change": "added"
+    },
+    {
+      "file": "docs/director/WAVE04.md",
+      "sha256": "e3751ec091fdd1c7ae74ab389d5fe7e504ab84b0e1649cab216b700a180684a8",
+      "bytes": 2802,
+      "change": "added"
+    }
+  ],
+  "correctionFiles": [
+    {
+      "path": "BLOB_BOT_SERIES1/director/build-compatibility.mjs",
+      "sha256": "5c54e8049a036051429d1c3370aefe2573b6617da2f05cd26039010b67e659e6"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/build-compatibility.test.mjs",
+      "sha256": "420c6864df74c30fc288735e42976ec80591c5531b39bc4d03a02eb4ade5b4b5"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/experiment-library.mjs",
+      "sha256": "c843c79254f1cfcfb39f4b8fb0f43fcc2465da1600bad9ccee8442223ea75d12"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/handoff.mjs",
+      "sha256": "c666f165e81ce703c81ab47dd7a6891b2f977ff643072eb521290db6200447e2"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/run.mjs",
+      "sha256": "10071b7ffcf5eb19826d9ca6e098d79bf079439ffff21e07d57a7e259587f3f7"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenario-contract.mjs",
+      "sha256": "66288a642580de686c33dad9ede54b4ca709aef0784e8c9c097ddbf204b3a316"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs",
+      "sha256": "25ba18f58345d1d324fed43dddd233273b9723bf436c62639a6b2808bdb78732"
+    }
+  ],
+  "correctionPatchSHA256": "a8eb993d560652996fa27e1b334dd85ff7abdba01e2661dbebdda8cfc8b3a5dc",
+  "build": {
+    "files": 541,
+    "digest": "9f371363833cb86941719c03b0fae360acbb747425998b5cf121c4b00936dd05",
+    "byteIdentical": true
+  },
+  "mountedComparisons": 12,
+  "remote": false,
+  "clean": true
+}
