@@ -1,0 +1,303 @@
+{
+  "webm": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 21,
+          "substep": 0
+        },
+        "simSeconds": 2.6380999984741216,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 11268.79999923706,
+        "captureWallMs": 11423.89999961853,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 0.43,
+        "marker": 2,
+        "renderDelayMs": 155.10000038146973,
+        "ptsResidualMs": -50.5,
+        "eventToFrameMs": 104.60000038146973,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 23,
+          "substep": 1
+        },
+        "simSeconds": 2.9880999984741203,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 12103.89999961853,
+        "captureWallMs": 12218.699999809265,
+        "encodedFrameObserved": 4,
+        "ptsSeconds": 1.226,
+        "marker": 4,
+        "renderDelayMs": 114.80000019073486,
+        "ptsResidualMs": -49.30000019073486,
+        "eventToFrameMs": 65.5,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 25,
+          "substep": 1
+        },
+        "simSeconds": 3.2880999984741193,
+        "action": 1,
+        "consequence": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 25,
+          "substep": 1,
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1,
+          "actionSequence": 1,
+          "receiverId": "silt_porosity_shelf_front",
+          "siteId": "silt_porosity_shelf",
+          "owner": "silt:RegionalTerritoryExpansion",
+          "conductivity01": 0.72,
+          "resistance01": 0.40777523792486875,
+          "profile": {
+            "topologyId": "three_way_balance",
+            "phaseCount": 3,
+            "reserve01": 0.682,
+            "stability": 1.017,
+            "recovery": 1.067,
+            "enduranceCapacity": 1.107
+          },
+          "acceptedCurrent01": 0.148846146861029,
+          "pressure01": 0.10419230280272031,
+          "before": {
+            "imprint": 0.23606,
+            "strain": 0,
+            "void": 0
+          },
+          "after": {
+            "imprint": 0.2377315300238653,
+            "strain": 0,
+            "void": 0
+          },
+          "retainedDuringSession": true,
+          "materialTransferred": 0,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        "eventWallMs": 12907.599999427795,
+        "captureWallMs": 13515.29999923706,
+        "encodedFrameObserved": 6,
+        "ptsSeconds": 2.516,
+        "marker": 6,
+        "renderDelayMs": 607.6999998092651,
+        "ptsResidualMs": -55.89999961853027,
+        "eventToFrameMs": 551.8000001907349,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "release",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 38,
+          "substep": 0
+        },
+        "simSeconds": 5.1880999984741125,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 16717.199999809265,
+        "captureWallMs": 16877.199999809265,
+        "encodedFrameObserved": 19,
+        "ptsSeconds": 5.882,
+        "marker": 19,
+        "renderDelayMs": 160,
+        "ptsResidualMs": -51.80000019073486,
+        "eventToFrameMs": 108.19999980926514,
+        "status": "OVER_100_MS"
+      }
+    ],
+    "captured": 30,
+    "encodedMarkers": 24,
+    "missingCapturedMarkers": [
+      23,
+      26,
+      27,
+      28,
+      29,
+      30
+    ],
+    "maxAbsPtsResidualMs": 57.80000019073486,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 0,
+    "codec": "video/webm;codecs=vp8,opus",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  },
+  "mp4": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 21,
+          "substep": 0
+        },
+        "simSeconds": 2.6380999984741216,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 11268.79999923706,
+        "captureWallMs": 11423.89999961853,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 0.1927,
+        "marker": 2,
+        "renderDelayMs": 155.10000038146973,
+        "ptsResidualMs": -50.79999999999998,
+        "eventToFrameMs": 104.30000038146974,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 23,
+          "substep": 1
+        },
+        "simSeconds": 2.9880999984741203,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 12103.89999961853,
+        "captureWallMs": 12218.699999809265,
+        "encodedFrameObserved": 4,
+        "ptsSeconds": 0.988533,
+        "marker": 4,
+        "renderDelayMs": 114.80000019073486,
+        "ptsResidualMs": -49.76700019073485,
+        "eventToFrameMs": 65.03300000000002,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 25,
+          "substep": 1
+        },
+        "simSeconds": 3.2880999984741193,
+        "action": 1,
+        "consequence": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 25,
+          "substep": 1,
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1,
+          "actionSequence": 1,
+          "receiverId": "silt_porosity_shelf_front",
+          "siteId": "silt_porosity_shelf",
+          "owner": "silt:RegionalTerritoryExpansion",
+          "conductivity01": 0.72,
+          "resistance01": 0.40777523792486875,
+          "profile": {
+            "topologyId": "three_way_balance",
+            "phaseCount": 3,
+            "reserve01": 0.682,
+            "stability": 1.017,
+            "recovery": 1.067,
+            "enduranceCapacity": 1.107
+          },
+          "acceptedCurrent01": 0.148846146861029,
+          "pressure01": 0.10419230280272031,
+          "before": {
+            "imprint": 0.23606,
+            "strain": 0,
+            "void": 0
+          },
+          "after": {
+            "imprint": 0.2377315300238653,
+            "strain": 0,
+            "void": 0
+          },
+          "retainedDuringSession": true,
+          "materialTransferred": 0,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        "eventWallMs": 12907.599999427795,
+        "captureWallMs": 13515.29999923706,
+        "encodedFrameObserved": 6,
+        "ptsSeconds": 2.2788,
+        "marker": 6,
+        "renderDelayMs": 607.6999998092651,
+        "ptsResidualMs": -56.099999618530546,
+        "eventToFrameMs": 551.6000001907346,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "release",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 38,
+          "substep": 0
+        },
+        "simSeconds": 5.1880999984741125,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 16717.199999809265,
+        "captureWallMs": 16877.199999809265,
+        "encodedFrameObserved": 17,
+        "ptsSeconds": 5.644267,
+        "marker": 19,
+        "renderDelayMs": 160,
+        "ptsResidualMs": -52.53300019073504,
+        "eventToFrameMs": 107.46699980926496,
+        "status": "OVER_100_MS"
+      }
+    ],
+    "captured": 30,
+    "encodedMarkers": 23,
+    "missingCapturedMarkers": [
+      13,
+      14,
+      26,
+      27,
+      28,
+      29,
+      30
+    ],
+    "maxAbsPtsResidualMs": 58.30000019073486,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 0,
+    "codec": "video/mp4;codecs=avc1.42001f,mp4a.40.2",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  }
+}

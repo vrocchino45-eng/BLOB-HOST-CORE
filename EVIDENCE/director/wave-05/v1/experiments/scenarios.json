@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "base": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "frequencyHz": 60,
+  "layouts": {
+    "deep": [
+      3,
+      0,
+      0
+    ],
+    "balanced": [
+      1,
+      1,
+      1
+    ],
+    "membrane": [
+      0,
+      0,
+      3
+    ]
+  },
+  "experiments": {
+    "DL-EXP-005": {
+      "description": "Matched Shelf contact, lateral displacement, neutral time and matched recovery pose; use native LT/RT",
+      "settleSteps": 20,
+      "conductionSteps": 30,
+      "offsetX": 0.95,
+      "disturbanceSteps": 18
+    },
+    "DL-EXP-006": {
+      "description": "Living Silt held grain: unbound tether Pulse, first release, then independent directed launch and Garden seat trials; repeat native metrics",
+      "pulseRounds": 3
+    },
+    "DL-EXP-007": {
+      "description": "Authored entry shelf: support eligibility, approach and tangent/boost/brake with real movement; no seeded anchor"
+    },
+    "DL-EXP-008": {
+      "description": "Three low/mid/high demand cycles; matched initial reserve, same session",
+      "demand": [
+        0.35,
+        0.65,
+        0.95
+      ],
+      "conductionSteps": 60,
+      "releaseSteps": 78
+    }
+  }
+}

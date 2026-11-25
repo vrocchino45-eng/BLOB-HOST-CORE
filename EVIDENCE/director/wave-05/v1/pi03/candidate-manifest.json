@@ -1,0 +1,47 @@
+{
+  "base": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "files": [
+    {
+      "path": "public/data/routes/siltPressureRouteCircuit_HC012A.json",
+      "sha256": "242cb4f8587a8d891ce08b4c0938a0b36619d0e30a0dfbe2e96ac554c4be8c4f",
+      "bytes": 11325
+    },
+    {
+      "path": "scripts/testPI03FreeMaterialContact.mjs",
+      "sha256": "60b4a7cfc18e7fe7353ed1bc4624b22916581180caccf42fe7622f794e8304e7",
+      "bytes": 8032
+    },
+    {
+      "path": "src/contact/SiltTrajectoryMemory.js",
+      "sha256": "01be2618b4d1d334e3735b3345151d73434342dd41a6495529b1e9c88e70c893",
+      "bytes": 11793
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "ca22b30ae96938456ba5c45483b30a4b7c03f64651a0e075d3603e8c717aac22",
+      "bytes": 153910
+    }
+  ],
+  "build": {
+    "files": 541,
+    "baselineFiles": 541,
+    "changed": [
+      "assets/ChemistryDebugPanel-pu0ES602.js",
+      "assets/RecipeDebugOverlay-CNWgkO0z.js",
+      "assets/RuntimeDiagnosticSummary-D8JiPERL.js",
+      "assets/index-UxcvAOZK.js",
+      "data/routes/siltPressureRouteCircuit_HC012A.json",
+      "index.html"
+    ],
+    "missing": [
+      "assets/ChemistryDebugPanel-Dp_qn8qI.js",
+      "assets/RecipeDebugOverlay-CipxEfqk.js",
+      "assets/RuntimeDiagnosticSummary-Lnqmd6PF.js",
+      "assets/index-bbE6dZc5.js"
+    ],
+    "identical": false
+  },
+  "productionSourceFiles": 3,
+  "candidateOnly": true,
+  "patchSHA256": "baabd2641140a06faa7c1a7258cfd62050db4a3501d3b93869bfc7bcce0887b5"
+}

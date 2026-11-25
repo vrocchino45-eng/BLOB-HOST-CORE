@@ -9,3 +9,7 @@
 ## Wave 04
 
 [Version 1](wave-04/v1/README.md) records the Director foundation, scenario revisions, comparative telemetry, regression results and headed handoff recordings. The 100 ms frame-alignment gate remains open.
+
+## Wave 05
+
+[Version 1](wave-05/v1/README.md) records the verified foundation publication, exact refinement blocker, PI03 contact candidate, comparative Core runs, GTX 1070 Ti audit and CI candidate. [Machine index](wave-05/v1/index.json) and [recordings](wave-05/v1/recordings/manifest.json).

@@ -1,0 +1,69 @@
+{
+  "schema": "blob.director-runs.v1",
+  "head": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "sourceFingerprint": "bc3ace7f45da8cd6a7dd3720c1dbd2fa7d78ebc844aac49f5e1ddbafeacef72f",
+  "status": "PASS",
+  "mode": "--pilot",
+  "stagingDeclared": true,
+  "productionSourcesIdentical": true,
+  "startingStateParity": true,
+  "parityError": null,
+  "ordinary": {
+    "key": "__director_isolation_witness__",
+    "value": "ordinary-context-only",
+    "hasDirectorPad": false,
+    "hasDirectorRuntime": false,
+    "hasOverlay": false,
+    "startupFlowFlag": false,
+    "storageIntact": true
+  },
+  "runs": [
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "input",
+      "evaluation": {
+        "status": "PASS",
+        "missing": [],
+        "violations": [],
+        "dose": 0.17935224561805882,
+        "currentDose": 0.25621749374008407,
+        "secondsToRelease": 2.686099999427794,
+        "reserveAtStart": 0.7,
+        "reserveAtEnd": 0.7255535226778427,
+        "inputEdges": [
+          {
+            "elapsed": 0,
+            "lt": 0.82,
+            "rt": 0
+          },
+          {
+            "elapsed": 0.4510666666030884,
+            "lt": 0.82,
+            "rt": 0.46
+          },
+          {
+            "elapsed": 2.686099999427794,
+            "lt": 0,
+            "rt": 0
+          }
+        ],
+        "directFlowDebit": 0.009897524944064484,
+        "strainPeak": 0.824645767059746,
+        "strainAtEnd": 0.08859502284809145,
+        "imprintAtEnd": 0.2915381720213205,
+        "acceptedImprintGain": 0.05547817202132049,
+        "maxTravelFromStart": 0.4849966645533187,
+        "maximumAuthorityStep": 0.04909999990463257,
+        "simulationSteps": 96,
+        "observedFrames": 40,
+        "simulatedTimeDroppedMs": 0,
+        "acceptedSteps": 47,
+        "acceptedInFrustum": 47,
+        "acceptedFirstReserve": 0.6829922429675928,
+        "releaseReserve": 0.588966856011176,
+        "acceptedLastReserve": 0.5840495226371526
+      },
+      "video": "<wave-05-archive>/refinement-browser-repeat/dl-exp-001.balanced-input/gameplay.webm"
+    }
+  ]
+}

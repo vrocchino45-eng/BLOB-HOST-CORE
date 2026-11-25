@@ -1,0 +1,31 @@
+{
+  "base": "d6b9b8ad13539d3be507c465ea3bb9782c718c9a",
+  "head": "5934b4c02dd70b392cd5b730f5dc4503a63430c2",
+  "branch": "candidate/ci01-i1",
+  "files": [
+    {
+      "path": ".github/workflows/blob-ci01.yml",
+      "sha256": "b309ee6d8183b016fe61e357590f7b59bd5af6badfebb8ac1bbb41e42f44a3ce",
+      "bytes": 1062
+    },
+    {
+      "path": "scripts/ci01-plan.json",
+      "sha256": "2f540e8a4ebfa24512d969425722352d0c615d417e4e55b83e26aadcb7e1f59c",
+      "bytes": 2931
+    },
+    {
+      "path": "scripts/ci01-verify.mjs",
+      "sha256": "4473922e30bf33750ebb58f724124cd4f31563bea5c22a603485142fea90acf8",
+      "bytes": 3811
+    }
+  ],
+  "build": {
+    "files": 541,
+    "baselineFiles": 541,
+    "changed": [],
+    "missing": [],
+    "identical": true
+  },
+  "hostedRun": false,
+  "patchSHA256": "13f32ff5efc7040fa998815966c988444c2fbadfbcade063834574e91ef626a1"
+}

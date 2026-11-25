@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "gameplay": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "foundation": "d6b9b8ad13539d3be507c465ea3bb9782c718c9a",
+  "parentEvidence": "5c9d0d748adbe1e99c4b3f60bbb76afee513472e",
+  "scenarios": "experiments/scenarios.json",
+  "verdicts": {
+    "A": {
+      "verdict": "PUBLISHED_AND_VERIFIED",
+      "read": "foundation/verification.json"
+    },
+    "B": {
+      "verdict": "BLOCKED",
+      "read": "refinement/promotion-manifest.json"
+    },
+    "C": {
+      "verdict": "LOCAL_CANDIDATE_PASS",
+      "read": "pi03/candidate-manifest.json"
+    },
+    "D": {
+      "verdict": "MECHANICAL_PASS",
+      "read": "experiments/README.md"
+    },
+    "E": {
+      "verdict": "MEASURED_WITH_ATTRIBUTION_LIMITS",
+      "read": "pf01/README.md"
+    },
+    "F": {
+      "verdict": "LOCAL_CANDIDATE_PASS",
+      "read": "ci01/README.md"
+    }
+  },
+  "experience": "UNACCEPTED",
+  "recordings": "recordings/manifest.json"
+}
