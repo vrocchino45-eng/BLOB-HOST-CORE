@@ -1,0 +1,209 @@
+{
+  "status": "PASS",
+  "branch": "candidate/ci01-i1",
+  "candidate": "16c676554bae973c16d4274c1b40c34dce3a0998",
+  "hosted": {
+    "run": {
+      "id": 45546414488,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45546414488",
+      "event": "pull_request",
+      "head": "16c676554bae973c16d4274c1b40c34dce3a0998",
+      "conclusion": "success",
+      "runner": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install from the committed lockfile",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run deterministic tests and build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload verification evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "pr": {
+      "number": 1,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/pull/1"
+    },
+    "merge": {
+      "sha": "2503f3f054710a36b5e0dc549e6abc3c21ba0416",
+      "tree": "0f4e70629f6ed930f1d61b651f521cd3c017bbb2",
+      "candidateTree": "0f4e70629f6ed930f1d61b651f521cd3c017bbb2",
+      "identical": true
+    },
+    "artifact": {
+      "id": 14991841025,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45546414488/artifacts/14991841025",
+      "name": "blob-ci01-2503f3f054710a36b5e0dc549e6abc3c21ba0416",
+      "bytes": 71319,
+      "digest": "sha256:d192c031a245ccf04b262e1f23e9f94060c7b34bb6295ee4267216b694fe10e1",
+      "expiration": "2026-12-09T04:23:44Z",
+      "created": "2026-11-25T04:23:45Z",
+      "configuredRetentionDays": 14,
+      "download": {
+        "bytes": 71319,
+        "sha256": "d192c031a245ccf04b262e1f23e9f94060c7b34bb6295ee4267216b694fe10e1"
+      }
+    }
+  },
+  "originalCandidate": "5934b4c02dd70b392cd5b730f5dc4503a63430c2",
+  "initialVerdict": "FAIL",
+  "originalBlocker": "The default shallow checkout omitted the CH03 fixture commit",
+  "sourceCheckoutSha": "2503f3f054710a36b5e0dc549e6abc3c21ba0416",
+  "platform": "linux",
+  "node": "v24.14.0",
+  "buildOutputCount": 541,
+  "crossPlatformBuildComparison": {
+    "reference": "Wave 05 local Windows output",
+    "differentPaths": []
+  },
+  "tests": [
+    {
+      "id": "launch-focused",
+      "exitCode": 0,
+      "passed": 11,
+      "verdict": "PASS",
+      "log": "launch-focused.log"
+    },
+    {
+      "id": "scenario-contract",
+      "exitCode": 0,
+      "passed": 3,
+      "verdict": "PASS",
+      "log": "scenario-contract.log"
+    },
+    {
+      "id": "production-build",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "production-build.log"
+    },
+    {
+      "id": "maintained",
+      "exitCode": 0,
+      "passed": 245,
+      "verdict": "PASS",
+      "log": "maintained.log"
+    },
+    {
+      "id": "verifyWave1CoreProfiles",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "verifyWave1CoreProfiles.log"
+    },
+    {
+      "id": "checkC63HubRouteAccess",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "checkC63HubRouteAccess.log"
+    },
+    {
+      "id": "validateRecipeDataLoad",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateRecipeDataLoad.log"
+    },
+    {
+      "id": "smokeHC031W1StabilizedAimLocalContact",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031W1StabilizedAimLocalContact.log"
+    },
+    {
+      "id": "smokeHC031U21RelationshipIntentLatch",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031U21RelationshipIntentLatch.log"
+    },
+    {
+      "id": "validateLS1BLivingSiltMaterialCycle",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateLS1BLivingSiltMaterialCycle.log"
+    },
+    {
+      "id": "validateHC016QTenderCompanion",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC016QTenderCompanion.log"
+    },
+    {
+      "id": "validateHC031C2FragmentFieldCapture",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031C2FragmentFieldCapture.log"
+    },
+    {
+      "id": "validateHC031DRuptureConsequence",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031DRuptureConsequence.log"
+    },
+    {
+      "id": "smokeLS1E1",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "Cannot read properties of undefined (reading 'observe')",
+      "log": "smokeLS1E1.log"
+    },
+    {
+      "id": "smokeLS1E2",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "ERR_UNSUPPORTED_RESOLVE_REQUEST",
+      "log": "smokeLS1E2.log"
+    }
+  ],
+  "checkedArtifactDigest": "d192c031a245ccf04b262e1f23e9f94060c7b34bb6295ee4267216b694fe10e1"
+}

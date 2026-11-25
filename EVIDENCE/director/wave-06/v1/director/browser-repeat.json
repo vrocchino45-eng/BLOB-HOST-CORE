@@ -1,0 +1,85 @@
+{
+  "schema": "blob.director-runs.v1",
+  "head": "bd8622941baac6fc74cc09f47438d205862bb053",
+  "build": {
+    "commit": "bd8622941baac6fc74cc09f47438d205862bb053",
+    "gameplayCheckpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "gameplayAncestry": true,
+    "gameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "requiredGameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "workingGameplayDifferences": [],
+    "toolingRevision": "d524ad2f0dcb6981fa551a1c422a457a3ad5d5ff0ac7e7078c0b0e1a9da62f42"
+  },
+  "scenarioRevisions": [
+    {
+      "id": "dl-exp-001.balanced",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    }
+  ],
+  "sourceFingerprint": "bc3ace7f45da8cd6a7dd3720c1dbd2fa7d78ebc844aac49f5e1ddbafeacef72f",
+  "status": "PASS",
+  "mode": "--pilot",
+  "stagingDeclared": true,
+  "productionSourcesIdentical": true,
+  "startingStateParity": true,
+  "parityError": null,
+  "ordinary": {
+    "key": "__director_isolation_witness__",
+    "value": "ordinary-context-only",
+    "hasDirectorPad": false,
+    "hasDirectorRuntime": false,
+    "hasOverlay": false,
+    "startupFlowFlag": false,
+    "storageIntact": true
+  },
+  "runs": [
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "input",
+      "evaluation": {
+        "status": "PASS",
+        "missing": [],
+        "violations": [],
+        "dose": 0.17926821611889432,
+        "currentDose": 0.25609745159842046,
+        "secondsToRelease": 2.6505000000000005,
+        "reserveAtStart": 0.7,
+        "reserveAtEnd": 0.7271502018756424,
+        "inputEdges": [
+          {
+            "elapsed": 0,
+            "lt": 0.82,
+            "rt": 0
+          },
+          {
+            "elapsed": 0.46230000019073486,
+            "lt": 0.82,
+            "rt": 0.46
+          },
+          {
+            "elapsed": 2.6505000000000005,
+            "lt": 0,
+            "rt": 0
+          }
+        ],
+        "directFlowDebit": 0.009900781033941652,
+        "strainPeak": 0.8073127280212736,
+        "strainAtEnd": 0.07242714802127374,
+        "imprintAtEnd": 0.29151113928996425,
+        "acceptedImprintGain": 0.05545113928996426,
+        "maxTravelFromStart": 0.480875472510396,
+        "maximumAuthorityStep": 0.0492999997138977,
+        "simulationSteps": 104,
+        "observedFrames": 47,
+        "simulatedTimeDroppedMs": 0,
+        "acceptedSteps": 48,
+        "acceptedInFrustum": 48,
+        "acceptedFirstReserve": 0.6826324680972671,
+        "releaseReserve": 0.5899822018959874,
+        "acceptedLastReserve": 0.5858702018756423
+      },
+      "video": "<wave-06-archive>/director-browser/dl-exp-001.balanced-input/gameplay.webm"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "canonicalSelection": "silt_porosity_shelf",
+  "coreToShelf": 2.8929396813621953,
+  "launch": {
+    "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+    "mountSequence": 1,
+    "unitId": "silt-grain-01",
+    "generation": 0,
+    "frame": 252,
+    "substep": 0,
+    "chargeSequence": 1,
+    "charge01": 0.5070921985815612,
+    "intendedTargetId": "silt_porosity_shelf",
+    "actualRecipientId": null,
+    "releaseDirection": [
+      -0.4211230782826535,
+      0.06550803439952389,
+      -0.9046347607553299
+    ],
+    "releasePosition": [
+      -0.8,
+      -0.75,
+      -1.61
+    ],
+    "releaseVelocity": [
+      -0.3572,
+      0.0556,
+      -0.7673
+    ],
+    "releaseDecisionSequence": 8
+  },
+  "delivered": {
+    "unitId": "silt-grain-01",
+    "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+    "mountSequence": 1,
+    "mountCount": 1,
+    "frame": 265,
+    "substep": 0,
+    "generation": 0,
+    "releaseSequence": 3,
+    "receiverId": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+    "microstep": 0,
+    "contactPosition": [
+      -0.8673749230181672,
+      -0.7359702451670441,
+      -1.8342535774182653
+    ],
+    "normal": [
+      -0.37370730429475785,
+      0.24134207248129697,
+      0.8955986013651303
+    ],
+    "incomingVelocity": [
+      -0.23533097198056818,
+      0.06648396676984591,
+      -1.1690431219796074
+    ],
+    "inwardSpeedRemoved": 0.9430031034975261,
+    "response": "accepted-stop-inward",
+    "deduplicationId": "HOST_ALPHA_WOUNDED_NURSERY:CELL_SILT_PRESSURE_ROUTE_001:1:1:265:0:0:silt-grain-01:0:3:SILT_ENTRY_SEDIMENT_SHELF_D11B"
+  },
+  "downstreamEndpoint": [
+    -2.45,
+    -0.54,
+    -4.85
+  ],
+  "ledgerTotal": 2,
+  "mass": 8,
+  "independentReplayEqual": true,
+  "focused": 9,
+  "noAdditionalCredit": true,
+  "initialApproach": "Mounted and staged at a reachable local pose, with reverse-side native grip, native aim, native charge and commitment."
+}

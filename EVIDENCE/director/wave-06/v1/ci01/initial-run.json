@@ -1,0 +1,83 @@
+{
+  "run": {
+    "id": 45545523201,
+    "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45545523201",
+    "event": "pull_request",
+    "head": "5934b4c02dd70b392cd5b730f5dc4503a63430c2",
+    "conclusion": "failure",
+    "runner": [
+      "ubuntu-24.04"
+    ],
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Install from the committed lockfile",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run deterministic tests and build",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Upload verification evidence",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "pr": {
+    "number": 1,
+    "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/pull/1"
+  },
+  "merge": {
+    "sha": "af1232842756db9070ad4fcae3177c7bf7af2194",
+    "tree": "a51f5228d7f01b0d9a89395921c278bb6778b058",
+    "candidateTree": "a51f5228d7f01b0d9a89395921c278bb6778b058",
+    "identical": true
+  },
+  "artifact": {
+    "id": 14991327300,
+    "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45545523201/artifacts/14991327300",
+    "name": "blob-ci01-af1232842756db9070ad4fcae3177c7bf7af2194",
+    "bytes": 70749,
+    "digest": "sha256:7a33b86123863794d973123270a5d676cd4a0c6859e0dbd94b17f34a18d24eb9",
+    "expiration": "2026-12-09T04:15:54Z",
+    "created": "2026-11-25T04:15:55Z",
+    "configuredRetentionDays": 14,
+    "download": {
+      "bytes": 70749,
+      "sha256": "7a33b86123863794d973123270a5d676cd4a0c6859e0dbd94b17f34a18d24eb9"
+    }
+  }
+}

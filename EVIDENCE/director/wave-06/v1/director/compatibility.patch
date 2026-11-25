@@ -1,0 +1,432 @@
+diff --git a/BLOB_BOT_SERIES1/director/build-compatibility.mjs b/BLOB_BOT_SERIES1/director/build-compatibility.mjs
+new file mode 100644
+index 0000000..6226f9d
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/build-compatibility.mjs
+@@ -0,0 +1,86 @@
++import { execFileSync, spawnSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
++import fs from 'node:fs';
++import path from 'node:path';
++
++export const CHECKPOINT = '2f90256a1047b748bf99f7aec39b70b2ed1aeffe';
++const INPUTS = ['src', 'public', 'index.html', 'package.json', 'package-lock.json', 'npm-shrinkwrap.json',
++  '.npmrc', ':(glob).env*', ':(glob)vite.config.*', ':(glob)postcss.config.*',
++  ':(glob)tsconfig*.json', ':(glob)jsconfig*.json'];
++const HEX40 = /^[0-9a-f]{40}$/;
++const HEX64 = /^[0-9a-f]{64}$/;
++const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
++const gitArgs = (root, args) => ['--no-optional-locks', '-C', root, ...args];
++const git = (root, ...args) => execFileSync('git', gitArgs(root, args), { windowsHide: true, maxBuffer: 16 * 1024 * 1024 });
++const entryPath = entry => entry.slice(entry.indexOf('\t') + 1);
++const authorityConfig = /^(?:\.env.*|vite\.config\..*|postcss\.config\..*|(?:tsconfig|jsconfig).*\.json)$/;
++function tree(root, commit) {
++  const rootConfig = git(root, 'ls-tree', '-z', commit).toString().split('\0').filter(Boolean)
++    .map(entryPath).filter(file => authorityConfig.test(file));
++  return git(root, 'ls-tree', '-r', '-z', commit, '--', ...INPUTS.filter(file => !file.startsWith(':')), ...rootConfig);
++}
++
++function inspectWorkingInputs(root, treeBytes) {
++  const porcelain = git(root, 'status', '--porcelain=v1', '-z', '--ignored=matching', '--untracked-files=all', '--', ...INPUTS)
++    .toString().split('\0').filter(Boolean);
++  const paths = new Set(porcelain.map(entry => entry.slice(3)));
++  for (const entry of treeBytes.toString().split('\0').filter(Boolean)) {
++    const tab = entry.indexOf('\t');
++    const [mode, kind, oid] = entry.slice(0, tab).split(' ');
++    const filename = entry.slice(tab + 1);
++    const file = path.join(root, filename);
++    if (kind !== 'blob' || mode === '120000' || !fs.existsSync(file) || !fs.lstatSync(file).isFile()) {
++      paths.add(filename);
++      continue;
++    }
++    const bytes = fs.readFileSync(file);
++    const workingOid = createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
++    if (workingOid !== oid) paths.add(filename);
++  }
++  return [...paths].sort();
++}
++
++function toolingRevision(root) {
++  const base = path.join(root, 'BLOB_BOT_SERIES1/director');
++  const dirFiles = fs.readdirSync(base, { recursive: true, withFileTypes: true })
++    .filter(entry => entry.isFile() && /\.(mjs|json)$/.test(entry.name))
++    .map(entry => path.relative(root, path.join(entry.parentPath, entry.name)).split(path.sep).join('/'));
++  const files = [...dirFiles, 'BLOB_BOT_SERIES1/source-identity.mjs', 'BLOB_BOT_SERIES1/package-lock.json'].sort();
++  return sha256(JSON.stringify(files.map(file => [file, sha256(fs.readFileSync(path.join(root, file)))])));
++}
++
++export function readBuildIdentity(root, checkpoint = CHECKPOINT) {
++  const commit = git(root, 'rev-parse', 'HEAD').toString().trim();
++  const ancestry = spawnSync('git', gitArgs(root, ['merge-base', '--is-ancestor', checkpoint, commit]), { windowsHide: true });
++  const found = ancestry.status === 0;
++  const basisExists = found || ancestry.status === 1;
++  const current = tree(root, commit);
++  return {
++    commit,
++    gameplayCheckpoint: checkpoint,
++    gameplayAncestry: found,
++    gameplayFingerprint: sha256(current),
++    requiredGameplayFingerprint: basisExists ? sha256(tree(root, checkpoint)) : null,
++    workingGameplayDifferences: inspectWorkingInputs(root, current),
++    toolingRevision: toolingRevision(root)
++  };
++}
++
++export function buildCompatibility(identity, checkpoint = CHECKPOINT) {
++  if (!identity || !HEX40.test(identity.commit ?? '') || !HEX64.test(identity.gameplayFingerprint ?? '')
++    || !HEX64.test(identity.requiredGameplayFingerprint ?? '') || !HEX64.test(identity.toolingRevision ?? '')
++    || !Array.isArray(identity.workingGameplayDifferences)) {
++    return { status: 'INCOMPATIBLE_BUILD', code: 'INVALID_BUILD_IDENTITY', errors: ['Missing or invalid source, gameplay fingerprint, or tooling identity'] };
++  }
++  if (identity.gameplayCheckpoint !== checkpoint || identity.gameplayAncestry !== true) {
++    return { status: 'INCOMPATIBLE_BUILD', code: 'BASELINE_ANCESTRY_MISMATCH', errors: ['Source is outside the required gameplay ancestry'] };
++  }
++  if (identity.workingGameplayDifferences.length) {
++    return { status: 'INCOMPATIBLE_BUILD', code: 'MODIFIED_GAMEPLAY_INPUTS',
++      errors: ['Unadmitted working gameplay inputs: ' + identity.workingGameplayDifferences.join(', ')] };
++  }
++  if (identity.gameplayFingerprint !== identity.requiredGameplayFingerprint) {
++    return { status: 'INCOMPATIBLE_BUILD', code: 'GAMEPLAY_FINGERPRINT_MISMATCH', errors: ['Authoritative gameplay input bytes differ from the required checkpoint'] };
++  }
++  return { status: 'PASS', code: identity.commit === checkpoint ? 'EXACT_CHECKPOINT' : 'COMPATIBLE_GAMEPLAY_DESCENDANT', errors: [] };
++}
+diff --git a/BLOB_BOT_SERIES1/director/build-compatibility.test.mjs b/BLOB_BOT_SERIES1/director/build-compatibility.test.mjs
+new file mode 100644
+index 0000000..d6bd654
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/build-compatibility.test.mjs
+@@ -0,0 +1,82 @@
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import os from 'node:os';
++import path from 'node:path';
++import { execFileSync } from 'node:child_process';
++import { test } from 'node:test';
++import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compatibility.mjs';
++import { loadScenario, validateScenario } from './scenario-contract.mjs';
++
++const root = path.resolve(import.meta.dirname, '../..');
++const actual = readBuildIdentity(root);
++const scenario = (await loadScenario(new URL('./scenarios/balanced.json', import.meta.url), actual)).scenario;
++const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'director-authority-'));
++const git = (...args) => execFileSync('git', ['-C', fixture, '-c', 'user.name=Fixture', '-c',
++  'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false', ...args], { encoding: 'utf8', windowsHide: true }).trim();
++const write = (name, text) => {
++  const file = path.join(fixture, name);
++  fs.mkdirSync(path.dirname(file), { recursive: true });
++  fs.writeFileSync(file, text);
++};
++const commit = label => { git('add', '-A'); git('commit', '-qm', label); return git('rev-parse', 'HEAD'); };
++git('init', '-q');
++git('config', 'core.autocrlf', 'false');
++write('src/main.js', 'export const fixture = true;\n');
++write('public/state.json', '{}\n');
++write('package.json', '{"type":"module"}\n');
++write('package-lock.json', '{"version":"test-lock"}\n');
++write('index.html', '<title>Fixture</title>\n');
++write('BLOB_BOT_SERIES1/director/run.mjs', 'export const revision = 1;\n');
++write('BLOB_BOT_SERIES1/source-identity.mjs', 'export {};\n');
++write('BLOB_BOT_SERIES1/package-lock.json', '{}\n');
++write('.gitignore', '.env.local\n');
++const baseline = commit('baseline');
++const before = readBuildIdentity(fixture, baseline);
++write('docs/notes.md', 'Documentation only\n');
++const docCommit = commit('docs');
++const docs = readBuildIdentity(fixture, baseline);
++write('BLOB_BOT_SERIES1/director/run.mjs', 'export const revision = 2;\n');
++const toolCommit = commit('tooling');
++const tooling = readBuildIdentity(fixture, baseline);
++write('package-lock.json', '{"version":"different"}\n');
++const configCommit = commit('dependency inputs');
++const changedLock = readBuildIdentity(fixture, baseline);
++write('src/main.js', 'export const fixture = false;\n');
++const dirty = readBuildIdentity(fixture, baseline);
++write('.env.local', 'VITE_TEST_FLAG=true\n');
++const ignoredConfig = readBuildIdentity(fixture, baseline);
++
++test('PI02 topology accepts its exact scenario checkpoint and the actual working tree', () => {
++  assert.equal(actual.gameplayCheckpoint, CHECKPOINT);
++  assert.equal(actual.gameplayAncestry, true);
++  assert.deepEqual(actual.workingGameplayDifferences, []);
++  assert.equal(validateScenario(scenario, actual).status, 'PASS');
++  assert.equal(buildCompatibility({ ...actual, commit: CHECKPOINT }).code, 'EXACT_CHECKPOINT');
++  assert.equal(buildCompatibility(before, baseline).code, 'EXACT_CHECKPOINT');
++});
++test('compatible descendants preserve the gameplay fingerprint and their own exact source commit', () => {
++  assert.equal(docs.commit, docCommit);
++  assert.equal(tooling.commit, toolCommit);
++  for (const value of [docs, tooling]) {
++    assert.equal(value.gameplayFingerprint, before.gameplayFingerprint);
++    assert.equal(buildCompatibility(value, baseline).code, 'COMPATIBLE_GAMEPLAY_DESCENDANT');
++  }
++  assert.equal(docs.toolingRevision, before.toolingRevision);
++  assert.notEqual(tooling.toolingRevision, docs.toolingRevision);
++});
++test('reject dependency input changes and dirty or ignored gameplay inputs', () => {
++  assert.equal(changedLock.commit, configCommit);
++  assert.equal(buildCompatibility(changedLock, baseline).code, 'GAMEPLAY_FINGERPRINT_MISMATCH');
++  assert.ok(dirty.workingGameplayDifferences.includes('src/main.js'));
++  assert.equal(buildCompatibility(dirty, baseline).code, 'MODIFIED_GAMEPLAY_INPUTS');
++  assert.ok(ignoredConfig.workingGameplayDifferences.includes('.env.local'));
++});
++test('diagnostics separate missing identity, unrelated ancestry and unknown scenario revision', () => {
++  for (const value of [undefined, 'bad-format']) {
++    assert.equal(validateScenario(scenario, { ...actual, gameplayFingerprint: value }).code, 'INVALID_BUILD_IDENTITY');
++  }
++  assert.equal(validateScenario(scenario, { ...actual, gameplayAncestry: false }).code, 'BASELINE_ANCESTRY_MISMATCH');
++  assert.equal(validateScenario({ ...scenario, revision: 2 }, actual).code, 'UNSUPPORTED_SCENARIO_REVISION');
++  assert.equal(validateScenario({ ...scenario, build: { checkpoint: '1'.repeat(40) } }, actual).code, 'UNSUPPORTED_SCENARIO_CHECKPOINT');
++});
++
+diff --git a/BLOB_BOT_SERIES1/director/experiment-library.mjs b/BLOB_BOT_SERIES1/director/experiment-library.mjs
+index 6087039..0ce8ef2 100644
+--- a/BLOB_BOT_SERIES1/director/experiment-library.mjs
++++ b/BLOB_BOT_SERIES1/director/experiment-library.mjs
+@@ -1,7 +1,7 @@
+ import a from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+-import {execFileSync} from 'node:child_process';
++import {buildCompatibility,readBuildIdentity} from './build-compatibility.mjs';
+ import {Vector3} from 'three';
+ import {rig,pad,cleanup,test,options,spec,layout,vector} from './experimental-fixture.mjs';
+ import {manipulate,pulse} from './experiment-material.mjs';
+@@ -65,9 +65,9 @@ function mobility(id,policy){
+     minimumReserve:Math.min(...trace.map(x=>x.reserve)),recoveredReserve:trace.at(-1).reserve,trace};
+ }
+ const root=path.resolve(import.meta.dirname,'../..');
+-const git=(...args)=>execFileSync('git',['--no-optional-locks','-C',root,...args],{encoding:'utf8'}).trim();
+-a.equal(git('rev-parse','HEAD'),spec.base);
+-a.equal(git('diff','HEAD','--name-only','--','src','scripts','public'),'');
++const build=readBuildIdentity(root,spec.base);
++const admission=buildCompatibility(build,spec.base);
++a.equal(admission.status,'PASS',admission.code+': '+admission.errors.join(', '));
+ const output=path.resolve(process.argv[2]??'');
+ a.ok(process.argv[2]&&path.relative(root,output).startsWith('..'));
+ fs.mkdirSync(output);
+@@ -78,7 +78,7 @@ try{
+   for(const r of manipulation)a.deepEqual(r.start,manipulation[0].start);
+   for(const r of movement)a.deepEqual(r.boot,movement[0].boot);
+   for(const r of pulses)a.deepEqual(r.start,pulses[0].start);
+-  const data={scope:'Mounted owner execution. Production input resolution, staged approach where declared, fixed native update calls and unrendered projection.',spec,
++  const data={build,scope:'Mounted owner execution. Production input resolution, staged approach where declared, fixed native update calls and unrendered projection.',spec,
+     manipulation,movement,pulses};
+   fs.writeFileSync(path.join(output,'mounted-experiments.json'),JSON.stringify(data,null,2)+'\n');
+   console.log(JSON.stringify({manipulation:manipulation.map(x=>[x.mode,x.status]),
+diff --git a/BLOB_BOT_SERIES1/director/handoff.mjs b/BLOB_BOT_SERIES1/director/handoff.mjs
+index 2009fdd..3b8dabb 100644
+--- a/BLOB_BOT_SERIES1/director/handoff.mjs
++++ b/BLOB_BOT_SERIES1/director/handoff.mjs
+@@ -1,10 +1,10 @@
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs/promises';
+ import path from 'node:path';
+-import {execFileSync} from 'node:child_process';
+ import {createServer} from 'vite';
+ import {chromium} from 'playwright';
+-import {loadScenario,CHECKPOINT} from './scenario-contract.mjs';
++import {loadScenario} from './scenario-contract.mjs';
++import {buildCompatibility,readBuildIdentity} from './build-compatibility.mjs';
+ import {verifyStart} from './run.mjs';
+ import {decodeCapture} from './frame-mapping.mjs';
+ 
+@@ -12,18 +12,22 @@ const root=path.resolve(import.meta.dirname,'../..');
+ const [outputArg,flag]=process.argv.slice(2);
+ const out=path.resolve(outputArg??'');
+ assert.ok(outputArg&&path.relative(root,out).startsWith('..'),'Use a new evidence directory outside the repository');
+-assert.equal(execFileSync('git',['--no-optional-locks','-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),CHECKPOINT);
+ await fs.mkdir(out);
++const build=readBuildIdentity(root), admission=buildCompatibility(build);
++if(admission.status!=='PASS'){
++  await fs.writeFile(path.join(out,'failure.json'),JSON.stringify({...admission,build},null,2)+'\n');
++  throw new Error(admission.code+': '+admission.errors.join(', '));
++}
+ const verify=flag==='--verify';
+ const layouts={deep:'Deep 3:0:0',balanced:'Balanced 1:1:1',membrane:'Membrane 0:0:3'};
+ const definitions={};
+ for(const id of Object.keys(layouts)){
+-  const loaded=await loadScenario(new URL('./scenarios/'+id+'.json',import.meta.url));
++  const loaded=await loadScenario(new URL('./scenarios/'+id+'.json',import.meta.url),build);
+   assert.equal(loaded.status,'PASS');
+   definitions[id]=loaded.scenario;
+ }
+ const server=await createServer({root,server:{host:'127.0.0.1',port:0,hmr:false},logLevel:'warn'});
+-const save=(name,data)=>fs.writeFile(path.join(out,name),JSON.stringify(data,null,2)+'\n',{flag:'wx'});
++const save=(name,data)=>fs.writeFile(path.join(out,name),JSON.stringify({build,scenarioRevisions:Object.values(definitions).map(({id,schema,revision})=>({id,schema,revision})),...data},null,2)+'\n',{flag:'wx'});
+ let browser,game;
+ const failures=[], operations=[];
+ try{
+diff --git a/BLOB_BOT_SERIES1/director/run.mjs b/BLOB_BOT_SERIES1/director/run.mjs
+index 4f5f2d6..49620b1 100644
+--- a/BLOB_BOT_SERIES1/director/run.mjs
++++ b/BLOB_BOT_SERIES1/director/run.mjs
+@@ -1,12 +1,12 @@
+ import assert from 'node:assert/strict';
+-import { execFileSync } from 'node:child_process';
+ import { mkdir, writeFile } from 'node:fs/promises';
+ import path from 'node:path';
+ import {pathToFileURL} from 'node:url';
+ import { createServer } from 'vite';
+ import { chromium } from 'playwright';
+ import { sourceIdentity } from '../source-identity.mjs';
+-import { CHECKPOINT, loadScenario } from './scenario-contract.mjs';
++import { loadScenario } from './scenario-contract.mjs';
++import { buildCompatibility, readBuildIdentity } from './build-compatibility.mjs';
+ 
+ const root = path.resolve(import.meta.dirname, '../..');
+ const DEFAULT_LAYOUTS = ['deep', 'balanced', 'membrane'];
+@@ -146,7 +146,7 @@ async function probeOrdinary(browser, origin) {
+   return { context: control, close: () => control.close(), proof };
+ }
+ 
+-async function execute(browser, origin, scenario, mode, out, { playable = false } = {}) {
++async function execute(browser, origin, scenario, mode, out, { playable = false, build } = {}) {
+   const clip = path.join(out, scenario.id + '-' + mode);
+   await mkdir(clip);
+   const { width, height } = scenario.presentation;
+@@ -224,7 +224,7 @@ async function execute(browser, origin, scenario, mode, out, { playable = false
+   const evaluation = failure || errors.length
+     ? { status: 'INVALID_SETUP', reason: failure?.message ?? errors.join('; ') }
+     : playable ? { status: 'NOT_EXERCISED', reason: 'Prepared for manual takeover' } : score(scenario, evidence);
+-  const outcome = { scenario, mode, started, elapsedWallMs: Date.now() - started, isolation,
++  const outcome = { build, scenario, mode, started, elapsedWallMs: Date.now() - started, isolation,
+     video: videoFile, evaluation, failure, errors, evidence };
+   await write(path.join(clip, 'trial.json'), outcome);
+   console.log(JSON.stringify({ scenario: scenario.id, mode, ...evaluation, dir: clip }));
+@@ -233,19 +233,22 @@ async function execute(browser, origin, scenario, mode, out, { playable = false
+ 
+ async function main() {
+   const { out, mode, layout } = parse(process.argv.slice(2));
+-  const head = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8', windowsHide: true }).trim();
++  const build = readBuildIdentity(root);
++  const { commit: head } = build;
+   await mkdir(out);
+-  if (head !== CHECKPOINT) {
+-    await write(path.join(out, 'runs.json'), { status: 'INCOMPATIBLE_BUILD', head, required: CHECKPOINT });
++  const admission = buildCompatibility(build);
++  if (admission.status !== 'PASS') {
++    await write(path.join(out, 'runs.json'), { ...admission, head, build });
++    console.error(admission.code + ': ' + admission.errors.join(', '));
+     return false;
+   }
+   const identity = baselineInventory();
+   const chosen = mode === '--all' ? DEFAULT_LAYOUTS : [layout];
+   const definitions = [];
+   for (const name of chosen) {
+-    const result = await loadScenario(new URL(`./scenarios/${name}.json`, import.meta.url), head);
++    const result = await loadScenario(new URL('./scenarios/' + name + '.json', import.meta.url), build);
+     if (result.status !== 'PASS') {
+-      await write(path.join(out, 'runs.json'), result);
++      await write(path.join(out, 'runs.json'), { ...result, head, build });
+       return false;
+     }
+     definitions.push(result.scenario);
+@@ -271,7 +274,7 @@ async function main() {
+     if (mode !== '--prepare') ordinary = await probeOrdinary(browser, origin);
+     const runs = [];
+     for (const comparison of mode === '--all' ? ['input', 'objective'] : mode === '--objective' ? ['objective'] : ['input']) {
+-      for (const scenario of definitions) runs.push(await execute(browser, origin, scenario, comparison, out, { playable: mode === '--prepare' }));
++      for (const scenario of definitions) runs.push(await execute(browser, origin, scenario, comparison, out, { playable: mode === '--prepare', build }));
+     }
+     let parity = false;
+     let parityError = null;
+@@ -294,7 +297,7 @@ async function main() {
+     const productionSourcesIdentical = baselineInventory() === identity;
+     const pass = runs.every(run => run.evaluation.status === 'PASS') && parity && ordinaryStorageIntact && productionSourcesIdentical;
+     await write(path.join(out, 'runs.json'), {
+-      schema: 'blob.director-runs.v1', head, sourceFingerprint: identity, status: pass ? 'PASS' : 'FAIL',
++      schema: 'blob.director-runs.v1', head, build, scenarioRevisions: definitions.map(({ id, schema, revision }) => ({ id, schema, revision })), sourceFingerprint: identity, status: pass ? 'PASS' : 'FAIL',
+       mode, stagingDeclared: true, productionSourcesIdentical, startingStateParity: parity, parityError,
+       ordinary: ordinary && { ...ordinary.proof, storageIntact: ordinaryStorageIntact },
+       runs: runs.map(({ scenario, mode, evaluation, video }) => ({ scenario: scenario.id, mode, evaluation, video }))
+diff --git a/BLOB_BOT_SERIES1/director/scenario-contract.mjs b/BLOB_BOT_SERIES1/director/scenario-contract.mjs
+index 9c6c61b..985dfc2 100644
+--- a/BLOB_BOT_SERIES1/director/scenario-contract.mjs
++++ b/BLOB_BOT_SERIES1/director/scenario-contract.mjs
+@@ -1,7 +1,10 @@
+ import { readFile } from 'node:fs/promises';
++import path from 'node:path';
++import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compatibility.mjs';
+ 
+ export const SCHEMA = 'blob.dev-scenario.v1';
+-export const CHECKPOINT = '2f90256a1047b748bf99f7aec39b70b2ed1aeffe';
++export { CHECKPOINT };
++const root = path.resolve(import.meta.dirname, '../..');
+ export const OUTCOMES = Object.freeze(['PASS', 'FAIL', 'NOT_EXERCISED', 'INVALID_SETUP', 'INCOMPATIBLE_BUILD']);
+ const text = value => typeof value === 'string' && value.length > 0;
+ const fraction = value => Number.isFinite(value) && value >= 0 && value <= 1;
+@@ -70,7 +73,10 @@ const validateShape = record({
+   expectedDurationSeconds: integer
+ });
+ 
+-export function validateScenario(scenario, checkpoint = CHECKPOINT) {
++export function validateScenario(scenario, identity = readBuildIdentity(root)) {
++  if (scenario?.schema !== undefined && scenario.schema !== SCHEMA || scenario?.revision !== undefined && scenario.revision !== 1) {
++    return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_SCENARIO_REVISION', errors: ['The scenario schema and revision must be blob.dev-scenario.v1 revision 1'] };
++  }
+   const errors = [];
+   if (!validateShape(scenario, errors)) return { status: 'INVALID_SETUP', errors };
+   const layout = scenario.id.split('.').at(-1);
+@@ -88,16 +94,18 @@ export function validateScenario(scenario, checkpoint = CHECKPOINT) {
+     errors.push('Duration and dose predicates are inconsistent');
+   }
+   if (errors.length) return { status: 'INVALID_SETUP', errors };
+-  if (scenario.build.checkpoint !== checkpoint) return { status: 'INCOMPATIBLE_BUILD', errors: ['Build checkpoint does not match'] };
+-  return { status: 'PASS', errors: [] };
++  if (scenario.build.checkpoint !== CHECKPOINT) {
++    return { status: 'INCOMPATIBLE_BUILD', code: 'UNSUPPORTED_SCENARIO_CHECKPOINT', errors: ['Scenario references an unadmitted gameplay checkpoint'] };
++  }
++  return buildCompatibility(identity, scenario.build.checkpoint);
+ }
+ 
+-export async function loadScenario(path, checkpoint = CHECKPOINT) {
++export async function loadScenario(path, identity) {
+   let scenario;
+   try {
+     scenario = JSON.parse(await readFile(path, 'utf8'));
+   } catch (error) {
+     return { status: 'INVALID_SETUP', errors: [error.message], scenario: null };
+   }
+-  return { ...validateScenario(scenario, checkpoint), scenario };
++  return { ...validateScenario(scenario, identity), scenario };
+ }
+diff --git a/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs b/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs
+index bd84b0b..314cb80 100644
+--- a/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs
++++ b/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs
+@@ -1,18 +1,22 @@
+ import assert from 'node:assert/strict';
+ import { test } from 'node:test';
++import path from 'node:path';
++import { buildCompatibility, readBuildIdentity } from './build-compatibility.mjs';
+ import { CHECKPOINT, OUTCOMES, loadScenario, validateScenario } from './scenario-contract.mjs';
+ 
+ const scenarioFile = layout => new URL(`./scenarios/${layout}.json`, import.meta.url);
+-const valid = (await loadScenario(scenarioFile('deep'))).scenario;
++const identity = readBuildIdentity(path.resolve(import.meta.dirname, '../..'));
++const valid = (await loadScenario(scenarioFile('deep'), identity)).scenario;
+ 
+-test('version one definitions validate on the exact build', async () => {
++test('version one definitions validate on compatible Director ancestry', async () => {
+   for (const layout of ['deep', 'balanced', 'membrane']) {
+-    assert.equal((await loadScenario(scenarioFile(layout), CHECKPOINT)).status, 'PASS');
++    assert.equal((await loadScenario(scenarioFile(layout), identity)).status, 'PASS');
+   }
+ });
+ 
+ test('wrong build is incompatible', () => {
+-  assert.equal(validateScenario(valid, '0'.repeat(40)).status, 'INCOMPATIBLE_BUILD');
++  const foreign = { ...identity, commit: '0'.repeat(40), gameplayAncestry: false };
++  assert.equal(validateScenario(valid, foreign).code, 'BASELINE_ANCESTRY_MISMATCH');
+   assert.equal(OUTCOMES.length, 5);
+ });
+ 
+@@ -43,7 +47,7 @@ test('malformed documents fail before setup', async () => {
+   for (const mutate of malformed) {
+     const scenario = structuredClone(valid);
+     mutate(scenario);
+-    const result = validateScenario(scenario);
++    const result = validateScenario(scenario, identity);
+     assert.equal(result.status, 'INVALID_SETUP', JSON.stringify(scenario));
+     assert.ok(result.errors.length >= 1);
+   }

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "verdict": "WAVE 06 FOUNDATIONS CONVERGED — READY FOR INTEGRATED DIRECTOR REVIEW",
+  "tracks": {
+    "A": {
+      "verdict": "PROMOTED_LOCAL",
+      "path": "director/contract.md",
+      "commit": "bd8622941baac6fc74cc09f47438d205862bb053"
+    },
+    "B": {
+      "verdict": "PROMOTED_LOCAL",
+      "path": "pi03/README.md",
+      "commit": "1c86d1f5a2466e218bc667d4a969a24d2be08797"
+    },
+    "C": {
+      "verdict": "VERIFIED_AUDIT",
+      "path": "ce02/README.md",
+      "scenario": "DL-EXP-009 revision 1"
+    },
+    "D": {
+      "verdict": "MEASURED_WITH_TIMING_LIMITS",
+      "path": "pf02/README.md",
+      "repeats": 2
+    },
+    "E": {
+      "verdict": "HOSTED_PASS_AFTER_HISTORY_FIX",
+      "path": "ci01/README.md",
+      "commit": "16c676554bae973c16d4274c1b40c34dce3a0998"
+    },
+    "F": {
+      "verdict": "LOCAL_INTEGRATION_VERIFIED",
+      "path": "integration/README.md",
+      "commit": "462f1278ea069b41b4c0216335f4bb9363ee38af"
+    }
+  },
+  "source": {
+    "PI02": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "DirectorFoundation": "d6b9b8ad13539d3be507c465ea3bb9782c718c9a",
+    "CI01Initial": "5934b4c02dd70b392cd5b730f5dc4503a63430c2",
+    "previousEvidence": "0afa1dbc64d7cbbe46bbf61d2787fee2179b2960"
+  },
+  "integrationScenarios": {
+    "schema": "blob.dev-scenario.v1",
+    "revision": 2
+  },
+  "recordings": "recordings/manifest.json",
+  "physicalController": "UNACCEPTED",
+  "realtimeExperience": "UNACCEPTED"
+}

@@ -1,0 +1,116 @@
+{
+  "source": "af1232842756db9070ad4fcae3177c7bf7af2194",
+  "platform": "linux",
+  "node": "v24.14.0",
+  "buildFiles": 541,
+  "verdict": "FAIL",
+  "cases": [
+    {
+      "id": "launch-focused",
+      "exitCode": 0,
+      "passed": 11,
+      "verdict": "PASS",
+      "log": "launch-focused.log"
+    },
+    {
+      "id": "scenario-contract",
+      "exitCode": 0,
+      "passed": 3,
+      "verdict": "PASS",
+      "log": "scenario-contract.log"
+    },
+    {
+      "id": "production-build",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "production-build.log"
+    },
+    {
+      "id": "maintained",
+      "exitCode": 1,
+      "passed": 210,
+      "verdict": "FAIL",
+      "log": "maintained.log"
+    },
+    {
+      "id": "verifyWave1CoreProfiles",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "verifyWave1CoreProfiles.log"
+    },
+    {
+      "id": "checkC63HubRouteAccess",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "checkC63HubRouteAccess.log"
+    },
+    {
+      "id": "validateRecipeDataLoad",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateRecipeDataLoad.log"
+    },
+    {
+      "id": "smokeHC031W1StabilizedAimLocalContact",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031W1StabilizedAimLocalContact.log"
+    },
+    {
+      "id": "smokeHC031U21RelationshipIntentLatch",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031U21RelationshipIntentLatch.log"
+    },
+    {
+      "id": "validateLS1BLivingSiltMaterialCycle",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateLS1BLivingSiltMaterialCycle.log"
+    },
+    {
+      "id": "validateHC016QTenderCompanion",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC016QTenderCompanion.log"
+    },
+    {
+      "id": "validateHC031C2FragmentFieldCapture",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031C2FragmentFieldCapture.log"
+    },
+    {
+      "id": "validateHC031DRuptureConsequence",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031DRuptureConsequence.log"
+    },
+    {
+      "id": "smokeLS1E1",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "Cannot read properties of undefined (reading 'observe')",
+      "log": "smokeLS1E1.log"
+    },
+    {
+      "id": "smokeLS1E2",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "ERR_UNSUPPORTED_RESOLVE_REQUEST",
+      "log": "smokeLS1E2.log"
+    }
+  ]
+}

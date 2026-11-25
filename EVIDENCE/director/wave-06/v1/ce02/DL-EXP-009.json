@@ -1,0 +1,39 @@
+{
+  "id": "DL-EXP-009",
+  "schema": "blob.director-analysis.v1",
+  "revision": 1,
+  "gameplay": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "familyOrder": [
+    "grave_memory_retention",
+    "vascular_rhythm_retention",
+    "silt_pressure_retention"
+  ],
+  "zones": [
+    "deep_core",
+    "inner_body",
+    "membrane"
+  ],
+  "distributionOrder": [
+    "deep_core",
+    "inner_body",
+    "membrane"
+  ],
+  "control": {
+    "topologyCapacity": 3,
+    "reserveBefore": 0.6,
+    "dt": 0.05,
+    "recoilBefore": 0.08,
+    "traceBefore": 1,
+    "authenticGraveII": true
+  },
+  "matchedGroups": [
+    "2:0:1",
+    "1:1:1"
+  ],
+  "protocol": [
+    "Enumerate the Cartesian product of all three zones for all three retained families.",
+    "Drive the existing deterministic Core Work fixture for each assignment.",
+    "Record owner-published chemistry, topology and the first eligible Grave recovery sample.",
+    "Hold radial zone counts constant for permutation comparisons. Geometry and cloud recognition remain separate measurements."
+  ]
+}

@@ -1,0 +1,185 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+import {execFileSync} from 'node:child_process';
+const [root, scratch, edge, out] = process.argv.slice(2);
+for (const [key, folder] of Object.entries({TEMP:'tmp',TMP:'tmp',npm_config_cache:'npm-cache',PLAYWRIGHT_BROWSERS_PATH:'browser-cache'}))
+  process.env[key] = path.join(scratch, folder);
+await fs.mkdir(out);
+const source=execFileSync('git',['--no-optional-locks','-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim();
+const req=createRequire(path.join(root,'package.json'));
+const {createServer}=await import(pathToFileURL(req.resolve('vite')).href);
+const {chromium}=req('./BLOB_BOT_SERIES1/node_modules/playwright');
+const {decodeCapture}=await import(pathToFileURL(path.join(root,'BLOB_BOT_SERIES1/director/frame-mapping.mjs')).href);
+const scenario=JSON.parse(await fs.readFile(path.join(root,'BLOB_BOT_SERIES1/director/scenarios/balanced.json'),'utf8'));
+const server=await createServer({root,cacheDir:path.join(scratch,'vite-cache','pf02'),logLevel:'warn',server:{host:'127.0.0.1',port:0,hmr:false}});
+const modes=['ordinary','director-inactive','bot','bot-telemetry','bot-telemetry-recording'];
+const runs=[];
+const stats=list=>{
+  const numbers=list.filter(Number.isFinite).sort((a,b)=>a-b);
+  const at=n=>numbers[Math.min(numbers.length-1,Math.floor(numbers.length*n))]??null;
+  return {count:numbers.length,min:at(0),p50:at(.5),p90:at(.9),p95:at(.95),max:at(1)};
+};
+let browser;
+try {
+  await server.listen();
+  browser=await chromium.launch({headless:false,executablePath:edge});
+  const origin='http://127.0.0.1:'+server.httpServer.address().port;
+  for(let repeat=1;repeat<=2;repeat++){
+    for(const mode of modes){
+      const tag=mode+'-'+repeat,record=mode.endsWith('recording'), controlled=mode.startsWith('bot');
+      const viewport={width:768,height:432};
+      const context=await browser.newContext({viewport,...(record?{recordVideo:{dir:path.join(out,'raw'),size:viewport}}:{})});
+      const page=await context.newPage(),errors=[];
+      page.on('pageerror',err=>errors.push(err.message));
+      if(controlled)await page.addInitScript(()=>{
+        const pad=window.__PF02_PAD__={lt:0,rt:0};
+        Object.defineProperty(navigator,'getGamepads',{configurable:true,value:()=>[{id:'PF02 staged pad',mapping:'standard',index:0,connected:true,
+          axes:[0,0,0,0],buttons:Array.from({length:17},(_,i)=>{const value=i===6?pad.lt:i===7?pad.rt:0;return{value,pressed:value>.5,touched:value>0};})}]});
+      });
+      await page.route('**/src/main.js',async r=>{
+        const response=await r.fetch();
+        await r.fulfill({response,body:(await response.text())+'\nwindow.__PF02_RUNTIME__=runtime;\n'});
+      });
+      await page.goto(origin+'/?flow=1',{waitUntil:'domcontentloaded',timeout:90000});
+      await page.waitForFunction(()=>window.__PF02_RUNTIME__?.isRunning,null,{timeout:90000});
+      await page.keyboard.press('Shift+Digit6');
+      await page.waitForFunction(()=>window.__PF02_RUNTIME__?.siltPressureRouteSystem?.active,null,{timeout:90000});
+      if(!await page.evaluate(()=>window.__PF02_RUNTIME__.frameState.coreGrowth?.debugCoreWorkRetainedAnatomySeeded===true))await page.keyboard.press('p');
+      await page.waitForFunction(()=>window.__PF02_RUNTIME__.frameState.spatialCoreChemistry?.retainedPieceCount===3,null,{timeout:90000});
+      await page.evaluate(()=>{window.__PF02_WARM__=window.__PF02_RUNTIME__.frameState.frame;});
+      await page.waitForFunction(()=>window.__PF02_RUNTIME__.frameState.frame>=window.__PF02_WARM__+16,null,{timeout:90000});
+
+      await page.evaluate(async ({mode,scenario})=>{
+        const r=window.__PF02_RUNTIME__, gl=r.renderer.getContext(), dbg=gl.getExtension('WEBGL_debug_renderer_info');
+        const renderer=gl.getParameter(dbg?.UNMASKED_RENDERER_WEBGL??gl.RENDERER);
+        const ext=gl.getExtension('EXT_disjoint_timer_query_webgl2');
+        const {stageShelf,sample}=await import('/BLOB_BOT_SERIES1/director/shelf-stage.mjs');
+        const isBot=mode.startsWith('bot'), extra=mode.includes('telemetry'), rec=mode.endsWith('recording');
+        const start=stageShelf(r,scenario);
+        if(mode==='director-inactive') {
+          const {startHandoff}=await import('/BLOB_BOT_SERIES1/director/handoff-browser.mjs');
+          window.__PF02_INACTIVE__=startHandoff;
+        }
+        const pad=window.__PF02_PAD__, rows=[], pending=[], samples=[], events={}, actions={};
+        let now, startFrame, simulation=0, previousCpu, sampleStarted=false, endingFrame;
+        const clocks=new Map();
+        const wrap=(obj,key,label)=>{
+          if(typeof obj?.[key]!=='function')return false;
+          const fn=obj[key];
+          obj[key]=function(...args){
+            const started=performance.now();
+            try{return fn.apply(this,args);}finally{clocks.set(label,(clocks.get(label)??0)+performance.now()-started);}
+          };
+          return true;
+        };
+        const sensors={hud:wrap(r.playtestHudSystem,'update','hud'),telemetry:wrap(r.sessionTelemetrySystem,'update','productionTelemetry'),
+          sceneTraversal:wrap(r.scene,'updateMatrixWorld','sceneTraversal')};
+        const begin=r.frameTruthObserver.beginFrame, end=r.frameTruthObserver.endFrame;
+        r.frameTruthObserver.beginFrame=function(...args){now=performance.now();return begin.apply(this,args);};
+        r.frameTruthObserver.endFrame=function(...args){try{return end.apply(this,args);}finally{
+          previousCpu=performance.now()-now;
+          if(rows.at(-1)?.frame===r.frameState.frame)rows.at(-1).cpuFrame=previousCpu;
+        }};
+        const registry=r.registry.update;
+        r.registry.update=function(dt,frame){
+          if(!sampleStarted){
+            startFrame=frame.frame;
+            sampleStarted=true;
+          }
+          if(isBot){
+            const live=simulation<1.25;
+            pad.lt=live?0.82:0;
+            pad.rt=live&&simulation>=0.28?0.46:0;
+          }
+          const startRegistry=performance.now();
+          const result=registry.call(this,dt,frame);
+          clocks.set('registry',(clocks.get('registry')??0)+performance.now()-startRegistry);
+          if(isBot){
+            const telemetryStart=performance.now();
+            const step={hostId:frame.activeHostId,cellId:frame.activeCellId,
+              mountSequence:frame.firstSliceRuntimeMount?.mountSequence,frame:frame.frame,substep:frame.runtimeSimulationSubstepIndex};
+            const returned=frame.coreFlow?.result;
+            const input=frame.input;
+            const mark=(id)=>{if(!actions[id]){actions[id]=step;events[id]={wallMs:performance.now(),simulation};}};
+            if(frame.targeting?.targetId==='silt_porosity_shelf')mark('canonical_selection');
+            if(input.flowDemand01>0)mark('analog_flow_request');
+            if(returned?.acceptedCurrent01>0)mark('accepted_current');
+            if(simulation>=1.25&&!input.flowDemand01&&!returned)mark('release');
+            if(extra){samples.push(sample(r));clocks.set('directorTelemetry',(clocks.get('directorTelemetry')??0)+performance.now()-telemetryStart);}
+          }
+          simulation+=dt;
+          return result;
+        };
+        const stamp=rec?document.createElement('canvas'):null;
+        if(stamp){stamp.width=190;stamp.height=10;stamp.style.cssText='position:fixed;bottom:0;left:0;z-index:2147483647;pointer-events:none';document.body.append(stamp);}
+        const paint=stamp?.getContext('2d'), native=r.renderer.render;
+        r.renderer.render=function(scene,camera){
+          if(scene!==r.scene||this.getRenderTarget()!==null)return native.call(this,scene,camera);
+          if(ext){
+            for(let i=pending.length-1;i>=0;i--){
+              const {query,row}=pending[i];
+              if(!gl.getQueryParameter(query,gl.QUERY_RESULT_AVAILABLE))continue;
+              if(!gl.getParameter(ext.GPU_DISJOINT_EXT))row.gpuMs=gl.getQueryParameter(query,gl.QUERY_RESULT)/1e6;
+              gl.deleteQuery(query);pending.splice(i,1);
+            }
+          }
+          const query=ext&&rows.length<32&&pending.length<6?gl.createQuery():null;
+          if(query)gl.beginQuery(ext.TIME_ELAPSED_EXT,query);
+          const before=performance.now();
+          try{return native.call(this,scene,camera);}finally{
+            if(query)gl.endQuery(ext.TIME_ELAPSED_EXT);
+            const f=r.frameState, info=this.info.render, marker=rows.length+1;
+            const row={marker,frame:f.frame,substep:f.runtimeSimulationSubstepIndex,sim:f.runtimeSeconds,wallMs:performance.now(),
+              rawMs:f.runtimeFrameRawDeltaMs,simulationMs:f.runtimeFrameSimulatedDeltaMs,discardedMs:f.runtimeFrameDroppedDeltaMs,
+              stepCount:f.runtimeSimulationSubstepCount,renderSubmission:performance.now()-before,drawCalls:info.calls,triangles:info.triangles,
+              programs:this.info.programs?.length??null,gpuMs:null,...Object.fromEntries(clocks)};
+            clocks.clear();
+            if(rows.length<32){
+              rows.push(row);
+              if(paint)for(let i=0;i<19;i++){
+                paint.fillStyle=(i<3?[1,0,1][i]:((marker>>(i-3))&1))?'white':'black';
+                paint.fillRect(i*10,0,10,10);
+              }
+            }
+            if(query)pending.push({query,row});
+            if(rows.length===32&&!endingFrame)endingFrame=f.frame;
+            if(endingFrame&&f.frame>=endingFrame+6){
+              r.renderer.render=native;r.registry.update=registry;if(pad)Object.assign(pad,{lt:0,rt:0});
+              window.__PF02_RESULT__={renderer,querySupported:Boolean(ext),sensors,rows,events,
+                trial:{actions,samples,start:undefined},start:{pose:start.state.pose,reserve:start.state.reserve,cell:f.activeCellId,
+                  facing:start.state.facing},startFrame};
+            }
+          }
+        };
+      },{mode,scenario});
+      await page.waitForFunction(()=>window.__PF02_RESULT__,null,{timeout:100000});
+      const data=await page.evaluate(()=>window.__PF02_RESULT__);
+      const video=page.video();
+      await context.close();
+      assert.deepEqual(errors,[]);
+      const rows=data.rows.slice(1),sum=key=>rows.reduce((n,x)=>n+x[key],0);
+      const recordName=tag+'.webm';
+      if(video)await video.saveAs(path.join(out,recordName));
+      let mapping=null;
+      if(record&&data.trial.samples.length){
+        const encoded=await decodeCapture(browser,origin,out,{trial:data.trial,capture:{frames:data.rows,peakAudio:0,
+          files:[{name:recordName,format:'webm',mime:'video/webm;codecs=vp8',nativeAudioTrack:false}]}});
+        mapping=encoded.webm;
+      }
+      const result={source,tag,mode,repeat,recording:record,renderer:data.renderer,start:data.start,sensors:data.sensors,
+        stats:Object.fromEntries(['rawMs','cpuFrame','renderSubmission','registry','gpuMs','sceneTraversal','hud','productionTelemetry','directorTelemetry','drawCalls','triangles','programs','stepCount']
+          .map(k=>[k,stats(rows.map(row=>row[k]))])),
+        wallMs:sum('rawMs'),simulationMs:sum('simulationMs'),discardedMs:sum('discardedMs'),actions:data.trial.actions,mapping};
+      runs.push(result);
+      await fs.writeFile(path.join(out,tag+'.json'),JSON.stringify({result,...data},null,2)+'\n',{flag:'wx'});
+      console.log(JSON.stringify({tag,renderer:data.renderer,p50:result.stats.rawMs.p50,discardedMs:result.discardedMs,
+        actions:Object.keys(data.trial.actions),aligned:result.mapping?.encodedMarkers??null}));
+    }
+  }
+  for(const x of runs)assert.deepEqual(x.start,runs[0].start);
+  await fs.writeFile(path.join(out,'matrix.json'),JSON.stringify(runs,null,2)+'\n',{flag:'wx'});
+}finally{await browser?.close();await server.close();}
+

@@ -1,0 +1,1767 @@
+{
+  "build": {
+    "commit": "bd8622941baac6fc74cc09f47438d205862bb053",
+    "gameplayCheckpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "gameplayAncestry": true,
+    "gameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "requiredGameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "workingGameplayDifferences": [],
+    "toolingRevision": "d524ad2f0dcb6981fa551a1c422a457a3ad5d5ff0ac7e7078c0b0e1a9da62f42"
+  },
+  "scenarioRevisions": [
+    {
+      "id": "dl-exp-001.deep",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    },
+    {
+      "id": "dl-exp-001.balanced",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    },
+    {
+      "id": "dl-exp-001.membrane",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    }
+  ],
+  "status": "PASS",
+  "held": {
+    "frame": 27,
+    "flow": 0.14751541552213943,
+    "held": true,
+    "sequence": 1
+  },
+  "transfer": {
+    "before": {
+      "pieces": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane"
+        }
+      ],
+      "topology": {
+        "id": "three_way_balance",
+        "label": "Three-Way Balance",
+        "distribution": "1:1:1",
+        "complete": true,
+        "dominantZone": "balanced"
+      },
+      "chemistry": {
+        "composition": {
+          "form": 0.32,
+          "flux": 0.21,
+          "scar": 0.02,
+          "seed": 0.36,
+          "signal": 0.09
+        },
+        "absorbed": 0,
+        "earned": {
+          "pass": "CONNECTION44",
+          "owner": "CoreGrowthSystem",
+          "growthKnown": true,
+          "matureBinding": false,
+          "surfaceFoundation": false,
+          "surfaceCause": "none",
+          "earnedFamilies": {
+            "grave": false,
+            "vascular": false,
+            "silt": false
+          },
+          "integrated": false,
+          "idleRecoveryMultiplier": 1,
+          "cause": "requires_mature_core_and_earned_vascular_return",
+          "enginePhaseAuthority": false,
+          "materialAuthority": false
+        },
+        "seedCount": 1,
+        "growthStage": "seed_core"
+      },
+      "derived": {
+        "physiology": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "chemistry": {
+          "pass": "HC-024E",
+          "active": true,
+          "source": "spatial_core_chemistry",
+          "memory": 0.06,
+          "rhythm": 0.28,
+          "pressure": 1,
+          "surfaceExpression": 0.333,
+          "deepConcentration": 0.333,
+          "innerCirculation": 0.333,
+          "dominantFamily": "silt_pressure",
+          "dominantMode": "adhesion_skin",
+          "topologyId": "three_way_balance",
+          "topologyDistribution": "1:1:1",
+          "cloudPatternId": "none",
+          "cloudPatternLabel": "Free Cloud",
+          "patternStrength": 0.86,
+          "responseRadius": 3.45,
+          "directionality": 0.40034765437071007,
+          "spreadMode": "free",
+          "localDirection": {
+            "x": 0.49896732212304246,
+            "y": -0.8115197641511716,
+            "z": -0.30408433673141905
+          },
+          "worldDirection": {
+            "x": 0.48654708489980963,
+            "y": -0.7990934194906402,
+            "z": 0.3531595122635856
+          },
+          "siltZoneId": "membrane",
+          "siltDepth01": 0.78,
+          "siltMembraneExposure": 1,
+          "siltLocalDirection": {
+            "x": 0.13250773199998755,
+            "y": -0.9772445234999081,
+            "z": -0.16563466499998444
+          },
+          "siltWorldDirection": {
+            "x": 0.08077806559211204,
+            "y": -0.9255816279615213,
+            "z": 0.3698290876868619
+          },
+          "visualHostResponseEnabled": true,
+          "movementConsequencesEnabled": true,
+          "movementConsequenceOwner": "PlayerMovementController",
+          "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+          "collisionConsequencesEnabled": false,
+          "progressionAuthority": false,
+          "geometryAuthority": false
+        }
+      },
+      "material": {
+        "mass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ],
+        "units": [
+          {
+            "id": "silt-grain-01",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-02",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-03",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-04",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-05",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-06",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-07",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-08",
+            "generation": 0,
+            "phase": "reservoir"
+          }
+        ],
+        "nativeAwake": false
+      },
+      "progression": {
+        "completed": false,
+        "returned": false,
+        "safeMatterAbsorbed": false,
+        "pressureRead": false,
+        "returnFoldReady": false,
+        "credits": 0
+      },
+      "receipts": {
+        "silt": 0,
+        "vascular": 0,
+        "grave": 0,
+        "local": 0
+      },
+      "grip": null,
+      "seat": null
+    },
+    "after": {
+      "pieces": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane"
+        }
+      ],
+      "topology": {
+        "id": "three_way_balance",
+        "label": "Three-Way Balance",
+        "distribution": "1:1:1",
+        "complete": true,
+        "dominantZone": "balanced"
+      },
+      "chemistry": {
+        "composition": {
+          "form": 0.32,
+          "flux": 0.21,
+          "scar": 0.02,
+          "seed": 0.36,
+          "signal": 0.09
+        },
+        "absorbed": 0,
+        "earned": {
+          "pass": "CONNECTION44",
+          "owner": "CoreGrowthSystem",
+          "growthKnown": true,
+          "matureBinding": false,
+          "surfaceFoundation": false,
+          "surfaceCause": "none",
+          "earnedFamilies": {
+            "grave": false,
+            "vascular": false,
+            "silt": false
+          },
+          "integrated": false,
+          "idleRecoveryMultiplier": 1,
+          "cause": "requires_mature_core_and_earned_vascular_return",
+          "enginePhaseAuthority": false,
+          "materialAuthority": false
+        },
+        "seedCount": 1,
+        "growthStage": "seed_core"
+      },
+      "derived": {
+        "physiology": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "chemistry": {
+          "pass": "HC-024E",
+          "active": true,
+          "source": "spatial_core_chemistry",
+          "memory": 0.06,
+          "rhythm": 0.28,
+          "pressure": 1,
+          "surfaceExpression": 0.333,
+          "deepConcentration": 0.333,
+          "innerCirculation": 0.333,
+          "dominantFamily": "silt_pressure",
+          "dominantMode": "adhesion_skin",
+          "topologyId": "three_way_balance",
+          "topologyDistribution": "1:1:1",
+          "cloudPatternId": "none",
+          "cloudPatternLabel": "Free Cloud",
+          "patternStrength": 0.86,
+          "responseRadius": 3.45,
+          "directionality": 0.40034765437071007,
+          "spreadMode": "free",
+          "localDirection": {
+            "x": 0.49896732212304246,
+            "y": -0.8115197641511716,
+            "z": -0.30408433673141905
+          },
+          "worldDirection": {
+            "x": 0.48633777859257077,
+            "y": -0.7988881125645814,
+            "z": 0.3539114984238921
+          },
+          "siltZoneId": "membrane",
+          "siltDepth01": 0.78,
+          "siltMembraneExposure": 1,
+          "siltLocalDirection": {
+            "x": 0.13250773199998755,
+            "y": -0.9772445234999081,
+            "z": -0.16563466499998444
+          },
+          "siltWorldDirection": {
+            "x": 0.08055873790890095,
+            "y": -0.9253657202917263,
+            "z": 0.3704167564453583
+          },
+          "visualHostResponseEnabled": true,
+          "movementConsequencesEnabled": true,
+          "movementConsequenceOwner": "PlayerMovementController",
+          "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+          "collisionConsequencesEnabled": false,
+          "progressionAuthority": false,
+          "geometryAuthority": false
+        }
+      },
+      "material": {
+        "mass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ],
+        "units": [
+          {
+            "id": "silt-grain-01",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-02",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-03",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-04",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-05",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-06",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-07",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-08",
+            "generation": 0,
+            "phase": "reservoir"
+          }
+        ],
+        "nativeAwake": false
+      },
+      "progression": {
+        "completed": false,
+        "returned": false,
+        "safeMatterAbsorbed": false,
+        "pressureRead": false,
+        "returnFoldReady": false,
+        "credits": 0
+      },
+      "receipts": {
+        "silt": 0,
+        "vascular": 0,
+        "grave": 0,
+        "local": 0
+      },
+      "grip": null,
+      "seat": null
+    },
+    "active": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "wallMs": 11149.199999809265,
+    "simulationTime": 4.138000000476837,
+    "frame": 40,
+    "substep": 0,
+    "flowPhase": "recovering"
+  },
+  "operations": [
+    {
+      "action": "load",
+      "id": "balanced",
+      "verified": true,
+      "storage": [
+        "blob.telemetry.session.index.v1",
+        "blob.telemetry.session.48fceac4-6d3e-4ce5-9a5b-41c9ae3a552e"
+      ],
+      "start": {
+        "state": {
+          "step": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 15,
+            "substep": 0
+          },
+          "runtimeSeconds": 1.60835000038147,
+          "wallMs": 22452.699999809265,
+          "dt": 0.03975,
+          "rawFrameMs": 79.5,
+          "droppedFrameMs": 0,
+          "pose": [
+            -2.45,
+            -0.54,
+            -3.67
+          ],
+          "facing": [
+            0,
+            0,
+            -1
+          ],
+          "attachment": false,
+          "speed": 0.12324197630883423,
+          "camera": {
+            "position": [
+              -2.45,
+              0.6399999999999999,
+              2.7800000000000002
+            ],
+            "rotation": [
+              -0.07664332334695328,
+              0,
+              0,
+              0.9970585745011845
+            ],
+            "yaw": 0,
+            "pitch": 0.18,
+            "near": false,
+            "patchOnScreen": [
+              0,
+              2.6989641397962322e-17,
+              0.9742930622820429
+            ],
+            "withinFrustum": true
+          },
+          "aim": null,
+          "selected": "none",
+          "corePhaseCount": 3,
+          "profile": {
+            "output": 1.02,
+            "response": 1.053,
+            "enduranceCapacity": 1.107,
+            "recovery": 1.067,
+            "efficiency": 1.063,
+            "stability": 1.017
+          },
+          "reserve": 0.7,
+          "settlement": null,
+          "input": {
+            "stabilize": false,
+            "absorb": false,
+            "pulseEventId": 0,
+            "flowDemand": 0,
+            "flowSequence": 0
+          },
+          "flow": {
+            "phase": "retracted",
+            "ready": false,
+            "reason": "aim_at_shelf",
+            "contact": false,
+            "strain": 0,
+            "extension": 0,
+            "effect": null
+          },
+          "imprint": 0
+        },
+        "retained": {
+          "pieces": [
+            {
+              "pieceId": "player_grave_memory_retention_root_HC024C2",
+              "family": "grave_memory_retention",
+              "zoneId": "deep_core"
+            },
+            {
+              "pieceId": "player_vascular_return_filament_root_HC011B",
+              "family": "vascular_rhythm_retention",
+              "zoneId": "inner_body"
+            },
+            {
+              "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+              "family": "silt_pressure_retention",
+              "zoneId": "membrane"
+            }
+          ],
+          "topology": {
+            "id": "three_way_balance",
+            "label": "Three-Way Balance",
+            "distribution": "1:1:1",
+            "complete": true,
+            "dominantZone": "balanced"
+          },
+          "chemistry": {
+            "composition": {
+              "form": 0.32,
+              "flux": 0.21,
+              "scar": 0.02,
+              "seed": 0.36,
+              "signal": 0.09
+            },
+            "absorbed": 0,
+            "earned": {
+              "pass": "CONNECTION44",
+              "owner": "CoreGrowthSystem",
+              "growthKnown": true,
+              "matureBinding": false,
+              "surfaceFoundation": false,
+              "surfaceCause": "none",
+              "earnedFamilies": {
+                "grave": false,
+                "vascular": false,
+                "silt": false
+              },
+              "integrated": false,
+              "idleRecoveryMultiplier": 1,
+              "cause": "requires_mature_core_and_earned_vascular_return",
+              "enginePhaseAuthority": false,
+              "materialAuthority": false
+            },
+            "seedCount": 1,
+            "growthStage": "seed_core"
+          },
+          "derived": {
+            "physiology": {
+              "output": 1.02,
+              "response": 1.053,
+              "enduranceCapacity": 1.107,
+              "recovery": 1.067,
+              "efficiency": 1.063,
+              "stability": 1.017
+            },
+            "chemistry": {
+              "pass": "HC-024E",
+              "active": true,
+              "source": "spatial_core_chemistry",
+              "memory": 0.06,
+              "rhythm": 0.28,
+              "pressure": 1,
+              "surfaceExpression": 0.333,
+              "deepConcentration": 0.333,
+              "innerCirculation": 0.333,
+              "dominantFamily": "silt_pressure",
+              "dominantMode": "adhesion_skin",
+              "topologyId": "three_way_balance",
+              "topologyDistribution": "1:1:1",
+              "cloudPatternId": "balanced_triad",
+              "cloudPatternLabel": "Balanced Triad",
+              "patternStrength": 1,
+              "responseRadius": 4.5,
+              "directionality": 0.04,
+              "spreadMode": "distributed",
+              "localDirection": {
+                "x": 0.49896732212304246,
+                "y": -0.8115197641511716,
+                "z": -0.30408433673141905
+              },
+              "worldDirection": {
+                "x": 0.49896732212304246,
+                "y": -0.8115197641511716,
+                "z": -0.30408433673141905
+              },
+              "siltZoneId": "membrane",
+              "siltDepth01": 0.78,
+              "siltMembraneExposure": 1,
+              "siltLocalDirection": {
+                "x": 0.13250773199998755,
+                "y": -0.9772445234999081,
+                "z": -0.16563466499998444
+              },
+              "siltWorldDirection": {
+                "x": 0.13250773199998755,
+                "y": -0.9772445234999081,
+                "z": -0.16563466499998444
+              },
+              "visualHostResponseEnabled": true,
+              "movementConsequencesEnabled": true,
+              "movementConsequenceOwner": "PlayerMovementController",
+              "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+              "collisionConsequencesEnabled": false,
+              "progressionAuthority": false,
+              "geometryAuthority": false
+            }
+          },
+          "material": {
+            "mass": 8,
+            "records": [
+              {
+                "id": "silt-grain-01",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-02",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-03",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-04",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-05",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-06",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-07",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-08",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              }
+            ],
+            "units": [
+              {
+                "id": "silt-grain-01",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-02",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-03",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-04",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-05",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-06",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-07",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-08",
+                "generation": 0,
+                "phase": "reservoir"
+              }
+            ],
+            "nativeAwake": false
+          },
+          "progression": {
+            "completed": false,
+            "returned": false,
+            "safeMatterAbsorbed": false,
+            "pressureRead": false,
+            "returnFoldReady": false,
+            "credits": 0
+          },
+          "receipts": {
+            "silt": 0,
+            "vascular": 0,
+            "grave": 0,
+            "local": 0
+          },
+          "grip": null,
+          "seat": null
+        },
+        "patch": {
+          "id": "silt_porosity_shelf_front",
+          "center": [
+            -2.45,
+            -0.54,
+            -4.85
+          ],
+          "normal": [
+            0,
+            0.360994102557712,
+            0.9325680982740896
+          ],
+          "radius": 0.22,
+          "conductivity": 0.72,
+          "resistance": 0.31
+        }
+      }
+    },
+    {
+      "action": "scenario_selection",
+      "closed": true
+    },
+    {
+      "action": "reset",
+      "id": "balanced",
+      "verified": true,
+      "storage": [
+        "blob.telemetry.session.07cb79e9-bfd3-4a3e-8e25-73318d519ad7",
+        "blob.telemetry.session.index.v1"
+      ],
+      "start": {
+        "state": {
+          "step": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 20,
+            "substep": 0
+          },
+          "runtimeSeconds": 2.0257500000000004,
+          "wallMs": 8847.900000572205,
+          "dt": 0.03475,
+          "rawFrameMs": 69.5,
+          "droppedFrameMs": 0,
+          "pose": [
+            -2.45,
+            -0.54,
+            -3.67
+          ],
+          "facing": [
+            0,
+            0,
+            -1
+          ],
+          "attachment": false,
+          "speed": 0.12345086376026806,
+          "camera": {
+            "position": [
+              -2.45,
+              0.6399999999999999,
+              2.7800000000000002
+            ],
+            "rotation": [
+              -0.07664332334695328,
+              0,
+              0,
+              0.9970585745011845
+            ],
+            "yaw": 0,
+            "pitch": 0.18,
+            "near": false,
+            "patchOnScreen": [
+              0,
+              2.699003831278733e-17,
+              0.9742930622820429
+            ],
+            "withinFrustum": true
+          },
+          "aim": null,
+          "selected": "none",
+          "corePhaseCount": 3,
+          "profile": {
+            "output": 1.02,
+            "response": 1.053,
+            "enduranceCapacity": 1.107,
+            "recovery": 1.067,
+            "efficiency": 1.063,
+            "stability": 1.017
+          },
+          "reserve": 0.7,
+          "settlement": null,
+          "input": {
+            "stabilize": false,
+            "absorb": false,
+            "pulseEventId": 0,
+            "flowDemand": 0,
+            "flowSequence": 0
+          },
+          "flow": {
+            "phase": "retracted",
+            "ready": false,
+            "reason": "aim_at_shelf",
+            "contact": false,
+            "strain": 0,
+            "extension": 0,
+            "effect": null
+          },
+          "imprint": 0
+        },
+        "retained": {
+          "pieces": [
+            {
+              "pieceId": "player_grave_memory_retention_root_HC024C2",
+              "family": "grave_memory_retention",
+              "zoneId": "deep_core"
+            },
+            {
+              "pieceId": "player_vascular_return_filament_root_HC011B",
+              "family": "vascular_rhythm_retention",
+              "zoneId": "inner_body"
+            },
+            {
+              "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+              "family": "silt_pressure_retention",
+              "zoneId": "membrane"
+            }
+          ],
+          "topology": {
+            "id": "three_way_balance",
+            "label": "Three-Way Balance",
+            "distribution": "1:1:1",
+            "complete": true,
+            "dominantZone": "balanced"
+          },
+          "chemistry": {
+            "composition": {
+              "form": 0.32,
+              "flux": 0.21,
+              "scar": 0.02,
+              "seed": 0.36,
+              "signal": 0.09
+            },
+            "absorbed": 0,
+            "earned": {
+              "pass": "CONNECTION44",
+              "owner": "CoreGrowthSystem",
+              "growthKnown": true,
+              "matureBinding": false,
+              "surfaceFoundation": false,
+              "surfaceCause": "none",
+              "earnedFamilies": {
+                "grave": false,
+                "vascular": false,
+                "silt": false
+              },
+              "integrated": false,
+              "idleRecoveryMultiplier": 1,
+              "cause": "requires_mature_core_and_earned_vascular_return",
+              "enginePhaseAuthority": false,
+              "materialAuthority": false
+            },
+            "seedCount": 1,
+            "growthStage": "seed_core"
+          },
+          "derived": {
+            "physiology": {
+              "output": 1.02,
+              "response": 1.053,
+              "enduranceCapacity": 1.107,
+              "recovery": 1.067,
+              "efficiency": 1.063,
+              "stability": 1.017
+            },
+            "chemistry": {
+              "pass": "HC-024E",
+              "active": true,
+              "source": "spatial_core_chemistry",
+              "memory": 0.06,
+              "rhythm": 0.28,
+              "pressure": 1,
+              "surfaceExpression": 0.333,
+              "deepConcentration": 0.333,
+              "innerCirculation": 0.333,
+              "dominantFamily": "silt_pressure",
+              "dominantMode": "adhesion_skin",
+              "topologyId": "three_way_balance",
+              "topologyDistribution": "1:1:1",
+              "cloudPatternId": "balanced_triad",
+              "cloudPatternLabel": "Balanced Triad",
+              "patternStrength": 1,
+              "responseRadius": 4.5,
+              "directionality": 0.04,
+              "spreadMode": "distributed",
+              "localDirection": {
+                "x": 0.49896732212304246,
+                "y": -0.8115197641511716,
+                "z": -0.30408433673141905
+              },
+              "worldDirection": {
+                "x": 0.49896732212304246,
+                "y": -0.8115197641511716,
+                "z": -0.30408433673141905
+              },
+              "siltZoneId": "membrane",
+              "siltDepth01": 0.78,
+              "siltMembraneExposure": 1,
+              "siltLocalDirection": {
+                "x": 0.13250773199998755,
+                "y": -0.9772445234999081,
+                "z": -0.16563466499998444
+              },
+              "siltWorldDirection": {
+                "x": 0.13250773199998755,
+                "y": -0.9772445234999081,
+                "z": -0.16563466499998444
+              },
+              "visualHostResponseEnabled": true,
+              "movementConsequencesEnabled": true,
+              "movementConsequenceOwner": "PlayerMovementController",
+              "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+              "collisionConsequencesEnabled": false,
+              "progressionAuthority": false,
+              "geometryAuthority": false
+            }
+          },
+          "material": {
+            "mass": 8,
+            "records": [
+              {
+                "id": "silt-grain-01",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-02",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-03",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-04",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-05",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-06",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-07",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-08",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              }
+            ],
+            "units": [
+              {
+                "id": "silt-grain-01",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-02",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-03",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-04",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-05",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-06",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-07",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-08",
+                "generation": 0,
+                "phase": "reservoir"
+              }
+            ],
+            "nativeAwake": false
+          },
+          "progression": {
+            "completed": false,
+            "returned": false,
+            "safeMatterAbsorbed": false,
+            "pressureRead": false,
+            "returnFoldReady": false,
+            "credits": 0
+          },
+          "receipts": {
+            "silt": 0,
+            "vascular": 0,
+            "grave": 0,
+            "local": 0
+          },
+          "grip": null,
+          "seat": null
+        },
+        "patch": {
+          "id": "silt_porosity_shelf_front",
+          "center": [
+            -2.45,
+            -0.54,
+            -4.85
+          ],
+          "normal": [
+            0,
+            0.360994102557712,
+            0.9325680982740896
+          ],
+          "radius": 0.22,
+          "conductivity": 0.72,
+          "resistance": 0.31
+        }
+      }
+    },
+    {
+      "action": "scenario_selection",
+      "closed": true
+    },
+    {
+      "action": "automate",
+      "id": "balanced",
+      "verified": true,
+      "storage": [
+        "blob.telemetry.session.936b16cc-c8cf-4a8f-8713-38b8c36795d4",
+        "blob.telemetry.session.index.v1"
+      ],
+      "start": {
+        "state": {
+          "step": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 20,
+            "substep": 0
+          },
+          "runtimeSeconds": 1.97410000038147,
+          "wallMs": 8569.89999961853,
+          "dt": 0.04160000038146973,
+          "rawFrameMs": 83.20000076293945,
+          "droppedFrameMs": 0,
+          "pose": [
+            -2.45,
+            -0.54,
+            -3.67
+          ],
+          "facing": [
+            0,
+            0,
+            -1
+          ],
+          "attachment": false,
+          "speed": 0.12345894840659216,
+          "camera": {
+            "position": [
+              -2.45,
+              0.6399999999999999,
+              2.7800000000000002
+            ],
+            "rotation": [
+              -0.07664332334695328,
+              0,
+              0,
+              0.9970585745011845
+            ],
+            "yaw": 0,
+            "pitch": 0.18,
+            "near": false,
+            "patchOnScreen": [
+              0,
+              2.6989983601666184e-17,
+              0.9742930622820429
+            ],
+            "withinFrustum": true
+          },
+          "aim": null,
+          "selected": "none",
+          "corePhaseCount": 3,
+          "profile": {
+            "output": 1.02,
+            "response": 1.053,
+            "enduranceCapacity": 1.107,
+            "recovery": 1.067,
+            "efficiency": 1.063,
+            "stability": 1.017
+          },
+          "reserve": 0.7,
+          "settlement": null,
+          "input": {
+            "stabilize": false,
+            "absorb": false,
+            "pulseEventId": 0,
+            "flowDemand": 0,
+            "flowSequence": 0
+          },
+          "flow": {
+            "phase": "retracted",
+            "ready": false,
+            "reason": "aim_at_shelf",
+            "contact": false,
+            "strain": 0,
+            "extension": 0,
+            "effect": null
+          },
+          "imprint": 0
+        },
+        "retained": {
+          "pieces": [
+            {
+              "pieceId": "player_grave_memory_retention_root_HC024C2",
+              "family": "grave_memory_retention",
+              "zoneId": "deep_core"
+            },
+            {
+              "pieceId": "player_vascular_return_filament_root_HC011B",
+              "family": "vascular_rhythm_retention",
+              "zoneId": "inner_body"
+            },
+            {
+              "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+              "family": "silt_pressure_retention",
+              "zoneId": "membrane"
+            }
+          ],
+          "topology": {
+            "id": "three_way_balance",
+            "label": "Three-Way Balance",
+            "distribution": "1:1:1",
+            "complete": true,
+            "dominantZone": "balanced"
+          },
+          "chemistry": {
+            "composition": {
+              "form": 0.32,
+              "flux": 0.21,
+              "scar": 0.02,
+              "seed": 0.36,
+              "signal": 0.09
+            },
+            "absorbed": 0,
+            "earned": {
+              "pass": "CONNECTION44",
+              "owner": "CoreGrowthSystem",
+              "growthKnown": true,
+              "matureBinding": false,
+              "surfaceFoundation": false,
+              "surfaceCause": "none",
+              "earnedFamilies": {
+                "grave": false,
+                "vascular": false,
+                "silt": false
+              },
+              "integrated": false,
+              "idleRecoveryMultiplier": 1,
+              "cause": "requires_mature_core_and_earned_vascular_return",
+              "enginePhaseAuthority": false,
+              "materialAuthority": false
+            },
+            "seedCount": 1,
+            "growthStage": "seed_core"
+          },
+          "derived": {
+            "physiology": {
+              "output": 1.02,
+              "response": 1.053,
+              "enduranceCapacity": 1.107,
+              "recovery": 1.067,
+              "efficiency": 1.063,
+              "stability": 1.017
+            },
+            "chemistry": {
+              "pass": "HC-024E",
+              "active": true,
+              "source": "spatial_core_chemistry",
+              "memory": 0.06,
+              "rhythm": 0.28,
+              "pressure": 1,
+              "surfaceExpression": 0.333,
+              "deepConcentration": 0.333,
+              "innerCirculation": 0.333,
+              "dominantFamily": "silt_pressure",
+              "dominantMode": "adhesion_skin",
+              "topologyId": "three_way_balance",
+              "topologyDistribution": "1:1:1",
+              "cloudPatternId": "balanced_triad",
+              "cloudPatternLabel": "Balanced Triad",
+              "patternStrength": 1,
+              "responseRadius": 4.5,
+              "directionality": 0.04,
+              "spreadMode": "distributed",
+              "localDirection": {
+                "x": 0.49896732212304246,
+                "y": -0.8115197641511716,
+                "z": -0.30408433673141905
+              },
+              "worldDirection": {
+                "x": 0.49896732212304246,
+                "y": -0.8115197641511716,
+                "z": -0.30408433673141905
+              },
+              "siltZoneId": "membrane",
+              "siltDepth01": 0.78,
+              "siltMembraneExposure": 1,
+              "siltLocalDirection": {
+                "x": 0.13250773199998755,
+                "y": -0.9772445234999081,
+                "z": -0.16563466499998444
+              },
+              "siltWorldDirection": {
+                "x": 0.13250773199998755,
+                "y": -0.9772445234999081,
+                "z": -0.16563466499998444
+              },
+              "visualHostResponseEnabled": true,
+              "movementConsequencesEnabled": true,
+              "movementConsequenceOwner": "PlayerMovementController",
+              "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+              "collisionConsequencesEnabled": false,
+              "progressionAuthority": false,
+              "geometryAuthority": false
+            }
+          },
+          "material": {
+            "mass": 8,
+            "records": [
+              {
+                "id": "silt-grain-01",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-02",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-03",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-04",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-05",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-06",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-07",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              },
+              {
+                "id": "silt-grain-08",
+                "originRegion": "silt",
+                "originSignature": "silt_accumulation_connection",
+                "mass": 1,
+                "composition": {
+                  "silt": 1
+                },
+                "owner": "environment",
+                "representation": "individual",
+                "historySequence": 0
+              }
+            ],
+            "units": [
+              {
+                "id": "silt-grain-01",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-02",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-03",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-04",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-05",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-06",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-07",
+                "generation": 0,
+                "phase": "reservoir"
+              },
+              {
+                "id": "silt-grain-08",
+                "generation": 0,
+                "phase": "reservoir"
+              }
+            ],
+            "nativeAwake": false
+          },
+          "progression": {
+            "completed": false,
+            "returned": false,
+            "safeMatterAbsorbed": false,
+            "pressureRead": false,
+            "returnFoldReady": false,
+            "credits": 0
+          },
+          "receipts": {
+            "silt": 0,
+            "vascular": 0,
+            "grave": 0,
+            "local": 0
+          },
+          "grip": null,
+          "seat": null
+        },
+        "patch": {
+          "id": "silt_porosity_shelf_front",
+          "center": [
+            -2.45,
+            -0.54,
+            -4.85
+          ],
+          "normal": [
+            0,
+            0.360994102557712,
+            0.9325680982740896
+          ],
+          "radius": 0.22,
+          "conductivity": 0.72,
+          "resistance": 0.31
+        }
+      }
+    },
+    {
+      "action": "scenario_selection",
+      "closed": true
+    }
+  ],
+  "productionKeyboardAfterTransfer": true,
+  "physicalController": false,
+  "failures": []
+}

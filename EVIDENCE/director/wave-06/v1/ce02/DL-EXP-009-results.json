@@ -1,0 +1,1989 @@
+{
+  "commit": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "spec": {
+    "id": "DL-EXP-009",
+    "schema": "blob.director-analysis.v1",
+    "revision": 1,
+    "gameplay": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "familyOrder": [
+      "grave_memory_retention",
+      "vascular_rhythm_retention",
+      "silt_pressure_retention"
+    ],
+    "zones": [
+      "deep_core",
+      "inner_body",
+      "membrane"
+    ],
+    "distributionOrder": [
+      "deep_core",
+      "inner_body",
+      "membrane"
+    ],
+    "control": {
+      "topologyCapacity": 3,
+      "reserveBefore": 0.6,
+      "dt": 0.05,
+      "recoilBefore": 0.08,
+      "traceBefore": 1,
+      "authenticGraveII": true
+    },
+    "matchedGroups": [
+      "2:0:1",
+      "1:1:1"
+    ],
+    "protocol": [
+      "Enumerate the Cartesian product of all three zones for all three retained families.",
+      "Drive the existing deterministic Core Work fixture for each assignment.",
+      "Record owner-published chemistry, topology and the first eligible Grave recovery sample.",
+      "Hold radial zone counts constant for permutation comparisons. Geometry and cloud recognition remain separate measurements."
+    ]
+  },
+  "results": [
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "3:0:0",
+      "weights": {
+        "deep": 1,
+        "inner": 0,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 0.06,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "quiet_core",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5996950867055552,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "2:1:0",
+      "weights": {
+        "deep": 0.6666666666666666,
+        "inner": 0.3333333333333333,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 0.06,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "adhesion_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5996087803816768,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "2:0:1",
+      "weights": {
+        "deep": 0.6666666666666666,
+        "inner": 0,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 0.06,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "adhesion_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5994545713188164,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "2:1:0",
+      "weights": {
+        "deep": 0.6666666666666666,
+        "inner": 0.3333333333333333,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 0.28,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "signal_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5996087803816768,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "1:2:0",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.6666666666666666,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 0.28,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5994862621176075,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "1:1:1",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.3333333333333333,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 0.28,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "adhesion_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5992625814728121,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "2:0:1",
+      "weights": {
+        "deep": 0.6666666666666666,
+        "inner": 0,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 1,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "signal_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5994545713188164,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "1:1:1",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.3333333333333333,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 1,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "signal_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5992625814728121,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "deep_core",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "1:0:2",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0,
+        "membrane": 0.6666666666666666
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.1099999999999999,
+          "depthPercent": 11,
+          "interactionId": "grave_memory_knot",
+          "interactionLabel": "Memory Knot",
+          "interactionIntent": "memory folds inward and consolidates around the nucleus"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 0.06,
+        "rhythm": 1,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.026399999999999993,
+        "trace": 1,
+        "reserve": 0.5988924177152686,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "2:1:0",
+      "weights": {
+        "deep": 0.6666666666666666,
+        "inner": 0.3333333333333333,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 0.06,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "residue_sense",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5996087803816768,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "1:2:0",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.6666666666666666,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 0.06,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5994862621176075,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "1:1:1",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.3333333333333333,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 0.06,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "adhesion_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5992625814728121,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "1:2:0",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.6666666666666666,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 0.28,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5994862621176075,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "0:3:0",
+      "weights": {
+        "deep": 0,
+        "inner": 1,
+        "membrane": 0
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 0.28,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": false,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5993057412116918,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "0:2:1",
+      "weights": {
+        "deep": 0,
+        "inner": 0.6666666666666666,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 0.28,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "adhesion_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5989672369999837,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "1:1:1",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.3333333333333333,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 1,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "signal_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5992625814728121,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "0:2:1",
+      "weights": {
+        "deep": 0,
+        "inner": 0.6666666666666666,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 1,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "signal_skin",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5989672369999837,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "inner_body",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "0:1:2",
+      "weights": {
+        "deep": 0,
+        "inner": 0.3333333333333333,
+        "membrane": 0.6666666666666666
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.46999999999999986,
+          "depthPercent": 47,
+          "interactionId": "grave_memory_echo",
+          "interactionLabel": "Memory Echo",
+          "interactionIntent": "memory recurs through the active inner body"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 0.28,
+        "rhythm": 1,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5983767266141992,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "2:0:1",
+      "weights": {
+        "deep": 0.6666666666666666,
+        "inner": 0,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 0.06,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "residue_sense",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5994545713188164,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "1:1:1",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.3333333333333333,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 0.06,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "residue_sense",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5992625814728121,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "deep_core",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "1:0:2",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0,
+        "membrane": 0.6666666666666666
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.10999999999999985,
+          "depthPercent": 11,
+          "interactionId": "vascular_cadence_anchor",
+          "interactionLabel": "Cadence Anchor",
+          "interactionIntent": "rhythm is concentrated as a stable internal beat"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 0.06,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5988924177152686,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "1:1:1",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0.3333333333333333,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 0.28,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "residue_sense",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5992625814728121,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "0:2:1",
+      "weights": {
+        "deep": 0,
+        "inner": 0.6666666666666666,
+        "membrane": 0.3333333333333333
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 0.28,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "residue_sense",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5989672369999837,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "inner_body",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "0:1:2",
+      "weights": {
+        "deep": 0,
+        "inner": 0.3333333333333333,
+        "membrane": 0.6666666666666666
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "vascular_circulation_drive",
+          "interactionLabel": "Circulation Drive",
+          "interactionIntent": "rhythm circulates through the body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 0.28,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5983767266141992,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "deep_core"
+      },
+      "distribution": "1:0:2",
+      "weights": {
+        "deep": 0.3333333333333333,
+        "inner": 0,
+        "membrane": 0.6666666666666666
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "deep_core",
+          "zoneLabel": "Deep Core",
+          "depth01": 0.11000000000000013,
+          "depthPercent": 11,
+          "interactionId": "silt_ballast",
+          "interactionLabel": "Ballast",
+          "interactionIntent": "pressure compacts inward as a dense stabilizing mass"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 1,
+        "pressure": 0.06,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999082,
+          "z": -0.1656346649999846
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5988924177152686,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "inner_body"
+      },
+      "distribution": "0:1:2",
+      "weights": {
+        "deep": 0,
+        "inner": 0.3333333333333333,
+        "membrane": 0.6666666666666666
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "inner_body",
+          "zoneLabel": "Inner Body",
+          "depth01": 0.47,
+          "depthPercent": 47,
+          "interactionId": "silt_body_brace",
+          "interactionLabel": "Body Brace",
+          "interactionIntent": "pressure braces the active internal structure"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 1,
+        "pressure": 0.28,
+        "siltMembrane": 0,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": 0.13250773199998755,
+          "y": -0.9772445234999081,
+          "z": -0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5983767266141992,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    },
+    {
+      "assignment": {
+        "grave_memory_retention": "membrane",
+        "vascular_rhythm_retention": "membrane",
+        "silt_pressure_retention": "membrane"
+      },
+      "distribution": "0:0:3",
+      "weights": {
+        "deep": 0,
+        "inner": 0,
+        "membrane": 1
+      },
+      "placement": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "label": "Grave Memory",
+          "family": "grave_memory_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "grave_residue_sense",
+          "interactionLabel": "Residue Sense",
+          "interactionIntent": "memory is exposed at the boundary as a sensing trace"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "label": "Vascular Rhythm",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "vascular_signal_skin",
+          "interactionLabel": "Signal Skin",
+          "interactionIntent": "rhythm reaches the boundary as an outward conducting pulse"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "label": "Silt Pressure",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane",
+          "zoneLabel": "Membrane",
+          "depth01": 1,
+          "depthPercent": 100,
+          "interactionId": "silt_adhesion_skin",
+          "interactionLabel": "Adhesion Skin",
+          "interactionIntent": "pressure spreads across the boundary as a gripping layer"
+        }
+      ],
+      "exposure": {
+        "memory": 1,
+        "rhythm": 1,
+        "pressure": 1,
+        "siltMembrane": 1,
+        "active": true,
+        "dominant": "mixed_membrane_expression",
+        "cloud": "none",
+        "siltOutputDirection": {
+          "x": -0.13250773199998755,
+          "y": 0.9772445234999082,
+          "z": 0.16563466499998444
+        }
+      },
+      "recovery": {
+        "recoilRemoved": 0.024149999999999998,
+        "trace": 1,
+        "reserve": 0.5973090277777777,
+        "earnedFactor": 1.15,
+        "authenticReceipts": 1
+      }
+    }
+  ],
+  "distributions": 10
+}

@@ -1,0 +1,173 @@
+{
+  "build": {
+    "commit": "bd8622941baac6fc74cc09f47438d205862bb053",
+    "gameplayCheckpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "gameplayAncestry": true,
+    "gameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "requiredGameplayFingerprint": "95ca41e86084cfed74e15b249885744f576d20664a9189b6f063d29244e35108",
+    "workingGameplayDifferences": [],
+    "toolingRevision": "d524ad2f0dcb6981fa551a1c422a457a3ad5d5ff0ac7e7078c0b0e1a9da62f42"
+  },
+  "scenarioRevisions": [
+    {
+      "id": "dl-exp-001.deep",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    },
+    {
+      "id": "dl-exp-001.balanced",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    },
+    {
+      "id": "dl-exp-001.membrane",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 1
+    }
+  ],
+  "webm": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 21,
+          "substep": 1
+        },
+        "simSeconds": 2.1157000007629394,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 8800.599999427795,
+        "captureWallMs": 8885.29999923706,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 0.287,
+        "marker": 2,
+        "renderDelayMs": 84.69999980926514,
+        "ptsResidualMs": -46.799999237060575,
+        "eventToFrameMs": 37.90000057220456,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 23,
+          "substep": 2
+        },
+        "status": "FRAME_NOT_ENCODED"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 26,
+          "substep": 0
+        },
+        "status": "FRAME_NOT_ENCODED"
+      }
+    ],
+    "captured": 31,
+    "encodedMarkers": 20,
+    "missingCapturedMarkers": [
+      4,
+      5,
+      7,
+      18,
+      24,
+      25,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "maxAbsPtsResidualMs": 47.599999427794955,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 5,
+    "codec": "video/webm;codecs=vp8,opus",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  },
+  "mp4": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 21,
+          "substep": 1
+        },
+        "simSeconds": 2.1157000007629394,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 8800.599999427795,
+        "captureWallMs": 8885.29999923706,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 0.1321,
+        "marker": 2,
+        "renderDelayMs": 84.69999980926514,
+        "ptsResidualMs": -46.69999923706055,
+        "eventToFrameMs": 38.000000572204584,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 23,
+          "substep": 2
+        },
+        "status": "FRAME_NOT_ENCODED"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 26,
+          "substep": 0
+        },
+        "status": "FRAME_NOT_ENCODED"
+      }
+    ],
+    "captured": 31,
+    "encodedMarkers": 19,
+    "missingCapturedMarkers": [
+      4,
+      5,
+      7,
+      8,
+      23,
+      24,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "maxAbsPtsResidualMs": 47.49999923706082,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 5,
+    "codec": "video/mp4;codecs=avc1.42001f,mp4a.40.2",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  }
+}

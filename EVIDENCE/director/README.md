@@ -13,3 +13,7 @@
 ## Wave 05
 
 [Version 1](wave-05/v1/README.md) records the verified foundation publication, exact refinement blocker, PI03 contact candidate, comparative Core runs, GTX 1070 Ti audit and CI candidate. [Machine index](wave-05/v1/index.json) and [recordings](wave-05/v1/recordings/manifest.json).
+
+## Wave 06
+
+[Version 1](wave-06/v1/README.md) records the independently promoted Director and PI03 checkpoints, DL-EXP-009, PF02, hosted CI and the local IN01 candidate. [Machine index](wave-06/v1/index.json) and [recordings](wave-06/v1/recordings/manifest.json).

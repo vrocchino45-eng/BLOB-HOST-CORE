@@ -1,0 +1,71 @@
+[
+  {
+    "run": "bot-telemetry-recording-1",
+    "markers": 145,
+    "missing": [
+      1
+    ],
+    "presentation": [
+      {
+        "name": "canonical_selection",
+        "status": "FRAME_NOT_ENCODED"
+      },
+      {
+        "name": "analog_flow_request",
+        "status": "WITHIN_100_MS",
+        "millis": 6.699999809265279,
+        "renderDelay": 144.79999923706055,
+        "residual": -138.09999942779527
+      },
+      {
+        "name": "accepted_current",
+        "status": "WITHIN_100_MS",
+        "millis": -5.1999998092655915,
+        "renderDelay": 142.39999961853027,
+        "residual": -147.59999942779586
+      },
+      {
+        "name": "release",
+        "status": "WITHIN_100_MS",
+        "millis": -43.69999980926491,
+        "renderDelay": 79.30000019073486,
+        "residual": -122.99999999999977
+      }
+    ]
+  },
+  {
+    "run": "bot-telemetry-recording-2",
+    "markers": 135,
+    "missing": [],
+    "presentation": [
+      {
+        "name": "canonical_selection",
+        "status": "OVER_100_MS",
+        "millis": 112.19999980926514,
+        "renderDelay": 112.19999980926514,
+        "residual": 0
+      },
+      {
+        "name": "analog_flow_request",
+        "status": "WITHIN_100_MS",
+        "millis": 43.199999809265364,
+        "renderDelay": 86.69999980926514,
+        "residual": -43.49999999999977
+      },
+      {
+        "name": "accepted_current",
+        "status": "WITHIN_100_MS",
+        "millis": 8.599999427795865,
+        "renderDelay": 85.59999942779541,
+        "residual": -76.99999999999955
+      },
+      {
+        "name": "release",
+        "status": "WITHIN_100_MS",
+        "millis": 35.00000000000023,
+        "renderDelay": 81.40000057220459,
+        "residual": -46.40000057220436
+      }
+    ]
+  }
+]
