@@ -1,0 +1,24 @@
+
+> blob-host-core-rebuild@0.31.54 build
+> node node_modules/vite/bin/vite.js build --outDir <local-path>
+
+vite v7.1.0 building for production...
+transforming...
+✓ 182 modules transformed.
+
+(!) outDir <local-path>
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../evidence/ui03-dist/index.html                                       2.17 kB │ gzip:   0.75 kB
+../evidence/ui03-dist/assets/RuntimeDiagnosticSummary-D6NzkH4q.js     10.27 kB │ gzip:   3.89 kB
+../evidence/ui03-dist/assets/ChemistryDebugPanel-DaONkxfY.js          26.49 kB │ gzip:   8.34 kB
+../evidence/ui03-dist/assets/RecipeDebugOverlay-D0e374k2.js           45.63 kB │ gzip:  14.18 kB
+../evidence/ui03-dist/assets/index-CUTr0RaV.js                     2,845.33 kB │ gzip: 743.96 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 42.04s

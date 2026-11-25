@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: canonical numeric contract is shaped and dimensioned correctly
+ok 1 - canonical numeric contract is shaped and dimensioned correctly
+  ---
+  duration_ms: 13.2162
+  type: 'test'
+  ...
+# Subtest: SI length, mass, and inventory alias cannot be admitted by declaration
+ok 2 - SI length, mass, and inventory alias cannot be admitted by declaration
+  ---
+  duration_ms: 12.028
+  type: 'test'
+  ...
+# Subtest: confusing momentum, force, and pressure fails validation
+ok 3 - confusing momentum, force, and pressure fails validation
+  ---
+  duration_ms: 2.6888
+  type: 'test'
+  ...
+# Subtest: explicit hypothetical scales convert impulse and density with dimensional powers
+ok 4 - explicit hypothetical scales convert impulse and density with dimensional powers
+  ---
+  duration_ms: 2.6431
+  type: 'test'
+  ...
+# Subtest: missing calibration, implicit defaults and nonfinite conversions fail closed
+ok 5 - missing calibration, implicit defaults and nonfinite conversions fail closed
+  ---
+  duration_ms: 1.3859
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1098.2757

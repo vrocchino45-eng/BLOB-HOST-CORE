@@ -1,0 +1,31 @@
+{
+  "candidate": "candidate/ci03-chromium-i1",
+  "parent": "c8c9136f4f4d2387a1f02f71c88908f1c5f4a65b",
+  "head": "bdbabf733c40fa36cbd44b2e9c7eb3472dd7b97d",
+  "stage": "LOCAL_ONLY",
+  "hostedVerdict": "UNEXECUTED",
+  "local": {
+    "verdict": "PASS",
+    "source": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "platform": "win32",
+    "headless": true,
+    "assertions": 18,
+    "timeoutSeconds": 240,
+    "playwright": "1.62.1",
+    "chromium": "151.0.7922.34",
+    "chromiumRevision": "1234",
+    "webGLRendererOnSameLaunchFlags": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "scope": "Staged C01 browser owner verification, separate from ordinary gameplay and deterministic hosted CI."
+  },
+  "files": [
+    {
+      "path": ".github/workflows/blob-ci03-chromium.yml",
+      "sha256": "72ede0a30d471de0304dcb2e098fb20441fbf29039b18e7e3b00cd631d49d8ac"
+    },
+    {
+      "path": "scripts/verifyCI03Chromium.mjs",
+      "sha256": "fa88b115ec66cc97765f7bd892e5eff8ec60d5bcd1d7e59380a5e30145a55a7c"
+    }
+  ],
+  "patchSHA256": "76463b0daa23eadca25f983ea7554d95f2f69aa56b59b48ebac0fb744ff3c4c6"
+}

@@ -1,0 +1,456 @@
+diff --git a/BLOB_BOT_SERIES1/director/handoff.mjs b/BLOB_BOT_SERIES1/director/handoff.mjs
+index 0b6b6cd..eb7071d 100644
+--- a/BLOB_BOT_SERIES1/director/handoff.mjs
++++ b/BLOB_BOT_SERIES1/director/handoff.mjs
+@@ -3,17 +3,21 @@ import fs from 'node:fs/promises';
+ import path from 'node:path';
+ import {createServer} from 'vite';
+ import {chromium} from 'playwright';
+-import {ACTIVE_CHECKPOINT,loadScenario} from './scenario-contract.mjs';
++import {ACTIVE_CHECKPOINT,UI03_CHECKPOINT,loadScenario} from './scenario-contract.mjs';
+ import {buildCompatibility,readBuildIdentity} from './build-compatibility.mjs';
+ import {verifyStart} from './run.mjs';
+ import {decodeCapture} from './frame-mapping.mjs';
+ 
+ const root=path.resolve(import.meta.dirname,'../..');
+-const [outputArg,flag]=process.argv.slice(2);
++const [outputArg,flag,revisionFlag]=process.argv.slice(2);
++assert.ok(revisionFlag === undefined || revisionFlag === '--ui03-revision-3', 'Unsupported Director admission option');
++const readmittedUI = revisionFlag === '--ui03-revision-3';
++const checkpoint = readmittedUI ? UI03_CHECKPOINT : ACTIVE_CHECKPOINT;
++const scenarioFolder = readmittedUI ? './scenarios/ui03-revision-3/' : './scenarios/';
+ const out=path.resolve(outputArg??'');
+ assert.ok(outputArg&&path.relative(root,out).startsWith('..'),'Use a new evidence directory outside the repository');
+ await fs.mkdir(out);
+-const build=readBuildIdentity(root,ACTIVE_CHECKPOINT), admission=buildCompatibility(build,ACTIVE_CHECKPOINT);
++const build=readBuildIdentity(root,checkpoint), admission=buildCompatibility(build,checkpoint);
+ if(admission.status!=='PASS'){
+   await fs.writeFile(path.join(out,'failure.json'),JSON.stringify({...admission,build},null,2)+'\n');
+   throw new Error(admission.code+': '+admission.errors.join(', '));
+@@ -22,7 +26,7 @@ const verify=flag==='--verify';
+ const layouts={deep:'Deep 3:0:0',balanced:'Balanced 1:1:1',membrane:'Membrane 0:0:3'};
+ const definitions={};
+ for(const id of Object.keys(layouts)){
+-  const loaded=await loadScenario(new URL('./scenarios/'+id+'.json',import.meta.url),build);
++  const loaded=await loadScenario(new URL(scenarioFolder+id+'.json',import.meta.url),build);
+   assert.equal(loaded.status,'PASS');
+   definitions[id]=loaded.scenario;
+ }
+diff --git a/BLOB_BOT_SERIES1/director/scenario-contract.mjs b/BLOB_BOT_SERIES1/director/scenario-contract.mjs
+index a073df0..5a3eb4c 100644
+--- a/BLOB_BOT_SERIES1/director/scenario-contract.mjs
++++ b/BLOB_BOT_SERIES1/director/scenario-contract.mjs
+@@ -5,7 +5,8 @@ import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compa
+ export const SCHEMA = 'blob.dev-scenario.v1';
+ export { CHECKPOINT };
+ export const ACTIVE_CHECKPOINT = '1c86d1f5a2466e218bc667d4a969a24d2be08797';
+-const scenarioCheckpoints = Object.freeze({ 1: CHECKPOINT, 2: ACTIVE_CHECKPOINT });
++export const UI03_CHECKPOINT = 'c68944ae723976273d5f2577c4d6c48d529c7362';
++const scenarioCheckpoints = Object.freeze({ 1: CHECKPOINT, 2: ACTIVE_CHECKPOINT, 3: UI03_CHECKPOINT });
+ const root = path.resolve(import.meta.dirname, '../..');
+ export const OUTCOMES = Object.freeze(['PASS', 'FAIL', 'NOT_EXERCISED', 'INVALID_SETUP', 'INCOMPATIBLE_BUILD']);
+ const text = value => typeof value === 'string' && value.length > 0;
+@@ -44,7 +45,7 @@ function record(checks) {
+ const validateShape = record({
+   schema: exact(SCHEMA),
+   id: value => typeof value === 'string' && /^dl-exp-001\.(deep|balanced|membrane)$/.test(value),
+-  revision: oneOf(1, 2),
++  revision: oneOf(1, 2, 3),
+   build: record({ checkpoint: sha }),
+   environment: record({
+     host: exact('HOST_ALPHA_WOUNDED_NURSERY'), cell: exact('CELL_SILT_PRESSURE_ROUTE_001'),
+@@ -79,6 +80,9 @@ export function validateScenario(scenario, identity = readBuildIdentity(root, AC
+   if (scenario?.schema !== undefined && scenario.schema !== SCHEMA || scenario?.revision !== undefined && !Object.hasOwn(scenarioCheckpoints, scenario.revision)) {
+     return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_SCENARIO_REVISION', errors: ['The scenario schema must be blob.dev-scenario.v1 with an admitted revision'] };
+   }
++  if (scenario?.revision === 3 && scenario.build?.checkpoint !== UI03_CHECKPOINT) {
++    return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_UI03_CHECKPOINT', errors: ['Revision 3 is scoped to the explicitly admitted UI03 checkpoint'] };
++  }
+   const errors = [];
+   if (!validateShape(scenario, errors)) return { status: 'INVALID_SETUP', errors };
+   const layout = scenario.id.split('.').at(-1);
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/balanced.json b/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/balanced.json
+new file mode 100644
+index 0000000..4a0eb0c
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/balanced.json
+@@ -0,0 +1,109 @@
++{
++  "schema": "blob.dev-scenario.v1",
++  "id": "dl-exp-001.balanced",
++  "revision": 3,
++  "build": {
++    "checkpoint": "c68944ae723976273d5f2577c4d6c48d529c7362"
++  },
++  "environment": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "receiver": "silt_porosity_shelf_front",
++    "seed": null,
++    "origin": "receiver-center-world",
++    "offset": [
++      0,
++      0,
++      1.18
++    ],
++    "facing": [
++      0,
++      0,
++      -1
++    ]
++  },
++  "authoritative": {
++    "core": {
++      "placements": [
++        "deep_core",
++        "inner_body",
++        "membrane"
++      ],
++      "reserve": 0.7,
++      "source": "existing-debug-anatomy"
++    },
++    "material": {
++      "ids": [
++        "silt-grain-01",
++        "silt-grain-02",
++        "silt-grain-03",
++        "silt-grain-04",
++        "silt-grain-05",
++        "silt-grain-06",
++        "silt-grain-07",
++        "silt-grain-08"
++      ],
++      "custody": "native-cycle",
++      "generation": 0,
++      "totalMass": 8,
++      "cycle": "dormant"
++    },
++    "regional": {
++      "progression": "fresh",
++      "receipts": 0,
++      "imprint": 0
++    },
++    "relationships": {
++      "flow": "released",
++      "attachment": "unattached",
++      "grip": "unheld"
++    }
++  },
++  "derived": {
++    "physiology": "derive-from-owner",
++    "chemistry": "derive-from-owner"
++  },
++  "presentation": {
++    "camera": "far-world",
++    "yaw": 0,
++    "pitch": 0.18,
++    "width": 768,
++    "height": 432
++  },
++  "input": {
++    "profile": "experimental-flow",
++    "standardPad": true,
++    "start": "neutral",
++    "stabilize": 0.82,
++    "demand": 0.46
++  },
++  "initialize": "mounted-silt-shelf-v1",
++  "requiredActions": [
++    "canonical_selection",
++    "analog_flow_request",
++    "accepted_current",
++    "release",
++    "recovery_window"
++  ],
++  "acceptance": {
++    "heldSeconds": 2.2,
++    "dose": 0.12,
++    "minimumDose": 0.03,
++    "objectiveLimitSeconds": 3.8,
++    "recoverySeconds": 1.3
++  },
++  "telemetry": [
++    "start",
++    "state",
++    "input",
++    "time",
++    "camera",
++    "reserve",
++    "flow",
++    "material",
++    "receipts",
++    "coverage"
++  ],
++  "reset": "fresh-disposable-browser-context",
++  "expectedDurationSeconds": 10
++}
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/deep.json b/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/deep.json
+new file mode 100644
+index 0000000..f9456ee
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/deep.json
+@@ -0,0 +1,109 @@
++{
++  "schema": "blob.dev-scenario.v1",
++  "id": "dl-exp-001.deep",
++  "revision": 3,
++  "build": {
++    "checkpoint": "c68944ae723976273d5f2577c4d6c48d529c7362"
++  },
++  "environment": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "receiver": "silt_porosity_shelf_front",
++    "seed": null,
++    "origin": "receiver-center-world",
++    "offset": [
++      0,
++      0,
++      1.18
++    ],
++    "facing": [
++      0,
++      0,
++      -1
++    ]
++  },
++  "authoritative": {
++    "core": {
++      "placements": [
++        "deep_core",
++        "deep_core",
++        "deep_core"
++      ],
++      "reserve": 0.7,
++      "source": "existing-debug-anatomy"
++    },
++    "material": {
++      "ids": [
++        "silt-grain-01",
++        "silt-grain-02",
++        "silt-grain-03",
++        "silt-grain-04",
++        "silt-grain-05",
++        "silt-grain-06",
++        "silt-grain-07",
++        "silt-grain-08"
++      ],
++      "custody": "native-cycle",
++      "generation": 0,
++      "totalMass": 8,
++      "cycle": "dormant"
++    },
++    "regional": {
++      "progression": "fresh",
++      "receipts": 0,
++      "imprint": 0
++    },
++    "relationships": {
++      "flow": "released",
++      "attachment": "unattached",
++      "grip": "unheld"
++    }
++  },
++  "derived": {
++    "physiology": "derive-from-owner",
++    "chemistry": "derive-from-owner"
++  },
++  "presentation": {
++    "camera": "far-world",
++    "yaw": 0,
++    "pitch": 0.18,
++    "width": 768,
++    "height": 432
++  },
++  "input": {
++    "profile": "experimental-flow",
++    "standardPad": true,
++    "start": "neutral",
++    "stabilize": 0.82,
++    "demand": 0.46
++  },
++  "initialize": "mounted-silt-shelf-v1",
++  "requiredActions": [
++    "canonical_selection",
++    "analog_flow_request",
++    "accepted_current",
++    "release",
++    "recovery_window"
++  ],
++  "acceptance": {
++    "heldSeconds": 2.2,
++    "dose": 0.12,
++    "minimumDose": 0.03,
++    "objectiveLimitSeconds": 3.8,
++    "recoverySeconds": 1.3
++  },
++  "telemetry": [
++    "start",
++    "state",
++    "input",
++    "time",
++    "camera",
++    "reserve",
++    "flow",
++    "material",
++    "receipts",
++    "coverage"
++  ],
++  "reset": "fresh-disposable-browser-context",
++  "expectedDurationSeconds": 10
++}
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/membrane.json b/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/membrane.json
+new file mode 100644
+index 0000000..9387371
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/membrane.json
+@@ -0,0 +1,109 @@
++{
++  "schema": "blob.dev-scenario.v1",
++  "id": "dl-exp-001.membrane",
++  "revision": 3,
++  "build": {
++    "checkpoint": "c68944ae723976273d5f2577c4d6c48d529c7362"
++  },
++  "environment": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "receiver": "silt_porosity_shelf_front",
++    "seed": null,
++    "origin": "receiver-center-world",
++    "offset": [
++      0,
++      0,
++      1.18
++    ],
++    "facing": [
++      0,
++      0,
++      -1
++    ]
++  },
++  "authoritative": {
++    "core": {
++      "placements": [
++        "membrane",
++        "membrane",
++        "membrane"
++      ],
++      "reserve": 0.7,
++      "source": "existing-debug-anatomy"
++    },
++    "material": {
++      "ids": [
++        "silt-grain-01",
++        "silt-grain-02",
++        "silt-grain-03",
++        "silt-grain-04",
++        "silt-grain-05",
++        "silt-grain-06",
++        "silt-grain-07",
++        "silt-grain-08"
++      ],
++      "custody": "native-cycle",
++      "generation": 0,
++      "totalMass": 8,
++      "cycle": "dormant"
++    },
++    "regional": {
++      "progression": "fresh",
++      "receipts": 0,
++      "imprint": 0
++    },
++    "relationships": {
++      "flow": "released",
++      "attachment": "unattached",
++      "grip": "unheld"
++    }
++  },
++  "derived": {
++    "physiology": "derive-from-owner",
++    "chemistry": "derive-from-owner"
++  },
++  "presentation": {
++    "camera": "far-world",
++    "yaw": 0,
++    "pitch": 0.18,
++    "width": 768,
++    "height": 432
++  },
++  "input": {
++    "profile": "experimental-flow",
++    "standardPad": true,
++    "start": "neutral",
++    "stabilize": 0.82,
++    "demand": 0.46
++  },
++  "initialize": "mounted-silt-shelf-v1",
++  "requiredActions": [
++    "canonical_selection",
++    "analog_flow_request",
++    "accepted_current",
++    "release",
++    "recovery_window"
++  ],
++  "acceptance": {
++    "heldSeconds": 2.2,
++    "dose": 0.12,
++    "minimumDose": 0.03,
++    "objectiveLimitSeconds": 3.8,
++    "recoverySeconds": 1.3
++  },
++  "telemetry": [
++    "start",
++    "state",
++    "input",
++    "time",
++    "camera",
++    "reserve",
++    "flow",
++    "material",
++    "receipts",
++    "coverage"
++  ],
++  "reset": "fresh-disposable-browser-context",
++  "expectedDurationSeconds": 10
++}
+diff --git a/BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs b/BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs
+new file mode 100644
+index 0000000..72fe2dd
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs
+@@ -0,0 +1,34 @@
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import test from 'node:test';
++import {ACTIVE_CHECKPOINT,UI03_CHECKPOINT,loadScenario,validateScenario} from './scenario-contract.mjs';
++import {readBuildIdentity} from './build-compatibility.mjs';
++
++const root=path.resolve(import.meta.dirname,'../..');
++const identity=readBuildIdentity(root,UI03_CHECKPOINT);
++const inherited=readBuildIdentity(root,ACTIVE_CHECKPOINT);
++const scenario=(layout,newMode=false)=>new URL('./scenarios/'+(newMode?'ui03-revision-3/':'')+layout+'.json',import.meta.url);
++test('revision three retains all three accepted workloads and admits only UI03 fingerprint',async()=>{
++  assert.equal(identity.gameplayFingerprint,identity.requiredGameplayFingerprint);
++  assert.notEqual(identity.gameplayFingerprint,inherited.requiredGameplayFingerprint);
++  for(const layout of ['deep','balanced','membrane']){
++    const newSetup=await loadScenario(scenario(layout,true),identity);
++    assert.equal(newSetup.status,'PASS');
++    const oldSetup=JSON.parse(fs.readFileSync(scenario(layout)));
++    assert.deepEqual({...newSetup.scenario,revision:oldSetup.revision,build:oldSetup.build},oldSetup);
++  }
++});
++test('old revision rejects this source and revision three rejects old checkpoint',async()=>{
++  const old=await loadScenario(scenario('balanced'),inherited);
++  assert.equal(old.code,'GAMEPLAY_FINGERPRINT_MISMATCH');
++  const revised=JSON.parse(fs.readFileSync(scenario('balanced',true)));
++  assert.equal(validateScenario({...revised,build:{checkpoint:ACTIVE_CHECKPOINT}},identity).code,'UNSUPPORTED_UI03_CHECKPOINT');
++  assert.equal(validateScenario({...revised,revision:4},identity).code,'UNSUPPORTED_SCENARIO_REVISION');
++});
++test('revision three still rejects dirty bytes, fingerprint drift and foreign ancestry',async()=>{
++  const revised=JSON.parse(fs.readFileSync(scenario('balanced',true)));
++  assert.equal(validateScenario(revised,{...identity,workingGameplayDifferences:['src/ui/PlaytestHudSystem.js']}).code,'MODIFIED_GAMEPLAY_INPUTS');
++  assert.equal(validateScenario(revised,{...identity,gameplayFingerprint:inherited.requiredGameplayFingerprint}).code,'GAMEPLAY_FINGERPRINT_MISMATCH');
++  assert.equal(validateScenario(revised,{...identity,gameplayAncestry:false}).code,'BASELINE_ANCESTRY_MISMATCH');
++});

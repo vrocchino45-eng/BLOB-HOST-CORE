@@ -21,3 +21,7 @@
 ## Wave 07
 
 [Version 1](wave-07/v1/README.md) presents the verified IN01 publication, material and momentum contracts, isolated HUD candidate, run profiling, and hosted CI evidence. [Machine index](wave-07/v1/index.json) · [Recordings](wave-07/v1/recordings.json).
+
+## Wave 08
+
+[Version 1](wave-08/v1/README.md) records numerical foundations, measured Silt calibration, the local UI03 checkpoint, transparent rendering A/B probes, and hosted CI03. [Machine index](wave-08/v1/index.json) · [Recordings](wave-08/v1/recordings.json).

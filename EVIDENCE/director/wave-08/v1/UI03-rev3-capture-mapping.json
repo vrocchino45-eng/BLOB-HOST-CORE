@@ -1,0 +1,286 @@
+{
+  "build": {
+    "commit": "c68944ae723976273d5f2577c4d6c48d529c7362",
+    "gameplayCheckpoint": "c68944ae723976273d5f2577c4d6c48d529c7362",
+    "gameplayAncestry": true,
+    "gameplayFingerprint": "f79584e22f77f8fa7f246dbafb1505f8df2c54b9ff2ecba45e9bd40940995e59",
+    "requiredGameplayFingerprint": "f79584e22f77f8fa7f246dbafb1505f8df2c54b9ff2ecba45e9bd40940995e59",
+    "workingGameplayDifferences": [],
+    "toolingRevision": "1452a26bf40b50acfc4b48e1b3a0704cb7777e0dbe7ca314021e9c70bc0ffec5"
+  },
+  "scenarioRevisions": [
+    {
+      "id": "dl-exp-001.deep",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 3
+    },
+    {
+      "id": "dl-exp-001.balanced",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 3
+    },
+    {
+      "id": "dl-exp-001.membrane",
+      "schema": "blob.dev-scenario.v1",
+      "revision": 3
+    }
+  ],
+  "webm": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 26,
+          "substep": 1
+        },
+        "simSeconds": 3.0136000003814702,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 11357.39999961853,
+        "captureWallMs": 11455.699999809265,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 0.314,
+        "marker": 2,
+        "renderDelayMs": 98.30000019073486,
+        "ptsResidualMs": -51.60000038146973,
+        "eventToFrameMs": 46.69999980926514,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 28,
+          "substep": 2
+        },
+        "simSeconds": 3.3608999996185296,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 11982.699999809265,
+        "captureWallMs": 12055.5,
+        "encodedFrameObserved": 4,
+        "ptsSeconds": 0.913,
+        "marker": 4,
+        "renderDelayMs": 72.80000019073486,
+        "ptsResidualMs": -52.40000057220459,
+        "eventToFrameMs": 20.399999618530273,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 30,
+          "substep": 2
+        },
+        "simSeconds": 3.6156999998092636,
+        "action": 1,
+        "consequence": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 30,
+          "substep": 2,
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1,
+          "actionSequence": 1,
+          "receiverId": "silt_porosity_shelf_front",
+          "siteId": "silt_porosity_shelf",
+          "owner": "silt:RegionalTerritoryExpansion",
+          "conductivity01": 0.72,
+          "resistance01": 0.40730953421496696,
+          "profile": {
+            "topologyId": "three_way_balance",
+            "phaseCount": 3,
+            "reserve01": 0.683,
+            "stability": 1.017,
+            "recovery": 1.067,
+            "enduranceCapacity": 1.107
+          },
+          "acceptedCurrent01": 0.14898343056677157,
+          "pressure01": 0.1042884013967401,
+          "before": {
+            "imprint": 0.23606,
+            "strain": 0,
+            "void": 0
+          },
+          "after": {
+            "imprint": 0.23722891943588573,
+            "strain": 0,
+            "void": 0
+          },
+          "retainedDuringSession": true,
+          "materialTransferred": 0,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        "eventWallMs": 12224.89999961853,
+        "captureWallMs": 12277.79999923706,
+        "encodedFrameObserved": 6,
+        "ptsSeconds": 1.14,
+        "marker": 6,
+        "renderDelayMs": 52.89999961853027,
+        "ptsResidualMs": -47.69999980926525,
+        "eventToFrameMs": 5.199999809265023,
+        "status": "WITHIN_100_MS"
+      }
+    ],
+    "captured": 29,
+    "encodedMarkers": 22,
+    "missingCapturedMarkers": [
+      7,
+      8,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "maxAbsPtsResidualMs": 53.60000038146973,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 2,
+    "codec": "video/webm;codecs=vp8,opus",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  },
+  "mp4": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 26,
+          "substep": 1
+        },
+        "simSeconds": 3.0136000003814702,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 11357.39999961853,
+        "captureWallMs": 11455.699999809265,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 0.157433,
+        "marker": 2,
+        "renderDelayMs": 98.30000019073486,
+        "ptsResidualMs": -51.167000381469734,
+        "eventToFrameMs": 47.13299980926513,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 28,
+          "substep": 2
+        },
+        "simSeconds": 3.3608999996185296,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 11982.699999809265,
+        "captureWallMs": 12055.5,
+        "encodedFrameObserved": 4,
+        "ptsSeconds": 0.756067,
+        "marker": 4,
+        "renderDelayMs": 72.80000019073486,
+        "ptsResidualMs": -52.33300057220458,
+        "eventToFrameMs": 20.46699961853028,
+        "status": "WITHIN_100_MS"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 30,
+          "substep": 2
+        },
+        "simSeconds": 3.6156999998092636,
+        "action": 1,
+        "consequence": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 30,
+          "substep": 2,
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1,
+          "actionSequence": 1,
+          "receiverId": "silt_porosity_shelf_front",
+          "siteId": "silt_porosity_shelf",
+          "owner": "silt:RegionalTerritoryExpansion",
+          "conductivity01": 0.72,
+          "resistance01": 0.40730953421496696,
+          "profile": {
+            "topologyId": "three_way_balance",
+            "phaseCount": 3,
+            "reserve01": 0.683,
+            "stability": 1.017,
+            "recovery": 1.067,
+            "enduranceCapacity": 1.107
+          },
+          "acceptedCurrent01": 0.14898343056677157,
+          "pressure01": 0.1042884013967401,
+          "before": {
+            "imprint": 0.23606,
+            "strain": 0,
+            "void": 0
+          },
+          "after": {
+            "imprint": 0.23722891943588573,
+            "strain": 0,
+            "void": 0
+          },
+          "retainedDuringSession": true,
+          "materialTransferred": 0,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        "eventWallMs": 12224.89999961853,
+        "captureWallMs": 12277.79999923706,
+        "encodedFrameObserved": 6,
+        "ptsSeconds": 0.9837,
+        "marker": 6,
+        "renderDelayMs": 52.89999961853027,
+        "ptsResidualMs": -46.99999980926509,
+        "eventToFrameMs": 5.899999809265182,
+        "status": "WITHIN_100_MS"
+      }
+    ],
+    "captured": 29,
+    "encodedMarkers": 22,
+    "missingCapturedMarkers": [
+      7,
+      8,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "maxAbsPtsResidualMs": 53.13300038146963,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 2,
+    "codec": "video/mp4;codecs=avc1.42001f,mp4a.40.2",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  }
+}

@@ -1,0 +1,1026 @@
+{
+  "schema": "blob.mp03-calibration.v1",
+  "revision": 1,
+  "status": "proposed-runtime-pair-measured-baseline",
+  "build": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "numericalRevision": 1,
+  "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+  "host": "HOST_ALPHA_WOUNDED_NURSERY",
+  "sampledMount": 1,
+  "transform": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "rotation": [
+      0,
+      0,
+      0,
+      1
+    ]
+  },
+  "admittedPairs": [],
+  "proposedPair": [
+    "silt-grain-01",
+    "silt-grain-02"
+  ],
+  "proposedRadiusLw": {
+    "silt-grain-01": 0.06,
+    "silt-grain-02": 0.06
+  },
+  "proposedMassMr": [
+    {
+      "silt-grain-01": 1,
+      "silt-grain-02": 1
+    },
+    {
+      "silt-grain-01": 1,
+      "silt-grain-02": 3
+    }
+  ],
+  "geometryProvenance": "Route-local centers and D11B shape are runtime measurements. Spheres are hypothetical centered proxies, using 0.12 Lw combined reach in a measured clear test corridor. Visual mesh dimensions are contextual only.",
+  "firstGrip": {
+    "id": "silt-grain-01",
+    "generation": 0,
+    "phase": "veins",
+    "owner": "grip",
+    "free": null,
+    "presentationCenter": [
+      1.1769058876793261,
+      -0.4202107617023887,
+      -12.227191667128672
+    ],
+    "visible": true,
+    "geometryId": "IcosahedronGeometry",
+    "displayScale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "firstRelease": {
+    "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+    "mountSequence": 1,
+    "unitId": "silt-grain-01",
+    "generation": 0,
+    "frame": 223,
+    "substep": 0,
+    "chargeSequence": 1,
+    "charge01": 0.5070921985815612,
+    "intendedTargetId": null,
+    "actualRecipientId": null,
+    "releaseDirection": [
+      0,
+      0.999999995,
+      -0.00009999999949994454
+    ],
+    "releasePosition": [
+      1.1769,
+      -0.4202,
+      -12.2272
+    ],
+    "releaseVelocity": [
+      0,
+      0.8482,
+      -0.0001
+    ],
+    "releaseDecisionSequence": 6
+  },
+  "firstObservations": [
+    {
+      "seconds": 8.433333333333332,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          3.775107738352401,
+          -0.6556889574424923,
+          -13.48374407749352
+        ],
+        "velocity": [
+          0.8654742836987389,
+          -0.22945206803797175,
+          -0.6861026423688575
+        ]
+      },
+      "presentationCenter": [
+        3.775107738352401,
+        -0.6556889574424923,
+        -13.48374407749352
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 8.533333333333337,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          3.8614599147256246,
+          -0.6773387680190993,
+          -13.55354716341593
+        ],
+        "velocity": [
+          0.8620557687091043,
+          -0.20725076826642916,
+          -0.7064891374079345
+        ]
+      },
+      "presentationCenter": [
+        3.8614599147256246,
+        -0.6773387680190993,
+        -13.55354716341593
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 8.633333333333342,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          3.9474409183959676,
+          -0.6967766904403007,
+          -13.625361758537041
+        ],
+        "velocity": [
+          0.8581386594390439,
+          -0.1852294989254078,
+          -0.7264028552566164
+        ]
+      },
+      "presentationCenter": [
+        3.9474409183959676,
+        -0.6967766904403007,
+        -13.625361758537041
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 8.733333333333347,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.033002457730462,
+          -0.7140366457322378,
+          -13.699137494789563
+        ],
+        "velocity": [
+          0.8537489678970123,
+          -0.16365868725920346,
+          -0.745791259947764
+        ]
+      },
+      "presentationCenter": [
+        4.033002457730462,
+        -0.7140366457322378,
+        -13.699137494789563
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 8.833333333333352,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.118098499532694,
+          -0.7291784713399208,
+          -13.774818934993505
+        ],
+        "velocity": [
+          0.8489069686443398,
+          -0.14278882912696003,
+          -0.764604970332525
+        ]
+      },
+      "presentationCenter": [
+        4.118098499532694,
+        -0.7291784713399208,
+        -13.774818934993505
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 8.933333333333357,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.202684757184513,
+          -0.7422856763331008,
+          -13.852345884001801
+        ],
+        "velocity": [
+          0.8436282831152054,
+          -0.12284624428615605,
+          -0.7827976782024736
+        ]
+      },
+      "presentationCenter": [
+        4.202684757184513,
+        -0.7422856763331008,
+        -13.852345884001801
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.033333333333362,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.286718296405452,
+          -0.7534628033145531,
+          -13.931653688581921
+        ],
+        "velocity": [
+          0.8379251169196242,
+          -0.10402937920435752,
+          -0.8003260139920374
+        ]
+      },
+      "presentationCenter": [
+        4.286718296405452,
+        -0.7534628033145531,
+        -13.931653688581921
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.133333333333367,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.3701572720014425,
+          -0.7628324570143943,
+          -14.01267352089879
+        ],
+        "velocity": [
+          0.8318076168339202,
+          -0.08650574517315535,
+          -0.8171493617745677
+        ]
+      },
+      "presentationCenter": [
+        4.3701572720014425,
+        -0.7628324570143943,
+        -14.01267352089879
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.233333333333372,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.452960805542032,
+          -0.7705320674899968,
+          -14.09533264058266
+        ],
+        "velocity": [
+          0.8252853124822594,
+          -0.07040956478421263,
+          -0.8332296243723144
+        ]
+      },
+      "presentationCenter": [
+        4.452960805542032,
+        -0.7705320674899968,
+        -14.09533264058266
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.333333333333377,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.535089010327713,
+          -0.7767104622018094,
+          -14.179554630401094
+        ],
+        "velocity": [
+          0.8183686064332136,
+          -0.05584018321406376,
+          -0.8485309386221043
+        ]
+      },
+      "presentationCenter": [
+        4.535089010327713,
+        -0.7767104622018094,
+        -14.179554630401094
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.433333333333382,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.6165031663258445,
+          -0.7815243258333827,
+          -14.265259600520636
+        ],
+        "velocity": [
+          0.8110702755334299,
+          -0.04286128264014439,
+          -0.8630193402165554
+        ]
+      },
+      "presentationCenter": [
+        4.6165031663258445,
+        -0.7815243258333827,
+        -14.265259600520636
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.533333333333387,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.69716604399948,
+          -0.7851346294422507,
+          -14.352364356260136
+        ],
+        "velocity": [
+          0.8034069457194702,
+          -0.03150091889363611,
+          -0.8766623771397646
+        ]
+      },
+      "presentationCenter": [
+        4.69716604399948,
+        -0.7851346294422507,
+        -14.352364356260136
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.633333333333391,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.777042372156531,
+          -0.7877031112830679,
+          -14.440782524131633
+        ],
+        "velocity": [
+          0.7954005022203191,
+          -0.021752379580839174,
+          -0.8894286706307977
+        ]
+      },
+      "presentationCenter": [
+        4.777042372156531,
+        -0.7877031112830679,
+        -14.440782524131633
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.733333333333396,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.855675945327943,
+          -0.7893549639939548,
+          -14.530224354424288
+        ],
+        "velocity": [
+          0.7790311472517365,
+          -0.01279045532146027,
+          -0.896480465167519
+        ]
+      },
+      "presentationCenter": [
+        4.855675945327943,
+        -0.7893549639939548,
+        -14.530224354424288
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.833333333333401,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          4.932337810736681,
+          -0.7901169722485749,
+          -14.619754919000234
+        ],
+        "velocity": [
+          0.7570119084812852,
+          -0.003950297311271764,
+          -0.8930595440768526
+        ]
+      },
+      "presentationCenter": [
+        4.932337810736681,
+        -0.7901169722485749,
+        -14.619754919000234
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 9.933333333333406,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          5.00649925683713,
+          -0.7900066474362083,
+          -14.708367106678228
+        ],
+        "velocity": [
+          0.7299573272923363,
+          0.004677302427605532,
+          -0.8798562279424554
+        ]
+      },
+      "presentationCenter": [
+        5.00649925683713,
+        -0.7900066474362083,
+        -14.708367106678228
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 10.033333333333411,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          5.077690006371151,
+          -0.7890503112756414,
+          -14.79512349969907
+        ],
+        "velocity": [
+          0.698430464798378,
+          0.013006093479210902,
+          -0.8575711834013054
+        ]
+      },
+      "presentationCenter": [
+        5.077690006371151,
+        -0.7890503112756414,
+        -14.79512349969907
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 10.133333333333416,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          5.145493164473192,
+          -0.7872826663718189,
+          -14.87915697234845
+        ],
+        "velocity": [
+          0.662944659254149,
+          0.020954003849913746,
+          -0.8269082744701494
+        ]
+      },
+      "presentationCenter": [
+        5.145493164473192,
+        -0.7872826663718189,
+        -14.87915697234845
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 10.233333333333421,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          5.209540415727069,
+          -0.784746373545657,
+          -14.959670760621155
+        ],
+        "velocity": [
+          0.6239662939256162,
+          0.028443252881612813,
+          -0.7885702213352803
+        ]
+      },
+      "presentationCenter": [
+        5.209540415727069,
+        -0.784746373545657,
+        -14.959670760621155
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "seconds": 10.333333333333426,
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          5.269507450013871,
+          -0.7814916050113097,
+          -15.035938087186413
+        ],
+        "velocity": [
+          0.5819169338629052,
+          0.03540070423758766,
+          -0.7432543812886838
+        ]
+      },
+      "presentationCenter": [
+        5.269507450013871,
+        -0.7814916050113097,
+        -15.035938087186413
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "secondNatural": {
+    "id": "silt-grain-02",
+    "generation": 0,
+    "phase": "veins",
+    "owner": "environment",
+    "free": null,
+    "presentationCenter": [
+      1.195602523403615,
+      -0.3141588961865029,
+      -12.206879690146696
+    ],
+    "visible": true,
+    "geometryId": "IcosahedronGeometry",
+    "displayScale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "secondGrip": {
+    "id": "silt-grain-02",
+    "generation": 0,
+    "phase": "veins",
+    "owner": "grip",
+    "free": null,
+    "presentationCenter": [
+      3.043773933553252,
+      -0.8496694747046966,
+      -12.92668882457446
+    ],
+    "visible": true,
+    "geometryId": "IcosahedronGeometry",
+    "displayScale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "secondRelease": {
+    "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+    "mountSequence": 1,
+    "unitId": "silt-grain-02",
+    "generation": 0,
+    "frame": 678,
+    "substep": 0,
+    "chargeSequence": 2,
+    "charge01": 0.5070921985815612,
+    "intendedTargetId": null,
+    "actualRecipientId": null,
+    "releaseDirection": [
+      1,
+      0,
+      -2.220446049250313e-16
+    ],
+    "releasePosition": [
+      3.0438,
+      -0.8497,
+      -12.9267
+    ],
+    "releaseVelocity": [
+      0.8482,
+      0,
+      0
+    ],
+    "releaseDecisionSequence": 8
+  },
+  "releasedPair": {
+    "first": {
+      "id": "silt-grain-01",
+      "generation": 0,
+      "phase": "garden_transit",
+      "owner": "environment",
+      "free": {
+        "position": [
+          5.595732854247434,
+          -0.7256278440268897,
+          -15.452266147569265
+        ],
+        "velocity": [
+          0.06657922484177546,
+          0.06493908590224355,
+          -0.06471038318033741
+        ]
+      },
+      "presentationCenter": [
+        5.595732854247434,
+        -0.7256278440268897,
+        -15.452266147569265
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "second": {
+      "id": "silt-grain-02",
+      "generation": 0,
+      "phase": "veins",
+      "owner": "environment",
+      "free": {
+        "position": [
+          3.0715321322209426,
+          -0.8496686624624108,
+          -12.926692500657964
+        ],
+        "velocity": [
+          0.8276553418806252,
+          0.00003669051484081906,
+          -0.00016538069535668558
+        ]
+      },
+      "presentationCenter": [
+        3.0715321322209426,
+        -0.8496686624624108,
+        -12.926692500657964
+      ],
+      "visible": true,
+      "geometryId": "IcosahedronGeometry",
+      "displayScale": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "secondRetrieval": {
+    "id": "silt-grain-02",
+    "generation": 0,
+    "phase": "veins",
+    "owner": "grip",
+    "free": null,
+    "presentationCenter": [
+      3.085159232415847,
+      -0.8496674210951285,
+      -12.926698007125212
+    ],
+    "visible": true,
+    "geometryId": "IcosahedronGeometry",
+    "displayScale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "observedPairSeparationLw": 3.5728836610908647,
+  "nativeLimits": {
+    "speedLwPerSecond": 2.1,
+    "accelerationLwPerSecond2": 1.8,
+    "microstepSeconds": 0.025
+  },
+  "collider": {
+    "id": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+    "center": [
+      -0.18,
+      -0.75,
+      -2.65
+    ],
+    "radii": [
+      1.35,
+      0.24,
+      0.95
+    ]
+  },
+  "corridor": {
+    "seed": {
+      "positionA": [
+        2.7238,
+        -0.8497,
+        -12.9267
+      ],
+      "positionB": [
+        3.0438,
+        -0.8497,
+        -12.9267
+      ],
+      "velocityA": [
+        1,
+        0,
+        0
+      ],
+      "velocityB": [
+        0,
+        0,
+        0
+      ],
+      "radiusA": 0.06,
+      "radiusB": 0.06,
+      "seconds": 0.33
+    },
+    "nearMiss": {
+      "positionA": [
+        2.7238,
+        -0.8497,
+        -12.9267
+      ],
+      "positionB": [
+        3.0438,
+        -0.7097,
+        -12.9267
+      ],
+      "velocityA": [
+        1,
+        0,
+        0
+      ],
+      "velocityB": [
+        0,
+        0,
+        0
+      ],
+      "radiusA": 0.06,
+      "radiusB": 0.06,
+      "seconds": 0.33
+    },
+    "pathEnd": [
+      3.0538000000000003,
+      -0.8497,
+      -12.9267
+    ],
+    "surfaceClearanceLowerBound": 2.408921945387181,
+    "nearMissRecipientSurfaceClearance": 2.4190305464726785,
+    "support": "Computational clearance against the existing fixed ellipsoid. No runtime pair fixture applied.",
+    "ingress": {
+      "reason": "ingress",
+      "seconds": 0.19999999999999984,
+      "normal": [
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "testedForceScope": "Force-free analytical stage only. External native drive and drag remain owner state.",
+  "analyticalTraces": [
+    {
+      "massA": 1,
+      "massB": 1,
+      "applied": true,
+      "outgoingA": [
+        0.5,
+        0,
+        0
+      ],
+      "outgoingB": [
+        0.5,
+        0,
+        0
+      ],
+      "momentumBefore": [
+        1,
+        0,
+        0
+      ],
+      "momentumAfter": [
+        1,
+        0,
+        0
+      ],
+      "energyBefore": 0.5,
+      "energyAfter": 0.25,
+      "normalImpulse": 0.5
+    },
+    {
+      "massA": 1,
+      "massB": 3,
+      "applied": true,
+      "outgoingA": [
+        0.25,
+        0,
+        0
+      ],
+      "outgoingB": [
+        0.25,
+        0,
+        0
+      ],
+      "momentumBefore": [
+        1,
+        0,
+        0
+      ],
+      "momentumAfter": [
+        1,
+        0,
+        0
+      ],
+      "energyBefore": 0.5,
+      "energyAfter": 0.125,
+      "normalImpulse": 0.75
+    }
+  ],
+  "ledgerUnits": 8,
+  "ledgerRecordCount": 8,
+  "existingHostReceipts": 2,
+  "runtimeCases": {
+    "twoBodyContacts": "BLOCKED_PENDING_EXPLICIT_ADMISSION",
+    "nearMiss": "ANALYTICAL_ONLY",
+    "retrieval": "BASELINE_GRIP_OF_SECOND_IDENTITY_ONLY",
+    "pairedForces": "UNIMPLEMENTED"
+  },
+  "proposedSeparationMarginLw": 0.001,
+  "proposedTieWindowSeconds": 0.00001,
+  "tiePolicy": "Reject candidate pair if native fixed-surface hit overlaps or is within an approved time-of-impact ambiguity window; preserve existing PI03 behavior.",
+  "lifecycle": "Candidate keyed by unordered pair plus both release IDs/generations and Host/cell/mount. Dedup until measured separation past authored clearance. Reacquisition invalidates old contact entirely. Remount needs fresh eligibility."
+}

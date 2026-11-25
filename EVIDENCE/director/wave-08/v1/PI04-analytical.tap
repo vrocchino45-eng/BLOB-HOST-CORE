@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: equal masses produce 0.5:0.5 and preserve one momentum unit
+ok 1 - equal masses produce 0.5:0.5 and preserve one momentum unit
+  ---
+  duration_ms: 15.3468
+  type: 'test'
+  ...
+# Subtest: one-to-three masses produce 0.25:0.25 and conserve momentum
+ok 2 - one-to-three masses produce 0.25:0.25 and conserve momentum
+  ---
+  duration_ms: 1.1565
+  type: 'test'
+  ...
+# Subtest: oblique velocities keep every tangential component
+ok 3 - oblique velocities keep every tangential component
+  ---
+  duration_ms: 6.9625
+  type: 'test'
+  ...
+# Subtest: reversed participant ordering gives the same solutions and absolute hit time
+ok 4 - reversed participant ordering gives the same solutions and absolute hit time
+  ---
+  duration_ms: 4.0125
+  type: 'test'
+  ...
+# Subtest: sweep admits an actual entry at 0.20 seconds and rejects a geometric near miss
+ok 5 - sweep admits an actual entry at 0.20 seconds and rejects a geometric near miss
+  ---
+  duration_ms: 1.3343
+  type: 'test'
+  ...
+# Subtest: initial overlap, separating moves, tangency and later intersection are distinct
+ok 6 - initial overlap, separating moves, tangency and later intersection are distinct
+  ---
+  duration_ms: 1.5152
+  type: 'test'
+  ...
+# Subtest: split common intervals give the same ingress time for force-free motion
+ok 7 - split common intervals give the same ingress time for force-free motion
+  ---
+  duration_ms: 1.1696
+  type: 'test'
+  ...
+# Subtest: invalid, nonfinite and unrepresentable inputs fail closed
+ok 8 - invalid, nonfinite and unrepresentable inputs fail closed
+  ---
+  duration_ms: 5.6652
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1175.8204

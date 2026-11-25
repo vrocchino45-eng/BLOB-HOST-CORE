@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: projection preserves owner bytes and separates unconfirmed candidates and retained history
+ok 1 - projection preserves owner bytes and separates unconfirmed candidates and retained history
+  ---
+  duration_ms: 28.4357
+  type: 'test'
+  ...
+# Subtest: ordinary RT remains Absorb and the Flow publication stays absent
+ok 2 - ordinary RT remains Absorb and the Flow publication stays absent
+  ---
+  duration_ms: 663.107
+  type: 'test'
+  ...
+# Subtest: real Flow publishes only the current receiver-confirmed sample and retains its history
+ok 3 - real Flow publishes only the current receiver-confirmed sample and retains its history
+  ---
+  duration_ms: 783.4336
+  type: 'test'
+  ...
+# Subtest: material acquisition, launch, actual contact, remount and retrieval keep their distinct truth
+ok 4 - material acquisition, launch, actual contact, remount and retrieval keep their distinct truth
+  ---
+  duration_ms: 1624.4579
+  type: 'test'
+  ...
+# Subtest: inspection and Core Work suppress live world information while retaining layout
+ok 5 - inspection and Core Work suppress live world information while retaining layout
+  ---
+  duration_ms: 216.2992
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7626.8144

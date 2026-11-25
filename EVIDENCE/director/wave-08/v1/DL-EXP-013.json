@@ -1,0 +1,125 @@
+{
+  "schema": "blob.director.numerical-experiment.v1",
+  "id": "DL-EXP-013",
+  "revision": 1,
+  "source": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "acceptedRuntimeScenarioRevision": 2,
+  "numericalContract": {
+    "file": "NF02-contract.json",
+    "revision": 1,
+    "status": "proposed"
+  },
+  "materialCalibration": {
+    "file": "MP03-calibration.json",
+    "revision": 1,
+    "status": "measured-and-proposed"
+  },
+  "pair": {
+    "ids": [
+      "silt-grain-01",
+      "silt-grain-02"
+    ],
+    "scope": "CELL_SILT_PRESSURE_ROUTE_001 / HOST_ALPHA_WOUNDED_NURSERY",
+    "inventoryPerGrain": 1,
+    "totalInventory": 8,
+    "proposedRadiusLw": [
+      0.06,
+      0.06
+    ],
+    "admittedRuntimePairs": []
+  },
+  "fixture": {
+    "momentumTolerance": {
+      "absolute": 1e-12,
+      "relative": 1e-12
+    },
+    "normalRestitution": 0,
+    "tangentImpulse": 0,
+    "matrix": [
+      {
+        "id": "equal",
+        "massMr": [
+          1,
+          1
+        ],
+        "vBefore": [
+          1,
+          0
+        ],
+        "vAfter": [
+          0.5,
+          0.5
+        ],
+        "pBefore": 1,
+        "pAfter": 1,
+        "energyBefore": 0.5,
+        "energyAfter": 0.25,
+        "normalizedNormalImpulse": 0.5
+      },
+      {
+        "id": "one-to-three",
+        "massMr": [
+          1,
+          3
+        ],
+        "vBefore": [
+          1,
+          0
+        ],
+        "vAfter": [
+          0.25,
+          0.25
+        ],
+        "pBefore": 1,
+        "pAfter": 1,
+        "energyBefore": 0.5,
+        "energyAfter": 0.125,
+        "normalizedNormalImpulse": 0.75
+      }
+    ],
+    "scope": "Closed analytical normal impulse only. No runtime receiver, native force, receipt, or progression observation is generated here."
+  },
+  "comparisons": [
+    {
+      "id": "direct-ingress",
+      "status": "ANALYTICAL_PASS",
+      "expect": "actual mathematical intersection at 0.20 Ts. No runtime contact."
+    },
+    {
+      "id": "near-miss",
+      "status": "ANALYTICAL_PASS",
+      "minimumSurfaceGapLw": 0.02,
+      "expect": "no impulse"
+    },
+    {
+      "id": "tangential-component",
+      "status": "ANALYTICAL_PASS",
+      "expect": "unchanged tangent; pure tangency has no compressive impulse"
+    },
+    {
+      "id": "repeat-contact",
+      "status": "BLOCKED_RUNTIME_ADMISSION",
+      "expect": "one delivery per continuous contact then fresh delivery only on measured separation"
+    },
+    {
+      "id": "retrieval",
+      "status": "BASELINE_WITNESS_ONLY",
+      "expect": "02 retains baseline custody after real independent grip and release; both after a pair requires the runtime gate"
+    }
+  ],
+  "requiredRuntimeWitness": [
+    "source ids, generations, release identities",
+    "Host/cell/mount/step/microstep and TOI",
+    "pre- and post-pair stage velocities",
+    "normal, contact point and actual recipient",
+    "momentum and energy with external forces recorded separately",
+    "unchanged progression and Host receipt ledger during the pair event",
+    "eight inventory units and identity parity"
+  ],
+  "otherExperiments": {
+    "DL_EXP_010": "partial: existing authored fixed response and geometric negative control only",
+    "DL_EXP_011": "partial: authored surface-eligibility witness only",
+    "DL_EXP_012": "blocked: no approved same-identity condition authority"
+  },
+  "captureClass": "No mounted two-body runtime recording or human acceptance."
+}

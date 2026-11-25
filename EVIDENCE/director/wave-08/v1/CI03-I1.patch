@@ -1,0 +1,450 @@
+diff --git a/.github/workflows/blob-ci03.yml b/.github/workflows/blob-ci03.yml
+new file mode 100644
+index 0000000..abef188
+--- /dev/null
++++ b/.github/workflows/blob-ci03.yml
+@@ -0,0 +1,33 @@
++name: BLOB CI03 IN01 deterministic verification
++on:
++  push:
++    branches: [candidate/ci03-i1]
++permissions:
++  contents: read
++jobs:
++  node-verification:
++    runs-on: ubuntu-24.04
++    timeout-minutes: 20
++    steps:
++      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
++        with:
++          persist-credentials: false
++          fetch-depth: 0
++      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
++        with:
++          node-version: '24.14.0'
++          cache: npm
++      - name: Install from the committed lockfile
++        run: node scripts/ci02-verify.mjs --install
++      - name: Run deterministic tests and build
++        run: node scripts/ci02-verify.mjs CI03_RESULTS --numerical
++      - name: Upload verification evidence
++        if: always()
++        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        with:
++          name: blob-ci03-${{ github.sha }}
++          path: |
++            CI03_RESULTS/*.log
++            CI03_RESULTS/summary.json
++          if-no-files-found: warn
++          retention-days: 14
+diff --git a/BLOB_BOT_SERIES1/director/numerics/NF02-contract.json b/BLOB_BOT_SERIES1/director/numerics/NF02-contract.json
+new file mode 100644
+index 0000000..d03b28c
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/numerics/NF02-contract.json
+@@ -0,0 +1,154 @@
++{
++  "schema": "blob.numerical-contract.v1",
++  "revision": 1,
++  "status": "proposed",
++  "governingSource": "462f1278ea069b41b4c0216335f4bb9363ee38af",
++  "mechanicalBases": [
++    "Lw",
++    "Mr",
++    "Ts"
++  ],
++  "exponentOrder": [
++    "length",
++    "mass",
++    "time"
++  ],
++  "inventoryUnit": "Q",
++  "SI": {
++    "metersPerLw": null,
++    "kilogramsPerMr": null,
++    "secondsPerTs": 1
++  },
++  "dimensionVectors": {
++    "length": [
++      1,
++      0,
++      0
++    ],
++    "area": [
++      2,
++      0,
++      0
++    ],
++    "volume": [
++      3,
++      0,
++      0
++    ],
++    "time": [
++      0,
++      0,
++      1
++    ],
++    "mass": [
++      0,
++      1,
++      0
++    ],
++    "density": [
++      -3,
++      1,
++      0
++    ],
++    "velocity": [
++      1,
++      0,
++      -1
++    ],
++    "acceleration": [
++      1,
++      0,
++      -2
++    ],
++    "momentum": [
++      1,
++      1,
++      -1
++    ],
++    "impulse": [
++      1,
++      1,
++      -1
++    ],
++    "force": [
++      1,
++      1,
++      -2
++    ],
++    "angularMomentum": [
++      2,
++      1,
++      -1
++    ],
++    "torque": [
++      2,
++      1,
++      -2
++    ],
++    "energy": [
++      2,
++      1,
++      -2
++    ],
++    "power": [
++      2,
++      1,
++      -3
++    ],
++    "pressure": [
++      -1,
++      1,
++      -2
++    ],
++    "frequency": [
++      0,
++      0,
++      -1
++    ],
++    "linearDamping": [
++      0,
++      0,
++      -1
++    ],
++    "dynamicViscosity": [
++      -1,
++      1,
++      -1
++    ],
++    "frictionCoefficient": [
++      0,
++      0,
++      0
++    ],
++    "restitution": [
++      0,
++      0,
++      0
++    ]
++  },
++  "ownerIndices": [
++    "pressure01",
++    "conductivity01",
++    "resistance01",
++    "reserve01",
++    "viscosityIndex"
++  ],
++  "frames": [
++    "silt-local",
++    "core-local",
++    "world",
++    "camera-view",
++    "clip"
++  ],
++  "timeDomains": [
++    "wall",
++    "simulation",
++    "mounted-ecology",
++    "presentation",
++    "audio"
++  ],
++  "analyticalTolerance": {
++    "absolute": 1e-12,
++    "relative": 1e-12
++  }
++}
+diff --git a/BLOB_BOT_SERIES1/director/numerics/NF02-contract.test.mjs b/BLOB_BOT_SERIES1/director/numerics/NF02-contract.test.mjs
+new file mode 100644
+index 0000000..920e37e
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/numerics/NF02-contract.test.mjs
+@@ -0,0 +1,29 @@
++import fs from 'node:fs';
++import assert from 'node:assert/strict';
++import {test} from 'node:test';
++import {verifyNFContract,convertUnits} from './NF02-verify.mjs';
++const source=JSON.parse(fs.readFileSync(new URL('./NF02-contract.json',import.meta.url)));
++test('canonical numeric contract is shaped and dimensioned correctly',()=>assert.equal(verifyNFContract(source),true));
++test('SI length, mass, and inventory alias cannot be admitted by declaration',()=>{
++  const broken=structuredClone(source);broken.SI.metersPerLw=1;assert.throws(()=>verifyNFContract(broken),TypeError);
++  const wrong=structuredClone(source);wrong.inventoryUnit='Mr';assert.throws(()=>verifyNFContract(wrong),TypeError);
++});
++test('confusing momentum, force, and pressure fails validation',()=>{
++  const broken=structuredClone(source);broken.dimensionVectors.force=broken.dimensionVectors.momentum;
++  assert.throws(()=>verifyNFContract(broken),TypeError);
++  const wrong=structuredClone(source);wrong.dimensionVectors.pressure=[0,0,0];assert.throws(()=>verifyNFContract(wrong),TypeError);
++});
++test('explicit hypothetical scales convert impulse and density with dimensional powers',()=>{
++  const scales={metersPerLw:.2,kilogramsPerMr:.5,secondsPerTs:1};
++  const {impulse,density,area,angularMomentum}=source.dimensionVectors;
++  assert.equal(convertUnits(1,impulse,scales),.1);
++  assert.ok(Math.abs(convertUnits(1,density,scales)-62.5)<1e-12);
++  assert.ok(Math.abs(convertUnits(.04,area,scales,false)-1)<1e-12);
++  assert.ok(Math.abs(convertUnits(1,angularMomentum,scales)-.02)<1e-12);
++});
++test('missing calibration, implicit defaults and nonfinite conversions fail closed',()=>{
++  assert.throws(()=>convertUnits(1,source.dimensionVectors.impulse,source.SI),RangeError);
++  assert.throws(()=>convertUnits(1,source.dimensionVectors.length,{...source.SI,metersPerLw:-1}),RangeError);
++  assert.throws(()=>convertUnits(NaN,source.dimensionVectors.time,source.SI),TypeError);
++  assert.equal(convertUnits(.05,source.dimensionVectors.time,source.SI),.05);
++});
+diff --git a/BLOB_BOT_SERIES1/director/numerics/NF02-verify.mjs b/BLOB_BOT_SERIES1/director/numerics/NF02-verify.mjs
+new file mode 100644
+index 0000000..3abba96
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/numerics/NF02-verify.mjs
+@@ -0,0 +1,38 @@
++// NF02 proposal verifier. No game import and no inferred unit conversions.
++const keys=(object,fields)=>object&&Object.getPrototypeOf(object)===Object.prototype
++  && Object.keys(object).length===fields.length && fields.every(k=>Object.hasOwn(object,k));
++const expectedDimensions={"length":[1,0,0],"area":[2,0,0],"volume":[3,0,0],"time":[0,0,1],"mass":[0,1,0],"density":[-3,1,0],"velocity":[1,0,-1],"acceleration":[1,0,-2],"momentum":[1,1,-1],"impulse":[1,1,-1],"force":[1,1,-2],"angularMomentum":[2,1,-1],"torque":[2,1,-2],"energy":[2,1,-2],"power":[2,1,-3],"pressure":[-1,1,-2],"frequency":[0,0,-1],"linearDamping":[0,0,-1],"dynamicViscosity":[-1,1,-1],"frictionCoefficient":[0,0,0],"restitution":[0,0,0]};
++const equal=(a,b)=>Array.isArray(a)&&a.length===b.length&&a.every((v,i)=>v===b[i]);
++
++export function verifyNFContract(value) {
++  if (!keys(value,['schema','revision','status','governingSource','mechanicalBases','exponentOrder','inventoryUnit','SI',
++    'dimensionVectors','ownerIndices','frames','timeDomains','analyticalTolerance'])) throw new TypeError('invalid contract fields');
++  if (value.schema!=='blob.numerical-contract.v1'||value.revision!==1||value.status!=='proposed'
++    || !/^[a-f0-9]{40}$/.test(value.governingSource)) throw new TypeError('invalid proposal identity');
++  if (!equal(value.mechanicalBases,['Lw','Mr','Ts']) || !equal(value.exponentOrder,['length','mass','time'])
++    || value.inventoryUnit!=='Q') throw new TypeError('physical and inventory bases must be independent');
++  if (!keys(value.SI,['metersPerLw','kilogramsPerMr','secondsPerTs']) || value.SI.metersPerLw!==null
++    || value.SI.kilogramsPerMr!==null||value.SI.secondsPerTs!==1) throw new TypeError('runtime has no admitted SI length or mass');
++  if (!keys(value.dimensionVectors,Object.keys(expectedDimensions))
++    || Object.entries(expectedDimensions).some(([k,v])=>!equal(value.dimensionVectors[k],v))) throw new TypeError('inconsistent dimensions');
++  if (!equal(value.ownerIndices,['pressure01','conductivity01','resistance01','reserve01','viscosityIndex'])
++    || !equal(value.frames,['silt-local','core-local','world','camera-view','clip'])
++    || !equal(value.timeDomains,['wall','simulation','mounted-ecology','presentation','audio'])
++    || !keys(value.analyticalTolerance,['absolute','relative'])
++    || value.analyticalTolerance.absolute!==1e-12||value.analyticalTolerance.relative!==1e-12) throw new TypeError('invalid scope or tolerance');
++  return true;
++}
++
++export function convertUnits(value, [length,mass,time], {metersPerLw,kilogramsPerMr,secondsPerTs}, toSI=true) {
++  if (!Number.isFinite(value)||![length,mass,time].every(Number.isSafeInteger)) throw new TypeError('invalid dimensional value');
++  const component=(scale,power)=>{
++    if (power===0)return 1;
++    if (!Number.isFinite(scale)||scale<=0)throw new RangeError('missing admitted scale for exponent');
++    return scale**power;
++  };
++  const factor=component(metersPerLw,length)*component(kilogramsPerMr,mass)*component(secondsPerTs,time);
++  if (!Number.isFinite(factor)||factor<=0)throw new RangeError('invalid conversion factor');
++  const result=toSI?value*factor:value/factor;
++  if (!Number.isFinite(result))throw new RangeError('conversion overflow');
++  return result;
++}
+diff --git a/BLOB_BOT_SERIES1/director/numerics/PI04-reference.mjs b/BLOB_BOT_SERIES1/director/numerics/PI04-reference.mjs
+new file mode 100644
+index 0000000..260c5d9
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/numerics/PI04-reference.mjs
+@@ -0,0 +1,83 @@
++// Isolated DL-EXP-013 reference. The game never imports this module.
++const RELATIVE_TOLERANCE = 1e-12;
++const ABSOLUTE_TOLERANCE = 1e-12;
++export const tolerance = Object.freeze({ relative: RELATIVE_TOLERANCE, absolute: ABSOLUTE_TOLERANCE });
++const diff = (a, b) => a.map((n, i) => n - b[i]);
++const add = (a, b) => a.map((n, i) => n + b[i]);
++const scale = (a, s) => a.map(n => n * s);
++const dot = (a, b) => a.reduce((total, n, i) => total + n * b[i], 0);
++const finite = (value, label) => {
++  if (!Number.isFinite(value)) throw new RangeError(label + ' must be finite');
++  return value;
++};
++function positive(value, label) {
++  if (finite(value, label) <= 0) throw new RangeError(label + ' must be positive');
++  return value;
++}
++function vector(value, label) {
++  if (!Array.isArray(value) || value.length !== 3) throw new TypeError(label + ' must have three components');
++  for (const n of value) finite(n, label);
++  return value;
++}
++export function within(a, b) {
++  return Math.abs(a - b) <= ABSOLUTE_TOLERANCE + RELATIVE_TOLERANCE * Math.max(Math.abs(a), Math.abs(b));
++}
++
++export function solveNormalImpulse({ massA, massB, velocityA, velocityB, normal }) {
++  positive(massA, 'mass A');
++  positive(massB, 'mass B');
++  vector(velocityA, 'velocity A');
++  vector(velocityB, 'velocity B');
++  if (!within(Math.hypot(...vector(normal, 'normal')), 1)) throw new RangeError('normal must be a unit vector');
++  const relativeNormal = finite(dot(diff(velocityB, velocityA), normal), 'relative normal speed');
++  // Compute mass fractions first to avoid a reciprocal overflow.
++  const largestMass = Math.max(massA, massB);
++  const ratioA = massA / largestMass;
++  const ratioB = massB / largestMass;
++  if (!(ratioA > 0 && ratioB > 0)) throw new RangeError('mass ratio is unrepresentable');
++  const closedNormal = relativeNormal < -ABSOLUTE_TOLERANCE ? -relativeNormal : 0;
++  const outgoingA = vector(add(velocityA, scale(normal, -closedNormal * (ratioB / (ratioA + ratioB)))), 'outgoing A');
++  const outgoingB = vector(add(velocityB, scale(normal, closedNormal * (ratioA / (ratioA + ratioB)))), 'outgoing B');
++  const momentum = (a, b) => vector(add(scale(a, massA), scale(b, massB)), 'total momentum');
++  const energy = (a, b) => finite((massA / 2) * dot(a, a) + (massB / 2) * dot(b, b), 'kinetic energy');
++  const momentumBefore = momentum(velocityA, velocityB);
++  const momentumAfter = momentum(outgoingA, outgoingB);
++  const energyBefore = energy(velocityA, velocityB);
++  const energyAfter = energy(outgoingA, outgoingB);
++  if (momentumAfter.some((value, i) => !within(value, momentumBefore[i]))
++      || (energyAfter > energyBefore && !within(energyAfter, energyBefore))) {
++    throw new RangeError('incoming state does not meet the conservation tolerance at this numerical scale');
++  }
++  return { applied: closedNormal > 0, outgoingA, outgoingB, momentumBefore, momentumAfter, energyBefore, energyAfter,
++    normalImpulse: finite(massA * closedNormal * (ratioB / (ratioA + ratioB)), 'normal impulse') };
++}
++
++export function firstSphereIngress({ positionA, positionB, velocityA, velocityB, radiusA, radiusB, seconds }) {
++  const diameter = positive(positive(radiusA, 'radius A') + positive(radiusB, 'radius B'), 'sum of radii');
++  positive(seconds, 'interval seconds');
++  const separation = vector(diff(vector(positionB, 'position B'), vector(positionA, 'position A')), 'relative position');
++  const travel = vector(scale(diff(vector(velocityB, 'velocity B'), vector(velocityA, 'velocity A')), seconds), 'relative displacement');
++  const magnitude = Math.max(diameter, ...separation.map(Math.abs), ...travel.map(Math.abs));
++  const p = separation.map(n => n / magnitude);
++  const v = travel.map(n => n / magnitude);
++  const r = diameter / magnitude;
++  const radiusSquared = r * r;
++  if (radiusSquared === 0) throw new RangeError('contact scale is unrepresentable');
++  const pSquared = dot(p, p);
++  const c = pSquared - radiusSquared;
++  const clearanceTolerance = RELATIVE_TOLERANCE * Math.max(pSquared, radiusSquared);
++  const b = dot(p, v);
++  const a = dot(v, v);
++  if (c < -clearanceTolerance) return { reason: 'initial_overlap' };
++  if (a === 0 || b >= 0) return { reason: 'separating_or_stationary' };
++  const discriminant = b * b - a * c;
++  const discriminantTolerance = RELATIVE_TOLERANCE * Math.max(b * b, Math.abs(a * c));
++  if (discriminant < -discriminantTolerance) return { reason: 'near_miss' };
++  if (discriminant <= discriminantTolerance) return { reason: 'tangential' };
++  const fraction = c <= clearanceTolerance ? 0 : c / (-b + Math.sqrt(discriminant));
++  if (fraction > 1) return { reason: 'outside_interval' };
++  const atHit = add(p, scale(v, fraction));
++  const length = Math.hypot(...atHit);
++  if (!(length > 0)) throw new RangeError('coincident contact center');
++  return { reason: 'ingress', seconds: fraction * seconds, normal: atHit.map(n => n / length) };
++}
+diff --git a/BLOB_BOT_SERIES1/director/numerics/PI04-reference.test.mjs b/BLOB_BOT_SERIES1/director/numerics/PI04-reference.test.mjs
+new file mode 100644
+index 0000000..56e42bb
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/numerics/PI04-reference.test.mjs
+@@ -0,0 +1,61 @@
++import assert from 'node:assert/strict';
++import {test} from 'node:test';
++import {firstSphereIngress, solveNormalImpulse, within} from './PI04-reference.mjs';
++
++const impulse = {massA:1,massB:1,velocityA:[1,0,0],velocityB:[0,0,0],normal:[1,0,0]};
++const sweep = {positionA:[0,0,0],positionB:[0.32,0,0],velocityA:impulse.velocityA,
++  velocityB:impulse.velocityB,radiusA:0.06,radiusB:0.06,seconds:0.33};
++const verifyConservation = output => {
++  for (let i=0; i<3; i++) assert.ok(within(output.momentumBefore[i],output.momentumAfter[i]));
++  assert.ok(output.energyAfter <= output.energyBefore);
++};
++test('equal masses produce 0.5:0.5 and preserve one momentum unit',()=>{
++  const out=solveNormalImpulse(impulse);
++  assert.deepEqual(out.outgoingA,[.5,0,0]); assert.deepEqual(out.outgoingB,[.5,0,0]);
++  assert.deepEqual(out.momentumBefore,[1,0,0]); assert.equal(out.energyBefore,.5); assert.equal(out.energyAfter,.25);
++  assert.equal(out.normalImpulse,.5); verifyConservation(out);
++});
++test('one-to-three masses produce 0.25:0.25 and conserve momentum',()=>{
++  const out=solveNormalImpulse({...impulse,massB:3});
++  assert.deepEqual(out.outgoingA,[.25,0,0]); assert.deepEqual(out.outgoingB,[.25,0,0]);
++  assert.equal(out.normalImpulse,.75); assert.equal(out.energyAfter,.125); verifyConservation(out);
++});
++test('oblique velocities keep every tangential component',()=>{
++  const out=solveNormalImpulse({...impulse,velocityA:[1,.34,-.52],velocityB:[0,.76,1.04]});
++  assert.deepEqual(out.outgoingA,[.5,.34,-.52]); assert.deepEqual(out.outgoingB,[.5,.76,1.04]);
++  verifyConservation(out);
++});
++test('reversed participant ordering gives the same solutions and absolute hit time',()=>{
++  const ab=solveNormalImpulse({...impulse,massB:3});
++  const ba=solveNormalImpulse({massA:3,massB:1,normal:[-1,0,0],velocityA:impulse.velocityB,velocityB:impulse.velocityA});
++  assert.deepEqual(ab.outgoingA,ba.outgoingB); assert.deepEqual(ab.outgoingB,ba.outgoingA);
++  const first=firstSphereIngress(sweep);
++  const reversed=firstSphereIngress({...sweep,positionA:sweep.positionB,positionB:sweep.positionA,velocityA:sweep.velocityB,velocityB:sweep.velocityA});
++  assert.ok(within(first.seconds,reversed.seconds)); assert.deepEqual(reversed.normal,[-1,0,0]);
++});
++test('sweep admits an actual entry at 0.20 seconds and rejects a geometric near miss',()=>{
++  const hit=firstSphereIngress(sweep);
++  assert.equal(hit.reason,'ingress'); assert.ok(within(hit.seconds,.2));
++  assert.deepEqual(hit.normal,[1,0,0]);
++  assert.equal(firstSphereIngress({...sweep,positionB:[.32,.14,0]}).reason,'near_miss');
++});
++test('initial overlap, separating moves, tangency and later intersection are distinct',()=>{
++  assert.equal(firstSphereIngress({...sweep,positionB:[.11,0,0]}).reason,'initial_overlap');
++  assert.equal(firstSphereIngress({...sweep,velocityA:[-1,0,0]}).reason,'separating_or_stationary');
++  assert.equal(firstSphereIngress({...sweep,positionB:[.32,.12,0]}).reason,'tangential');
++  assert.equal(firstSphereIngress({...sweep,seconds:.1}).reason,'outside_interval');
++  assert.equal(solveNormalImpulse({...impulse,velocityA:[-1,.2,0]}).applied,false);
++});
++test('split common intervals give the same ingress time for force-free motion',()=>{
++  assert.equal(firstSphereIngress({...sweep,seconds:.1}).reason,'outside_interval');
++  const split=firstSphereIngress({...sweep,positionA:[.1,0,0],seconds:.23});
++  assert.ok(within(.1+split.seconds,firstSphereIngress(sweep).seconds));
++});
++test('invalid, nonfinite and unrepresentable inputs fail closed',()=>{
++  for (const massA of [0,-1,NaN,Infinity]) assert.throws(()=>solveNormalImpulse({...impulse,massA}),RangeError);
++  assert.throws(()=>solveNormalImpulse({...impulse,massA:Number.MIN_VALUE,massB:Number.MAX_VALUE}),RangeError);
++  assert.throws(()=>solveNormalImpulse({...impulse,velocityB:[0,NaN,0]}),RangeError);
++  assert.throws(()=>solveNormalImpulse({...impulse,normal:[2,0,0]}),RangeError);
++  assert.throws(()=>firstSphereIngress({...sweep,seconds:Infinity}),RangeError);
++  assert.throws(()=>firstSphereIngress({...sweep,radiusA:0}),RangeError);
++});
+diff --git a/scripts/ci02-verify.mjs b/scripts/ci02-verify.mjs
+index 29e6d4a..50afca7 100644
+--- a/scripts/ci02-verify.mjs
++++ b/scripts/ci02-verify.mjs
+@@ -46,6 +46,11 @@ const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+ const source = git('rev-parse', 'HEAD');
+ if (process.env.GITHUB_SHA) assert.equal(process.env.GITHUB_SHA, source);
+ const plan = JSON.parse(fs.readFileSync(new URL('./ci02-plan.json', import.meta.url)));
++if (process.argv[3] === '--numerical') plan.push({
++  id: 'nf02-pi04-analytical', count: 13,
++  args: ['--test','--test-reporter=tap','BLOB_BOT_SERIES1/director/numerics/NF02-contract.test.mjs',
++    'BLOB_BOT_SERIES1/director/numerics/PI04-reference.test.mjs']
++});
+ const summary = { source, node: process.version, platform: process.platform, cases: [], verdict: 'PASS' };
+ const scrub = value => value.split(cwd).join('<checkout>').split(out).join('<evidence>');
+ for (const check of plan) {
