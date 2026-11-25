@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import { createServer } from 'vite';
 import { chromium } from 'playwright';
 import { sourceIdentity } from '../source-identity.mjs';
-import { CHECKPOINT, loadScenario } from './scenario-contract.mjs';
+import { loadScenario } from './scenario-contract.mjs';
+import { buildCompatibility, readBuildIdentity } from './build-compatibility.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const DEFAULT_LAYOUTS = ['deep', 'balanced', 'membrane'];
@@ -146,7 +146,7 @@ async function probeOrdinary(browser, origin) {
   return { context: control, close: () => control.close(), proof };
 }
 
-async function execute(browser, origin, scenario, mode, out, { playable = false } = {}) {
+async function execute(browser, origin, scenario, mode, out, { playable = false, build } = {}) {
   const clip = path.join(out, scenario.id + '-' + mode);
   await mkdir(clip);
   const { width, height } = scenario.presentation;
@@ -224,7 +224,7 @@ async function execute(browser, origin, scenario, mode, out, { playable = false 
   const evaluation = failure || errors.length
     ? { status: 'INVALID_SETUP', reason: failure?.message ?? errors.join('; ') }
     : playable ? { status: 'NOT_EXERCISED', reason: 'Prepared for manual takeover' } : score(scenario, evidence);
-  const outcome = { scenario, mode, started, elapsedWallMs: Date.now() - started, isolation,
+  const outcome = { build, scenario, mode, started, elapsedWallMs: Date.now() - started, isolation,
     video: videoFile, evaluation, failure, errors, evidence };
   await write(path.join(clip, 'trial.json'), outcome);
   console.log(JSON.stringify({ scenario: scenario.id, mode, ...evaluation, dir: clip }));
@@ -233,19 +233,22 @@ async function execute(browser, origin, scenario, mode, out, { playable = false 
 
 async function main() {
   const { out, mode, layout } = parse(process.argv.slice(2));
-  const head = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8', windowsHide: true }).trim();
+  const build = readBuildIdentity(root);
+  const { commit: head } = build;
   await mkdir(out);
-  if (head !== CHECKPOINT) {
-    await write(path.join(out, 'runs.json'), { status: 'INCOMPATIBLE_BUILD', head, required: CHECKPOINT });
+  const admission = buildCompatibility(build);
+  if (admission.status !== 'PASS') {
+    await write(path.join(out, 'runs.json'), { ...admission, head, build });
+    console.error(admission.code + ': ' + admission.errors.join(', '));
     return false;
   }
   const identity = baselineInventory();
   const chosen = mode === '--all' ? DEFAULT_LAYOUTS : [layout];
   const definitions = [];
   for (const name of chosen) {
-    const result = await loadScenario(new URL(`./scenarios/${name}.json`, import.meta.url), head);
+    const result = await loadScenario(new URL('./scenarios/' + name + '.json', import.meta.url), build);
     if (result.status !== 'PASS') {
-      await write(path.join(out, 'runs.json'), result);
+      await write(path.join(out, 'runs.json'), { ...result, head, build });
       return false;
     }
     definitions.push(result.scenario);
@@ -271,7 +274,7 @@ async function main() {
     if (mode !== '--prepare') ordinary = await probeOrdinary(browser, origin);
     const runs = [];
     for (const comparison of mode === '--all' ? ['input', 'objective'] : mode === '--objective' ? ['objective'] : ['input']) {
-      for (const scenario of definitions) runs.push(await execute(browser, origin, scenario, comparison, out, { playable: mode === '--prepare' }));
+      for (const scenario of definitions) runs.push(await execute(browser, origin, scenario, comparison, out, { playable: mode === '--prepare', build }));
     }
     let parity = false;
     let parityError = null;
@@ -294,7 +297,7 @@ async function main() {
     const productionSourcesIdentical = baselineInventory() === identity;
     const pass = runs.every(run => run.evaluation.status === 'PASS') && parity && ordinaryStorageIntact && productionSourcesIdentical;
     await write(path.join(out, 'runs.json'), {
-      schema: 'blob.director-runs.v1', head, sourceFingerprint: identity, status: pass ? 'PASS' : 'FAIL',
+      schema: 'blob.director-runs.v1', head, build, scenarioRevisions: definitions.map(({ id, schema, revision }) => ({ id, schema, revision })), sourceFingerprint: identity, status: pass ? 'PASS' : 'FAIL',
       mode, stagingDeclared: true, productionSourcesIdentical, startingStateParity: parity, parityError,
       ordinary: ordinary && { ...ordinary.proof, storageIntact: ordinaryStorageIntact },
       runs: runs.map(({ scenario, mode, evaluation, video }) => ({ scenario: scenario.id, mode, evaluation, video }))

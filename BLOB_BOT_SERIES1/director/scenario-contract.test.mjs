@@ -1,18 +1,22 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import path from 'node:path';
+import { buildCompatibility, readBuildIdentity } from './build-compatibility.mjs';
 import { CHECKPOINT, OUTCOMES, loadScenario, validateScenario } from './scenario-contract.mjs';
 
 const scenarioFile = layout => new URL(`./scenarios/${layout}.json`, import.meta.url);
-const valid = (await loadScenario(scenarioFile('deep'))).scenario;
+const identity = readBuildIdentity(path.resolve(import.meta.dirname, '../..'));
+const valid = (await loadScenario(scenarioFile('deep'), identity)).scenario;
 
-test('version one definitions validate on the exact build', async () => {
+test('version one definitions validate on compatible Director ancestry', async () => {
   for (const layout of ['deep', 'balanced', 'membrane']) {
-    assert.equal((await loadScenario(scenarioFile(layout), CHECKPOINT)).status, 'PASS');
+    assert.equal((await loadScenario(scenarioFile(layout), identity)).status, 'PASS');
   }
 });
 
 test('wrong build is incompatible', () => {
-  assert.equal(validateScenario(valid, '0'.repeat(40)).status, 'INCOMPATIBLE_BUILD');
+  const foreign = { ...identity, commit: '0'.repeat(40), gameplayAncestry: false };
+  assert.equal(validateScenario(valid, foreign).code, 'BASELINE_ANCESTRY_MISMATCH');
   assert.equal(OUTCOMES.length, 5);
 });
 
@@ -43,7 +47,7 @@ test('malformed documents fail before setup', async () => {
   for (const mutate of malformed) {
     const scenario = structuredClone(valid);
     mutate(scenario);
-    const result = validateScenario(scenario);
+    const result = validateScenario(scenario, identity);
     assert.equal(result.status, 'INVALID_SETUP', JSON.stringify(scenario));
     assert.ok(result.errors.length >= 1);
   }

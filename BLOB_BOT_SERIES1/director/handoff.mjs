@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {execFileSync} from 'node:child_process';
 import {createServer} from 'vite';
 import {chromium} from 'playwright';
-import {loadScenario,CHECKPOINT} from './scenario-contract.mjs';
+import {loadScenario} from './scenario-contract.mjs';
+import {buildCompatibility,readBuildIdentity} from './build-compatibility.mjs';
 import {verifyStart} from './run.mjs';
 import {decodeCapture} from './frame-mapping.mjs';
 
@@ -12,18 +12,22 @@ const root=path.resolve(import.meta.dirname,'../..');
 const [outputArg,flag]=process.argv.slice(2);
 const out=path.resolve(outputArg??'');
 assert.ok(outputArg&&path.relative(root,out).startsWith('..'),'Use a new evidence directory outside the repository');
-assert.equal(execFileSync('git',['--no-optional-locks','-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),CHECKPOINT);
 await fs.mkdir(out);
+const build=readBuildIdentity(root), admission=buildCompatibility(build);
+if(admission.status!=='PASS'){
+  await fs.writeFile(path.join(out,'failure.json'),JSON.stringify({...admission,build},null,2)+'\n');
+  throw new Error(admission.code+': '+admission.errors.join(', '));
+}
 const verify=flag==='--verify';
 const layouts={deep:'Deep 3:0:0',balanced:'Balanced 1:1:1',membrane:'Membrane 0:0:3'};
 const definitions={};
 for(const id of Object.keys(layouts)){
-  const loaded=await loadScenario(new URL('./scenarios/'+id+'.json',import.meta.url));
+  const loaded=await loadScenario(new URL('./scenarios/'+id+'.json',import.meta.url),build);
   assert.equal(loaded.status,'PASS');
   definitions[id]=loaded.scenario;
 }
 const server=await createServer({root,server:{host:'127.0.0.1',port:0,hmr:false},logLevel:'warn'});
-const save=(name,data)=>fs.writeFile(path.join(out,name),JSON.stringify(data,null,2)+'\n',{flag:'wx'});
+const save=(name,data)=>fs.writeFile(path.join(out,name),JSON.stringify({build,scenarioRevisions:Object.values(definitions).map(({id,schema,revision})=>({id,schema,revision})),...data},null,2)+'\n',{flag:'wx'});
 let browser,game;
 const failures=[], operations=[];
 try{

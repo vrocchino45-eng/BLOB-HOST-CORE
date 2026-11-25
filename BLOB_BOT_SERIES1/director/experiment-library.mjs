@@ -1,7 +1,7 @@
 import a from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import {execFileSync} from 'node:child_process';
+import {buildCompatibility,readBuildIdentity} from './build-compatibility.mjs';
 import {Vector3} from 'three';
 import {rig,pad,cleanup,test,options,spec,layout,vector} from './experimental-fixture.mjs';
 import {manipulate,pulse} from './experiment-material.mjs';
@@ -65,9 +65,9 @@ function mobility(id,policy){
     minimumReserve:Math.min(...trace.map(x=>x.reserve)),recoveredReserve:trace.at(-1).reserve,trace};
 }
 const root=path.resolve(import.meta.dirname,'../..');
-const git=(...args)=>execFileSync('git',['--no-optional-locks','-C',root,...args],{encoding:'utf8'}).trim();
-a.equal(git('rev-parse','HEAD'),spec.base);
-a.equal(git('diff','HEAD','--name-only','--','src','scripts','public'),'');
+const build=readBuildIdentity(root,spec.base);
+const admission=buildCompatibility(build,spec.base);
+a.equal(admission.status,'PASS',admission.code+': '+admission.errors.join(', '));
 const output=path.resolve(process.argv[2]??'');
 a.ok(process.argv[2]&&path.relative(root,output).startsWith('..'));
 fs.mkdirSync(output);
@@ -78,7 +78,7 @@ try{
   for(const r of manipulation)a.deepEqual(r.start,manipulation[0].start);
   for(const r of movement)a.deepEqual(r.boot,movement[0].boot);
   for(const r of pulses)a.deepEqual(r.start,pulses[0].start);
-  const data={scope:'Mounted owner execution. Production input resolution, staged approach where declared, fixed native update calls and unrendered projection.',spec,
+  const data={build,scope:'Mounted owner execution. Production input resolution, staged approach where declared, fixed native update calls and unrendered projection.',spec,
     manipulation,movement,pulses};
   fs.writeFileSync(path.join(output,'mounted-experiments.json'),JSON.stringify(data,null,2)+'\n');
   console.log(JSON.stringify({manipulation:manipulation.map(x=>[x.mode,x.status]),

@@ -1,7 +1,10 @@
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compatibility.mjs';
 
 export const SCHEMA = 'blob.dev-scenario.v1';
-export const CHECKPOINT = '2f90256a1047b748bf99f7aec39b70b2ed1aeffe';
+export { CHECKPOINT };
+const root = path.resolve(import.meta.dirname, '../..');
 export const OUTCOMES = Object.freeze(['PASS', 'FAIL', 'NOT_EXERCISED', 'INVALID_SETUP', 'INCOMPATIBLE_BUILD']);
 const text = value => typeof value === 'string' && value.length > 0;
 const fraction = value => Number.isFinite(value) && value >= 0 && value <= 1;
@@ -70,7 +73,10 @@ const validateShape = record({
   expectedDurationSeconds: integer
 });
 
-export function validateScenario(scenario, checkpoint = CHECKPOINT) {
+export function validateScenario(scenario, identity = readBuildIdentity(root)) {
+  if (scenario?.schema !== undefined && scenario.schema !== SCHEMA || scenario?.revision !== undefined && scenario.revision !== 1) {
+    return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_SCENARIO_REVISION', errors: ['The scenario schema and revision must be blob.dev-scenario.v1 revision 1'] };
+  }
   const errors = [];
   if (!validateShape(scenario, errors)) return { status: 'INVALID_SETUP', errors };
   const layout = scenario.id.split('.').at(-1);
@@ -88,16 +94,18 @@ export function validateScenario(scenario, checkpoint = CHECKPOINT) {
     errors.push('Duration and dose predicates are inconsistent');
   }
   if (errors.length) return { status: 'INVALID_SETUP', errors };
-  if (scenario.build.checkpoint !== checkpoint) return { status: 'INCOMPATIBLE_BUILD', errors: ['Build checkpoint does not match'] };
-  return { status: 'PASS', errors: [] };
+  if (scenario.build.checkpoint !== CHECKPOINT) {
+    return { status: 'INCOMPATIBLE_BUILD', code: 'UNSUPPORTED_SCENARIO_CHECKPOINT', errors: ['Scenario references an unadmitted gameplay checkpoint'] };
+  }
+  return buildCompatibility(identity, scenario.build.checkpoint);
 }
 
-export async function loadScenario(path, checkpoint = CHECKPOINT) {
+export async function loadScenario(path, identity) {
   let scenario;
   try {
     scenario = JSON.parse(await readFile(path, 'utf8'));
   } catch (error) {
     return { status: 'INVALID_SETUP', errors: [error.message], scenario: null };
   }
-  return { ...validateScenario(scenario, checkpoint), scenario };
+  return { ...validateScenario(scenario, identity), scenario };
 }
