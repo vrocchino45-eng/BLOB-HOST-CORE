@@ -1,0 +1,8 @@
+# PI03 preparation · Contact and recipient ownership
+
+- Aim/commit. `src/input/InputSystem.js:765`, `src/targeting/TargetingSystem.js:155` and `src/routes/SiltPressureRouteSystem.js:1576,1602` authenticate a directed release, material identity/generation and mount-step. Aim identity is intent. The release's actual recipient is initially null.
+- Motion. `src/contact/SiltGripAuthority.js` and `src/contact/SiltTrajectoryMemory.js:62,87` own grip and release/integration/rejoin. `src/contact/SiltTrajectoryFieldProbe.js` observes habitat. A possible later segment probe should read existing free-step movement without a new solver.
+- Geometry. `src/routes/SiltPressureRouteSystem.js:838,1196,1231` distinguishes visual geology, authored locomotion and held Garden contact. `src/player/CoreFlowSystem.js:139` handles crown obstruction. No generic free-material collider is implied by these boundaries.
+- Receivers. `src/contact/SiltCompressionContact.js` and `SiltPlateSeat.js:20` own held contact/seat. `src/routes/SiltPressureRouteSystem.js:2060–2102` verifies B1 ecological arrival. `src/world/RegionalTerritoryExpansion.js:330` confirms only native Flow. `src/core/HostConnectionReceiptLedger.js` retains authenticated release observations and defined effects. None can be repurposed as an implicit impact receipt.
+
+Any later receiver witness needs explicit authored opt-in, material and mount identity, one accepted contact event, and retained receipt/credit ownership. Test false positives, zero motion, rejoin, remount, duplicate and mass parity before proposing any consequence. No impact mechanics, damage, fragmentation, generic projectile or structural assembly added.

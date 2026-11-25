@@ -1,0 +1,177 @@
+{
+  "checkpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "gates": [
+    {
+      "file": "launch-focused.tap",
+      "code": 0,
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "scripts/testPI02DirectedSiltLaunch.mjs"
+      ],
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "verdict": "PASS"
+    },
+    {
+      "file": "scenario-contract.tap",
+      "code": 0,
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs"
+      ],
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "verdict": "PASS"
+    },
+    {
+      "file": "production-build.log",
+      "code": 0,
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--outDir",
+        "<isolated-output>"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "maintained.tap",
+      "code": 0,
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=2",
+        "scripts/testB5FlowReserveSettlement.mjs",
+        "scripts/testB5GraveCoreFeedback.mjs",
+        "scripts/testC2CascadeVisuals.mjs",
+        "scripts/testC2ContextualLabels.mjs",
+        "scripts/testC63RouteReadiness.mjs",
+        "scripts/testCC01VascularResidualRecovery.mjs",
+        "scripts/testCH01VascularRecovery.mjs",
+        "scripts/testCH02SiltShelfConsequence.mjs",
+        "scripts/testCH03GraveRecoilSettling.mjs",
+        "scripts/testF1SiltFlow.mjs",
+        "scripts/testLocalSiltEcologicalResistance.mjs",
+        "scripts/testLocalSiltSeepExchange.mjs",
+        "scripts/testSiltHeldMotionReporting.mjs",
+        "scripts/testT1ReturnReadout.mjs",
+        "scripts/testWave1CoreEngine.mjs",
+        "scripts/testWave1FeedbackState.mjs",
+        "scripts/testWave1HostResponse.mjs",
+        "scripts/testWave1TargetLifecycle.mjs",
+        "scripts/testWave1VerbInteraction.mjs",
+        "scripts/testWC01VascularCaption.mjs",
+        "scripts/testWC01VascularReadability.mjs"
+      ],
+      "tests": 245,
+      "pass": 245,
+      "fail": 0,
+      "verdict": "PASS"
+    },
+    {
+      "file": "verifyWave1CoreProfiles.log",
+      "code": 0,
+      "args": [
+        "scripts/verifyWave1CoreProfiles.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "checkC63HubRouteAccess.log",
+      "code": 0,
+      "args": [
+        "scripts/checkC63HubRouteAccess.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "validateRecipeDataLoad.log",
+      "code": 0,
+      "args": [
+        "scripts/validateRecipeDataLoad.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "smokeHC031W1StabilizedAimLocalContact.log",
+      "code": 0,
+      "args": [
+        "scripts/smokeHC031W1StabilizedAimLocalContact.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "smokeHC031U21RelationshipIntentLatch.log",
+      "code": 0,
+      "args": [
+        "scripts/smokeHC031U21RelationshipIntentLatch.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "validateLS1BLivingSiltMaterialCycle.log",
+      "code": 0,
+      "args": [
+        "scripts/validateLS1BLivingSiltMaterialCycle.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "validateHC016QTenderCompanion.log",
+      "code": 0,
+      "args": [
+        "scripts/validateHC016QTenderCompanion.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "validateHC031C2FragmentFieldCapture.log",
+      "code": 0,
+      "args": [
+        "scripts/validateHC031C2FragmentFieldCapture.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "validateHC031DRuptureConsequence.log",
+      "code": 0,
+      "args": [
+        "scripts/validateHC031DRuptureConsequence.mjs"
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "file": "smokeLS1E1.log",
+      "code": 1,
+      "args": [
+        "scripts/smokeLS1E1.mjs"
+      ],
+      "baselineReproduced": true,
+      "verdict": "REPRODUCED_BASELINE_EXCEPTION"
+    },
+    {
+      "file": "smokeLS1E2.log",
+      "code": 1,
+      "args": [
+        "scripts/smokeLS1E2.mjs"
+      ],
+      "baselineReproduced": true,
+      "verdict": "REPRODUCED_BASELINE_EXCEPTION"
+    }
+  ],
+  "productionBuildByteIdenticalFiles": 541,
+  "baselineExceptions": [
+    {
+      "test": "smokeLS1E1",
+      "signature": "Cannot read properties of undefined (reading 'observe')"
+    },
+    {
+      "test": "smokeLS1E2",
+      "signature": "ERR_UNSUPPORTED_RESOLVE_REQUEST"
+    }
+  ]
+}

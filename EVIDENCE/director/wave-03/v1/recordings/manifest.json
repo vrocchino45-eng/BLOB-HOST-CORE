@@ -1,0 +1,50 @@
+{
+  "schema": "blob.director.recording-manifest.v1",
+  "checkpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "release": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/releases/tag/director-wave-03-evidence-v1",
+  "tag": "director-wave-03-evidence-v1",
+  "assets": [
+    {
+      "mode": "input",
+      "filename": "DL-EXP-001-input.webm",
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/releases/download/director-wave-03-evidence-v1/DL-EXP-001-input.webm",
+      "archivePath": "comparisons-final/DL-EXP-001-input.webm",
+      "sha256": "fc19af4fe4808038e6de96cbfc54832d7931773aac76b413d02a8d29c7763f36",
+      "bytes": 6193685,
+      "durationSeconds": 51.036000000000016,
+      "dimensions": [
+        1536,
+        376
+      ],
+      "audio": "silent source",
+      "maxPlaybackDriftMs": 146.74599980926217,
+      "maxSourceAnchorDifferenceMs": 1414.300000190724,
+      "maxAnchorBracketMs": 800.0000000000043,
+      "decoderDrops": 0,
+      "estimatedOutputMissedIntervals": 23
+    },
+    {
+      "mode": "objective",
+      "filename": "DL-EXP-001-objective.webm",
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/releases/download/director-wave-03-evidence-v1/DL-EXP-001-objective.webm",
+      "archivePath": "comparisons-final/DL-EXP-001-objective.webm",
+      "sha256": "eaa5e157636f0180e068e8a4021d504b767aa8182de923ac725c72e46fd7e8d7",
+      "bytes": 5381289,
+      "durationSeconds": 44.876000000000026,
+      "dimensions": [
+        1536,
+        376
+      ],
+      "audio": "silent source",
+      "maxPlaybackDriftMs": 204.67099999999405,
+      "maxSourceAnchorDifferenceMs": 1996.5200005722072,
+      "maxAnchorBracketMs": 400.0000000000057,
+      "decoderDrops": 2,
+      "estimatedOutputMissedIntervals": 13
+    }
+  ],
+  "visibility": "public",
+  "sourceClips": "../archive/index.json",
+  "retention": "Release assets depend on continued repository and release availability. The E: archive is the preservation copy.",
+  "scope": "Visual review; no real-time Experience verdict."
+}

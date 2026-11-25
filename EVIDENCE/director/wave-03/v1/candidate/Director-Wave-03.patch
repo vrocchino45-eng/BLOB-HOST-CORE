@@ -1,0 +1,1444 @@
+diff --git a/BLOB_BOT_SERIES1/director/compose.mjs b/BLOB_BOT_SERIES1/director/compose.mjs
+new file mode 100644
+index 0000000..40980fc
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/compose.mjs
+@@ -0,0 +1,279 @@
++import { createReadStream } from 'node:fs';
++import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
++import http from 'node:http';
++import path from 'node:path';
++import { chromium } from 'playwright';
++
++const readJSON = async file => JSON.parse(await readFile(file, 'utf8'));
++const modes = ['input', 'objective'];
++
++async function composeGroup(page, clips, mode) {
++  return page.evaluate(async ({ clips, mode }) => {
++    function nextEvent(target, name) {
++      return new Promise((resolve, reject) => {
++        const clear = () => {
++          target.removeEventListener(name, done);
++          target.removeEventListener('error', failed);
++          clearTimeout(timeout);
++        };
++        const done = event => { clear(); resolve(event); };
++        const failed = () => { clear(); reject(new Error(name + ' failed')); };
++        const timeout = setTimeout(failed, 20_000);
++        target.addEventListener(name, done, { once: true });
++        target.addEventListener('error', failed, { once: true });
++      });
++    }
++    const makeVideo = async clip => {
++      const video = document.createElement('video');
++      video.preload = 'auto';
++      video.muted = true;
++      video.playsInline = true;
++      video.style.cssText = 'position:fixed;bottom:0;right:0;width:2px;height:2px;opacity:0.01';
++      document.body.append(video);
++      const ready = nextEvent(video, 'loadeddata');
++      video.src = clip.url;
++      await ready;
++      if (!Number.isFinite(video.duration)) {
++        const found = nextEvent(video, 'seeked');
++        video.currentTime = 10_000_000;
++        await found;
++      }
++      if (!Number.isFinite(video.duration)) throw new Error('Source has unknown duration');
++      return video;
++    };
++    const videos = await Promise.all(clips.map(makeVideo));
++    const pixelCanvas = document.createElement('canvas');
++    pixelCanvas.width = pixelCanvas.height = 1;
++    const pixel = pixelCanvas.getContext('2d', { willReadFrequently: true });
++    const seek = async (video, time) => {
++      if (Math.abs(video.currentTime - time) < 0.002 && video.readyState >= 2) return;
++      const done = nextEvent(video, 'seeked');
++      video.currentTime = time;
++      await done;
++    };
++    const cue = async (video, time) => {
++      await seek(video, Math.max(0, Math.min(video.duration - 0.004, time)));
++      pixel.drawImage(video, 10, video.videoHeight - 14, 4, 4, 0, 0, 1, 1);
++      const [r, g, b] = pixel.getImageData(0, 0, 1, 1).data;
++      return b > 140 && r > 148 && g < 100 ? 'start' : b > 140 && g > 148 && r < 100 ? 'end' : null;
++    };
++    const refine = async (video, low, high, kind) => {
++      for (let i = 0; i < 5; i += 1) {
++        const mid = (low + high) / 2;
++        if (await cue(video, mid) === kind) high = mid;
++        else low = mid;
++      }
++      return { at: high, bracketSeconds: high - low };
++    };
++    const locate = async (video, clip) => {
++      const cap = video.duration - 0.008;
++      const find = async (kind, guesses) => {
++        for (const guess of guesses) {
++          const at = Math.max(0, Math.min(cap, guess));
++          if (await cue(video, at) !== kind) continue;
++          // Seek backward exponentially to bracket the first frame of this cue.
++          let high = at;
++          let low = Math.max(0, high - 0.10);
++          for (let back = 0.1; low > 0 && await cue(video, low) === kind; back *= 2) {
++            high = low;
++            low = Math.max(0, low - back);
++          }
++          return refine(video, low, high, kind);
++        }
++        return null;
++      };
++      const start = await find('start', [clip.startEstimate + 2, clip.startEstimate, cap / 2,
++        cap * 0.76, cap - 3, cap * 0.9]);
++      if (!start) throw new Error('Source clip lacks start sync marker: ' + clip.label);
++      const endGuess = start.at + clip.telemetryDurationMs / 1000;
++      const end = await find('end', [cap, cap - 0.2, endGuess + 0.3, endGuess + 0.8, endGuess + 1.4, cap - 0.6, cap - 1.0]);
++      if (!end || end.at <= start.at) throw new Error('Source clip lacks end sync marker: ' + clip.label);
++      return { start, end, duration: video.duration, sourceWallComparisonMs:
++        1000 * (end.at - start.at) - clip.telemetryDurationMs };
++    };
++    const anchors = await Promise.all(videos.map((video, i) => locate(video, clips[i])));
++    await Promise.all(videos.map((video, i) => seek(video, anchors[i].start.at)));
++
++    const canvas = document.createElement('canvas');
++    canvas.width = 1536;
++    canvas.height = 376;
++    document.body.style.margin = '0';
++    document.body.append(canvas);
++    const ctx = canvas.getContext('2d', { alpha: false });
++    const fps = 24;
++    const stream = canvas.captureStream(fps);
++    const mimeType = 'video/webm;codecs=vp8';
++    if (!MediaRecorder.isTypeSupported(mimeType)) throw new Error('VP8 MediaRecorder unavailable');
++    const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 5_000_000 });
++    const chunks = [];
++    recorder.addEventListener('dataavailable', event => { if (event.data.size) chunks.push(event.data); });
++    
++    const panelWidth = 512;
++    const imageHeight = 288;
++    const tailSeconds = 4;
++    const introSeconds = 3;
++    const metrics = clips.map(() => ({ driftMsMax: 0, driftSamples: 0 }));
++    const sound = 'Silent capture';
++    const fullSeconds = Math.max(...anchors.map(cue => cue.end.at - cue.start.at));
++    const paintText = (text, x, y, size = 21, color = '#eff5f6') => {
++      ctx.fillStyle = color;
++      ctx.font = size + 'px system-ui, sans-serif';
++      ctx.fillText(text, x, y);
++    };
++    const fmt = value => Number.isFinite(value) ? value.toFixed(3) : '—';
++    let outputTicks = 0;
++    let missedOutputIntervals = 0;
++    let largestOutputIntervalMs = 0;
++    let previousPaintAt;
++    function draw(total, now) {
++      const elapsed = Math.max(0, total - introSeconds);
++      ctx.fillStyle = '#101819';
++      ctx.fillRect(0, 0, canvas.width, canvas.height);
++      ctx.textBaseline = 'middle';
++      paintText((mode === 'input' ? 'Same input' : 'Same objective') + '  ·  ' + elapsed.toFixed(1) + ' s  ·  ' + sound, 12, 16);
++      clips.forEach((clip, i) => {
++        const x = i * panelWidth;
++        const video = videos[i];
++        const { start, end } = anchors[i];
++        const clipTime = video.currentTime - start.at;
++        const eventMs = 1000 * Math.max(0, clipTime);
++        const finished = video.currentTime >= end.at - 0.04 || video.ended;
++        if (finished && !video.paused) video.pause();
++        let label = 'Preparing';
++        for (const event of clip.events) if (eventMs >= event.ms) label = event.label;
++        if (finished) label = clip.status === 'PASS' ? 'Completed' : clip.status;
++        if (total >= introSeconds && !finished) {
++          const drift = Math.abs(clipTime - elapsed) * 1000;
++          metrics[i].driftMsMax = Math.max(metrics[i].driftMsMax, drift);
++          metrics[i].driftSamples++;
++        }
++        ctx.drawImage(video, x, 33, panelWidth, imageHeight);
++        paintText(clip.label + '  ·  ' + label, x + 10, 334, 18);
++        paintText('Pressure dose ' + (finished ? fmt(clip.dose) : '…') + '   ·   Reserve ' + (finished ? fmt(clip.reserve) : '…'),
++          x + 10, 358, 17, '#b9d5cf');
++      });
++      if (previousPaintAt !== undefined) {
++        const interval = now - previousPaintAt;
++        largestOutputIntervalMs = Math.max(largestOutputIntervalMs, interval);
++        missedOutputIntervals += Math.max(0, Math.round(interval / (1000 / fps)) - 1);
++      }
++      previousPaintAt = now;
++      outputTicks++;
++    }
++    recorder.start();
++    const start = performance.now();
++    let playing = false;
++    await new Promise((resolve, reject) => {
++      const frame = now => {
++        try {
++          const total = Math.max(0, (now - start) / 1000);
++          if (total >= fullSeconds + introSeconds + tailSeconds) { resolve(); return; }
++          if (total >= introSeconds && !playing) {
++            playing = true;
++            for (const video of videos) video.play().catch(reject);
++          }
++          if (previousPaintAt === undefined || now - previousPaintAt >= 33) draw(total, now);
++          requestAnimationFrame(frame);
++        } catch (error) { reject(error); }
++      };
++      requestAnimationFrame(frame);
++    });
++    const recordEnd = nextEvent(recorder, 'stop');
++    recorder.stop();
++    await recordEnd;
++    for (const track of stream.getTracks()) track.stop();
++    const href = URL.createObjectURL(new Blob(chunks, { type: mimeType }));
++    const link = document.createElement('a');
++    link.href = href;
++    link.download = 'DL-EXP-001-' + mode + '.webm';
++    link.click();
++    return { anchors, outputTicks, estimatedMissedOutputIntervals: missedOutputIntervals, largestOutputIntervalMs,
++      durationSeconds: fullSeconds + introSeconds + tailSeconds, dimensions: [canvas.width, canvas.height],
++      audio: 'No audio captured by Playwright source recorder', panels: videos.map((video, i) => {
++        const quality = video.getVideoPlaybackQuality();
++        return { label: clips[i].label, ...metrics[i], decodedFrames: quality.totalVideoFrames,
++          droppedDuringDecode: quality.droppedVideoFrames, sourceCaptureDroppedFrames: 'unavailable from source encoder' };
++      }) };
++  }, { clips, mode });
++}
++
++async function main() {
++  const [runsDirArg, outArg] = process.argv.slice(2);
++  if (!runsDirArg || !outArg) throw new Error('Usage: node BLOB_BOT_SERIES1/director/compose.mjs <run-dir> <new-output-dir>');
++  const runsDir = path.resolve(runsDirArg);
++  const out = path.resolve(outArg);
++  const report = await readJSON(path.join(runsDir, 'runs.json'));
++  if (report.status !== 'PASS' || report.runs.length !== 6) throw new Error('Composition requires six accepted, matched trials');
++  await mkdir(out);
++  const source = new Map();
++  const clips = {};
++  for (const mode of modes) {
++    clips[mode] = [];
++    for (const run of report.runs.filter(r => r.mode === mode)) {
++      const local = path.resolve(runsDir, run.scenario + '-' + mode, 'gameplay.webm');
++      if (path.resolve(run.video) !== local) throw new Error('Unexpected raw video path');
++      const trial = await readJSON(path.join(path.dirname(local), 'trial.json'));
++      const { evidence } = trial;
++      const id = mode + '-' + clips[mode].length;
++      const url = '/video/' + id;
++      source.set(url, { local, size: (await stat(local)).size });
++      const events = [];
++      const accepted = evidence.samples.find(s => s.flow?.effect?.acceptedCurrent01 > 0);
++      const add = (sample, label) => {
++        if (Number.isFinite(sample?.wallMs)) events.push({ ms: sample.wallMs - evidence.replayAnchor.wallMs, label });
++      };
++      add(accepted, 'Current accepted');
++      add(evidence.releaseCommand, 'Released');
++      const name = run.scenario.split('.').at(-1);
++      clips[mode].push({ label: name[0].toUpperCase() + name.slice(1), url,
++        status: run.evaluation.status, dose: run.evaluation.dose, reserve: run.evaluation.reserveAtEnd, events,
++        startEstimate: (evidence.timeOrigin + evidence.replayAnchor.wallMs - trial.started) / 1000,
++        telemetryDurationMs: evidence.end.wallMs - evidence.replayAnchor.wallMs });
++    }
++  }
++  const server = http.createServer((request, response) => {
++    if (request.url === '/') {
++      response.setHeader('Content-Type', 'text/html; charset=utf-8');
++      response.end('<!doctype html><title>Director compositor</title>');
++      return;
++    }
++    const media = source.get(request.url);
++    if (!media) { response.writeHead(404).end(); return; }
++    const range = /^bytes=(\d+)-(\d*)$/.exec(request.headers.range ?? '');
++    const start = range ? Number(range[1]) : 0;
++    const end = range && range[2] ? Number(range[2]) : media.size - 1;
++    if (start > end || end >= media.size) { response.writeHead(416).end(); return; }
++    response.writeHead(range ? 206 : 200, {
++      'Content-Type': 'video/webm', 'Accept-Ranges': 'bytes', 'Content-Length': end - start + 1,
++      ...(range ? { 'Content-Range': `bytes ${start}-${end}/${media.size}` } : {})
++    });
++    createReadStream(media.local, { start, end }).pipe(response);
++  });
++  let browser;
++  try {
++    await new Promise((resolve, reject) => server.listen(0, '127.0.0.1', resolve).once('error', reject));
++    const executablePath = process.env.BLOB_BOT_CHROMIUM_EXECUTABLE;
++    browser = await chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) });
++    const context = await browser.newContext({ viewport: { width: 1536, height: 376 }, acceptDownloads: true });
++    const results = {};
++    for (const mode of modes) {
++      const page = await context.newPage();
++      await page.goto('http://127.0.0.1:' + server.address().port);
++      const [download, result] = await Promise.all([
++        page.waitForEvent('download', { timeout: 180_000 }), composeGroup(page, clips[mode], mode)
++      ]);
++      const video = path.join(out, 'DL-EXP-001-' + mode + '.webm');
++      await download.saveAs(video);
++      results[mode] = { ...result, video, bytes: (await stat(video)).size };
++      await writeFile(path.join(out, mode + '-sync.json'), JSON.stringify(results[mode], null, 2) + '\n', { flag: 'wx' });
++      await page.close();
++    }
++    await writeFile(path.join(out, 'composition.json'), JSON.stringify(results, null, 2) + '\n', { flag: 'wx' });
++    console.log(JSON.stringify(results));
++  } finally {
++    await browser?.close();
++    await new Promise(resolve => server.close(resolve));
++  }
++}
++
++try { await main(); } catch (error) { console.error(error.stack); process.exitCode = 1; }
+diff --git a/BLOB_BOT_SERIES1/director/run.mjs b/BLOB_BOT_SERIES1/director/run.mjs
+new file mode 100644
+index 0000000..122ae2c
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/run.mjs
+@@ -0,0 +1,310 @@
++import assert from 'node:assert/strict';
++import { execFileSync } from 'node:child_process';
++import { mkdir, writeFile } from 'node:fs/promises';
++import path from 'node:path';
++import { createServer } from 'vite';
++import { chromium } from 'playwright';
++import { sourceIdentity } from '../source-identity.mjs';
++import { CHECKPOINT, loadScenario } from './scenario-contract.mjs';
++
++const root = path.resolve(import.meta.dirname, '../..');
++const DEFAULT_LAYOUTS = ['deep', 'balanced', 'membrane'];
++const baselineInventory = () => sourceIdentity(root).fingerprint;
++const write = (file, data) => writeFile(file, JSON.stringify(data, null, 2) + '\n', { flag: 'wx' });
++
++function parse(args) {
++  const [outArg, mode = '--all', layout] = args;
++  if (!outArg || !['--all', '--pilot', '--objective', '--prepare'].includes(mode) || (layout && !DEFAULT_LAYOUTS.includes(layout))) {
++    throw new Error('Usage: node BLOB_BOT_SERIES1/director/run.mjs <new-output-dir> [--all | --pilot [layout] | --objective layout | --prepare layout]');
++  }
++  const out = path.resolve(outArg);
++  const rel = path.relative(root, out);
++  if (!rel || (!rel.startsWith('..' + path.sep) && rel !== '..' && !path.isAbsolute(rel))) {
++    throw new Error('Use an external output directory');
++  }
++  return { out, mode, layout: layout ?? 'deep' };
++}
++
++function inputAdapter() {
++  const original = navigator.getGamepads.bind(navigator);
++  const pad = { lt: 0, rt: 0, override: true };
++  window.__DIRECTOR_PAD__ = pad;
++  Object.defineProperty(navigator, 'getGamepads', {
++    configurable: true,
++    value() {
++      if (!pad.override) return original();
++      return [{ id: 'Director standard fixture', index: 0, mapping: 'standard', connected: true,
++        timestamp: performance.now(), axes: [0, 0, 0, 0], buttons: Array.from({ length: 17 }, (_, index) => {
++          const value = index === 6 ? pad.lt : index === 7 ? pad.rt : 0;
++          return { value, pressed: value > 0.5, touched: value > 0 };
++        }) }];
++    }
++  });
++}
++
++function verifyStart(scenario, start) {
++  const { state, retained, patch } = start;
++  const starting = scenario.authoritative;
++  assert.equal(state.step.hostId, scenario.environment.host);
++  assert.equal(state.step.cellId, scenario.environment.cell);
++  assert.ok(state.step.mountSequence > 0);
++  assert.equal(patch.id, scenario.environment.receiver);
++  assert.deepEqual(state.pose, patch.center.map((v, i) => v + scenario.environment.offset[i]));
++  assert.deepEqual(state.facing, scenario.environment.facing);
++  assert.equal(state.reserve, starting.core.reserve);
++  assert.deepEqual(retained.pieces.map(p => p.zoneId), starting.core.placements);
++  assert.equal(retained.topology.complete, true);
++  assert.equal(retained.chemistry.seedCount, 1);
++  assert.equal(retained.material.mass, starting.material.totalMass);
++  assert.equal(retained.material.nativeAwake, false);
++  assert.deepEqual(retained.material.records.map(r => r.id), starting.material.ids);
++  assert.deepEqual(retained.material.units.map(r => r.id), starting.material.ids);
++  assert.ok(retained.material.units.every(r => r.generation === starting.material.generation && r.phase === 'reservoir'));
++  assert.ok(Object.values(retained.progression).every(value => value === false || value === 0));
++  assert.ok(Object.values(retained.receipts).every(value => value === starting.regional.receipts));
++  assert.equal(state.imprint, starting.regional.imprint);
++  assert.equal(state.attachment, false);
++  assert.equal(retained.grip, null);
++  assert.equal(retained.seat, null);
++  assert.equal(state.camera.near, false);
++  assert.equal(state.camera.yaw, scenario.presentation.yaw);
++  assert.equal(state.camera.pitch, scenario.presentation.pitch);
++  assert.ok(state.camera.withinFrustum);
++  assert.equal(state.aim, null);
++  assert.ok(!state.input.stabilize && !state.input.absorb && !state.input.flowDemand);
++  assert.ok(!state.flow?.effect && !state.flow?.extension && !state.flow?.strain);
++}
++
++function score(scenario, value) {
++  try {
++    verifyStart(scenario, value.start);
++  } catch (error) {
++    return { status: 'INVALID_SETUP', reason: error.message };
++  }
++  const start = value.start.retained;
++  const finish = value.final.retained;
++  const missing = scenario.requiredActions.filter(action => !value.actions[action]);
++  const violations = [];
++  for (const key of ['material', 'progression', 'receipts', 'grip', 'seat']) {
++    try { assert.deepEqual(finish[key], start[key]); } catch { violations.push(key); }
++  }
++  if (value.invariantViolation) violations.push(value.invariantViolation);
++  if (value.samples.some(s => s.input.absorb || s.input.pulseEventId !== value.start.state.input.pulseEventId)) {
++    violations.push('Flow action leaked into Absorb or Pulse');
++  }
++  const maximum = field => Math.max(...value.samples.map(field));
++  const frames = value.samples.filter(s => s.step?.substep === 0);
++  const accepted = value.samples.filter(s => s.flow?.effect?.acceptedCurrent01 > 0);
++  if (accepted.some(s => s.settlement?.status !== 'settled' || s.settlement?.actionSequence !== s.flow.effect.actionSequence)) {
++    violations.push('Accepted Flow missing matching reserve settlement');
++  }
++  const data = {
++    missing, violations, dose: value.pressureDose, currentDose: value.currentDose, secondsToRelease: value.final.stoppingAt,
++    reserveAtStart: value.start.state.reserve, reserveAtEnd: value.final.state.reserve,
++    inputEdges: value.probes.map(({ elapsed, lt, rt }) => ({ elapsed, lt, rt })),
++    directFlowDebit: value.samples.reduce((sum, sample) => sum + (sample.settlement?.actualDebit ?? 0), 0),
++    strainPeak: maximum(s => s.flow?.strain ?? 0), strainAtEnd: value.final.state.flow?.strain ?? 0,
++    imprintAtEnd: value.final.state.imprint, acceptedImprintGain: value.acceptedImprintGain, maxTravelFromStart: maximum(s =>
++      Math.hypot(...s.pose.map((v, axis) => v - value.start.state.pose[axis]))),
++    maximumAuthorityStep: maximum(s => s.dt), simulationSteps: value.samples.length,
++    observedFrames: frames.length, simulatedTimeDroppedMs: frames.reduce((sum, row) => sum + row.droppedFrameMs, 0),
++    acceptedSteps: accepted.length, acceptedInFrustum: accepted.filter(s => s.camera.withinFrustum).length,
++    acceptedFirstReserve: accepted[0]?.reserve ?? null, releaseReserve: value.samples.find(s => s.step?.frame === value.actions.release?.frame
++      && s.step?.substep === value.actions.release?.substep)?.reserve ?? null,
++    acceptedLastReserve: accepted.at(-1)?.reserve ?? null
++  };
++  if (violations.length) return { status: 'FAIL', ...data };
++  if (missing.length) return { status: 'NOT_EXERCISED', ...data };
++  const target = value.policy === 'objective' ? scenario.acceptance.dose : scenario.acceptance.minimumDose;
++  return { status: value.pressureDose + 1e-8 >= target && data.imprintAtEnd > 0 ? 'PASS' : 'FAIL', ...data };
++}
++
++function controls(data) {
++  const { step, pose, facing, camera, reserve, corePhaseCount } = data.start.state;
++  const { pieces, chemistry, material, progression, receipts, grip, seat } = data.start.retained;
++  return { location: [step.hostId, step.cellId], pose, facing, camera, reserve,
++    corePhaseCount, pieceIdentity: pieces.map(({ pieceId, family }) => [pieceId, family]),
++    chemistry, material, progression, receipts, grip, seat, patch: data.start.patch };
++}
++
++async function probeOrdinary(browser, origin) {
++  const control = await browser.newContext();
++  const page = await control.newPage();
++  await page.goto(origin, { waitUntil: 'domcontentloaded' });
++  await page.locator('canvas').first().waitFor({ state: 'attached', timeout: 60_000 });
++  await page.waitForFunction(() => document.querySelector('canvas')?.width > 0);
++  const proof = await page.evaluate(() => {
++    const key = '__director_isolation_witness__';
++    localStorage.setItem(key, 'ordinary-context-only');
++    return { key, value: localStorage.getItem(key), hasDirectorPad: '__DIRECTOR_PAD__' in window,
++      hasDirectorRuntime: '__DIRECTOR_RUNTIME__' in window, hasOverlay: Boolean(document.querySelector('#director-sync')),
++      startupFlowFlag: new URLSearchParams(location.search).has('flow') };
++  });
++  assert.ok(!proof.hasDirectorPad && !proof.hasDirectorRuntime && !proof.hasOverlay && !proof.startupFlowFlag);
++  await page.close();
++  return { context: control, close: () => control.close(), proof };
++}
++
++async function execute(browser, origin, scenario, mode, out, { playable = false } = {}) {
++  const clip = path.join(out, scenario.id + '-' + mode);
++  await mkdir(clip);
++  const { width, height } = scenario.presentation;
++  const settings = { viewport: { width, height }, deviceScaleFactor: 1 };
++  if (!playable) settings.recordVideo = { dir: clip, size: { width, height } };
++  const context = await browser.newContext(settings);
++  await context.addInitScript(inputAdapter);
++  const page = await context.newPage();
++  const started = Date.now();
++  const errors = [];
++  page.on('pageerror', error => errors.push(error.message));
++  const video = page.video();
++  let evidence, failure, isolation;
++  try {
++    await page.route('**/src/main.js', async route => {
++      const response = await route.fetch();
++      await route.fulfill({ response, body: (await response.text()) + '\nwindow.__DIRECTOR_RUNTIME__ = runtime;\n' });
++    });
++    await page.goto(origin + '/?flow=1', { waitUntil: 'networkidle', timeout: 60_000 });
++    await page.waitForFunction(() => window.__DIRECTOR_RUNTIME__?.isRunning, null, { timeout: 60_000 });
++    isolation = await page.evaluate(() => ({ storageKeys: Object.keys(localStorage), sessionKeys: Object.keys(sessionStorage) }));
++    assert.deepEqual(isolation.sessionKeys, []);
++    assert.ok(isolation.storageKeys.every(key => key.startsWith('blob.telemetry.session.')), 'Normal player storage entered the trial');
++    await page.keyboard.press('Shift+Digit6');
++    await page.waitForFunction(() => {
++      const r = window.__DIRECTOR_RUNTIME__;
++      return r.siltPressureRouteSystem?.active && r.siltPressureRouteSystem.territoryExpansion?.readFlowPatch(r.frameState);
++    }, null, { timeout: 75_000 });
++    if (!await page.evaluate(() => window.__DIRECTOR_RUNTIME__.frameState.coreGrowth?.debugCoreWorkRetainedAnatomySeeded === true)) {
++      await page.keyboard.press('p');
++    }
++    await page.waitForFunction(() => {
++      const f = window.__DIRECTOR_RUNTIME__.frameState;
++      return f.coreGrowth?.debugCoreWorkRetainedAnatomySeeded === true && f.spatialCoreChemistry?.retainedPieceCount === 3;
++    }, null, { timeout: 75_000 });
++    await page.evaluate(async ({ scenario, mode, playable }) => {
++      const { installShelfTrial } = await import('/BLOB_BOT_SERIES1/director/shelf-tape.mjs');
++      window.__DIRECTOR_EVIDENCE__ = installShelfTrial(window.__DIRECTOR_RUNTIME__, scenario, mode, window.__DIRECTOR_PAD__, { playable });
++    }, { scenario, mode, playable });
++
++    await page.waitForFunction(() => window.__DIRECTOR_EVIDENCE__?.final || window.__DIRECTOR_EVIDENCE__?.status,
++      null, { timeout: 95_000 });
++    evidence = await page.evaluate(() => ({
++      ...window.__DIRECTOR_EVIDENCE__, timeOrigin: performance.timeOrigin, device: navigator.userAgent
++    }));
++    if (playable) {
++      verifyStart(scenario, evidence.start);
++      await page.evaluate(() => { window.__DIRECTOR_PAD__.override = false; });
++      console.log(JSON.stringify({ ready: scenario.id, note: 'Physical input passed through. Close the browser window to exit.' }));
++      await page.waitForEvent('close', { timeout: 0 });
++    } else {
++      await page.evaluate(() => new Promise(resolve => {
++        requestAnimationFrame(() => requestAnimationFrame(resolve));
++      }));
++      await page.waitForTimeout(650); // retain the final visual anchor after a full paint
++    }
++  } catch (error) {
++    failure = { message: error.message, stack: error.stack };
++    if (!page.isClosed()) {
++      const state = await page.evaluate(() => {
++        const r = window.__DIRECTOR_RUNTIME__;
++        const f = r?.frameState;
++        return { activeCell: f?.activeCellId, active: r?.siltPressureRouteSystem?.active,
++          isRunning: r?.isRunning, frame: f?.frame, flow: f?.coreFlow, lastInput: f?.input,
++          seed: f?.coreGrowth?.debugCoreWorkRetainedAnatomySeeded,
++          partialTrial: window.__DIRECTOR_EVIDENCE__ };
++      }).catch(() => null);
++      failure.diagnostic = state;
++    }
++  } finally {
++    await context.close();
++  }
++  const videoFile = video ? path.join(clip, 'gameplay.webm') : null;
++  if (video) await video.saveAs(videoFile);
++  const evaluation = failure || errors.length
++    ? { status: 'INVALID_SETUP', reason: failure?.message ?? errors.join('; ') }
++    : playable ? { status: 'NOT_EXERCISED', reason: 'Prepared for manual takeover' } : score(scenario, evidence);
++  const outcome = { scenario, mode, started, elapsedWallMs: Date.now() - started, isolation,
++    video: videoFile, evaluation, failure, errors, evidence };
++  await write(path.join(clip, 'trial.json'), outcome);
++  console.log(JSON.stringify({ scenario: scenario.id, mode, ...evaluation, dir: clip }));
++  return outcome;
++}
++
++async function main() {
++  const { out, mode, layout } = parse(process.argv.slice(2));
++  const head = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8', windowsHide: true }).trim();
++  await mkdir(out);
++  if (head !== CHECKPOINT) {
++    await write(path.join(out, 'runs.json'), { status: 'INCOMPATIBLE_BUILD', head, required: CHECKPOINT });
++    return false;
++  }
++  const identity = baselineInventory();
++  const chosen = mode === '--all' ? DEFAULT_LAYOUTS : [layout];
++  const definitions = [];
++  for (const name of chosen) {
++    const result = await loadScenario(new URL(`./scenarios/${name}.json`, import.meta.url), head);
++    if (result.status !== 'PASS') {
++      await write(path.join(out, 'runs.json'), result);
++      return false;
++    }
++    definitions.push(result.scenario);
++  }
++  // The authorized three-way experiment varies arrangement only.
++  const comparable = (scenario) => {
++    const { id, authoritative, ...rest } = scenario;
++    const { core, ...restState } = authoritative;
++    const { placements, ...coreControl } = core;
++    return { ...rest, authoritative: { ...restState, core: coreControl } };
++  };
++  for (const entry of definitions.slice(1)) assert.deepEqual(comparable(entry), comparable(definitions[0]));
++
++  const server = await createServer({ root, server: { host: '127.0.0.1', port: 0, hmr: false }, logLevel: 'warn' });
++  let browser, ordinary;
++  try {
++    await server.listen();
++    const origin = 'http://127.0.0.1:' + server.httpServer.address().port;
++    const executablePath = process.env.BLOB_BOT_CHROMIUM_EXECUTABLE;
++    const launch = { headless: mode !== '--prepare', args: JSON.parse(process.env.BLOB_BOT_CHROMIUM_ARGS ?? '[]') };
++    if (executablePath) launch.executablePath = executablePath;
++    browser = await chromium.launch(launch);
++    if (mode !== '--prepare') ordinary = await probeOrdinary(browser, origin);
++    const runs = [];
++    for (const comparison of mode === '--all' ? ['input', 'objective'] : mode === '--objective' ? ['objective'] : ['input']) {
++      for (const scenario of definitions) runs.push(await execute(browser, origin, scenario, comparison, out, { playable: mode === '--prepare' }));
++    }
++    let parity = false;
++    let parityError = null;
++    if (runs.every(run => run.evidence?.start)) {
++      try {
++        const first = controls(runs[0].evidence);
++        for (const run of runs.slice(1)) assert.deepEqual(controls(run.evidence), first);
++        parity = true;
++      } catch (error) { parityError = error.message; }
++    }
++
++    let ordinaryStorageIntact = null;
++    if (ordinary) {
++      const page = await ordinary.context.newPage();
++      await page.goto(origin, { waitUntil: 'domcontentloaded' });
++      ordinaryStorageIntact = await page.evaluate(({ key, value }) =>
++        localStorage.getItem(key) === value && !('__DIRECTOR_PAD__' in window), ordinary.proof);
++      await page.close();
++    }
++    const productionSourcesIdentical = baselineInventory() === identity;
++    const pass = runs.every(run => run.evaluation.status === 'PASS') && parity && ordinaryStorageIntact && productionSourcesIdentical;
++    await write(path.join(out, 'runs.json'), {
++      schema: 'blob.director-runs.v1', head, sourceFingerprint: identity, status: pass ? 'PASS' : 'FAIL',
++      mode, stagingDeclared: true, productionSourcesIdentical, startingStateParity: parity, parityError,
++      ordinary: ordinary && { ...ordinary.proof, storageIntact: ordinaryStorageIntact },
++      runs: runs.map(({ scenario, mode, evaluation, video }) => ({ scenario: scenario.id, mode, evaluation, video }))
++    });
++    return Boolean(pass || mode === '--prepare' && runs.every(r => r.evaluation.status === 'NOT_EXERCISED'));
++  } finally {
++    if (ordinary) await ordinary.close();
++    if (browser) await browser.close();
++    await server.close();
++  }
++}
++
++try { process.exitCode = Number(!await main()); }
++catch (error) { console.error(error.stack); process.exitCode = 1; }
+diff --git a/BLOB_BOT_SERIES1/director/scenario-contract.mjs b/BLOB_BOT_SERIES1/director/scenario-contract.mjs
+new file mode 100644
+index 0000000..9c6c61b
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenario-contract.mjs
+@@ -0,0 +1,103 @@
++import { readFile } from 'node:fs/promises';
++
++export const SCHEMA = 'blob.dev-scenario.v1';
++export const CHECKPOINT = '2f90256a1047b748bf99f7aec39b70b2ed1aeffe';
++export const OUTCOMES = Object.freeze(['PASS', 'FAIL', 'NOT_EXERCISED', 'INVALID_SETUP', 'INCOMPATIBLE_BUILD']);
++const text = value => typeof value === 'string' && value.length > 0;
++const fraction = value => Number.isFinite(value) && value >= 0 && value <= 1;
++const positive = value => Number.isFinite(value) && value > 0;
++const vector = value => Array.isArray(value) && value.length === 3 && value.every(Number.isFinite);
++const oneOf = (...values) => value => values.includes(value);
++const exact = value => oneOf(value);
++const zone = oneOf('deep_core', 'inner_body', 'membrane');
++const sha = value => typeof value === 'string' && /^[a-f0-9]{40}$/.test(value);
++const requiredActions = ['canonical_selection', 'analog_flow_request', 'accepted_current', 'release', 'recovery_window'];
++const requiredTelemetry = ['start', 'state', 'input', 'time', 'camera', 'reserve', 'flow', 'material', 'receipts', 'coverage'];
++const arrayOf = (check, length) => value => Array.isArray(value) && value.length === length && value.every(check);
++const integer = value => Number.isSafeInteger(value) && value >= 1;
++const grain = (id, index) => id === `silt-grain-${String(index + 1).padStart(2, '0')}`;
++
++function record(checks) {
++  return (value, errors = [], at = 'scenario') => {
++    if (!value || typeof value !== 'object' || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) {
++      errors.push(`${at} must be an object`);
++      return false;
++    }
++    const oldLength = errors.length;
++    for (const key of Object.keys(value)) if (!Object.hasOwn(checks, key)) errors.push(`${at}.${key} is unknown`);
++    for (const [key, check] of Object.entries(checks)) {
++      const keyPath = `${at}.${key}`;
++      const before = errors.length;
++      if (!Object.hasOwn(value, key) || (!check(value[key], errors, keyPath) && errors.length === before)) {
++        errors.push(`${keyPath} is missing or invalid`);
++      }
++    }
++    return oldLength === errors.length;
++  };
++}
++
++const validateShape = record({
++  schema: exact(SCHEMA),
++  id: value => typeof value === 'string' && /^dl-exp-001\.(deep|balanced|membrane)$/.test(value),
++  revision: exact(1),
++  build: record({ checkpoint: sha }),
++  environment: record({
++    host: exact('HOST_ALPHA_WOUNDED_NURSERY'), cell: exact('CELL_SILT_PRESSURE_ROUTE_001'),
++    receiver: exact('silt_porosity_shelf_front'), seed: exact(null), origin: exact('receiver-center-world'),
++    offset: vector, facing: vector
++  }),
++  authoritative: record({
++    core: record({ placements: arrayOf(zone, 3), reserve: fraction, source: exact('existing-debug-anatomy') }),
++    material: record({ ids: value => Array.isArray(value) && value.length === 8 && value.every(grain),
++      custody: exact('native-cycle'), generation: exact(0), totalMass: exact(8), cycle: exact('dormant') }),
++    regional: record({ progression: exact('fresh'), receipts: exact(0), imprint: exact(0) }),
++    relationships: record({ flow: exact('released'), attachment: exact('unattached'), grip: exact('unheld') })
++  }),
++  derived: record({ physiology: exact('derive-from-owner'), chemistry: exact('derive-from-owner') }),
++  presentation: record({
++    camera: exact('far-world'), yaw: Number.isFinite, pitch: Number.isFinite,
++    width: exact(768), height: exact(432)
++  }),
++  input: record({ profile: exact('experimental-flow'), standardPad: exact(true), start: exact('neutral'),
++    stabilize: fraction, demand: fraction }),
++  initialize: exact('mounted-silt-shelf-v1'),
++  requiredActions: value => arrayOf(text, requiredActions.length)(value) && requiredActions.every((s, i) => value[i] === s),
++  acceptance: record({
++    heldSeconds: positive, dose: fraction, minimumDose: fraction, objectiveLimitSeconds: positive, recoverySeconds: positive
++  }),
++  telemetry: value => arrayOf(text, requiredTelemetry.length)(value) && requiredTelemetry.every((s, i) => value[i] === s),
++  reset: exact('fresh-disposable-browser-context'),
++  expectedDurationSeconds: integer
++});
++
++export function validateScenario(scenario, checkpoint = CHECKPOINT) {
++  const errors = [];
++  if (!validateShape(scenario, errors)) return { status: 'INVALID_SETUP', errors };
++  const layout = scenario.id.split('.').at(-1);
++  const expected = {
++    deep: ['deep_core', 'deep_core', 'deep_core'],
++    balanced: ['deep_core', 'inner_body', 'membrane'],
++    membrane: ['membrane', 'membrane', 'membrane']
++  }[layout];
++  if (scenario.authoritative.core.placements.some((entry, index) => entry !== expected[index])) errors.push('Scenario ID and layout disagree');
++  if (Math.abs(Math.hypot(...scenario.environment.facing) - 1) > 1e-8) errors.push('Facing must be normalized');
++  if (scenario.input.demand <= 0 || scenario.input.stabilize <= 0) errors.push('Analog action requires positive stabilize and demand');
++  const rule = scenario.acceptance;
++  if (rule.minimumDose <= 0 || rule.dose < rule.minimumDose || rule.heldSeconds > rule.objectiveLimitSeconds
++    || scenario.expectedDurationSeconds < rule.objectiveLimitSeconds + rule.recoverySeconds) {
++    errors.push('Duration and dose predicates are inconsistent');
++  }
++  if (errors.length) return { status: 'INVALID_SETUP', errors };
++  if (scenario.build.checkpoint !== checkpoint) return { status: 'INCOMPATIBLE_BUILD', errors: ['Build checkpoint does not match'] };
++  return { status: 'PASS', errors: [] };
++}
++
++export async function loadScenario(path, checkpoint = CHECKPOINT) {
++  let scenario;
++  try {
++    scenario = JSON.parse(await readFile(path, 'utf8'));
++  } catch (error) {
++    return { status: 'INVALID_SETUP', errors: [error.message], scenario: null };
++  }
++  return { ...validateScenario(scenario, checkpoint), scenario };
++}
+diff --git a/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs b/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs
+new file mode 100644
+index 0000000..bd84b0b
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenario-contract.test.mjs
+@@ -0,0 +1,51 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import { CHECKPOINT, OUTCOMES, loadScenario, validateScenario } from './scenario-contract.mjs';
++
++const scenarioFile = layout => new URL(`./scenarios/${layout}.json`, import.meta.url);
++const valid = (await loadScenario(scenarioFile('deep'))).scenario;
++
++test('version one definitions validate on the exact build', async () => {
++  for (const layout of ['deep', 'balanced', 'membrane']) {
++    assert.equal((await loadScenario(scenarioFile(layout), CHECKPOINT)).status, 'PASS');
++  }
++});
++
++test('wrong build is incompatible', () => {
++  assert.equal(validateScenario(valid, '0'.repeat(40)).status, 'INCOMPATIBLE_BUILD');
++  assert.equal(OUTCOMES.length, 5);
++});
++
++test('malformed documents fail before setup', async () => {
++  const malformed = [
++    entry => { delete entry.initialize; },
++    entry => { entry.revision = 2; },
++    entry => { entry.id = 'dl-exp-001.membrane'; },
++    entry => { entry.environment.facing = [0, 0, 0]; },
++    entry => { entry.environment.seed = 42; },
++    entry => { entry.environment.cell = 'unknown'; },
++    entry => { entry.authoritative.core.reserve = 1.5; },
++    entry => { entry.authoritative.material.ids[1] = entry.authoritative.material.ids[0]; },
++    entry => { entry.authoritative.material.custody = 'duplicated'; },
++    entry => { entry.authoritative.relationships.grip = 'held'; },
++    entry => { entry.derived.physiology = { response: 1 }; },
++    entry => { entry.derived.chemistry = { exposure: 1 }; },
++    entry => { entry.presentation.width = '768'; },
++    entry => { entry.input.demand = 0; },
++    entry => { entry.input.profile = 'ordinary'; },
++    entry => { entry.requiredActions.splice(2, 1); },
++    entry => { entry.acceptance.dose = 0; },
++    entry => { entry.telemetry.splice(5, 1); },
++    entry => { entry.reset = 'reuse ordinary session'; },
++    entry => { entry.expectedDurationSeconds = 1; },
++    entry => { entry.extra = 'unknown'; }
++  ];
++  for (const mutate of malformed) {
++    const scenario = structuredClone(valid);
++    mutate(scenario);
++    const result = validateScenario(scenario);
++    assert.equal(result.status, 'INVALID_SETUP', JSON.stringify(scenario));
++    assert.ok(result.errors.length >= 1);
++  }
++  assert.equal((await loadScenario(new URL('./scenarios/absent.json', import.meta.url))).status, 'INVALID_SETUP');
++});
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/balanced.json b/BLOB_BOT_SERIES1/director/scenarios/balanced.json
+new file mode 100644
+index 0000000..43d0155
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/balanced.json
+@@ -0,0 +1,109 @@
++{
++  "schema": "blob.dev-scenario.v1",
++  "id": "dl-exp-001.balanced",
++  "revision": 1,
++  "build": {
++    "checkpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe"
++  },
++  "environment": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "receiver": "silt_porosity_shelf_front",
++    "seed": null,
++    "origin": "receiver-center-world",
++    "offset": [
++      0,
++      0,
++      1.18
++    ],
++    "facing": [
++      0,
++      0,
++      -1
++    ]
++  },
++  "authoritative": {
++    "core": {
++      "placements": [
++        "deep_core",
++        "inner_body",
++        "membrane"
++      ],
++      "reserve": 0.7,
++      "source": "existing-debug-anatomy"
++    },
++    "material": {
++      "ids": [
++        "silt-grain-01",
++        "silt-grain-02",
++        "silt-grain-03",
++        "silt-grain-04",
++        "silt-grain-05",
++        "silt-grain-06",
++        "silt-grain-07",
++        "silt-grain-08"
++      ],
++      "custody": "native-cycle",
++      "generation": 0,
++      "totalMass": 8,
++      "cycle": "dormant"
++    },
++    "regional": {
++      "progression": "fresh",
++      "receipts": 0,
++      "imprint": 0
++    },
++    "relationships": {
++      "flow": "released",
++      "attachment": "unattached",
++      "grip": "unheld"
++    }
++  },
++  "derived": {
++    "physiology": "derive-from-owner",
++    "chemistry": "derive-from-owner"
++  },
++  "presentation": {
++    "camera": "far-world",
++    "yaw": 0,
++    "pitch": 0.18,
++    "width": 768,
++    "height": 432
++  },
++  "input": {
++    "profile": "experimental-flow",
++    "standardPad": true,
++    "start": "neutral",
++    "stabilize": 0.82,
++    "demand": 0.46
++  },
++  "initialize": "mounted-silt-shelf-v1",
++  "requiredActions": [
++    "canonical_selection",
++    "analog_flow_request",
++    "accepted_current",
++    "release",
++    "recovery_window"
++  ],
++  "acceptance": {
++    "heldSeconds": 2.2,
++    "dose": 0.12,
++    "minimumDose": 0.03,
++    "objectiveLimitSeconds": 3.8,
++    "recoverySeconds": 1.3
++  },
++  "telemetry": [
++    "start",
++    "state",
++    "input",
++    "time",
++    "camera",
++    "reserve",
++    "flow",
++    "material",
++    "receipts",
++    "coverage"
++  ],
++  "reset": "fresh-disposable-browser-context",
++  "expectedDurationSeconds": 10
++}
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/deep.json b/BLOB_BOT_SERIES1/director/scenarios/deep.json
+new file mode 100644
+index 0000000..3474adf
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/deep.json
+@@ -0,0 +1,109 @@
++{
++  "schema": "blob.dev-scenario.v1",
++  "id": "dl-exp-001.deep",
++  "revision": 1,
++  "build": {
++    "checkpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe"
++  },
++  "environment": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "receiver": "silt_porosity_shelf_front",
++    "seed": null,
++    "origin": "receiver-center-world",
++    "offset": [
++      0,
++      0,
++      1.18
++    ],
++    "facing": [
++      0,
++      0,
++      -1
++    ]
++  },
++  "authoritative": {
++    "core": {
++      "placements": [
++        "deep_core",
++        "deep_core",
++        "deep_core"
++      ],
++      "reserve": 0.7,
++      "source": "existing-debug-anatomy"
++    },
++    "material": {
++      "ids": [
++        "silt-grain-01",
++        "silt-grain-02",
++        "silt-grain-03",
++        "silt-grain-04",
++        "silt-grain-05",
++        "silt-grain-06",
++        "silt-grain-07",
++        "silt-grain-08"
++      ],
++      "custody": "native-cycle",
++      "generation": 0,
++      "totalMass": 8,
++      "cycle": "dormant"
++    },
++    "regional": {
++      "progression": "fresh",
++      "receipts": 0,
++      "imprint": 0
++    },
++    "relationships": {
++      "flow": "released",
++      "attachment": "unattached",
++      "grip": "unheld"
++    }
++  },
++  "derived": {
++    "physiology": "derive-from-owner",
++    "chemistry": "derive-from-owner"
++  },
++  "presentation": {
++    "camera": "far-world",
++    "yaw": 0,
++    "pitch": 0.18,
++    "width": 768,
++    "height": 432
++  },
++  "input": {
++    "profile": "experimental-flow",
++    "standardPad": true,
++    "start": "neutral",
++    "stabilize": 0.82,
++    "demand": 0.46
++  },
++  "initialize": "mounted-silt-shelf-v1",
++  "requiredActions": [
++    "canonical_selection",
++    "analog_flow_request",
++    "accepted_current",
++    "release",
++    "recovery_window"
++  ],
++  "acceptance": {
++    "heldSeconds": 2.2,
++    "dose": 0.12,
++    "minimumDose": 0.03,
++    "objectiveLimitSeconds": 3.8,
++    "recoverySeconds": 1.3
++  },
++  "telemetry": [
++    "start",
++    "state",
++    "input",
++    "time",
++    "camera",
++    "reserve",
++    "flow",
++    "material",
++    "receipts",
++    "coverage"
++  ],
++  "reset": "fresh-disposable-browser-context",
++  "expectedDurationSeconds": 10
++}
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/membrane.json b/BLOB_BOT_SERIES1/director/scenarios/membrane.json
+new file mode 100644
+index 0000000..6f7cbcb
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/membrane.json
+@@ -0,0 +1,109 @@
++{
++  "schema": "blob.dev-scenario.v1",
++  "id": "dl-exp-001.membrane",
++  "revision": 1,
++  "build": {
++    "checkpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe"
++  },
++  "environment": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "receiver": "silt_porosity_shelf_front",
++    "seed": null,
++    "origin": "receiver-center-world",
++    "offset": [
++      0,
++      0,
++      1.18
++    ],
++    "facing": [
++      0,
++      0,
++      -1
++    ]
++  },
++  "authoritative": {
++    "core": {
++      "placements": [
++        "membrane",
++        "membrane",
++        "membrane"
++      ],
++      "reserve": 0.7,
++      "source": "existing-debug-anatomy"
++    },
++    "material": {
++      "ids": [
++        "silt-grain-01",
++        "silt-grain-02",
++        "silt-grain-03",
++        "silt-grain-04",
++        "silt-grain-05",
++        "silt-grain-06",
++        "silt-grain-07",
++        "silt-grain-08"
++      ],
++      "custody": "native-cycle",
++      "generation": 0,
++      "totalMass": 8,
++      "cycle": "dormant"
++    },
++    "regional": {
++      "progression": "fresh",
++      "receipts": 0,
++      "imprint": 0
++    },
++    "relationships": {
++      "flow": "released",
++      "attachment": "unattached",
++      "grip": "unheld"
++    }
++  },
++  "derived": {
++    "physiology": "derive-from-owner",
++    "chemistry": "derive-from-owner"
++  },
++  "presentation": {
++    "camera": "far-world",
++    "yaw": 0,
++    "pitch": 0.18,
++    "width": 768,
++    "height": 432
++  },
++  "input": {
++    "profile": "experimental-flow",
++    "standardPad": true,
++    "start": "neutral",
++    "stabilize": 0.82,
++    "demand": 0.46
++  },
++  "initialize": "mounted-silt-shelf-v1",
++  "requiredActions": [
++    "canonical_selection",
++    "analog_flow_request",
++    "accepted_current",
++    "release",
++    "recovery_window"
++  ],
++  "acceptance": {
++    "heldSeconds": 2.2,
++    "dose": 0.12,
++    "minimumDose": 0.03,
++    "objectiveLimitSeconds": 3.8,
++    "recoverySeconds": 1.3
++  },
++  "telemetry": [
++    "start",
++    "state",
++    "input",
++    "time",
++    "camera",
++    "reserve",
++    "flow",
++    "material",
++    "receipts",
++    "coverage"
++  ],
++  "reset": "fresh-disposable-browser-context",
++  "expectedDurationSeconds": 10
++}
+diff --git a/BLOB_BOT_SERIES1/director/shelf-stage.mjs b/BLOB_BOT_SERIES1/director/shelf-stage.mjs
+new file mode 100644
+index 0000000..21d2fb2
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/shelf-stage.mjs
+@@ -0,0 +1,116 @@
++import { Vector3 } from 'three';
++import { readFlowAim, readFlowStep } from '../../src/interaction/SiltFlowContract.js';
++
++const PIECES = ['memoryImprintRoot', 'vascularFilamentRoot', 'siltAdaptationRoot'];
++const DEPTH = { deep_core: 0.12, inner_body: 0.43, membrane: 0.78 };
++const copy = value => value == null ? null : structuredClone(value);
++const poseOffset = new Vector3();
++const facing = new Vector3();
++const projection = new Vector3();
++
++function setPlacement(embodiment, pieceName, zone) {
++  const piece = embodiment[pieceName];
++  const { coreWorkAnchorLocal: anchor, coreWorkBasePosition: base, coreWorkOffset: offset } = piece.userData;
++  const radius = embodiment.coreWorkMinimumRadius
++    + (embodiment.coreWorkMaximumRadius - embodiment.coreWorkMinimumRadius) * DEPTH[zone];
++  const center = anchor.clone().add(base).normalize().multiplyScalar(radius);
++  offset.copy(center).sub(anchor).sub(base);
++  piece.position.copy(base).add(offset);
++}
++
++export function sample(runtime) {
++  const frame = runtime.frameState;
++  const route = runtime.siltPressureRouteSystem;
++  const patch = route.territoryExpansion?.readFlowPatch(frame);
++  const actualCamera = runtime.renderCamera ?? runtime.camera;
++  const patchOnScreen = patch ? projection.copy(patch.center).project(actualCamera).toArray() : null;
++  const cameraVisible = patchOnScreen?.every(v => Number.isFinite(v) && v >= -1 && v <= 1) ?? false;
++  const pose = runtime.playerCore.getWorldPosition(new Vector3());
++  const phase = frame.coreEngine?.phaseCount;
++  return {
++    step: readFlowStep(frame), runtimeSeconds: frame.runtimeSeconds, wallMs: performance.now(),
++    dt: frame.runtimeSimulationSubstepSeconds ?? 0, rawFrameMs: frame.runtimeFrameRawDeltaMs ?? 0,
++    droppedFrameMs: frame.runtimeFrameDroppedDeltaMs ?? 0, pose: pose.toArray(),
++    facing: runtime.coreEmbodimentSystem.direction.toArray(),
++    attachment: frame.playerAttachment?.active === true,
++    speed: frame.playerKinematics?.speed ?? 0,
++    camera: { position: actualCamera.position.toArray(), rotation: actualCamera.quaternion.toArray(),
++      yaw: runtime.cameraYaw, pitch: runtime.cameraPitch, near: frame.cameraReadability?.nearWorldActive === true,
++      patchOnScreen, withinFrustum: cameraVisible },
++    aim: readFlowAim(frame), selected: frame.targeting?.targetId ?? null, corePhaseCount: phase,
++    profile: copy(frame.corePerformance?.traits), reserve: runtime.coreRadialPerformanceSystem.reserve01,
++    settlement: copy(frame.siltFlowReserveSettlement),
++    input: {
++      stabilize: frame.input?.stabilizeHeld ?? false, absorb: frame.input?.absorbHeld ?? false,
++      pulseEventId: frame.input?.pulseEventId ?? 0, flowDemand: frame.input?.flowDemand01 ?? 0,
++      flowSequence: frame.input?.flowActionSequence ?? 0
++    },
++    flow: frame.coreFlow && {
++      phase: frame.coreFlow.phase, ready: frame.coreFlow.ready, reason: frame.coreFlow.reason, contact: frame.coreFlow.contactValid,
++      strain: frame.coreFlow.strain01, extension: frame.coreFlow.extension, effect: copy(frame.coreFlow.result)
++    },
++    imprint: route.territoryExpansion?.flowPatch?.site?.imprint ?? null
++  };
++}
++
++export function retained(runtime) {
++  const route = runtime.siltPressureRouteSystem;
++  const frame = runtime.frameState;
++  const material = route.materialIdentity.snapshot();
++  return {
++    pieces: frame.spatialCoreChemistry?.placements.map(({ pieceId, family, zoneId }) => ({ pieceId, family, zoneId })) ?? [],
++    topology: copy(frame.spatialCoreChemistry?.topology),
++    chemistry: { composition: copy(frame.playerComposition), absorbed: frame.chemObjectState?.absorbedObjects ?? 0,
++      earned: copy(frame.coreGrowth?.earnedEvolution), seedCount: frame.coreGrowth?.debugCoreWorkSeedCount ?? 0,
++      growthStage: frame.coreGrowth?.stageId ?? null },
++    derived: { physiology: copy(frame.corePerformance?.traits), chemistry: copy(frame.coreChemistryOutput) },
++    material: { mass: material.totalMass, records: [...material.records].sort((a, b) => a.id.localeCompare(b.id)),
++      units: route.livingCycle.units.map(({ id, generation, phase }) => ({ id, generation, phase })), nativeAwake: route.livingCycle.active },
++    progression: { completed: route.completed, returned: Boolean(frame.act1RouteHistory?.siltReturned),
++      safeMatterAbsorbed: route.safeMatterAbsorbed, pressureRead: route.pressureRead,
++      returnFoldReady: route.returnFoldReady, credits: frame.returnRegionEngine?.creditCount ?? 0 },
++    receipts: { silt: runtime.hostConnectionReceiptLedger.acceptedTotal,
++      vascular: runtime.hostConnectionReceiptLedger.vascularEffectSnapshot().acceptedTotal,
++      grave: runtime.hostConnectionReceiptLedger.graveIIResolutionSnapshot().acceptedTotal,
++      local: route.transactionSequence },
++    grip: route.siltGrip.heldId ?? null, seat: route.siltPlateSeat.unitId ?? null
++  };
++}
++
++// Run once before scoring. Owner inputs may be staged here. The trial uses
++// only resolved controller input and observation after this call has returned.
++export function stageShelf(runtime, scenario) {
++  const route = runtime.siltPressureRouteSystem;
++  const frame = runtime.frameState;
++  const core = runtime.coreEmbodimentSystem;
++  const patch = route.territoryExpansion?.readFlowPatch(frame);
++  const pose = scenario.environment;
++  if (!route.active || !patch || pose.receiver !== patch.id || !frame.coreGrowth?.debugCoreWorkRetainedAnatomySeeded) {
++    throw new Error('Fresh Silt mount and existing debug anatomy are required');
++  }
++  PIECES.forEach((name, index) => setPlacement(core, name, scenario.authoritative.core.placements[index]));
++  const requested = poseOffset.fromArray(pose.offset).add(patch.center);
++  runtime.playerCore.position.copy(runtime.playerCore.parent.worldToLocal(requested.clone()));
++  runtime.playerMovementController.velocity.set(0, 0, 0);
++  core.direction.copy(facing.fromArray(pose.facing));
++  core.targetDirection.copy(facing);
++  core.bank = 0;
++  core.orientBody(0, 0);
++  core.bodyFrame.quaternion.copy(core.targetQuaternion);
++  runtime.playerCore.updateWorldMatrix(true, true);
++  runtime.cameraYaw = scenario.presentation.yaw;
++  runtime.cameraPitch = scenario.presentation.pitch;
++  runtime.cameraDistance = 6.45;
++  runtime.cameraMotionLead.set(0, 0, 0);
++  runtime.verticalCameraAnchorY = runtime.playerCore.position.y;
++  runtime.camera.position.copy(requested).add(new Vector3(0, 1.18, 6.45));
++  runtime.camera.lookAt(patch.center);
++  runtime.camera.updateMatrixWorld(true);
++  core.updateSpatialCoreChemistry(frame.runtimeSeconds, 0, frame);
++  const reserve = runtime.coreRadialPerformanceSystem;
++  reserve.reserve01 = scenario.authoritative.core.reserve;
++  reserve.publish(frame, reserve.resolveProfile(frame));
++  return { state: sample(runtime), retained: retained(runtime), patch: { id: patch.id,
++    center: patch.center.toArray(), normal: patch.normal.toArray(), radius: patch.radius,
++    conductivity: patch.conductivity, resistance: patch.resistance } };
++}
+diff --git a/BLOB_BOT_SERIES1/director/shelf-tape.mjs b/BLOB_BOT_SERIES1/director/shelf-tape.mjs
+new file mode 100644
+index 0000000..79577eb
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/shelf-tape.mjs
+@@ -0,0 +1,106 @@
++import { retained, sample, stageShelf } from './shelf-stage.mjs';
++
++const SIM_EPSILON = 1e-9;
++const PAD_NEUTRAL = Object.freeze({ lt: 0, rt: 0 });
++const transitions = (last, current) => last?.ready !== current?.ready || last?.phase !== current?.phase
++  || last?.reason !== current?.reason || Boolean(last?.effect) !== Boolean(current?.effect);
++
++function marker(color) {
++  let cue = document.querySelector('#director-sync');
++  if (!cue) {
++    cue = document.createElement('div');
++    cue.id = 'director-sync';
++    cue.style.cssText = 'position:fixed;left:0;bottom:0;width:24px;height:24px;z-index:2147483647;pointer-events:none';
++    document.body.append(cue);
++  }
++  cue.style.background = color;
++}
++
++export function installShelfTrial(runtime, scenario, mode, pad, { playable = false } = {}) {
++  if (!['input', 'objective'].includes(mode)) throw new Error('Unknown comparison mode');
++  const evidence = { start: null, replayAnchor: null, final: null, samples: [], changes: [],
++    policy: mode, actions: {}, probes: [], pressureDose: 0, currentDose: 0, acceptedImprintGain: 0 };
++  const registry = runtime.registry;
++  const original = registry.update;
++  let active = false;
++  let elapsed = 0;
++  let stoppingAt = null;
++  let lastControl;
++  let lastFlow;
++  const anchor = () => ({ wallMs: performance.now(), runtimeSeconds: runtime.frameState.runtimeSeconds });
++  const returnControl = () => {
++    Object.assign(pad, PAD_NEUTRAL);
++    registry.update = original;
++  };
++  const ready = readyData => {
++    evidence.start = readyData;
++    evidence.replayAnchor = anchor();
++    if (playable) {
++      evidence.status = 'NOT_EXERCISED';
++      returnControl();
++      return;
++    }
++    active = true;
++    marker('#fa00fa');
++  };
++
++  registry.update = function observe(dt, frame) {
++    if (!evidence.start) {
++      ready(stageShelf(runtime, scenario));
++    }
++    if (!active) return original.call(this, dt, frame);
++    const rules = scenario.acceptance;
++    const requestAt = 0.45;
++    const upper = mode === 'input' ? requestAt + rules.heldSeconds : requestAt + rules.objectiveLimitSeconds;
++    if (stoppingAt === null && (elapsed >= upper - SIM_EPSILON
++      || (mode === 'objective' && evidence.pressureDose >= rules.dose))) {
++      stoppingAt = elapsed;
++      evidence.releaseCommand = anchor();
++    }
++    const control = {
++      lt: stoppingAt === null ? scenario.input.stabilize : 0,
++      rt: stoppingAt === null && elapsed + SIM_EPSILON >= requestAt ? scenario.input.demand : 0
++    };
++    Object.assign(pad, control);
++    if (control.lt !== lastControl?.lt || control.rt !== lastControl?.rt) {
++      evidence.probes.push({ ...anchor(), elapsed, ...control });
++      lastControl = control;
++    }
++
++    const result = original.call(this, dt, frame);
++    const data = sample(runtime);
++    const flow = data.flow;
++    const effect = flow?.effect;
++    const sameStep = effect && data.step && ['hostId', 'cellId', 'mountSequence', 'frame', 'substep']
++      .every(key => effect[key] === data.step[key]);
++    elapsed += dt;
++    evidence.samples.push(data);
++    if (data.aim?.targetId === 'silt_porosity_shelf') evidence.actions.canonical_selection ??= data.step;
++    if (data.input.flowDemand > 0 && data.input.flowSequence > 0 && !data.input.absorb) evidence.actions.analog_flow_request ??= data.step;
++    if (sameStep && effect.acceptedCurrent01 > 0) {
++      evidence.actions.accepted_current ??= data.step;
++      evidence.pressureDose += effect.pressure01 * dt;
++      evidence.currentDose += effect.acceptedCurrent01 * dt;
++      evidence.acceptedImprintGain += effect.after.imprint - effect.before.imprint;
++      if (effect.materialTransferred || effect.progressionCredit || effect.hostReceipt) {
++        evidence.invariantViolation = 'Receiver reported an out-of-scope side effect';
++      }
++    }
++    if (stoppingAt !== null && !data.input.flowDemand && !flow?.effect && !data.input.stabilize) {
++      evidence.actions.release ??= data.step;
++    }
++    if (transitions(lastFlow, flow)) evidence.changes.push({ step: data.step, elapsed, wallMs: data.wallMs,
++      phase: flow?.phase ?? null, reason: flow?.reason ?? null, result: Boolean(effect) });
++    lastFlow = flow;
++    if (stoppingAt !== null && elapsed >= stoppingAt + rules.recoverySeconds) {
++      evidence.actions.recovery_window = data.step;
++      evidence.final = { state: data, retained: retained(runtime), elapsed, stoppingAt };
++      evidence.end = anchor();
++      marker('#00fafa');
++      active = false;
++      returnControl();
++    }
++    return result;
++  };
++  return evidence;
++}
+diff --git a/docs/director/DL-EXP-002.md b/docs/director/DL-EXP-002.md
+new file mode 100644
+index 0000000..95b300a
+--- /dev/null
++++ b/docs/director/DL-EXP-002.md
+@@ -0,0 +1,11 @@
++# DL-EXP-002 · Physical Manipulation Comparison
++
++Revision 1. Registered specification only, starting from PI02-P1. Reserve scenario IDs `dl-exp-002.tether-pulse`, `dl-exp-002.directed-launch`, and `dl-exp-002.garden-placement` for future loadable definitions.
++
++| Panel | Production input and required witnesses |
++| --- | --- |
++| Ordinary tethered Pulse | LT+A or Q+E acquires an eligible grain through the native owner. Charge and release ordinary Pulse while held. Observe native Pulse ID, accepted tether displacement and held identity. Treat later deliberate release separately. |
++| Directed material launch | Match the first setup and charge. Commit A/E while holding Stabilize and charging. Observe one directed release, aim/velocity, one reserve envelope and suppression of the second native Pulse. Report actual recipient only if confirmed. |
++| Controlled Garden placement | Start in the existing Garden catchment or traverse to it with the same grain generation. Acquire naturally, use held contact, brace and imprint qualification, and press A/E. Observe native seat and custody transition, separately from any accepted B1 ecological arrival. |
++
++Match underlying chemistry, Core configuration, pre-grip reserve, grain ID/generation/phase, finite census, environment, camera and input profile where possible. A/B share starting geometry. C must be at the Garden contact patch. Record exact staged differences and route/geometry eligibility. Test production input, accepted motion, release vector, charge, reserve, tether, placement acceptance and visibility. Record ledger and progression deltas and missed actions. Proposed three-panel 60–120 seconds with aligned start/charge cues and actual elapsed, individual source clips, optional future human takeover and raw telemetry. Chord comfort, visibility, distinction from tether Pulse, weight/momentum and retrieval require human evidence.
+diff --git a/docs/director/DL02-C1.md b/docs/director/DL02-C1.md
+new file mode 100644
+index 0000000..099357a
+--- /dev/null
++++ b/docs/director/DL02-C1.md
+@@ -0,0 +1,10 @@
++# DL02-C1 / DL03–05 · Director execution and capture
++
++DL-EXP-001 uses the admitted Silt Shelf with identical native material and patch, camera, reserve, chemistry stock and earned development. The same debug-prepared piece identities populate three layouts. Only the organization differs. Fixture staging occurs once, before the tape. Live input reaches the normal InputSystem and production owners.
++
++- Same input: latch Stabilize, start constant analog Flow at nominal simulation 0.45 s, and hold 2.2 s. Log actual edge/substep timing and partition variability.
++- Same objective: common selection, same demand and stop after 0.12 pressure·seconds or a common 3.8 s hold cap. Keep overshoot and real completion times.
++- In both: release, observe 1.3 s recovery and log position, action, reserve, strain, accepted receiver delivery and imprint, elapsed/deferred timing, and stable accounting. Report states that were attempted but rejected.
++- Capture: six original browser WebMs. Compose using source video start/end cue detection and wall-time anchors with an explicit elapsed axis, independent of gameplay timing. Preserve the source endings. Report anchor brackets, processing drift, decode metrics, and actual recorder limitations. The Playwright recorder produces silent video and offers no exact source-drop counter.
++
++Use `run.mjs <new-external-dir> --all` then `compose.mjs <run-dir> <new-output-dir>` after all acceptance conditions pass. Preserve individual source clips. Phone readability and physical-controller judgment are separate from geometric frustum evidence.
+diff --git a/docs/director/DS02-C1.md b/docs/director/DS02-C1.md
+new file mode 100644
+index 0000000..9e14233
+--- /dev/null
++++ b/docs/director/DS02-C1.md
+@@ -0,0 +1,8 @@
++# DS02-C1 · Scenario contract v1
++
++PI02-P1 is the compatible checkpoint. `BLOB_BOT_SERIES1/director/scenario-contract.mjs` validates revision, provenance, exact Host/cell and Shelf receiver, basis and pose, Core placement/reserve, native material IDs/custody/generation, and fresh progression and receipt conditions. It validates neutral relationship state, camera and explicit existing experimental input profile. Null seed means no controlled random draw was supplied. Strict validation rejects unknown fields, arbitrary recipes, mismatched configuration, wrong build, and derived values offered in place of owner state.
++
++- Authoritative facts: initial placement inputs, reserve, owner membership, identity and prior progression. `shelf-stage.mjs` stages only documented placement, pose and reserve after the existing Shift+6 test mount and anatomy preparation. Real owner publications verify prerequisites and recompute derived traits and chemistry.
++- Presentation fields: explicit view/pitch/yaw/viewport. Transient input: neutral device, then existing normalized standard-pad profile. They carry no progression.
++- Protocol: named initializer, duration, required actions, acceptance predicates, telemetry coverage and fresh disposable reset. Track separate PASS, FAIL, NOT_EXERCISED, INVALID_SETUP and INCOMPATIBLE_BUILD outcomes.
++- Isolation: one new Playwright context per episode at an isolated Vite origin, native diagnostic telemetry limited to that context, ordinary context sentinel retained separately. Human handoff can use `run.mjs <new-external-output-dir> --prepare deep` when installed browser rendering is available. The prepared browser passes device controls through after start verification.
+diff --git a/docs/director/MASTER_WORKFLOW_DECISIONS_v1.1-W03.md b/docs/director/MASTER_WORKFLOW_DECISIONS_v1.1-W03.md
+new file mode 100644
+index 0000000..09e6dbc
+--- /dev/null
++++ b/docs/director/MASTER_WORKFLOW_DECISIONS_v1.1-W03.md
+@@ -0,0 +1,9 @@
++# Master Workflow decisions · Wave 03
++
++Revision 1. This is a coordination record of the supplied Wave 02 and Wave 03 decisions. The standalone Master Workflow Plan v1.1 and BUILD_STRATEGY_REFERENCE.md were unavailable for comparison. Checkpoint numbering and source hierarchy remain authoritative.
++
++- PI02-P1 is the only authorized publication. New scenario and Director code stays local.
++- Develop in isolated workspaces and verify checkpoint, provenance and actual starting state. Separate staging from production gameplay actions and affected state.
++- Keep owners, input, timing and field receipts independent. Match underlying conditions and report natural layout-derived physiological differences.
++- Sequential run and capture are separate from scoring. Preserve original clips, elapsed-time differences and uncertainty. Use explicit failure and coverage statuses.
++- PS02 and NV02 are contracts. DL-EXP-002 and PI03 are preparation. Controller comfort and readability still need Experience evidence.
+diff --git a/docs/director/NV02-C1.md b/docs/director/NV02-C1.md
+new file mode 100644
+index 0000000..39b7c7f
+--- /dev/null
++++ b/docs/director/NV02-C1.md
+@@ -0,0 +1,5 @@
++# NV02-C1 · Spatial identity foundation
++
++Revision 1 proposal. Use registered regions and authored gates from `src/world/RegionRegistry.js:9–19`, `WorldCompositionRegistry.js` and local cell recipes. `src/core/GameRuntime.js:1623` publishes the active Host. `src/modes/ModeController.js:101–114` publishes active cell and mount. `src/world/RegionalTerritoryExpansion.js:315` exposes the mounted Shelf receiver pose.
++
++Retain stable place ID/kind, parent and authored links, coordinate frame, recipe revision and aliases. Core arrangements have a distinct local frame. World hierarchy spans chamber/cell, organ, Host and approved external places. Distinguish authored adjacency, discovery, historical visits, live mounted world pose and current gate eligibility. Camera never grants access or changes the location identity. Preserve unknown geography outside approved canon. PS02 references durable IDs and DS02 verifies runtime material/cell/mount transforms. Test alias, remount, translated geometry, Near/World, Hub range and unknown places before any map. No map or world content added.
+diff --git a/docs/director/PI03_DEPENDENCIES.md b/docs/director/PI03_DEPENDENCIES.md
+new file mode 100644
+index 0000000..eea2d88
+--- /dev/null
++++ b/docs/director/PI03_DEPENDENCIES.md
+@@ -0,0 +1,8 @@
++# PI03 preparation · Contact and recipient ownership
++
++- Aim/commit. `src/input/InputSystem.js:765`, `src/targeting/TargetingSystem.js:155` and `src/routes/SiltPressureRouteSystem.js:1576,1602` authenticate a directed release, material identity/generation and mount-step. Aim identity is intent. The release's actual recipient is initially null.
++- Motion. `src/contact/SiltGripAuthority.js` and `src/contact/SiltTrajectoryMemory.js:62,87` own grip and release/integration/rejoin. `src/contact/SiltTrajectoryFieldProbe.js` observes habitat. A possible later segment probe should read existing free-step movement without a new solver.
++- Geometry. `src/routes/SiltPressureRouteSystem.js:838,1196,1231` distinguishes visual geology, authored locomotion and held Garden contact. `src/player/CoreFlowSystem.js:139` handles crown obstruction. No generic free-material collider is implied by these boundaries.
++- Receivers. `src/contact/SiltCompressionContact.js` and `SiltPlateSeat.js:20` own held contact/seat. `src/routes/SiltPressureRouteSystem.js:2060–2102` verifies B1 ecological arrival. `src/world/RegionalTerritoryExpansion.js:330` confirms only native Flow. `src/core/HostConnectionReceiptLedger.js` retains authenticated release observations and defined effects. None can be repurposed as an implicit impact receipt.
++
++Any later receiver witness needs explicit authored opt-in, material and mount identity, one accepted contact event, and retained receipt/credit ownership. Test false positives, zero motion, rejoin, remount, duplicate and mass parity before proposing any consequence. No impact mechanics, damage, fragmentation, generic projectile or structural assembly added.
+diff --git a/docs/director/PS02-C1.md b/docs/director/PS02-C1.md
+new file mode 100644
+index 0000000..5dac374
+--- /dev/null
++++ b/docs/director/PS02-C1.md
+@@ -0,0 +1,5 @@
++# PS02-C1 · Persistence foundation
++
++Revision 1 proposal. Core, regional, material and Host receipt owners serialize only approved durable state. `src/core/RuntimeStateLedgerSystem.js:19` publishes a live read model. `src/core/SessionTelemetrySystem.js:3693` retains diagnostics in a distinct namespace. Development scenarios remain disposable and do not hydrate player saves.
++
++A future envelope records schema/checkpoint/recipe IDs, generation, checksum and owner-versioned payloads. Retain approved identity, progression, placements, material custody/generation/mass and retained consequences. Include receipt parent/cursor integrity. Recompute derived traits, exposure and presentation. Preserve fresh mount and neutral input, focus, grip, Flow and charge on reset. Reserve, camera preferences and elapsed world time require explicit durability decisions. Validate old/new schema and foreign keys before one atomic generation commit. Retain a last-valid generation and test migrations, interruption, unknown versions, invalid mass and exactly-once reapplication. No player save system is implemented.

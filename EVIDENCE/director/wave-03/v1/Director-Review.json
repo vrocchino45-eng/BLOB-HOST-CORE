@@ -1,0 +1,170 @@
+{
+  "verdict": "DIRECTOR LAB FOUNDATION COMPLETE — READY FOR DIRECTOR REVIEW",
+  "publication": {
+    "commit": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+    "parent": "8a15b59530733fdccc61118b4d8f14174f49566a",
+    "ref": "refs/heads/integration/pi02-p1",
+    "protectedRefsEqual": true
+  },
+  "focus": [
+    {
+      "scenario": "dl-exp-001.deep",
+      "mode": "input",
+      "status": "PASS",
+      "stopSimulationSeconds": 2.6499999999999986,
+      "pressureDose": 0.2149343318487112,
+      "reserveAfterRecovery": 0.8474080602198111,
+      "directFlowDebit": 0.011928413818585448,
+      "strainPeak": 0.6728650769246022,
+      "strainAfterRecovery": 0,
+      "acceptedImprintGain": 0.06601659230066059,
+      "maxMovement": 0.4821736673476677,
+      "droppedSimulationMs": 30932.800000190735,
+      "steps": 80,
+      "observedFrames": 27,
+      "frustumFraction": 1
+    },
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "input",
+      "status": "PASS",
+      "stopSimulationSeconds": 2.6499999999999986,
+      "pressureDose": 0.178180246084931,
+      "reserveAfterRecovery": 0.7297755797161576,
+      "directFlowDebit": 0.0098354535751205,
+      "strainPeak": 0.8073192602900127,
+      "strainAfterRecovery": 0.05828526029001231,
+      "acceptedImprintGain": 0.0551381018462927,
+      "maxMovement": 0.4831056325275981,
+      "droppedSimulationMs": 43718.89999961853,
+      "steps": 80,
+      "observedFrames": 27,
+      "frustumFraction": 1
+    },
+    {
+      "scenario": "dl-exp-001.membrane",
+      "mode": "input",
+      "status": "PASS",
+      "stopSimulationSeconds": 2.6499999999999986,
+      "pressureDose": 0.12032942633320831,
+      "reserveAfterRecovery": 0.41189040098982516,
+      "directFlowDebit": 0.00656659687342126,
+      "strainPeak": 1,
+      "strainAfterRecovery": 0.5436999999999993,
+      "acceptedImprintGain": 0.03767892565229758,
+      "maxMovement": 0.484159383165904,
+      "droppedSimulationMs": 31989.099999427795,
+      "steps": 80,
+      "observedFrames": 27,
+      "frustumFraction": 1
+    },
+    {
+      "scenario": "dl-exp-001.deep",
+      "mode": "objective",
+      "status": "PASS",
+      "stopSimulationSeconds": 1.800000000000001,
+      "pressureDose": 0.12115214000018776,
+      "reserveAfterRecovery": 0.8704092639446179,
+      "directFlowDebit": 0.006551198512686152,
+      "strainPeak": 0.36811660580542943,
+      "strainAfterRecovery": 0,
+      "acceptedImprintGain": 0.03794466070128899,
+      "maxMovement": 0.3757435960011,
+      "droppedSimulationMs": 24958.5,
+      "steps": 63,
+      "observedFrames": 21,
+      "frustumFraction": 1
+    },
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "objective",
+      "status": "PASS",
+      "stopSimulationSeconds": 1.950000000000001,
+      "pressureDose": 0.1215490142952739,
+      "reserveAfterRecovery": 0.7681165961464043,
+      "directFlowDebit": 0.006595559039018206,
+      "strainPeak": 0.5152471782400998,
+      "strainAfterRecovery": 0,
+      "acceptedImprintGain": 0.03806031508168817,
+      "maxMovement": 0.3954612006529018,
+      "droppedSimulationMs": 38606.900000572205,
+      "steps": 66,
+      "observedFrames": 22,
+      "frustumFraction": 1
+    },
+    {
+      "scenario": "dl-exp-001.membrane",
+      "mode": "objective",
+      "status": "PASS",
+      "stopSimulationSeconds": 2.6499999999999986,
+      "pressureDose": 0.12032942633320831,
+      "reserveAfterRecovery": 0.41189040098982516,
+      "directFlowDebit": 0.00656659687342126,
+      "strainPeak": 1,
+      "strainAfterRecovery": 0.5436999999999993,
+      "acceptedImprintGain": 0.03767892565229758,
+      "maxMovement": 0.484159383165904,
+      "droppedSimulationMs": 30479,
+      "steps": 80,
+      "observedFrames": 27,
+      "frustumFraction": 1
+    }
+  ],
+  "media": [
+    {
+      "mode": "input",
+      "sha256": "fc19af4fe4808038e6de96cbfc54832d7931773aac76b413d02a8d29c7763f36",
+      "seconds": 51.036000000000016,
+      "maxPlaybackDriftMs": 146.74599980926217,
+      "maxSourceAnchorDifferenceMs": 1414.300000190724,
+      "maxAnchorBracketMs": 800.0000000000043,
+      "decodeDrops": 0,
+      "estimatedOutputMisses": 23,
+      "video": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/releases/download/director-wave-03-evidence-v1/DL-EXP-001-input.webm"
+    },
+    {
+      "mode": "objective",
+      "sha256": "eaa5e157636f0180e068e8a4021d504b767aa8182de923ac725c72e46fd7e8d7",
+      "seconds": 44.876000000000026,
+      "maxPlaybackDriftMs": 204.67099999999405,
+      "maxSourceAnchorDifferenceMs": 1996.5200005722072,
+      "maxAnchorBracketMs": 400.0000000000057,
+      "decodeDrops": 2,
+      "estimatedOutputMisses": 13,
+      "video": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/releases/download/director-wave-03-evidence-v1/DL-EXP-001-objective.webm"
+    }
+  ],
+  "startingStateParity": true,
+  "identicalInputEdges": [
+    {
+      "elapsed": 0,
+      "lt": 0.82,
+      "rt": 0
+    },
+    {
+      "elapsed": 0.44999999999999996,
+      "lt": 0.82,
+      "rt": 0.46
+    },
+    {
+      "elapsed": 2.6499999999999986,
+      "lt": 0,
+      "rt": 0
+    }
+  ],
+  "ordinary": {
+    "key": "__director_isolation_witness__",
+    "value": "ordinary-context-only",
+    "hasDirectorPad": false,
+    "hasDirectorRuntime": false,
+    "hasOverlay": false,
+    "startupFlowFlag": false,
+    "storageIntact": true
+  },
+  "protectedCheckouts": 10,
+  "changedFiles": 16,
+  "buildByteIdentical": 541,
+  "acceptedRuns": "telemetry/runs.json",
+  "sourceClips": "archive/index.json",
+  "comparisonMetadata": "recordings/sync.json"
+}

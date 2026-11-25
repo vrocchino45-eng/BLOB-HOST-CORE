@@ -1,0 +1,59 @@
+{
+  "checkpoint": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "matchedStartingConditions": true,
+  "ordinaryStorageIsolation": true,
+  "productionSourcesIdentical": true,
+  "comparisons": [
+    {
+      "scenario": "dl-exp-001.deep",
+      "mode": "input",
+      "status": "PASS",
+      "missing": [],
+      "violations": [],
+      "trial": "../telemetry/trials/dl-exp-001.deep-input.json"
+    },
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "input",
+      "status": "PASS",
+      "missing": [],
+      "violations": [],
+      "trial": "../telemetry/trials/dl-exp-001.balanced-input.json"
+    },
+    {
+      "scenario": "dl-exp-001.membrane",
+      "mode": "input",
+      "status": "PASS",
+      "missing": [],
+      "violations": [],
+      "trial": "../telemetry/trials/dl-exp-001.membrane-input.json"
+    },
+    {
+      "scenario": "dl-exp-001.deep",
+      "mode": "objective",
+      "status": "PASS",
+      "missing": [],
+      "violations": [],
+      "trial": "../telemetry/trials/dl-exp-001.deep-objective.json"
+    },
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "objective",
+      "status": "PASS",
+      "missing": [],
+      "violations": [],
+      "trial": "../telemetry/trials/dl-exp-001.balanced-objective.json"
+    },
+    {
+      "scenario": "dl-exp-001.membrane",
+      "mode": "objective",
+      "status": "PASS",
+      "missing": [],
+      "violations": [],
+      "trial": "../telemetry/trials/dl-exp-001.membrane-objective.json"
+    }
+  ],
+  "sameSessionMaterialMass": 8,
+  "balancedObjectiveRecapture": "The first accepted trial lacked a captured final marker. The replacement matched the original measured outcome.",
+  "scope": "Evidence review and technical verification; gameplay integration remains separately authorized."
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "blob.director.presentation.v1",
+  "scope": "development capture or offline edit only",
+  "source": "native game canvas",
+  "capture": {
+    "viewport": [
+      768,
+      432
+    ],
+    "hud": "exclude DOM HUD from output",
+    "camera": "production camera unchanged",
+    "timing": "simulation and wall/media clocks labeled separately"
+  },
+  "overlay": {
+    "placement": "footer outside world frame",
+    "fields": [
+      "scenario",
+      "simulationSeconds",
+      "reserve01",
+      "acceptedPressure01",
+      "strain01"
+    ],
+    "markers": [
+      "staged start",
+      "selection",
+      "first accepted effect",
+      "release",
+      "recovery",
+      "coverage outcome"
+    ],
+    "freshness": "mark missing owner publications as unobserved",
+    "mapping": "Host/cell/mount/frame/substep paired with actual presentation timestamp"
+  },
+  "layouts": {
+    "comparative": {
+      "panels": 3,
+      "crop": "consistent native framing across panels, preserve elapsed differences"
+    },
+    "focused": {
+      "panels": 1,
+      "crop": "full canvas"
+    },
+    "detail": {
+      "panels": 1,
+      "crop": "centered 62% canvas crop; verify Core, connector/held grain and recipient remain visible"
+    },
+    "mobile": {
+      "panels": 1,
+      "crop": "prefer single-panel H.264/AAC when supported; use clearly labeled chapters or readable stacked comparison"
+    }
+  },
+  "timingTargetMs": 100,
+  "limits": "Report frame gaps and actual alignment without altering game timing."
+}
