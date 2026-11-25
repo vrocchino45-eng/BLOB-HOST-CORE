@@ -5,7 +5,8 @@ import { buildCompatibility, CHECKPOINT, readBuildIdentity } from './build-compa
 export const SCHEMA = 'blob.dev-scenario.v1';
 export { CHECKPOINT };
 export const ACTIVE_CHECKPOINT = '1c86d1f5a2466e218bc667d4a969a24d2be08797';
-const scenarioCheckpoints = Object.freeze({ 1: CHECKPOINT, 2: ACTIVE_CHECKPOINT });
+export const UI03_CHECKPOINT = 'c68944ae723976273d5f2577c4d6c48d529c7362';
+const scenarioCheckpoints = Object.freeze({ 1: CHECKPOINT, 2: ACTIVE_CHECKPOINT, 3: UI03_CHECKPOINT });
 const root = path.resolve(import.meta.dirname, '../..');
 export const OUTCOMES = Object.freeze(['PASS', 'FAIL', 'NOT_EXERCISED', 'INVALID_SETUP', 'INCOMPATIBLE_BUILD']);
 const text = value => typeof value === 'string' && value.length > 0;
@@ -44,7 +45,7 @@ function record(checks) {
 const validateShape = record({
   schema: exact(SCHEMA),
   id: value => typeof value === 'string' && /^dl-exp-001\.(deep|balanced|membrane)$/.test(value),
-  revision: oneOf(1, 2),
+  revision: oneOf(1, 2, 3),
   build: record({ checkpoint: sha }),
   environment: record({
     host: exact('HOST_ALPHA_WOUNDED_NURSERY'), cell: exact('CELL_SILT_PRESSURE_ROUTE_001'),
@@ -78,6 +79,9 @@ const validateShape = record({
 export function validateScenario(scenario, identity = readBuildIdentity(root, ACTIVE_CHECKPOINT)) {
   if (scenario?.schema !== undefined && scenario.schema !== SCHEMA || scenario?.revision !== undefined && !Object.hasOwn(scenarioCheckpoints, scenario.revision)) {
     return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_SCENARIO_REVISION', errors: ['The scenario schema must be blob.dev-scenario.v1 with an admitted revision'] };
+  }
+  if (scenario?.revision === 3 && scenario.build?.checkpoint !== UI03_CHECKPOINT) {
+    return { status: 'INVALID_SETUP', code: 'UNSUPPORTED_UI03_CHECKPOINT', errors: ['Revision 3 is scoped to the explicitly admitted UI03 checkpoint'] };
   }
   const errors = [];
   if (!validateShape(scenario, errors)) return { status: 'INVALID_SETUP', errors };
