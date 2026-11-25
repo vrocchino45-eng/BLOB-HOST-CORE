@@ -1,0 +1,324 @@
+{
+  "branch": "integration/dl-f01-p1",
+  "commit": "d6b9b8ad13539d3be507c465ea3bb9782c718c9a",
+  "parent": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "priorParent": "8a15b59530733fdccc61118b4d8f14174f49566a",
+  "patchSHA256": "08a6af10c12a5bd45da02e8353bc64b098d6a49ec32b126308222b5cebbc76a3",
+  "files": [
+    {
+      "path": "BLOB_BOT_SERIES1/director/compose.mjs",
+      "sha256": "be5a68c17b0aa3fba0554e80388a58d310c32318dba878e2d6d19261d732fd74",
+      "bytes": 13544,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/run.mjs",
+      "sha256": "bb9da15aa856f34f49ea673a6c712ff15701b4e0878b98615bf8f567d7e259ff",
+      "bytes": 16949,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenario-contract.mjs",
+      "sha256": "a8ecfb8f891fa43a1e3bf012e245966024b94a242559e9878a9f47d2a3073c04",
+      "bytes": 5798,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs",
+      "sha256": "f34b4fdc8bd1e37bbe7704005695bd021123d087d907a793e621662fccef4487",
+      "bytes": 2355,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenarios/balanced.json",
+      "sha256": "0c93cebf1978fd9d6739372d4fc2a0e67140873c2db5979692f05d71f35edd23",
+      "bytes": 2178,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenarios/deep.json",
+      "sha256": "024e64b0b14a8904c182146dd0b4171e1fc5688a6cb90c5ba1a689888542aa16",
+      "bytes": 2174,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenarios/membrane.json",
+      "sha256": "7c7cdce6315de129044811b15ae60bbf86b7d2e3e5aa44e84267e0e32a63cc46",
+      "bytes": 2175,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/shelf-stage.mjs",
+      "sha256": "18bc63e891da919c03f58c479c4f770c3b52aefdd7aadcef5449a52a62d0f73f",
+      "bytes": 6931,
+      "operation": "add"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/shelf-tape.mjs",
+      "sha256": "82b4271911c2cb7f056c154444af0e9309b2f3e07573780ff87c21bb7810ca54",
+      "bytes": 4531,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/DL-EXP-002.md",
+      "sha256": "18c905324de63d3e61123eb3537818c06d24907c4bfb053f67b6841906aaa908",
+      "bytes": 1901,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/DL02-C1.md",
+      "sha256": "9e49ec28dd77a98a5403c35a3521975be81d846751fd9e61d0b0727d07dfd63c",
+      "bytes": 1581,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/DS02-C1.md",
+      "sha256": "0f25e6a00c683ba9437bbff409b7223728199f9bda69f2e275c5420742d636a3",
+      "bytes": 1713,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/MASTER_WORKFLOW_DECISIONS_v1.1-W03.md",
+      "sha256": "10e724824f82bb077b5d9a98f97b04e5d5a90280214b98ed4cbd34d91a40b010",
+      "bytes": 1006,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/NV02-C1.md",
+      "sha256": "db33cb1ed7792c2341e2cc55b3011671d0dd7ad2a653c0396a0e959cc0240064",
+      "bytes": 1093,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/PI03_DEPENDENCIES.md",
+      "sha256": "d4c80867c3b98a37b3005f3e71f78fea2a23e1c4e2a8fa079b6374f1e0569aa2",
+      "bytes": 1682,
+      "operation": "add"
+    },
+    {
+      "path": "docs/director/PS02-C1.md",
+      "sha256": "eed23af3437ebc72dfd4c9f8cbf2d05e8d2001cdf078f9cab87051763281adb0",
+      "bytes": 1104,
+      "operation": "add"
+    }
+  ],
+  "buildByteIdentical": 541,
+  "replay": [
+    {
+      "scenario": "dl-exp-001.deep",
+      "mode": "input",
+      "result": "PASS"
+    },
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "input",
+      "result": "PASS"
+    },
+    {
+      "scenario": "dl-exp-001.membrane",
+      "mode": "input",
+      "result": "PASS"
+    },
+    {
+      "scenario": "dl-exp-001.deep",
+      "mode": "objective",
+      "result": "PASS"
+    },
+    {
+      "scenario": "dl-exp-001.balanced",
+      "mode": "objective",
+      "result": "PASS"
+    },
+    {
+      "scenario": "dl-exp-001.membrane",
+      "mode": "objective",
+      "result": "PASS"
+    }
+  ],
+  "storageIsolation": true,
+  "startingStateParity": true,
+  "gates": [
+    {
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "scripts/testPI02DirectedSiltLaunch.mjs"
+      ],
+      "log": "launch-focused.tap",
+      "code": 0,
+      "pass": 11,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs"
+      ],
+      "log": "scenario-contract.tap",
+      "code": 0,
+      "pass": 3,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--outDir",
+        "<wave-04-archive>/foundation/dist"
+      ],
+      "log": "production-build.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=2",
+        "scripts/testB5FlowReserveSettlement.mjs",
+        "scripts/testB5GraveCoreFeedback.mjs",
+        "scripts/testC2CascadeVisuals.mjs",
+        "scripts/testC2ContextualLabels.mjs",
+        "scripts/testC63RouteReadiness.mjs",
+        "scripts/testCC01VascularResidualRecovery.mjs",
+        "scripts/testCH01VascularRecovery.mjs",
+        "scripts/testCH02SiltShelfConsequence.mjs",
+        "scripts/testCH03GraveRecoilSettling.mjs",
+        "scripts/testF1SiltFlow.mjs",
+        "scripts/testLocalSiltEcologicalResistance.mjs",
+        "scripts/testLocalSiltSeepExchange.mjs",
+        "scripts/testSiltHeldMotionReporting.mjs",
+        "scripts/testT1ReturnReadout.mjs",
+        "scripts/testWave1CoreEngine.mjs",
+        "scripts/testWave1FeedbackState.mjs",
+        "scripts/testWave1HostResponse.mjs",
+        "scripts/testWave1TargetLifecycle.mjs",
+        "scripts/testWave1VerbInteraction.mjs",
+        "scripts/testWC01VascularCaption.mjs",
+        "scripts/testWC01VascularReadability.mjs"
+      ],
+      "log": "maintained.tap",
+      "code": 0,
+      "pass": 245,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/verifyWave1CoreProfiles.mjs"
+      ],
+      "log": "verifyWave1CoreProfiles.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/checkC63HubRouteAccess.mjs"
+      ],
+      "log": "checkC63HubRouteAccess.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/validateRecipeDataLoad.mjs"
+      ],
+      "log": "validateRecipeDataLoad.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/smokeHC031W1StabilizedAimLocalContact.mjs"
+      ],
+      "log": "smokeHC031W1StabilizedAimLocalContact.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/smokeHC031U21RelationshipIntentLatch.mjs"
+      ],
+      "log": "smokeHC031U21RelationshipIntentLatch.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/validateLS1BLivingSiltMaterialCycle.mjs"
+      ],
+      "log": "validateLS1BLivingSiltMaterialCycle.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/validateHC016QTenderCompanion.mjs"
+      ],
+      "log": "validateHC016QTenderCompanion.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/validateHC031C2FragmentFieldCapture.mjs"
+      ],
+      "log": "validateHC031C2FragmentFieldCapture.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/validateHC031DRuptureConsequence.mjs"
+      ],
+      "log": "validateHC031DRuptureConsequence.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    },
+    {
+      "args": [
+        "scripts/smokeLS1E1.mjs"
+      ],
+      "log": "smokeLS1E1.log",
+      "code": 1,
+      "pass": 0,
+      "baselineException": true
+    },
+    {
+      "args": [
+        "scripts/smokeLS1E2.mjs"
+      ],
+      "log": "smokeLS1E2.log",
+      "code": 1,
+      "pass": 0,
+      "baselineException": true
+    },
+    {
+      "args": [
+        "BLOB_BOT_SERIES1/director/run.mjs",
+        "<wave-04-archive>/foundation/replay",
+        "--all"
+      ],
+      "log": "comparative-replay.log",
+      "code": 0,
+      "pass": 0,
+      "baselineException": false
+    }
+  ],
+  "clean": true,
+  "localOnly": true,
+  "inherited": {
+    "whiteSpace": "One blank line with trailing spaces preserved to match the approved patch",
+    "media": "Silent source with low capture cadence and original timestamp offsets"
+  }
+}

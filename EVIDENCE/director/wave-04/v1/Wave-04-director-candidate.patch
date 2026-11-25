@@ -1,0 +1,779 @@
+diff --git a/BLOB_BOT_SERIES1/director/experiment-library.mjs b/BLOB_BOT_SERIES1/director/experiment-library.mjs
+new file mode 100644
+index 0000000..6087039
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/experiment-library.mjs
+@@ -0,0 +1,87 @@
++import a from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import {execFileSync} from 'node:child_process';
++import {Vector3} from 'three';
++import {rig,pad,cleanup,test,options,spec,layout,vector} from './experimental-fixture.mjs';
++import {manipulate,pulse} from './experiment-material.mjs';
++import {PlayerMovementController} from '../../src/player/PlayerMovementController.js';
++import {CoreTopologyResonanceSystem} from '../../src/player/CoreTopologyResonanceSystem.js';
++import {CoreTopologyEnvironmentalHandlingSystem} from '../../src/player/CoreTopologyEnvironmentalHandlingSystem.js';
++
++const local = JSON.parse(fs.readFileSync(new URL('../../public/data/world/localCellRecipes.json',import.meta.url)));
++const cell = local.find(entry=>entry.id==='CELL_SILT_PRESSURE_ROUTE_001');
++const dt = rig.STEP;
++const seconds = count=>Number.isFinite(count)?count*dt:null;
++
++function mobility(id,policy){
++  const g=rig.makeGame(test,options);
++  layout(g,id);
++  const f=g.frame, cfg=spec.mobility, start=g.route.root.localToWorld(vector(cfg.offset));
++  g.playerRoot.position.copy(start);
++  g.camera.position.copy(start).add(new Vector3(0,0,3));g.camera.lookAt(start);g.camera.updateMatrixWorld(true);
++  const movement=new PlayerMovementController({frameState:f,playerRoot:g.playerRoot,camera:g.camera,localCellRecipe:cell});
++  const resonance=new CoreTopologyResonanceSystem({frameState:f});
++  const handling=new CoreTopologyEnvironmentalHandlingSystem({frameState:f});
++  const boot={host:f.activeHostId,cell:f.activeCellId,position:start.toArray(),camera:g.camera.quaternion.toArray(),
++    velocity:movement.velocity.toArray(),chemistry:f.playerComposition,reserve:g.radial.reserve01,
++    mass:g.route.materialIdentity.totalMass(),receipts:rig.receipts(g).acceptedTotal};
++  const trace=[];
++  let phase='forward', turn, turnX, brake, stop, speedAt, reached, switched, distance=0;
++  for(let i=0;i<cfg.limit;i++){
++    const p=g.playerRoot.position;
++    if(phase==='forward'&&(policy==='input'?i>=cfg.forwardSteps:start.z-p.z>=cfg.forward)){
++      turn=i;turnX=p.x;phase='turn';
++    }
++    if(phase==='turn'&&(policy==='input'?i-turn>=cfg.turnSteps:p.x-turnX>=cfg.side)){
++      phase='brake';brake=i;
++    }
++    const boost=phase!=='brake';
++    pad.axes[0]=phase==='turn'?cfg.axis:0;pad.axes[1]=phase==='forward'?-cfg.axis:0;
++    pad.buttons[10]={value:Number(boost),pressed:boost};
++    const previous=f.corePerformance,reserve=g.radial.reserve01;
++    resonance.update(dt,f);handling.update(dt,f);
++    g.step();
++    const settled=f.corePerformance;
++    f.corePerformance=previous;movement.update(dt,f);f.corePerformance=settled;
++    const speed=movement.velocity.length();
++    if(speed>=cfg.target) speedAt??=i+1;
++    if(start.z-p.z>=cfg.forward) reached??=i+1;
++    if(phase==='turn'&&movement.velocity.x>Math.abs(movement.velocity.z)) switched??=i+1;
++    if(phase==='brake'&&stop===undefined){ distance+=speed*dt;if(speed<=cfg.rest)stop=i+1; }
++    trace.push({frame:f.frame,simulationTime:(i+1)*dt,phase,position:p.toArray(),velocity:movement.velocity.toArray(),
++      speed,axes:[f.input.moveX,f.input.moveZ,f.input.boostHeld],reserve:g.radial.reserve01,
++      debit:Math.max(0,reserve-g.radial.reserve01),attached:f.playerAttachment?.active===true});
++    if(brake!==undefined&&i-brake>=cfg.recoverySteps)break;
++  }
++  const coverage={turn,brake,stop,speedAt,reached,switched};
++  a.equal(g.route.materialIdentity.totalMass(),boot.mass);
++  a.equal(rig.receipts(g).acceptedTotal,boot.receipts);
++  a.ok(trace.every(row=>!row.attached));
++  return {id,policy,boot,coverage,status:Object.values(coverage).every(Number.isFinite)?'PASS':'NOT_EXERCISED',
++    initialAcceleration:trace[0].speed/dt,timeToSpeed:seconds(speedAt),traversalTime:seconds(reached),
++    turnDelay:seconds(switched-turn),brakingTime:seconds(stop-brake),brakingDistance:distance,
++    peakSpeed:Math.max(...trace.map(x=>x.speed)),debit:trace.reduce((n,x)=>n+x.debit,0),
++    minimumReserve:Math.min(...trace.map(x=>x.reserve)),recoveredReserve:trace.at(-1).reserve,trace};
++}
++const root=path.resolve(import.meta.dirname,'../..');
++const git=(...args)=>execFileSync('git',['--no-optional-locks','-C',root,...args],{encoding:'utf8'}).trim();
++a.equal(git('rev-parse','HEAD'),spec.base);
++a.equal(git('diff','HEAD','--name-only','--','src','scripts','public'),'');
++const output=path.resolve(process.argv[2]??'');
++a.ok(process.argv[2]&&path.relative(root,output).startsWith('..'));
++fs.mkdirSync(output);
++try{
++  const manipulation=['tether-pulse','directed-launch','garden-placement'].map(manipulate);
++  const movement=['input','objective'].flatMap(policy=>Object.keys(spec.layout).map(id=>mobility(id,policy)));
++  const pulses=Object.keys(spec.layout).map(pulse);
++  for(const r of manipulation)a.deepEqual(r.start,manipulation[0].start);
++  for(const r of movement)a.deepEqual(r.boot,movement[0].boot);
++  for(const r of pulses)a.deepEqual(r.start,pulses[0].start);
++  const data={scope:'Mounted owner execution. Production input resolution, staged approach where declared, fixed native update calls and unrendered projection.',spec,
++    manipulation,movement,pulses};
++  fs.writeFileSync(path.join(output,'mounted-experiments.json'),JSON.stringify(data,null,2)+'\n');
++  console.log(JSON.stringify({manipulation:manipulation.map(x=>[x.mode,x.status]),
++    mobility:movement.map(({trace,...x})=>x),pulse:pulses.map(x=>[x.id,...x.rounds.map(b=>[b.valid,b.full,b.accepted.appliedDisplacement,b.debit])])}));
++  if(movement.some(r=>r.status!=='PASS'))process.exitCode=1;
++}finally{cleanup();}
+diff --git a/BLOB_BOT_SERIES1/director/experiment-material.mjs b/BLOB_BOT_SERIES1/director/experiment-material.mjs
+new file mode 100644
+index 0000000..0e7b0e6
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/experiment-material.mjs
+@@ -0,0 +1,65 @@
++import a from 'node:assert/strict';
++import {rig,spec,test,options,layout,material,parity,vector} from './experimental-fixture.mjs';
++
++export function manipulate(mode) {
++  const { game,unit }=rig.prepare(test,options);
++  layout(game,'balanced'); game.aim(rig.LEFT);
++  const start=material(game,unit), sequence=game.route.transactionSequence;
++  let result;
++  if(mode==='garden-placement'){
++    // Existing deterministic approach setup. Actual brace, imprint and A/seat are native.
++    rig.prepareGarden(game);
++    a.ok(game.route.siltContact.imprinted&&game.route.siltContact.braced);
++    const before=material(game,unit);
++    rig.tap(game,'interact');
++    a.equal(game.route.siltPlateSeat.unitId,unit.id);
++    result={before,contact:game.route.siltContact.snapshot(),actions:['held_brace','pulse_imprint','seat']};
++  }else{
++    rig.charge(game,rig.LEFT,spec.holdSteps);
++    const before=material(game,unit), charge=game.frame.input.pulseCharge01;
++    if(mode==='directed-launch'){
++      const release=rig.commit(game), just=material(game,unit); rig.releasePulse(game);
++      a.equal(game.frame.input.pulsePressed,false); a.equal(release.actualRecipientId,null);
++      a.equal(just.held,null);a.ok(just.free);
++      result={charge,release,firstFree:just.free,debit:before.reserve-just.reserve,actions:['charge','directed_launch','native_X_up_suppressed']};
++    }else{
++      rig.releasePulse(game);
++      const motion=structuredClone(game.route.heldMotionLast), just=material(game,unit);
++      a.equal(just.held,unit.id);a.ok(motion.appliedDisplacement>0); a.equal(rig.launch(game),null);
++      result={charge,motion,debit:before.reserve-just.reserve,actions:['charge','tether_pulse']};
++    }
++  }
++  const end=material(game,unit);parity(start,end,mode==='directed-launch'?1:0);
++  return {mode,status:'PASS',start,end,result,receipts:rig.receipts(game).records,
++    decisions:game.route.transactionTrace.filter(x=>x.sequence>sequence)};
++}
++
++export function pulse(id) {
++  const {game,unit}=rig.prepare(test,options);
++  layout(game,id);game.aim(rig.LEFT);
++  const start=material(game,unit), rounds=[];
++  for(let burst=0;burst<spec.pulse.bursts;burst++){
++    game.pulse(true);
++    const trace=[];
++    let valid,full;
++    for(let step=1;step<=spec.pulse.cap;step++){
++      game.step();
++      const charge=game.frame.input.pulseCharge01;
++      trace.push({step,frame:game.frame.frame,charge,reserve:game.radial.reserve01});
++      if(charge>0) valid??=step*rig.STEP;
++      if(charge>=1){full=step*rig.STEP;break;}
++    }
++    a.ok(valid&&full);
++    const before=material(game,unit);rig.releasePulse(game);
++    const accepted=structuredClone(game.route.heldMotionLast), after=material(game,unit);
++    a.equal(accepted.heldGrainId,unit.id);a.equal(accepted.pulseEventId,game.frame.input.pulseEventId);a.equal(after.held,unit.id);
++    const recovery=[];
++    for(let j=0;j<spec.pulse.recoverySteps;j++){game.step();recovery.push(game.radial.reserve01);}
++    rounds.push({valid,full,accepted,trace,recovery,debit:before.reserve-after.reserve,
++      physicalMovement:vector(after.position).distanceTo(vector(before.position)),
++      publishedCoreResponse:game.frame.corePerformance.verbModifiers.pulse.responseStrengthMultiplier});
++  }
++  a.equal(new Set(rounds.map(r=>r.accepted.pulseEventId)).size,rounds.length);
++  const end=material(game,unit);parity(start,end);
++  return {id,status:'PASS',start,end,rounds};
++}
+diff --git a/BLOB_BOT_SERIES1/director/experimental-fixture.mjs b/BLOB_BOT_SERIES1/director/experimental-fixture.mjs
+new file mode 100644
+index 0000000..c622f35
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/experimental-fixture.mjs
+@@ -0,0 +1,46 @@
++import a from 'node:assert/strict';
++import fs from 'node:fs';
++import {createHash} from 'node:crypto';
++import {registerHooks} from 'node:module';
++import {Vector3} from 'three';
++
++export const spec = JSON.parse(fs.readFileSync(new URL('./scenarios/exp-002-004.json', import.meta.url)));
++const fixture = new URL('../../scripts/testPI02DirectedSiltLaunch.mjs', import.meta.url);
++const source = fs.readFileSync(fixture, 'utf8');
++a.equal(createHash('sha256').update(source).digest('hex'), spec.sourceHash);
++const parts = source.split("\ntest('keyboard and standard gamepad launch and retrieve");
++a.equal(parts.length, 2);
++const hook = registerHooks({ load(url, ctx, next) {
++  return url !== fixture.href ? next(url, ctx) : { format: 'module', shortCircuit: true,
++    source: parts[0] + '\nexport {makeGame,prepare,prepareGarden,grainMesh,charge,commit,tap,releasePulse,launch,receipts,LEFT,STEP};' };
++}});
++let original;
++try { original = await import(fixture.href); } finally { hook.deregister(); }
++export const rig = original;
++export let pad;
++const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
++export const cleanup = () => Object.defineProperty(globalThis, 'navigator', descriptor);
++export const test = {mock:{getter(owner,key,get){
++  Object.defineProperty(owner, key, {get,configurable:true}); pad = get().getGamepads()[0];
++}}};
++export const options = {padMode:true};
++export const vector = array => new Vector3().fromArray(array);
++export function layout(g,id) {
++  const [deep_core,inner_body,membrane] = spec.layout[id], frame=g.frame;
++  frame.spatialCoreChemistry = {retainedPieceCount:3,counts:{deep_core,inner_body,membrane},
++    topology:{id,distribution:spec.layout[id].join(':'),complete:true}};
++  g.radial.reserve01=spec.reserve;
++  g.radial.publish(frame,g.radial.resolveProfile(frame));
++}
++export function material(g,u) {
++  const mesh=rig.grainMesh(g,u), route=g.route;
++  return {id:u.id, generation:u.generation, phase:u.phase, owner:route.materialIdentity.get(u.id).owner,
++    mass:route.materialIdentity.totalMass(), position:mesh.position.toArray(),
++    visible:mesh.visible, ndc:mesh.getWorldPosition(new Vector3()).project(g.camera).toArray(),
++    held:route.siltGrip.heldId, seat:route.siltPlateSeat.unitId, free:route.siltTrajectory.get(u.id)??null,
++    reserve:g.radial.reserve01, receipts:rig.receipts(g).acceptedTotal, completion:route.completed};
++}
++export function parity(before,after,receipts=0) {
++  a.deepEqual([after.id,after.generation,before.mass,after.mass,after.completion],[before.id,before.generation,8,8,before.completion]);
++  a.equal(after.receipts-before.receipts,receipts);
++}
+diff --git a/BLOB_BOT_SERIES1/director/frame-capture.mjs b/BLOB_BOT_SERIES1/director/frame-capture.mjs
+new file mode 100644
+index 0000000..d6920b8
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/frame-capture.mjs
+@@ -0,0 +1,90 @@
++const markerWidth=190, cell=10, prefix=[1,0,1];
++export function frameCode(context,height){
++  const pixels=context.getImageData(0,height-cell,markerWidth,cell).data;
++  const bit=i=>pixels[((5*markerWidth)+i*cell+5)*4]>128;
++  if(prefix.some((value,i)=>Boolean(value)!==bit(i)))return null;
++  let key=0;
++  for(let i=0;i<16;i++) key+=Number(bit(i+prefix.length))*2**i;
++  return key||null;
++}
++function stamp(context,key,height){
++  for(let i=0;i<19;i++){
++    const value=i<prefix.length?prefix[i]:(key>>(i-prefix.length))&1;
++    context.fillStyle=value?'white':'black';
++    context.fillRect(i*10,height-10,10,10);
++  }
++}
++function audioTap(runtime){
++  const host=runtime.eventAnchoredHostAudioSystem;
++  if(host?.context?.state!=='running'||!host.outputCompressor)return null;
++  const destination=host.context.createMediaStreamDestination();
++  const analyser=host.context.createAnalyser();
++  host.outputCompressor.connect(destination);host.outputCompressor.connect(analyser);
++  const values=new Float32Array(analyser.fftSize);
++  return {track:destination.stream.getAudioTracks()[0],
++    level(){analyser.getFloatTimeDomainData(values);return Math.sqrt(values.reduce((n,x)=>n+x*x,0)/values.length);},
++    close(){host.outputCompressor.disconnect(destination);host.outputCompressor.disconnect(analyser);}};
++}
++function chooseMime(format,audio){
++  const codecs=format==='webm'?['vp8','vp8,opus']:['avc1.42001f','avc1.42001f,mp4a.40.2'];
++  const table=codecs.map(c=>'video/'+format+';codecs='+c);
++  if(audio&&MediaRecorder.isTypeSupported(table[1]))return {mime:table[1],audio:true};
++  if(MediaRecorder.isTypeSupported(table[0]))return {mime:table[0],audio:false};
++  return null;
++}
++export function captureRuntime(runtime,{detail=false,phone=true}={}){
++  const canvas=document.createElement('canvas');
++  canvas.width=768;canvas.height=432;
++  const context=canvas.getContext('2d',{alpha:false});
++  const source=canvas.captureStream(0).getVideoTracks()[0];
++  const audio=audioTap(runtime);
++  const recordings=[];
++  for(const format of phone?['webm','mp4']:['webm']){
++    const support=chooseMime(format,audio);
++    if(!support)continue;
++    const tracks=[source];
++    if(support.audio)tracks.push(audio.track);
++    const recorder=new MediaRecorder(new MediaStream(tracks),{mimeType:support.mime,videoBitsPerSecond:2000000});
++    const chunks=[];
++    recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
++    recorder.start();
++    recordings.push({format,recorder,chunks,...support});
++  }
++  if(!recordings.length){
++    source.stop();audio?.close();audio?.track.stop();
++    throw new Error('No supported capture codec');
++  }
++  const renderer=runtime.renderer,original=renderer.render,frames=[];
++  let frame,peakAudio=0;
++  renderer.render=function capture(scene,camera){
++    const result=original.call(this,scene,camera),f=runtime.frameState;
++    if(scene!==runtime.scene||this.getRenderTarget()!==null||frame===f.frame)return result;
++    frame=f.frame;
++    const image=renderer.domElement,scale=detail ? .62 : 1;
++    const w=image.width*scale,h=image.height*scale;
++    context.drawImage(image,(image.width-w)/2,(image.height-h)/2,w,h,0,0,canvas.width,canvas.height);
++    const marker=frames.length+1;
++    if(marker>=65536)return result;
++    stamp(context,marker,canvas.height);
++    frames.push({marker,wallMs:performance.now(),frame,substep:f.runtimeSimulationSubstepIndex,
++      simSeconds:f.runtimeSeconds,flowPhase:f.coreFlow?.phase,action:f.input?.flowActionSequence,
++      host:f.activeHostId,cell:f.activeCellId,mount:f.firstSliceRuntimeMount?.mountSequence});
++    peakAudio=Math.max(peakAudio,audio?.level()??0);
++    source.requestFrame();
++    return result;
++  };
++  return {supported:recordings.map(r=>r.format),frames,
++    async stop(base){
++      renderer.render=original;
++      const files=await Promise.all(recordings.map(({format,recorder,chunks,mime,audio})=>new Promise(resolve=>{
++        recorder.onstop=()=>{
++          const name=base+'.'+format,a=document.createElement('a');
++          a.href=URL.createObjectURL(new Blob(chunks,{type:mime}));
++          a.download=name;a.click();resolve({name,format,mime,nativeAudioTrack:audio});
++        };
++        recorder.stop();
++      })));
++      source.stop();audio?.close();audio?.track.stop();
++      return {files,frames,peakAudio,timeOrigin:performance.timeOrigin,detail,crop:detail ? .62 : 1};
++    }};
++}
+diff --git a/BLOB_BOT_SERIES1/director/frame-mapping.mjs b/BLOB_BOT_SERIES1/director/frame-mapping.mjs
+new file mode 100644
+index 0000000..28824a4
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/frame-mapping.mjs
+@@ -0,0 +1,75 @@
++import fs from 'node:fs/promises';
++import path from 'node:path';
++
++export function scoreFrameMapping(capture,samples,encoded,coverage){
++  const byMarker=new Map(capture.frames.map(row=>[row.marker,row]));
++  const known=encoded.filter(f=>byMarker.has(f.marker));
++  const origin=known[0], originWall=origin?byMarker.get(origin.marker).wallMs:null;
++  const byFrame=new Map();
++  for(const decoded of known){
++    const capture=byMarker.get(decoded.marker);
++    if(!byFrame.has(capture.frame))byFrame.set(capture.frame,{...capture,...decoded,
++      ptsResidualMs:(decoded.ptsSeconds-origin.ptsSeconds)*1000-(capture.wallMs-originWall)});
++  }
++  const actions=Object.entries(coverage).map(([name,step])=>{
++    const event=samples.find(s=>s.step?.frame===step?.frame&&s.step?.substep===step?.substep);
++    const media=event&&byFrame.get(step.frame);
++    if(!event||!media)return {name,step,status:event?'FRAME_NOT_ENCODED':'MISSING_EVENT_SAMPLE'};
++    const renderDelayMs=media.wallMs-event.wallMs;
++    const eventToFrameMs=renderDelayMs+media.ptsResidualMs;
++    return {name,step,simSeconds:event.runtimeSeconds,action:event.input.flowSequence,
++      consequence:event.flow?.effect??null,eventWallMs:event.wallMs,captureWallMs:media.wallMs,
++      encodedFrameObserved:media.encodedFrameObserved,ptsSeconds:media.ptsSeconds,marker:media.marker,
++      renderDelayMs,ptsResidualMs:media.ptsResidualMs,eventToFrameMs,
++      status:Math.abs(eventToFrameMs)<=100?'WITHIN_100_MS':'OVER_100_MS'};
++  });
++  return {actions,captured:capture.frames.length,encodedMarkers:known.length,
++    missingCapturedMarkers:capture.frames.filter(f=>!known.some(other=>other.marker===f.marker)).map(f=>f.marker),
++    maxAbsPtsResidualMs:known.length?Math.max(...[...byFrame.values()].map(f=>Math.abs(f.ptsResidualMs))):null};
++}
++
++export async function decodeCapture(browser,origin,out,raw){
++  const context=await browser.newContext();
++  const page=await context.newPage();
++  const results={};
++  try{
++    await page.route('**/__director_media',route=>route.fulfill({
++      contentType:'text/html',body:'<!doctype html><title>Director frame inspection</title>'}));
++    await page.goto(origin+'/__director_media');
++    const payload=async row=>({data:(await fs.readFile(path.join(out,row.name))).toString('base64'),mime:row.mime});
++    for(const row of raw.capture.files){
++      const report=await page.evaluate(async ({data,mime})=>{
++        const {frameCode}=await import('/BLOB_BOT_SERIES1/director/frame-capture.mjs');
++        const source=Uint8Array.from(atob(data),c=>c.charCodeAt(0));
++        const video=document.createElement('video');
++        const canvas=document.createElement('canvas');
++        const context=canvas.getContext('2d',{willReadFrequently:true});
++        video.muted=true;video.playsInline=true;
++        video.src=URL.createObjectURL(new Blob([source],{type:mime}));
++        document.body.replaceChildren(video);
++        await new Promise((resolve,reject)=>{
++          video.onloadedmetadata=resolve;video.onerror=()=>reject(new Error('Video failed to decode'));
++        });
++        canvas.width=video.videoWidth;canvas.height=video.videoHeight;
++        const frames=[];
++        const recordFrame=(_now,info)=>{
++          context.drawImage(video,0,0);
++          const marker=frameCode(context,canvas.height);
++          if(marker!==null)frames.push({marker,ptsSeconds:info.mediaTime,encodedFrameObserved:info.presentedFrames});
++          if(!video.ended)video.requestVideoFrameCallback(recordFrame);
++        };
++        video.requestVideoFrameCallback(recordFrame);
++        const ended=new Promise((resolve,reject)=>{
++          const timeout=setTimeout(()=>reject(new Error('Media presentation timed out')),80_000);
++          video.onended=()=>{clearTimeout(timeout);resolve();};
++        });
++        await video.play();await ended;
++        return {frames,dimensions:[video.videoWidth,video.videoHeight],quality:video.getVideoPlaybackQuality().droppedVideoFrames};
++      },await payload(row));
++      results[row.format]={...scoreFrameMapping(raw.capture,raw.trial.samples,report.frames,raw.trial.actions),
++        dimensions:report.dimensions,decoderDrops:report.quality,codec:row.mime,
++        nativeAudioTrack:row.nativeAudioTrack,signalObserved:row.nativeAudioTrack&&raw.capture.peakAudio>0.0001};
++    }
++    return results;
++  }finally{await context.close();}
++}
+diff --git a/BLOB_BOT_SERIES1/director/frame-mapping.test.mjs b/BLOB_BOT_SERIES1/director/frame-mapping.test.mjs
+new file mode 100644
+index 0000000..d2bc3c1
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/frame-mapping.test.mjs
+@@ -0,0 +1,25 @@
++import assert from 'node:assert/strict';
++import {test} from 'node:test';
++import {scoreFrameMapping} from './frame-mapping.mjs';
++
++const step=(frame,substep)=>({hostId:'host',cellId:'cell',mountSequence:2,frame,substep});
++const sample=(frame,substep,wallMs,flow)=>({step:step(frame,substep),wallMs,runtimeSeconds:1+frame/60,input:{flowSequence:4},flow});
++const captures={frames:[{marker:1,frame:20,wallMs:1000},{marker:2,frame:21,wallMs:1160},{marker:3,frame:22,wallMs:1300}]};
++const decoded=[{marker:1,encodedFrameObserved:1,ptsSeconds:.01},
++  {marker:2,encodedFrameObserved:3,ptsSeconds:.20},{marker:9,encodedFrameObserved:4,ptsSeconds:.30}];
++
++test('maps exact substep, consequence and decoded presentation marker',()=>{
++ const result=scoreFrameMapping(captures,[sample(21,0,1130,null),sample(21,1,1150,{effect:{receiverId:'shelf'}})],
++  decoded,{accepted:step(21,1)});
++ const [event]=result.actions;
++ assert.equal(event.status,'WITHIN_100_MS');
++ assert.equal(event.marker,2);assert.equal(event.encodedFrameObserved,3);
++ assert.equal(event.consequence.receiverId,'shelf');assert.equal(event.renderDelayMs,10);
++ assert.equal(event.eventToFrameMs,40);
++ assert.deepEqual(result.missingCapturedMarkers,[3]);
++});
++test('reports presentation delay and matched-frame gaps without fabricating success',()=>{
++ const result=scoreFrameMapping(captures,[sample(21,0,1010,null),sample(22,0,1200,null)],
++  decoded,{request:step(21,0),consequence:step(22,0),unrecorded:step(23,0)});
++ assert.deepEqual(result.actions.map(e=>e.status),['OVER_100_MS','FRAME_NOT_ENCODED','MISSING_EVENT_SAMPLE']);
++});
+diff --git a/BLOB_BOT_SERIES1/director/handoff-browser.mjs b/BLOB_BOT_SERIES1/director/handoff-browser.mjs
+new file mode 100644
+index 0000000..04c8900
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/handoff-browser.mjs
+@@ -0,0 +1,57 @@
++import {installShelfTrial} from './shelf-tape.mjs';
++import {retained} from './shelf-stage.mjs';
++import {captureRuntime} from './frame-capture.mjs';
++
++export function startHandoff(runtime, scenario, automate, capture){
++  const real = navigator.getGamepads.bind(navigator), pad={lt:0,rt:0};
++  let owner='director', transfer=null, waiting=false;
++  Object.defineProperty(navigator,'getGamepads',{configurable:true,value(){
++    if(owner==='human')return real();
++    return [{id:'Director standard fixture',mapping:'standard',index:0,connected:true,axes:[0,0,0,0],
++      buttons:Array.from({length:17},(_,i)=>{
++        const value=i===6?pad.lt:i===7?pad.rt:0;
++        return {value,pressed:value>.5,touched:value>0};
++      })}];
++  }});
++  const toolbar=document.createElement('aside');
++  toolbar.style.cssText='position:fixed;top:12px;right:12px;z-index:10000;display:flex;gap:8px;padding:8px;background:#182929;color:white';
++  const title=document.createElement('span');
++  title.textContent=(automate?'Automation · ':'Prepared · ')+scenario.id;
++  const hand=document.createElement('button');
++  hand.textContent='Take over';hand.onclick=takeover;
++  const exit=document.createElement('button');
++  exit.textContent='Scenario selection';exit.onclick=()=>window.returnToDirector();
++  toolbar.append(title,hand,exit);document.body.append(toolbar);
++  const block=event=>{
++    if(event.target instanceof Node && toolbar.contains(event.target)){
++      event.stopImmediatePropagation();
++      return;
++    }
++    if(owner!=='human'){event.preventDefault();event.stopImmediatePropagation();}
++  };
++  const types=['keydown','mousedown','mouseup'];
++  for(const type of types)addEventListener(type,block,true);
++  const registry=runtime.registry,nativeUpdate=registry.update;
++  const recorder=capture?captureRuntime(runtime,capture):null;
++  const evidence=installShelfTrial(runtime,scenario,'input',pad,{playable:!automate});
++  const neutral=()=>[...real()].every(n=>!n||[...n.axes].every(v=>Math.abs(v)<=.12)
++    &&[...n.buttons].every(b=>!b.pressed&&b.value<=.08));
++  function takeover(){
++    if(waiting||owner==='human'||!evidence.start)return;
++    waiting=true;owner='neutralizing';pad.lt=pad.rt=0;
++    hand.textContent='Release controls';
++    const before=retained(runtime);
++    registry.update=function clearBot(dt,frame){
++      const result=nativeUpdate.call(this,dt,frame),x=frame.input??{};
++      const active=[x.stabilizeHeld,x.absorbHeld,x.pulseHeld,x.pulsePressed,x.interactPressed,Boolean(x.flowDemand01)];
++      if(!active.some(Boolean)&&!frame.coreFlow?.result&&neutral()){
++        transfer={before,after:retained(runtime),active,wallMs:performance.now(),simulationTime:frame.runtimeSeconds,frame:frame.frame,substep:frame.runtimeSimulationSubstepIndex,
++          flowPhase:frame.coreFlow?.phase};
++        registry.update=nativeUpdate;
++        owner='human';hand.disabled=true;hand.textContent='Human input active';
++      }
++      return result;
++    };
++  }
++  return {evidence,recorder,takeover,owner:()=>owner,transfer:()=>transfer};
++}
+diff --git a/BLOB_BOT_SERIES1/director/handoff.mjs b/BLOB_BOT_SERIES1/director/handoff.mjs
+new file mode 100644
+index 0000000..2009fdd
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/handoff.mjs
+@@ -0,0 +1,172 @@
++import assert from 'node:assert/strict';
++import fs from 'node:fs/promises';
++import path from 'node:path';
++import {execFileSync} from 'node:child_process';
++import {createServer} from 'vite';
++import {chromium} from 'playwright';
++import {loadScenario,CHECKPOINT} from './scenario-contract.mjs';
++import {verifyStart} from './run.mjs';
++import {decodeCapture} from './frame-mapping.mjs';
++
++const root=path.resolve(import.meta.dirname,'../..');
++const [outputArg,flag]=process.argv.slice(2);
++const out=path.resolve(outputArg??'');
++assert.ok(outputArg&&path.relative(root,out).startsWith('..'),'Use a new evidence directory outside the repository');
++assert.equal(execFileSync('git',['--no-optional-locks','-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),CHECKPOINT);
++await fs.mkdir(out);
++const verify=flag==='--verify';
++const layouts={deep:'Deep 3:0:0',balanced:'Balanced 1:1:1',membrane:'Membrane 0:0:3'};
++const definitions={};
++for(const id of Object.keys(layouts)){
++  const loaded=await loadScenario(new URL('./scenarios/'+id+'.json',import.meta.url));
++  assert.equal(loaded.status,'PASS');
++  definitions[id]=loaded.scenario;
++}
++const server=await createServer({root,server:{host:'127.0.0.1',port:0,hmr:false},logLevel:'warn'});
++const save=(name,data)=>fs.writeFile(path.join(out,name),JSON.stringify(data,null,2)+'\n',{flag:'wx'});
++let browser,game;
++const failures=[], operations=[];
++try{
++  await server.listen();
++  const origin='http://127.0.0.1:'+server.httpServer.address().port;
++  const executablePath=process.env.BLOB_BOT_CHROMIUM_EXECUTABLE;
++  browser=await chromium.launch({headless:false,...(executablePath?{executablePath}:{}),
++    args:JSON.parse(process.env.BLOB_BOT_CHROMIUM_ARGS??'[]')});
++  const chooser=await browser.newPage({viewport:{width:740,height:480}});
++  const choice=chooser.locator('#scenario');
++  async function back(){
++    const current=game;game=null;
++    await chooser.bringToFront();
++    await current?.context.close();
++    operations.push({action:'scenario_selection',closed:current?.page.isClosed()??true});
++    await chooser.locator('#state').evaluate(el=>{el.textContent='Choose a scenario';});
++  }
++  async function open(id,action,detail){
++    const scenario=definitions[id];
++    if(!scenario||!['load','reset','automate'].includes(action))throw new Error('Unknown Director action');
++    if(game)await back();
++    const context=await browser.newContext({acceptDownloads:true,viewport:{width:768,height:432}});
++    const page=await context.newPage(); game={context,page,id};
++    page.on('pageerror',error=>failures.push(error.message));
++    await page.exposeFunction('returnToDirector',()=>{setTimeout(()=>{void back();},120);});
++    await page.route('**/src/main.js',async route=>{
++      const response=await route.fetch();
++      await route.fulfill({response,body:(await response.text())+'\nwindow.__DIRECTOR_RUNTIME__=runtime;\n'});
++    });
++    await page.goto(origin+'/?flow=1',{waitUntil:'domcontentloaded',timeout:60_000});
++    await page.bringToFront();
++    console.log('Opened',action,id);
++    await page.waitForFunction(()=>window.__DIRECTOR_RUNTIME__?.isRunning,null,{timeout:60_000});
++    console.log('Runtime started');
++    const storage=await page.evaluate(()=>Object.keys(localStorage));
++    assert.ok(storage.every(key=>key.startsWith('blob.telemetry.session.')));
++    await page.keyboard.press('Shift+Digit6');
++    await page.waitForFunction(()=>{
++      const r=window.__DIRECTOR_RUNTIME__;
++      return r.siltPressureRouteSystem?.active&&r.siltPressureRouteSystem.territoryExpansion?.readFlowPatch(r.frameState);
++    },null,{timeout:60_000});
++    if(!await page.evaluate(()=>window.__DIRECTOR_RUNTIME__.frameState.coreGrowth?.debugCoreWorkRetainedAnatomySeeded===true))
++      await page.keyboard.press('p');
++    await page.waitForFunction(()=>window.__DIRECTOR_RUNTIME__.frameState.spatialCoreChemistry?.retainedPieceCount===3,null,{timeout:60_000});
++    console.log('Mounted and seeded');
++    await page.evaluate(async ({scenario,automate,detail})=>{
++      const {startHandoff}=await import('/BLOB_BOT_SERIES1/director/handoff-browser.mjs');
++      window.__DIR_HANDOFF__=startHandoff(window.__DIRECTOR_RUNTIME__,scenario,automate,automate?{detail,phone:true}:null);
++    },{scenario,automate:action==='automate',detail});
++    await page.waitForFunction(()=>window.__DIR_HANDOFF__?.evidence.start,null,{timeout:60_000});
++    const start=await page.evaluate(()=>window.__DIR_HANDOFF__.evidence.start);
++    verifyStart(scenario,start);console.log('Verified start',id,action);
++    game.start=start;
++    operations.push({action,id,verified:true,storage,start});
++    if(action!=='automate'){
++      await page.evaluate(()=>window.__DIR_HANDOFF__.takeover());
++      await page.waitForFunction(()=>window.__DIR_HANDOFF__.owner()==='human',null,{timeout:60_000});
++    }
++    return scenario.id+' · Start verified';
++  }
++  await chooser.exposeFunction('directorLoad',async(...args)=>{
++    try{return await open(...args);}
++    catch(error){console.error('Scenario setup:',error.stack);operations.push({action:'setup_error',error:error.message});throw error;}
++  });
++  await chooser.setContent(`<!doctype html><title>Director Lab · Scenario selection</title>
++    <style>body{background:#162526;color:#edf6f5;font:18px system-ui;margin:36px}button,select{padding:8px;margin:8px 6px 0 0}#state{min-height:26px}</style>
++    <h1>Director Lab</h1><label>Scenario <select id="scenario">
++    ${Object.entries(layouts).map(([key,label])=>'<option value="'+key+'">Silt Shelf · '+label+'</option>').join('')}
++    </select></label><p>Prepared at the Porosity Shelf with reserve 0.70. Experimental RT Flow is enabled.</p>
++    <label><input type="checkbox" id="detail"> Focused connector capture</label>
++    <p><button data-op="load">Load</button><button data-op="reset">Reset</button>
++    <button data-op="automate">Automate and record</button></p><p id="state" role="status">Choose a scenario</p>
++    <script>for(const b of document.querySelectorAll('[data-op]')) b.onclick=async()=>{
++      const state=document.querySelector('#state'),buttons=[...document.querySelectorAll('button')];
++      buttons.forEach(button=>button.disabled=true);state.textContent='Preparing and verifying start…';
++      try{state.textContent=await window.directorLoad(document.querySelector('#scenario').value,b.dataset.op,document.querySelector('#detail').checked);}
++      catch(e){state.textContent='Setup failed · '+e.message;}
++      finally{buttons.forEach(button=>button.disabled=false);}
++    }</script>`);
++  if(!verify){
++    console.log('Director chooser is open. Close it to exit.');
++    await chooser.waitForEvent('close',{timeout:0});
++  }else{
++    const click=async action=>{
++      await chooser.bringToFront();
++      await chooser.locator('[data-op="'+action+'"]').click();
++      await chooser.getByRole('status').filter({hasText:/Start verified|Setup failed/}).waitFor({timeout:185_000});
++      const visible=await chooser.locator('#state').textContent();
++      assert.match(visible,/Start verified/,visible);
++      return game;
++    };
++    await choice.selectOption('balanced');
++    const first=await click('load');
++    const reset=await click('reset');
++    assert.ok(first.page.isClosed());
++    const stable=start=>{
++      const {state,retained,patch}=start;
++      return {pose:state.pose,facing:state.facing,reserve:state.reserve,patch,material:retained.material,receipts:retained.receipts,pieces:retained.pieces};
++    };
++    assert.deepEqual(stable(first.start),stable(reset.start));
++    await reset.page.getByRole('button',{name:'Scenario selection'}).click();
++    await chooser.getByRole('status').filter({hasText:'Choose a scenario'}).waitFor();
++    await chooser.locator('#detail').check();
++    const live=await click('automate');
++    await live.page.waitForFunction(()=>window.__DIRECTOR_RUNTIME__.frameState.coreFlow?.result?.acceptedCurrent01>0,null,{timeout:95_000});
++    const held=await live.page.evaluate(()=>{
++      const f=window.__DIRECTOR_RUNTIME__.frameState;
++      return {frame:f.frame,flow:f.coreFlow.result?.acceptedCurrent01??0,held:f.input.stabilizeHeld,sequence:f.input.flowActionSequence};
++    });
++    assert.ok(held.flow>0&&held.held);
++    await live.page.getByRole('button',{name:'Take over',exact:true}).click();
++    await live.page.getByRole('button',{name:'Human input active'}).waitFor({timeout:60_000});
++    const transfer=await live.page.evaluate(()=>window.__DIR_HANDOFF__.transfer());
++    assert.ok(transfer&&!transfer.active.some(Boolean));
++    for(const key of ['material','progression','receipts','grip','seat'])assert.deepEqual(transfer.before[key],transfer.after[key]);
++    await live.page.keyboard.down('w');
++    await live.page.waitForFunction(()=>window.__DIRECTOR_RUNTIME__.frameState.input.moveZ<0,null,{timeout:45_000});
++    await live.page.keyboard.up('w');
++    const formats=await live.page.evaluate(()=>window.__DIR_HANDOFF__.recorder.supported);
++    const downloadEvents=formats.map(format=>live.page.waitForEvent('download',{timeout:45000,predicate:d=>d.suggestedFilename().endsWith('.'+format)}));
++    const raw=await live.page.evaluate(async ()=>{
++      const hand=window.__DIR_HANDOFF__;
++      return {trial:hand.evidence,handoff:hand.transfer(),capture:await hand.recorder.stop('shelf-handoff-detail')};
++    });
++    const downloads=await Promise.all(downloadEvents);
++    for(const codec of raw.capture.files){
++      const download=downloads.find(d=>d.suggestedFilename()===codec.name);
++      assert.ok(download,codec.name);
++      await download.saveAs(path.join(out,codec.name));
++    }
++    await back();
++    await save('headed-handoff.json',{status:'PASS',held,transfer,operations,productionKeyboardAfterTransfer:true,physicalController:false,failures});
++    await save('capture-source.json',raw);
++    const mapping=await decodeCapture(browser,origin,out,raw);
++    await save('capture-mapping.json',mapping);
++    assert.deepEqual(failures,[]);
++    console.log(JSON.stringify({headed:'PASS',formats:raw.capture.files,frames:raw.capture.frames.length,
++      peakAudio:raw.capture.peakAudio,mapping}));
++  }
++}catch(error){
++  await save('failure.json',{error:error.stack,operations,failures});
++  throw error;
++}finally{
++  await browser?.close();
++  await server.close();
++}
+diff --git a/BLOB_BOT_SERIES1/director/run.mjs b/BLOB_BOT_SERIES1/director/run.mjs
+index 122ae2c..4f5f2d6 100644
+--- a/BLOB_BOT_SERIES1/director/run.mjs
++++ b/BLOB_BOT_SERIES1/director/run.mjs
+@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
+ import { execFileSync } from 'node:child_process';
+ import { mkdir, writeFile } from 'node:fs/promises';
+ import path from 'node:path';
++import {pathToFileURL} from 'node:url';
+ import { createServer } from 'vite';
+ import { chromium } from 'playwright';
+ import { sourceIdentity } from '../source-identity.mjs';
+@@ -42,7 +43,7 @@ function inputAdapter() {
+   });
+ }
+ 
+-function verifyStart(scenario, start) {
++export function verifyStart(scenario, start) {
+   const { state, retained, patch } = start;
+   const starting = scenario.authoritative;
+   assert.equal(state.step.hostId, scenario.environment.host);
+@@ -306,5 +307,7 @@ async function main() {
+   }
+ }
+ 
+-try { process.exitCode = Number(!await main()); }
++if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
++  try { process.exitCode = Number(!await main()); }
+ catch (error) { console.error(error.stack); process.exitCode = 1; }
++}
+diff --git a/BLOB_BOT_SERIES1/director/scenarios/exp-002-004.json b/BLOB_BOT_SERIES1/director/scenarios/exp-002-004.json
+new file mode 100644
+index 0000000..e330376
+--- /dev/null
++++ b/BLOB_BOT_SERIES1/director/scenarios/exp-002-004.json
+@@ -0,0 +1,45 @@
++{
++  "schema": "blob.director.mounted.v1",
++  "base": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
++  "sourceHash": "8595821fe54361afead3c17541c725088b69048ac605260b3ed574ab57ebbe86",
++  "holdSteps": 48,
++  "layout": {
++    "deep": [
++      3,
++      0,
++      0
++    ],
++    "balanced": [
++      1,
++      1,
++      1
++    ],
++    "membrane": [
++      0,
++      0,
++      3
++    ]
++  },
++  "reserve": 0.7,
++  "pulse": {
++    "bursts": 3,
++    "recoverySteps": 42,
++    "cap": 120
++  },
++  "mobility": {
++    "offset": [
++      0,
++      0,
++      -1
++    ],
++    "axis": 0.82,
++    "target": 0.85,
++    "forward": 1.3,
++    "side": 0.6,
++    "rest": 0.25,
++    "forwardSteps": 65,
++    "turnSteps": 42,
++    "recoverySteps": 140,
++    "limit": 350
++  }
++}
+diff --git a/docs/director/WAVE04.md b/docs/director/WAVE04.md
+new file mode 100644
+index 0000000..1c25f86
+--- /dev/null
++++ b/docs/director/WAVE04.md
+@@ -0,0 +1,27 @@
++# Wave 04 · Director coordination and review
++
++Revision 1. The foundation admission is the exact Wave 03 patch on published PI02-P1 `2f90256a1047b748bf99f7aec39b70b2ed1aeffe`. The local `integration/dl-f01-p1` checkpoint contains the approved 16 files. Candidate tooling remains separate from the foundation and has no production entry point.
++
++## Development scenario chooser
++
++Enter from the isolated candidate using existing project dependencies and Playwright.
++
++```powershell
++node BLOB_BOT_SERIES1/director/handoff.mjs <new-external-evidence-directory>
++```
++
++Select a Shelf layout, then Load for human input, Reset for a new disposable context, or Automate and record for the accepted Shelf tape. Setup uses the existing authored patch and development mount. Start verification gates transfer. In the game, Take over requests a native neutral input step. Keep physical controls neutral until the toolbar reports Human input active. Scenario selection closes the game context. The chooser lives outside normal player UI. Closing it exits.
++
++The `--verify` mode checks Load, Reset, automation and takeover, then confirms production keyboard movement after transfer. The frame observer taps the native rendered scene. An optional detail crop narrows the recorded canvas region around the Shelf at the same camera pose. The audio tap reads the existing post-compressor mix and leaves its output path and gain intact. The decoder binds simulation substeps to actual encoded presentation timestamps via the frame code. It reports missing markers and alignment differences without changing time. Media codec availability depends on the browser.
++
++## Comparative library
++
++```powershell
++node BLOB_BOT_SERIES1/director/experiment-library.mjs <new-external-evidence-directory>
++```
++
++One loadable definition pins the exact fixture hash and 1/60-second mounted comparison inputs. It covers ordinary tether Pulse, directed launch and Garden placement, two boosted mobility protocols and three native Pulse bursts per layout. Read the separate accepted telemetry and review report before drawing player-experience conclusions from the unrendered fixture. Neither fixture-only results nor frame-code alignment substitutes for controller acceptance.
++
++## Dependencies and protection
++
++The PI03 audit gates further contact work on a free-material recipient contract. Core support, held Garden contact and crown Flow each have explicit, distinct scopes. PS02/NV02 remain audit contracts with transient input and mount identity reset boundaries. Existing movement, camera, controllers, physiology, ecology, receipt ownership, audio mix and scheduler remain authoritative. LS1E1 and LS1E2 remain baseline exceptions. Foundation promotion is local only. No trade merge or remote publication is part of this coordination record.

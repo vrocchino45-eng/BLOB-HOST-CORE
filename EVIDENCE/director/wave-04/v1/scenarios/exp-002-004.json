@@ -1,0 +1,45 @@
+{
+  "schema": "blob.director.mounted.v1",
+  "base": "2f90256a1047b748bf99f7aec39b70b2ed1aeffe",
+  "sourceHash": "8595821fe54361afead3c17541c725088b69048ac605260b3ed574ab57ebbe86",
+  "holdSteps": 48,
+  "layout": {
+    "deep": [
+      3,
+      0,
+      0
+    ],
+    "balanced": [
+      1,
+      1,
+      1
+    ],
+    "membrane": [
+      0,
+      0,
+      3
+    ]
+  },
+  "reserve": 0.7,
+  "pulse": {
+    "bursts": 3,
+    "recoverySteps": 42,
+    "cap": 120
+  },
+  "mobility": {
+    "offset": [
+      0,
+      0,
+      -1
+    ],
+    "axis": 0.82,
+    "target": 0.85,
+    "forward": 1.3,
+    "side": 0.6,
+    "rest": 0.25,
+    "forwardSteps": 65,
+    "turnSteps": 42,
+    "recoverySteps": 140,
+    "limit": 350
+  }
+}

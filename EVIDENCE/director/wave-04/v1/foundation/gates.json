@@ -1,0 +1,178 @@
+[
+  {
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testPI02DirectedSiltLaunch.mjs"
+    ],
+    "log": "launch-focused.tap",
+    "code": 0,
+    "pass": 11,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs"
+    ],
+    "log": "scenario-contract.tap",
+    "code": 0,
+    "pass": 3,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "node_modules/vite/bin/vite.js",
+      "build",
+      "--outDir",
+      "<wave-04-archive>/foundation/dist"
+    ],
+    "log": "production-build.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "--test-concurrency=2",
+      "scripts/testB5FlowReserveSettlement.mjs",
+      "scripts/testB5GraveCoreFeedback.mjs",
+      "scripts/testC2CascadeVisuals.mjs",
+      "scripts/testC2ContextualLabels.mjs",
+      "scripts/testC63RouteReadiness.mjs",
+      "scripts/testCC01VascularResidualRecovery.mjs",
+      "scripts/testCH01VascularRecovery.mjs",
+      "scripts/testCH02SiltShelfConsequence.mjs",
+      "scripts/testCH03GraveRecoilSettling.mjs",
+      "scripts/testF1SiltFlow.mjs",
+      "scripts/testLocalSiltEcologicalResistance.mjs",
+      "scripts/testLocalSiltSeepExchange.mjs",
+      "scripts/testSiltHeldMotionReporting.mjs",
+      "scripts/testT1ReturnReadout.mjs",
+      "scripts/testWave1CoreEngine.mjs",
+      "scripts/testWave1FeedbackState.mjs",
+      "scripts/testWave1HostResponse.mjs",
+      "scripts/testWave1TargetLifecycle.mjs",
+      "scripts/testWave1VerbInteraction.mjs",
+      "scripts/testWC01VascularCaption.mjs",
+      "scripts/testWC01VascularReadability.mjs"
+    ],
+    "log": "maintained.tap",
+    "code": 0,
+    "pass": 245,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/verifyWave1CoreProfiles.mjs"
+    ],
+    "log": "verifyWave1CoreProfiles.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/checkC63HubRouteAccess.mjs"
+    ],
+    "log": "checkC63HubRouteAccess.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/validateRecipeDataLoad.mjs"
+    ],
+    "log": "validateRecipeDataLoad.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/smokeHC031W1StabilizedAimLocalContact.mjs"
+    ],
+    "log": "smokeHC031W1StabilizedAimLocalContact.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/smokeHC031U21RelationshipIntentLatch.mjs"
+    ],
+    "log": "smokeHC031U21RelationshipIntentLatch.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/validateLS1BLivingSiltMaterialCycle.mjs"
+    ],
+    "log": "validateLS1BLivingSiltMaterialCycle.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/validateHC016QTenderCompanion.mjs"
+    ],
+    "log": "validateHC016QTenderCompanion.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/validateHC031C2FragmentFieldCapture.mjs"
+    ],
+    "log": "validateHC031C2FragmentFieldCapture.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/validateHC031DRuptureConsequence.mjs"
+    ],
+    "log": "validateHC031DRuptureConsequence.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  },
+  {
+    "args": [
+      "scripts/smokeLS1E1.mjs"
+    ],
+    "log": "smokeLS1E1.log",
+    "code": 1,
+    "pass": 0,
+    "baselineException": true
+  },
+  {
+    "args": [
+      "scripts/smokeLS1E2.mjs"
+    ],
+    "log": "smokeLS1E2.log",
+    "code": 1,
+    "pass": 0,
+    "baselineException": true
+  },
+  {
+    "args": [
+      "BLOB_BOT_SERIES1/director/run.mjs",
+      "<wave-04-archive>/foundation/replay",
+      "--all"
+    ],
+    "log": "comparative-replay.log",
+    "code": 0,
+    "pass": 0,
+    "baselineException": false
+  }
+]

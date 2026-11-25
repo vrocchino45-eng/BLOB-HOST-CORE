@@ -1,0 +1,29 @@
+[
+  {
+    "entry": "new-tools.tap",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs",
+      "BLOB_BOT_SERIES1/director/frame-mapping.test.mjs"
+    ],
+    "code": 0
+  },
+  {
+    "entry": "production-build.log",
+    "args": [
+      "node_modules/vite/bin/vite.js",
+      "build",
+      "--outDir",
+      "<wave-04-archive>/candidate-checks/dist"
+    ],
+    "code": 0
+  },
+  {
+    "entry": "C01-receipt-chain.log",
+    "args": [
+      "BLOB_BOT_SERIES1/cases/browser.mjs"
+    ],
+    "code": 0
+  }
+]

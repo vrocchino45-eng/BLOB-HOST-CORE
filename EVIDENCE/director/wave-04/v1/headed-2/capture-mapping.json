@@ -1,0 +1,254 @@
+{
+  "webm": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 8,
+          "substep": 0
+        },
+        "simSeconds": 0.9500000000000003,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 50608.10000038147,
+        "captureWallMs": 51334.800000190735,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 8.822,
+        "marker": 2,
+        "renderDelayMs": 726.6999998092651,
+        "ptsResidualMs": -369.90000057220504,
+        "eventToFrameMs": 356.7999992370601,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 0
+        },
+        "simSeconds": 1.2500000000000004,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 54723.10000038147,
+        "captureWallMs": 57278.199999809265,
+        "encodedFrameObserved": 4,
+        "ptsSeconds": 14.796,
+        "marker": 4,
+        "renderDelayMs": 2555.0999994277954,
+        "ptsResidualMs": -339.30000019073486,
+        "eventToFrameMs": 2215.7999992370605,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0
+        },
+        "simSeconds": 1.5500000000000007,
+        "action": 1,
+        "consequence": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0,
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1,
+          "actionSequence": 1,
+          "receiverId": "silt_porosity_shelf_front",
+          "siteId": "silt_porosity_shelf",
+          "owner": "silt:RegionalTerritoryExpansion",
+          "conductivity01": 0.72,
+          "resistance01": 0.40783443400855623,
+          "profile": {
+            "topologyId": "three_way_balance",
+            "phaseCount": 3,
+            "reserve01": 0.683,
+            "stability": 1.017,
+            "recovery": 1.067,
+            "enduranceCapacity": 1.107
+          },
+          "acceptedCurrent01": 0.14885148754344465,
+          "pressure01": 0.10419604128041125,
+          "before": {
+            "imprint": 0.23606,
+            "strain": 0,
+            "void": 0
+          },
+          "after": {
+            "imprint": 0.2377315899992909,
+            "strain": 0,
+            "void": 0
+          },
+          "retainedDuringSession": true,
+          "materialTransferred": 0,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        "eventWallMs": 60716.699999809265,
+        "captureWallMs": 62286.89999961853,
+        "encodedFrameObserved": 6,
+        "ptsSeconds": 19.83,
+        "marker": 6,
+        "renderDelayMs": 1570.1999998092651,
+        "ptsResidualMs": -314.0000000000018,
+        "eventToFrameMs": 1256.1999998092633,
+        "status": "OVER_100_MS"
+      }
+    ],
+    "captured": 10,
+    "encodedMarkers": 6,
+    "missingCapturedMarkers": [
+      7,
+      8,
+      9,
+      10
+    ],
+    "maxAbsPtsResidualMs": 375.200000762939,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 0,
+    "codec": "video/webm;codecs=vp8,opus",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  },
+  "mp4": {
+    "actions": [
+      {
+        "name": "canonical_selection",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 8,
+          "substep": 0
+        },
+        "simSeconds": 0.9500000000000003,
+        "action": 0,
+        "consequence": null,
+        "eventWallMs": 50608.10000038147,
+        "captureWallMs": 51334.800000190735,
+        "encodedFrameObserved": 2,
+        "ptsSeconds": 2.705733,
+        "marker": 2,
+        "renderDelayMs": 726.6999998092651,
+        "ptsResidualMs": -370.16700057220487,
+        "eventToFrameMs": 356.53299923706027,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "analog_flow_request",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 0
+        },
+        "simSeconds": 1.2500000000000004,
+        "action": 1,
+        "consequence": null,
+        "eventWallMs": 54723.10000038147,
+        "captureWallMs": 57278.199999809265,
+        "encodedFrameObserved": 4,
+        "ptsSeconds": 8.680367,
+        "marker": 4,
+        "renderDelayMs": 2555.0999994277954,
+        "ptsResidualMs": -338.9330001907347,
+        "eventToFrameMs": 2216.1669992370607,
+        "status": "OVER_100_MS"
+      },
+      {
+        "name": "accepted_current",
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0
+        },
+        "simSeconds": 1.5500000000000007,
+        "action": 1,
+        "consequence": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0,
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1,
+          "actionSequence": 1,
+          "receiverId": "silt_porosity_shelf_front",
+          "siteId": "silt_porosity_shelf",
+          "owner": "silt:RegionalTerritoryExpansion",
+          "conductivity01": 0.72,
+          "resistance01": 0.40783443400855623,
+          "profile": {
+            "topologyId": "three_way_balance",
+            "phaseCount": 3,
+            "reserve01": 0.683,
+            "stability": 1.017,
+            "recovery": 1.067,
+            "enduranceCapacity": 1.107
+          },
+          "acceptedCurrent01": 0.14885148754344465,
+          "pressure01": 0.10419604128041125,
+          "before": {
+            "imprint": 0.23606,
+            "strain": 0,
+            "void": 0
+          },
+          "after": {
+            "imprint": 0.2377315899992909,
+            "strain": 0,
+            "void": 0
+          },
+          "retainedDuringSession": true,
+          "materialTransferred": 0,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        "eventWallMs": 60716.699999809265,
+        "captureWallMs": 62286.89999961853,
+        "encodedFrameObserved": 6,
+        "ptsSeconds": 13.714233,
+        "marker": 6,
+        "renderDelayMs": 1570.1999998092651,
+        "ptsResidualMs": -313.7669999999998,
+        "eventToFrameMs": 1256.4329998092653,
+        "status": "OVER_100_MS"
+      }
+    ],
+    "captured": 10,
+    "encodedMarkers": 6,
+    "missingCapturedMarkers": [
+      7,
+      8,
+      9,
+      10
+    ],
+    "maxAbsPtsResidualMs": 374.73300076293935,
+    "dimensions": [
+      768,
+      432
+    ],
+    "decoderDrops": 0,
+    "codec": "video/mp4;codecs=avc1.42001f,mp4a.40.2",
+    "nativeAudioTrack": true,
+    "signalObserved": true
+  }
+}

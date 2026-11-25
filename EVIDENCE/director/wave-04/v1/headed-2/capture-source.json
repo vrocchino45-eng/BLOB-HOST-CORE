@@ -1,0 +1,3817 @@
+{
+  "trial": {
+    "start": {
+      "state": {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 7,
+          "substep": 0
+        },
+        "runtimeSeconds": 0.8000000000000002,
+        "wallMs": 45735.39999961853,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3788.5999994277954,
+        "droppedFrameMs": 3638.5999994277954,
+        "pose": [
+          -2.45,
+          -0.54,
+          -3.67
+        ],
+        "facing": [
+          0,
+          0,
+          -1
+        ],
+        "attachment": false,
+        "speed": 0.11907031744259493,
+        "camera": {
+          "position": [
+            -2.45,
+            0.6399999999999999,
+            2.7800000000000002
+          ],
+          "rotation": [
+            -0.07664332334695328,
+            0,
+            0,
+            0.9970585745011845
+          ],
+          "yaw": 0,
+          "pitch": 0.18,
+          "near": false,
+          "patchOnScreen": [
+            0,
+            2.6930410322158493e-17,
+            0.9742930622820429
+          ],
+          "withinFrustum": true
+        },
+        "aim": null,
+        "selected": "none",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.7,
+        "settlement": null,
+        "input": {
+          "stabilize": false,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": false,
+          "reason": "aim_at_shelf",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      "retained": {
+        "pieces": [
+          {
+            "pieceId": "player_grave_memory_retention_root_HC024C2",
+            "family": "grave_memory_retention",
+            "zoneId": "deep_core"
+          },
+          {
+            "pieceId": "player_vascular_return_filament_root_HC011B",
+            "family": "vascular_rhythm_retention",
+            "zoneId": "inner_body"
+          },
+          {
+            "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+            "family": "silt_pressure_retention",
+            "zoneId": "membrane"
+          }
+        ],
+        "topology": {
+          "id": "three_way_balance",
+          "label": "Three-Way Balance",
+          "distribution": "1:1:1",
+          "complete": true,
+          "dominantZone": "balanced"
+        },
+        "chemistry": {
+          "composition": {
+            "form": 0.32,
+            "flux": 0.21,
+            "scar": 0.02,
+            "seed": 0.36,
+            "signal": 0.09
+          },
+          "absorbed": 0,
+          "earned": {
+            "pass": "CONNECTION44",
+            "owner": "CoreGrowthSystem",
+            "growthKnown": true,
+            "matureBinding": false,
+            "surfaceFoundation": false,
+            "surfaceCause": "none",
+            "earnedFamilies": {
+              "grave": false,
+              "vascular": false,
+              "silt": false
+            },
+            "integrated": false,
+            "idleRecoveryMultiplier": 1,
+            "cause": "requires_mature_core_and_earned_vascular_return",
+            "enginePhaseAuthority": false,
+            "materialAuthority": false
+          },
+          "seedCount": 1,
+          "growthStage": "seed_core"
+        },
+        "derived": {
+          "physiology": {
+            "output": 1.02,
+            "response": 1.053,
+            "enduranceCapacity": 1.107,
+            "recovery": 1.067,
+            "efficiency": 1.063,
+            "stability": 1.017
+          },
+          "chemistry": {
+            "pass": "HC-024E",
+            "active": true,
+            "source": "spatial_core_chemistry",
+            "memory": 0.06,
+            "rhythm": 0.28,
+            "pressure": 1,
+            "surfaceExpression": 0.333,
+            "deepConcentration": 0.333,
+            "innerCirculation": 0.333,
+            "dominantFamily": "silt_pressure",
+            "dominantMode": "adhesion_skin",
+            "topologyId": "three_way_balance",
+            "topologyDistribution": "1:1:1",
+            "cloudPatternId": "balanced_triad",
+            "cloudPatternLabel": "Balanced Triad",
+            "patternStrength": 1,
+            "responseRadius": 4.5,
+            "directionality": 0.04,
+            "spreadMode": "distributed",
+            "localDirection": {
+              "x": 0.49896732212304246,
+              "y": -0.8115197641511716,
+              "z": -0.30408433673141905
+            },
+            "worldDirection": {
+              "x": 0.49896732212304246,
+              "y": -0.8115197641511716,
+              "z": -0.30408433673141905
+            },
+            "siltZoneId": "membrane",
+            "siltDepth01": 0.78,
+            "siltMembraneExposure": 1,
+            "siltLocalDirection": {
+              "x": 0.13250773199998755,
+              "y": -0.9772445234999081,
+              "z": -0.16563466499998444
+            },
+            "siltWorldDirection": {
+              "x": 0.13250773199998755,
+              "y": -0.9772445234999081,
+              "z": -0.16563466499998444
+            },
+            "visualHostResponseEnabled": true,
+            "movementConsequencesEnabled": true,
+            "movementConsequenceOwner": "PlayerMovementController",
+            "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+            "collisionConsequencesEnabled": false,
+            "progressionAuthority": false,
+            "geometryAuthority": false
+          }
+        },
+        "material": {
+          "mass": 8,
+          "records": [
+            {
+              "id": "silt-grain-01",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-02",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-03",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-04",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-05",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-06",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-07",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            },
+            {
+              "id": "silt-grain-08",
+              "originRegion": "silt",
+              "originSignature": "silt_accumulation_connection",
+              "mass": 1,
+              "composition": {
+                "silt": 1
+              },
+              "owner": "environment",
+              "representation": "individual",
+              "historySequence": 0
+            }
+          ],
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-03",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-04",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-05",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-06",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-07",
+              "generation": 0,
+              "phase": "reservoir"
+            },
+            {
+              "id": "silt-grain-08",
+              "generation": 0,
+              "phase": "reservoir"
+            }
+          ],
+          "nativeAwake": false
+        },
+        "progression": {
+          "completed": false,
+          "returned": false,
+          "safeMatterAbsorbed": false,
+          "pressureRead": false,
+          "returnFoldReady": false,
+          "credits": 0
+        },
+        "receipts": {
+          "silt": 0,
+          "vascular": 0,
+          "grave": 0,
+          "local": 0
+        },
+        "grip": null,
+        "seat": null
+      },
+      "patch": {
+        "id": "silt_porosity_shelf_front",
+        "center": [
+          -2.45,
+          -0.54,
+          -4.85
+        ],
+        "normal": [
+          0,
+          0.360994102557712,
+          0.9325680982740896
+        ],
+        "radius": 0.22,
+        "conductivity": 0.72,
+        "resistance": 0.31
+      }
+    },
+    "replayAnchor": {
+      "wallMs": 45813.60000038147,
+      "runtimeSeconds": 0.8000000000000002
+    },
+    "final": null,
+    "samples": [
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 7,
+          "substep": 0
+        },
+        "runtimeSeconds": 0.8000000000000002,
+        "wallMs": 46096.300000190735,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3788.5999994277954,
+        "droppedFrameMs": 3638.5999994277954,
+        "pose": [
+          -2.449283077179882,
+          -0.5407156766454482,
+          -3.6712165963008063
+        ],
+        "facing": [
+          0,
+          0,
+          -1
+        ],
+        "attachment": false,
+        "speed": 0.03166245694813964,
+        "camera": {
+          "position": [
+            -2.45,
+            0.6399999999999999,
+            2.7800000000000002
+          ],
+          "rotation": [
+            -0.07664332334695328,
+            0,
+            0,
+            0.9970585745011845
+          ],
+          "yaw": 0,
+          "pitch": 0.18,
+          "near": false,
+          "patchOnScreen": [
+            0,
+            2.6930410322158493e-17,
+            0.9742930622820429
+          ],
+          "withinFrustum": true
+        },
+        "aim": null,
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6992625814728121,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": false,
+          "reason": "aim_at_shelf",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 7,
+          "substep": 1
+        },
+        "runtimeSeconds": 0.8500000000000002,
+        "wallMs": 46156.699999809265,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3788.5999994277954,
+        "droppedFrameMs": 3638.5999994277954,
+        "pose": [
+          -2.4480277389159144,
+          -0.5419688328464337,
+          -3.6733468672942062
+        ],
+        "facing": [
+          0.0746315395461051,
+          -0.0745018129820216,
+          -0.9944242621574404
+        ],
+        "attachment": false,
+        "speed": 0.055441245030645465,
+        "camera": {
+          "position": [
+            -2.45,
+            0.6399999999999999,
+            2.7800000000000002
+          ],
+          "rotation": [
+            -0.07664332334695328,
+            0,
+            0,
+            0.9970585745011845
+          ],
+          "yaw": 0,
+          "pitch": 0.18,
+          "near": false,
+          "patchOnScreen": [
+            0,
+            2.6930410322158493e-17,
+            0.9742930622820429
+          ],
+          "withinFrustum": true
+        },
+        "aim": null,
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6985251629456242,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": false,
+          "reason": "aim_at_shelf",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 7,
+          "substep": 2
+        },
+        "runtimeSeconds": 0.9000000000000002,
+        "wallMs": 46357.5,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3788.5999994277954,
+        "droppedFrameMs": 3638.5999994277954,
+        "pose": [
+          -2.446369955826434,
+          -0.5436237343324327,
+          -3.676160074961204
+        ],
+        "facing": [
+          0.1385739458866898,
+          -0.1383330728994688,
+          -0.9806432697283874
+        ],
+        "attachment": false,
+        "speed": 0.07321497409077436,
+        "camera": {
+          "position": [
+            -2.45,
+            0.6399999999999999,
+            2.7800000000000002
+          ],
+          "rotation": [
+            -0.07664332334695328,
+            0,
+            0,
+            0.9970585745011845
+          ],
+          "yaw": 0,
+          "pitch": 0.18,
+          "near": false,
+          "patchOnScreen": [
+            0,
+            2.6930410322158493e-17,
+            0.9742930622820429
+          ],
+          "withinFrustum": true
+        },
+        "aim": null,
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6977877444184363,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": false,
+          "reason": "aim_at_shelf",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 8,
+          "substep": 0
+        },
+        "runtimeSeconds": 0.9500000000000003,
+        "wallMs": 50608.10000038147,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 4879,
+        "droppedFrameMs": 4728.999999999999,
+        "pose": [
+          -2.444414878485771,
+          -0.5455754133046917,
+          -3.679477781963541
+        ],
+        "facing": [
+          0.19248646167792696,
+          -0.19215187649506818,
+          -0.962302768586964
+        ],
+        "attachment": false,
+        "speed": 0.08634479248243586,
+        "camera": {
+          "position": [
+            -2.44530149561188,
+            2.160304516179414,
+            4.175830322158864
+          ],
+          "rotation": [
+            -0.15416895984646928,
+            -0.000006363272178971574,
+            0.00017116710329577768,
+            0.9880444840598976
+          ],
+          "yaw": 0,
+          "pitch": 0.19997852560459933,
+          "near": false,
+          "patchOnScreen": [
+            -0.0005886966067590412,
+            0.03541349957470448,
+            0.9789651868580516
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6970230981302444,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": true,
+          "reason": "ready",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 8,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.0000000000000002,
+        "wallMs": 51030.5,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 4879,
+        "droppedFrameMs": 4728.999999999999,
+        "pose": [
+          -2.4422375851325295,
+          -0.5477489220276357,
+          -3.683172582805405
+        ],
+        "facing": [
+          0.23746827356324585,
+          -0.23705549977624438,
+          -0.9420262783366113
+        ],
+        "attachment": false,
+        "speed": 0.0961588264816613,
+        "camera": {
+          "position": [
+            -2.44530149561188,
+            2.160304516179414,
+            4.175830322158864
+          ],
+          "rotation": [
+            -0.15416895984646928,
+            -0.000006363272178971574,
+            0.00017116710329577768,
+            0.9880444840598976
+          ],
+          "yaw": 0,
+          "pitch": 0.19997852560459933,
+          "near": false,
+          "patchOnScreen": [
+            -0.0005886966067590412,
+            0.03541349957470448,
+            0.9789651868580516
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.696190382439543,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": true,
+          "reason": "ready",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 8,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.0500000000000003,
+        "wallMs": 51096.800000190735,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 4879,
+        "droppedFrameMs": 4728.999999999999,
+        "pose": [
+          -2.43989419386098,
+          -0.5500882399529861,
+          -3.6871492467813685
+        ],
+        "facing": [
+          0.2747558259651227,
+          -0.2742782379442786,
+          -0.9215642594460817
+        ],
+        "attachment": false,
+        "speed": 0.10349443924223999,
+        "camera": {
+          "position": [
+            -2.44530149561188,
+            2.160304516179414,
+            4.175830322158864
+          ],
+          "rotation": [
+            -0.15416895984646928,
+            -0.000006363272178971574,
+            0.00017116710329577768,
+            0.9880444840598976
+          ],
+          "yaw": 0,
+          "pitch": 0.19997852560459933,
+          "near": false,
+          "patchOnScreen": [
+            -0.0005886966067590412,
+            0.03541349957470448,
+            0.9789651868580516
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6952895973463319,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": true,
+          "reason": "ready",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 9,
+          "substep": 0
+        },
+        "runtimeSeconds": 1.1000000000000003,
+        "wallMs": 51373,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 778.8000001907349,
+        "droppedFrameMs": 628.8000001907347,
+        "pose": [
+          -2.437426650787109,
+          -0.5525514938766313,
+          -3.691336592603695
+        ],
+        "facing": [
+          0.30555214670804687,
+          -0.30502102768810113,
+          -0.9019978150251801
+        ],
+        "attachment": false,
+        "speed": 0.10897752749905791,
+        "camera": {
+          "position": [
+            -2.438402702098711,
+            2.9211792169899393,
+            4.79337186772497
+          ],
+          "rotation": [
+            -0.1828663571182082,
+            -0.00002990717824749026,
+            0.00010273463704092268,
+            0.9831377746712161
+          ],
+          "yaw": 0,
+          "pitch": 0.21386703799764512,
+          "near": false,
+          "patchOnScreen": [
+            -0.0012925350520386896,
+            0.04356554130337706,
+            0.9806724253883654
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6943207428506112,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": true,
+          "reason": "ready",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 9,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.1500000000000004,
+        "wallMs": 51401.89999961853,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 778.8000001907349,
+        "droppedFrameMs": 628.8000001907347,
+        "pose": [
+          -2.434866309018488,
+          -0.5551073851898207,
+          -3.6956814149989303
+        ],
+        "facing": [
+          0.3309435492839485,
+          -0.33036829424009834,
+          -0.8839305161313475
+        ],
+        "attachment": false,
+        "speed": 0.1130759249763101,
+        "camera": {
+          "position": [
+            -2.438402702098711,
+            2.9211792169899393,
+            4.79337186772497
+          ],
+          "rotation": [
+            -0.1828663571182082,
+            -0.00002990717824749026,
+            0.00010273463704092268,
+            0.9831377746712161
+          ],
+          "yaw": 0,
+          "pitch": 0.21386703799764512,
+          "near": false,
+          "patchOnScreen": [
+            -0.0012925350520386896,
+            0.04356554130337706,
+            0.9806724253883654
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6932838189523808,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": true,
+          "reason": "ready",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 9,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.2000000000000004,
+        "wallMs": 51441.300000190735,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 778.8000001907349,
+        "droppedFrameMs": 628.8000001907347,
+        "pose": [
+          -2.4322366037965284,
+          -0.5577325193869151,
+          -3.700143945072559
+        ],
+        "facing": [
+          0.3518696719345911,
+          -0.35125804253738363,
+          -0.8676436604536731
+        ],
+        "attachment": false,
+        "speed": 0.11613931938012279,
+        "camera": {
+          "position": [
+            -2.438402702098711,
+            2.9211792169899393,
+            4.79337186772497
+          ],
+          "rotation": [
+            -0.1828663571182082,
+            -0.00002990717824749026,
+            0.00010273463704092268,
+            0.9831377746712161
+          ],
+          "yaw": 0,
+          "pitch": 0.21386703799764512,
+          "near": false,
+          "patchOnScreen": [
+            -0.0012925350520386896,
+            0.04356554130337706,
+            0.9806724253883654
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6921788256516407,
+        "settlement": null,
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0,
+          "flowSequence": 0
+        },
+        "flow": {
+          "phase": "retracted",
+          "ready": true,
+          "reason": "ready",
+          "contact": false,
+          "strain": 0,
+          "extension": 0,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 0
+        },
+        "runtimeSeconds": 1.2500000000000004,
+        "wallMs": 54723.10000038147,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3197.199999809265,
+        "droppedFrameMs": 3047.199999809265,
+        "pose": [
+          -2.429555052062373,
+          -0.5604094099751931,
+          -3.704694457106277
+        ],
+        "facing": [
+          0.369122559068661,
+          -0.3684809402355926,
+          -0.8532117750416344
+        ],
+        "attachment": false,
+        "speed": 0.11842908881449273,
+        "camera": {
+          "position": [
+            -2.4305530264578628,
+            3.3159621063551334,
+            5.094323672603886
+          ],
+          "rotation": [
+            -0.19606712142931654,
+            -0.000044611884368313366,
+            0.000049950930749673996,
+            0.9805904748716998
+          ],
+          "yaw": 0,
+          "pitch": 0.22349756150455635,
+          "near": false,
+          "patchOnScreen": [
+            -0.0020368032879954276,
+            0.04653569933579141,
+            0.9814407508153038
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.691005762948391,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 0,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "rejected",
+          "reason": "extending",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": null,
+          "deliverySubstep": null,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": null,
+          "resistance01": null,
+          "requestedDebit": 0,
+          "actualDebit": 0,
+          "reserveBefore": 0.691005762948391,
+          "reserveAfter": 0.691005762948391
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "disconnected",
+          "ready": true,
+          "reason": "extending",
+          "contact": false,
+          "strain": 0,
+          "extension": 0.18,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.3000000000000005,
+        "wallMs": 54757.699999809265,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3197.199999809265,
+        "droppedFrameMs": 3047.199999809265,
+        "pose": [
+          -2.426834747055457,
+          -0.563124986474243,
+          -3.709310732269529
+        ],
+        "facing": [
+          0.3833595492786874,
+          -0.3826931833235031,
+          -0.8405839538169673
+        ],
+        "attachment": false,
+        "speed": 0.12014060335406665,
+        "camera": {
+          "position": [
+            -2.4305530264578628,
+            3.3159621063551334,
+            5.094323672603886
+          ],
+          "rotation": [
+            -0.19606712142931654,
+            -0.000044611884368313366,
+            0.000049950930749673996,
+            0.9805904748716998
+          ],
+          "yaw": 0,
+          "pitch": 0.22349756150455635,
+          "near": false,
+          "patchOnScreen": [
+            -0.0020368032879954276,
+            0.04653569933579141,
+            0.9814407508153038
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6897646308426316,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 1,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "rejected",
+          "reason": "extending",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": null,
+          "deliverySubstep": null,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": null,
+          "resistance01": null,
+          "requestedDebit": 0,
+          "actualDebit": 0,
+          "reserveBefore": 0.6897646308426316,
+          "reserveAfter": 0.6897646308426316
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "disconnected",
+          "ready": true,
+          "reason": "extending",
+          "contact": false,
+          "strain": 0,
+          "extension": 0.36,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.3500000000000005,
+        "wallMs": 54817.199999809265,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3197.199999809265,
+        "droppedFrameMs": 3047.199999809265,
+        "pose": [
+          -2.424085475468417,
+          -0.5658694792029225,
+          -3.7139761628414756
+        ],
+        "facing": [
+          0.39512127696059535,
+          -0.3944344664516857,
+          -0.829638854061213
+        ],
+        "attachment": false,
+        "speed": 0.12141989461160715,
+        "camera": {
+          "position": [
+            -2.4305530264578628,
+            3.3159621063551334,
+            5.094323672603886
+          ],
+          "rotation": [
+            -0.19606712142931654,
+            -0.000044611884368313366,
+            0.000049950930749673996,
+            0.9805904748716998
+          ],
+          "yaw": 0,
+          "pitch": 0.22349756150455635,
+          "near": false,
+          "patchOnScreen": [
+            -0.0020368032879954276,
+            0.04653569933579141,
+            0.9814407508153038
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6884554293343625,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 2,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "rejected",
+          "reason": "extending",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": null,
+          "deliverySubstep": null,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": null,
+          "resistance01": null,
+          "requestedDebit": 0,
+          "actualDebit": 0,
+          "reserveBefore": 0.6884554293343625,
+          "reserveAfter": 0.6884554293343625
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "disconnected",
+          "ready": true,
+          "reason": "extending",
+          "contact": false,
+          "strain": 0,
+          "extension": 0.54,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 0
+        },
+        "runtimeSeconds": 1.4000000000000006,
+        "wallMs": 59026.10000038147,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 4427.699999809265,
+        "droppedFrameMs": 4277.699999809265,
+        "pose": [
+          -2.4213145524773974,
+          -0.5686355857005246,
+          -3.7186783351898725
+        ],
+        "facing": [
+          0.4048502550221861,
+          -0.40414653334001577,
+          -0.8202206109320336
+        ],
+        "attachment": false,
+        "speed": 0.12237611559821181,
+        "camera": {
+          "position": [
+            -2.4223058862716145,
+            3.529194083237617,
+            5.248691296866115
+          ],
+          "rotation": [
+            -0.2028541458381311,
+            -0.00005201585509393299,
+            0.000019403228478470657,
+            0.9792089625989684
+          ],
+          "yaw": 0,
+          "pitch": 0.23015357387599247,
+          "near": false,
+          "patchOnScreen": [
+            -0.002802023656745097,
+            0.04788222219278705,
+            0.9818228409985695
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6870781584235839,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 0,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "rejected",
+          "reason": "extending",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": null,
+          "deliverySubstep": null,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": null,
+          "resistance01": null,
+          "requestedDebit": 0,
+          "actualDebit": 0,
+          "reserveBefore": 0.6870781584235839,
+          "reserveAfter": 0.6870781584235839
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "disconnected",
+          "ready": true,
+          "reason": "extending",
+          "contact": false,
+          "strain": 0,
+          "extension": 0.72,
+          "effect": null
+        },
+        "imprint": 0
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.4500000000000006,
+        "wallMs": 59362.699999809265,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 4427.699999809265,
+        "droppedFrameMs": 4277.699999809265,
+        "pose": [
+          -2.4185274458950707,
+          -0.571417847658677,
+          -3.7234079706023056
+        ],
+        "facing": [
+          0.41290793753618427,
+          -0.4121902097719557,
+          -0.8121614778403157
+        ],
+        "attachment": false,
+        "speed": 0.12309085398935898,
+        "camera": {
+          "position": [
+            -2.4223058862716145,
+            3.529194083237617,
+            5.248691296866115
+          ],
+          "rotation": [
+            -0.2028541458381311,
+            -0.00005201585509393299,
+            0.000019403228478470657,
+            0.9792089625989684
+          ],
+          "yaw": 0,
+          "pitch": 0.23015357387599247,
+          "near": false,
+          "patchOnScreen": [
+            -0.002802023656745097,
+            0.04788222219278705,
+            0.9818228409985695
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6856328181102955,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 1,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "rejected",
+          "reason": "extending",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": null,
+          "deliverySubstep": null,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": null,
+          "resistance01": null,
+          "requestedDebit": 0,
+          "actualDebit": 0,
+          "reserveBefore": 0.6856328181102955,
+          "reserveAfter": 0.6856328181102955
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "disconnected",
+          "ready": true,
+          "reason": "extending",
+          "contact": false,
+          "strain": 0,
+          "extension": 0.8999999999999999,
+          "effect": null
+        },
+        "imprint": 0.23606
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.5000000000000007,
+        "wallMs": 59693.60000038147,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 4427.699999809265,
+        "droppedFrameMs": 4277.699999809265,
+        "pose": [
+          -2.4157282427010025,
+          -0.5742121852019123,
+          -3.7281581335983
+        ],
+        "facing": [
+          0.41958948553134684,
+          -0.41886014371936525,
+          -0.8052955008162733
+        ],
+        "attachment": false,
+        "speed": 0.12362509343289349,
+        "camera": {
+          "position": [
+            -2.4223058862716145,
+            3.529194083237617,
+            5.248691296866115
+          ],
+          "rotation": [
+            -0.2028541458381311,
+            -0.00005201585509393299,
+            0.000019403228478470657,
+            0.9792089625989684
+          ],
+          "yaw": 0,
+          "pitch": 0.23015357387599247,
+          "near": false,
+          "patchOnScreen": [
+            -0.002802023656745097,
+            0.04788222219278705,
+            0.9818228409985695
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6841194083944976,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 2,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "rejected",
+          "reason": "contact_dwell",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": null,
+          "deliverySubstep": null,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": null,
+          "resistance01": null,
+          "requestedDebit": 0,
+          "actualDebit": 0,
+          "reserveBefore": 0.6841194083944976,
+          "reserveAfter": 0.6841194083944976
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "contact",
+          "ready": true,
+          "reason": "contact",
+          "contact": true,
+          "strain": 0,
+          "extension": 1.0799999999999998,
+          "effect": null
+        },
+        "imprint": 0.23606
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0
+        },
+        "runtimeSeconds": 1.5500000000000007,
+        "wallMs": 60716.699999809265,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 1688.6000003814697,
+        "droppedFrameMs": 1538.6000003814697,
+        "pose": [
+          -2.4129199977551474,
+          -0.5770155487803167,
+          -3.7329236401730843
+        ],
+        "facing": [
+          0.42513612787959876,
+          -0.42439714474360835,
+          -0.7994662821564235
+        ],
+        "attachment": false,
+        "speed": 0.12402441685886749,
+        "camera": {
+          "position": [
+            -2.4138966107132718,
+            3.6488274508058405,
+            5.330310300092959
+          ],
+          "rotation": [
+            -0.20662507216873116,
+            -0.00005528667374986315,
+            0.000003385814671206716,
+            0.9784201942331253
+          ],
+          "yaw": 0,
+          "pitch": 0.23473274787685938,
+          "near": false,
+          "patchOnScreen": [
+            -0.0035800266875542675,
+            0.048624075141173013,
+            0.9820241656048232
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6822647488464086,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 12,
+          "deliverySubstep": 0,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.14885148754344465,
+          "resistance01": 0.40783443400855623,
+          "requestedDebit": 0.0002731804297812558,
+          "actualDebit": 0.00027318042978130563,
+          "reserveBefore": 0.68253792927619,
+          "reserveAfter": 0.6822647488464086
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.021184655757289513,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 12,
+            "substep": 0,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.40783443400855623,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.683,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.14885148754344465,
+            "pressure01": 0.10419604128041125,
+            "before": {
+              "imprint": 0.23606,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.2377315899992909,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.2377315899992909
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.6000000000000008,
+        "wallMs": 62048.5,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 1688.6000003814697,
+        "droppedFrameMs": 1538.6000003814697,
+        "pose": [
+          -2.4101049944477673,
+          -0.579825658972679,
+          -3.7377006154825776
+        ],
+        "facing": [
+          0.4297453121887917,
+          -0.42899831724375526,
+          -0.794530937379901
+        ],
+        "attachment": false,
+        "speed": 0.12432289575341832,
+        "camera": {
+          "position": [
+            -2.4138966107132718,
+            3.6488274508058405,
+            5.330310300092959
+          ],
+          "rotation": [
+            -0.20662507216873116,
+            -0.00005528667374986315,
+            0.000003385814671206716,
+            0.9784201942331253
+          ],
+          "yaw": 0,
+          "pitch": 0.23473274787685938,
+          "near": false,
+          "patchOnScreen": [
+            -0.0035800266875542675,
+            0.048624075141173013,
+            0.9820241656048232
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6803418172721808,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 1,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 12,
+          "deliverySubstep": 1,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.14847486747633382,
+          "resistance01": 0.40917220994635706,
+          "requestedDebit": 0.000273383053410528,
+          "actualDebit": 0.00027338305341051417,
+          "reserveBefore": 0.6806152003255913,
+          "reserveAfter": 0.6803418172721808
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.04239628006075706,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 12,
+            "substep": 1,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.40917220994635706,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.681,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.14847486747633382,
+            "pressure01": 0.10393240723343367,
+            "before": {
+              "imprint": 0.2377315899992909,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.23939530220628777,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.23939530220628777
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.6500000000000008,
+        "wallMs": 62067.89999961853,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 1688.6000003814697,
+        "droppedFrameMs": 1538.6000003814697,
+        "pose": [
+          -2.4072849395252156,
+          -0.5826408119993585,
+          -3.7424861632299375
+        ],
+        "facing": [
+          0.43357895062293567,
+          -0.43282529194370556,
+          -0.7903616641959298
+        ],
+        "attachment": false,
+        "speed": 0.1245459972413287,
+        "camera": {
+          "position": [
+            -2.4138966107132718,
+            3.6488274508058405,
+            5.330310300092959
+          ],
+          "rotation": [
+            -0.20662507216873116,
+            -0.00005528667374986315,
+            0.000003385814671206716,
+            0.9784201942331253
+          ],
+          "yaw": 0,
+          "pitch": 0.23473274787685938,
+          "near": false,
+          "patchOnScreen": [
+            -0.0035800266875542675,
+            0.048624075141173013,
+            0.9820241656048232
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6783506228426319,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 2,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 12,
+          "deliverySubstep": 2,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.1481046047920787,
+          "resistance01": 0.41048540824090923,
+          "requestedDebit": 0.00027357650622195724,
+          "actualDebit": 0.00027357650622195084,
+          "reserveBefore": 0.6786241993488539,
+          "reserveAfter": 0.6783506228426319
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.06363434981903035,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 12,
+            "substep": 2,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.41048540824090923,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.679,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.1481046047920787,
+            "pressure01": 0.10367322335445509,
+            "before": {
+              "imprint": 0.23939530220628777,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.2410512433613829,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.2410512433613829
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 13,
+          "substep": 0
+        },
+        "runtimeSeconds": 1.7000000000000008,
+        "wallMs": 64514,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3238.6000003814697,
+        "droppedFrameMs": 3088.60000038147,
+        "pose": [
+          -2.4044611087147145,
+          -0.5854597343506366,
+          -3.747278118544727
+        ],
+        "facing": [
+          0.43677008051847727,
+          -0.4360108749308032,
+          -0.7868458640076584
+        ],
+        "attachment": false,
+        "speed": 0.12471275701837337,
+        "camera": {
+          "position": [
+            -2.4054231775120325,
+            3.7177032502342744,
+            5.373186807741625
+          ],
+          "rotation": [
+            -0.20884779711669785,
+            -0.00005654668136459985,
+            -0.000004655215123305227,
+            0.9779481552824284
+          ],
+          "yaw": 0,
+          "pitch": 0.23786229593068295,
+          "near": false,
+          "patchOnScreen": [
+            -0.004366902802768322,
+            0.04912262170905756,
+            0.9821322970285983
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6762911740619085,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 13,
+          "substep": 0,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 13,
+          "deliverySubstep": 0,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.14774013975729747,
+          "resistance01": 0.41177623741022884,
+          "requestedDebit": 0.00027376145488674586,
+          "actualDebit": 0.0002737614548867784,
+          "reserveBefore": 0.6765649355167953,
+          "reserveAfter": 0.6762911740619085
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.08489838951214773,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 13,
+            "substep": 0,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.41177623741022884,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.677,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.14774013975729747,
+            "pressure01": 0.10341809783010822,
+            "before": {
+              "imprint": 0.2410512433613829,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.2426995131333868,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.2426995131333868
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 13,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.7500000000000009,
+        "wallMs": 64546.60000038147,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3238.6000003814697,
+        "droppedFrameMs": 3088.60000038147,
+        "pose": [
+          -2.401634455573271,
+          -0.5882814741270049,
+          -3.7520748632696006
+        ],
+        "facing": [
+          0.43942823249793883,
+          -0.43866440643847493,
+          -0.7838854297712887
+        ],
+        "attachment": false,
+        "speed": 0.12483740353463128,
+        "camera": {
+          "position": [
+            -2.4054231775120325,
+            3.7177032502342744,
+            5.373186807741625
+          ],
+          "rotation": [
+            -0.20884779711669785,
+            -0.00005654668136459985,
+            -0.000004655215123305227,
+            0.9779481552824284
+          ],
+          "yaw": 0,
+          "pitch": 0.23786229593068295,
+          "near": false,
+          "patchOnScreen": [
+            -0.004366902802768322,
+            0.04912262170905756,
+            0.9821322970285983
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6741635159899688,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 13,
+          "substep": 1,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 13,
+          "deliverySubstep": 1,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.147360799093839,
+          "resistance01": 0.41304719855815186,
+          "requestedDebit": 0.00027390134359350375,
+          "actualDebit": 0.0002739013435935078,
+          "reserveBefore": 0.6744374173335623,
+          "reserveAfter": 0.6741635159899688
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.10618699227305398,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 13,
+            "substep": 1,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.41304719855815186,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.674,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.147360799093839,
+            "pressure01": 0.1031525593656873,
+            "before": {
+              "imprint": 0.2426995131333868,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.2443399802853994,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.2443399802853994
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 13,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.800000000000001,
+        "wallMs": 64567.5,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 3238.6000003814697,
+        "droppedFrameMs": 3088.60000038147,
+        "pose": [
+          -2.398805692848055,
+          -0.5911053198202109,
+          -3.7568751878942104
+        ],
+        "facing": [
+          0.4416437567869264,
+          -0.4408760796431166,
+          -0.7813955941068818
+        ],
+        "attachment": false,
+        "speed": 0.12493057200901148,
+        "camera": {
+          "position": [
+            -2.4054231775120325,
+            3.7177032502342744,
+            5.373186807741625
+          ],
+          "rotation": [
+            -0.20884779711669785,
+            -0.00005654668136459985,
+            -0.000004655215123305227,
+            0.9779481552824284
+          ],
+          "yaw": 0,
+          "pitch": 0.23786229593068295,
+          "near": false,
+          "patchOnScreen": [
+            -0.004366902802768322,
+            0.04912262170905756,
+            0.9821322970285983
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6719676185430762,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 13,
+          "substep": 2,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 13,
+          "deliverySubstep": 2,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.1470060548772181,
+          "resistance01": 0.4143008731710036,
+          "requestedDebit": 0.0002740713160367517,
+          "actualDebit": 0.0002740713160367392,
+          "reserveBefore": 0.6722416898591129,
+          "reserveAfter": 0.6719676185430762
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.12750077961933373,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 13,
+            "substep": 2,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.4143008731710036,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.672,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.1470060548772181,
+            "pressure01": 0.10290423841405266,
+            "before": {
+              "imprint": 0.2443399802853994,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.24597295328080168,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.24597295328080168
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 14,
+          "substep": 0
+        },
+        "runtimeSeconds": 1.850000000000001,
+        "wallMs": 64830,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 889.1999998092651,
+        "droppedFrameMs": 739.1999998092651,
+        "pose": [
+          -2.395975353290147,
+          -0.593930739605215,
+          -3.761678188356115
+        ],
+        "facing": [
+          0.44349131479122655,
+          -0.44272042617203644,
+          -0.7793035852315832
+        ],
+        "attachment": false,
+        "speed": 0.1250002118583946,
+        "camera": {
+          "position": [
+            -2.3969256078995547,
+            3.7575369945326846,
+            5.394117215210739
+          ],
+          "rotation": [
+            -0.21021573912731292,
+            -0.000056920471606443144,
+            -0.000008605707798700104,
+            0.9776550208070119
+          ],
+          "yaw": 0,
+          "pitch": 0.23998019657891587,
+          "near": false,
+          "patchOnScreen": [
+            -0.005160655247372912,
+            0.04952031100589902,
+            0.9821885881013723
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.669703488177834,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 14,
+          "substep": 0,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 14,
+          "deliverySubstep": 0,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.14665513175863637,
+          "resistance01": 0.41554000204126224,
+          "requestedDebit": 0.00027423483187655396,
+          "actualDebit": 0.00027423483187660747,
+          "reserveBefore": 0.6699777230097106,
+          "reserveAfter": 0.669703488177834
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.14883944485273948,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 14,
+            "substep": 0,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.41554000204126224,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.67,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.14665513175863637,
+            "pressure01": 0.10265859223104545,
+            "before": {
+              "imprint": 0.24597295328080168,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.24759850773832853,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.24759850773832853
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 14,
+          "substep": 1
+        },
+        "runtimeSeconds": 1.900000000000001,
+        "wallMs": 64857.39999961853,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 889.1999998092651,
+        "droppedFrameMs": 739.1999998092651,
+        "pose": [
+          -2.39314383511048,
+          -0.5967573359632659,
+          -3.7664831889034285
+        ],
+        "facing": [
+          0.44503270338905143,
+          -0.4442591354864387,
+          -0.777547241941655
+        ],
+        "attachment": false,
+        "speed": 0.12505226496599745,
+        "camera": {
+          "position": [
+            -2.3969256078995547,
+            3.7575369945326846,
+            5.394117215210739
+          ],
+          "rotation": [
+            -0.21021573912731292,
+            -0.000056920471606443144,
+            -0.000008605707798700104,
+            0.9776550208070119
+          ],
+          "yaw": 0,
+          "pitch": 0.23998019657891587,
+          "near": false,
+          "patchOnScreen": [
+            -0.005160655247372912,
+            0.04952031100589902,
+            0.9821885881013723
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6673711307284063,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 14,
+          "substep": 1,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 14,
+          "deliverySubstep": 1,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.14630736570698885,
+          "resistance01": 0.41676722035240515,
+          "requestedDebit": 0.0002743925135525304,
+          "actualDebit": 0.000274392513552546,
+          "reserveBefore": 0.6676455232419588,
+          "reserveAfter": 0.6673711307284063
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.17020273822547002,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 14,
+            "substep": 1,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.41676722035240515,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.668,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.14630736570698885,
+            "pressure01": 0.10241515599489219,
+            "before": {
+              "imprint": 0.24759850773832853,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.24921671137854468,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.24921671137854468
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 14,
+          "substep": 2
+        },
+        "runtimeSeconds": 1.950000000000001,
+        "wallMs": 64893.699999809265,
+        "dt": 0.049999999999999996,
+        "rawFrameMs": 889.1999998092651,
+        "droppedFrameMs": 739.1999998092651,
+        "pose": [
+          -2.390311435956403,
+          -0.5995848117643933,
+          -3.7712896844376202
+        ],
+        "facing": [
+          0.4463191457587216,
+          -0.44554334172712745,
+          -0.776073676123491
+        ],
+        "attachment": false,
+        "speed": 0.12509117266087494,
+        "camera": {
+          "position": [
+            -2.3969256078995547,
+            3.7575369945326846,
+            5.394117215210739
+          ],
+          "rotation": [
+            -0.21021573912731292,
+            -0.000056920471606443144,
+            -0.000008605707798700104,
+            0.9776550208070119
+          ],
+          "yaw": 0,
+          "pitch": 0.23998019657891587,
+          "near": false,
+          "patchOnScreen": [
+            -0.005160655247372912,
+            0.04952031100589902,
+            0.9821885881013723
+          ],
+          "withinFrustum": true
+        },
+        "aim": {
+          "targetId": "silt_porosity_shelf",
+          "attentionSequence": 2,
+          "relationshipSequence": 1
+        },
+        "selected": "silt_porosity_shelf",
+        "corePhaseCount": 3,
+        "profile": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "reserve": 0.6649705888330405,
+        "settlement": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 14,
+          "substep": 2,
+          "owner": "CoreRadialPerformanceSystem",
+          "status": "settled",
+          "reason": "applied",
+          "receiverId": "silt_porosity_shelf_front",
+          "actionSequence": 1,
+          "deliveryFrame": 14,
+          "deliverySubstep": 2,
+          "stepSeconds": 0.049999999999999996,
+          "acceptedCurrent01": 0.1459422450082223,
+          "resistance01": 0.41798506885814024,
+          "requestedDebit": 0.00027450755698083017,
+          "actualDebit": 0.00027450755698088525,
+          "reserveBefore": 0.6652450963900214,
+          "reserveAfter": 0.6649705888330405
+        },
+        "input": {
+          "stabilize": true,
+          "absorb": false,
+          "pulseEventId": 0,
+          "flowDemand": 0.39518054672703895,
+          "flowSequence": 1
+        },
+        "flow": {
+          "phase": "conducting",
+          "ready": true,
+          "reason": "current_accepted",
+          "contact": true,
+          "strain": 0.19158948793390884,
+          "extension": 1.15,
+          "effect": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "frame": 14,
+            "substep": 2,
+            "targetId": "silt_porosity_shelf",
+            "attentionSequence": 2,
+            "relationshipSequence": 1,
+            "actionSequence": 1,
+            "receiverId": "silt_porosity_shelf_front",
+            "siteId": "silt_porosity_shelf",
+            "owner": "silt:RegionalTerritoryExpansion",
+            "conductivity01": 0.72,
+            "resistance01": 0.41798506885814024,
+            "profile": {
+              "topologyId": "three_way_balance",
+              "phaseCount": 3,
+              "reserve01": 0.665,
+              "stability": 1.017,
+              "recovery": 1.067,
+              "enduranceCapacity": 1.107
+            },
+            "acceptedCurrent01": 0.1459422450082223,
+            "pressure01": 0.10215957150575561,
+            "before": {
+              "imprint": 0.24921671137854468,
+              "strain": 0,
+              "void": 0
+            },
+            "after": {
+              "imprint": 0.2508274050587889,
+              "strain": 0,
+              "void": 0
+            },
+            "retainedDuringSession": true,
+            "materialTransferred": 0,
+            "progressionCredit": false,
+            "hostReceipt": false
+          }
+        },
+        "imprint": 0.2508274050587889
+      }
+    ],
+    "changes": [
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 7,
+          "substep": 0
+        },
+        "elapsed": 0.049999999999999996,
+        "wallMs": 46096.300000190735,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "result": false
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 8,
+          "substep": 0
+        },
+        "elapsed": 0.19999999999999998,
+        "wallMs": 50608.10000038147,
+        "phase": "retracted",
+        "reason": "ready",
+        "result": false
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 10,
+          "substep": 0
+        },
+        "elapsed": 0.49999999999999994,
+        "wallMs": 54723.10000038147,
+        "phase": "disconnected",
+        "reason": "extending",
+        "result": false
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 11,
+          "substep": 2
+        },
+        "elapsed": 0.7500000000000001,
+        "wallMs": 59693.60000038147,
+        "phase": "contact",
+        "reason": "contact",
+        "result": false
+      },
+      {
+        "step": {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 2,
+          "frame": 12,
+          "substep": 0
+        },
+        "elapsed": 0.8000000000000002,
+        "wallMs": 60716.699999809265,
+        "phase": "conducting",
+        "reason": "current_accepted",
+        "result": true
+      }
+    ],
+    "policy": "input",
+    "actions": {
+      "canonical_selection": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 8,
+        "substep": 0
+      },
+      "analog_flow_request": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 10,
+        "substep": 0
+      },
+      "accepted_current": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 12,
+        "substep": 0
+      }
+    },
+    "probes": [
+      {
+        "wallMs": 45816.60000038147,
+        "runtimeSeconds": 0.8000000000000002,
+        "elapsed": 0,
+        "lt": 0.82,
+        "rt": 0
+      },
+      {
+        "wallMs": 54555,
+        "runtimeSeconds": 1.2500000000000004,
+        "elapsed": 0.44999999999999996,
+        "lt": 0.82,
+        "rt": 0.46
+      }
+    ],
+    "pressureDose": 0.04642549436049207,
+    "currentDose": 0.06632213480070295,
+    "acceptedImprintGain": 0.01476740505878893
+  },
+  "handoff": {
+    "before": {
+      "pieces": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane"
+        }
+      ],
+      "topology": {
+        "id": "three_way_balance",
+        "label": "Three-Way Balance",
+        "distribution": "1:1:1",
+        "complete": true,
+        "dominantZone": "balanced"
+      },
+      "chemistry": {
+        "composition": {
+          "form": 0.32,
+          "flux": 0.21,
+          "scar": 0.02,
+          "seed": 0.36,
+          "signal": 0.09
+        },
+        "absorbed": 0,
+        "earned": {
+          "pass": "CONNECTION44",
+          "owner": "CoreGrowthSystem",
+          "growthKnown": true,
+          "matureBinding": false,
+          "surfaceFoundation": false,
+          "surfaceCause": "none",
+          "earnedFamilies": {
+            "grave": false,
+            "vascular": false,
+            "silt": false
+          },
+          "integrated": false,
+          "idleRecoveryMultiplier": 1,
+          "cause": "requires_mature_core_and_earned_vascular_return",
+          "enginePhaseAuthority": false,
+          "materialAuthority": false
+        },
+        "seedCount": 1,
+        "growthStage": "seed_core"
+      },
+      "derived": {
+        "physiology": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "chemistry": {
+          "pass": "HC-024E",
+          "active": true,
+          "source": "spatial_core_chemistry",
+          "memory": 0.06,
+          "rhythm": 0.28,
+          "pressure": 1,
+          "surfaceExpression": 0.333,
+          "deepConcentration": 0.333,
+          "innerCirculation": 0.333,
+          "dominantFamily": "silt_pressure",
+          "dominantMode": "adhesion_skin",
+          "topologyId": "three_way_balance",
+          "topologyDistribution": "1:1:1",
+          "cloudPatternId": "none",
+          "cloudPatternLabel": "Free Cloud",
+          "patternStrength": 0.86,
+          "responseRadius": 3.45,
+          "directionality": 0.40034765437071007,
+          "spreadMode": "free",
+          "localDirection": {
+            "x": 0.49896732212304246,
+            "y": -0.8115197641511716,
+            "z": -0.30408433673141905
+          },
+          "worldDirection": {
+            "x": 0.5028547476115469,
+            "y": -0.8150173931587072,
+            "z": 0.28789538317470986
+          },
+          "siltZoneId": "membrane",
+          "siltDepth01": 0.78,
+          "siltMembraneExposure": 1,
+          "siltLocalDirection": {
+            "x": 0.13250773199998755,
+            "y": -0.9772445234999081,
+            "z": -0.16563466499998444
+          },
+          "siltWorldDirection": {
+            "x": 0.09830571013473786,
+            "y": -0.9427807167050443,
+            "z": 0.31859144301758646
+          },
+          "visualHostResponseEnabled": true,
+          "movementConsequencesEnabled": true,
+          "movementConsequenceOwner": "PlayerMovementController",
+          "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+          "collisionConsequencesEnabled": false,
+          "progressionAuthority": false,
+          "geometryAuthority": false
+        }
+      },
+      "material": {
+        "mass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ],
+        "units": [
+          {
+            "id": "silt-grain-01",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-02",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-03",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-04",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-05",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-06",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-07",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-08",
+            "generation": 0,
+            "phase": "reservoir"
+          }
+        ],
+        "nativeAwake": false
+      },
+      "progression": {
+        "completed": false,
+        "returned": false,
+        "safeMatterAbsorbed": false,
+        "pressureRead": false,
+        "returnFoldReady": false,
+        "credits": 0
+      },
+      "receipts": {
+        "silt": 0,
+        "vascular": 0,
+        "grave": 0,
+        "local": 0
+      },
+      "grip": null,
+      "seat": null
+    },
+    "after": {
+      "pieces": [
+        {
+          "pieceId": "player_grave_memory_retention_root_HC024C2",
+          "family": "grave_memory_retention",
+          "zoneId": "deep_core"
+        },
+        {
+          "pieceId": "player_vascular_return_filament_root_HC011B",
+          "family": "vascular_rhythm_retention",
+          "zoneId": "inner_body"
+        },
+        {
+          "pieceId": "player_silt_pressure_adaptation_root_HC012B",
+          "family": "silt_pressure_retention",
+          "zoneId": "membrane"
+        }
+      ],
+      "topology": {
+        "id": "three_way_balance",
+        "label": "Three-Way Balance",
+        "distribution": "1:1:1",
+        "complete": true,
+        "dominantZone": "balanced"
+      },
+      "chemistry": {
+        "composition": {
+          "form": 0.32,
+          "flux": 0.21,
+          "scar": 0.02,
+          "seed": 0.36,
+          "signal": 0.09
+        },
+        "absorbed": 0,
+        "earned": {
+          "pass": "CONNECTION44",
+          "owner": "CoreGrowthSystem",
+          "growthKnown": true,
+          "matureBinding": false,
+          "surfaceFoundation": false,
+          "surfaceCause": "none",
+          "earnedFamilies": {
+            "grave": false,
+            "vascular": false,
+            "silt": false
+          },
+          "integrated": false,
+          "idleRecoveryMultiplier": 1,
+          "cause": "requires_mature_core_and_earned_vascular_return",
+          "enginePhaseAuthority": false,
+          "materialAuthority": false
+        },
+        "seedCount": 1,
+        "growthStage": "seed_core"
+      },
+      "derived": {
+        "physiology": {
+          "output": 1.02,
+          "response": 1.053,
+          "enduranceCapacity": 1.107,
+          "recovery": 1.067,
+          "efficiency": 1.063,
+          "stability": 1.017
+        },
+        "chemistry": {
+          "pass": "HC-024E",
+          "active": true,
+          "source": "spatial_core_chemistry",
+          "memory": 0.06,
+          "rhythm": 0.28,
+          "pressure": 1,
+          "surfaceExpression": 0.333,
+          "deepConcentration": 0.333,
+          "innerCirculation": 0.333,
+          "dominantFamily": "silt_pressure",
+          "dominantMode": "adhesion_skin",
+          "topologyId": "three_way_balance",
+          "topologyDistribution": "1:1:1",
+          "cloudPatternId": "none",
+          "cloudPatternLabel": "Free Cloud",
+          "patternStrength": 0.86,
+          "responseRadius": 3.45,
+          "directionality": 0.40034765437071007,
+          "spreadMode": "free",
+          "localDirection": {
+            "x": 0.49896732212304246,
+            "y": -0.8115197641511716,
+            "z": -0.30408433673141905
+          },
+          "worldDirection": {
+            "x": 0.5009113164577512,
+            "y": -0.8131250397257784,
+            "z": 0.2965055190304458
+          },
+          "siltZoneId": "membrane",
+          "siltDepth01": 0.78,
+          "siltMembraneExposure": 1,
+          "siltLocalDirection": {
+            "x": 0.13250773199998755,
+            "y": -0.9772445234999081,
+            "z": -0.16563466499998444
+          },
+          "siltWorldDirection": {
+            "x": 0.09616283003977885,
+            "y": -0.94068166404759,
+            "z": 0.32537780662392723
+          },
+          "visualHostResponseEnabled": true,
+          "movementConsequencesEnabled": true,
+          "movementConsequenceOwner": "PlayerMovementController",
+          "movementConsequenceScope": "silt_membrane_attachment_on_existing_boundary_only",
+          "collisionConsequencesEnabled": false,
+          "progressionAuthority": false,
+          "geometryAuthority": false
+        }
+      },
+      "material": {
+        "mass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ],
+        "units": [
+          {
+            "id": "silt-grain-01",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-02",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-03",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-04",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-05",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-06",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-07",
+            "generation": 0,
+            "phase": "reservoir"
+          },
+          {
+            "id": "silt-grain-08",
+            "generation": 0,
+            "phase": "reservoir"
+          }
+        ],
+        "nativeAwake": false
+      },
+      "progression": {
+        "completed": false,
+        "returned": false,
+        "safeMatterAbsorbed": false,
+        "pressureRead": false,
+        "returnFoldReady": false,
+        "credits": 0
+      },
+      "receipts": {
+        "silt": 0,
+        "vascular": 0,
+        "grave": 0,
+        "local": 0
+      },
+      "grip": null,
+      "seat": null
+    },
+    "active": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "wallMs": 66592.39999961853,
+    "simulationTime": 2.000000000000001,
+    "frame": 15,
+    "substep": 0,
+    "flowPhase": "recovering"
+  },
+  "capture": {
+    "files": [
+      {
+        "name": "shelf-handoff-detail.webm",
+        "format": "webm",
+        "mime": "video/webm;codecs=vp8,opus",
+        "nativeAudioTrack": true
+      },
+      {
+        "name": "shelf-handoff-detail.mp4",
+        "format": "mp4",
+        "mime": "video/mp4;codecs=avc1.42001f,mp4a.40.2",
+        "nativeAudioTrack": true
+      }
+    ],
+    "frames": [
+      {
+        "marker": 1,
+        "wallMs": 48258.89999961853,
+        "frame": 7,
+        "substep": 2,
+        "simSeconds": 0.9000000000000002,
+        "flowPhase": "retracted",
+        "action": 0,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 2,
+        "wallMs": 51334.800000190735,
+        "frame": 8,
+        "substep": 2,
+        "simSeconds": 1.0500000000000003,
+        "flowPhase": "retracted",
+        "action": 0,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 3,
+        "wallMs": 51633.10000038147,
+        "frame": 9,
+        "substep": 2,
+        "simSeconds": 1.2000000000000004,
+        "flowPhase": "retracted",
+        "action": 0,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 4,
+        "wallMs": 57278.199999809265,
+        "frame": 10,
+        "substep": 2,
+        "simSeconds": 1.3500000000000005,
+        "flowPhase": "disconnected",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 5,
+        "wallMs": 60364.5,
+        "frame": 11,
+        "substep": 2,
+        "simSeconds": 1.5000000000000007,
+        "flowPhase": "contact",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 6,
+        "wallMs": 62286.89999961853,
+        "frame": 12,
+        "substep": 2,
+        "simSeconds": 1.6500000000000008,
+        "flowPhase": "conducting",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 7,
+        "wallMs": 64712.699999809265,
+        "frame": 13,
+        "substep": 2,
+        "simSeconds": 1.800000000000001,
+        "flowPhase": "conducting",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 8,
+        "wallMs": 64999.60000038147,
+        "frame": 14,
+        "substep": 2,
+        "simSeconds": 1.950000000000001,
+        "flowPhase": "conducting",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 9,
+        "wallMs": 66899.60000038147,
+        "frame": 15,
+        "substep": 2,
+        "simSeconds": 2.1000000000000005,
+        "flowPhase": "recovering",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      },
+      {
+        "marker": 10,
+        "wallMs": 68841.80000019073,
+        "frame": 16,
+        "substep": 2,
+        "simSeconds": 2.25,
+        "flowPhase": "recovering",
+        "action": 1,
+        "host": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mount": 2
+      }
+    ],
+    "peakAudio": 0.00369421860892712,
+    "timeOrigin": 1795571543158.9,
+    "detail": true,
+    "crop": 0.62
+  }
+}
