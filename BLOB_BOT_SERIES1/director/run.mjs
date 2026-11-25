@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 import { createServer } from 'vite';
 import { chromium } from 'playwright';
 import { sourceIdentity } from '../source-identity.mjs';
@@ -42,7 +43,7 @@ function inputAdapter() {
   });
 }
 
-function verifyStart(scenario, start) {
+export function verifyStart(scenario, start) {
   const { state, retained, patch } = start;
   const starting = scenario.authoritative;
   assert.equal(state.step.hostId, scenario.environment.host);
@@ -306,5 +307,7 @@ async function main() {
   }
 }
 
-try { process.exitCode = Number(!await main()); }
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  try { process.exitCode = Number(!await main()); }
 catch (error) { console.error(error.stack); process.exitCode = 1; }
+}
