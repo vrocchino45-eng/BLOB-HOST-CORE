@@ -1199,6 +1199,7 @@ export class SiltPressureRouteSystem {
   // Root anchoring and current cell visibility are owned by this route.
   createHCCrawlableSurfaces() {
     const proof = this.recipe?.hcCrawlableSurfaceProof;
+    this.freeMaterialSurface = null;
     if (proof?.pass !== "BOT1D11B") return;
     for (const definition of proof.surfaces ?? []) {
       const material = this.trackMaterial(new THREE.MeshStandardMaterial({
@@ -1225,6 +1226,9 @@ export class SiltPressureRouteSystem {
       mesh.userData.siltGeometryOwnership = "new_authored_contact_surface_not_original_visual_only_geology";
       this.root.add(mesh);
       this.hcCrawlableSurfaceMeshes.push(mesh);
+      if (definition.freeMaterialContact === 'stop-inward' && !this.freeMaterialSurface) {
+        this.freeMaterialSurface = { id: definition.id, center: [...definition.position], radii: [...definition.scale] };
+      }
     }
   }
 
@@ -1605,7 +1609,9 @@ export class SiltPressureRouteSystem {
     this.root.updateWorldMatrix(true, false);
     const direction = new THREE.Vector3().fromArray(aim.direction)
       .transformDirection(this.root.matrixWorld.clone().invert()).toArray();
+    const step = this.freeMaterialSurface ? this.readHeldMotionStep(frameState) : null;
     const released = this.siltTrajectory.release(held.id, this.siltGrip.position, {
+      freeContactSource: step?.hostId ? { ...step, generation: held.generation } : null,
       releaseContext: this.siltResistanceExperiment ? { generation: held.generation, mountCount: this.mountCount } : null,
       directedPulse: { direction, displacement: TETHER_PULSE_DISTANCE * charge.charge01 }
     });
@@ -1965,12 +1971,16 @@ export class SiltPressureRouteSystem {
     resolved.clear();
     if (!this.livingCycle?.active) return;
     const resistance = this.selectSiltBudResistance(frameState);
+    const step = this.freeMaterialSurface && (frameState.runtimeSimulationSubstepSeconds ?? dt) === dt
+      ? this.readHeldMotionStep(frameState) : null;
     for (const [index, unit] of this.livingCycle.units.entries()) {
       if (!this.siltTrajectory.has(unit.id) || (unit.id === this.siltGrip.heldId && this.siltGrip.position)
         || this.siltPlateSeat.isSeated(unit.id)) continue;
       const nativePoint = this.copyNativeGrainPosition(unit, index, this.livingMatterV).toArray();
+      const contact = step?.hostId && this.materialIdentity.get(unit.id)?.owner === 'environment'
+        ? { surface: this.freeMaterialSurface, step: { ...step, generation: unit.generation } } : null;
       resolved.set(unit.id, this.siltTrajectory.advance(unit.id, dt, nativePoint,
-        resistance?.receiverId === unit.id ? resistance : null));
+        resistance?.receiverId === unit.id ? resistance : null, contact));
     }
   }
 
