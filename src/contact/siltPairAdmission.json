@@ -1,0 +1,175 @@
+{
+  "schema": "blob.silt-pair-admission.v1",
+  "revision": 1,
+  "status": "approved-experimental",
+  "authorization": {
+    "workOrder": "BLOB Parallel Development Wave 09, section 3 Team B MP03-P1",
+    "sourceSHA256": "3d57eaa1773e2478832e2af51bc8697bcbd9d54a4bec0dd3d39a381b7cedcb8f",
+    "priorEvidence": "1521d2519226c56ae76c1faf5989523ce22e3a2d",
+    "frozenFrom": [
+      {
+        "file": "MP03-calibration.json",
+        "sha256": "24cc139ea3a721c0aec12223bed7ce6ed990ee8b4f67a3d668d86e323a4ca6c3"
+      },
+      {
+        "file": "NF02-contract.json",
+        "sha256": "6ce077eba5eebb40cee15094c16c26017adebbec8232cb4e4623e2ee2b127df4"
+      }
+    ]
+  },
+  "baseline": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "dimensionalContract": {
+    "id": "blob.numerical-contract.v1",
+    "revision": 1,
+    "status": "approved-for-scoped-mechanics",
+    "units": [
+      "Lw",
+      "Ts",
+      "Mr",
+      "Q"
+    ],
+    "SI": {
+      "metersPerLw": null,
+      "kilogramsPerMr": null,
+      "secondsPerTs": 1
+    }
+  },
+  "scope": {
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "ids": [
+      "silt-grain-01",
+      "silt-grain-02"
+    ],
+    "requiredFrame": {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "environmentOwned": true,
+    "releasePolicy": "Both existing PI02 directed releases must have current Host, cell, mount count and sequence, generation and monotonic step evidence.",
+    "eligiblePhases": [
+      "veins",
+      "garden_transit",
+      "settled",
+      "growing",
+      "mature",
+      "returning"
+    ],
+    "ordinaryActivation": false
+  },
+  "radiiLw": {
+    "silt-grain-01": 0.06,
+    "silt-grain-02": 0.06
+  },
+  "massFixturesMr": {
+    "equal": {
+      "silt-grain-01": 1,
+      "silt-grain-02": 1
+    },
+    "one-to-three": {
+      "silt-grain-01": 1,
+      "silt-grain-02": 3
+    }
+  },
+  "restitution": 0,
+  "tangentialImpulse": 0,
+  "separationMarginLw": 0.001,
+  "fixedSurfaceExclusionSeconds": 0.00001,
+  "nativeLimits": {
+    "speedLwPerSecond": 2.1,
+    "accelerationLwPerSecond2": 1.8,
+    "microstepSeconds": 0.025
+  },
+  "measuredCorridor": {
+    "seed": {
+      "positionA": [
+        2.7238,
+        -0.8497,
+        -12.9267
+      ],
+      "positionB": [
+        3.0438,
+        -0.8497,
+        -12.9267
+      ],
+      "velocityA": [
+        1,
+        0,
+        0
+      ],
+      "velocityB": [
+        0,
+        0,
+        0
+      ],
+      "radiusA": 0.06,
+      "radiusB": 0.06,
+      "seconds": 0.33
+    },
+    "miss": {
+      "positionA": [
+        2.7238,
+        -0.8497,
+        -12.9267
+      ],
+      "positionB": [
+        3.0438,
+        -0.7097,
+        -12.9267
+      ],
+      "velocityA": [
+        1,
+        0,
+        0
+      ],
+      "velocityB": [
+        0,
+        0,
+        0
+      ],
+      "radiusA": 0.06,
+      "radiusB": 0.06,
+      "seconds": 0.33
+    },
+    "clearanceLowerBoundLw": 2.408921945387181,
+    "surface": {
+      "id": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
+      "center": [
+        -0.18,
+        -0.75,
+        -2.65
+      ],
+      "radii": [
+        1.35,
+        0.24,
+        0.95
+      ]
+    },
+    "basis": "Staged measurement and numerical test corridor within the admitted Silt route, not a new gameplay volume."
+  },
+  "accounting": {
+    "ledgerUnit": "Q",
+    "expectedUnits": 8,
+    "impulseMayCreditReceipts": false,
+    "impulseMayCreditProgression": false
+  },
+  "prerequisites": [
+    "exact fixture selected before mount",
+    "pair volumes used only for experimental collision proxies",
+    "finite approaching contact over the same native microstep"
+  ]
+}

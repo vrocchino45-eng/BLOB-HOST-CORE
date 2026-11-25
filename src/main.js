@@ -20,6 +20,7 @@ const runtime = new GameRuntime({
   flowExperiment: new URLSearchParams(window.location.search).get('flow') === '1',
   nearWorldExperiment: new URLSearchParams(window.location.search).get('nearWorld') === '1',
   siltResistanceExperiment: new URLSearchParams(window.location.search).get('b3') === '1',
+  siltPairExperiment: import.meta.env.DEV ? new URLSearchParams(window.location.search).get('siltPair') : null,
   buildId: "HC-031W1",
   buildLabel: "Stabilized Aim + Local Contact Proof"
 });

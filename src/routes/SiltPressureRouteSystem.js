@@ -1,3 +1,4 @@
+import { siltPairIds } from '../contact/SiltPairMomentum.js';
 import * as THREE from "three";
 import { SiltReturnRoundTrip } from "./SiltReturnRoundTrip.js";
 import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
@@ -31,7 +32,7 @@ const TETHER_PULSE_DISTANCE = 0.28;
  */
 export class SiltPressureRouteSystem {
   constructor({ recipeDataSystem, scene, playerRoot, frameState, camera, hostConnectionReceiptLedger = null,
-    flowExperiment = false, siltResistanceExperiment = false }) {
+    flowExperiment = false, siltResistanceExperiment = false, siltPairExperiment = null }) {
     this.flowExperiment = flowExperiment;
     this.siltResistanceExperiment = siltResistanceExperiment;
     if (!recipeDataSystem) throw new Error("[SiltPressureRouteSystem] recipeDataSystem is required.");
@@ -69,7 +70,7 @@ export class SiltPressureRouteSystem {
     this.siltPlateSeat = new SiltPlateSeat();
     // D2O1: independent native-path attraction for deliberately released
     // unseated units. No new material and no mutation to the LS1B phase clock.
-    this.siltTrajectory = new SiltTrajectoryMemory();
+    this.siltTrajectory = new SiltTrajectoryMemory({ pairExperiment: siltPairExperiment });
     this.siltResolvedTrajectories = new Map();
     // D2P1: read-only evidence for travel between existing Silt cavities.
     this.siltTrajectoryField = new SiltTrajectoryFieldProbe();
@@ -262,6 +263,7 @@ export class SiltPressureRouteSystem {
   }
 
   onRuntimeUnmount(frameState) {
+    if (this.siltTrajectory.pairFixture) this.siltTrajectory.clearPairContact();
     this.returnRoundTrip.suspend();
     this.gardenSeep.arrivalAt = null;
     this.animateGardenSeepBed();
@@ -1973,8 +1975,12 @@ export class SiltPressureRouteSystem {
     const resistance = this.selectSiltBudResistance(frameState);
     const step = this.freeMaterialSurface && (frameState.runtimeSimulationSubstepSeconds ?? dt) === dt
       ? this.readHeldMotionStep(frameState) : null;
+    if (step && this.siltTrajectory.pairFixture && !siltFlowUnavailableReason(frameState)) {
+      const paired = this.advanceSiltMaterialPair(dt, step, resistance);
+      if (paired) for (const [id, motion] of paired) resolved.set(id, motion);
+    }
     for (const [index, unit] of this.livingCycle.units.entries()) {
-      if (!this.siltTrajectory.has(unit.id) || (unit.id === this.siltGrip.heldId && this.siltGrip.position)
+      if (resolved.has(unit.id) || !this.siltTrajectory.has(unit.id) || (unit.id === this.siltGrip.heldId && this.siltGrip.position)
         || this.siltPlateSeat.isSeated(unit.id)) continue;
       const nativePoint = this.copyNativeGrainPosition(unit, index, this.livingMatterV).toArray();
       const contact = step?.hostId && this.materialIdentity.get(unit.id)?.owner === 'environment'
@@ -1982,6 +1988,25 @@ export class SiltPressureRouteSystem {
       resolved.set(unit.id, this.siltTrajectory.advance(unit.id, dt, nativePoint,
         resistance?.receiverId === unit.id ? resistance : null, contact));
     }
+  }
+
+  advanceSiltMaterialPair(dt, step, resistance) {
+    const entries = [];
+    for (const id of siltPairIds) {
+      const index = this.livingCycle.units.findIndex(unit => unit.id === id);
+      if (index < 0 || !this.siltTrajectory.has(id) || this.siltGrip.heldId === id) return null;
+      const unit = this.livingCycle.units[index];
+      entries.push({ id, phase: unit.phase, custody: this.materialIdentity.get(id)?.owner,
+        seated: this.siltPlateSeat.isSeated(id),
+        nativePoint: this.copyNativeGrainPosition(unit, index, this.livingMatterV).toArray(),
+        resistance: resistance?.receiverId === id ? resistance : null,
+        contact: { surface: this.freeMaterialSurface, step: { ...step, generation: unit.generation } } });
+    }
+    this.root.updateWorldMatrix(true, false);
+    const [x, y, z] = this.entryAnchor.toArray();
+    const expected = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1];
+    const rigidFrame = this.root.matrixWorld.elements.every((value, i) => Math.abs(value - expected[i]) <= 1e-10);
+    return this.siltTrajectory.advancePair(dt, entries, rigidFrame);
   }
 
   animateLivingMatter() {

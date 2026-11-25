@@ -1,3 +1,6 @@
+import { resolveSiltPairImpact, siltPairFixture, siltPairIds } from './SiltPairMomentum.js';
+import { HC031W2A4_MAX_STEP_SECONDS } from '../core/BoundedSimulationCatchUp.js';
+
 /**
  * LS1D1D2O1 — bounded route-local kinematic history for individual Silt grains.
  *
@@ -17,6 +20,7 @@ const roundVec = a => a.map(round);
 const pulseImpulse = displacement => Math.min(1.35, 0.55 + displacement * 2.1);
 
 const CONTACT_EPSILON = 1e-7;
+const MAX_MICROSTEP_SECONDS = 0.025;
 const CONTACT_HISTORY_LIMIT = 32;
 const dot = (a, b) => a.reduce((sum, n, i) => sum + n * b[i], 0);
 
@@ -36,7 +40,7 @@ function sweepIngress(position, move, { center, radii }) {
 }
 
 export class SiltTrajectoryMemory {
-  constructor({ maxUnits=8, spring=0.44, drag=0.74, maxSpeed=2.1, maxAcceleration=1.8 }={}) {
+  constructor({ maxUnits=8, spring=0.44, drag=0.74, maxSpeed=2.1, maxAcceleration=1.8, pairExperiment=null }={}) {
     this.maxUnits=maxUnits;
     this.spring=spring;
     this.drag=drag;
@@ -50,6 +54,9 @@ export class SiltTrajectoryMemory {
     this.sequence=0;
     this.lastEvent='none';
     this.freeContacts = [];
+    this.pairFixture = siltPairFixture(pairExperiment);
+    this.pairLatch = null;
+    this.pairContacts = this.pairFixture ? [] : null;
   }
   beginHold(id, position) {
     if(typeof id!=='string'||!finite3(position)) return false;
@@ -58,6 +65,7 @@ export class SiltTrajectoryMemory {
       this.history.set(id,{releases:0,travelDistance:0,maxNativeDeviation:0});
     }
     if(this.free.delete(id)) this.reacquisitions++;
+    if (this.pairLatch && siltPairIds.includes(id)) this.clearPairContact();
     this.held.set(id,{position:[...position],velocity:[0,0,0],pulse:[0,0,0],pulseAge:Infinity});
     return true;
   }
@@ -139,6 +147,143 @@ export class SiltTrajectoryMemory {
       distance: length(move) * impact.fraction + length(along) };
   }
 
+
+  nativeVelocity(record, nativePoint, resistance, radiusSquared, step) {
+    const delta=subtract(nativePoint,record.position);
+    const accel=limit(subtract(scale(delta,this.spring),scale(record.velocity,this.drag)),this.maxAcceleration);
+    let velocity=limit(vec(record.velocity,scale(accel,step)),this.maxSpeed);
+    if (resistance) {
+      const offset = subtract(record.position, resistance.center);
+      const separationSquared = offset[0] ** 2 + offset[1] ** 2 + offset[2] ** 2;
+      if (separationSquared < radiusSquared) {
+        // Extra drag falls to zero at the boundary. A positive scalar
+        // preserves heading and leaves the native spring and speed cap intact.
+        const rate = resistance.rate * (1 - separationSquared / radiusSquared);
+        velocity = scale(velocity, Math.exp(-rate * step));
+      }
+    }
+    return velocity;
+  }
+
+  clearPairContact() {
+    this.pairLatch = null;
+  }
+
+  pairMember(entry, id) {
+    const record = this.free.get(id);
+    const { contact, phase, custody, seated } = entry ?? {};
+    const step = contact?.step;
+    const source = record?.freeContact?.source;
+    const previous = record?.freeContact?.step;
+    if (entry?.id !== id || !record || this.held.has(id) || seated || custody !== 'environment'
+      || !this.pairFixture.phases.includes(phase) || !finite3(record.position) || !finite3(record.velocity)
+      || !finite3(entry.nativePoint) || !step || !source || !previous
+      || step.hostId !== this.pairFixture.hostId || step.cellId !== this.pairFixture.cellId
+      || !['frame', 'substep', 'mountCount', 'mountSequence', 'generation'].every(k => Number.isSafeInteger(step[k]) && step[k] >= 0)
+      || !['hostId', 'cellId', 'mountCount', 'mountSequence', 'generation'].every(k => step[k] === source[k])) return null;
+    const releaseSequence = record.freeContact.releaseSequence;
+    if (!Number.isSafeInteger(releaseSequence) || releaseSequence < 1) return null;
+    const after = (a, b) => a.frame > b.frame || (a.frame === b.frame && a.substep > b.substep);
+    const releaseStep = record.seconds === 0 && step.frame === source.frame && step.substep === source.substep;
+    if (!releaseStep && (!after(step, source) || !after(step, previous))) return null;
+    const { resistance } = entry;
+    return { ...entry, record, step, source, releaseSequence, mass: this.pairFixture.masses[id],
+      radius: this.pairFixture.radii[id], radiusSquared: resistance ? resistance.radius ** 2 : 0 };
+  }
+
+  advancePair(dt, entries, rigidFrame) {
+    const fixture = this.pairFixture;
+    if (!fixture || rigidFrame !== true || !Number.isFinite(dt) || dt <= 1e-8 || dt > HC031W2A4_MAX_STEP_SECONDS
+      || !Array.isArray(entries) || entries.length !== siltPairIds.length) return null;
+    const members = siltPairIds.map(id => this.pairMember(entries.find(entry => entry.id === id), id));
+    if (members.some(member => !member)) return null;
+    const [a, b] = members;
+    if (!['frame', 'substep', 'mountCount', 'mountSequence'].every(k => a.step[k] === b.step[k])
+      || a.releaseSequence === b.releaseSequence) return null;
+    const key = JSON.stringify([fixture.id, a.step.hostId, a.step.cellId, a.step.mountSequence, a.step.mountCount,
+      ...members.map(member => [member.id, member.step.generation, member.releaseSequence])]);
+    if (this.pairLatch?.key !== key) this.pairLatch = { key, armed: true };
+    for (const member of members) member.record.freeContact.step = member.step;
+
+    let left = dt;
+    let microstep = 0;
+    while (left > 1e-8) {
+      const seconds = Math.min(left, MAX_MICROSTEP_SECONDS);
+      left -= seconds;
+      const native = members.map(member => this.predictPairMember(member, seconds));
+      const separation = length(subtract(native[0].position, native[1].position));
+      if (separation > a.radius + b.radius + fixture.separationMargin) this.pairLatch.armed = true;
+      const candidate = this.pairLatch.armed && resolveSiltPairImpact(native[0], native[1], seconds);
+      const impact = candidate && candidate.velocities.every(v => length(v) <= this.maxSpeed)
+        && !native.some((body, index) => this.fixedSurfacePrecedes(body, members[index].contact.surface, seconds, candidate.time));
+      if (impact) {
+        this.applyPairContact(members, native, candidate, seconds, microstep);
+      } else {
+        for (const [index, member] of members.entries()) {
+          member.record.velocity = native[index].velocity;
+          this.advancePairMember(member, seconds, microstep);
+        }
+      }
+      for (const member of members) member.record.seconds += seconds;
+      microstep++;
+    }
+    return new Map(members.map(member => [member.id, this.finishAdvance(member.id, member.record, member.nativePoint)]));
+  }
+
+  predictPairMember(member, seconds) {
+    const { record, nativePoint, resistance, radiusSquared, mass, radius } = member;
+    return { position: record.position, beforeNativeVelocity: record.velocity, mass, radius,
+      velocity: this.nativeVelocity(record, nativePoint, resistance, radiusSquared, seconds) };
+  }
+
+  fixedSurfacePrecedes(body, surface, seconds, time) {
+    if (!surface) return false;
+    const hit = sweepIngress(body.position, scale(body.velocity, seconds), surface);
+    return Boolean(hit && -dot(body.velocity, hit.normal) > CONTACT_EPSILON
+      && hit.fraction * seconds <= time + this.pairFixture.fixedSurfaceWindow);
+  }
+
+  advancePairMember(member, seconds, microstep, travelBefore = 0) {
+    const { record, contact, step, id } = member;
+    const move = scale(record.velocity, seconds);
+    const fixed = contact.surface ? this.resolveFreeContact(record, id, contact.surface, step, microstep, seconds, move) : null;
+    record.position = fixed?.position ?? vec(record.position, move);
+    this.history.get(id).travelDistance += travelBefore + (fixed?.distance ?? length(move));
+  }
+
+  applyPairContact(members, native, result, seconds, microstep) {
+    // The entire pair was validated before either position or velocity changes.
+    for (const [i, { record }] of members.entries()) {
+      record.position = result.positions[i];
+      record.velocity = result.velocities[i];
+    }
+    const { step, radius } = members[0];
+    this.pairLatch.armed = false;
+    const event = {
+      ...step, microstep, microstepSeconds: seconds, contactSeconds: result.time,
+      fixture: this.pairFixture.id, revision: this.pairFixture.revision,
+      id: [this.pairLatch.key, step.frame, step.substep, microstep].join(':'),
+      kind: 'accepted-silt-pair', actualRecipientIds: members.map(member => member.id),
+      normal: result.normal, point: vec(result.positions[0], scale(result.normal, radius)),
+      impulse: result.impulse, momentumBefore: result.momentumBefore, momentumAfter: result.momentumAfter,
+      kineticEnergyBefore: result.energyBefore, kineticEnergyAfter: result.energyAfter,
+      kineticEnergyLost: Math.max(0, result.energyBefore - result.energyAfter),
+      units: members.map(({ id, step, mass, radius, releaseSequence, source }, i) => ({
+        id, generation: step.generation, releaseSequence, releaseFrame: source.frame, releaseSubstep: source.substep,
+        mass, radius, startingPosition: [...native[i].position], contactPosition: [...result.positions[i]],
+        beforeNativeVelocity: [...native[i].beforeNativeVelocity], incomingVelocity: [...native[i].velocity],
+        outgoingVelocity: [...result.velocities[i]]
+      })),
+      inventoryTransferred: false, progressionCredit: false, hostReceipt: false
+    };
+    this.pairContacts.push(event);
+    if (this.pairContacts.length > CONTACT_HISTORY_LIMIT) this.pairContacts.shift();
+    // Remaining travel keeps the original PI03 owner and native step length.
+    for (const [i, member] of members.entries()) {
+      this.advancePairMember(member, seconds - result.time, microstep, length(native[i].velocity) * result.time);
+    }
+  }
+
   advance(id,dt,nativePoint,resistance=null,contact=null){
     const record=this.free.get(id);
     if(!record||!finite3(nativePoint))return null;
@@ -166,20 +311,8 @@ export class SiltTrajectoryMemory {
     let microstep = 0;
     const radiusSquared = resistance ? resistance.radius ** 2 : 0;
     while(left>1e-8){
-      const step=Math.min(left,0.025);left-=step;
-      const delta=subtract(nativePoint,record.position);
-      const accel=limit(subtract(scale(delta,this.spring),scale(record.velocity,this.drag)),this.maxAcceleration);
-      record.velocity=limit(vec(record.velocity,scale(accel,step)),this.maxSpeed);
-      if (resistance) {
-        const offset = subtract(record.position, resistance.center);
-        const separationSquared = offset[0] ** 2 + offset[1] ** 2 + offset[2] ** 2;
-        if (separationSquared < radiusSquared) {
-          // Extra drag falls to zero at the boundary. A positive scalar
-          // preserves heading and leaves the native spring and speed cap intact.
-          const rate = resistance.rate * (1 - separationSquared / radiusSquared);
-          record.velocity = scale(record.velocity, Math.exp(-rate * step));
-        }
-      }
+      const step=Math.min(left,MAX_MICROSTEP_SECONDS);left-=step;
+      record.velocity = this.nativeVelocity(record, nativePoint, resistance, radiusSquared, step);
       const stepMove=scale(record.velocity,step);
       const impact = surface ? this.resolveFreeContact(record, id, surface, contact.step, microstep, step, stepMove) : null;
       record.position = impact?.position ?? vec(record.position, stepMove);
@@ -187,6 +320,9 @@ export class SiltTrajectoryMemory {
       microstep++;
       record.seconds+=step;
     }
+    return this.finishAdvance(id, record, nativePoint);
+  }
+  finishAdvance(id, record, nativePoint) {
     const distance=length(subtract(nativePoint,record.position));
     record.nativeError=distance;
     this.history.get(id).maxNativeDeviation=Math.max(distance,this.history.get(id).maxNativeDeviation);
@@ -204,6 +340,8 @@ export class SiltTrajectoryMemory {
       releases:this.releases,reacquisitions:this.reacquisitions,sequence:this.sequence,
       lastEvent:this.lastEvent,
       ...(this.freeContacts.length ? { freeMaterialContacts: this.freeContacts.slice() } : {}),
+      ...(this.pairFixture ? { materialPairExperiment: { fixture: this.pairFixture.id,
+        revision: this.pairFixture.revision, contacts: this.pairContacts.slice() } } : {}),
       histories:[...this.history.entries()].map(([unitId,h])=>({unitId,
         releases:h.releases,travelDistance:round(h.travelDistance),
         maxNativeDeviation:round(h.maxNativeDeviation)})),

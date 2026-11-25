@@ -117,13 +117,14 @@ import { GatheringGroundAliveSystem } from "../fields/GatheringGroundAliveSystem
 
 export class GameRuntime {
   constructor({ appRoot, buildId, buildLabel, coreRepairTrial = false, flowExperiment = false,
-    nearWorldExperiment = false, siltResistanceExperiment = false }) {
+    nearWorldExperiment = false, siltResistanceExperiment = false, siltPairExperiment = null }) {
     this.appRoot = appRoot;
     this.buildId = buildId;
     this.buildLabel = buildLabel;
     Object.defineProperty(this, 'coreRepairTrial', { value: coreRepairTrial === true, writable: false });
     this.flowExperiment = flowExperiment === true;
     this.siltResistanceExperiment = siltResistanceExperiment === true;
+    this.siltPairExperiment = siltPairExperiment;
     this.nearWorldFraming = nearWorldExperiment === true ? new NearWorldFraming() : null;
     this.renderCamera = null;
 
@@ -2417,7 +2418,8 @@ export class GameRuntime {
       frameState: this.frameState,
       camera: this.camera,
       flowExperiment: this.flowExperiment,
-      siltResistanceExperiment: this.siltResistanceExperiment
+      siltResistanceExperiment: this.siltResistanceExperiment,
+      siltPairExperiment: this.siltPairExperiment
     });
     if (this.flowExperiment) {
       const silt = this.siltPressureRouteSystem;
