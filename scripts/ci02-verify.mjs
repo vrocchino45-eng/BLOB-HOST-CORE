@@ -46,6 +46,11 @@ const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const source = git('rev-parse', 'HEAD');
 if (process.env.GITHUB_SHA) assert.equal(process.env.GITHUB_SHA, source);
 const plan = JSON.parse(fs.readFileSync(new URL('./ci02-plan.json', import.meta.url)));
+if (process.argv[3] === '--numerical') plan.push({
+  id: 'nf02-pi04-analytical', count: 13,
+  args: ['--test','--test-reporter=tap','BLOB_BOT_SERIES1/director/numerics/NF02-contract.test.mjs',
+    'BLOB_BOT_SERIES1/director/numerics/PI04-reference.test.mjs']
+});
 const summary = { source, node: process.version, platform: process.platform, cases: [], verdict: 'PASS' };
 const scrub = value => value.split(cwd).join('<checkout>').split(out).join('<evidence>');
 for (const check of plan) {
