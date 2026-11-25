@@ -1,0 +1,33 @@
+name: BLOB CI02 IN01 deterministic verification
+on:
+  push:
+    branches: [candidate/ci02-i1]
+permissions:
+  contents: read
+jobs:
+  node-verification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.14.0'
+          cache: npm
+      - name: Install from the committed lockfile
+        run: node scripts/ci02-verify.mjs --install
+      - name: Run deterministic tests and build
+        run: node scripts/ci02-verify.mjs CI02_RESULTS
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blob-ci02-${{ github.sha }}
+          path: |
+            CI02_RESULTS/*.log
+            CI02_RESULTS/summary.json
+          if-no-files-found: warn
+          retention-days: 14
