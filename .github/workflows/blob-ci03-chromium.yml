@@ -9,9 +9,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/blob-ci03-chromium
       BLOB_BOT_CHROMIUM_ARGS: '["--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader"]'
     steps:
+      - name: Set the runner-scoped Chromium cache
+        run: echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/blob-ci03-chromium" >> "$GITHUB_ENV"
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
