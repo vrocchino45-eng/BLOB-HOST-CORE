@@ -144,6 +144,7 @@
     "count": 5,
     "args": [
       "--test",
+      "--test-reporter=tap",
       "scripts/testUI03PlayerInformation.mjs"
     ]
   },
@@ -152,6 +153,7 @@
     "count": 3,
     "args": [
       "--test",
+      "--test-reporter=tap",
       "BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs"
     ]
   },
@@ -160,6 +162,7 @@
     "count": 5,
     "args": [
       "--test",
+      "--test-reporter=tap",
       "BLOB_BOT_SERIES1/director/in02-admission.test.mjs"
     ]
   },
@@ -168,6 +171,7 @@
     "count": 4,
     "args": [
       "--test",
+      "--test-reporter=tap",
       "BLOB_BOT_SERIES1/director/numerics/NF05-conservation.test.mjs"
     ]
   }
