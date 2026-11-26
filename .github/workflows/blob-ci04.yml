@@ -1,0 +1,36 @@
+name: BLOB CI04 isolated PI04 verification
+on:
+  push:
+    branches: [candidate/ci04-pi04-i1]
+permissions:
+  contents: read
+jobs:
+  node-verification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.14.0'
+          cache: npm
+      - name: Install from the committed lockfile
+        run: node scripts/ci04-verify.mjs --install
+      - name: Run runtime, numerical and pinned Director verification
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/blob-wave09-in01" 462f1278ea069b41b4c0216335f4bb9363ee38af
+          node scripts/ci04-verify.mjs CI04_RESULTS --numerical "$RUNNER_TEMP/blob-wave09-in01"
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blob-ci04-${{ github.sha }}
+          path: |
+            CI04_RESULTS/*.log
+            CI04_RESULTS/summary.json
+            CI04_RESULTS/mounted.json
+          if-no-files-found: warn
+          retention-days: 14
