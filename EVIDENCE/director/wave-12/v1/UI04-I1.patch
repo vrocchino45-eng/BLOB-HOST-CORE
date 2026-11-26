@@ -1,0 +1,245 @@
+diff --git a/scripts/testC2ContextualLabels.mjs b/scripts/testC2ContextualLabels.mjs
+index ca1e139..c9114ac 100644
+--- a/scripts/testC2ContextualLabels.mjs
++++ b/scripts/testC2ContextualLabels.mjs
+@@ -1,6 +1,7 @@
+ import assert from 'node:assert/strict';
+ import { test } from 'node:test';
+ import { HostConnectionReceiptLedger } from '../src/core/HostConnectionReceiptLedger.js';
++import { readFlowStep } from '../src/interaction/SiltFlowContract.js';
+ import { PlaytestHudSystem } from '../src/ui/PlaytestHudSystem.js';
+ import { buildQuickLookSnapshot, QuickLookInspectorSystem } from '../src/ui/QuickLookInspectorSystem.js';
+ 
+@@ -24,6 +25,14 @@ function setup(cell = SILT, labels = true) {
+   return { frame, read: () => hud.resolveHudState(frame, true) };
+ }
+ 
++function publishShelfDelivery(frame) {
++  const step = readFlowStep(frame);
++  const actionSequence = 1;
++  const result = { ...step, actionSequence, acceptedCurrent01: 0.4,
++    pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.02 } };
++  Object.assign(frame.coreFlow, { step, actionSequence, result });
++}
++
+ function publishSiltRelease(frame, reason = 'deliberate-release') {
+   const ledger = new HostConnectionReceiptLedger();
+   const decision = {
+@@ -87,8 +96,8 @@ test('Grip and contact outrank selection, while alignment loss and overload dist
+   Object.assign(frame.coreFlow, { contactValid: true, reason: 'receiver_rejected' });
+   assert.equal(read().primaryInstruction, 'Shelf contact · current declined');
+ 
+-  const result = { acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.02 } };
+-  Object.assign(frame.coreFlow, { result, reason: 'current_accepted' });
++  frame.coreFlow.reason = 'current_accepted';
++  publishShelfDelivery(frame);
+   assert.equal(read().primaryInstruction, 'Shelf · current accepted, resistance felt');
+   assert.match(read().flowLine, /pressure 0\.20 · resistance 0\.30/);
+   frame.coreFlow.overloaded = true;
+@@ -304,7 +313,7 @@ test('F1 guidance and C2 live consequences or history take precedence over Garde
+   assert.deepEqual(read().contextualLabel, { tier: 'instruction', text: 'Align the Core with the Shelf' });
+   frame.coreFlow = { contactValid: true };
+   assert.deepEqual(read().contextualLabel, { tier: 'interaction', text: 'Shelf contact · waiting for current' });
+-  frame.coreFlow.result = { acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.02 } };
++  publishShelfDelivery(frame);
+   assert.deepEqual(read().contextualLabel,
+     { tier: 'interaction', text: 'Shelf · current accepted, resistance felt' });
+   delete frame.coreFlow;
+diff --git a/scripts/testUI04ShelfInformation.mjs b/scripts/testUI04ShelfInformation.mjs
+new file mode 100644
+index 0000000..0868639
+--- /dev/null
++++ b/scripts/testUI04ShelfInformation.mjs
+@@ -0,0 +1,86 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import { projectPlayerInformation } from '../src/ui/PlayerInformationModel.js';
++import { PlaytestHudSystem } from '../src/ui/PlaytestHudSystem.js';
++
++const hostId = 'HOST_ALPHA_WOUNDED_NURSERY';
++const cellId = 'CELL_SILT_PRESSURE_ROUTE_001';
++const targetId = 'silt_porosity_shelf';
++const receiverId = 'silt_porosity_shelf_front';
++const text = 'Flow · Current accepted 0.40 · pressure 0.20 · resistance 0.30 · shelf imprint 0.10';
++
++function fixture() {
++  const step = { hostId, cellId, mountSequence: 2, frame: 40, substep: 1 };
++  const result = {
++    ...step,
++    owner: 'silt:RegionalTerritoryExpansion',
++    targetId, receiverId, actionSequence: 4,
++    acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3,
++    after: { imprint: 0.1 }
++  };
++  const frame = {
++    activeHostId: hostId, activeCellId: cellId, frame: 40, runtimeSimulationSubstepIndex: 1,
++    firstSliceRuntimeMount: { mountSequence: 2, activeRuntimeCellId: cellId, activeSystemIds: ['siltPressureRouteSystem'] },
++    quickLookInspector: { coreLabelsEnabled: true },
++    siltPressureRoute: { active: true },
++    runtimeExecution: { frame: 40, executedSystemIds: ['targetingSystem'] },
++    targeting: { active: true, attentionActive: true, attentionTargetId: targetId, targetId },
++    coreFlow: { step, result, lastResult: result, actionSequence: 4, contactValid: true, reason: 'contact' }
++  };
++  const hud = new PlaytestHudSystem({ recipeDataSystem: { data: {} }, frameState: frame });
++  const read = () => hud.resolveHudState(frame, true).flowLine;
++  const context = () => hud.resolveHudState(frame,true).contextualLabel?.text;
++  return { frame, read, context };
++}
++
++test('current authoritative projection is the displayed delivery and leaves gameplay fields unchanged', () => {
++  const { frame, read, context } = fixture();
++  frame.playerInformation = projectPlayerInformation(frame);
++  assert.equal(frame.playerInformation.accepted.flow.actualRecipient, receiverId);
++  Object.defineProperty(frame.coreFlow.result, 'pressure01', { get() { assert.fail('Owner fallback was used'); } });
++  assert.equal(read(), text);
++  assert.equal(context(), 'Shelf · current accepted, resistance felt');
++  assert.equal(frame.coreFlow.result.after.imprint, 0.1);
++});
++
++test('missing or stale projection uses only the fresh owner sample', () => {
++  const { frame, read } = fixture();
++  assert.equal(read(), text);
++  frame.playerInformation = projectPlayerInformation(frame);
++  frame.playerInformation = { ...frame.playerInformation,
++    accepted: { flow: { ...frame.playerInformation.accepted.flow, actionSequence: 3, pressure01: 0.9 } } };
++  assert.equal(read(), text);
++  frame.coreFlow.overloaded = true;
++  assert.match(read(), /Overload · current limited 0.40/);
++});
++
++test('prior step, earlier action and remount cannot display historical flow as current', () => {
++  const { frame, read, context } = fixture();
++  frame.playerInformation = projectPlayerInformation(frame);
++  frame.coreFlow.actionSequence = 5;
++  assert.doesNotMatch(read(), /Current accepted/);
++  frame.coreFlow.actionSequence = 4;
++  frame.runtimeSimulationSubstepIndex++;
++  assert.doesNotMatch(read(), /Current accepted/);
++  frame.runtimeSimulationSubstepIndex--;
++  frame.firstSliceRuntimeMount.mountSequence++;
++  assert.doesNotMatch(read(), /Current accepted/);
++  assert.doesNotMatch(context() ?? '', /current accepted/);
++  assert.equal(frame.coreFlow.lastResult.acceptedCurrent01, 0.4);
++});
++
++test('labels, menu, inspection, Core Work and release retain their existing presentation gates', () => {
++  const { frame, read } = fixture();
++  frame.playerInformation = projectPlayerInformation(frame);
++  frame.quickLookInspector.coreLabelsEnabled = false;
++  assert.equal(read(), '');
++  frame.quickLookInspector.coreLabelsEnabled = true;
++  frame.statusPage = { open: true };
++  assert.equal(read(), '');
++  frame.statusPage.open = false;
++  frame.inspectionCamera = { active: true, coreWorkActive: true };
++  assert.equal(read(), '');
++  frame.inspectionCamera = { active: false, coreWorkActive: false };
++  frame.coreFlow = { ...frame.coreFlow, contactValid: false, result: null, phase: 'recovering' };
++  assert.equal(read(), 'Flow · Released · recovering');
++});
+diff --git a/src/ui/ContextualWorldLabels.js b/src/ui/ContextualWorldLabels.js
+index 492424a..3ec3090 100644
+--- a/src/ui/ContextualWorldLabels.js
++++ b/src/ui/ContextualWorldLabels.js
+@@ -119,7 +119,7 @@ function readSiltEnvironmentLabel(silt, mountSequence) {
+   return liveArrival ? 'Sediment arrived' : 'Garden imprint retained';
+ }
+ 
+-export function readContextualWorldLabel(frame, { action, targetLabel, cascade, freshConsequence }) {
++export function readContextualWorldLabel(frame, { action, targetLabel, cascade, freshConsequence, shelfDelivery }) {
+   if (!hasContextualWorldLabels(frame)) return null;
+   const { activeCellId: cellId, targeting: target } = frame;
+   const boundary = frame.localCellBoundaryMorphById?.[HUB_RETURN_BOUNDARY_BY_CELL[cellId]];
+@@ -150,15 +150,17 @@ export function readContextualWorldLabel(frame, { action, targetLabel, cascade,
+     };
+   }
+   if (blockedFlow) return { tier: 'instruction', text: blockedFlow };
+-  if (flow?.overloaded && flow.result?.acceptedCurrent01 > 0) {
++  const acceptedFlow = shelfDelivery === undefined
++    ? (flow?.result?.acceptedCurrent01 > 0 ? flow.result : null) : shelfDelivery;
++  if (flow?.overloaded && acceptedFlow) {
+     return { tier: 'instruction', text: 'Shelf overload · current limited' };
+   }
+ 
+   if (silt?.siltGrip?.heldId) return {
+     tier: 'interaction', text: silt.siltContact?.braced ? 'Silt grain · braced contact' : 'Silt grain · gripped'
+   };
+-  if (flow?.result?.acceptedCurrent01 > 0) return {
+-    tier: 'interaction', text: flow.result.resistance01 > 0
++  if (flow && acceptedFlow) return {
++    tier: 'interaction', text: acceptedFlow.resistance01 > 0
+       ? 'Shelf · current accepted, resistance felt' : 'Shelf · current accepted'
+   };
+   if (flow?.contactValid) return { tier: 'interaction', text: 'Shelf contact · waiting for current' };
+diff --git a/src/ui/PlaytestHudSystem.js b/src/ui/PlaytestHudSystem.js
+index f1aa027..79b8e98 100644
+--- a/src/ui/PlaytestHudSystem.js
++++ b/src/ui/PlaytestHudSystem.js
+@@ -1,6 +1,6 @@
+ import { currentPlayerInformation, projectPlayerInformation } from "./PlayerInformationModel.js";
+ import { readHostLanguage } from '../language/HostLanguageGrammar.js';
+-import { inSiltFlowWorld, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
++import { inSiltFlowWorld, readFlowStep, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
+ import { HUB_RETURN_BOUNDARY_BY_CELL, readCascadeLabel, readContextualWorldLabel } from './ContextualWorldLabels.js';
+ 
+ const SILT_FLOW_GUIDANCE = {
+@@ -18,11 +18,34 @@ const SILT_FLOW_GUIDANCE = {
+   invalid_contact: 'Contact unavailable · release and try again'
+ };
+ 
+-function describeSiltFlow(flow) {
+-  if (flow.result?.acceptedCurrent01 > 0) {
+-    const { acceptedCurrent01, pressure01, resistance01, after } = flow.result;
++const flowStepKeys = ['hostId', 'cellId', 'mountSequence', 'frame', 'substep'];
++const sameFlowStep = (a, b) => Boolean(a && b && flowStepKeys.every(key => a[key] === b[key]));
++
++function currentShelfDelivery(frame) {
++  const flow = frame.coreFlow;
++  const result = flow.result;
++  const step = readFlowStep(frame);
++  if (!flow.contactValid || !(result?.acceptedCurrent01 > 0) || !sameFlowStep(flow.step, step)
++    || !sameFlowStep(result, step) || result.actionSequence !== flow.actionSequence) return null;
++
++  const projected = currentPlayerInformation(frame)?.accepted.flow;
++  if (sameFlowStep(projected?.step, step) && projected.actionSequence === result.actionSequence
++    && projected.owner === result.owner && projected.intendedTarget === result.targetId
++    && projected.actualRecipient === result.receiverId) return projected;
++
++  return {
++    current01: result.acceptedCurrent01,
++    pressure01: result.pressure01,
++    resistance01: result.resistance01,
++    retainedImprintAfter: result.after.imprint
++  };
++}
++
++function describeSiltFlow(flow, delivery) {
++  if (delivery) {
++    const { current01, pressure01, resistance01, retainedImprintAfter } = delivery;
+     const state = flow.overloaded ? 'Overload · current limited' : 'Current accepted';
+-    return `Flow · ${state} ${acceptedCurrent01.toFixed(2)} · pressure ${pressure01.toFixed(2)} · resistance ${resistance01.toFixed(2)} · shelf imprint ${after.imprint.toFixed(2)}`;
++    return `Flow · ${state} ${current01.toFixed(2)} · pressure ${pressure01.toFixed(2)} · resistance ${resistance01.toFixed(2)} · shelf imprint ${retainedImprintAfter.toFixed(2)}`;
+   }
+   if (flow.phase === 'recovering' || flow.phase === 'retracting') {
+     const cause = flow.reason === 'target_changed' ? 'Shelf aim lost' : 'Released';
+@@ -301,8 +324,9 @@ export class PlaytestHudSystem {
+     const languageRead = readHostLanguage(frameState);
+     const siltFlowLabelsOpen = Boolean(frameState.coreFlow && frameState.quickLookInspector?.coreLabelsEnabled
+       && frameState.activeCellId === SILT_FLOW_CELL);
+-    const flowLine = siltFlowLabelsOpen && inSiltFlowWorld(frameState)
+-      ? describeSiltFlow(frameState.coreFlow) : '';
++    const showSiltFlow = siltFlowLabelsOpen && inSiltFlowWorld(frameState);
++    const shelfDelivery = showSiltFlow ? currentShelfDelivery(frameState) : null;
++    const flowLine = showSiltFlow ? describeSiltFlow(frameState.coreFlow, shelfDelivery) : '';
+     const languageLine = languageRead?.lines?.join("\n") ?? '';
+ 
+     const selectedChemistry = coreWorkManipulation.selectedChemistry ?? spatialCoreChemistry.selectedPlacement ?? null;
+@@ -467,7 +491,7 @@ export class PlaytestHudSystem {
+     const contextualLabel = visible ? readContextualWorldLabel(frameState, {
+       action: actionHint || objective,
+       targetLabel: target.targetLabel && target.targetLabel !== target.targetId ? target.targetLabel : targetLabel,
+-      cascade, freshConsequence
++      cascade, freshConsequence, shelfDelivery
+     }) : null;
+     const primaryInstruction = contextualLabel?.text ?? (actionHint || objective);
+     const testPlatformToast = Boolean(testPlatform.active && (testPlatform.elapsedSeconds ?? 999) <= 5.0)

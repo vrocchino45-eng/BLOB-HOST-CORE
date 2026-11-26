@@ -1,0 +1,131 @@
+{
+  "verdict": "PASS",
+  "source": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "tooling": "cb4b746f4e677e8bc104b9bdd42eb8de4029980f",
+  "fingerprint": "038d165da6015a21379e7dfec688f80a36113da232729039bbf5a791e68b4350",
+  "counts": {
+    "launch-focused": 11,
+    "pi03-contact": 9,
+    "director-compatibility": 9,
+    "maintained": 245,
+    "pi04-runtime": 15,
+    "ui03-owner-traces": 5,
+    "director-revision-3": 3,
+    "director-revision-4": 5,
+    "conservation-accounting": 4,
+    "nf06-geometry": 8,
+    "pi05-restitution": 19,
+    "director-revision-5": 4,
+    "ui04-receiver-presentation": 4,
+    "director-revision-6": 6,
+    "nf02-pi04-analytical": 16
+  },
+  "pinnedC01": {
+    "local": {
+      "verdict": "PASS",
+      "source": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+      "platform": "win32",
+      "headless": true,
+      "assertions": 18,
+      "timeoutSeconds": 240,
+      "playwright": "1.62.1",
+      "chromium": "151.0.7922.34",
+      "chromiumRevision": "1234",
+      "webGLRendererOnSameLaunchFlags": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "scope": "Staged C01 browser owner verification, separate from ordinary gameplay and deterministic hosted CI."
+    },
+    "hosted": {
+      "verdict": "PASS",
+      "source": "cb4b746f4e677e8bc104b9bdd42eb8de4029980f",
+      "platform": "linux",
+      "headless": true,
+      "assertions": 18,
+      "timeoutSeconds": 240,
+      "playwright": "1.62.1",
+      "chromium": "151.0.7922.34",
+      "chromiumRevision": "1234",
+      "webGLRendererOnSameLaunchFlags": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "scope": "Staged C01 browser owner verification, separate from ordinary gameplay and deterministic hosted CI."
+    }
+  },
+  "supplemental": 9,
+  "exceptions": [
+    [
+      "smokeLS1E1",
+      "Cannot read properties of undefined (reading 'observe')"
+    ],
+    [
+      "smokeLS1E2",
+      "ERR_UNSUPPORTED_RESOLVE_REQUEST"
+    ]
+  ],
+  "build": {
+    "matchingFiles": 541,
+    "platforms": [
+      "win32",
+      "linux"
+    ],
+    "exactCandidateMatches": true,
+    "productionSelectorsCompiledOut": true
+  },
+  "mounted": {
+    "browserCases": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1
+    ],
+    "legacyPI04Exact": true,
+    "PI05ExistingMountedExact": true
+  },
+  "shelf": {
+    "exactCandidate": "PASS",
+    "hosted": "PASS"
+  },
+  "hosted": {
+    "deterministic": {
+      "run": {
+        "id": 45774060684,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45774060684",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "artifact": {
+        "id": 15095670733,
+        "filename": "CI07-final-deterministic-artifact-15095670733.zip",
+        "sha256": "7169579310edb3025c2c9f15fea2f5a4551b194c41fa638fbf246ed7348ea2b1",
+        "bytes": 90081,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45774060684/artifacts/15095670733",
+        "expiresAt": "2026-12-10T07:17:01Z",
+        "access": "GitHub authentication"
+      }
+    },
+    "chromium": {
+      "run": {
+        "id": 45774060676,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45774060676",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "artifact": {
+        "id": 15095411210,
+        "filename": "CI07-final-chromium-artifact-15095411210.zip",
+        "sha256": "c9a58041e9e9cea8dc84adb851937cc3664f882a1537d25f630807ca04731e13",
+        "bytes": 224164,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45774060676/artifacts/15095411210",
+        "expiresAt": "2026-12-10T07:18:07Z",
+        "access": "GitHub authentication"
+      }
+    }
+  },
+  "initialBrowserAttempt": {
+    "run": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45769464664",
+    "classification": "Shelf replay harness timed out before accepted delivery",
+    "correction": "Use a bounded normalized input tape through native tick. Gameplay, browser build, timeout and assertions retained."
+  }
+}

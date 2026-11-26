@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: analytical e0-equal
+ok 1 - analytical e0-equal
+  ---
+  duration_ms: 18.4196
+  type: 'test'
+  ...
+# Subtest: mounted e0-equal records genuine owner response and native retrieval
+ok 2 - mounted e0-equal records genuine owner response and native retrieval
+  ---
+  duration_ms: 2568.9996
+  type: 'test'
+  ...
+# Subtest: analytical e05-equal
+ok 3 - analytical e05-equal
+  ---
+  duration_ms: 1.5212
+  type: 'test'
+  ...
+# Subtest: mounted e05-equal records genuine owner response and native retrieval
+ok 4 - mounted e05-equal records genuine owner response and native retrieval
+  ---
+  duration_ms: 1958.7673
+  type: 'test'
+  ...
+# Subtest: analytical e1-equal
+ok 5 - analytical e1-equal
+  ---
+  duration_ms: 0.8908
+  type: 'test'
+  ...
+# Subtest: mounted e1-equal records genuine owner response and native retrieval
+ok 6 - mounted e1-equal records genuine owner response and native retrieval
+  ---
+  duration_ms: 1627.8051
+  type: 'test'
+  ...
+# Subtest: analytical e0-one-to-three
+ok 7 - analytical e0-one-to-three
+  ---
+  duration_ms: 3.001
+  type: 'test'
+  ...
+# Subtest: mounted e0-one-to-three records genuine owner response and native retrieval
+ok 8 - mounted e0-one-to-three records genuine owner response and native retrieval
+  ---
+  duration_ms: 1591.9668
+  type: 'test'
+  ...
+# Subtest: analytical e05-one-to-three
+ok 9 - analytical e05-one-to-three
+  ---
+  duration_ms: 1.0475
+  type: 'test'
+  ...
+# Subtest: mounted e05-one-to-three records genuine owner response and native retrieval
+ok 10 - mounted e05-one-to-three records genuine owner response and native retrieval
+  ---
+  duration_ms: 1592.3973
+  type: 'test'
+  ...
+# Subtest: analytical e1-one-to-three
+ok 11 - analytical e1-one-to-three
+  ---
+  duration_ms: 0.7723
+  type: 'test'
+  ...
+# Subtest: mounted e1-one-to-three records genuine owner response and native retrieval
+ok 12 - mounted e1-one-to-three records genuine owner response and native retrieval
+  ---
+  duration_ms: 1490.459
+  type: 'test'
+  ...
+# Subtest: unknown, out-of-range, nonfinite and unapproved restitution inputs reject
+ok 13 - unknown, out-of-range, nonfinite and unapproved restitution inputs reject
+  ---
+  duration_ms: 1.9282
+  type: 'test'
+  ...
+# Subtest: unsupported elastic speed rejects both trajectory outputs and preserves native velocity
+ok 14 - unsupported elastic speed rejects both trajectory outputs and preserves native velocity
+  ---
+  duration_ms: 5.7383
+  type: 'test'
+  ...
+# Subtest: older mount and wrong generation cannot take an elastic impulse
+ok 15 - older mount and wrong generation cannot take an elastic impulse
+  ---
+  duration_ms: 1.8707
+  type: 'test'
+  ...
+# Subtest: earlier and tied fixed-surface contact still wins against the elastic response
+ok 16 - earlier and tied fixed-surface contact still wins against the elastic response
+  ---
+  duration_ms: 4.0398
+  type: 'test'
+  ...
+# Subtest: mounted restitution near miss does not create pair or fixed-surface events
+ok 17 - mounted restitution near miss does not create pair or fixed-surface events
+  ---
+  duration_ms: 1263.4228
+  type: 'test'
+  ...
+# Subtest: the owner suppresses persistent contact and rearms only after measured separation
+ok 18 - the owner suppresses persistent contact and rearms only after measured separation
+  ---
+  duration_ms: 20.1497
+  type: 'test'
+  ...
+# Subtest: mounted intermediate fixture repeats only after measured separation
+ok 19 - mounted intermediate fixture repeats only after measured separation
+  ---
+  duration_ms: 1941.0559
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18640.0156

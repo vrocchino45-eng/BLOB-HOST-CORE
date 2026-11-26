@@ -31,3 +31,5 @@
 - [Wave 10 combined physical and UI foundation](wave-10/v1/README.md)
 
 - [Wave 11 promoted IN02 and scoped restitution](wave-11/v1/README.md)
+
+- [Wave 12 dual engineering foundations and IN03 qualification](wave-12/v1/README.md)

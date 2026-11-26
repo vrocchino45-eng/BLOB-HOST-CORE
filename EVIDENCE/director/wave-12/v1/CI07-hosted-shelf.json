@@ -1,0 +1,668 @@
+{
+  "verdict": "PASS",
+  "chromium": "151.0.7922.34",
+  "active": {
+    "owner": {
+      "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+      "mountSequence": 2,
+      "frame": 41,
+      "substep": 0,
+      "targetId": "silt_porosity_shelf",
+      "attentionSequence": 2,
+      "relationshipSequence": 1,
+      "actionSequence": 1,
+      "receiverId": "silt_porosity_shelf_front",
+      "siteId": "silt_porosity_shelf",
+      "owner": "silt:RegionalTerritoryExpansion",
+      "conductivity01": 0.72,
+      "resistance01": 0.3343200152965269,
+      "profile": {
+        "topologyId": "three_way_balance",
+        "phaseCount": 3,
+        "reserve01": 0.694,
+        "stability": 1.017,
+        "recovery": 1.067,
+        "enduranceCapacity": 1.107
+      },
+      "acceptedCurrent01": 0.16758067744537514,
+      "pressure01": 0.11730647421176259,
+      "before": {
+        "imprint": 0,
+        "strain": 0,
+        "void": 0
+      },
+      "after": {
+        "imprint": 0.0008211453194823381,
+        "strain": 0,
+        "void": 0
+      },
+      "retainedDuringSession": true,
+      "materialTransferred": 0,
+      "progressionCredit": false,
+      "hostReceipt": false
+    },
+    "model": {
+      "owner": "silt:RegionalTerritoryExpansion",
+      "step": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 41,
+        "substep": 0
+      },
+      "actionSequence": 1,
+      "intendedTarget": "silt_porosity_shelf",
+      "actualRecipient": "silt_porosity_shelf_front",
+      "current01": 0.16758067744537514,
+      "pressure01": 0.11730647421176259,
+      "resistance01": 0.3343200152965269,
+      "retainedImprintAfter": 0.0008211453194823381
+    },
+    "text": "Shelf · current accepted, resistance felt",
+    "frame": 41,
+    "step": 0,
+    "line": "Flow · Current accepted 0.17 · pressure 0.12 · resistance 0.33 · shelf imprint 0.00",
+    "tape": [
+      {
+        "frame": 14,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.4499192590422063,
+          -0.5400806006116737,
+          -3.670137014958681
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "frame": 15,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.449764273665356,
+          -0.5402353165887427,
+          -3.670400020446669
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "frame": 16,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.4495412937270538,
+          -0.540457908937275,
+          -3.6707784106450005
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "frame": 17,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.4492560429750543,
+          -0.540742663858689,
+          -3.671262472527182
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "frame": 18,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.4489137633349247,
+          -0.5410843485390744,
+          -3.6718433107043715
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "frame": 19,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.4485192554695923,
+          -0.5414781706601465,
+          -3.672512778597057
+        ],
+        "direction": [
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "frame": 20,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": false,
+        "phase": "retracted",
+        "reason": "aim_at_shelf",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.44807691592461,
+          -0.5419197413185471,
+          -3.673263415400663
+        ],
+        "direction": [
+          0.025853360376314076,
+          -0.025808421364844812,
+          -0.9993325418217436
+        ]
+      },
+      {
+        "frame": 21,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "retracted",
+        "reason": "ready",
+        "demand": 0,
+        "contact": false,
+        "position": [
+          -2.4475912500482564,
+          -0.5424045629973159,
+          -3.6740875756756872
+        ],
+        "direction": [
+          0.05054807336628984,
+          -0.050460209335630286,
+          -0.9974460684933097
+        ]
+      },
+      {
+        "frame": 22,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.447065905029169,
+          -0.5429289948474576,
+          -3.6749790702535323
+        ],
+        "direction": [
+          0.07407518897988644,
+          -0.07394642947943075,
+          -0.9945073111570562
+        ]
+      },
+      {
+        "frame": 23,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4465042210374923,
+          -0.543489702504802,
+          -3.675932230966681
+        ],
+        "direction": [
+          0.09643834561644252,
+          -0.09627071387122055,
+          -0.990672294528059
+        ]
+      },
+      {
+        "frame": 24,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.445909257069539,
+          -0.5440836322902664,
+          -3.6769418667910863
+        ],
+        "direction": [
+          0.11765173384698042,
+          -0.117447228415587,
+          -0.9860852995863472
+        ]
+      },
+      {
+        "frame": 25,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4452838146168614,
+          -0.5447079875819271,
+          -3.6780032236804785
+        ],
+        "direction": [
+          0.1377381885065547,
+          -0.13749876825545565,
+          -0.9808783207692814
+        ]
+      },
+      {
+        "frame": 26,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4446304593428714,
+          -0.545360207176078,
+          -3.679111947781795
+        ],
+        "direction": [
+          0.15672744400678018,
+          -0.1564550161172815,
+          -0.9751709266722643
+        ]
+      },
+      {
+        "frame": 27,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4439515409347337,
+          -0.5460379454698442,
+          -3.6802640517471192
+        ],
+        "direction": [
+          0.17465457216039934,
+          -0.17435098285103184,
+          -0.9690704387207089
+        ]
+      },
+      {
+        "frame": 28,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4432492112841375,
+          -0.5467390543120129,
+          -3.681455883881464
+        ],
+        "direction": [
+          0.19155860949055897,
+          -0.19122563712551127,
+          -0.9626723507175149
+        ]
+      },
+      {
+        "frame": 29,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.442525441137619,
+          -0.5474615663816529,
+          -3.682684099887677
+        ],
+        "direction": [
+          0.20748137175749187,
+          -0.20712072201566528,
+          -0.9560609221620444
+        ]
+      },
+      {
+        "frame": 30,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4417820353452693,
+          -0.5482036799659128,
+          -3.6839456369898462
+        ],
+        "direction": [
+          0.22246644689800218,
+          -0.22207974969256525,
+          -0.949309888698662
+        ]
+      },
+      {
+        "frame": 31,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.441020646825812,
+          -0.5489637450192169,
+          -3.685237690234986
+        ],
+        "direction": [
+          0.23655835329292477,
+          -0.23614716115399031,
+          -0.9424832432283615
+        ]
+      },
+      {
+        "frame": 32,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.44024278935611,
+          -0.5497402503959904,
+          -3.6865576907896322
+        ],
+        "direction": [
+          0.24980184780124254,
+          -0.24936763546133847,
+          -0.9356360506198476
+        ]
+      },
+      {
+        "frame": 33,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4394498492840553,
+          -0.550531812158128,
+          -3.6879032860634218
+        ],
+        "direction": [
+          0.2622413669045943,
+          -0.26178553185555226,
+          -0.9288152673137514
+        ]
+      },
+      {
+        "frame": 34,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4386430962554777,
+          -0.5513371628667332,
+          -3.689272321505856
+        ],
+        "direction": [
+          0.2739205842227258,
+          -0.2734444480417082,
+          -0.9220605443105383
+        ]
+      },
+      {
+        "frame": 35,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4378236930380637,
+          -0.5521551417752742,
+          -3.6906628239354076
+        ],
+        "direction": [
+          0.28488206828026047,
+          -0.2843868785506669,
+          -0.9154049980640095
+        ]
+      },
+      {
+        "frame": 36,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4369927045183037,
+          -0.5529846858482745,
+          -3.69207298627197
+        ],
+        "direction": [
+          0.2951670254804865,
+          -0.29465395815962997,
+          -0.9088759387341404
+        ]
+      },
+      {
+        "frame": 37,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "disconnected",
+        "reason": "extending",
+        "demand": 0.39518054672703895,
+        "contact": false,
+        "position": [
+          -2.4361511059410836,
+          -0.5538248215360458,
+          -3.6935011535545255
+        ],
+        "direction": [
+          0.30481511458149735,
+          -0.304285276690763,
+          -0.9024955491922907
+        ]
+      },
+      {
+        "frame": 38,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "contact",
+        "reason": "contact",
+        "demand": 0.39518054672703895,
+        "contact": true,
+        "position": [
+          -2.435299790455668,
+          -0.5546746572418195,
+          -3.694945810135837
+        ],
+        "direction": [
+          0.31386432043178686,
+          -0.3133187529662671,
+          -0.8962815112449637
+        ]
+      },
+      {
+        "frame": 39,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "contact",
+        "reason": "contact",
+        "demand": 0.39518054672703895,
+        "contact": true,
+        "position": [
+          -2.434439576026469,
+          -0.5555333764229916,
+          -3.6964055679550842
+        ],
+        "direction": [
+          0.3223508762047049,
+          -0.3217905571780085,
+          -0.8902475778799548
+        ]
+      },
+      {
+        "frame": 40,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "contact",
+        "reason": "contact",
+        "demand": 0.39518054672703895,
+        "contact": true,
+        "position": [
+          -2.433571211762068,
+          -0.5564002312731011,
+          -3.697879155797704
+        ],
+        "direction": [
+          0.3303092248049553,
+          -0.3297350723611008,
+          -0.8844040920663863
+        ]
+      },
+      {
+        "frame": 41,
+        "step": 0.016666666666666666,
+        "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+        "target": "silt_porosity_shelf",
+        "attention": true,
+        "phase": "conducting",
+        "reason": "current_accepted",
+        "demand": 0.39518054672703895,
+        "contact": true,
+        "position": [
+          -2.432695383711466,
+          -0.5572745369356562,
+          -3.6993654094593316
+        ],
+        "direction": [
+          0.3377720114616402,
+          -0.3371848869998245,
+          -0.8787584538723217
+        ]
+      }
+    ]
+  },
+  "variations": {
+    "fresh": "Flow · Current accepted 0.17 · pressure 0.12 · resistance 0.33 · shelf imprint 0.00",
+    "missing": "Flow · Current accepted 0.17 · pressure 0.12 · resistance 0.33 · shelf imprint 0.00",
+    "stale": "Flow · Current accepted 0.17 · pressure 0.12 · resistance 0.33 · shelf imprint 0.00",
+    "interrupted": "",
+    "labelsOff": "",
+    "oldMount": "Flow · Waiting for the receiver",
+    "released": "Flow · Released · recovering"
+  },
+  "inputClock": "Injected 1/60 Ts in replay only. Native runtime, registry, input arbitration, targeting, Flow, settlement and HUD.",
+  "scope": "Native accepted receiver and contextual primary instruction in the rendered DOM. Interruption/read-model variants applied to presentation-only readback of the same mounted browser frame."
+}

@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: candidate dimensions close independently of material inventory Q
+ok 1 - candidate dimensions close independently of material inventory Q
+  ---
+  duration_ms: 25.0367
+  type: 'test'
+  ...
+# Subtest: equal potentials and an open pathway produce zero transfer
+ok 2 - equal potentials and an open pathway produce zero transfer
+  ---
+  duration_ms: 33.2202
+  type: 'test'
+  ...
+# Subtest: a passive linear pathway balances source work, receiver work and dissipation
+ok 3 - a passive linear pathway balances source work, receiver work and dissipation
+  ---
+  duration_ms: 4.2595
+  type: 'test'
+  ...
+# Subtest: reversing direction preserves loss and exchanges the source and destination
+ok 4 - reversing direction preserves loss and exchanges the source and destination
+  ---
+  duration_ms: 4.4891
+  type: 'test'
+  ...
+# Subtest: zero-duration observation has power and no transferred quantity or energy
+ok 5 - zero-duration observation has power and no transferred quantity or energy
+  ---
+  duration_ms: 15.815
+  type: 'test'
+  ...
+# Subtest: admitted intervals integrate piecewise-constant work and quantity consistently
+ok 6 - admitted intervals integrate piecewise-constant work and quantity consistently
+  ---
+  duration_ms: 2.8494
+  type: 'test'
+  ...
+# Subtest: series carries identical current and partitions potential drop
+ok 7 - series carries identical current and partitions potential drop
+  ---
+  duration_ms: 16.7671
+  type: 'test'
+  ...
+# Subtest: parallel branches share potential drop and currents sum at a junction
+ok 8 - parallel branches share potential drop and currents sum at a junction
+  ---
+  duration_ms: 10.3879
+  type: 'test'
+  ...
+# Subtest: a storage allocation must be accounted for in the junction
+ok 9 - a storage allocation must be accounted for in the junction
+  ---
+  duration_ms: 2.9077
+  type: 'test'
+  ...
+# Subtest: linear storage stores signed quantity with nonnegative energy and finite capacity
+ok 10 - linear storage stores signed quantity with nonnegative energy and finite capacity
+  ---
+  duration_ms: 48.5723
+  type: 'test'
+  ...
+# Subtest: invalid, nonfinite, active and unlimited pathways fail closed
+ok 11 - invalid, nonfinite, active and unlimited pathways fail closed
+  ---
+  duration_ms: 29.5132
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3399.7996

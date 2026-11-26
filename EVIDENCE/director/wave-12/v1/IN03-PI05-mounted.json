@@ -1,0 +1,3508 @@
+{
+  "schema": "blob.pi05.mounted.v1",
+  "source": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "mounted": [
+    {
+      "id": "e0-equal",
+      "coefficient": 0,
+      "mode": "pi05:e0-equal",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e0-equal",
+          "revision": 1,
+          "restitution": 0,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e0-equal\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 0.5640892862447334,
+          "momentumBefore": [
+            0.9684783581953985,
+            0.057086095639104426,
+            -0.18316600939668523
+          ],
+          "momentumAfter": [
+            0.9684783581953985,
+            0.057086095639104426,
+            -0.18316600939668526
+          ],
+          "kineticEnergyBefore": 0.6409315609694797,
+          "kineticEnergyAfter": 0.322734838113387,
+          "kineticEnergyLost": 0.3181967228560927,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                0.5498627251133,
+                0.013500237693504795,
+                -0.36455254014802874
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.4186156330820985,
+                0.04358585794559963,
+                0.18138653075134348
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "witness": {
+        "approach": 1.1281785724894668,
+        "separation": 2.220446049250313e-16,
+        "externalNativeEnergy": 0.015058093173119236,
+        "externalNativeMomentum": [
+          -0.0023976071855996567,
+          0.004486751864108147,
+          -0.016343682621320868
+        ]
+      },
+      "retrievals": [
+        {
+          "id": "silt-grain-01",
+          "release": 5,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-01",
+            "generation": 0,
+            "frame": 622,
+            "substep": 0,
+            "chargeSequence": 3,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              -1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9251,
+              -0.8473,
+              -12.9571
+            ],
+            "releaseVelocity": [
+              -0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 10
+          }
+        },
+        {
+          "id": "silt-grain-02",
+          "release": 6,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-02",
+            "generation": 0,
+            "frame": 675,
+            "substep": 0,
+            "chargeSequence": 4,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              3.0955,
+              -0.7759,
+              -12.7368
+            ],
+            "releaseVelocity": [
+              0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 12
+          }
+        }
+      ],
+      "inventoryQ": 8,
+      "remountNoNewImpact": true
+    },
+    {
+      "id": "e05-equal",
+      "coefficient": 0.5,
+      "mode": "pi05:e05-equal",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e05-equal",
+          "revision": 1,
+          "restitution": 0.5,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e05-equal\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 0.8461339293671002,
+          "momentumBefore": [
+            0.9684783581953985,
+            0.057086095639104426,
+            -0.18316600939668523
+          ],
+          "momentumAfter": [
+            0.9684783581953985,
+            0.057086095639104426,
+            -0.1831660093966852
+          ],
+          "kineticEnergyBefore": 0.6409315609694797,
+          "kineticEnergyAfter": 0.4022840188274103,
+          "kineticEnergyLost": 0.2386475421420694,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                0.2756087100142175,
+                0.009816921398400196,
+                -0.43028190266681277
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.692869648181181,
+                0.04726917424070423,
+                0.24711589327012756
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "witness": {
+        "approach": 1.1281785724894668,
+        "separation": 0.5640892862447342,
+        "externalNativeEnergy": 0.015058093173119236,
+        "externalNativeMomentum": [
+          -0.0023976071855996567,
+          0.004486751864108147,
+          -0.016343682621320868
+        ]
+      },
+      "retrievals": [
+        {
+          "id": "silt-grain-01",
+          "release": 5,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-01",
+            "generation": 0,
+            "frame": 622,
+            "substep": 0,
+            "chargeSequence": 3,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              -1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9197,
+              -0.8474,
+              -12.9584
+            ],
+            "releaseVelocity": [
+              -0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 10
+          }
+        },
+        {
+          "id": "silt-grain-02",
+          "release": 6,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-02",
+            "generation": 0,
+            "frame": 675,
+            "substep": 0,
+            "chargeSequence": 4,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              3.2645,
+              -0.7736,
+              -12.6963
+            ],
+            "releaseVelocity": [
+              0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 12
+          }
+        }
+      ],
+      "inventoryQ": 8,
+      "remountNoNewImpact": true
+    },
+    {
+      "id": "e1-equal",
+      "coefficient": 1,
+      "mode": "pi05:e1-equal",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e1-equal",
+          "revision": 1,
+          "restitution": 1,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e1-equal\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 1.1281785724894668,
+          "momentumBefore": [
+            0.9684783581953985,
+            0.057086095639104426,
+            -0.18316600939668523
+          ],
+          "momentumAfter": [
+            0.9684783581953985,
+            0.057086095639104426,
+            -0.1831660093966852
+          ],
+          "kineticEnergyBefore": 0.6409315609694797,
+          "kineticEnergyAfter": 0.64093156096948,
+          "kineticEnergyLost": 0,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                0.0013546949151352905,
+                0.006133605103295598,
+                -0.49601126518559685
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.9671236632802632,
+                0.05095249053580883,
+                0.31284525578891165
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "witness": {
+        "approach": 1.1281785724894668,
+        "separation": 1.1281785724894673,
+        "externalNativeEnergy": 0.015058093173119236,
+        "externalNativeMomentum": [
+          -0.0023976071855996567,
+          0.004486751864108147,
+          -0.016343682621320868
+        ]
+      },
+      "retrievals": [
+        {
+          "id": "silt-grain-01",
+          "release": 5,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-01",
+            "generation": 0,
+            "frame": 622,
+            "substep": 0,
+            "chargeSequence": 3,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              -1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9144,
+              -0.8474,
+              -12.9596
+            ],
+            "releaseVelocity": [
+              -0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 10
+          }
+        },
+        {
+          "id": "silt-grain-02",
+          "release": 6,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-02",
+            "generation": 0,
+            "frame": 675,
+            "substep": 0,
+            "chargeSequence": 4,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              3.4335,
+              -0.7714,
+              -12.6558
+            ],
+            "releaseVelocity": [
+              0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 12
+          }
+        }
+      ],
+      "inventoryQ": 8,
+      "remountNoNewImpact": true
+    },
+    {
+      "id": "e0-one-to-three",
+      "coefficient": 0,
+      "mode": "pi05:e0-one-to-three",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e0-one-to-three",
+          "revision": 1,
+          "restitution": 0,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e0-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 0.8461339293671002,
+          "momentumBefore": [
+            0.7086935639632661,
+            0.1295245463498853,
+            -0.08331039796913456
+          ],
+          "momentumAfter": [
+            0.7086935639632659,
+            0.1295245463498853,
+            -0.08331039796913453
+          ],
+          "kineticEnergyBefore": 0.6616082138667746,
+          "kineticEnergyAfter": 0.18431312958263546,
+          "kineticEnergyLost": 0.47729508428413914,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                0.2756087100142175,
+                0.009816921398400196,
+                -0.43028190266681277
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.14436161798301614,
+                0.03990254165049503,
+                0.1156571682325594
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "witness": {
+        "approach": 1.1281785724894668,
+        "separation": 3.885780586188048e-16,
+        "externalNativeEnergy": 0.018261774712327705,
+        "externalNativeMomentum": [
+          -0.02343179461942764,
+          0.010160221493579705,
+          -0.008316555265977285
+        ]
+      },
+      "retrievals": [
+        {
+          "id": "silt-grain-01",
+          "release": 5,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-01",
+            "generation": 0,
+            "frame": 622,
+            "substep": 0,
+            "chargeSequence": 3,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              -1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9197,
+              -0.8474,
+              -12.9584
+            ],
+            "releaseVelocity": [
+              -0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 10
+          }
+        },
+        {
+          "id": "silt-grain-02",
+          "release": 6,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-02",
+            "generation": 0,
+            "frame": 675,
+            "substep": 0,
+            "chargeSequence": 4,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9264,
+              -0.7782,
+              -12.7773
+            ],
+            "releaseVelocity": [
+              0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 12
+          }
+        }
+      ],
+      "inventoryQ": 8,
+      "remountNoNewImpact": true
+    },
+    {
+      "id": "e05-one-to-three",
+      "coefficient": 0.5,
+      "mode": "pi05:e05-one-to-three",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e05-one-to-three",
+          "revision": 1,
+          "restitution": 0.5,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e05-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 1.2692008940506503,
+          "momentumBefore": [
+            0.7086935639632661,
+            0.1295245463498853,
+            -0.08331039796913456
+          ],
+          "momentumAfter": [
+            0.708693563963266,
+            0.1295245463498853,
+            -0.08331039796913453
+          ],
+          "kineticEnergyBefore": 0.6616082138667746,
+          "kineticEnergyAfter": 0.30363690065367055,
+          "kineticEnergyLost": 0.35797131321310405,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                -0.13577231263440614,
+                0.004291946955743298,
+                -0.5288759464449889
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.2814886255325574,
+                0.04174419979804733,
+                0.14852184949195146
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "witness": {
+        "approach": 1.1281785724894668,
+        "separation": 0.5640892862447342,
+        "externalNativeEnergy": 0.018261774712327705,
+        "externalNativeMomentum": [
+          -0.02343179461942764,
+          0.010160221493579705,
+          -0.008316555265977285
+        ]
+      },
+      "retrievals": [
+        {
+          "id": "silt-grain-01",
+          "release": 5,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-01",
+            "generation": 0,
+            "frame": 622,
+            "substep": 0,
+            "chargeSequence": 3,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              -1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9118,
+              -0.8475,
+              -12.9603
+            ],
+            "releaseVelocity": [
+              -0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 10
+          }
+        },
+        {
+          "id": "silt-grain-02",
+          "release": 6,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-02",
+            "generation": 0,
+            "frame": 675,
+            "substep": 0,
+            "chargeSequence": 4,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              3.0109,
+              -0.777,
+              -12.7571
+            ],
+            "releaseVelocity": [
+              0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 12
+          }
+        }
+      ],
+      "inventoryQ": 8,
+      "remountNoNewImpact": true
+    },
+    {
+      "id": "e1-one-to-three",
+      "coefficient": 1,
+      "mode": "pi05:e1-one-to-three",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e1-one-to-three",
+          "revision": 1,
+          "restitution": 1,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e1-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 1.6922678587342004,
+          "momentumBefore": [
+            0.7086935639632661,
+            0.1295245463498853,
+            -0.08331039796913456
+          ],
+          "momentumAfter": [
+            0.7086935639632657,
+            0.1295245463498853,
+            -0.08331039796913464
+          ],
+          "kineticEnergyBefore": 0.6616082138667746,
+          "kineticEnergyAfter": 0.6616082138667752,
+          "kineticEnergyLost": 0,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                -0.5471533352830298,
+                -0.0012330274869136008,
+                -0.6274699902231651
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.4186156330820985,
+                0.04358585794559963,
+                0.18138653075134348
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "witness": {
+        "approach": 1.1281785724894668,
+        "separation": 1.1281785724894677,
+        "externalNativeEnergy": 0.018261774712327705,
+        "externalNativeMomentum": [
+          -0.02343179461942764,
+          0.010160221493579705,
+          -0.008316555265977285
+        ]
+      },
+      "retrievals": [
+        {
+          "id": "silt-grain-01",
+          "release": 5,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-01",
+            "generation": 0,
+            "frame": 622,
+            "substep": 0,
+            "chargeSequence": 3,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              -1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              2.9037,
+              -0.8476,
+              -12.9622
+            ],
+            "releaseVelocity": [
+              -0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 10
+          }
+        },
+        {
+          "id": "silt-grain-02",
+          "release": 6,
+          "proof": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "unitId": "silt-grain-02",
+            "generation": 0,
+            "frame": 675,
+            "substep": 0,
+            "chargeSequence": 4,
+            "charge01": 0.5070921985815612,
+            "intendedTargetId": null,
+            "actualRecipientId": null,
+            "releaseDirection": [
+              1,
+              0,
+              -2.220446049250313e-16
+            ],
+            "releasePosition": [
+              3.0955,
+              -0.7759,
+              -12.7368
+            ],
+            "releaseVelocity": [
+              0.8482,
+              0,
+              0
+            ],
+            "releaseDecisionSequence": 12
+          }
+        }
+      ],
+      "inventoryQ": 8,
+      "remountNoNewImpact": true
+    },
+    {
+      "id": "elastic-near-miss",
+      "mode": "pi05:e1-one-to-three",
+      "miss": true,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.7097,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases; observed owner initial positions and velocities staged. No output seeded.",
+      "inventoryQ": 8
+    },
+    {
+      "id": "persistent-and-repeat",
+      "staging": "Existing trajectory owner with directly staged native attractor inputs after admitted release sources",
+      "gap": 1.039098858540844,
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 3,
+          "mountCount": 1,
+          "substep": 0,
+          "frame": 100,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.025,
+          "contactSeconds": 0.01018848700967907,
+          "fixture": "pi05:e0-one-to-three",
+          "revision": 1,
+          "restitution": 0,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e0-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",3,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,2]]:100:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            1,
+            0,
+            0
+          ],
+          "point": [
+            0.07,
+            0,
+            0
+          ],
+          "impulse": 0.736125,
+          "momentumBefore": [
+            0.9815,
+            0,
+            0
+          ],
+          "momentumAfter": [
+            0.9815,
+            0,
+            0
+          ],
+          "kineticEnergyBefore": 0.48167112500000003,
+          "kineticEnergyAfter": 0.12041778125000001,
+          "kineticEnergyLost": 0.36125334375,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 100,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                0,
+                0,
+                0
+              ],
+              "contactPosition": [
+                0.010000000000000007,
+                0,
+                0
+              ],
+              "beforeNativeVelocity": [
+                1,
+                0,
+                0
+              ],
+              "incomingVelocity": [
+                0.9815,
+                0,
+                0
+              ],
+              "outgoingVelocity": [
+                0.245375,
+                0,
+                0
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 2,
+              "releaseFrame": 100,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                0.13,
+                0,
+                0
+              ],
+              "contactPosition": [
+                0.13,
+                0,
+                0
+              ],
+              "beforeNativeVelocity": [
+                0,
+                0,
+                0
+              ],
+              "incomingVelocity": [
+                0,
+                0,
+                0
+              ],
+              "outgoingVelocity": [
+                0.245375,
+                0,
+                0
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 3,
+          "mountCount": 1,
+          "substep": 0,
+          "frame": 202,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.025,
+          "contactSeconds": 0.007791712514777016,
+          "fixture": "pi05:e0-one-to-three",
+          "revision": 1,
+          "restitution": 0,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e0-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",3,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,2]]:202:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            1,
+            0,
+            0
+          ],
+          "point": [
+            0.28116694867139114,
+            0,
+            0
+          ],
+          "impulse": 2.0170549695377504,
+          "momentumBefore": [
+            -2.8351075175815916,
+            0,
+            0
+          ],
+          "momentumAfter": [
+            -2.8351075175815916,
+            0,
+            0
+          ],
+          "kineticEnergyBefore": 3.7170698296222477,
+          "kineticEnergyAfter": 1.0047293295309567,
+          "kineticEnergyLost": 2.7123405000912912,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 100,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                0.21097322190362036,
+                0,
+                0
+              ],
+              "contactPosition": [
+                0.2211669486713911,
+                0,
+                0
+              ],
+              "beforeNativeVelocity": [
+                1.2904725375275523,
+                0,
+                0
+              ],
+              "incomingVelocity": [
+                1.3082780901423527,
+                0,
+                0
+              ],
+              "outgoingVelocity": [
+                -0.7087768793953977,
+                0,
+                0
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 2,
+              "releaseFrame": 100,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                0.351928305169141,
+                0,
+                0
+              ],
+              "contactPosition": [
+                0.3411669486713911,
+                0,
+                0
+              ],
+              "beforeNativeVelocity": [
+                -1.3583874931748559,
+                0,
+                0
+              ],
+              "incomingVelocity": [
+                -1.3811285359079815,
+                0,
+                0
+              ],
+              "outgoingVelocity": [
+                -0.7087768793953979,
+                0,
+                0
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ]
+    },
+    {
+      "mode": "pi05:e05-one-to-three",
+      "miss": false,
+      "initial": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 223,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 1,
+          "position": [
+            2.7238,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 1,
+            "mountCount": 1,
+            "frame": 558,
+            "substep": 0,
+            "generation": 0
+          },
+          "release": 3,
+          "position": [
+            3.0438,
+            -0.8497,
+            -12.9267
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-01",
+          "generation": 0,
+          "frame": 223,
+          "substep": 0,
+          "chargeSequence": 1,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            0,
+            0.999999995,
+            -0.00009999999949994454
+          ],
+          "releasePosition": [
+            1.1769,
+            -0.4202,
+            -12.2272
+          ],
+          "releaseVelocity": [
+            0,
+            0.8482,
+            -0.0001
+          ],
+          "releaseDecisionSequence": 6
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "unitId": "silt-grain-02",
+          "generation": 0,
+          "frame": 558,
+          "substep": 0,
+          "chargeSequence": 2,
+          "charge01": 0.5070921985815612,
+          "intendedTargetId": null,
+          "actualRecipientId": null,
+          "releaseDirection": [
+            1,
+            0,
+            -2.220446049250313e-16
+          ],
+          "releasePosition": [
+            1.2101,
+            -0.32,
+            -12.2137
+          ],
+          "releaseVelocity": [
+            0.8482,
+            0,
+            0
+          ],
+          "releaseDecisionSequence": 8
+        }
+      ],
+      "events": [
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 570,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.016666666666666666,
+          "contactSeconds": 0.01371315278115687,
+          "fixture": "pi05:e05-one-to-three",
+          "revision": 1,
+          "restitution": 0.5,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e05-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:570:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9723780322964535,
+            0.013059337891791018,
+            0.23304595255250782
+          ],
+          "point": [
+            2.9723730416325993,
+            -0.8468007902884825,
+            -12.935641788008134
+          ],
+          "impulse": 1.2692008940506503,
+          "momentumBefore": [
+            0.7086935639632661,
+            0.1295245463498853,
+            -0.08331039796913456
+          ],
+          "momentumAfter": [
+            0.708693563963266,
+            0.1295245463498853,
+            -0.08331039796913453
+          ],
+          "kineticEnergyBefore": 0.6616082138667746,
+          "kineticEnergyAfter": 0.30363690065367055,
+          "kineticEnergyLost": 0.35797131321310405,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.898968233716871,
+                -0.8478705011422552,
+                -12.946428094062332
+              ],
+              "contactPosition": [
+                2.914030359694812,
+                -0.84758435056199,
+                -12.949624545161285
+              ],
+              "beforeNativeVelocity": [
+                1.0902512687801504,
+                0.019216853234341625,
+                -0.2127365688114679
+              ],
+              "incomingVelocity": [
+                1.0983707553114648,
+                0.020866870283713992,
+                -0.23309381511046057
+              ],
+              "outgoingVelocity": [
+                -0.13577231263440614,
+                0.004291946955743298,
+                -0.5288759464449889
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                3.0324969578571497,
+                -0.8465139097858887,
+                -12.922343698482765
+              ],
+              "contactPosition": [
+                3.0307157235703865,
+                -0.8460172300149751,
+                -12.921659030854984
+              ],
+              "beforeNativeVelocity": [
+                -0.11937530339915224,
+                0.033382490540654654,
+                0.045914242036103545
+              ],
+              "incomingVelocity": [
+                -0.12989239711606623,
+                0.03621922535539043,
+                0.049927805713775336
+              ],
+              "outgoingVelocity": [
+                0.2814886255325574,
+                0.04174419979804733,
+                0.14852184949195146
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        },
+        {
+          "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+          "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+          "mountSequence": 1,
+          "mountCount": 1,
+          "frame": 792,
+          "substep": 0,
+          "generation": 0,
+          "microstep": 0,
+          "microstepSeconds": 0.025,
+          "contactSeconds": 0.016755043726414478,
+          "fixture": "pi05:e05-one-to-three",
+          "revision": 1,
+          "restitution": 0.5,
+          "restitutionAdmissionRevision": 1,
+          "id": "[\"pi05:e05-one-to-three\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",1,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:792:0:0",
+          "kind": "accepted-silt-pair",
+          "actualRecipientIds": [
+            "silt-grain-01",
+            "silt-grain-02"
+          ],
+          "normal": [
+            0.9970890971874043,
+            0.0041883639720642326,
+            0.07613008523076822
+          ],
+          "point": [
+            3.0399190666114335,
+            -0.8453628176683139,
+            -12.92300439197623
+          ],
+          "impulse": 0.2927289911268244,
+          "momentumBefore": [
+            -0.2907027784729005,
+            -0.017085640250273672,
+            0.0112352209549655
+          ],
+          "momentumAfter": [
+            -0.29070277847290044,
+            -0.017085640250273672,
+            0.011235220954965493
+          ],
+          "kineticEnergyBefore": 0.0378516287283783,
+          "kineticEnergyAfter": 0.01880934822923864,
+          "kineticEnergyLost": 0.019042280499139662,
+          "units": [
+            {
+              "id": "silt-grain-01",
+              "generation": 0,
+              "releaseSequence": 1,
+              "releaseFrame": 223,
+              "releaseSubstep": 0,
+              "mass": 1,
+              "radius": 0.06,
+              "startingPosition": [
+                2.978118357706165,
+                -0.8456048487044142,
+                -12.928745982533572
+              ],
+              "contactPosition": [
+                2.9800937207801894,
+                -0.8456141195066378,
+                -12.927572197090075
+              ],
+              "beforeNativeVelocity": [
+                0.11952002732236558,
+                -0.0005605034491329284,
+                0.0712917637655271
+              ],
+              "incomingVelocity": [
+                0.11789662302761361,
+                -0.000553314116928965,
+                0.07005564787912183
+              ],
+              "outgoingVelocity": [
+                -0.17398026245561138,
+                -0.0017793696769432667,
+                0.047770164835119894
+              ]
+            },
+            {
+              "id": "silt-grain-02",
+              "generation": 0,
+              "releaseSequence": 3,
+              "releaseFrame": 558,
+              "releaseSubstep": 0,
+              "mass": 3,
+              "radius": 0.06,
+              "startingPosition": [
+                3.102026446055587,
+                -0.8450191825475689,
+                -12.918108073920676
+              ],
+              "contactPosition": [
+                3.0997444124426776,
+                -0.8451115158299901,
+                -12.918436586862382
+              ],
+              "beforeNativeVelocity": [
+                -0.13797710416611259,
+                -0.005604842657617193,
+                -0.01994149131251545
+              ],
+              "incomingVelocity": [
+                -0.13619980050017136,
+                -0.005510775377781569,
+                -0.019606808974718778
+              ],
+              "outgoingVelocity": [
+                -0.03890750533909636,
+                -0.005102090191110135,
+                -0.012178314626718133
+              ]
+            }
+          ],
+          "inventoryTransferred": false,
+          "progressionCredit": false,
+          "hostReceipt": false
+        }
+      ],
+      "custody": {
+        "originRegion": "silt",
+        "count": 8,
+        "totalMass": 8,
+        "records": [
+          {
+            "id": "silt-grain-01",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-02",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 2
+          },
+          {
+            "id": "silt-grain-03",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-04",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-05",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-06",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-07",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          },
+          {
+            "id": "silt-grain-08",
+            "originRegion": "silt",
+            "originSignature": "silt_accumulation_connection",
+            "mass": 1,
+            "composition": {
+              "silt": 1
+            },
+            "owner": "environment",
+            "representation": "individual",
+            "historySequence": 0
+          }
+        ]
+      },
+      "beforeAndAfterReceiptHashEqual": true,
+      "creditsAtImpact": 2,
+      "progression": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "staging": "Native control-based releases, followed by staged inputs to the existing native attraction.",
+      "id": "mounted-intermediate-repeat",
+      "coefficient": 0.5,
+      "gap": 0.9897007615725943,
+      "inventoryQ": 8
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "verdict": "PASS",
+  "references": {
+    "A": "18491dcdd608d5e06868a7da573de106ba25647d",
+    "B": "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+    "C": "1761c9de6b9eb2336b1b713db4060bf445707691",
+    "D": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+    "UI04": "d2236ace722f9d3449035c0125bc5d493c983934"
+  },
+  "independent": {
+    "exact": 45,
+    "onIN02": 45
+  },
+  "combined": 45,
+  "sourcePatch": "UI04-I1.patch",
+  "exactPhysics": true,
+  "cases": [
+    "same-step accepted owner",
+    "actual vs intended",
+    "live vs retained",
+    "missing/stale/remount",
+    "interruption and presentation fallback"
+  ]
+}
