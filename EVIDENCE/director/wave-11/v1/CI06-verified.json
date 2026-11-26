@@ -1,0 +1,285 @@
+{
+  "verdict": "PASS",
+  "source": "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+  "tooling": "0ce25cb38a303a63bcb86adb3be6c820fcde182f",
+  "counts": {
+    "launch-focused": 11,
+    "pi03-contact": 9,
+    "director-compatibility": 9,
+    "maintained": 245,
+    "pi04-runtime": 15,
+    "ui03-owner-traces": 5,
+    "director-revision-3": 3,
+    "director-revision-4": 5,
+    "conservation-accounting": 4,
+    "nf06-geometry": 8,
+    "pi05-restitution": 19,
+    "director-revision-5": 4,
+    "nf02-pi04-analytical": 16
+  },
+  "cases": [
+    {
+      "id": "launch-focused",
+      "exitCode": 0,
+      "passed": 11,
+      "verdict": "PASS",
+      "log": "launch-focused.log"
+    },
+    {
+      "id": "pi03-contact",
+      "exitCode": 0,
+      "passed": 9,
+      "verdict": "PASS",
+      "log": "pi03-contact.log"
+    },
+    {
+      "id": "director-compatibility",
+      "exitCode": 0,
+      "passed": 9,
+      "verdict": "PASS",
+      "log": "director-compatibility.log"
+    },
+    {
+      "id": "production-build",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "production-build.log"
+    },
+    {
+      "id": "maintained",
+      "exitCode": 0,
+      "passed": 245,
+      "verdict": "PASS",
+      "log": "maintained.log"
+    },
+    {
+      "id": "verifyWave1CoreProfiles",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "verifyWave1CoreProfiles.log"
+    },
+    {
+      "id": "checkC63HubRouteAccess",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "checkC63HubRouteAccess.log"
+    },
+    {
+      "id": "validateRecipeDataLoad",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateRecipeDataLoad.log"
+    },
+    {
+      "id": "smokeHC031W1StabilizedAimLocalContact",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031W1StabilizedAimLocalContact.log"
+    },
+    {
+      "id": "smokeHC031U21RelationshipIntentLatch",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031U21RelationshipIntentLatch.log"
+    },
+    {
+      "id": "validateLS1BLivingSiltMaterialCycle",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateLS1BLivingSiltMaterialCycle.log"
+    },
+    {
+      "id": "validateHC016QTenderCompanion",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC016QTenderCompanion.log"
+    },
+    {
+      "id": "validateHC031C2FragmentFieldCapture",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031C2FragmentFieldCapture.log"
+    },
+    {
+      "id": "validateHC031DRuptureConsequence",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031DRuptureConsequence.log"
+    },
+    {
+      "id": "smokeLS1E1",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "Cannot read properties of undefined (reading 'observe')",
+      "log": "smokeLS1E1.log"
+    },
+    {
+      "id": "smokeLS1E2",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "ERR_UNSUPPORTED_RESOLVE_REQUEST",
+      "log": "smokeLS1E2.log"
+    },
+    {
+      "id": "pi04-runtime",
+      "exitCode": 0,
+      "passed": 15,
+      "verdict": "PASS",
+      "log": "pi04-runtime.log"
+    },
+    {
+      "id": "ui03-owner-traces",
+      "exitCode": 0,
+      "passed": 5,
+      "verdict": "PASS",
+      "log": "ui03-owner-traces.log"
+    },
+    {
+      "id": "director-revision-3",
+      "exitCode": 0,
+      "passed": 3,
+      "verdict": "PASS",
+      "log": "director-revision-3.log"
+    },
+    {
+      "id": "director-revision-4",
+      "exitCode": 0,
+      "passed": 5,
+      "verdict": "PASS",
+      "log": "director-revision-4.log"
+    },
+    {
+      "id": "conservation-accounting",
+      "exitCode": 0,
+      "passed": 4,
+      "verdict": "PASS",
+      "log": "conservation-accounting.log"
+    },
+    {
+      "id": "nf06-geometry",
+      "exitCode": 0,
+      "passed": 8,
+      "verdict": "PASS",
+      "log": "nf06-geometry.log"
+    },
+    {
+      "id": "pi05-restitution",
+      "exitCode": 0,
+      "passed": 19,
+      "verdict": "PASS",
+      "log": "pi05-restitution.log"
+    },
+    {
+      "id": "director-revision-5",
+      "exitCode": 0,
+      "passed": 4,
+      "verdict": "PASS",
+      "log": "director-revision-5.log"
+    },
+    {
+      "id": "nf02-pi04-analytical",
+      "exitCode": 0,
+      "passed": 16,
+      "verdict": "PASS",
+      "log": "nf02-pi04-analytical.log"
+    }
+  ],
+  "build": {
+    "matchingFiles": 541,
+    "platforms": [
+      "win32",
+      "linux"
+    ]
+  },
+  "c01": {
+    "local": {
+      "verdict": "PASS",
+      "source": "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+      "platform": "win32",
+      "headless": true,
+      "assertions": 18,
+      "timeoutSeconds": 240,
+      "playwright": "1.62.1",
+      "chromium": "151.0.7922.34",
+      "chromiumRevision": "1234",
+      "webGLRendererOnSameLaunchFlags": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "scope": "Staged C01 browser owner verification, separate from ordinary gameplay and deterministic hosted CI."
+    },
+    "hosted": {
+      "verdict": "PASS",
+      "source": "0ce25cb38a303a63bcb86adb3be6c820fcde182f",
+      "platform": "linux",
+      "headless": true,
+      "assertions": 18,
+      "timeoutSeconds": 240,
+      "playwright": "1.62.1",
+      "chromium": "151.0.7922.34",
+      "chromiumRevision": "1234",
+      "webGLRendererOnSameLaunchFlags": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "scope": "Staged C01 browser owner verification, separate from ordinary gameplay and deterministic hosted CI."
+    }
+  },
+  "mounted": {
+    "exactNodeAcrossPlatforms": true,
+    "legacyPI04ExactTrace": true,
+    "browserContacts": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  "hosted": {
+    "deterministic": {
+      "run": {
+        "id": 45761215981,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45761215981",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "artifact": {
+        "id": 15089389289,
+        "filename": "CI06-deterministic-artifact-15089389289.zip",
+        "sha256": "66c9899e9bb127d49cf2ea49969954907ba6385d1d63eb48df6cdc1ac2bf4f4b",
+        "bytes": 88894,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45761215981/artifacts/15089389289",
+        "expiresAt": "2026-12-10T05:23:39Z",
+        "access": "GitHub authentication"
+      }
+    },
+    "chromium": {
+      "run": {
+        "id": 45761215993,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45761215993",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "artifact": {
+        "id": 15089662628,
+        "filename": "CI06-chromium-artifact-15089662628.zip",
+        "sha256": "2fa8361019f502d1403c05e63ed363ca1c441de361f9e8c79ec47e972d0d7bac",
+        "bytes": 67469,
+        "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45761215993/artifacts/15089662628",
+        "expiresAt": "2026-12-10T05:24:44Z",
+        "access": "GitHub authentication"
+      }
+    }
+  }
+}

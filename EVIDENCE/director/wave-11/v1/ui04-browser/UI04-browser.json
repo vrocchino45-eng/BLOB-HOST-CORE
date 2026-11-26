@@ -1,0 +1,76 @@
+{
+  "verdict": "PASS",
+  "chromium": "151.0.7922.34",
+  "active": {
+    "owner": {
+      "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+      "mountSequence": 2,
+      "frame": 30,
+      "substep": 2,
+      "targetId": "silt_porosity_shelf",
+      "attentionSequence": 2,
+      "relationshipSequence": 1,
+      "actionSequence": 1,
+      "receiverId": "silt_porosity_shelf_front",
+      "siteId": "silt_porosity_shelf",
+      "owner": "silt:RegionalTerritoryExpansion",
+      "conductivity01": 0.72,
+      "resistance01": 0.41058859893139943,
+      "profile": {
+        "topologyId": "three_way_balance",
+        "phaseCount": 3,
+        "reserve01": 0.679,
+        "stability": 1.017,
+        "recovery": 1.067,
+        "enduranceCapacity": 1.107
+      },
+      "acceptedCurrent01": 0.14807868004543648,
+      "pressure01": 0.10365507603180553,
+      "before": {
+        "imprint": 0.239394800917855,
+        "strain": 0,
+        "void": 0
+      },
+      "after": {
+        "imprint": 0.24105045330241698,
+        "strain": 0,
+        "void": 0
+      },
+      "retainedDuringSession": true,
+      "materialTransferred": 0,
+      "progressionCredit": false,
+      "hostReceipt": false
+    },
+    "model": {
+      "owner": "silt:RegionalTerritoryExpansion",
+      "step": {
+        "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+        "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+        "mountSequence": 2,
+        "frame": 30,
+        "substep": 2
+      },
+      "actionSequence": 1,
+      "intendedTarget": "silt_porosity_shelf",
+      "actualRecipient": "silt_porosity_shelf_front",
+      "current01": 0.14807868004543648,
+      "pressure01": 0.10365507603180553,
+      "resistance01": 0.41058859893139943,
+      "retainedImprintAfter": 0.24105045330241698
+    },
+    "text": "Shelf · current accepted, resistance felt",
+    "frame": 30,
+    "line": "Flow · Current accepted 0.15 · pressure 0.10 · resistance 0.41 · shelf imprint 0.24"
+  },
+  "variations": {
+    "fresh": "Flow · Current accepted 0.15 · pressure 0.10 · resistance 0.41 · shelf imprint 0.24",
+    "missing": "Flow · Current accepted 0.15 · pressure 0.10 · resistance 0.41 · shelf imprint 0.24",
+    "stale": "Flow · Current accepted 0.15 · pressure 0.10 · resistance 0.41 · shelf imprint 0.24",
+    "interrupted": "",
+    "labelsOff": "",
+    "oldMount": "Flow · Waiting for the receiver",
+    "released": "Flow · Released · recovering"
+  },
+  "scope": "Native mounted owner delivery and rendered contextual primary instruction. Interruption/read-model variants applied to presentation-only readback of the same accepted frame."
+}

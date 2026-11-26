@@ -1,0 +1,34 @@
+{
+  "candidate": "d2236ace722f9d3449035c0125bc5d493c983934",
+  "base": "c68944ae723976273d5f2577c4d6c48d529c7362",
+  "compatibility": "0893bf1520b34ceab5cf10e8b28dc4eb80d5ebe8",
+  "compatibilityBase": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "exactPatchTreeMatch": true,
+  "files": [
+    {
+      "path": "scripts/testC2ContextualLabels.mjs",
+      "sha256": "a9bd58627c8196b6e448223ce4438998963464b7b51f3158cca946850d8ac0f1"
+    },
+    {
+      "path": "scripts/testUI04ShelfInformation.mjs",
+      "sha256": "bdde0edecdac0a135e0275192e062c7b3ca3a8580f98e361ae0c59741bcc6b52"
+    },
+    {
+      "path": "src/ui/ContextualWorldLabels.js",
+      "sha256": "7daae77bbf97a5370015dfc88249e882fc0f53ab55e08765987b84ab790c1a9d"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "sha256": "482688f093acb25562c921cd9445ec3b311de647fad064fc708a2370f6940aee"
+    }
+  ],
+  "verdict": "PASS",
+  "publishedBranch": "candidate/ui04-p1",
+  "freshFetch": true,
+  "exactTests": 45,
+  "IN02CompatibilityTests": 45,
+  "browser": "PASS",
+  "ordinaryParity": "exact measured physical and receiver state",
+  "knownStates": "Same-step accepted/retarget/missing/stale/mode interruption/remount and owner fallback",
+  "scope": "Independent UI04 candidate. Governing IN02 has no UI04 overlay."
+}

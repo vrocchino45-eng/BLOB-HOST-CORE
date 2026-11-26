@@ -1,0 +1,564 @@
+{
+  "schema": "blob.pi05-restitution.v1",
+  "revision": 5,
+  "source": {
+    "commit": "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+    "fingerprint": "f4117baacd61930af046397e1cb69bf35435b08a558bc1a02fb5a325ef49a246",
+    "base": "18491dcdd608d5e06868a7da573de106ba25647d"
+  },
+  "previous": {
+    "2": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "3": "133c979aa0fd420eeede40d51df55c7bda668663",
+    "4": "85b2b2732321646d0b9eed9fc159b72b87dff790"
+  },
+  "calibrationSHA256": "9f3c42bc9fc1ab048e91e17d75ef746078d9a120a64e3ce4af1c60b4d7b9ee78",
+  "numericalGate": "496f95509f4284f75d8dd3e15991669768db7f58adb4363ea8e9eda1df4d3523",
+  "scenarios": [
+    {
+      "schema": "blob.pi05-restitution.v1",
+      "revision": 5,
+      "id": "e0-equal",
+      "mode": "pi05:e0-equal",
+      "massFixture": "equal",
+      "restitution": 0,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 402,
+          "simSeconds": 7.883333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 63,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 400,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      }
+    },
+    {
+      "schema": "blob.pi05-restitution.v1",
+      "revision": 5,
+      "id": "e05-equal",
+      "mode": "pi05:e05-equal",
+      "massFixture": "equal",
+      "restitution": 0.5,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 402,
+          "simSeconds": 7.883333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 63,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 400,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      }
+    },
+    {
+      "schema": "blob.pi05-restitution.v1",
+      "revision": 5,
+      "id": "e1-equal",
+      "mode": "pi05:e1-equal",
+      "massFixture": "equal",
+      "restitution": 1,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      }
+    },
+    {
+      "schema": "blob.pi05-restitution.v1",
+      "revision": 5,
+      "id": "e0-one-to-three",
+      "mode": "pi05:e0-one-to-three",
+      "massFixture": "one-to-three",
+      "restitution": 0,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      }
+    },
+    {
+      "schema": "blob.pi05-restitution.v1",
+      "revision": 5,
+      "id": "e05-one-to-three",
+      "mode": "pi05:e05-one-to-three",
+      "massFixture": "one-to-three",
+      "restitution": 0.5,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      }
+    },
+    {
+      "schema": "blob.pi05-restitution.v1",
+      "revision": 5,
+      "id": "e1-one-to-three",
+      "mode": "pi05:e1-one-to-three",
+      "massFixture": "one-to-three",
+      "restitution": 1,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      }
+    }
+  ]
+}

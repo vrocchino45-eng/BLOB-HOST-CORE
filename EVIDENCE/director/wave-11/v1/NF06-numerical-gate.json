@@ -1,0 +1,32 @@
+{
+  "status": "APPROVED_AGAINST_EXISTING_NUMERICAL_STANDARDS",
+  "scope": "Six separate PI05 development fixtures and existing owner only",
+  "source": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "authorizationSHA256": "d8415c27a310284ba84a78a462f7919fe35efa4e82fc0e3848cfbe1954ae6a7d",
+  "promotionEvidence": "6af248e189942b9cace5123ee4f0c54ec9fa736b",
+  "admittedParentSHA256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4",
+  "existingContracts": {
+    "nf02": "6ce077eba5eebb40cee15094c16c26017adebbec8232cb4e4623e2ee2b127df4",
+    "nf04": "b3d50dc2a1e7e852c7d1b8dc0cc3da751d9755ffb3034b54a85dbda2fb528dff",
+    "nf05": "63fee5365085616e0f5ff271d79ecaacb1e2d281b16cb4ea6f55d8d6ca448188"
+  },
+  "units": [
+    "Lw",
+    "Ts",
+    "Mr",
+    "Q"
+  ],
+  "SI": {
+    "metersPerLw": null,
+    "kilogramsPerMr": null,
+    "secondsPerTs": 1
+  },
+  "contractSHA256": "496f95509f4284f75d8dd3e15991669768db7f58adb4363ea8e9eda1df4d3523",
+  "testsSHA256": "57ae94ceadd25099b2b76c11f11c9125cc70742057d6a4487099f25c24b3015b",
+  "acceptance": {
+    "pass": 8,
+    "tolerance": "1e-12*(1+max(abs(a),abs(b)))",
+    "directedContact": true,
+    "atomicSpeedLimit": true
+  }
+}

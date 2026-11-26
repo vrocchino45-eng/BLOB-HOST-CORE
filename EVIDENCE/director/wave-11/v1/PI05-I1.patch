@@ -1,0 +1,375 @@
+diff --git a/scripts/testPI05Restitution.mjs b/scripts/testPI05Restitution.mjs
+new file mode 100644
+index 0000000..6a2d5cd
+--- /dev/null
++++ b/scripts/testPI05Restitution.mjs
+@@ -0,0 +1,178 @@
++import assert from 'node:assert/strict';
++import { execFileSync } from 'node:child_process';
++import { readFileSync, writeFileSync } from 'node:fs';
++import { registerHooks } from 'node:module';
++import { test } from 'node:test';
++import { Vector3 } from 'three';
++import admission from '../src/contact/siltPairRestitutionAdmission.json' with { type: 'json' };
++import { resolveSiltPairImpact, siltPairFixture } from '../src/contact/SiltPairMomentum.js';
++
++const existing = new URL('./testPI04SiltPairMomentum.mjs', import.meta.url);
++const original = readFileSync(existing,'utf8');
++const end = original.indexOf("\nfor(const mode of ['equal','one-to-three']){");
++assert.ok(end>0);
++const fixture = original.slice(0,end).replace("import {test} from 'node:test';","const test=()=>{};")
++   + '\nexport {stagedMounted,setup,pairEvents,rig,stamp,scope,A,B};';
++const hook = registerHooks({load(url,ctx,next) {
++ return url===existing.href ? {format:'module',shortCircuit:true,source:fixture} : next(url,ctx);
++}});
++let pi04;
++try { pi04=await import(existing.href); } finally { hook.deregister(); }
++const {stagedMounted,setup,pairEvents,rig,A,B,scope}=pi04;
++const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
++const subtract=(a,b)=>a.map((x,i)=>x-b[i]);
++const close=(a,b)=>assert.ok(Math.abs(a-b)<=1e-12*(1+Math.max(Math.abs(a),Math.abs(b))),a+' vs '+b);
++const body=(x,v,m=1)=>({position:[x,0,0],velocity:v,mass:m,radius:.06});
++const cases=[
++ ['e0-equal',1,0,[.5,.5],.25],
++ ['e05-equal',1,.5,[.25,.75],.3125],
++ ['e1-equal',1,1,[0,1],.5],
++ ['e0-one-to-three',3,0,[.25,.25],.125],
++ ['e05-one-to-three',3,.5,[-.125,.375],.21875],
++ ['e1-one-to-three',3,1,[-.5,.5],.5]
++];
++const mounted=[];
++function verifyContact(event, coefficient) {
++ assert.deepEqual(event.actualRecipientIds,[A,B]);
++ assert.equal(event.restitution,coefficient);
++ assert.equal(event.restitutionAdmissionRevision,admission.revision);
++ assert.equal(event.inventoryTransferred,false);
++ assert.equal(event.progressionCredit,false);
++ assert.equal(event.hostReceipt,false);
++ const [a,b]=event.units, n=event.normal;
++ const approach=-dot(subtract(b.incomingVelocity,a.incomingVelocity),n);
++ const separation=dot(subtract(b.outgoingVelocity,a.outgoingVelocity),n);
++ assert.ok(approach>0);
++ close(separation,coefficient*approach);
++ close(event.impulse,(1+coefficient)*approach/(1/a.mass+1/b.mass));
++ close(event.kineticEnergyLost,(1-coefficient**2)*approach**2/(2*(1/a.mass+1/b.mass)));
++ close(event.kineticEnergyBefore-event.kineticEnergyAfter,event.kineticEnergyLost);
++ assert.ok(event.kineticEnergyAfter<=event.kineticEnergyBefore+1e-12);
++ for(const [i,v] of event.momentumAfter.entries())close(v,event.momentumBefore[i]);
++ for(const unit of event.units){
++  const dv=subtract(unit.outgoingVelocity,unit.incomingVelocity), normal=dot(dv,n);
++  dv.forEach((x,i)=>close(x,normal*n[i]));
++ }
++ close(new Vector3(...a.contactPosition).distanceTo(new Vector3(...b.contactPosition)),.12);
++ const preNativeEnergy=event.units.reduce((sum,u)=>sum+u.mass*dot(u.beforeNativeVelocity,u.beforeNativeVelocity)/2,0);
++ const nativeMomentum=event.units.reduce((sum,u)=>sum.map((p,i)=>p+u.mass*(u.incomingVelocity[i]-u.beforeNativeVelocity[i])),[0,0,0]);
++ return {approach,separation,externalNativeEnergy:event.kineticEnergyBefore-preNativeEnergy,externalNativeMomentum:nativeMomentum};
++}
++for (const [id,massB,e,out,energy] of cases) {
++ test('analytical '+id,()=>{
++  const result=resolveSiltPairImpact(body(0,[1,.2,0]),body(.32,[0,.2,0],massB),.24,e);
++  assert.ok(result);
++  result.velocities.forEach((v,i)=>{close(v[0],out[i]);close(v[1],.2);close(v[2],0);});
++  close(result.energyAfter,energy+(1+massB)*.02);
++  close(result.momentumAfter[0],1);
++  if(e===0)assert.deepEqual(result,resolveSiltPairImpact(body(0,[1,.2,0]),body(.32,[0,.2,0],massB),.24));
++ });
++ test('mounted '+id+' records genuine owner response and native retrieval',t=>{
++  const m=stagedMounted(t,'pi05:'+id);
++  const [hit]=m.evidence.events;
++  assert.equal(m.evidence.events.length,1);
++  assert.deepEqual(hit.units.map(u=>u.mass),[1,massB]);
++  const witness=verifyContact(hit,e);
++  const retrievals=[];
++  for(const [i,unit] of [m.first,m.second].entries()){
++   rig.acquire(m.game,unit);
++   assert.equal(m.owner.has(unit.id),false);
++   assert.equal(m.route.materialIdentity.get(unit.id).owner,'grip');
++   const proof=m.release(i===0?[-1,0,0]:[1,0,0]);
++   const release=m.owner.free.get(unit.id).freeContact.releaseSequence;
++   assert.notEqual(release,hit.units[i].releaseSequence);
++   retrievals.push({id:unit.id,release,proof});
++  }
++  m.game.mount('CELL_SIGNAL_CHORUS_NERVE_001');m.game.step();
++  m.game.mount(scope.cellId);m.game.steps(4);
++  assert.equal(pairEvents(m.owner).length,1);
++  assert.equal(m.route.materialIdentity.totalMass(),8);
++  mounted.push({id,coefficient:e,...m.evidence,witness,retrievals,inventoryQ:8,remountNoNewImpact:true});
++ });
++}
++test('unknown, out-of-range, nonfinite and unapproved restitution inputs reject',()=>{
++ const a=body(0,[1,0,0]), b=body(.18,[0,0,0]);
++ for(const e of [-.01,1.01,.75,NaN,Infinity,null,'1'])assert.equal(resolveSiltPairImpact(a,b,.2,e),null);
++ for(const name of ['e05-equal','pi05:__proto__','pi05:e05-four-to-one','pi05:e2-equal','pi05:v0-e05-equal'])
++   assert.equal(siltPairFixture(name),null);
++ assert.equal(siltPairFixture('equal').restitution,undefined);
++});
++test('unsupported elastic speed rejects both trajectory outputs and preserves native velocity',()=>{
++ const f=setup('pi05:e1-equal');
++ f.seed([0,0,0],[.12,0,0],[2.1,0,0],[0,2.1,0]);
++ f.owner.advancePair(.025,f.entries(100),true);
++ assert.equal(pairEvents(f.owner).length,0);
++ assert.deepEqual([f.owner.get(A).velocity,f.owner.get(B).velocity],[[2.1,0,0],[0,2.1,0]]);
++});
++test('older mount and wrong generation cannot take an elastic impulse',()=>{
++ const f=setup('pi05:e1-equal');f.seed([0,0,0],[.13,0,0]);
++ for(const change of [{mountSequence:2},{mountCount:0},{generation:1},{frame:99}]){
++  const [a,b]=f.entries(100);Object.assign(b.contact.step,change);
++  assert.equal(f.owner.advancePair(.025,[a,b],true),null);
++ }
++ assert.equal(pairEvents(f.owner).length,0);
++});
++test('earlier and tied fixed-surface contact still wins against the elastic response',()=>{
++ for(const [time,expected] of [[.019,0],[.020005,0],[.02002,1]]){
++  const f=setup('pi05:e1-equal');f.seed([0,0,0],[.14,0,0]);
++  const surface={id:'fixed-primitive',center:[time+.5,0,0],radii:[.5,.2,.2]};
++  f.owner.advancePair(.025,f.entries(100,undefined,surface),true);
++  assert.equal(pairEvents(f.owner).length,expected);
++  if(!expected)assert.equal(f.owner.snapshot().freeMaterialContacts[0].receiverId,surface.id);
++ }
++});
++test('mounted restitution near miss does not create pair or fixed-surface events',t=>{
++ const m=stagedMounted(t,'pi05:e1-one-to-three',true);
++ assert.equal(m.evidence.events.length,0);
++ assert.equal(m.owner.snapshot().freeMaterialContacts,undefined);
++ mounted.push({id:'elastic-near-miss',...m.evidence,inventoryQ:8});
++});
++test('the owner suppresses persistent contact and rearms only after measured separation',()=>{
++ const f=setup('pi05:e0-one-to-three',{spring:.44,drag:.74});f.seed([0,0,0],[.13,0,0]);
++ f.owner.advancePair(.05,f.entries(100,[[0,0,0],[.13,0,0]]),true);
++ assert.equal(pairEvents(f.owner).length,1);
++ for(let frame=101;frame<108;frame++)f.owner.advancePair(.025,f.entries(frame,[[1,0,0],[-1,0,0]]),true);
++ assert.equal(pairEvents(f.owner).length,1);
++ for(let frame=108;frame<142;frame++)f.owner.advancePair(.025,f.entries(frame,[[-4,0,0],[4,0,0]]),true);
++ const gap=f.owner.get(B).position[0]-f.owner.get(A).position[0];assert.ok(gap>.121);
++ for(let frame=142;frame<260&&pairEvents(f.owner).length===1;frame++)f.owner.advancePair(.025,f.entries(frame,[[4,0,0],[-4,0,0]]),true);
++ const events=pairEvents(f.owner);
++ assert.equal(events.length,2);
++ assert.notEqual(events[0].id,events[1].id);
++ assert.deepEqual(events[0].units.map(u=>u.releaseSequence),events[1].units.map(u=>u.releaseSequence));
++ mounted.push({id:'persistent-and-repeat',staging:'Existing trajectory owner with directly staged native attractor inputs after admitted release sources',gap,events});
++});
++test('mounted intermediate fixture repeats only after measured separation', t => {
++ const m=stagedMounted(t,'pi05:e05-one-to-three');
++ assert.equal(m.evidence.events.length,1);
++ const receipt=rig.receipts(m.game), center=m.owner.get(B).position;
++ const original=m.route.copyNativeGrainPosition, targets=new Map();
++ const point=x=>[center[0]+x,center[1],center[2]];
++ m.route.copyNativeGrainPosition=function(unit,index,out){
++  return targets.has(unit.id)?out.fromArray(targets.get(unit.id)):original.call(this,unit,index,out);
++ };
++ try {
++  targets.set(A,point(-1));targets.set(B,point(1));
++  for(let i=0;i<48;i++)m.game.step(.025);
++  const gap=new Vector3(...m.owner.get(A).position).distanceTo(new Vector3(...m.owner.get(B).position));
++  assert.ok(gap>.121);
++  assert.equal(pairEvents(m.owner).length,1);
++  targets.set(A,point(0));targets.set(B,point(0));
++  for(let i=0;i<260&&pairEvents(m.owner).length===1;i++)m.game.step(.025);
++  const events=pairEvents(m.owner);
++  assert.equal(events.length,2);
++  events.forEach(event=>verifyContact(event,.5));
++  assert.notEqual(events[0].id,events[1].id);
++  assert.deepEqual(events[0].units.map(x=>x.releaseSequence),events[1].units.map(x=>x.releaseSequence));
++  assert.deepEqual(rig.receipts(m.game),receipt);
++  assert.equal(m.route.materialIdentity.totalMass(),8);
++  mounted.push({...m.evidence,id:'mounted-intermediate-repeat',coefficient:.5,gap,events,inventoryQ:8,
++   staging:'Native control-based releases, followed by staged inputs to the existing native attraction.'});
++ }finally{m.route.copyNativeGrainPosition=original;}
++});
++
++test.after(()=>{
++ const file=process.env.BLOB_PI05_REPORT;
++ if(file)writeFileSync(file,JSON.stringify({schema:'blob.pi05.mounted.v1',
++   source:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),mounted},null,2)+'\n');
++});
+diff --git a/src/contact/SiltPairMomentum.js b/src/contact/SiltPairMomentum.js
+index 11975eb..53007fa 100644
+--- a/src/contact/SiltPairMomentum.js
++++ b/src/contact/SiltPairMomentum.js
+@@ -1,4 +1,5 @@
+ import admission from './siltPairAdmission.json' with { type: 'json' };
++import restitutionAdmission from './siltPairRestitutionAdmission.json' with { type: 'json' };
+ 
+ const TOLERANCE = 1e-12;
+ const finiteVector = value => Array.isArray(value) && value.length === 3
+@@ -12,19 +13,44 @@ const within = (a, b) => Math.abs(a - b) <= TOLERANCE * (1 + Math.max(Math.abs(a
+ 
+ export const siltPairIds = Object.freeze([...admission.scope.ids]);
+ 
++function readRestitutionFixture(mode) {
++  const scope = restitutionAdmission.scope;
++  const match = /^pi05:(e0|e05|e1)-(equal|one-to-three)$/.exec(mode);
++  if (!match || restitutionAdmission.schema !== 'blob.silt-pair-restitution-admission.v1'
++    || restitutionAdmission.revision !== 1 || restitutionAdmission.status !== 'admitted-development-only'
++    || restitutionAdmission.existingAdmission.revision !== admission.revision
++    || scope.host !== admission.scope.host || scope.cell !== admission.scope.cell
++    || scope.tangentImpulse !== 0 || scope.separationMarginLw !== admission.separationMarginLw
++    || scope.fixedSurfaceExclusionSeconds !== admission.fixedSurfaceExclusionSeconds
++    || scope.ids.length !== siltPairIds.length || scope.radiiLw.length !== siltPairIds.length
++    || !siltPairIds.every((id, index) => scope.ids[index] === id && scope.radiiLw[index] === admission.radiiLw[id])) return null;
++
++  const [, name, massFixture] = match;
++  const coefficient = { e0: 0, e05: 0.5, e1: 1 }[name];
++  const fixture = restitutionAdmission.fixtures[mode];
++  return fixture?.massFixture === massFixture && fixture.restitution === coefficient ? fixture : null;
++}
++
+ export function siltPairFixture(mode) {
+-  if (!Object.hasOwn(admission.massFixturesMr, mode)) return null;
++  if (typeof mode !== "string") return null;
++  const legacy = Object.hasOwn(admission.massFixturesMr, mode);
++  const restitution = legacy ? null : readRestitutionFixture(mode);
++  if (!legacy && !restitution) return null;
++  const massFixture = restitution?.massFixture ?? mode;
+   return Object.freeze({
+     id: mode, revision: admission.revision, hostId: admission.scope.host, cellId: admission.scope.cell,
+-    masses: Object.freeze({ ...admission.massFixturesMr[mode] }), radii: Object.freeze({ ...admission.radiiLw }),
++    masses: Object.freeze({ ...admission.massFixturesMr[massFixture] }), radii: Object.freeze({ ...admission.radiiLw }),
+     phases: Object.freeze([...admission.scope.eligiblePhases]), separationMargin: admission.separationMarginLw,
+-    fixedSurfaceWindow: admission.fixedSurfaceExclusionSeconds
++    fixedSurfaceWindow: admission.fixedSurfaceExclusionSeconds,
++    ...(restitution ? { restitution: restitution.restitution, restitutionAdmissionRevision: restitutionAdmission.revision } : {})
+   });
+ }
+ 
+ // Geometry and impulse math for the admitted pair. SiltTrajectoryMemory owns
+ // eligibility, integration, arbitration, and the atomic application of results.
+-export function resolveSiltPairImpact(a, b, seconds) {
++export function resolveSiltPairImpact(a, b, seconds, restitution) {
++  if (restitution !== undefined && ![0, 0.5, 1].includes(restitution)) return null;
++  const coefficient = restitution ?? 0;
+   if (!positive(seconds) || ![a, b].every(body => positive(body?.mass) && positive(body.radius)
+     && finiteVector(body.position) && finiteVector(body.velocity))) return null;
+   const separation = subtract(b.position, a.position);
+@@ -60,8 +86,9 @@ export function resolveSiltPairImpact(a, b, seconds) {
+   const ratioA = a.mass / largestMass;
+   const ratioB = b.mass / largestMass;
+   if (!positive(ratioA) || !positive(ratioB)) return null;
+-  const deltaA = vn * (ratioB / (ratioA + ratioB));
+-  const deltaB = -vn * (ratioA / (ratioA + ratioB));
++  const response = vn * (1 + coefficient);
++  const deltaA = response * (ratioB / (ratioA + ratioB));
++  const deltaB = -response * (ratioA / (ratioA + ratioB));
+   const impulse = -a.mass * deltaA;
+   const velocities = [add(a.velocity, scale(normal, deltaA)), add(b.velocity, scale(normal, deltaB))];
+   const positions = [add(a.position, scale(a.velocity, time)), add(b.position, scale(b.velocity, time))];
+@@ -76,5 +103,10 @@ export function resolveSiltPairImpact(a, b, seconds) {
+     || ![impulse, energyBefore, energyAfter].every(Number.isFinite)
+     || !momentumAfter.every((value, i) => within(value, momentumBefore[i]))
+     || (energyAfter > energyBefore && !within(energyAfter, energyBefore))) return null;
++  if (restitution !== undefined) {
++    const separatingSpeed = dot(subtract(velocities[1], velocities[0]), normal);
++    const loss = 0.5 * (impulse / -response) * vn ** 2 * (1 - coefficient ** 2);
++    if (!within(separatingSpeed, -coefficient * vn) || !within(energyBefore - energyAfter, loss)) return null;
++  }
+   return { time, normal, impulse, positions, velocities, momentumBefore, momentumAfter, energyBefore, energyAfter };
+ }
+diff --git a/src/contact/SiltTrajectoryMemory.js b/src/contact/SiltTrajectoryMemory.js
+index 6482b63..3e3fbff 100644
+--- a/src/contact/SiltTrajectoryMemory.js
++++ b/src/contact/SiltTrajectoryMemory.js
+@@ -213,7 +213,7 @@ export class SiltTrajectoryMemory {
+       const native = members.map(member => this.predictPairMember(member, seconds));
+       const separation = length(subtract(native[0].position, native[1].position));
+       if (separation > a.radius + b.radius + fixture.separationMargin) this.pairLatch.armed = true;
+-      const candidate = this.pairLatch.armed && resolveSiltPairImpact(native[0], native[1], seconds);
++      const candidate = this.pairLatch.armed && resolveSiltPairImpact(native[0], native[1], seconds, fixture.restitution);
+       const impact = candidate && candidate.velocities.every(v => length(v) <= this.maxSpeed)
+         && !native.some((body, index) => this.fixedSurfacePrecedes(body, members[index].contact.surface, seconds, candidate.time));
+       if (impact) {
+@@ -262,6 +262,8 @@ export class SiltTrajectoryMemory {
+     const event = {
+       ...step, microstep, microstepSeconds: seconds, contactSeconds: result.time,
+       fixture: this.pairFixture.id, revision: this.pairFixture.revision,
++      ...(this.pairFixture.restitution === undefined ? {} : { restitution: this.pairFixture.restitution,
++        restitutionAdmissionRevision: this.pairFixture.restitutionAdmissionRevision }),
+       id: [this.pairLatch.key, step.frame, step.substep, microstep].join(':'),
+       kind: 'accepted-silt-pair', actualRecipientIds: members.map(member => member.id),
+       normal: result.normal, point: vec(result.positions[0], scale(result.normal, radius)),
+diff --git a/src/contact/siltPairRestitutionAdmission.json b/src/contact/siltPairRestitutionAdmission.json
+new file mode 100644
+index 0000000..0a36d95
+--- /dev/null
++++ b/src/contact/siltPairRestitutionAdmission.json
+@@ -0,0 +1,53 @@
++{
++  "schema": "blob.silt-pair-restitution-admission.v1",
++  "revision": 1,
++  "existingAdmission": {
++    "revision": 1,
++    "sha256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
++  },
++  "authorizationSHA256": "d8415c27a310284ba84a78a462f7919fe35efa4e82fc0e3848cfbe1954ae6a7d",
++  "numericalContractSHA256": "496f95509f4284f75d8dd3e15991669768db7f58adb4363ea8e9eda1df4d3523",
++  "governing": "18491dcdd608d5e06868a7da573de106ba25647d",
++  "status": "admitted-development-only",
++  "scope": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "ids": [
++      "silt-grain-01",
++      "silt-grain-02"
++    ],
++    "radiiLw": [
++      0.06,
++      0.06
++    ],
++    "tangentImpulse": 0,
++    "separationMarginLw": 0.001,
++    "fixedSurfaceExclusionSeconds": 0.00001
++  },
++  "fixtures": {
++    "pi05:e0-equal": {
++      "massFixture": "equal",
++      "restitution": 0
++    },
++    "pi05:e05-equal": {
++      "massFixture": "equal",
++      "restitution": 0.5
++    },
++    "pi05:e1-equal": {
++      "massFixture": "equal",
++      "restitution": 1
++    },
++    "pi05:e0-one-to-three": {
++      "massFixture": "one-to-three",
++      "restitution": 0
++    },
++    "pi05:e05-one-to-three": {
++      "massFixture": "one-to-three",
++      "restitution": 0.5
++    },
++    "pi05:e1-one-to-three": {
++      "massFixture": "one-to-three",
++      "restitution": 1
++    }
++  }
++}
+diff --git a/src/main.js b/src/main.js
+index 8cc4bef..b0de3a8 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -13,14 +13,21 @@ if (!appRoot) {
+ // Use the guarded scar repair coupling in standard play. The query value 0
+ // selects the original repair rate and 1 keeps the explicit trial marker.
+ const coreRepairComparison = new URLSearchParams(window.location.search).get('coreRepairTrial');
+-if (coreRepairComparison === '1') document.title += ' [Core repair trial]';
++if (coreRepairComparison === '1') document.title += ' [Core repair trial]';
++let siltPairExperiment = null;
++if (import.meta.env && import.meta.env.DEV) {
++  const query = new URLSearchParams(window.location.search);
++  const pair = query.get('siltPair');
++  if (pair === 'equal' || pair === 'one-to-three') siltPairExperiment = pair;
++  else if (pair === null && query.has('siltRestitution')) siltPairExperiment = 'pi05:' + query.get('siltRestitution');
++}
+ const runtime = new GameRuntime({
+   appRoot,
+   coreRepairTrial: coreRepairComparison !== '0',
+   flowExperiment: new URLSearchParams(window.location.search).get('flow') === '1',
+   nearWorldExperiment: new URLSearchParams(window.location.search).get('nearWorld') === '1',
+   siltResistanceExperiment: new URLSearchParams(window.location.search).get('b3') === '1',
+-  siltPairExperiment: import.meta.env && import.meta.env.DEV ? new URLSearchParams(window.location.search).get('siltPair') : null,
++  siltPairExperiment,
+   buildId: "HC-031W1",
+   buildLabel: "Stabilized Aim + Local Contact Proof"
+ });

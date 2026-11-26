@@ -1,0 +1,604 @@
+{
+  "verdict": "PASS",
+  "source": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "chromium": "151.0.7922.34",
+  "geometry": {
+    "contactId": "[\"equal\",\"HOST_ALPHA_WOUNDED_NURSERY\",\"CELL_SILT_PRESSURE_ROUTE_001\",2,1,[\"silt-grain-01\",0,1],[\"silt-grain-02\",0,3]]:468:0:0",
+    "axis": [
+      0.9722259364305852,
+      0.012863984127665111,
+      0.23369049284049861
+    ],
+    "proxyDistance": 0.1200000000000003,
+    "proxyClearance": 3.0531133177191805e-16,
+    "inferredAtContactVisualClearance": -0.21347651257903924,
+    "renderedStepVisualClearance": -0.21347651257903905,
+    "views": [
+      {
+        "name": "detail",
+        "offset": [
+          0.14,
+          0.12,
+          0.72
+        ],
+        "centerPixels": 74.20003132509,
+        "boundsNdc": [
+          [
+            [
+              -0.3159520594893958,
+              0.16162399769242375
+            ],
+            [
+              -0.3941760104980418,
+              0.43327911826564375
+            ]
+          ],
+          [
+            [
+              -0.16258214204006166,
+              0.3421871394262873
+            ],
+            [
+              -0.44750134463946517,
+              0.4470703421957654
+            ]
+          ]
+        ],
+        "overlapNdc": [
+          0.3242061397324854,
+          0.8274551287636855
+        ]
+      },
+      {
+        "name": "far",
+        "offset": [
+          0.45,
+          0.38,
+          2.4
+        ],
+        "centerPixels": 22.356080780449517,
+        "boundsNdc": [
+          [
+            [
+              -0.09347998880037814,
+              0.04869902088991433
+            ],
+            [
+              -0.1226990816761324,
+              0.12997963648608166
+            ]
+          ],
+          [
+            [
+              -0.04625509843215465,
+              0.09494491015618797
+            ],
+            [
+              -0.12987057774599833,
+              0.12789558780915486
+            ]
+          ]
+        ],
+        "overlapNdc": [
+          0.09495411932206899,
+          0.25059466948528725
+        ]
+      },
+      {
+        "name": "oblique",
+        "offset": [
+          1.5,
+          0.3,
+          0.5
+        ],
+        "centerPixels": 7.077697263520319,
+        "boundsNdc": [
+          [
+            [
+              -0.10672159265838767,
+              0.10024936054630522
+            ],
+            [
+              -0.1729748212675717,
+              0.2034246896748743
+            ]
+          ],
+          [
+            [
+              -0.10809763679086934,
+              0.11503803551562772
+            ],
+            [
+              -0.21067995413716603,
+              0.19362107552621546
+            ]
+          ]
+        ],
+        "overlapNdc": [
+          0.2069709532046929,
+          0.3665958967937871
+        ]
+      }
+    ],
+    "bodies": [
+      {
+        "unitId": "silt-grain-01",
+        "radius": 0.06,
+        "physicalContact": [
+          2.9141515505348448,
+          -0.8476079646720583,
+          -12.94974830401621
+        ],
+        "physicalEnd": [
+          2.9157566155334997,
+          -0.8475690484499107,
+          -12.950814136959277
+        ],
+        "center": [
+          2.9157566155334997,
+          -0.8475690484499107,
+          -12.950814136959277
+        ],
+        "visualBoundsCenter": [
+          2.9157566155334997,
+          -0.8475690484499108,
+          -12.950814136959277
+        ],
+        "endCenterOffset": 0,
+        "bounds": [
+          [
+            2.7460099888498597,
+            3.08550324221714
+          ],
+          [
+            -1.01756905023805,
+            -0.6775690466617713
+          ],
+          [
+            -13.120560763642917,
+            -12.781067510275637
+          ]
+        ],
+        "normalSupport": [
+          -0.164137391894173,
+          0.164137391894173
+        ]
+      },
+      {
+        "unitId": "silt-grain-02",
+        "radius": 0.06,
+        "physicalContact": [
+          3.030818662906515,
+          -0.8460642865767386,
+          -12.921705444875348
+        ],
+        "physicalEnd": [
+          3.0320395699883447,
+          -0.8459391360010566,
+          -12.921177807033441
+        ],
+        "center": [
+          3.0320395699883447,
+          -0.8459391360010566,
+          -12.921177807033441
+        ],
+        "visualBoundsCenter": [
+          3.0320395699883447,
+          -0.8459391360010566,
+          -12.921177807033441
+        ],
+        "endCenterOffset": 0,
+        "bounds": [
+          [
+            2.863913760048398,
+            3.200165379928291
+          ],
+          [
+            -1.015939137789196,
+            -0.6759391342129173
+          ],
+          [
+            -13.082812109035087,
+            -12.759543505031795
+          ]
+        ],
+        "normalSupport": [
+          -0.16933912068486653,
+          0.16933912068486653
+        ]
+      }
+    ]
+  },
+  "images": [
+    {
+      "label": "approach-oblique-A",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": false,
+      "aligned": false,
+      "view": "oblique",
+      "camera": [
+        4.392106920010006,
+        -0.5496514368914733,
+        -12.426842437644702
+      ],
+      "file": "equal-approach-oblique-A.png"
+    },
+    {
+      "label": "approach-oblique-B",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": true,
+      "aligned": false,
+      "view": "oblique",
+      "camera": [
+        4.392106920010006,
+        -0.5496514368914733,
+        -12.426842437644702
+      ],
+      "file": "equal-approach-oblique-B.png"
+    },
+    {
+      "label": "approach-oblique-C",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": true,
+      "aligned": true,
+      "view": "oblique",
+      "camera": [
+        4.392106920010006,
+        -0.5496514368914733,
+        -12.426842437644702
+      ],
+      "file": "equal-approach-oblique-C.png"
+    },
+    {
+      "label": "approach-close-A",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": false,
+      "aligned": false,
+      "view": "close",
+      "camera": [
+        3.032106920010006,
+        -0.7296514368914734,
+        -12.206842437644701
+      ],
+      "file": "equal-approach-close-A.png"
+    },
+    {
+      "label": "approach-close-B",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": true,
+      "aligned": false,
+      "view": "close",
+      "camera": [
+        3.032106920010006,
+        -0.7296514368914734,
+        -12.206842437644701
+      ],
+      "file": "equal-approach-close-B.png"
+    },
+    {
+      "label": "approach-close-C",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": true,
+      "aligned": true,
+      "view": "close",
+      "camera": [
+        3.032106920010006,
+        -0.7296514368914734,
+        -12.206842437644701
+      ],
+      "file": "equal-approach-close-C.png"
+    },
+    {
+      "label": "approach-normal-A",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": false,
+      "aligned": false,
+      "view": "normal",
+      "camera": [
+        4.042105632159811,
+        -0.8495511688037274,
+        -12.925124299088012
+      ],
+      "file": "equal-approach-normal-A.png"
+    },
+    {
+      "label": "approach-normal-B",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": true,
+      "aligned": false,
+      "view": "normal",
+      "camera": [
+        4.042105632159811,
+        -0.8495511688037274,
+        -12.925124299088012
+      ],
+      "file": "equal-approach-normal-B.png"
+    },
+    {
+      "label": "approach-normal-C",
+      "frame": 458,
+      "simSeconds": 16.15000000000031,
+      "overlay": true,
+      "aligned": true,
+      "view": "normal",
+      "camera": [
+        4.042105632159811,
+        -0.8495511688037274,
+        -12.925124299088012
+      ],
+      "file": "equal-approach-normal-C.png"
+    },
+    {
+      "label": "accepted-oblique-A",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": false,
+      "aligned": false,
+      "view": "oblique",
+      "camera": [
+        4.473898092760923,
+        -0.5467540922254837,
+        -12.435995971996359
+      ],
+      "file": "equal-accepted-oblique-A.png"
+    },
+    {
+      "label": "accepted-oblique-B",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": true,
+      "aligned": false,
+      "view": "oblique",
+      "camera": [
+        4.473898092760923,
+        -0.5467540922254837,
+        -12.435995971996359
+      ],
+      "file": "equal-accepted-oblique-B.png"
+    },
+    {
+      "label": "accepted-oblique-C",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": true,
+      "aligned": true,
+      "view": "oblique",
+      "camera": [
+        4.473898092760923,
+        -0.5467540922254837,
+        -12.435995971996359
+      ],
+      "file": "equal-accepted-oblique-C.png"
+    },
+    {
+      "label": "accepted-close-A",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": false,
+      "aligned": false,
+      "view": "close",
+      "camera": [
+        3.1138980927609223,
+        -0.7267540922254837,
+        -12.215995971996358
+      ],
+      "file": "equal-accepted-close-A.png"
+    },
+    {
+      "label": "accepted-close-B",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": true,
+      "aligned": false,
+      "view": "close",
+      "camera": [
+        3.1138980927609223,
+        -0.7267540922254837,
+        -12.215995971996358
+      ],
+      "file": "equal-accepted-close-B.png"
+    },
+    {
+      "label": "accepted-close-C",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": true,
+      "aligned": true,
+      "view": "close",
+      "camera": [
+        3.1138980927609223,
+        -0.7267540922254837,
+        -12.215995971996358
+      ],
+      "file": "equal-accepted-close-C.png"
+    },
+    {
+      "label": "accepted-normal-A",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": false,
+      "aligned": false,
+      "view": "normal",
+      "camera": [
+        4.091957919656095,
+        -0.8319605104786688,
+        -12.667251905229787
+      ],
+      "file": "equal-accepted-normal-A.png"
+    },
+    {
+      "label": "accepted-normal-B",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": true,
+      "aligned": false,
+      "view": "normal",
+      "camera": [
+        4.091957919656095,
+        -0.8319605104786688,
+        -12.667251905229787
+      ],
+      "file": "equal-accepted-normal-B.png"
+    },
+    {
+      "label": "accepted-normal-C",
+      "frame": 468,
+      "simSeconds": 16.31666666666697,
+      "overlay": true,
+      "aligned": true,
+      "view": "normal",
+      "camera": [
+        4.091957919656095,
+        -0.8319605104786688,
+        -12.667251905229787
+      ],
+      "file": "equal-accepted-normal-C.png"
+    },
+    {
+      "label": "after-oblique-A",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": false,
+      "aligned": false,
+      "view": "oblique",
+      "camera": [
+        4.669382025284557,
+        -0.5259547823233375,
+        -12.514870994601978
+      ],
+      "file": "equal-after-oblique-A.png"
+    },
+    {
+      "label": "after-oblique-B",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": true,
+      "aligned": false,
+      "view": "oblique",
+      "camera": [
+        4.669382025284557,
+        -0.5259547823233375,
+        -12.514870994601978
+      ],
+      "file": "equal-after-oblique-B.png"
+    },
+    {
+      "label": "after-oblique-C",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": true,
+      "aligned": true,
+      "view": "oblique",
+      "camera": [
+        4.669382025284557,
+        -0.5259547823233375,
+        -12.514870994601978
+      ],
+      "file": "equal-after-oblique-C.png"
+    },
+    {
+      "label": "after-close-A",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": false,
+      "aligned": false,
+      "view": "close",
+      "camera": [
+        3.3093820252845574,
+        -0.7059547823233375,
+        -12.294870994601977
+      ],
+      "file": "equal-after-close-A.png"
+    },
+    {
+      "label": "after-close-B",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": true,
+      "aligned": false,
+      "view": "close",
+      "camera": [
+        3.3093820252845574,
+        -0.7059547823233375,
+        -12.294870994601977
+      ],
+      "file": "equal-after-close-B.png"
+    },
+    {
+      "label": "after-close-C",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": true,
+      "aligned": true,
+      "view": "close",
+      "camera": [
+        3.3093820252845574,
+        -0.7059547823233375,
+        -12.294870994601977
+      ],
+      "file": "equal-after-close-C.png"
+    },
+    {
+      "label": "after-normal-A",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": false,
+      "aligned": false,
+      "view": "normal",
+      "camera": [
+        4.287441852179731,
+        -0.8111612005765226,
+        -12.746126927835405
+      ],
+      "file": "equal-after-normal-A.png"
+    },
+    {
+      "label": "after-normal-B",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": true,
+      "aligned": false,
+      "view": "normal",
+      "camera": [
+        4.287441852179731,
+        -0.8111612005765226,
+        -12.746126927835405
+      ],
+      "file": "equal-after-normal-B.png"
+    },
+    {
+      "label": "after-normal-C",
+      "frame": 493,
+      "simSeconds": 16.73333333333361,
+      "overlay": true,
+      "aligned": true,
+      "view": "normal",
+      "camera": [
+        4.287441852179731,
+        -0.8111612005765226,
+        -12.746126927835405
+      ],
+      "file": "equal-after-normal-C.png"
+    }
+  ],
+  "comparison": {
+    "A": "native",
+    "B": "native plus proxy outline",
+    "C": "temporary proxy-aligned diagnostic replacing only the two visible grain representations"
+  },
+  "scope": "Three presentations and three cameras at matched browser states. The recorded impact marker is the first observed render after the owner contact, with analytical contact positions retained in the event.",
+  "capturePlayback": "Three phase stills, one second each at 12 fps. Staged visual evidence.",
+  "recording": {
+    "file": "MP06-geometry-comparison.webm",
+    "bytes": 354706,
+    "sha256": "786a20d50ecf1c19c2333a153a8f953b5c07d06edc9a180f44688669d1a45d8b"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "verdict": "PASS",
+  "candidate": "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+  "base": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "legacyPI04ExactTrace": true,
+  "pi05Checks": 19,
+  "pi04Checks": 15,
+  "ordinaryBootChecks": 3,
+  "mountedCases": [
+    {
+      "id": "e0-equal",
+      "events": 1,
+      "retrievals": 2,
+      "separation": null
+    },
+    {
+      "id": "e05-equal",
+      "events": 1,
+      "retrievals": 2,
+      "separation": null
+    },
+    {
+      "id": "e1-equal",
+      "events": 1,
+      "retrievals": 2,
+      "separation": null
+    },
+    {
+      "id": "e0-one-to-three",
+      "events": 1,
+      "retrievals": 2,
+      "separation": null
+    },
+    {
+      "id": "e05-one-to-three",
+      "events": 1,
+      "retrievals": 2,
+      "separation": null
+    },
+    {
+      "id": "e1-one-to-three",
+      "events": 1,
+      "retrievals": 2,
+      "separation": null
+    },
+    {
+      "id": "elastic-near-miss",
+      "events": 0,
+      "retrievals": 0,
+      "separation": null
+    },
+    {
+      "id": "persistent-and-repeat",
+      "events": 2,
+      "retrievals": 0,
+      "separation": 1.039098858540844
+    },
+    {
+      "id": "mounted-intermediate-repeat",
+      "events": 2,
+      "retrievals": 0,
+      "separation": 0.9897007615725943
+    }
+  ],
+  "production": {
+    "outputs": 541,
+    "legacyAndNewQuerySelectorsCompiledOut": true
+  }
+}
