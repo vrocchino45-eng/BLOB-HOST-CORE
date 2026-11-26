@@ -1,4 +1,5 @@
 import admission from './siltPairAdmission.json' with { type: 'json' };
+import restitutionAdmission from './siltPairRestitutionAdmission.json' with { type: 'json' };
 
 const TOLERANCE = 1e-12;
 const finiteVector = value => Array.isArray(value) && value.length === 3
@@ -12,19 +13,44 @@ const within = (a, b) => Math.abs(a - b) <= TOLERANCE * (1 + Math.max(Math.abs(a
 
 export const siltPairIds = Object.freeze([...admission.scope.ids]);
 
+function readRestitutionFixture(mode) {
+  const scope = restitutionAdmission.scope;
+  const match = /^pi05:(e0|e05|e1)-(equal|one-to-three)$/.exec(mode);
+  if (!match || restitutionAdmission.schema !== 'blob.silt-pair-restitution-admission.v1'
+    || restitutionAdmission.revision !== 1 || restitutionAdmission.status !== 'admitted-development-only'
+    || restitutionAdmission.existingAdmission.revision !== admission.revision
+    || scope.host !== admission.scope.host || scope.cell !== admission.scope.cell
+    || scope.tangentImpulse !== 0 || scope.separationMarginLw !== admission.separationMarginLw
+    || scope.fixedSurfaceExclusionSeconds !== admission.fixedSurfaceExclusionSeconds
+    || scope.ids.length !== siltPairIds.length || scope.radiiLw.length !== siltPairIds.length
+    || !siltPairIds.every((id, index) => scope.ids[index] === id && scope.radiiLw[index] === admission.radiiLw[id])) return null;
+
+  const [, name, massFixture] = match;
+  const coefficient = { e0: 0, e05: 0.5, e1: 1 }[name];
+  const fixture = restitutionAdmission.fixtures[mode];
+  return fixture?.massFixture === massFixture && fixture.restitution === coefficient ? fixture : null;
+}
+
 export function siltPairFixture(mode) {
-  if (!Object.hasOwn(admission.massFixturesMr, mode)) return null;
+  if (typeof mode !== "string") return null;
+  const legacy = Object.hasOwn(admission.massFixturesMr, mode);
+  const restitution = legacy ? null : readRestitutionFixture(mode);
+  if (!legacy && !restitution) return null;
+  const massFixture = restitution?.massFixture ?? mode;
   return Object.freeze({
     id: mode, revision: admission.revision, hostId: admission.scope.host, cellId: admission.scope.cell,
-    masses: Object.freeze({ ...admission.massFixturesMr[mode] }), radii: Object.freeze({ ...admission.radiiLw }),
+    masses: Object.freeze({ ...admission.massFixturesMr[massFixture] }), radii: Object.freeze({ ...admission.radiiLw }),
     phases: Object.freeze([...admission.scope.eligiblePhases]), separationMargin: admission.separationMarginLw,
-    fixedSurfaceWindow: admission.fixedSurfaceExclusionSeconds
+    fixedSurfaceWindow: admission.fixedSurfaceExclusionSeconds,
+    ...(restitution ? { restitution: restitution.restitution, restitutionAdmissionRevision: restitutionAdmission.revision } : {})
   });
 }
 
 // Geometry and impulse math for the admitted pair. SiltTrajectoryMemory owns
 // eligibility, integration, arbitration, and the atomic application of results.
-export function resolveSiltPairImpact(a, b, seconds) {
+export function resolveSiltPairImpact(a, b, seconds, restitution) {
+  if (restitution !== undefined && ![0, 0.5, 1].includes(restitution)) return null;
+  const coefficient = restitution ?? 0;
   if (!positive(seconds) || ![a, b].every(body => positive(body?.mass) && positive(body.radius)
     && finiteVector(body.position) && finiteVector(body.velocity))) return null;
   const separation = subtract(b.position, a.position);
@@ -60,8 +86,9 @@ export function resolveSiltPairImpact(a, b, seconds) {
   const ratioA = a.mass / largestMass;
   const ratioB = b.mass / largestMass;
   if (!positive(ratioA) || !positive(ratioB)) return null;
-  const deltaA = vn * (ratioB / (ratioA + ratioB));
-  const deltaB = -vn * (ratioA / (ratioA + ratioB));
+  const response = vn * (1 + coefficient);
+  const deltaA = response * (ratioB / (ratioA + ratioB));
+  const deltaB = -response * (ratioA / (ratioA + ratioB));
   const impulse = -a.mass * deltaA;
   const velocities = [add(a.velocity, scale(normal, deltaA)), add(b.velocity, scale(normal, deltaB))];
   const positions = [add(a.position, scale(a.velocity, time)), add(b.position, scale(b.velocity, time))];
@@ -76,5 +103,10 @@ export function resolveSiltPairImpact(a, b, seconds) {
     || ![impulse, energyBefore, energyAfter].every(Number.isFinite)
     || !momentumAfter.every((value, i) => within(value, momentumBefore[i]))
     || (energyAfter > energyBefore && !within(energyAfter, energyBefore))) return null;
+  if (restitution !== undefined) {
+    const separatingSpeed = dot(subtract(velocities[1], velocities[0]), normal);
+    const loss = 0.5 * (impulse / -response) * vn ** 2 * (1 - coefficient ** 2);
+    if (!within(separatingSpeed, -coefficient * vn) || !within(energyBefore - energyAfter, loss)) return null;
+  }
   return { time, normal, impulse, positions, velocities, momentumBefore, momentumAfter, energyBefore, energyAfter };
 }

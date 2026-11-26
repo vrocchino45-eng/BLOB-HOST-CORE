@@ -14,13 +14,20 @@ if (!appRoot) {
 // selects the original repair rate and 1 keeps the explicit trial marker.
 const coreRepairComparison = new URLSearchParams(window.location.search).get('coreRepairTrial');
 if (coreRepairComparison === '1') document.title += ' [Core repair trial]';
+let siltPairExperiment = null;
+if (import.meta.env && import.meta.env.DEV) {
+  const query = new URLSearchParams(window.location.search);
+  const pair = query.get('siltPair');
+  if (pair === 'equal' || pair === 'one-to-three') siltPairExperiment = pair;
+  else if (pair === null && query.has('siltRestitution')) siltPairExperiment = 'pi05:' + query.get('siltRestitution');
+}
 const runtime = new GameRuntime({
   appRoot,
   coreRepairTrial: coreRepairComparison !== '0',
   flowExperiment: new URLSearchParams(window.location.search).get('flow') === '1',
   nearWorldExperiment: new URLSearchParams(window.location.search).get('nearWorld') === '1',
   siltResistanceExperiment: new URLSearchParams(window.location.search).get('b3') === '1',
-  siltPairExperiment: import.meta.env && import.meta.env.DEV ? new URLSearchParams(window.location.search).get('siltPair') : null,
+  siltPairExperiment,
   buildId: "HC-031W1",
   buildLabel: "Stabilized Aim + Local Contact Proof"
 });

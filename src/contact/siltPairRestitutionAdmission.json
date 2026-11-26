@@ -1,0 +1,53 @@
+{
+  "schema": "blob.silt-pair-restitution-admission.v1",
+  "revision": 1,
+  "existingAdmission": {
+    "revision": 1,
+    "sha256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
+  },
+  "authorizationSHA256": "d8415c27a310284ba84a78a462f7919fe35efa4e82fc0e3848cfbe1954ae6a7d",
+  "numericalContractSHA256": "496f95509f4284f75d8dd3e15991669768db7f58adb4363ea8e9eda1df4d3523",
+  "governing": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "status": "admitted-development-only",
+  "scope": {
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "ids": [
+      "silt-grain-01",
+      "silt-grain-02"
+    ],
+    "radiiLw": [
+      0.06,
+      0.06
+    ],
+    "tangentImpulse": 0,
+    "separationMarginLw": 0.001,
+    "fixedSurfaceExclusionSeconds": 0.00001
+  },
+  "fixtures": {
+    "pi05:e0-equal": {
+      "massFixture": "equal",
+      "restitution": 0
+    },
+    "pi05:e05-equal": {
+      "massFixture": "equal",
+      "restitution": 0.5
+    },
+    "pi05:e1-equal": {
+      "massFixture": "equal",
+      "restitution": 1
+    },
+    "pi05:e0-one-to-three": {
+      "massFixture": "one-to-three",
+      "restitution": 0
+    },
+    "pi05:e05-one-to-three": {
+      "massFixture": "one-to-three",
+      "restitution": 0.5
+    },
+    "pi05:e1-one-to-three": {
+      "massFixture": "one-to-three",
+      "restitution": 1
+    }
+  }
+}
