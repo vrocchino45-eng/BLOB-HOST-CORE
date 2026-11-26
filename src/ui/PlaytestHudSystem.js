@@ -1,3 +1,4 @@
+import { currentPlayerInformation, projectPlayerInformation } from "./PlayerInformationModel.js";
 import { readHostLanguage } from '../language/HostLanguageGrammar.js';
 import { inSiltFlowWorld, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
 import { HUB_RETURN_BOUNDARY_BY_CELL, readCascadeLabel, readContextualWorldLabel } from './ContextualWorldLabels.js';
@@ -73,6 +74,7 @@ export class PlaytestHudSystem {
   }
 
   update(_dt, frameState) {
+    frameState.playerInformation = projectPlayerInformation(frameState);
     if (!this.el) return;
 
     const debugMode = frameState.debugDisplay?.mode ?? this.config?.defaultDebugMode ?? "hidden";
@@ -258,6 +260,8 @@ export class PlaytestHudSystem {
     const hostAudio = frameState.hostAudio ?? {};
     const coreEngine = frameState.coreEngine ?? {};
     const corePerformance = frameState.corePerformance ?? {};
+    const reservePercent = currentPlayerInformation(frameState)?.core.reservePercent
+      ?? corePerformance.endurance?.reservePercent ?? 100;
     const coreSensoryResponse = frameState.coreSensoryResponse ?? {};
     const interactionComposition = frameState.interactionComposition ?? {};
     const testPlatform = frameState.debugTestPlatform ?? {};
@@ -319,7 +323,7 @@ export class PlaytestHudSystem {
           : "";
     const pairedDemandRead = describePairedDemand(corePerformance);
     const performanceRead = corePerformance.active
-      ? ` / drive ${corePerformance.personality ?? "triadic balance"} · reserve ${corePerformance.endurance?.reservePercent ?? 100}% · boost x${corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1}${activeVerbPhysiology ? ` · ${activeVerbPhysiology}` : ""}${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}`
+      ? ` / drive ${corePerformance.personality ?? "triadic balance"} · reserve ${reservePercent}% · boost x${corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1}${activeVerbPhysiology ? ` · ${activeVerbPhysiology}` : ""}${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}`
       : "";
     const stateLabel = inspectionCamera.coreWorkActive
       ? `Core Work: ${coreWorkManipulation.candidateCount ?? 0} pieces${topology ? ` / ${topology.label} ${topology.distribution}` : ""}${cloudRead}${engineRead}${performanceRead} / ${coreWorkManipulation.held ? "Guide holding" : "selected"} ${coreWorkManipulation.selectedPieceLabel ?? "none"}${selectedChemistry ? ` / ${selectedChemistry.zoneLabel} · ${selectedChemistry.interactionLabel}` : ((coreWorkManipulation.candidateCount ?? 0) > 0 ? ` / depth ${coreWorkManipulation.selectedDepthPercent ?? 0}%` : "")}`
@@ -530,7 +534,7 @@ export class PlaytestHudSystem {
       objective,
       actionHint,
       primaryInstruction,
-      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
+      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${reservePercent}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
       auditLine: [auditLine, languageLine].filter(Boolean).join("\n"),
       flowLine,
       siltFlowLabelsOpen,
@@ -624,7 +628,7 @@ export class PlaytestHudSystem {
       coreEngineDebugCycleCommand: coreEngine.architectureDebugCycleCommand ?? "O",
       corePerformanceActive: Boolean(corePerformance.active),
       corePerformancePersonality: corePerformance.personality ?? "forming / neutral",
-      corePerformanceReservePercent: corePerformance.endurance?.reservePercent ?? 100,
+      corePerformanceReservePercent: reservePercent,
       corePerformanceBoostAccelerationMultiplier: corePerformance.movementModifiers?.boostAccelerationMultiplier ?? 1,
       corePerformanceBoostSpeedMultiplier: corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1,
       coreSensoryActive: Boolean(coreSensoryResponse.active),
