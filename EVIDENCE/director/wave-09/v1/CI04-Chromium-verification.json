@@ -1,0 +1,44 @@
+{
+  "original": {
+    "source": "bdbabf733c40fa36cbd44b2e9c7eb3472dd7b97d",
+    "run": {
+      "id": 45582217417,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45582217417",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    "jobs": 0,
+    "setupFailure": "runner context was evaluated at jobs.<job_id>.env"
+  },
+  "verified": {
+    "summary": {
+      "verdict": "PASS",
+      "source": "f21969cc38b84ec88d073282d00699b5bd53f91b",
+      "platform": "linux",
+      "headless": true,
+      "assertions": 18,
+      "timeoutSeconds": 240,
+      "playwright": "1.62.1",
+      "chromium": "151.0.7922.34",
+      "chromiumRevision": "1234",
+      "webGLRendererOnSameLaunchFlags": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "scope": "Staged C01 browser owner verification, separate from ordinary gameplay and deterministic hosted CI."
+    },
+    "run": {
+      "id": 45585271888,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45585271888",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "artifact": {
+      "id": 15008098075,
+      "filename": "CI04-Chromium-repaired-artifact-15008098075.zip",
+      "sha256": "79477584852e22a9c37ed9c621f33d1bdb1bd69e316e798ade6b8b7b129ad3c0",
+      "bytes": 2872,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45585271888/artifacts/15008098075",
+      "expiresAt": "2026-12-09T09:27:00Z",
+      "access": "GitHub authentication"
+    }
+  },
+  "repair": "Initialize PLAYWRIGHT_BROWSERS_PATH in a runner shell step through GITHUB_ENV. Browser and acceptance settings retained."
+}

@@ -1,0 +1,5 @@
+# UI04-C1 · Scoped consumer convergence proposal
+
+Migrate only the current receiver-confirmed Flow line in `PlaytestHudSystem.resolveHudState` / `describeSiltFlow`. `PlayerInformationModel` already exposes matched current, pressure, resistance, recipient and retained imprint. Native Flow retains permission, contact and rejection reasons. Accept the read model only for the matching Host, cell, mount, frame/substep and action. Preserve the owner fallback for a valid current sample when the projection is absent or stale. Existing disconnected/recovering and optional-label behavior stays with the current panel and priorities. Historical deliveries remain history.
+
+Test current and delayed flow, rejection, context interruption/remount, disabled labels, no model in isolated fixtures, and exact existing priority and text parity. Compare against the WC01 HUD and C2 cues. Keep Quick Look, Guide navigation and input arbitration outside this slice. The ordinary HUD receives no experimental mass quantities.

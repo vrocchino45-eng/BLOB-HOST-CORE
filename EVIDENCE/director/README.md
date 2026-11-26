@@ -25,3 +25,5 @@
 ## Wave 08
 
 [Version 1](wave-08/v1/README.md) records numerical foundations, measured Silt calibration, the local UI03 checkpoint, transparent rendering A/B probes, and hosted CI03. [Machine index](wave-08/v1/index.json) · [Recordings](wave-08/v1/recordings.json).
+
+- [Wave 09 scoped momentum and evidence](wave-09/v1/README.md)

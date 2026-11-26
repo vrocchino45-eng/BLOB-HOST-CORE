@@ -1,0 +1,48 @@
+{
+  "revision": 2,
+  "source": "18c891838a1e8710e32c550b936341e42466cbe1",
+  "baseline": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "calibration": {
+    "revision": 1,
+    "sha256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
+  },
+  "numericalRevision": 1,
+  "ordinaryMode": "off",
+  "analytical": {
+    "pre": [
+      1,
+      0
+    ],
+    "equal": [
+      0.5,
+      0.5
+    ],
+    "oneToThree": [
+      0.25,
+      0.25
+    ]
+  },
+  "mounted": "PI04-mounted.json",
+  "browser": "pi04-browser-final/summary.json",
+  "cases": [
+    {
+      "scope": "mounted owner",
+      "contacts": [
+        1,
+        1,
+        0,
+        2
+      ]
+    },
+    {
+      "scope": "Chromium, staged placement with native normalized control path",
+      "contacts": [
+        1,
+        1,
+        0,
+        0
+      ]
+    }
+  ],
+  "experience": "No unassisted playtest. Capture sampled from fixed simulated steps for motion review."
+}

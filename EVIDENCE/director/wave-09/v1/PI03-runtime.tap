@@ -1,0 +1,65 @@
+TAP version 13
+# {"canonicalSelection":"silt_porosity_shelf","coreToShelf":2.8929396813621953,"launch":{"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":252,"substep":0,"chargeSequence":1,"charge01":0.5070921985815612,"intendedTargetId":"silt_porosity_shelf","actualRecipientId":null,"releaseDirection":[-0.4211230782826535,0.06550803439952389,-0.9046347607553299],"releasePosition":[-0.8,-0.75,-1.61],"releaseVelocity":[-0.3572,0.0556,-0.7673],"releaseDecisionSequence":8},"delivered":{"unitId":"silt-grain-01","hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"mountCount":1,"frame":265,"substep":0,"generation":0,"releaseSequence":3,"receiverId":"SILT_ENTRY_SEDIMENT_SHELF_D11B","microstep":0,"contactPosition":[-0.8673749230181672,-0.7359702451670441,-1.8342535774182653],"normal":[-0.37370730429475785,0.24134207248129697,0.8955986013651303],"incomingVelocity":[-0.23533097198056818,0.06648396676984591,-1.1690431219796074],"inwardSpeedRemoved":0.9430031034975261,"response":"accepted-stop-inward","deduplicationId":"HOST_ALPHA_WOUNDED_NURSERY:CELL_SILT_PRESSURE_ROUTE_001:1:1:265:0:0:silt-grain-01:0:3:SILT_ENTRY_SEDIMENT_SHELF_D11B"},"downstreamEndpoint":[-2.45,-0.54,-4.85],"ledgerTotal":2,"mass":8}
+# Subtest: first ingress is delivered to the authored recipient before the intended endpoint
+ok 1 - first ingress is delivered to the authored recipient before the intended endpoint
+  ---
+  duration_ms: 30.4163
+  type: 'test'
+  ...
+# Subtest: swept contact finds low and high speed ingress and rejects a near miss
+ok 2 - swept contact finds low and high speed ingress and rejects a near miss
+  ---
+  duration_ms: 38.0863
+  type: 'test'
+  ...
+# Subtest: split catch-up, repeated overlap and duplicate steps preserve actual pose and emit a single impact
+ok 3 - split catch-up, repeated overlap and duplicate steps preserve actual pose and emit a single impact
+  ---
+  duration_ms: 9.9978
+  type: 'test'
+  ...
+# Subtest: same release recontacts after separation and retains history through a fresh mount
+ok 4 - same release recontacts after separation and retains history through a fresh mount
+  ---
+  duration_ms: 13.9801
+  type: 'test'
+  ...
+# Subtest: wrong host, cell, generation or stale mount receive no accepted sample
+ok 5 - wrong host, cell, generation or stale mount receive no accepted sample
+  ---
+  duration_ms: 3.071
+  type: 'test'
+  ...
+# Subtest: ordinary release retains its existing trajectory with and without contact capability
+ok 6 - ordinary release retains its existing trajectory with and without contact capability
+  ---
+  duration_ms: 3.7622
+  type: 'test'
+  ...
+# Subtest: mounted gameplay launches, contacts and retrieves the same conserved grain with no extra credit
+ok 7 - mounted gameplay launches, contacts and retrieves the same conserved grain with no extra credit
+  ---
+  duration_ms: 1947.2199
+  type: 'test'
+  ...
+# Subtest: the canonically selected Shelf does not override intervening sediment contact
+ok 8 - the canonically selected Shelf does not override intervening sediment contact
+  ---
+  duration_ms: 1102.9078
+  type: 'test'
+  ...
+# Subtest: oblique ingress removes inward speed and preserves the accepted tangent
+ok 9 - oblique ingress removes inward speed and preserves the accepted tangent
+  ---
+  duration_ms: 3.2544
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7748.7004

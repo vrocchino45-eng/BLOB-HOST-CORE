@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: canonical numeric contract is shaped and dimensioned correctly
+ok 1 - canonical numeric contract is shaped and dimensioned correctly
+  ---
+  duration_ms: 8.0671
+  type: 'test'
+  ...
+# Subtest: SI length, mass, and inventory alias cannot be admitted by declaration
+ok 2 - SI length, mass, and inventory alias cannot be admitted by declaration
+  ---
+  duration_ms: 12.7836
+  type: 'test'
+  ...
+# Subtest: confusing momentum, force, and pressure fails validation
+ok 3 - confusing momentum, force, and pressure fails validation
+  ---
+  duration_ms: 3.254
+  type: 'test'
+  ...
+# Subtest: explicit hypothetical scales convert impulse and density with dimensional powers
+ok 4 - explicit hypothetical scales convert impulse and density with dimensional powers
+  ---
+  duration_ms: 4.6084
+  type: 'test'
+  ...
+# Subtest: missing calibration, implicit defaults and nonfinite conversions fail closed
+ok 5 - missing calibration, implicit defaults and nonfinite conversions fail closed
+  ---
+  duration_ms: 2.454
+  type: 'test'
+  ...
+# Subtest: approval is scoped and leaves previous scale factors and Q independent
+ok 6 - approval is scoped and leaves previous scale factors and Q independent
+  ---
+  duration_ms: 33.0009
+  type: 'test'
+  ...
+# Subtest: translation, acceleration, momentum and impulse are dimensionally consistent
+ok 7 - translation, acceleration, momentum and impulse are dimensionally consistent
+  ---
+  duration_ms: 3.2966
+  type: 'test'
+  ...
+# Subtest: energy, work, pressure, angular and relaxation relationships use the correct powers
+ok 8 - energy, work, pressure, angular and relaxation relationships use the correct powers
+  ---
+  duration_ms: 7.2019
+  type: 'test'
+  ...
+# Subtest: equal masses produce 0.5:0.5 and preserve one momentum unit
+ok 9 - equal masses produce 0.5:0.5 and preserve one momentum unit
+  ---
+  duration_ms: 28.6739
+  type: 'test'
+  ...
+# Subtest: one-to-three masses produce 0.25:0.25 and conserve momentum
+ok 10 - one-to-three masses produce 0.25:0.25 and conserve momentum
+  ---
+  duration_ms: 2.664
+  type: 'test'
+  ...
+# Subtest: oblique velocities keep every tangential component
+ok 11 - oblique velocities keep every tangential component
+  ---
+  duration_ms: 13.1806
+  type: 'test'
+  ...
+# Subtest: reversed participant ordering gives the same solutions and absolute hit time
+ok 12 - reversed participant ordering gives the same solutions and absolute hit time
+  ---
+  duration_ms: 4.4661
+  type: 'test'
+  ...
+# Subtest: sweep admits an actual entry at 0.20 seconds and rejects a geometric near miss
+ok 13 - sweep admits an actual entry at 0.20 seconds and rejects a geometric near miss
+  ---
+  duration_ms: 2.0164
+  type: 'test'
+  ...
+# Subtest: initial overlap, separating moves, tangency and later intersection are distinct
+ok 14 - initial overlap, separating moves, tangency and later intersection are distinct
+  ---
+  duration_ms: 1.917
+  type: 'test'
+  ...
+# Subtest: split common intervals give the same ingress time for force-free motion
+ok 15 - split common intervals give the same ingress time for force-free motion
+  ---
+  duration_ms: 1.7688
+  type: 'test'
+  ...
+# Subtest: invalid, nonfinite and unrepresentable inputs fail closed
+ok 16 - invalid, nonfinite and unrepresentable inputs fail closed
+  ---
+  duration_ms: 6.0203
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1382.7089

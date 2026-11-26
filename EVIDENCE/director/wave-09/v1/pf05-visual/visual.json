@@ -1,0 +1,194 @@
+{
+  "verdict": "PASS",
+  "scope": "Several draw submissions of the exact same accepted frame and camera, outside timed runs. Exact parity across the observed owner fields.",
+  "parity": true,
+  "sample": {
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "frame": 24,
+    "step": 1,
+    "time": 2.6971999998092655,
+    "aim": "silt_porosity_shelf",
+    "pose": [
+      -2.4143619488185744,
+      -0.575576104155297,
+      -3.730476692913938
+    ],
+    "flow": {
+      "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+      "mountSequence": 2,
+      "frame": 24,
+      "substep": 1,
+      "targetId": "silt_porosity_shelf",
+      "attentionSequence": 2,
+      "relationshipSequence": 1,
+      "actionSequence": 1,
+      "receiverId": "silt_porosity_shelf_front",
+      "siteId": "silt_porosity_shelf",
+      "owner": "silt:RegionalTerritoryExpansion",
+      "conductivity01": 0.72,
+      "resistance01": 0.40857716165707597,
+      "profile": {
+        "topologyId": "three_way_balance",
+        "phaseCount": 3,
+        "reserve01": 0.683,
+        "stability": 1.017,
+        "recovery": 1.067,
+        "enduranceCapacity": 1.107
+      },
+      "acceptedCurrent01": 0.14866478956289472,
+      "pressure01": 0.1040653526940263,
+      "before": {
+        "imprint": 0.24110242146622607,
+        "strain": 0,
+        "void": 0
+      },
+      "after": {
+        "imprint": 0.24249885642585478,
+        "strain": 0,
+        "void": 0
+      },
+      "retainedDuringSession": true,
+      "materialTransferred": 0,
+      "progressionCredit": false,
+      "hostReceipt": false
+    },
+    "reserve": 0.683,
+    "ledger": {
+      "originRegion": "silt",
+      "count": 8,
+      "totalMass": 8,
+      "records": [
+        {
+          "id": "silt-grain-01",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-02",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-03",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-04",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-05",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-06",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-07",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        },
+        {
+          "id": "silt-grain-08",
+          "originRegion": "silt",
+          "originSignature": "silt_accumulation_connection",
+          "mass": 1,
+          "composition": {
+            "silt": 1
+          },
+          "owner": "environment",
+          "representation": "individual",
+          "historySequence": 0
+        }
+      ]
+    },
+    "receipts": 0
+  },
+  "captures": [
+    {
+      "group": "control",
+      "renderedCallsOmitted": 0,
+      "file": "control.png",
+      "bytes": 182033
+    },
+    {
+      "group": "silt-motes",
+      "renderedCallsOmitted": 46,
+      "file": "silt-motes.png",
+      "bytes": 181596
+    },
+    {
+      "group": "particles",
+      "renderedCallsOmitted": 96,
+      "file": "particles.png",
+      "bytes": 175151
+    },
+    {
+      "group": "core-shell",
+      "renderedCallsOmitted": 1,
+      "file": "core-shell.png",
+      "bytes": 181927
+    },
+    {
+      "group": "flow",
+      "renderedCallsOmitted": 7,
+      "file": "flow.png",
+      "bytes": 182014
+    }
+  ]
+}

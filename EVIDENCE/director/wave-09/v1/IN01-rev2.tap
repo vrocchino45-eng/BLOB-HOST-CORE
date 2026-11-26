@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: the integrated build accepts PI03 and rejects the old gameplay fingerprint
+ok 1 - the integrated build accepts PI03 and rejects the old gameplay fingerprint
+  ---
+  duration_ms: 19268.4843
+  type: 'test'
+  ...
+# Subtest: compatible descendants preserve the gameplay fingerprint and their own exact source commit
+ok 2 - compatible descendants preserve the gameplay fingerprint and their own exact source commit
+  ---
+  duration_ms: 1.9426
+  type: 'test'
+  ...
+# Subtest: reject dependency input changes and dirty or ignored gameplay inputs
+ok 3 - reject dependency input changes and dirty or ignored gameplay inputs
+  ---
+  duration_ms: 1.5854
+  type: 'test'
+  ...
+# Subtest: diagnostics separate missing identity, unrelated ancestry and unknown scenario revision
+ok 4 - diagnostics separate missing identity, unrelated ancestry and unknown scenario revision
+  ---
+  duration_ms: 2.7305
+  type: 'test'
+  ...
+# Subtest: maps exact substep, consequence and decoded presentation marker
+ok 5 - maps exact substep, consequence and decoded presentation marker
+  ---
+  duration_ms: 69.7078
+  type: 'test'
+  ...
+# Subtest: reports presentation delay and matched-frame gaps without fabricating success
+ok 6 - reports presentation delay and matched-frame gaps without fabricating success
+  ---
+  duration_ms: 2.0697
+  type: 'test'
+  ...
+# Subtest: admitted revision-two scenarios validate on PI03 ancestry
+ok 7 - admitted revision-two scenarios validate on PI03 ancestry
+  ---
+  duration_ms: 36.6954
+  type: 'test'
+  ...
+# Subtest: wrong build is incompatible
+ok 8 - wrong build is incompatible
+  ---
+  duration_ms: 2.7536
+  type: 'test'
+  ...
+# Subtest: malformed documents fail before setup
+ok 9 - malformed documents fail before setup
+  ---
+  duration_ms: 48.2618
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 57495.7741

@@ -1,0 +1,1513 @@
+TAP version 13
+# Subtest: Production registration keeps settlement opt-in and between Flow and telemetry
+ok 1 - Production registration keeps settlement opt-in and between Flow and telemetry
+  ---
+  duration_ms: 950.0516
+  type: 'test'
+  ...
+# Subtest: Selection, misalignment, dwell and receiver rejection each leave reserve equal to idle
+ok 2 - Selection, misalignment, dwell and receiver rejection each leave reserve equal to idle
+  ---
+  duration_ms: 684.3952
+  type: 'test'
+  ...
+# Subtest: A short delivery preserves same-step pressure and imprint and updates the next profile
+ok 3 - A short delivery preserves same-step pressure and imprint and updates the next profile
+  ---
+  duration_ms: 327.7484
+  type: 'test'
+  ...
+# Short delivery reserve 0.628800000 → 0.628709381 at I=0.183691, R=0.328881
+# Subtest: Sustained delivery preserves overload at matched profiles and costs only accepted work
+ok 4 - Sustained delivery preserves overload at matched profiles and costs only accepted work
+  ---
+  duration_ms: 633.1853
+  type: 'test'
+  ...
+# Full RT overload at step 71, total debit 0.008429644, reserve 0.749070356
+# Subtest: Returned resistance scales the cost, and the debit clips at low and empty reserve
+ok 5 - Returned resistance scales the cost, and the debit clips at low and empty reserve
+  ---
+  duration_ms: 196.7251
+  type: 'test'
+  ...
+# Returned resistance 0.328881 → 0.496881, debit 0.000090606 → 0.000102623
+# Subtest: Zero, stale, mismatched and replayed deliveries never debit reserve or replace last settlement
+ok 6 - Zero, stale, mismatched and replayed deliveries never debit reserve or replace last settlement
+  ---
+  duration_ms: 111.844
+  type: 'test'
+  ...
+# Subtest: Fixed and catch-up steps agree and the final debit survives release or unmount
+ok 7 - Fixed and catch-up steps agree and the final debit survives release or unmount
+  ---
+  duration_ms: 350.2781
+  type: 'test'
+  ...
+# Subtest: Legal radial placements feed real current and retain their existing profiles
+ok 8 - Legal radial placements feed real current and retain their existing profiles
+  ---
+  duration_ms: 347.5856
+  type: 'test'
+  ...
+# First membrane/deep delivery debits 0.000077472/0.000104885
+# Subtest: Mounted Flow leaves the subsequent authenticated B5-B Grave recovery unchanged
+ok 9 - Mounted Flow leaves the subsequent authenticated B5-B Grave recovery unchanged
+  ---
+  duration_ms: 2462.3928
+  type: 'test'
+  ...
+# Subtest: An authenticated release reduces only Stabilize demand during measured, marginal trace recovery
+ok 10 - An authenticated release reduces only Stabilize demand during measured, marginal trace recovery
+  ---
+  duration_ms: 2885.4438
+  type: 'test'
+  ...
+# Unarranged Core: reserve spent 0.000750000 → 0.000730795, Stabilize demand 0.2 → 0.195, recovery/s 0.431038/0.307884
+# Subtest: Intact, out-of-range, unheld, unread, unsettled and fully clipped traces emit no witness
+ok 11 - Intact, out-of-range, unheld, unread, unsettled and fully clipped traces emit no witness
+  ---
+  duration_ms: 3295.5289
+  type: 'test'
+  ...
+# Subtest: Earned Core sets the same recovery ceiling in both cases and suppresses false feedback
+ok 12 - Earned Core sets the same recovery ceiling in both cases and suppresses false feedback
+  ---
+  duration_ms: 751.3278
+  type: 'test'
+  ...
+# Earned Grave Core: reserve spent 0.000750000 → 0.000750000, Stabilize demand 0.2 → 0.2, recovery/s 0.483000/0.345000
+# Subtest: Two Core Work layouts retain their cost law, including concurrent verbs and paired coordination
+ok 13 - Two Core Work layouts retain their cost law, including concurrent verbs and paired coordination
+  ---
+  duration_ms: 2206.383
+  type: 'test'
+  ...
+# deep_core: reserve spent 0.000953908 → 0.000947094, Stabilize demand 0.142 → 0.138, recovery/s 0.431038/0.307884
+# membrane: reserve spent 0.007412986 → 0.007353078, Stabilize demand 0.31 → 0.302, recovery/s 0.431038/0.307884
+# Subtest: Catch-up and fixed steps agree, and one witness cannot reduce demand twice
+ok 14 - Catch-up and fixed steps agree, and one witness cannot reduce demand twice
+  ---
+  duration_ms: 588.8914
+  type: 'test'
+  ...
+# Three fixed or catch-up steps spend 0.002192384 reserve
+# Subtest: Grave clears live evidence on interruption and remounts from retained C2 memory
+ok 15 - Grave clears live evidence on interruption and remounts from retained C2 memory
+  ---
+  duration_ms: 263.2501
+  type: 'test'
+  ...
+# Subtest: Core rejects stale, foreign, mismatched and invalid witnesses independently of Grave
+ok 16 - Core rejects stale, foreign, mismatched and invalid witnesses independently of Grave
+  ---
+  duration_ms: 329.3481
+  type: 'test'
+  ...
+# Subtest: A qualified release drives one directional pair without moving or consuming matter
+ok 17 - A qualified release drives one directional pair without moving or consuming matter
+  ---
+  duration_ms: 1061.9251
+  type: 'test'
+  ...
+# Subtest: An ineligible release, forged transaction, or button-only attempt leaves Silt crests hidden
+ok 18 - An ineligible release, forged transaction, or button-only attempt leaves Silt crests hidden
+  ---
+  duration_ms: 406.6687
+  type: 'test'
+  ...
+# Subtest: A positive Vascular effect travels as two existing folds and ends on unmount
+ok 19 - A positive Vascular effect travels as two existing folds and ends on unmount
+  ---
+  duration_ms: 477.9182
+  type: 'test'
+  ...
+# Subtest: Vascular cadence and current match with the cascade renderer enabled or bypassed
+ok 20 - Vascular cadence and current match with the cascade renderer enabled or bypassed
+  ---
+  duration_ms: 937.7774
+  type: 'test'
+  ...
+# Subtest: Saturated and forged arrivals cannot create a Vascular or Grave one-shot
+ok 21 - Saturated and forged arrivals cannot create a Vascular or Grave one-shot
+  ---
+  duration_ms: 1006.6622
+  type: 'test'
+  ...
+# Subtest: Grave bends its authored rings on arrival and restores only the retained form after remount
+ok 22 - Grave bends its authored rings on arrival and restores only the retained form after remount
+  ---
+  duration_ms: 530.0013
+  type: 'test'
+  ...
+# Subtest: Labels and existing one-shot audio signatures reference the same render event IDs
+ok 23 - Labels and existing one-shot audio signatures reference the same render event IDs
+  ---
+  duration_ms: 340.4621
+  type: 'test'
+  ...
+# Subtest: Repeated crossings and label changes keep the same mesh and material allocations
+ok 24 - Repeated crossings and label changes keep the same mesh and material allocations
+  ---
+  duration_ms: 363.0361
+  type: 'test'
+  ...
+# 36 owner steps and 411 stable mesh allocations checked in 68.3 ms
+# Subtest: Idle keeps route guidance and canonical attention adds a single primary identity
+ok 25 - Idle keeps route guidance and canonical attention adds a single primary identity
+  ---
+  duration_ms: 37.2773
+  type: 'test'
+  ...
+# Subtest: Grip and contact outrank selection, while alignment loss and overload distinguish blocked delivery
+ok 26 - Grip and contact outrank selection, while alignment loss and overload distinguish blocked delivery
+  ---
+  duration_ms: 15.2906
+  type: 'test'
+  ...
+# Subtest: T1-A remains the actionable instruction near the fold and yields to active interaction farther away
+ok 27 - T1-A remains the actionable instruction near the fold and yields to active interaction farther away
+  ---
+  duration_ms: 5.1142
+  type: 'test'
+  ...
+# Subtest: Hub direct-entry guidance and Core Work retain their existing action slots
+ok 28 - Hub direct-entry guidance and Core Work retain their existing action slots
+  ---
+  duration_ms: 2.8182
+  type: 'test'
+  ...
+# Subtest: Only a qualified Silt release outranks passive identity and keeps provenance in the notes
+ok 29 - Only a qualified Silt release outranks passive identity and keeps provenance in the notes
+  ---
+  duration_ms: 6.9084
+  type: 'test'
+  ...
+# Subtest: Vascular presents a confirmed membrane change and retains history without replay on remount
+ok 30 - Vascular presents a confirmed membrane change and retains history without replay on remount
+  ---
+  duration_ms: 4.7131
+  type: 'test'
+  ...
+# Subtest: Grave remembers the same Silt source and distinguishes available recovery from applied recovery
+ok 31 - Grave remembers the same Silt source and distinguishes available recovery from applied recovery
+  ---
+  duration_ms: 3.0013
+  type: 'test'
+  ...
+# Subtest: The Silt owner controls the boost cue in Reservoir and Veins and its expiration
+ok 32 - The Silt owner controls the boost cue in Reservoir and Veins and its expiration
+  ---
+  duration_ms: 2.371
+  type: 'test'
+  ...
+# Subtest: A verified local arrival occupies the spare secondary slot independently of Pulse
+ok 33 - A verified local arrival occupies the spare secondary slot independently of Pulse
+  ---
+  duration_ms: 3.1109
+  type: 'test'
+  ...
+# Subtest: A settled phase, Garden placement and zero imprint cannot report an arrival
+ok 34 - A settled phase, Garden placement and zero imprint cannot report an arrival
+  ---
+  duration_ms: 2.2433
+  type: 'test'
+  ...
+# Subtest: Arrival expiry and same-session remount keep only the retained Garden imprint
+ok 35 - Arrival expiry and same-session remount keep only the retained Garden imprint
+  ---
+  duration_ms: 3.2441
+  type: 'test'
+  ...
+# Subtest: Return-fold, safety and grip guidance reserve their priority during an arrival
+ok 36 - Return-fold, safety and grip guidance reserve their priority during an arrival
+  ---
+  duration_ms: 3.5161
+  type: 'test'
+  ...
+# Subtest: F1 guidance and C2 live consequences or history take precedence over Garden feedback
+ok 37 - F1 guidance and C2 live consequences or history take precedence over Garden feedback
+  ---
+  duration_ms: 4.6831
+  type: 'test'
+  ...
+# Subtest: Reading either label setting leaves owner state intact and labels off suppresses environmental text
+ok 38 - Reading either label setting leaves owner state intact and labels off suppresses environmental text
+  ---
+  duration_ms: 6.0048
+  type: 'test'
+  ...
+# PASS hub_to_grave direct entry without Grave
+# PASS hub_to_grave compatibility awake
+# PASS hub_to_grave rejects unprepared destination
+# PASS hub_to_grave rejects distant interaction
+# PASS hub_to_grave rejects inactive Hub
+# PASS hub_to_vascular direct entry without Grave
+# PASS hub_to_vascular compatibility awake
+# PASS hub_to_vascular rejects unprepared destination
+# PASS hub_to_vascular rejects distant interaction
+# PASS hub_to_vascular rejects inactive Hub
+# PASS hub_to_silt direct entry without Grave
+# PASS hub_to_silt compatibility awake
+# PASS hub_to_silt rejects unprepared destination
+# PASS hub_to_silt rejects distant interaction
+# PASS hub_to_silt rejects inactive Hub
+# PASS grave_return retains owner
+# PASS vascular_return retains owner
+# PASS silt_return retains owner
+# PASS hub_comb_entry retains owner
+# C63 readiness integration: PASS (19 assertions). This is a logic-level test, not a browser traversal test.
+# Subtest: scripts\\testC63RouteReadiness.mjs
+ok 5 - scripts\\testC63RouteReadiness.mjs
+  ---
+  duration_ms: 774.5447
+  type: 'test'
+  ...
+# Subtest: eligible neutral coherence settles only the residual with measured physical response
+ok 40 - eligible neutral coherence settles only the residual with measured physical response
+  ---
+  duration_ms: 1045.4787
+  type: 'test'
+  ...
+# {"factor":1,"before":0.085267,"remaining":0.06226699999999999,"removed":0.023000000000000007,"integrity":0.91,"previous":{"swirl":0.013152983359458855,"viscosity":0.30355610001090555,"pressure":0.5732807500163583,"acceleration":1.02976796},"actual":{"swirl":0.009605085377032436,"viscosity":0.2980361000109055,"pressure":0.5696007500163582,"acceleration":1.0325279600000001},"ordinaryReserve":0.9973090277777777}
+# Subtest: eligible maximum coherence settles only the residual with measured physical response
+ok 41 - eligible maximum coherence settles only the residual with measured physical response
+  ---
+  duration_ms: 515.4574
+  type: 'test'
+  ...
+# {"factor":1.1,"before":0.085267,"remaining":0.05996699999999999,"removed":0.025300000000000003,"integrity":0.91,"previous":{"swirl":0.013152983359458855,"viscosity":0.30355610001090555,"pressure":0.5732807500163583,"acceleration":1.02976796},"actual":{"swirl":0.009250295578789768,"viscosity":0.29748410001090553,"pressure":0.5692327500163582,"acceleration":1.03280396},"ordinaryReserve":0.9996087803816768}
+# Subtest: zero residual matches the original ineligible return exactly
+ok 42 - zero residual matches the original ineligible return exactly
+  ---
+  duration_ms: 267.6067
+  type: 'test'
+  ...
+# Subtest: Stabilize released matches the original ineligible return exactly
+ok 43 - Stabilize released matches the original ineligible return exactly
+  ---
+  duration_ms: 232.3534
+  type: 'test'
+  ...
+# Subtest: invalid current distance matches the original ineligible return exactly
+ok 44 - invalid current distance matches the original ineligible return exactly
+  ---
+  duration_ms: 220.3666
+  type: 'test'
+  ...
+# Subtest: outside authored current but inside the native fringe matches the original ineligible return exactly
+ok 45 - outside authored current but inside the native fringe matches the original ineligible return exactly
+  ---
+  duration_ms: 191.9252
+  type: 'test'
+  ...
+# Subtest: outside authored interaction range matches the original ineligible return exactly
+ok 46 - outside authored interaction range matches the original ineligible return exactly
+  ---
+  duration_ms: 172.2393
+  type: 'test'
+  ...
+# Subtest: forming topology matches the original ineligible return exactly
+ok 47 - forming topology matches the original ineligible return exactly
+  ---
+  duration_ms: 154.1022
+  type: 'test'
+  ...
+# Subtest: topology identity mismatch matches the original ineligible return exactly
+ok 48 - topology identity mismatch matches the original ineligible return exactly
+  ---
+  duration_ms: 163.2325
+  type: 'test'
+  ...
+# Subtest: debug anatomy in the sample matches the original ineligible return exactly
+ok 49 - debug anatomy in the sample matches the original ineligible return exactly
+  ---
+  duration_ms: 142.8437
+  type: 'test'
+  ...
+# Subtest: debug growth flag matches the original ineligible return exactly
+ok 50 - debug growth flag matches the original ineligible return exactly
+  ---
+  duration_ms: 167.974
+  type: 'test'
+  ...
+# Subtest: missing earned return record matches the original ineligible return exactly
+ok 51 - missing earned return record matches the original ineligible return exactly
+  ---
+  duration_ms: 155.4182
+  type: 'test'
+  ...
+# Subtest: wrong return owner matches the original ineligible return exactly
+ok 52 - wrong return owner matches the original ineligible return exactly
+  ---
+  duration_ms: 143.6885
+  type: 'test'
+  ...
+# Subtest: never crossed the return matches the original ineligible return exactly
+ok 53 - never crossed the return matches the original ineligible return exactly
+  ---
+  duration_ms: 131.0991
+  type: 'test'
+  ...
+# Subtest: missing original route completion matches the original ineligible return exactly
+ok 54 - missing original route completion matches the original ineligible return exactly
+  ---
+  duration_ms: 127.7717
+  type: 'test'
+  ...
+# Subtest: unready return matches the original ineligible return exactly
+ok 55 - unready return matches the original ineligible return exactly
+  ---
+  duration_ms: 142.7255
+  type: 'test'
+  ...
+# Subtest: unearned growth matches the original ineligible return exactly
+ok 56 - unearned growth matches the original ineligible return exactly
+  ---
+  duration_ms: 172.9211
+  type: 'test'
+  ...
+# Subtest: foreign Host sample matches the original ineligible return exactly
+ok 57 - foreign Host sample matches the original ineligible return exactly
+  ---
+  duration_ms: 142.256
+  type: 'test'
+  ...
+# Subtest: foreign cell sample matches the original ineligible return exactly
+ok 58 - foreign cell sample matches the original ineligible return exactly
+  ---
+  duration_ms: 149.6034
+  type: 'test'
+  ...
+# Subtest: stale mount sample matches the original ineligible return exactly
+ok 59 - stale mount sample matches the original ineligible return exactly
+  ---
+  duration_ms: 194.1858
+  type: 'test'
+  ...
+# Subtest: inactive runtime mount matches the original ineligible return exactly
+ok 60 - inactive runtime mount matches the original ineligible return exactly
+  ---
+  duration_ms: 141.1675
+  type: 'test'
+  ...
+# Subtest: stale frame sample matches the original ineligible return exactly
+ok 61 - stale frame sample matches the original ineligible return exactly
+  ---
+  duration_ms: 177.7895
+  type: 'test'
+  ...
+# Subtest: stale substep sample matches the original ineligible return exactly
+ok 62 - stale substep sample matches the original ineligible return exactly
+  ---
+  duration_ms: 131.1808
+  type: 'test'
+  ...
+# Subtest: stale sample time matches the original ineligible return exactly
+ok 63 - stale sample time matches the original ineligible return exactly
+  ---
+  duration_ms: 129.8686
+  type: 'test'
+  ...
+# Subtest: invalid coherence matches the original ineligible return exactly
+ok 64 - invalid coherence matches the original ineligible return exactly
+  ---
+  duration_ms: 125.959
+  type: 'test'
+  ...
+# Subtest: Core Work input matches the original ineligible return exactly
+ok 65 - Core Work input matches the original ineligible return exactly
+  ---
+  duration_ms: 147.6902
+  type: 'test'
+  ...
+# Subtest: Core Work entry matches the original ineligible return exactly
+ok 66 - Core Work entry matches the original ineligible return exactly
+  ---
+  duration_ms: 128.3264
+  type: 'test'
+  ...
+# Subtest: inspection matches the original ineligible return exactly
+ok 67 - inspection matches the original ineligible return exactly
+  ---
+  duration_ms: 130.5169
+  type: 'test'
+  ...
+# Subtest: held Core Work piece matches the original ineligible return exactly
+ok 68 - held Core Work piece matches the original ineligible return exactly
+  ---
+  duration_ms: 152.7281
+  type: 'test'
+  ...
+# Subtest: open Status Page matches the original ineligible return exactly
+ok 69 - open Status Page matches the original ineligible return exactly
+  ---
+  duration_ms: 204.88
+  type: 'test'
+  ...
+# Subtest: Native cadence and recovery are identical before completion and on the completion step
+ok 70 - Native cadence and recovery are identical before completion and on the completion step
+  ---
+  duration_ms: 9099.6919
+  type: 'test'
+  ...
+# Subtest: Actual removal clips to zero and subsequent holds show no new recovery
+ok 71 - Actual removal clips to zero and subsequent holds show no new recovery
+  ---
+  duration_ms: 84.3403
+  type: 'test'
+  ...
+# Subtest: One prior sample can settle at most once per frame/substep even if replayed as a copy
+ok 72 - One prior sample can settle at most once per frame/substep even if replayed as a copy
+  ---
+  duration_ms: 102.0543
+  type: 'test'
+  ...
+# Subtest: Unmount and remount preserve residual and require a new mounted prior sample
+ok 73 - Unmount and remount preserve residual and require a new mounted prior sample
+  ---
+  duration_ms: 91.4142
+  type: 'test'
+  ...
+# Subtest: Two fixed steps equal two catch-up substeps with distinct recovery witnesses
+ok 74 - Two fixed steps equal two catch-up substeps with distinct recovery witnesses
+  ---
+  duration_ms: 187.8764
+  type: 'test'
+  ...
+# Subtest: Matched scattered Vascular step uses the real 2:1:0 and 0:0:3 Core profiles
+ok 75 - Matched scattered Vascular step uses the real 2:1:0 and 0:0:3 Core profiles
+  ---
+  duration_ms: 618.1939
+  type: 'test'
+  ...
+# {"deep":{"eligible":true,"factor":1.1,"turbulenceRemoved":0.02529999999999999,"integrityRestored":0.01870000000000005,"neutralReason":null},"membrane":{"eligible":true,"factor":1,"turbulenceRemoved":0.02300000000000002,"integrityRestored":0.017000000000000015,"neutralReason":"coherence_at_or_below_neutral"}}
+# Subtest: Release clears the last live evidence and restoring LT reads a fresh sample
+ok 76 - Release clears the last live evidence and restoring LT reads a fresh sample
+  ---
+  duration_ms: 162.6106
+  type: 'test'
+  ...
+# Subtest: Out-of-range hold contributes no recovery
+ok 77 - Out-of-range hold contributes no recovery
+  ---
+  duration_ms: 156.1485
+  type: 'test'
+  ...
+# Subtest: The native Stabilize fringe retains its original rate outside the authored current
+ok 78 - The native Stabilize fringe retains its original rate outside the authored current
+  ---
+  duration_ms: 154.3234
+  type: 'test'
+  ...
+# Subtest: inspection preserves the original reweave rate
+ok 79 - inspection preserves the original reweave rate
+  ---
+  duration_ms: 101.8829
+  type: 'test'
+  ...
+# Subtest: Core Work preserves the original reweave rate
+ok 80 - Core Work preserves the original reweave rate
+  ---
+  duration_ms: 104.0444
+  type: 'test'
+  ...
+# Subtest: skipped simulation frame preserves the original reweave rate
+ok 81 - skipped simulation frame preserves the original reweave rate
+  ---
+  duration_ms: 85.7222
+  type: 'test'
+  ...
+# Subtest: wrong timestamp preserves the original reweave rate
+ok 82 - wrong timestamp preserves the original reweave rate
+  ---
+  duration_ms: 96.8504
+  type: 'test'
+  ...
+# Subtest: foreign Host preserves the original reweave rate
+ok 83 - foreign Host preserves the original reweave rate
+  ---
+  duration_ms: 84.0974
+  type: 'test'
+  ...
+# Subtest: foreign cell preserves the original reweave rate
+ok 84 - foreign cell preserves the original reweave rate
+  ---
+  duration_ms: 94.6273
+  type: 'test'
+  ...
+# Subtest: invalid Core coherence preserves the original reweave rate
+ok 85 - invalid Core coherence preserves the original reweave rate
+  ---
+  duration_ms: 91.9335
+  type: 'test'
+  ...
+# Subtest: mount sequence mismatch preserves the original reweave rate
+ok 86 - mount sequence mismatch preserves the original reweave rate
+  ---
+  duration_ms: 77.368
+  type: 'test'
+  ...
+# Subtest: unmounted authority preserves the original reweave rate
+ok 87 - unmounted authority preserves the original reweave rate
+  ---
+  duration_ms: 65.5548
+  type: 'test'
+  ...
+# Subtest: foreign mount cell preserves the original reweave rate
+ok 88 - foreign mount cell preserves the original reweave rate
+  ---
+  duration_ms: 71.9632
+  type: 'test'
+  ...
+# Subtest: debug-seeded sample preserves the original reweave rate
+ok 89 - debug-seeded sample preserves the original reweave rate
+  ---
+  duration_ms: 78.4974
+  type: 'test'
+  ...
+# Subtest: debug enabled on this step preserves the original reweave rate
+ok 90 - debug enabled on this step preserves the original reweave rate
+  ---
+  duration_ms: 100.9215
+  type: 'test'
+  ...
+# Subtest: Forming Core and non-scattered circulation use native recovery
+ok 91 - Forming Core and non-scattered circulation use native recovery
+  ---
+  duration_ms: 170.0987
+  type: 'test'
+  ...
+# Subtest: Core Work exit needs a world-mode sample published after the suspension
+ok 92 - Core Work exit needs a world-mode sample published after the suspension
+  ---
+  duration_ms: 74.3216
+  type: 'test'
+  ...
+# Subtest: Unmount clears evidence and remount rejects the previous lifetime until a fresh owner sample
+ok 93 - Unmount clears evidence and remount rejects the previous lifetime until a fresh owner sample
+  ---
+  duration_ms: 68.783
+  type: 'test'
+  ...
+# Subtest: Legacy prior-step reader remains compatible when no mount stamp exists
+ok 94 - Legacy prior-step reader remains compatible when no mount stamp exists
+  ---
+  duration_ms: 69.7909
+  type: 'test'
+  ...
+# Subtest: Catch-up substeps match fixed-step recovery and reject an out-of-order prior sample
+ok 95 - Catch-up substeps match fixed-step recovery and reject an out-of-order prior sample
+  ---
+  duration_ms: 138.3213
+  type: 'test'
+  ...
+# Subtest: Evidence reports actual physical clipping at the turbulence and integrity bounds
+ok 96 - Evidence reports actual physical clipping at the turbulence and integrity bounds
+  ---
+  duration_ms: 160.7378
+  type: 'test'
+  ...
+# Subtest: Reweave leaves receipts, phase, credits and return permission with their original owners
+ok 97 - Reweave leaves receipts, phase, credits and return permission with their original owners
+  ---
+  duration_ms: 63.7768
+  type: 'test'
+  ...
+# Subtest: Post-read recovery and valve eligibility retain their original behavior
+ok 98 - Post-read recovery and valve eligibility retain their original behavior
+  ---
+  duration_ms: 229.5666
+  type: 'test'
+  ...
+# Subtest: Pristine and saturated Shelf retain the exact first-contact and full-imprint bounds
+ok 99 - Pristine and saturated Shelf retain the exact first-contact and full-imprint bounds
+  ---
+  duration_ms: 2107.5497
+  type: 'test'
+  ...
+# Subtest: Matched 0.50 imprint halves retention while pressure, current, resistance and immediate debit match CH01-P1
+ok 100 - Matched 0.50 imprint halves retention while pressure, current, resistance and immediate debit match CH01-P1
+  ---
+  duration_ms: 436.7002
+  type: 'test'
+  ...
+# Subtest: Release and same-session remount retain ownership without changing materials or permissions
+ok 101 - Release and same-session remount retain ownership without changing materials or permissions
+  ---
+  duration_ms: 868.3098
+  type: 'test'
+  ...
+# Subtest: Shelf preserves imprint and reserve when the crown is out_of_reach
+ok 102 - Shelf preserves imprint and reserve when the crown is out_of_reach
+  ---
+  duration_ms: 831.0719
+  type: 'test'
+  ...
+# Subtest: Shelf preserves imprint and reserve when the crown is obstructed
+ok 103 - Shelf preserves imprint and reserve when the crown is obstructed
+  ---
+  duration_ms: 287.1583
+  type: 'test'
+  ...
+# Subtest: Receiver rejects stale hostId before retaining imprint
+ok 104 - Receiver rejects stale hostId before retaining imprint
+  ---
+  duration_ms: 209.8675
+  type: 'test'
+  ...
+# Subtest: Receiver rejects stale cellId before retaining imprint
+ok 105 - Receiver rejects stale cellId before retaining imprint
+  ---
+  duration_ms: 182.6446
+  type: 'test'
+  ...
+# Subtest: Receiver rejects stale mountSequence before retaining imprint
+ok 106 - Receiver rejects stale mountSequence before retaining imprint
+  ---
+  duration_ms: 221.6066
+  type: 'test'
+  ...
+# Subtest: Receiver rejects stale substep before retaining imprint
+ok 107 - Receiver rejects stale substep before retaining imprint
+  ---
+  duration_ms: 233.2997
+  type: 'test'
+  ...
+# Subtest: Forming topology retains the existing neutral performance at an imprinted Shelf
+ok 108 - Forming topology retains the existing neutral performance at an imprinted Shelf
+  ---
+  duration_ms: 234.3152
+  type: 'test'
+  ...
+# Subtest: Fixed and catch-up simulation agree on imprint, physical delivery and reserve
+ok 109 - Fixed and catch-up simulation agree on imprint, physical delivery and reserve
+  ---
+  duration_ms: 742.2782
+  type: 'test'
+  ...
+# Subtest: Deep Memory Knot redirects 0.00225 of earned trace capacity and leaves the full trace intact
+ok 110 - Deep Memory Knot redirects 0.00225 of earned trace capacity and leaves the full trace intact
+  ---
+  duration_ms: 1128.1703
+  type: 'test'
+  ...
+# Subtest: Inner and membrane Grave placements keep native recovery at the same radial counts
+ok 111 - Inner and membrane Grave placements keep native recovery at the same radial counts
+  ---
+  duration_ms: 795.0431
+  type: 'test'
+  ...
+# Subtest: The redirected amount follows the authored trace rate and clips to remaining recoil
+ok 112 - The redirected amount follows the authored trace rate and clips to remaining recoil
+  ---
+  duration_ms: 336.3015
+  type: 'test'
+  ...
+# Subtest: Before Grave II resolution, recoil and trace follow the native authored rates
+ok 113 - Before Grave II resolution, recoil and trace follow the native authored rates
+  ---
+  duration_ms: 95.2481
+  type: 'test'
+  ...
+# Subtest: A completed resonance publication without an authentic Host resolution stays neutral
+ok 114 - A completed resonance publication without an authentic Host resolution stays neutral
+  ---
+  duration_ms: 161.0703
+  type: 'test'
+  ...
+# Subtest: Native fallback for unearned Grave
+ok 115 - Native fallback for unearned Grave
+  ---
+  duration_ms: 145.7606
+  type: 'test'
+  ...
+# Subtest: Native fallback for already full trace required
+ok 116 - Native fallback for already full trace required
+  ---
+  duration_ms: 162.5452
+  type: 'test'
+  ...
+# Subtest: Native fallback for unsafe recoil before native settling
+ok 117 - Native fallback for unsafe recoil before native settling
+  ---
+  duration_ms: 141.4593
+  type: 'test'
+  ...
+# Subtest: Native fallback for released Stabilize
+ok 118 - Native fallback for released Stabilize
+  ---
+  duration_ms: 144.7398
+  type: 'test'
+  ...
+# Subtest: Native fallback for outside authored range
+ok 119 - Native fallback for outside authored range
+  ---
+  duration_ms: 135.5396
+  type: 'test'
+  ...
+# Subtest: Native fallback for unread residue
+ok 120 - Native fallback for unread residue
+  ---
+  duration_ms: 123.2358
+  type: 'test'
+  ...
+# Subtest: Native fallback for unsettled residue
+ok 121 - Native fallback for unsettled residue
+  ---
+  duration_ms: 135.1118
+  type: 'test'
+  ...
+# Subtest: Native fallback for return fold pending
+ok 122 - Native fallback for return fold pending
+  ---
+  duration_ms: 163.341
+  type: 'test'
+  ...
+# Subtest: Native fallback for foreign resolution
+ok 123 - Native fallback for foreign resolution
+  ---
+  duration_ms: 124.2982
+  type: 'test'
+  ...
+# Subtest: Native fallback for forming topology
+ok 124 - Native fallback for forming topology
+  ---
+  duration_ms: 220.2121
+  type: 'test'
+  ...
+# Subtest: Native fallback for debug-seeded Core
+ok 125 - Native fallback for debug-seeded Core
+  ---
+  duration_ms: 164.3159
+  type: 'test'
+  ...
+# Subtest: Native fallback for inspection
+ok 126 - Native fallback for inspection
+  ---
+  duration_ms: 214.8953
+  type: 'test'
+  ...
+# Subtest: Native fallback for Core Work
+ok 127 - Native fallback for Core Work
+  ---
+  duration_ms: 168.0323
+  type: 'test'
+  ...
+# Subtest: Native fallback for status page
+ok 128 - Native fallback for status page
+  ---
+  duration_ms: 165.7695
+  type: 'test'
+  ...
+# Subtest: Native fallback for transition in progress
+ok 129 - Native fallback for transition in progress
+  ---
+  duration_ms: 159.8522
+  type: 'test'
+  ...
+# Subtest: A prior sample with invalid sampledFrame cannot authorize extra settling
+ok 130 - A prior sample with invalid sampledFrame cannot authorize extra settling
+  ---
+  duration_ms: 189.8118
+  type: 'test'
+  ...
+# Subtest: A prior sample with invalid sampledSubstep cannot authorize extra settling
+ok 131 - A prior sample with invalid sampledSubstep cannot authorize extra settling
+  ---
+  duration_ms: 135.2379
+  type: 'test'
+  ...
+# Subtest: A prior sample with invalid hostId cannot authorize extra settling
+ok 132 - A prior sample with invalid hostId cannot authorize extra settling
+  ---
+  duration_ms: 133.4273
+  type: 'test'
+  ...
+# Subtest: A prior sample with invalid cellId cannot authorize extra settling
+ok 133 - A prior sample with invalid cellId cannot authorize extra settling
+  ---
+  duration_ms: 130.7453
+  type: 'test'
+  ...
+# Subtest: A prior sample with invalid mountSequence cannot authorize extra settling
+ok 134 - A prior sample with invalid mountSequence cannot authorize extra settling
+  ---
+  duration_ms: 124.9552
+  type: 'test'
+  ...
+# Subtest: A prior sample with invalid debugAnatomy cannot authorize extra settling
+ok 135 - A prior sample with invalid debugAnatomy cannot authorize extra settling
+  ---
+  duration_ms: 104.9315
+  type: 'test'
+  ...
+# Subtest: Leaving and returning preserves the receipt and requires a fresh mounted prior sample
+ok 136 - Leaving and returning preserves the receipt and requires a fresh mounted prior sample
+  ---
+  duration_ms: 129.2721
+  type: 'test'
+  ...
+# Subtest: Fixed and catch-up steps deliver the same recoil, integrity and reserve results
+ok 137 - Fixed and catch-up steps deliver the same recoil, integrity and reserve results
+  ---
+  duration_ms: 300.9924
+  type: 'test'
+  ...
+# Subtest: The accepted Grave II outcome still reaches Silt once with the same pressure echo and mass
+ok 138 - The accepted Grave II outcome still reaches Silt once with the same pressure echo and mass
+  ---
+  duration_ms: 364.2742
+  type: 'test'
+  ...
+# Subtest: The opt-in InputSystem latches calibrated RT, preserves B Cancel and requires release on reconnect
+ok 139 - The opt-in InputSystem latches calibrated RT, preserves B Cancel and requires release on reconnect
+  ---
+  duration_ms: 68.7888
+  type: 'test'
+  ...
+# Subtest: Near World input is opt-in, edge-triggered and leaves modal controls and held Flow intact
+ok 140 - Near World input is opt-in, edge-triggered and leaves modal controls and held Flow intact
+  ---
+  duration_ms: 41.2201
+  type: 'test'
+  ...
+# Subtest: Near World preserves the gameplay sightline, clears authored walls and suspends during inspection
+ok 141 - Near World preserves the gameplay sightline, clears authored walls and suspends during inspection
+  ---
+  duration_ms: 48.9347
+  type: 'test'
+  ...
+# Subtest: Far and Near views produce identical receiver samples and retained site state for the same held action
+ok 142 - Far and Near views produce identical receiver samples and retained site state for the same held action
+  ---
+  duration_ms: 863.7199
+  type: 'test'
+  ...
+# Subtest: The crown only reaches the authored disc from its exposed face and rejects obstruction
+ok 143 - The crown only reaches the authored disc from its exposed face and rejects obstruction
+  ---
+  duration_ms: 123.6169
+  type: 'test'
+  ...
+# Subtest: S01 blocked Shelf geometry stops before the nearest hit while the physical tip stays extended
+ok 144 - S01 blocked Shelf geometry stops before the nearest hit while the physical tip stays extended
+  ---
+  duration_ms: 240.7075
+  type: 'test'
+  ...
+# Subtest: S01 angled obstructions clear every visible crown vertex in Far and Near World
+ok 145 - S01 angled obstructions clear every visible crown vertex in Far and Near World
+  ---
+  duration_ms: 706.1034
+  type: 'test'
+  ...
+# Subtest: S01 rendering preserves blocked and accepted state, reserve, receiver and telemetry across context exits
+ok 146 - S01 rendering preserves blocked and accepted state, reserve, receiver and telemetry across context exits
+  ---
+  duration_ms: 2511.3239
+  type: 'test'
+  ...
+# Subtest: The territory owner rejects forged, stale, duplicate and post-handoff samples
+ok 147 - The territory owner rejects forged, stale, duplicate and post-handoff samples
+  ---
+  duration_ms: 84.155
+  type: 'test'
+  ...
+# Subtest: Accepted current bounds strain and pressure, preserves mass and progression, then recovers
+ok 148 - Accepted current bounds strain and pressure, preserves mass and progression, then recovers
+  ---
+  duration_ms: 400.8864
+  type: 'test'
+  ...
+# Subtest: Catch-up substeps match fixed steps and Core arrangements matter across 3, 6 and 12
+ok 149 - Catch-up substeps match fixed steps and Core arrangements matter across 3, 6 and 12
+  ---
+  duration_ms: 630.2109
+  type: 'test'
+  ...
+# Subtest: A continuous approach from the Silt entry fits the authored movement envelope
+ok 150 - A continuous approach from the Silt entry fits the authored movement envelope
+  ---
+  duration_ms: 38.1558
+  type: 'test'
+  ...
+# Subtest: A normal mounted Silt approach acquires the same visible patch and delivers current
+ok 151 - A normal mounted Silt approach acquires the same visible patch and delivers current
+  ---
+  duration_ms: 931.1993
+  type: 'test'
+  ...
+# Subtest: Off-axis world movement reaches the same Shelf approach with Far and Near framing
+ok 152 - Off-axis world movement reaches the same Shelf approach with Far and Near framing
+  ---
+  duration_ms: 848.6675
+  type: 'test'
+  ...
+# Subtest: Shelf touch is distinct from delivery and each accepted sample drives the visual circuit
+ok 153 - Shelf touch is distinct from delivery and each accepted sample drives the visual circuit
+  ---
+  duration_ms: 40.7373
+  type: 'test'
+  ...
+# Subtest: Release, obstruction, retarget, and Core Work clear live Flow cues on the first sample
+ok 154 - Release, obstruction, retarget, and Core Work clear live Flow cues on the first sample
+  ---
+  duration_ms: 282.2292
+  type: 'test'
+  ...
+# Subtest: The Shelf retains its owner-derived collar mark after an actual route unmount and remount
+ok 155 - The Shelf retains its owner-derived collar mark after an actual route unmount and remount
+  ---
+  duration_ms: 275.5414
+  type: 'test'
+  ...
+# Subtest: The mounted Silt route still reads pressure, opens the ribs, accepts the packet and readies return
+ok 156 - The mounted Silt route still reads pressure, opens the ribs, accepts the packet and readies return
+  ---
+  duration_ms: 955.8084
+  type: 'test'
+  ...
+# Subtest: The existing Silt seat accepts and extracts one gripped identity without changing mass
+ok 157 - The existing Silt seat accepts and extracts one gripped identity without changing mass
+  ---
+  duration_ms: 137.1307
+  type: 'test'
+  ...
+# Subtest: Optional labels and exports use the owner result and distinguish live delivery from history
+ok 158 - Optional labels and exports use the owner result and distinguish live delivery from history
+  ---
+  duration_ms: 237.4711
+  type: 'test'
+  ...
+# Subtest: Flow labels explain selection, range, alignment, obstruction and receiver-confirmed delivery
+ok 159 - Flow labels explain selection, range, alignment, obstruction and receiver-confirmed delivery
+  ---
+  duration_ms: 166.0421
+  type: 'test'
+  ...
+# Subtest: Session exports deduplicate Flow transitions while retaining frame, substep and receiver identity
+ok 160 - Session exports deduplicate Flow transitions while retaining frame, substep and receiver identity
+  ---
+  duration_ms: 317.7377
+  type: 'test'
+  ...
+# Subtest: The default and explicit disabled routes produce identical positions and state
+ok 161 - The default and explicit disabled routes produce identical positions and state
+  ---
+  duration_ms: 1712.2179
+  type: 'test'
+  ...
+# Subtest: A mature bud reduces speed with distance falloff and never reverses the increment
+ok 162 - A mature bud reduces speed with distance falloff and never reverses the increment
+  ---
+  duration_ms: 1378.2743
+  type: 'test'
+  ...
+# Subtest: Native maturation supports resistance after the earned route and preserves the actual Hub crossing
+ok 163 - Native maturation supports resistance after the earned route and preserves the actual Hub crossing
+  ---
+  duration_ms: 3312.2058
+  type: 'test'
+  ...
+# Subtest: Growing, recycled, dormant and no-longer-owned sources do not slow another grain
+ok 164 - Growing, recycled, dormant and no-longer-owned sources do not slow another grain
+  ---
+  duration_ms: 1990.3699
+  type: 'test'
+  ...
+# Subtest: Only one eligible free receiver is selected in stable grain identity order
+ok 165 - Only one eligible free receiver is selected in stable grain identity order
+  ---
+  duration_ms: 110.56
+  type: 'test'
+  ...
+# Subtest: Held material and the pending return-goal grain are excluded from B3
+ok 166 - Held material and the pending return-goal grain are excluded from B3
+  ---
+  duration_ms: 134.2444
+  type: 'test'
+  ...
+# Subtest: Native circulation and a verified B1 arrival are identical with the flag enabled
+ok 167 - Native circulation and a verified B1 arrival are identical with the flag enabled
+  ---
+  duration_ms: 218.7762
+  type: 'test'
+  ...
+# Subtest: Removing the source mesh from the scene leaves the full resistance trace identical
+ok 168 - Removing the source mesh from the scene leaves the full resistance trace identical
+  ---
+  duration_ms: 407.0357
+  type: 'test'
+  ...
+# Subtest: Fixed steps and runtime catch-up agree while the free grain crosses the resistance zone
+ok 169 - Fixed steps and runtime catch-up agree while the free grain crosses the resistance zone
+  ---
+  duration_ms: 348.369
+  type: 'test'
+  ...
+# Subtest: The grain exits without stopping and its ordinary recovery resumes immediately
+ok 170 - The grain exits without stopping and its ordinary recovery resumes immediately
+  ---
+  duration_ms: 291.8513
+  type: 'test'
+  ...
+# Subtest: Unmount pauses trajectories and an old release cannot supply the new mount
+ok 171 - Unmount pauses trajectories and an old release cannot supply the new mount
+  ---
+  duration_ms: 129.3526
+  type: 'test'
+  ...
+# Subtest: A legitimately awakened grain arrives and settles inside the authored Garden with neutral input
+ok 172 - A legitimately awakened grain arrives and settles inside the authored Garden with neutral input
+  ---
+  duration_ms: 1783.3371
+  type: 'test'
+  ...
+# Subtest: Matching native settled events outside the Garden do not deliver and provide a no-delivery control
+ok 173 - Matching native settled events outside the Garden do not deliver and provide a no-delivery control
+  ---
+  duration_ms: 1979.9431
+  type: 'test'
+  ...
+# Subtest: An in-pocket settled pose cannot substitute for an outside resolved approach or a different grain
+ok 174 - An in-pocket settled pose cannot substitute for an outside resolved approach or a different grain
+  ---
+  duration_ms: 1393.1543
+  type: 'test'
+  ...
+# Subtest: A dormant reservoir does not awaken or create a delivery under neutral input
+ok 175 - A dormant reservoir does not awaken or create a delivery under neutral input
+  ---
+  duration_ms: 723.6641
+  type: 'test'
+  ...
+# Subtest: Held, seated and disturbed free grains cannot qualify even at the receiving pocket
+ok 176 - Held, seated and disturbed free grains cannot qualify even at the receiving pocket
+  ---
+  duration_ms: 526.2339
+  type: 'test'
+  ...
+# Subtest: Duplicate native event observation cannot increase imprint or restart the arrival cue
+ok 177 - Duplicate native event observation cannot increase imprint or restart the arrival cue
+  ---
+  duration_ms: 612.2225
+  type: 'test'
+  ...
+# Subtest: A settled event witnessed under another frame, substep, cell or mount is stale
+ok 178 - A settled event witnessed under another frame, substep, cell or mount is stale
+  ---
+  duration_ms: 2418.341
+  type: 'test'
+  ...
+# Subtest: The Garden saturates at one after eight actual arrivals, then later settlements do not replay the cue
+ok 179 - The Garden saturates at one after eight actual arrivals, then later settlements do not replay the cue
+  ---
+  duration_ms: 1351.6424
+  type: 'test'
+  ...
+# Subtest: Fixed updates and the runtime catch-up planner produce identical delivered identities and receiver values
+ok 180 - Fixed updates and the runtime catch-up planner produce identical delivered identities and receiver values
+  ---
+  duration_ms: 1456.7765
+  type: 'test'
+  ...
+# Subtest: Leaving clears the one-shot geometry, retains the bed mark and pauses Silt until a fresh mount
+ok 181 - Leaving clears the one-shot geometry, retains the bed mark and pauses Silt until a fresh mount
+  ---
+  duration_ms: 522.8414
+  type: 'test'
+  ...
+# Subtest: Pulse and Absorb alone report the accepted pose and their own components
+ok 182 - Pulse and Absorb alone report the accepted pose and their own components
+  ---
+  duration_ms: 773.7415
+  type: 'test'
+  ...
+# Subtest: Matched composed steps agree despite different receipt order and preserve C2 provenance
+ok 183 - Matched composed steps agree despite different receipt order and preserve C2 provenance
+  ---
+  duration_ms: 483.2637
+  type: 'test'
+  ...
+# Subtest: The outer limit clips the applied Pulse contribution and the composed step resolves inward
+ok 184 - The outer limit clips the applied Pulse contribution and the composed step resolves inward
+  ---
+  duration_ms: 159.0629
+  type: 'test'
+  ...
+# Subtest: A braced Pulse reports zero accepted movement and retains the separate pressure receipt
+ok 185 - A braced Pulse reports zero accepted movement and retains the separate pressure receipt
+  ---
+  duration_ms: 175.0181
+  type: 'test'
+  ...
+# Subtest: An RT-off flush preserves the previous receipt and supplies no current pull recipient
+ok 186 - An RT-off flush preserves the previous receipt and supplies no current pull recipient
+  ---
+  duration_ms: 172.9756
+  type: 'test'
+  ...
+# Subtest: One rendered frame retains all substeps with unique identities and no recorder duplicates
+ok 187 - One rendered frame retains all substeps with unique identities and no recorder duplicates
+  ---
+  duration_ms: 143.9528
+  type: 'test'
+  ...
+# Subtest: Release, unmount and remount clear the live sample and retain separately identified history
+ok 188 - Release, unmount and remount clear the live sample and retain separately identified history
+  ---
+  duration_ms: 148.6256
+  type: 'test'
+  ...
+# Subtest: No grip or a rejected pose leaves the accepted-motion trace empty
+ok 189 - No grip or a rejected pose leaves the accepted-motion trace empty
+  ---
+  duration_ms: 121.9739
+  type: 'test'
+  ...
+# Subtest: Accepted acquisition headroom and Core follow appear as motion without verb components
+ok 190 - Accepted acquisition headroom and Core follow appear as motion without verb components
+  ---
+  duration_ms: 103.4696
+  type: 'test'
+  ...
+# Subtest: Batched pulls describe their applied step and the recorder reports a bounded history gap
+ok 191 - Batched pulls describe their applied step and the recorder reports a bounded history gap
+  ---
+  duration_ms: 309.3278
+  type: 'test'
+  ...
+# Subtest: At the inner limit a Pulse moves the grain and an Absorb-only step stays still
+ok 192 - At the inner limit a Pulse moves the grain and an Absorb-only step stays still
+  ---
+  duration_ms: 212.2384
+  type: 'test'
+  ...
+# Subtest: A clipped Pulse with zero applied travel differs from opposing components that sum to zero
+ok 193 - A clipped Pulse with zero applied travel differs from opposing components that sum to zero
+  ---
+  duration_ms: 259.0009
+  type: 'test'
+  ...
+# Subtest: The physical Pulse cutoff uses the accepted contribution before receipt rounding
+ok 194 - The physical Pulse cutoff uses the accepted contribution before receipt rounding
+  ---
+  duration_ms: 231.3562
+  type: 'test'
+  ...
+# Subtest: Absorb opening a brace preserves the existing brace gate on the release sample
+ok 195 - Absorb opening a brace preserves the existing brace gate on the release sample
+  ---
+  duration_ms: 114.5496
+  type: 'test'
+  ...
+# Subtest: Matching substeps preserve release through catch-up, and real elapsed steps still decay it
+ok 196 - Matching substeps preserve release through catch-up, and real elapsed steps still decay it
+  ---
+  duration_ms: 195.1668
+  type: 'test'
+  ...
+# Subtest: Core Work interruption and Silt unmount clear the grip without reusing Pulse on reacquisition
+ok 197 - Core Work interruption and Silt unmount clear the grip without reusing Pulse on reacquisition
+  ---
+  duration_ms: 269.3281
+  type: 'test'
+  ...
+# Subtest: Hub fallback names only prepared spokes and preserves commit and Comb priority
+ok 198 - Hub fallback names only prepared spokes and preserves commit and Comb priority
+  ---
+  duration_ms: 112.0594
+  type: 'test'
+  ...
+# Subtest: Each Hub spoke displays distinct commit, approach, and unavailable guidance
+ok 199 - Each Hub spoke displays distinct commit, approach, and unavailable guidance
+  ---
+  duration_ms: 39.2265
+  type: 'test'
+  ...
+# Subtest: Grave entry, first return and revisit have identical owner traces with labels on and off
+ok 200 - Grave entry, first return and revisit have identical owner traces with labels on and off
+  ---
+  duration_ms: 83.5081
+  type: 'test'
+  ...
+# Subtest: Vascular entry, first return and revisit have identical owner traces with labels on and off
+ok 201 - Vascular entry, first return and revisit have identical owner traces with labels on and off
+  ---
+  duration_ms: 42.0332
+  type: 'test'
+  ...
+# Subtest: Silt entry, first return and revisit have identical owner traces with labels on and off
+ok 202 - Silt entry, first return and revisit have identical owner traces with labels on and off
+  ---
+  duration_ms: 38.6904
+  type: 'test'
+  ...
+# Subtest: C1 Status follows the actual Grave offer through the commit boundary
+ok 203 - C1 Status follows the actual Grave offer through the commit boundary
+  ---
+  duration_ms: 14.8865
+  type: 'test'
+  ...
+# Subtest: C1 Status follows the actual Vascular offer through the commit boundary
+ok 204 - C1 Status follows the actual Vascular offer through the commit boundary
+  ---
+  duration_ms: 11.9392
+  type: 'test'
+  ...
+# Subtest: C1 Status follows the actual Silt offer through the commit boundary
+ok 205 - C1 Status follows the actual Silt offer through the commit boundary
+  ---
+  duration_ms: 5.0525
+  type: 'test'
+  ...
+# Subtest: C1 Status optional investigation is separate from preparation, approach and entry
+ok 206 - C1 Status optional investigation is separate from preparation, approach and entry
+  ---
+  duration_ms: 12.2904
+  type: 'test'
+  ...
+# Subtest: C1 Status preserves inactive historical rows and withholds unplayable or unmatched offers
+ok 207 - C1 Status preserves inactive historical rows and withholds unplayable or unmatched offers
+  ---
+  duration_ms: 5.107
+  type: 'test'
+  ...
+# Subtest: C1 Vascular caption distinguishes brace, readiness, projection and release
+ok 208 - C1 Vascular caption distinguishes brace, readiness, projection and release
+  ---
+  duration_ms: 477.3036
+  type: 'test'
+  ...
+# Subtest: C1 Vascular scatter, recovery and return retain route guidance precedence
+ok 209 - C1 Vascular scatter, recovery and return retain route guidance precedence
+  ---
+  duration_ms: 1208.9111
+  type: 'test'
+  ...
+# Subtest: C1 Vascular transition and modal precedence do not promote an old readiness state
+ok 210 - C1 Vascular transition and modal precedence do not promote an old readiness state
+  ---
+  duration_ms: 874.5424
+  type: 'test'
+  ...
+# Subtest: V01 native readiness follows the owner with labels off, independently of cadence and C2
+ok 211 - V01 native readiness follows the owner with labels off, independently of cadence and C2
+  ---
+  duration_ms: 1460.6832
+  type: 'test'
+  ...
+# Subtest: V01 deterministic none trace preserves reads, load, identity, return and Vascular II
+ok 212 - V01 deterministic none trace preserves reads, load, identity, return and Vascular II
+  ---
+  duration_ms: 1879.6093
+  type: 'test'
+  ...
+# Subtest: V01 deterministic authentic trace preserves reads, load, identity, return and Vascular II
+ok 213 - V01 deterministic authentic trace preserves reads, load, identity, return and Vascular II
+  ---
+  duration_ms: 2023.5978
+  type: 'test'
+  ...
+# Subtest: V01 deterministic duplicate-stale trace preserves reads, load, identity, return and Vascular II
+ok 214 - V01 deterministic duplicate-stale trace preserves reads, load, identity, return and Vascular II
+  ---
+  duration_ms: 1860.6451
+  type: 'test'
+  ...
+# Subtest: V01 deterministic saturated trace preserves reads, load, identity, return and Vascular II
+ok 215 - V01 deterministic saturated trace preserves reads, load, identity, return and Vascular II
+  ---
+  duration_ms: 2148.3491
+  type: 'test'
+  ...
+# Subtest: V01 deterministic release-revisit trace preserves reads, load, identity, return and Vascular II
+ok 216 - V01 deterministic release-revisit trace preserves reads, load, identity, return and Vascular II
+  ---
+  duration_ms: 1595.346
+  type: 'test'
+  ...
+# Subtest: V01 ready permission remains readable during recovery; release and range loss remove it
+ok 217 - V01 ready permission remains readable during recovery; release and range loss remove it
+  ---
+  duration_ms: 111.4415
+  type: 'test'
+  ...
+# Subtest: Standard startup uses Core coherence in the mounted scar repair path
+ok 218 - Standard startup uses Core coherence in the mounted scar repair path
+  ---
+  duration_ms: 175.5519
+  type: 'test'
+  ...
+# Subtest: The explicit comparison keeps the original repair rate and the trial marker
+ok 219 - The explicit comparison keeps the original repair rate and the trial marker
+  ---
+  duration_ms: 59.1731
+  type: 'test'
+  ...
+# Subtest: Incomplete, stale and inspection samples retain the existing repair guards
+ok 220 - Incomplete, stale and inspection samples retain the existing repair guards
+  ---
+  duration_ms: 41.7447
+  type: 'test'
+  ...
+# Subtest: Core labels and selected-piece previews use the live radial charge, recovery, endurance and stability
+ok 221 - Core labels and selected-piece previews use the live radial charge, recovery, endurance and stability
+  ---
+  duration_ms: 58.7802
+  type: 'test'
+  ...
+# Subtest: The existing HUD and telemetry expose feedback through the existing label setting
+ok 222 - The existing HUD and telemetry expose feedback through the existing label setting
+  ---
+  duration_ms: 84.4163
+  type: 'test'
+  ...
+# Subtest: Stale or unintegrated verb data cannot claim that control or a target effect was established
+ok 223 - Stale or unintegrated verb data cannot claim that control or a target effect was established
+  ---
+  duration_ms: 4.105
+  type: 'test'
+  ...
+# Subtest: Regional response reports measured changes, session-retained values and temporary waves
+ok 224 - Regional response reports measured changes, session-retained values and temporary waves
+  ---
+  duration_ms: 13.268
+  type: 'test'
+  ...
+# Subtest: Vascular pressure is temporary and requires the mounted response from the current Host episode
+ok 225 - Vascular pressure is temporary and requires the mounted response from the current Host episode
+  ---
+  duration_ms: 16.2651
+  type: 'test'
+  ...
+# Subtest: grave chemistry shapes each verb in the existing local circuit
+ok 226 - grave chemistry shapes each verb in the existing local circuit
+  ---
+  duration_ms: 562.9585
+  type: 'test'
+  ...
+# Subtest: vascular chemistry shapes each verb in the existing local circuit
+ok 227 - vascular chemistry shapes each verb in the existing local circuit
+  ---
+  duration_ms: 325.3553
+  type: 'test'
+  ...
+# Subtest: silt chemistry shapes each verb in the existing local circuit
+ok 228 - silt chemistry shapes each verb in the existing local circuit
+  ---
+  duration_ms: 395.6489
+  type: 'test'
+  ...
+# Subtest: Pulse answers actual releases once, with charge and the ambient chord effect
+ok 229 - Pulse answers actual releases once, with charge and the ambient chord effect
+  ---
+  duration_ms: 470.767
+  type: 'test'
+  ...
+# Subtest: Local response uses a current cell chemistry sample and preserves Hub behavior
+ok 230 - Local response uses a current cell chemistry sample and preserves Hub behavior
+  ---
+  duration_ms: 263.2291
+  type: 'test'
+  ...
+# Subtest: The Host response preserves the 3, 6, and 12 Core phases and territory structure
+ok 231 - The Host response preserves the 3, 6, and 12 Core phases and territory structure
+  ---
+  duration_ms: 126.6763
+  type: 'test'
+  ...
+# Subtest: Relationship release clears the lock and audit while preserving world attention
+ok 232 - Relationship release clears the lock and audit while preserving world attention
+  ---
+  duration_ms: 125.1104
+  type: 'test'
+  ...
+# Subtest: Core Work clears world aim and requires fresh acquisition; external inspection retains aim
+ok 233 - Core Work clears world aim and requires fresh acquisition; external inspection retains aim
+  ---
+  duration_ms: 46.4531
+  type: 'test'
+  ...
+# Subtest: Region handoff and unmount clear publications without replacing another producer’s selection
+ok 234 - Region handoff and unmount clear publications without replacing another producer’s selection
+  ---
+  duration_ms: 25.8192
+  type: 'test'
+  ...
+# Subtest: The production mount profile clears Nursery bond, assist and VFX on deactivation
+ok 235 - The production mount profile clears Nursery bond, assist and VFX on deactivation
+  ---
+  duration_ms: 41.5995
+  type: 'test'
+  ...
+# Subtest: Consuming Nursery matter credits chemistry exactly once and publishes no active bond
+ok 236 - Consuming Nursery matter credits chemistry exactly once and publishes no active bond
+  ---
+  duration_ms: 52.0505
+  type: 'test'
+  ...
+# Subtest: The census separates external providers, chemistry acquisition and Pulse recipients
+ok 237 - The census separates external providers, chemistry acquisition and Pulse recipients
+  ---
+  duration_ms: 45.2339
+  type: 'test'
+  ...
+# Subtest: Stabilize delivery requires a matching reactive response in the world
+ok 238 - Stabilize delivery requires a matching reactive response in the world
+  ---
+  duration_ms: 25.5451
+  type: 'test'
+  ...
+# Subtest: Silt grip, appetite, ambient territory and unknown delivery remain separate
+ok 239 - Silt grip, appetite, ambient territory and unknown delivery remain separate
+  ---
+  duration_ms: 4.3749
+  type: 'test'
+  ...
+# Subtest: Core progression keeps the 3, 6 and 12 phases and radial performance tradeoffs
+ok 240 - Core progression keeps the 3, 6 and 12 phases and radial performance tradeoffs
+  ---
+  duration_ms: 28.0244
+  type: 'test'
+  ...
+# Subtest: Stabilize establishes control only on the retained target and clears it on handoff or release
+ok 241 - Stabilize establishes control only on the retained target and clears it on handoff or release
+  ---
+  duration_ms: 94.1756
+  type: 'test'
+  ...
+# Subtest: Controller X releases one Pulse, RT holds Absorb, and LT holds Stabilize
+ok 242 - Controller X releases one Pulse, RT holds Absorb, and LT holds Stabilize
+  ---
+  duration_ms: 44.3133
+  type: 'test'
+  ...
+# Subtest: Pulse publishes broad discovery early and applies recoil once to the current step's targets
+ok 243 - Pulse publishes broad discovery early and applies recoil once to the current step's targets
+  ---
+  duration_ms: 19.7526
+  type: 'test'
+  ...
+# Subtest: Pulse and Absorb oppose each other while Stabilize contains the draw
+ok 244 - Pulse and Absorb oppose each other while Stabilize contains the draw
+  ---
+  duration_ms: 200.6021
+  type: 'test'
+  ...
+# Subtest: Core configuration and endurance shape interaction output, control, and cost
+ok 245 - Core configuration and endurance shape interaction output, control, and cost
+  ---
+  duration_ms: 161.1113
+  type: 'test'
+  ...
+1..245
+# tests 245
+# suites 0
+# pass 245
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76812.2488

@@ -1,0 +1,79 @@
+TAP version 13
+# Subtest: keyboard and standard gamepad launch and retrieve the same grain, then use the existing seat and extraction
+ok 1 - keyboard and standard gamepad launch and retrieve the same grain, then use the existing seat and extraction
+  ---
+  duration_ms: 2334.3533
+  type: 'test'
+  ...
+# {"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":223,"substep":0,"chargeSequence":1,"charge01":0.5070921985815612,"intendedTargetId":null,"actualRecipientId":null,"releaseDirection":[-0.6084806950256562,0.19950186722152663,-0.7680821888028774],"releasePosition":[1.1769,-0.4202,-12.2272],"releaseVelocity":[-0.5161,0.1692,-0.6515],"releaseDecisionSequence":6,"receipt":{"schemaVersion":1,"id":"CELL_SILT_PRESSURE_ROUTE_001:silt-trajectory:6","sequence":1,"kind":"silt_material_disturbance_observed","sourceCellId":"CELL_SILT_PRESSURE_ROUTE_001","sourceSystem":"SiltPressureRouteSystem","sourceReceiptSequence":6,"subjectId":"silt-grain-01","simulationSeconds":3.717,"origin":[1.1769,-0.4202,-12.2272],"releaseVelocity":[-0.5161,0.1692,-0.6515],"effectType":"observed_only","targetCellId":null,"materialTransfer":false,"routeCredit":false,"worldConsequence":false},"reserveBefore":0.8897931709677427,"reserveAfter":0.8885431709677427,"firstDelta":[-0.00849314517224431,0.0027857011275467247,-0.010724643044740745],"mass":8}
+# Subtest: matched off-axis directions and low or high valid charge use the existing bounded impulse
+ok 2 - matched off-axis directions and low or high valid charge use the existing bounded impulse
+  ---
+  duration_ms: 2345.0246
+  type: 'test'
+  ...
+# [{"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":223,"substep":0,"chargeSequence":1,"charge01":0.5070921985815612,"intendedTargetId":null,"actualRecipientId":null,"releaseDirection":[-0.6084806950256562,0.19950186722152663,-0.7680821888028774],"releasePosition":[1.1769,-0.4202,-12.2272],"releaseVelocity":[-0.5161,0.1692,-0.6515],"releaseDecisionSequence":6,"speed":0.8481981490194375},{"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":223,"substep":0,"chargeSequence":1,"charge01":0.5070921985815612,"intendedTargetId":null,"actualRecipientId":null,"releaseDirection":[0.6084806950256562,0.19950186722152663,-0.7680821888028774],"releasePosition":[1.1769,-0.4202,-12.2272],"releaseVelocity":[0.5161,0.1692,-0.6515],"releaseDecisionSequence":6,"speed":0.8481981490194375},{"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":201,"substep":0,"chargeSequence":1,"charge01":0.11702127659574461,"intendedTargetId":null,"actualRecipientId":null,"releaseDirection":[-0.6084806950256562,0.19950186722152663,-0.7680821888028774],"releasePosition":[1.1769,-0.4202,-12.2272],"releaseVelocity":[-0.3765,0.1235,-0.4753],"releaseDecisionSequence":6,"speed":0.6188009292171434},{"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":263,"substep":0,"chargeSequence":1,"charge01":1,"intendedTargetId":null,"actualRecipientId":null,"releaseDirection":[-0.6084806950256562,0.19950186722152663,-0.7680821888028774],"releasePosition":[1.1769,-0.4202,-12.2272],"releaseVelocity":[-0.6925,0.227,-0.8741],"releaseDecisionSequence":6,"speed":1.1380404474358545}]
+# Subtest: ordinary quick and charged Pulse retain tether displacement and ordinary A/E release
+ok 3 - ordinary quick and charged Pulse retain tether displacement and ordinary A/E release
+  ---
+  duration_ms: 1620.5543
+  type: 'test'
+  ...
+# Subtest: valid commitment takes the interaction edge ahead of an otherwise eligible seat
+ok 4 - valid commitment takes the interaction edge ahead of an otherwise eligible seat
+  ---
+  duration_ms: 604.7598
+  type: 'test'
+  ...
+# Subtest: missing, stale or invalid aim rejects without releasing the grain or consuming Pulse
+ok 5 - missing, stale or invalid aim rejects without releasing the grain or consuming Pulse
+  ---
+  duration_ms: 1689.3376
+  type: 'test'
+  ...
+# Subtest: menu, inspection, Core Work and transition invalidate a continuing charge
+ok 6 - menu, inspection, Core Work and transition invalidate a continuing charge
+  ---
+  duration_ms: 2409.9021
+  type: 'test'
+  ...
+# Subtest: a remount requires a fresh charge and retains ordinary departure provenance
+ok 7 - a remount requires a fresh charge and retains ordinary departure provenance
+  ---
+  duration_ms: 638.9938
+  type: 'test'
+  ...
+# Subtest: holding the interaction edge and releasing X cannot duplicate launch or reopen reserve demand
+ok 8 - holding the interaction edge and releasing X cannot duplicate launch or reopen reserve demand
+  ---
+  duration_ms: 636.0634
+  type: 'test'
+  ...
+# Subtest: launch uses the existing charged Pulse reserve peak and commit-step debit
+ok 9 - launch uses the existing charged Pulse reserve peak and commit-step debit
+  ---
+  duration_ms: 1153.5366
+  type: 'test'
+  ...
+# {"directed":{"peak":1.08,"age":0,"debit":0.0012499999999999734,"launch":{"hostId":"HOST_ALPHA_WOUNDED_NURSERY","cellId":"CELL_SILT_PRESSURE_ROUTE_001","mountSequence":1,"unitId":"silt-grain-01","generation":0,"frame":270,"substep":0,"chargeSequence":1,"charge01":1,"intendedTargetId":null,"actualRecipientId":null,"releaseDirection":[-0.6084806950256562,0.19950186722152663,-0.7680821888028774],"releasePosition":[1.1769,-0.4202,-12.2272],"releaseVelocity":[-0.6925,0.227,-0.8741],"releaseDecisionSequence":6}},"native":{"peak":1.08,"age":0,"debit":0.0012499999999999734,"launch":null}}
+# Subtest: retargeting a held grain to the Shelf preserves canonical intent and independent Flow ownership
+ok 10 - retargeting a held grain to the Shelf preserves canonical intent and independent Flow ownership
+  ---
+  duration_ms: 1463.3491
+  type: 'test'
+  ...
+# Subtest: fixed and bounded catch-up steps produce one equivalent release and reserve envelope
+ok 11 - fixed and bounded catch-up steps produce one equivalent release and reserve envelope
+  ---
+  duration_ms: 969.7901
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18682.62

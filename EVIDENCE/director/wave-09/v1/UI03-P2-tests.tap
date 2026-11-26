@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: revision three retains all three accepted workloads and admits only UI03 fingerprint
+ok 1 - revision three retains all three accepted workloads and admits only UI03 fingerprint
+  ---
+  duration_ms: 62.1466
+  type: 'test'
+  ...
+# Subtest: old revision rejects this source and revision three rejects old checkpoint
+ok 2 - old revision rejects this source and revision three rejects old checkpoint
+  ---
+  duration_ms: 26.6637
+  type: 'test'
+  ...
+# Subtest: revision three still rejects dirty bytes, fingerprint drift and foreign ancestry
+ok 3 - revision three still rejects dirty bytes, fingerprint drift and foreign ancestry
+  ---
+  duration_ms: 7.1366
+  type: 'test'
+  ...
+# Subtest: projection preserves owner bytes and separates unconfirmed candidates and retained history
+ok 4 - projection preserves owner bytes and separates unconfirmed candidates and retained history
+  ---
+  duration_ms: 75.2593
+  type: 'test'
+  ...
+# Subtest: ordinary RT remains Absorb and the Flow publication stays absent
+ok 5 - ordinary RT remains Absorb and the Flow publication stays absent
+  ---
+  duration_ms: 2025.783
+  type: 'test'
+  ...
+# Subtest: real Flow publishes only the current receiver-confirmed sample and retains its history
+ok 6 - real Flow publishes only the current receiver-confirmed sample and retains its history
+  ---
+  duration_ms: 1142.0608
+  type: 'test'
+  ...
+# Subtest: material acquisition, launch, actual contact, remount and retrieval keep their distinct truth
+ok 7 - material acquisition, launch, actual contact, remount and retrieval keep their distinct truth
+  ---
+  duration_ms: 1988.5472
+  type: 'test'
+  ...
+# Subtest: inspection and Core Work suppress live world information while retaining layout
+ok 8 - inspection and Core Work suppress live world information while retaining layout
+  ---
+  duration_ms: 191.7197
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 37737.3932

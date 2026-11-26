@@ -1,0 +1,18 @@
+{
+  "branch": "candidate/ci03-chromium-i1",
+  "head": "f21969cc38b84ec88d073282d00699b5bd53f91b",
+  "parent": "bdbabf733c40fa36cbd44b2e9c7eb3472dd7b97d",
+  "changedFiles": [
+    ".github/workflows/blob-ci03-chromium.yml"
+  ],
+  "freshFetch": true,
+  "reason": "Exact run ended before starting a job. The runner context is unavailable at jobs.<job_id>.env; the cache is assigned from a run step.",
+  "unchanged": [
+    "Node/Playwright/Chromium pins",
+    "runner flags",
+    "replay assertions",
+    "time budgets",
+    "gameplay and Director fingerprints"
+  ],
+  "patchSHA256": "28cc3d7055e2f793f2b0ee25c6ae113ab60491c078968c6a24a0209853097094"
+}

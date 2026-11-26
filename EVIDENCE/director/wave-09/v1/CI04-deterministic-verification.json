@@ -1,0 +1,177 @@
+{
+  "verdict": "PASS",
+  "source": "e6688a95d3e2bcb04dd098a40743b84764c49307",
+  "gameplay": "18c891838a1e8710e32c550b936341e42466cbe1",
+  "baseline": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "run": {
+    "id": 45733710377,
+    "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45733710377",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "artifact": {
+    "id": 15078570354,
+    "filename": "CI04-deterministic-artifact-15078570354.zip",
+    "sha256": "3b7fc83bbc04ca7fb6a46ba5aa4fd694eaf51a788990ee2c06657521f5797ca5",
+    "bytes": 79032,
+    "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45733710377/artifacts/15078570354",
+    "expiresAt": "2026-12-10T01:09:20Z",
+    "access": "GitHub authentication"
+  },
+  "fingerprintGate": {
+    "baseline": "COMPATIBLE_GAMEPLAY_DESCENDANT",
+    "candidate": "GAMEPLAY_FINGERPRINT_MISMATCH"
+  },
+  "counts": {
+    "launch-focused": 11,
+    "pi03-contact": 9,
+    "director-compatibility": 9,
+    "maintained": 245,
+    "pi04-runtime": 15,
+    "nf02-pi04-analytical": 16
+  },
+  "cases": [
+    {
+      "id": "launch-focused",
+      "exitCode": 0,
+      "passed": 11,
+      "verdict": "PASS",
+      "log": "launch-focused.log"
+    },
+    {
+      "id": "pi03-contact",
+      "exitCode": 0,
+      "passed": 9,
+      "verdict": "PASS",
+      "log": "pi03-contact.log"
+    },
+    {
+      "id": "director-compatibility",
+      "exitCode": 0,
+      "passed": 9,
+      "verdict": "PASS",
+      "log": "director-compatibility.log"
+    },
+    {
+      "id": "production-build",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "production-build.log"
+    },
+    {
+      "id": "maintained",
+      "exitCode": 0,
+      "passed": 245,
+      "verdict": "PASS",
+      "log": "maintained.log"
+    },
+    {
+      "id": "verifyWave1CoreProfiles",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "verifyWave1CoreProfiles.log"
+    },
+    {
+      "id": "checkC63HubRouteAccess",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "checkC63HubRouteAccess.log"
+    },
+    {
+      "id": "validateRecipeDataLoad",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateRecipeDataLoad.log"
+    },
+    {
+      "id": "smokeHC031W1StabilizedAimLocalContact",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031W1StabilizedAimLocalContact.log"
+    },
+    {
+      "id": "smokeHC031U21RelationshipIntentLatch",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "smokeHC031U21RelationshipIntentLatch.log"
+    },
+    {
+      "id": "validateLS1BLivingSiltMaterialCycle",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateLS1BLivingSiltMaterialCycle.log"
+    },
+    {
+      "id": "validateHC016QTenderCompanion",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC016QTenderCompanion.log"
+    },
+    {
+      "id": "validateHC031C2FragmentFieldCapture",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031C2FragmentFieldCapture.log"
+    },
+    {
+      "id": "validateHC031DRuptureConsequence",
+      "exitCode": 0,
+      "passed": 0,
+      "verdict": "PASS",
+      "log": "validateHC031DRuptureConsequence.log"
+    },
+    {
+      "id": "smokeLS1E1",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "Cannot read properties of undefined (reading 'observe')",
+      "log": "smokeLS1E1.log"
+    },
+    {
+      "id": "smokeLS1E2",
+      "exitCode": 1,
+      "passed": 0,
+      "verdict": "BASELINE_EXCEPTION",
+      "expected": "ERR_UNSUPPORTED_RESOLVE_REQUEST",
+      "log": "smokeLS1E2.log"
+    },
+    {
+      "id": "pi04-runtime",
+      "exitCode": 0,
+      "passed": 15,
+      "verdict": "PASS",
+      "log": "pi04-runtime.log"
+    },
+    {
+      "id": "nf02-pi04-analytical",
+      "exitCode": 0,
+      "passed": 16,
+      "verdict": "PASS",
+      "log": "nf02-pi04-analytical.log"
+    }
+  ],
+  "build": {
+    "files": 541,
+    "matchingLocalBytes": 541,
+    "differences": []
+  },
+  "mounted": {
+    "exactLocalParity": true,
+    "contacts": [
+      1,
+      1,
+      0,
+      2
+    ]
+  }
+}

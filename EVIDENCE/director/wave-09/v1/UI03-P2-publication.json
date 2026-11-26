@@ -1,0 +1,62 @@
+{
+  "publications": {
+    "integration/ui03-p1": "c68944ae723976273d5f2577c4d6c48d529c7362",
+    "candidate/ui03-readmission": "133c979aa0fd420eeede40d51df55c7bda668663"
+  },
+  "base": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "freshFetch": true,
+  "source": [
+    {
+      "path": "scripts/testUI03PlayerInformation.mjs",
+      "sha256": "256e349777fcf30ec386dcb5a0ff222146eeddbf426c12dfa48471aa1564e796"
+    },
+    {
+      "path": "src/ui/PlayerInformationModel.js",
+      "sha256": "ec8aa0c5e1b8bb717bbd2e83567f8b9938c54f7fc35d4417749fd696a28d5ad8"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "sha256": "e3716aea76f4bb7b4cec22f9e0aa4d477668130d359fa85778486b30e3db3a9a"
+    }
+  ],
+  "readmissionFiles": [
+    {
+      "path": "BLOB_BOT_SERIES1/director/handoff.mjs",
+      "sha256": "ba0dc385241ae8eb60ffe5425d4b4eefd9eeb28cd589eed759aa6e43f16370e9"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenario-contract.mjs",
+      "sha256": "c59bf5b7288eaa73c1d60c7de9fcf97d4cb7d5585062be91a080cfce4fbc4456"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/balanced.json",
+      "sha256": "a2fa4a5ca91b5cc39f2cd93f8e17a6f77e8dbdc904f86a0d63d252a40e7944db"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/deep.json",
+      "sha256": "e0ed57857acde2431be660115ce658a2a01e1753d6fff7b81a67a97a474a470b"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/membrane.json",
+      "sha256": "954c4c7d77dad65bec2279cdcefea6dbbbe42d20d17f276aec60dbb7fea67ee7"
+    },
+    {
+      "path": "BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs",
+      "sha256": "e97420ebdac7a0fe5de1627361c7d68c723a378900ee83f9196d875d7c3a67d5"
+    }
+  ],
+  "productionBuild": {
+    "parityFiles": 541,
+    "orderedSHA256": "7ba48c5d62a10745d798632bc3da875259cbbcf7668978d8ddf54037f0005332"
+  },
+  "tests": {
+    "focused": 5,
+    "readmission": 3
+  },
+  "fingerprint": "f79584e22f77f8fa7f246dbafb1505f8df2c54b9ff2ecba45e9bd40940995e59",
+  "priorGate": "GAMEPLAY_FINGERPRINT_MISMATCH",
+  "olderScenarioRevision": 2,
+  "uiScenarioRevision": 3,
+  "optIn": true,
+  "preservedRemoteRefs": 49
+}

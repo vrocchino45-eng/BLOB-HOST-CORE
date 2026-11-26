@@ -1,0 +1,40 @@
+{
+  "branch": "candidate/pi04-i1",
+  "head": "c1748ccdeaefb94e375690f4f94a473c4288c1e7",
+  "parent": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "admissionSHA256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4",
+  "files": [
+    {
+      "path": "scripts/testPI04SiltPairMomentum.mjs",
+      "sha256": "43bcb430c58e922f81eeee735c67e0af85dc5867640dacace638b60b27b84315"
+    },
+    {
+      "path": "src/contact/SiltPairMomentum.js",
+      "sha256": "9be517818bbb97a3e6b36cc7b91a86f6cb1157307bd6dd15cbc060100015de51"
+    },
+    {
+      "path": "src/contact/SiltTrajectoryMemory.js",
+      "sha256": "9274d393fcde3b9c94e121a9995cd8e069b9765855a4358ce182929287af8887"
+    },
+    {
+      "path": "src/contact/siltPairAdmission.json",
+      "sha256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "72b5864492cd14ed9f220dc6a261d4c17297aa3ac35d2be52f8a5b3cf070b4c3"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "de8053f67159b9e7a8878d491db9d936270692d9e04509e97833056c0a2b6f75"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "3af3d8ab3c0e93c2a211eb377a8692f3f34a597d15a3efa40d4afc073b83cd9c"
+    }
+  ],
+  "patchSHA256": "831fba9601694bd408f8cacfb069375601a2d969b84f05f43b4c2e1b19cf5f38",
+  "experimental": true,
+  "ordinaryBoot": false,
+  "scope": "Two existing Silt material identities in the existing trajectory owner. Development opt-in only."
+}
