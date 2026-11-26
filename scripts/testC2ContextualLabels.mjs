@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { HostConnectionReceiptLedger } from '../src/core/HostConnectionReceiptLedger.js';
+import { readFlowStep } from '../src/interaction/SiltFlowContract.js';
 import { PlaytestHudSystem } from '../src/ui/PlaytestHudSystem.js';
 import { buildQuickLookSnapshot, QuickLookInspectorSystem } from '../src/ui/QuickLookInspectorSystem.js';
 
@@ -22,6 +23,14 @@ function setup(cell = SILT, labels = true) {
   };
   const hud = new PlaytestHudSystem({ recipeDataSystem: { data: {} }, frameState: frame });
   return { frame, read: () => hud.resolveHudState(frame, true) };
+}
+
+function publishShelfDelivery(frame) {
+  const step = readFlowStep(frame);
+  const actionSequence = 1;
+  const result = { ...step, actionSequence, acceptedCurrent01: 0.4,
+    pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.02 } };
+  Object.assign(frame.coreFlow, { step, actionSequence, result });
 }
 
 function publishSiltRelease(frame, reason = 'deliberate-release') {
@@ -87,8 +96,8 @@ test('Grip and contact outrank selection, while alignment loss and overload dist
   Object.assign(frame.coreFlow, { contactValid: true, reason: 'receiver_rejected' });
   assert.equal(read().primaryInstruction, 'Shelf contact · current declined');
 
-  const result = { acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.02 } };
-  Object.assign(frame.coreFlow, { result, reason: 'current_accepted' });
+  frame.coreFlow.reason = 'current_accepted';
+  publishShelfDelivery(frame);
   assert.equal(read().primaryInstruction, 'Shelf · current accepted, resistance felt');
   assert.match(read().flowLine, /pressure 0\.20 · resistance 0\.30/);
   frame.coreFlow.overloaded = true;
@@ -304,7 +313,7 @@ test('F1 guidance and C2 live consequences or history take precedence over Garde
   assert.deepEqual(read().contextualLabel, { tier: 'instruction', text: 'Align the Core with the Shelf' });
   frame.coreFlow = { contactValid: true };
   assert.deepEqual(read().contextualLabel, { tier: 'interaction', text: 'Shelf contact · waiting for current' });
-  frame.coreFlow.result = { acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.02 } };
+  publishShelfDelivery(frame);
   assert.deepEqual(read().contextualLabel,
     { tier: 'interaction', text: 'Shelf · current accepted, resistance felt' });
   delete frame.coreFlow;
