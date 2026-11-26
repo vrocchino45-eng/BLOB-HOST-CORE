@@ -1,0 +1,47 @@
+name: BLOB CI05 IN02 Chromium replay
+on:
+  push:
+    branches: [candidate/ci05-in02-i1]
+permissions:
+  contents: read
+jobs:
+  chromium-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    env:
+      BLOB_BOT_CHROMIUM_ARGS: '["--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader"]'
+    steps:
+      - name: Set the runner-scoped Chromium cache
+        run: echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/blob-ci05-chromium" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.14.0'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            BLOB_BOT_SERIES1/package-lock.json
+      - name: Install both locked dependency sets
+        run: |
+          node scripts/ci05-verify.mjs --install
+          npm ci --prefix BLOB_BOT_SERIES1 --no-audit --no-fund
+      - name: Install the Playwright-locked Chromium
+        run: node BLOB_BOT_SERIES1/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Run the bounded staged browser case
+        run: node scripts/verifyCI05Chromium.mjs CI05_CHROMIUM_RESULTS
+      - name: Run pinned staged PI04 browser cases
+        run: node scripts/verifyCI05Mounted.mjs "$GITHUB_WORKSPACE" CI05_MOUNTED_RESULTS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: blob-ci05-chromium-${{ github.sha }}
+          path: |
+            CI05_MOUNTED_RESULTS/summary.json
+            CI05_CHROMIUM_RESULTS/C01.json
+            CI05_CHROMIUM_RESULTS/browser.log
+            CI05_CHROMIUM_RESULTS/summary.json
+          if-no-files-found: warn
+          retention-days: 14
