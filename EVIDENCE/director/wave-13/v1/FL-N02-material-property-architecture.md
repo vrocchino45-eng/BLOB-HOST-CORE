@@ -1,0 +1,39 @@
+# FL-N02 Flow material-property architecture v1
+
+Audit against governing IN03 `310b827c5a2f446beb33c60545bdf17a9b6e204d`. The normalized Shelf transaction remains the runtime contract. This register proposes how to admit future properties and gives isolated analytical references. Respect UP-02 and UP-05 and keep the existing field identity. [FL-N01 ownership and dimensions](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/tree/1448ede43b5d650b2c7e2829970d0ef1548a291d/EVIDENCE/director/wave-12/v1) · [Qualified runtime](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/blob/310b827c5a2f446beb33c60545bdf17a9b6e204d/src/world/RegionalTerritoryExpansion.js#L330)
+
+## What the current systems own
+
+| Existing witness | Owner | Classification |
+| --- | --- | --- |
+| Chemical domains, families, recipes, affinities, development and visual entries | RecipeDataSystem, LocalChemistryContextSystem, authored data in public/data | Registry and authored gameplay semantics. No physical Flow material tensor, current carrier or electrical storage scale. |
+| Grain identity, lineage, custody and Q | MaterialIdentityLedger and the living Silt route | Material accounting. Experiment inertia in Mr remains scoped to the pair calibration. |
+| Canonical receiver and contact | TargetingSystem, SiltFlowContract and CoreFlowSystem | Identity, time, geometry and an authorized discharge/request index. |
+| Shelf conductivity, resistance and accepted current | RegionalTerritoryDefinitions authors 0.72 conductivity and 0.31 base resistance for the specific Shelf patch. RegionalTerritoryExpansion applies facing and prior imprint and owns acceptance. | Empirical normalized receiver/interface indices. Pressure01 is a gameplay output. Don’t use these values as material coefficients, force per area or potential. |
+| Strain, overload, recovery, imprint and current rendering | CoreFlowSystem, owner retain/publish and UI04 | Live state, normalized responses, same-session history, and presentation. Keep the history defined by the receiver. |
+| Reserve debit | CoreRadialPerformanceSystem | Operational capacity fraction with existing bounded per-admitted-second cost. Mechanical dissipation and Flow/chemical energy retain separate ledgers. |
+
+[Recipe owner](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/blob/310b827c5a2f446beb33c60545bdf17a9b6e204d/src/data/RecipeDataSystem.js) · [Chemistry context](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/blob/310b827c5a2f446beb33c60545bdf17a9b6e204d/src/chemistry/LocalChemistryContextSystem.js) · [Material ledger](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/blob/310b827c5a2f446beb33c60545bdf17a9b6e204d/src/ecology/MaterialIdentityLedger.js) · [Shelf definitions](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/blob/310b827c5a2f446beb33c60545bdf17a9b6e204d/src/world/RegionalTerritoryDefinitions.js) · [Core settlement](https://github.com/vrocchino45-eng/BLOB-HOST-CORE/blob/310b827c5a2f446beb33c60545bdf17a9b6e204d/src/player/CoreRadialPerformanceSystem.js#L303)
+
+## Proposed constitutive property register
+
+| Family | Intrinsic versus effective / interface basis | Admission requirement |
+| --- | --- | --- |
+| Conductivity / resistivity | Intrinsic locally only under stated homogeneous composition, condition, frequency and direction. Candidate volumetric isotropic conductivity σF has dimension qF²/(E·Ts·Lw). Resistivity ρF is its reciprocal. | Independent measurements at fixed geometry and condition. A tensor needs declared axes and positive passive work in every tested direction. |
+| Resistance / conductance | Effective pathway R and G from geometry, conductivity and boundary interfaces. Contact-area, pressure and orientation may change interface loss. | With fixed quasi-static, homogeneous, finite, linear, uniform-cross-section segments, Rbulk=ρF L/A and G=1/Rtotal. Rcontact is separately measured within the admitted orientation and condition. |
+| Insulation and leakage | Open path and finite leakage are different boundary conditions. Surface wetting, environment, contact and frequency can change leakage. | Require a declared isolation test, leak path identity, conductor/isolator controls, bound and accounted sink. |
+| Capacitive behavior | Intrinsic field storage versus effective device geometry and field coupling. C_F is a dimensioned candidate device response. | Pin initial/stored quantity, energy, interfaces, magnitude limits, time and release evidence. Linear storage reference only, with E=qF²/(2 C_F). |
+| Inductive behavior | Intrinsic local field coupling, geometry and connection produce effective rate response, dependent on frequency/condition and topology. | Admit a field model, current and phase reference, energy boundary and causal response before coefficient selection. |
+| Directional transfer | Anisotropy can be orientation-specific while remaining passive and reciprocal. Rectification and switching need different laws and explicit state. | Compare reversal and angular cases. Test ΔΦ·I≥0 for a passive memoryless element and account stored energy for stateful devices. |
+| Transformation / regulation | Effective part and interface behavior. Inputs may include mechanical work, field energy and bounded state. | Declare ports, output, source, conversion law, efficiency/loss, conditioning, limits and failure. A regulator or transformed output never earns chemistry or reserve implicitly. |
+
+Unresolved laws include field carrier and propagation, whether signed qF needs continuity, fixture coefficient calibration, frequency response, interface aging, topology and condition changes, directional asymmetry, and conversion. Turn no empirical receiver, native traction, chemistry-family or decorative rhythm coefficient into a physical constant. The dimensioned references inherit provisional qF and E=Mr·Lw²/Ts². Field energy, mechanical work, chemical energy, reserve, material inventory Q, throughput and information retention have distinct meanings and lifetimes. A bounded energy-port version can be admitted first if current-like continuity is unnecessary.
+
+## Minimal future two-material conductive pathway
+
+1. Select two authenticated material specimen IDs A and B, a mechanical support and three defined interfaces with source and receiver. Pin composition, custody, L/A, temperature or condition witness, geometry, contact force/extent and orientation, native clock, initial state and source/sink limits. Preserve the existing chemistry registry and identity ledger.
+2. Admit one finite, bounded steady transfer law and short observation window. Measure single-material controls, two-segment series, seam-open, reversed direction, and a finite leakage control. Separately read bulk/ contact losses, receiver work and cumulative throughput. Require zero unsupported credit on invalid, stale or unmounted transactions, a clear orientation, and no inferred transfer from contact, selection or effects.
+3. Confirm source work equals receiver work plus measured loss. Keep no stored energy channel unless a bounded storage owner and pass are admitted. A finite current/energy reject is atomic. Tests compare matched geometry and condition. If the first law cannot be calibrated without replacing Shelf settlement, keep it an isolated experiment.
+4. Require all material Q, custody, chemistry, progression, receipt, movement, camera and reserve invariants before further topology work. Keep the current species and read models. Delete or disable nothing. Quarantine engineering calibrations until a specific fixture, identity and interface law are approved.
+
+The FL-N02 reference uses fictitious analytical coefficients, positive finite bulk dimensions and prescribed finite interface/optional leakage terms. It preserves the previous FL-N01 dimensions and does not register any material coefficient in runtime. [Reference tests](FL-N02-reference.test.mjs) · [Results](FL-N02.tap)

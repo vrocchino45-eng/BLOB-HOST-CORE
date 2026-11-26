@@ -1,0 +1,45 @@
+{
+  "verdict": "QUALIFIED_DIAGNOSTIC_WITH_OCCLUSION_LIMIT",
+  "source": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "physicalSeparation": 0.1200000000000003,
+  "visualOverlap": 0.21347651257903924,
+  "radii": [
+    0.06,
+    0.06
+  ],
+  "views": [
+    {
+      "view": "normal-facing",
+      "centerPixels": 74.19996518097629,
+      "shots": [
+        "equal-accepted-normal-facing-A.png",
+        "equal-accepted-normal-facing-B.png",
+        "equal-accepted-normal-facing-C.png",
+        "equal-accepted-normal-facing-D.png"
+      ]
+    },
+    {
+      "view": "oblique",
+      "centerPixels": 7.077690954250574,
+      "shots": [
+        "equal-accepted-oblique-A.png",
+        "equal-accepted-oblique-B.png",
+        "equal-accepted-oblique-C.png",
+        "equal-accepted-oblique-D.png"
+      ]
+    },
+    {
+      "view": "along-normal",
+      "centerPixels": 0.7252973436532507,
+      "shots": [
+        "equal-accepted-along-normal-A.png",
+        "equal-accepted-along-normal-B.png",
+        "equal-accepted-along-normal-C.png",
+        "equal-accepted-along-normal-D.png"
+      ]
+    }
+  ],
+  "projectionLimit": "Along-normal front/rear occlusion remains",
+  "stateParity": "Exact across treatments",
+  "initial": "Navigation timeout before capture; sequential rerun preserved scenario and timeout."
+}

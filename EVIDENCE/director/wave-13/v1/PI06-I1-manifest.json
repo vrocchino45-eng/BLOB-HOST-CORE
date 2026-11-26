@@ -1,0 +1,34 @@
+{
+  "base": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "candidate": "3d0f4eef0e9b7f216c953da31189e08ba979fb83",
+  "files": [
+    {
+      "path": "scripts/testPI06SiltImpactFriction.mjs",
+      "sha256": "96f1ca331544dc1fdde0f10f63deaafd6f4bd483b8d7dfe324574649f4f4263a"
+    },
+    {
+      "path": "src/contact/SiltPairMomentum.js",
+      "sha256": "0eaf734d3d92c16618bd40827eeb384b5b668d606ad2ce203939d0ff8a70b023"
+    },
+    {
+      "path": "src/contact/SiltTrajectoryMemory.js",
+      "sha256": "f564b105d330296cbc65c49837f27a963fc6e3f87683e332989bfeae99402c38"
+    },
+    {
+      "path": "src/contact/siltPairFrictionAdmission.json",
+      "sha256": "d26930851ba2dda3dfa1e8f6117b0de273ff49ff018f452f91fe7ce5456d9826"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "7acc135b7126fd230a53de2559455bccbeb2d5e9c84dfeaef9b1e8228589ea9f"
+    }
+  ],
+  "patchSHA256": "2bb9c29e4c870c919593a68e22b1e639a583e4db3f8c84e9e8d9681498fb6989",
+  "tree": "a195beea232272c8d540301a120de9616a60fcfa",
+  "admission": {
+    "path": "src/contact/siltPairFrictionAdmission.json",
+    "sha256": "d26930851ba2dda3dfa1e8f6117b0de273ff49ff018f452f91fe7ce5456d9826"
+  },
+  "normalAndCustodyOwners": "unchanged authority",
+  "scope": "existing two-grain development fixture only"
+}

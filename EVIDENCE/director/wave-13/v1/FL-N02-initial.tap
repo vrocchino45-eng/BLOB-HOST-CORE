@@ -1,0 +1,172 @@
+TAP version 13
+# Subtest: candidate dimensions close independently of material inventory Q
+ok 1 - candidate dimensions close independently of material inventory Q
+  ---
+  duration_ms: 8.0624
+  type: 'test'
+  ...
+# Subtest: equal potentials and an open pathway produce zero transfer
+ok 2 - equal potentials and an open pathway produce zero transfer
+  ---
+  duration_ms: 5.4205
+  type: 'test'
+  ...
+# Subtest: a passive linear pathway balances source work, receiver work and dissipation
+ok 3 - a passive linear pathway balances source work, receiver work and dissipation
+  ---
+  duration_ms: 1.3467
+  type: 'test'
+  ...
+# Subtest: reversing direction preserves loss and exchanges the source and destination
+ok 4 - reversing direction preserves loss and exchanges the source and destination
+  ---
+  duration_ms: 1.0117
+  type: 'test'
+  ...
+# Subtest: zero-duration observation has power and no transferred quantity or energy
+ok 5 - zero-duration observation has power and no transferred quantity or energy
+  ---
+  duration_ms: 0.9982
+  type: 'test'
+  ...
+# Subtest: admitted intervals integrate piecewise-constant work and quantity consistently
+ok 6 - admitted intervals integrate piecewise-constant work and quantity consistently
+  ---
+  duration_ms: 0.998
+  type: 'test'
+  ...
+# Subtest: series carries identical current and partitions potential drop
+ok 7 - series carries identical current and partitions potential drop
+  ---
+  duration_ms: 1.1482
+  type: 'test'
+  ...
+# Subtest: parallel branches share potential drop and currents sum at a junction
+ok 8 - parallel branches share potential drop and currents sum at a junction
+  ---
+  duration_ms: 1.2943
+  type: 'test'
+  ...
+# Subtest: a storage allocation must be accounted for in the junction
+ok 9 - a storage allocation must be accounted for in the junction
+  ---
+  duration_ms: 1.0748
+  type: 'test'
+  ...
+# Subtest: linear storage stores signed quantity with nonnegative energy and finite capacity
+ok 10 - linear storage stores signed quantity with nonnegative energy and finite capacity
+  ---
+  duration_ms: 5.5619
+  type: 'test'
+  ...
+# Subtest: invalid, nonfinite, active and unlimited pathways fail closed
+ok 11 - invalid, nonfinite, active and unlimited pathways fail closed
+  ---
+  duration_ms: 3.5594
+  type: 'test'
+  ...
+# Subtest: bulk conductivity and resistivity close dimensionally with L over A
+not ok 12 - bulk conductivity and resistivity close dimensionally with L over A
+  ---
+  duration_ms: 15.9384
+  type: 'test'
+  location: 'E:\\BLOB-PARALLEL-DEVELOPMENT-WAVE-13\\evidence\\FL-N02-reference.test.mjs:24:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+      [
+        1,
+        2,
+        -1,
+        -2,
+    +   -0
+    -   0
+      ]
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 1
+    1: 2
+    2: -1
+    3: -2
+    4: 0
+  actual:
+    0: 1
+    1: 2
+    2: -1
+    3: -2
+    4: -0
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///<local-checkout>)
+    Test.runInAsyncScope (node:async_hooks:228:14)
+    Test.run (node:internal/test_runner/test:1118:25)
+    Test.start (node:internal/test_runner/test:1015:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17)
+  ...
+# Subtest: fixed homogeneous material scales through length, area and conductivity independently
+ok 13 - fixed homogeneous material scales through length, area and conductivity independently
+  ---
+  duration_ms: 13.2886
+  type: 'test'
+  ...
+# Subtest: two distinct bulk resistances and interface close the passive power budget
+ok 14 - two distinct bulk resistances and interface close the passive power budget
+  ---
+  duration_ms: 4.7748
+  type: 'test'
+  ...
+# Subtest: a zero contact term can exist within a strictly finite bulk path
+ok 15 - a zero contact term can exist within a strictly finite bulk path
+  ---
+  duration_ms: 4.4013
+  type: 'test'
+  ...
+# Subtest: reversed passive homogeneous path reverses transfer direction with the same losses
+ok 16 - reversed passive homogeneous path reverses transfer direction with the same losses
+  ---
+  duration_ms: 2.8631
+  type: 'test'
+  ...
+# Subtest: equal port potential or a genuine open seam has no credited throughput
+ok 17 - equal port potential or a genuine open seam has no credited throughput
+  ---
+  duration_ms: 1.7648
+  type: 'test'
+  ...
+# Subtest: a separate finite leakage branch requires its own accounted current and loss
+ok 18 - a separate finite leakage branch requires its own accounted current and loss
+  ---
+  duration_ms: 10.9002
+  type: 'test'
+  ...
+# Subtest: directional projection of a positive diagonal conductivity stays passive across sample axes
+ok 19 - directional projection of a positive diagonal conductivity stays passive across sample axes
+  ---
+  duration_ms: 4.2307
+  type: 'test'
+  ...
+# Subtest: storage allocation is capacity-limited and independently budgeted
+ok 20 - storage allocation is capacity-limited and independently budgeted
+  ---
+  duration_ms: 10.745
+  type: 'test'
+  ...
+# Subtest: invalid interface, nonfinite or unsupported source cap fails closed
+ok 21 - invalid interface, nonfinite or unsupported source cap fails closed
+  ---
+  duration_ms: 5.3033
+  type: 'test'
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 20
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 923.4229

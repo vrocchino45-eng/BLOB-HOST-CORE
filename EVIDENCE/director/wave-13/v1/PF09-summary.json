@@ -1,0 +1,1959 @@
+{
+  "verdict": "INCONCLUSIVE_TOTAL_FRAME_GAIN",
+  "source": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "previouslySkipped": 648,
+  "diagnosticSkipped": 464,
+  "isolationSkipped": 534,
+  "avoided": 72,
+  "attachmentFrames": 120,
+  "rows": [
+    {
+      "workload": "Surface Wake",
+      "pass": "control-1",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "mount": [
+        1
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 788,
+        "hidden": 512,
+        "visibleMeshes": 220,
+        "hiddenMeshes": 411
+      },
+      "frameP50": 71,
+      "frameP95": 92.80000019073486,
+      "cpuP50": 38,
+      "gpuP50": 32.827392,
+      "matrixP50": 1.5,
+      "registryP50": 26.5,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 279,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1792.1999998092651,
+      "discarded": 0,
+      "allocations": {
+        "<dependency>": 36768528,
+        "/src/core/GameRuntime.js": 524352,
+        "/src/camera/CameraReadabilitySystem.js": 524300,
+        "native/unsymbolized": 10488232,
+        "/src/world/LiftFieldReadabilitySystem.js": 524292,
+        "/src/presentation/RenderBudgetSystem.js": 524300,
+        "/src/core/SessionTelemetrySystem.js": 524316,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 524368,
+        "/src/input/InputSystem.js": 524300,
+        "/src/interaction/VerbCompositionSystem.js": 524324,
+        "/src/player/PlayerMovementController.js": 1048868,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524300,
+        "/src/player/CoreEmbodimentSystem.js": 2621472,
+        "/src/player/CoreGrowthSystem.js": 1048656,
+        "/src/visual/MotionSignatureSystem.js": 1048584,
+        "/src/chemistry/ChemObjectSystem.js": 1048584,
+        "/src/chemistry/BondSystem.js": 524292,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524300,
+        "/src/opening/SurfaceWakeGameplaySystem.js": 524320,
+        "/src/opening/SurfaceWakeLayeredInteractionSystem.js": 524300,
+        "/src/opening/SurfaceWakeEcologicalCausalitySystem.js": 1048596,
+        "/src/cinematic/CinematicAwakeningSystem.js": 1048604,
+        "/src/core/FirstSliceCohesionSystem.js": 524316,
+        "/src/routes/ReturnRegionEngineSystem.js": 524304,
+        "/src/core/FirstSliceTransitionCoordinator.js": 524292
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 7.829
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.631
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.369
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.964
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.014
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.606
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.442
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.471
+        }
+      ],
+      "hostBusy": 0.6819713441397233,
+      "motionLw": 2.6188472578915274
+    },
+    {
+      "workload": "Surface Wake",
+      "pass": "diagnostic",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "mount": [
+        1
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 788,
+        "hidden": 512,
+        "visibleMeshes": 220,
+        "hiddenMeshes": 411
+      },
+      "frameP50": 68,
+      "frameP95": 132.5,
+      "cpuP50": 36.10000038146973,
+      "gpuP50": 29.026304,
+      "matrixP50": 2.3999996185302734,
+      "registryP50": 24.5,
+      "transparentP50": 30.000000953674316,
+      "leafProbeP50": 0.09999942779541016,
+      "draws": 279,
+      "attempts": 78,
+      "bypassed": 0,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 54
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 54
+        },
+        {
+          "id": "siltPressureRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 54
+        }
+      ],
+      "admitted": 1958.1999998092651,
+      "discarded": 0,
+      "allocations": {
+        "<dependency>": 39400496,
+        "native/unsymbolized": 15210448,
+        "/src/presentation/RenderBudgetSystem.js": 1048600,
+        "/src/core/SystemRegistry.js": 1048604,
+        "/src/core/RuntimeStateLedgerSystem.js": 524304,
+        "/src/core/SessionTelemetrySystem.js": 1573036,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 1048620,
+        "/src/player/PlayerMovementController.js": 524328,
+        "/src/player/CoreSurfaceTruthSystem.js": 1048592,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 524292,
+        "/src/player/CoreEmbodimentSystem.js": 4194348,
+        "/src/visual/VisualComposer.js": 524300,
+        "/src/visual/MotionSignatureSystem.js": 524300,
+        "/src/chemistry/ChemObjectSystem.js": 1048592,
+        "/src/ecology/EntityRelationshipGrammarSystem.js": 524300,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 1048604,
+        "/src/ecology/EntityLocalMatterCouplingSystem.js": 524316,
+        "/src/camera/InspectionCameraSystem.js": 524292,
+        "/src/opening/SurfaceWakeLayeredInteractionSystem.js": 524292,
+        "/src/opening/SurfaceWakeEcologicalCausalitySystem.js": 1048648,
+        "/src/ui/PlaytestHudSystem.js": 1052256
+      },
+      "gc": [
+        {
+          "kind": "MajorGC",
+          "ms": 16.968
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 6.607
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.598
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.017
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.033
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.397
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.209
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.167
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.62
+        }
+      ],
+      "hostBusy": 0.6057890013518272,
+      "motionLw": 2.7570228258001883
+    },
+    {
+      "workload": "Surface Wake",
+      "pass": "control-2",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "mount": [
+        1
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 788,
+        "hidden": 512,
+        "visibleMeshes": 220,
+        "hiddenMeshes": 411
+      },
+      "frameP50": 60.19999980926514,
+      "frameP95": 71.40000057220459,
+      "cpuP50": 31,
+      "gpuP50": 25.452544,
+      "matrixP50": 0.8999996185302734,
+      "registryP50": 22.90000057220459,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 279,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1515.9000005722046,
+      "discarded": 0,
+      "allocations": {
+        "/src/core/GameRuntime.js": 524292,
+        "/src/camera/CameraReadabilitySystem.js": 1048644,
+        "<dependency>": 48855372,
+        "native/unsymbolized": 9964112,
+        "/src/presentation/RenderBudgetSystem.js": 1048600,
+        "/src/core/SystemRegistry.js": 524300,
+        "/src/world/HostConditionSystem.js": 524384,
+        "/src/core/SessionTelemetrySystem.js": 1048808,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 1048688,
+        "/src/interaction/VerbCompositionSystem.js": 524320,
+        "/src/player/PlayerMovementController.js": 524292,
+        "/src/player/CoreSurfaceTruthSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 2621472,
+        "/src/presentation/InteractionCompositionSystem.js": 1048584,
+        "/src/player/CoreEmbodimentSystem.js": 1048584,
+        "/src/visual/MotionSignatureSystem.js": 524292,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524292,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/guide/GuidePromptSystem.js": 524416,
+        "/src/opening/SurfaceWakeLayeredInteractionSystem.js": 524292,
+        "/src/opening/SurfaceWakeEcologicalCausalitySystem.js": 1048628,
+        "/src/ui/PlaytestHudSystem.js": 524576,
+        "/src/ui/StatusPageSystem.js": 524316
+      },
+      "gc": [
+        {
+          "kind": "MajorGC",
+          "ms": 15.134
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.868
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.523
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.147
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.688
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.001
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.385
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.096
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.13
+        }
+      ],
+      "hostBusy": 0.5181948131509087,
+      "motionLw": 2.4230451125008923
+    },
+    {
+      "workload": "Surface Wake",
+      "pass": "isolate",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "mount": [
+        1
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 788,
+        "hidden": 512,
+        "visibleMeshes": 220,
+        "hiddenMeshes": 411
+      },
+      "frameP50": 69.10000038146973,
+      "frameP95": 123.5,
+      "cpuP50": 35.10000038146973,
+      "gpuP50": 32.365568,
+      "matrixP50": 1.6999998092651367,
+      "registryP50": 23.800000190734863,
+      "transparentP50": 30.399999618530273,
+      "leafProbeP50": 0.10000038146972656,
+      "draws": 279,
+      "attempts": 78,
+      "bypassed": 0,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 54
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 54
+        },
+        {
+          "id": "siltPressureRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 54
+        }
+      ],
+      "admitted": 1953.0999994277954,
+      "discarded": 0,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 1572884,
+        "native/unsymbolized": 12731396,
+        "<dependency>": 44128864,
+        "/src/core/FrameTruthObserver.js": 524292,
+        "/src/presentation/RenderBudgetSystem.js": 1572892,
+        "/src/core/RuntimeStateLedgerSystem.js": 1048624,
+        "/src/core/SessionTelemetrySystem.js": 1572924,
+        "/src/input/InputSystem.js": 524368,
+        "/src/player/PlayerMovementController.js": 524292,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 1048584,
+        "/src/player/CoreEngineSystem.js": 524300,
+        "/src/world/TemporalHistorySystem.js": 524300,
+        "/src/world/HostContactEcologyContinuationSystem.js": 1048604,
+        "/src/world/LiftFieldReadabilitySystem.js": 524292,
+        "/src/world/CoreWorldResonanceSystem.js": 524292,
+        "/src/presentation/InteractionCompositionSystem.js": 524292,
+        "/src/player/CoreEmbodimentSystem.js": 2621460,
+        "/src/visual/VisualComposer.js": 524300,
+        "/src/visual/MotionSignatureSystem.js": 524292,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/targeting/TargetingSystem.js": 524300,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 1048624,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 524300,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 1048800,
+        "/src/morph/MorphStateSelector.js": 1048592,
+        "/src/camera/InspectionCameraSystem.js": 524292,
+        "/src/guide/GuidePromptSystem.js": 524304,
+        "/src/opening/SurfaceWakeGameplaySystem.js": 524300,
+        "/src/opening/SurfaceWakeEcologicalCausalitySystem.js": 1048584,
+        "/src/cinematic/CinematicAwakeningSystem.js": 524292,
+        "/src/ui/PlayerInformationModel.js": 524320,
+        "/src/core/FirstSliceCohesionSystem.js": 524316
+      },
+      "gc": [
+        {
+          "kind": "MajorGC",
+          "ms": 15.807
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 7.82
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.041
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.123
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.696
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.272
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.324
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.022
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.246
+        }
+      ],
+      "hostBusy": 0.5727734627421663,
+      "motionLw": 2.763351234252216
+    },
+    {
+      "workload": "Surface Wake",
+      "pass": "control-3",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_MEMBRANE_NURSERY_001",
+        "CELL_MEMBRANE_NURSERY_001"
+      ],
+      "mount": [
+        1
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 788,
+        "hidden": 512,
+        "visibleMeshes": 220,
+        "hiddenMeshes": 411
+      },
+      "frameP50": 65.69999980926514,
+      "frameP95": 84.5,
+      "cpuP50": 33.19999980926514,
+      "gpuP50": 28.327936,
+      "matrixP50": 0.8000001907348633,
+      "registryP50": 23.699999809265137,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 279,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1663.5,
+      "discarded": 0,
+      "allocations": {
+        "/src/core/GameRuntime.js": 1048584,
+        "/src/camera/CameraReadabilitySystem.js": 1048584,
+        "<dependency>": 39927944,
+        "native/unsymbolized": 17450916,
+        "/src/presentation/VisualHierarchyCompressionSystem.js": 524292,
+        "/src/presentation/CoreSightlinePresentation.js": 524304,
+        "/src/presentation/RenderBudgetSystem.js": 2621500,
+        "/src/core/SystemRegistry.js": 524300,
+        "/src/debug/DebugAreaJumpSystem.js": 524304,
+        "/src/input/ControllerComfortSystem.js": 524304,
+        "/src/player/PlayerMovementController.js": 1572924,
+        "/src/player/CoreSurfaceTruthSystem.js": 524300,
+        "/src/player/CoreEarnedEvolution.js": 524348,
+        "/src/player/CoreFlowSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 1572888,
+        "/src/player/CoreEmbodimentSystem.js": 2097180,
+        "/src/player/CoreGrowthSystem.js": 524352,
+        "/src/visual/VisualComposer.js": 524300,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524348,
+        "/src/opening/SurfaceWakeGameplaySystem.js": 1048632,
+        "/src/opening/SurfaceWakeEcologicalCausalitySystem.js": 1048600,
+        "/src/routes/ReturnRegionEngineSystem.js": 524328,
+        "/src/routes/GraveResonanceGameplaySystem.js": 524300,
+        "/src/combat/GraveRuptureHarvestSystem.js": 524368
+      },
+      "gc": [
+        {
+          "kind": "MajorGC",
+          "ms": 13.847
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 6.15
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.993
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.79
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.349
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.261
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.182
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.115
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.37
+        }
+      ],
+      "hostBusy": 0.5282774774284041,
+      "motionLw": 2.5179438301104167
+    },
+    {
+      "workload": "Silt Shelf",
+      "pass": "control-1",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 684,
+        "visibleMeshes": 301,
+        "hiddenMeshes": 542
+      },
+      "frameP50": 69.70000076293945,
+      "frameP95": 81.89999961853027,
+      "cpuP50": 43.80000019073486,
+      "gpuP50": 38.498304,
+      "matrixP50": 1.1000003814697266,
+      "registryP50": 19.59999942779541,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 412,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1737.4000005722046,
+      "discarded": 0,
+      "allocations": {
+        "<dependency>": 58304724,
+        "/src/camera/CameraReadabilitySystem.js": 1572896,
+        "native/unsymbolized": 18879296,
+        "/src/player/PlayerMovementController.js": 524320,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 1048584,
+        "/src/world/LiftFieldReadabilitySystem.js": 1572876,
+        "/src/player/CoreEmbodimentSystem.js": 4194352,
+        "/src/presentation/RenderBudgetSystem.js": 4194372,
+        "/src/core/SessionTelemetrySystem.js": 524300,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 1048604,
+        "/src/input/InputSystem.js": 524496,
+        "/src/interaction/VerbCompositionSystem.js": 524292,
+        "/src/player/CoreRadialPerformanceSystem.js": 1572876,
+        "/src/player/CoreFlowSystem.js": 524292,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524304,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/player/CoreEarnedEvolution.js": 524348,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/targeting/TargetingSystem.js": 3145764,
+        "/src/ecology/EntityLocalMatterCouplingSystem.js": 524300,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/ecology/EntityEcologicalCrossInfluenceSystem.js": 524308,
+        "/src/guide/GuidePromptSystem.js": 524328,
+        "/src/ui/PlaytestHudSystem.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 2621484,
+        "/src/world/RegionalTerritoryExpansion.js": 524292
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 3.601
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.336
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.906
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.591
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.355
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.526
+        }
+      ],
+      "hostBusy": 0.4661000957015191,
+      "motionLw": 0.33120870720061774
+    },
+    {
+      "workload": "Silt Shelf",
+      "pass": "diagnostic",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 684,
+        "visibleMeshes": 301,
+        "hiddenMeshes": 542
+      },
+      "frameP50": 75,
+      "frameP95": 84.19999980926514,
+      "cpuP50": 46.10000038146973,
+      "gpuP50": 40.635392,
+      "matrixP50": 2.09999942779541,
+      "registryP50": 21.5,
+      "transparentP50": 37.30000019073486,
+      "leafProbeP50": 0,
+      "draws": 412,
+      "attempts": 24,
+      "bypassed": 0,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 48
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 48
+        }
+      ],
+      "admitted": 1832.8000001907349,
+      "discarded": 0,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 524300,
+        "<dependency>": 50420456,
+        "native/unsymbolized": 18879884,
+        "/src/player/CoreStabilizeSample.js": 524300,
+        "/src/world/LiftFieldReadabilitySystem.js": 2621472,
+        "/src/presentation/RenderBudgetSystem.js": 2621500,
+        "/src/core/SystemRegistry.js": 524496,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 524304,
+        "/src/debug/DebugAreaJumpSystem.js": 524300,
+        "/src/input/InputSystem.js": 524304,
+        "/src/interaction/VerbCompositionSystem.js": 524292,
+        "/src/player/PlayerMovementController.js": 524300,
+        "/src/player/CoreTopologyVerbCharacterSystem.js": 524304,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 1048584,
+        "/src/presentation/InteractionCompositionSystem.js": 1048584,
+        "/src/player/CoreEmbodimentSystem.js": 3145764,
+        "/src/visual/MotionSignatureSystem.js": 524292,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 1048592,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 524304,
+        "/src/ui/PlaytestHudSystem.js": 524304,
+        "/src/routes/ReturnRegionEngineSystem.js": 524292,
+        "/src/routes/SiltPressureRouteSystem.js": 4718640,
+        "/src/world/RegionalTerritoryExpansion.js": 1048592
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 4.199
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.219
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.574
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.151
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.408
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.941
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.51
+        }
+      ],
+      "hostBusy": 0.502251089403358,
+      "motionLw": 0.33740806178254723
+    },
+    {
+      "workload": "Silt Shelf",
+      "pass": "control-2",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 684,
+        "visibleMeshes": 301,
+        "hiddenMeshes": 542
+      },
+      "frameP50": 70.90000057220459,
+      "frameP95": 89.80000019073486,
+      "cpuP50": 43.69999980926514,
+      "gpuP50": 39.064576,
+      "matrixP50": 1.1999998092651367,
+      "registryP50": 21,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 412,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1778.5,
+      "discarded": 0,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 1572892,
+        "<dependency>": 55693128,
+        "native/unsymbolized": 14691496,
+        "/src/combat/GraveRuptureConsequenceSystem.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 2621460,
+        "/src/presentation/RenderBudgetSystem.js": 1572900,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524320,
+        "/src/debug/DebugAreaJumpSystem.js": 524304,
+        "/src/input/ControllerComfortSystem.js": 524352,
+        "/src/player/PlayerMovementController.js": 524292,
+        "/src/world/RegionalTerritoryVolume.js": 524292,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 1048644,
+        "/src/player/CoreSurfaceTruthSystem.js": 524300,
+        "/src/player/CoreRadialPerformanceSystem.js": 1048596,
+        "/src/player/CoreTopologyVerbCharacterSystem.js": 1048600,
+        "/src/player/CoreVerbEngineCouplingSystem.js": 524292,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 2621472,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 524292,
+        "/src/player/CoreEmbodimentSystem.js": 2621508,
+        "/src/visual/MotionSignatureSystem.js": 524300,
+        "/src/chemistry/ChemObjectSystem.js": 1048584,
+        "/src/targeting/TargetingSystem.js": 524292,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524308,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 1048600,
+        "/src/ui/PlaytestHudSystem.js": 524576,
+        "/src/modes/ModeController.js": 524328,
+        "/src/world/RegionalTerritoryExpansion.js": 1048592
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 5.071
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.772
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.093
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.673
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.547
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.046
+        }
+      ],
+      "hostBusy": 0.48878752113305046,
+      "motionLw": 0.3245492163841227
+    },
+    {
+      "workload": "Silt Shelf",
+      "pass": "isolate",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 684,
+        "visibleMeshes": 301,
+        "hiddenMeshes": 542
+      },
+      "frameP50": 114.89999961853027,
+      "frameP95": 188.70000076293945,
+      "cpuP50": 57.19999980926514,
+      "gpuP50": 44.496896,
+      "matrixP50": 2.6000003814697266,
+      "registryP50": 38.29999923706055,
+      "transparentP50": 46.69999885559082,
+      "leafProbeP50": 0,
+      "draws": 411,
+      "attempts": 24,
+      "bypassed": 24,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 62
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 62
+        }
+      ],
+      "admitted": 2697.7999992370605,
+      "discarded": 100.80000019073486,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 1572900,
+        "<dependency>": 71428536,
+        "native/unsymbolized": 23597096,
+        "/src/world/RegionalTerritoryVolume.js": 1048612,
+        "/src/player/CoreEmbodimentSystem.js": 6291564,
+        "/src/ui/PlaytestHudSystem.js": 524576,
+        "/src/presentation/RenderBudgetSystem.js": 4718700,
+        "/src/core/SystemRegistry.js": 524300,
+        "/src/core/SessionTelemetrySystem.js": 545072,
+        "/src/input/InputSystem.js": 1048624,
+        "/src/player/PlayerMovementController.js": 1048584,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 524292,
+        "/src/player/CoreTopologyEnvironmentalHandlingSystem.js": 524292,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 524292,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 1572984,
+        "/src/visual/VisualComposer.js": 1048584,
+        "/src/chemistry/ChemObjectSystem.js": 2097180,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524304,
+        "/src/targeting/TargetingSystem.js": 1048584,
+        "/src/targeting/TargetFocusRegistry.js": 524304,
+        "/src/ecology/EntitySystem.js": 524292,
+        "/src/ecology/EntityEcologicalCrossInfluenceSystem.js": 524308,
+        "/src/ecology/OrbiterSystem.js": 524292,
+        "/src/camera/InspectionCameraSystem.js": 524448,
+        "/src/routes/ReturnRegionEngineSystem.js": 524304,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/routes/SiltPressureRouteSystem.js": 3145764,
+        "/src/world/RegionalTerritoryExpansion.js": 524292,
+        "/src/contact/SiltTrajectoryMemory.js": 524304
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 4.863
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.848
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.498
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.726
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.162
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.731
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.165
+        }
+      ],
+      "hostBusy": 0.6059919072220817,
+      "motionLw": 0.47930213999863
+    },
+    {
+      "workload": "Silt Shelf",
+      "pass": "control-3",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 684,
+        "visibleMeshes": 301,
+        "hiddenMeshes": 542
+      },
+      "frameP50": 133,
+      "frameP95": 146.69999980926514,
+      "cpuP50": 74.19999980926514,
+      "gpuP50": 66.316288,
+      "matrixP50": 2.09999942779541,
+      "registryP50": 44.40000057220459,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 411,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 3185.199999809265,
+      "discarded": 0.6000003814697341,
+      "allocations": {
+        "/src/core/GameRuntime.js": 524304,
+        "/src/camera/CameraReadabilitySystem.js": 2621492,
+        "<dependency>": 53578584,
+        "native/unsymbolized": 16781272,
+        "/src/core/SystemRegistry.js": 524496,
+        "/src/core/SessionTelemetrySystem.js": 1705128,
+        "/src/world/RegionalTerritoryVolume.js": 1572924,
+        "/src/player/CoreTopologyVerbCharacterSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 2097180,
+        "/src/chemistry/ChemObjectSystem.js": 2097176,
+        "/src/ui/PlaytestHudSystem.js": 1573452,
+        "/src/combat/RuptureConsequenceGrammar.js": 524292,
+        "/src/routes/SiltPressureRouteSystem.js": 3670088,
+        "/src/core/FirstSliceTransitionCoordinator.js": 524300,
+        "/src/presentation/RenderBudgetSystem.js": 1572900,
+        "/src/debug/DebugAreaJumpSystem.js": 524300,
+        "/src/input/InputSystem.js": 1048796,
+        "/src/interaction/VerbCompositionSystem.js": 1572888,
+        "/src/input/ControllerComfortSystem.js": 524352,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 524300,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/player/CoreVerbEngineCouplingSystem.js": 1048596,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 1048584,
+        "/src/player/CoreEmbodimentSystem.js": 3145760,
+        "/src/player/CoreGrowthSystem.js": 1048592,
+        "/src/player/CoreEarnedEvolution.js": 524340,
+        "/src/targeting/TargetingSystem.js": 2097192,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524324,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 1048600,
+        "/src/ecology/EntityEcologicalResidueSystem.js": 524400,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/ecology/OrbiterSystem.js": 524292,
+        "/src/camera/InspectionCameraSystem.js": 524304,
+        "/src/guide/GuidePromptSystem.js": 524304,
+        "/src/modes/ModeController.js": 524384,
+        "/src/core/FirstSliceCohesionSystem.js": 524320,
+        "/src/routes/ReturnRegionEngineSystem.js": 524304,
+        "/src/routes/Act1RouteContractSystem.js": 524292,
+        "/src/world/RegionalTerritoryExpansion.js": 524292,
+        "/BLOB_BOT_SERIES1/director/shelf-stage.mjs": 524316
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 4.691
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.32
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.153
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.175
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.412
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.055
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.978
+        }
+      ],
+      "hostBusy": 0.8170951685939898,
+      "motionLw": 0.5622613545250084
+    },
+    {
+      "workload": "Core Work",
+      "pass": "control-1",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 699,
+        "visibleMeshes": 298,
+        "hiddenMeshes": 545
+      },
+      "frameP50": 83.09999942779541,
+      "frameP95": 101.90000057220459,
+      "cpuP50": 53.59999942779541,
+      "gpuP50": 48.072704,
+      "matrixP50": 1.4000005722045898,
+      "registryP50": 22.199999809265137,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 340,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 2080.5,
+      "discarded": 0,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 2097184,
+        "<dependency>": 38343648,
+        "native/unsymbolized": 14159976,
+        "/src/core/FrameTruthObserver.js": 524292,
+        "/src/presentation/RenderBudgetSystem.js": 2097200,
+        "/src/core/SessionTelemetrySystem.js": 524292,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 1573012,
+        "/src/input/InputSystem.js": 524300,
+        "/src/player/PlayerMovementController.js": 1048592,
+        "/src/world/RegionalTerritoryVolume.js": 524320,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 524368,
+        "/src/player/CoreTopologyEnvironmentalHandlingSystem.js": 524300,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524320,
+        "/src/player/CoreTopologyVerbCharacterSystem.js": 1048592,
+        "/src/world/HostContactShelfSystem.js": 524416,
+        "/src/player/CoreEmbodimentSystem.js": 2097188,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 1048604,
+        "/src/ecology/EntityEcologicalResidueSystem.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 1048596,
+        "/src/routes/Act1RouteContractSystem.js": 524300
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 3.555
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.625
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.348
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.145
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.505
+        }
+      ],
+      "hostBusy": 0.9244165605867734,
+      "motionLw": 0.39032860100612926
+    },
+    {
+      "workload": "Core Work",
+      "pass": "diagnostic",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 699,
+        "visibleMeshes": 298,
+        "hiddenMeshes": 545
+      },
+      "frameP50": 66.19999980926514,
+      "frameP95": 71.89999961853027,
+      "cpuP50": 40.09999942779541,
+      "gpuP50": 34.702336,
+      "matrixP50": 2.299999237060547,
+      "registryP50": 18.600000381469727,
+      "transparentP50": 31.599997520446777,
+      "leafProbeP50": 0.09999942779541016,
+      "draws": 341,
+      "attempts": 24,
+      "bypassed": 0,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 48
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 48
+        }
+      ],
+      "admitted": 1612.1999998092651,
+      "discarded": 0,
+      "allocations": {
+        "<dependency>": 38347100,
+        "/src/camera/CameraReadabilitySystem.js": 1572888,
+        "/src/presentation/RenderBudgetSystem.js": 2097192,
+        "/src/core/SystemRegistry.js": 524304,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 524300,
+        "/src/debug/DebugAreaJumpSystem.js": 524320,
+        "/src/input/InputSystem.js": 1572900,
+        "native/unsymbolized": 15877584,
+        "/src/world/RegionalTerritoryVolume.js": 1048584,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 524300,
+        "/src/player/CoreSurfaceTruthSystem.js": 524300,
+        "/src/player/CoreTendrilSupportPlaneSystem.js": 524308,
+        "/src/player/CoreEngineSystem.js": 524300,
+        "/src/player/CoreTopologyVerbCharacterSystem.js": 1048592,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/presentation/InteractionCompositionSystem.js": 524400,
+        "/src/player/CoreEmbodimentSystem.js": 3146120,
+        "/src/visual/VisualComposer.js": 524292,
+        "/src/visual/MotionSignatureSystem.js": 1048584,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 1048620,
+        "/src/ecology/EntityEcologicalResidueSystem.js": 524304,
+        "/src/camera/InspectionCameraSystem.js": 524292,
+        "/src/systems/ObjectiveSystem.js": 524304,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/routes/SiltPressureRouteSystem.js": 3670056
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 4.5
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.141
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.257
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.504
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.66
+        }
+      ],
+      "hostBusy": 0.7805894070331967,
+      "motionLw": 0.3036643100583759
+    },
+    {
+      "workload": "Core Work",
+      "pass": "control-2",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 690,
+        "visibleMeshes": 298,
+        "hiddenMeshes": 545
+      },
+      "frameP50": 60.39999961853027,
+      "frameP95": 66.90000057220459,
+      "cpuP50": 35,
+      "gpuP50": 32.50176,
+      "matrixP50": 1.1999998092651367,
+      "registryP50": 18.5,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 340,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1466.1000003814697,
+      "discarded": 0,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 524292,
+        "<dependency>": 44650604,
+        "/src/core/BoundedSimulationCatchUp.js": 524292,
+        "/src/presentation/RenderBudgetSystem.js": 2621492,
+        "/src/core/SystemRegistry.js": 524496,
+        "/src/input/ControlMap.js": 524304,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 1048592,
+        "/src/player/CoreSurfaceTruthSystem.js": 524304,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/player/CoreTopologyEnvironmentalHandlingSystem.js": 524292,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/world/CoreWorldResonanceSystem.js": 524292,
+        "native/unsymbolized": 10488796,
+        "/src/player/CoreEmbodimentSystem.js": 3145804,
+        "/src/visual/VisualComposer.js": 524300,
+        "/src/visual/MotionSignatureSystem.js": 524292,
+        "/src/chemistry/ChemObjectSystem.js": 524316,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524300,
+        "/src/ecology/EntityEcologicalResidueSystem.js": 1048752,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/guide/GuidePromptSystem.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 1572888,
+        "/src/world/RegionalTerritoryExpansion.js": 524292
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 4.541
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.267
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.325
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.101
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.733
+        }
+      ],
+      "hostBusy": 0.5813709489391466,
+      "motionLw": 0.27808947059845984
+    },
+    {
+      "workload": "Core Work",
+      "pass": "isolate",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 690,
+        "visibleMeshes": 298,
+        "hiddenMeshes": 545
+      },
+      "frameP50": 67.90000057220459,
+      "frameP95": 135.30000019073486,
+      "cpuP50": 40.70000076293945,
+      "gpuP50": 36.820992,
+      "matrixP50": 2.3000001907348633,
+      "registryP50": 19.199999809265137,
+      "transparentP50": 31.600001335144043,
+      "leafProbeP50": 0,
+      "draws": 340,
+      "attempts": 24,
+      "bypassed": 24,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 52
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 52
+        }
+      ],
+      "admitted": 1876.5999994277954,
+      "discarded": 0,
+      "allocations": {
+        "/src/core/GameRuntime.js": 524292,
+        "<dependency>": 45697960,
+        "/src/camera/CameraReadabilitySystem.js": 1048592,
+        "/src/visual/CoreWorkReadability.js": 524300,
+        "native/unsymbolized": 24647068,
+        "/src/core/FirstSliceTransitionCoordinator.js": 524304,
+        "/src/presentation/RenderBudgetSystem.js": 1572892,
+        "/src/core/SessionTelemetrySystem.js": 524320,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 2097216,
+        "/src/input/InputSystem.js": 524308,
+        "/src/world/RegionalTerritoryVolume.js": 524300,
+        "/src/player/CoreSurfaceTruthSystem.js": 1572904,
+        "/src/player/CoreTendrilSupportPlaneSystem.js": 524300,
+        "/src/world/CoreWorldResonanceSystem.js": 524368,
+        "/src/presentation/InteractionCompositionSystem.js": 524292,
+        "/src/player/CoreEmbodimentSystem.js": 4718676,
+        "/src/visual/VisualComposer.js": 524300,
+        "/src/visual/MotionSignatureSystem.js": 524324,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/targeting/TargetFocusRegistry.js": 524304,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524300,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/routes/GraveResonanceGameplaySystem.js": 524320,
+        "/src/routes/SiltPressureRouteSystem.js": 2097224,
+        "/src/contact/SiltTrajectoryMemory.js": 1048604,
+        "/src/world/RegionalTerritoryExpansion.js": 524292
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 3.663
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.615
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.312
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.611
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.499
+        }
+      ],
+      "hostBusy": 0.5052243645834406,
+      "motionLw": 0.3368464896743182
+    },
+    {
+      "workload": "Core Work",
+      "pass": "control-3",
+      "attached": 0,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 699,
+        "visibleMeshes": 298,
+        "hiddenMeshes": 545
+      },
+      "frameP50": 73.10000038146973,
+      "frameP95": 104.5,
+      "cpuP50": 44.30000019073486,
+      "gpuP50": 38.322208,
+      "matrixP50": 1.6000003814697266,
+      "registryP50": 19.5,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 340,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 1839.9000005722046,
+      "discarded": 0,
+      "allocations": {
+        "/src/core/GameRuntime.js": 524292,
+        "<dependency>": 41490264,
+        "/src/camera/CameraReadabilitySystem.js": 524300,
+        "/src/player/CoreEmbodimentSystem.js": 3670080,
+        "/src/visual/MotionSignatureSystem.js": 1048584,
+        "/src/routes/ReturnRegionEngineSystem.js": 524320,
+        "native/unsymbolized": 12059820,
+        "/src/presentation/RenderBudgetSystem.js": 1572900,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 524300,
+        "/src/debug/DebugAreaJumpSystem.js": 524384,
+        "/src/player/PlayerMovementController.js": 524292,
+        "/src/world/RegionalTerritoryVolume.js": 524292,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 524328,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/ui/PlaytestHudSystem.js": 524576,
+        "/src/combat/GraveRuptureConsequenceSystem.js": 524300,
+        "/src/routes/Act1RouteContractSystem.js": 524328,
+        "/src/routes/SiltPressureRouteSystem.js": 4194532
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 3.115
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.39
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.553
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.194
+        }
+      ],
+      "hostBusy": 0.7098566088070625,
+      "motionLw": 0.334103286199342
+    },
+    {
+      "workload": "Attached surface",
+      "pass": "control-1",
+      "attached": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1053,
+        "hidden": 656,
+        "visibleMeshes": 324,
+        "hiddenMeshes": 520
+      },
+      "frameP50": 97,
+      "frameP95": 151.5,
+      "cpuP50": 62.79999923706055,
+      "gpuP50": 51.479552,
+      "matrixP50": 2,
+      "registryP50": 32.30000019073486,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 422,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 2681.699999809265,
+      "discarded": 12.100000381469744,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 524304,
+        "<dependency>": 48323272,
+        "native/unsymbolized": 17306020,
+        "/src/chemistry/ChemObjectSystem.js": 2097204,
+        "/src/presentation/RenderBudgetSystem.js": 2097200,
+        "/src/core/SystemRegistry.js": 524300,
+        "/src/chemistry/LocalChemistryContextSystem.js": 1048584,
+        "/src/core/SessionTelemetrySystem.js": 524300,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 524292,
+        "/src/input/InputSystem.js": 524496,
+        "/src/player/PlayerMovementController.js": 2097176,
+        "/src/world/RegionalTerritoryVolume.js": 524320,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 524320,
+        "/src/player/CoreSurfaceTruthSystem.js": 524304,
+        "/src/player/CoreRadialPerformanceSystem.js": 524348,
+        "/src/player/CoreVerbEngineCouplingSystem.js": 524292,
+        "/src/world/TemporalHistorySystem.js": 524340,
+        "/src/world/LiftFieldReadabilitySystem.js": 524292,
+        "/src/player/CoreEmbodimentSystem.js": 4194368,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524304,
+        "/src/camera/InspectionCameraSystem.js": 524292,
+        "/src/ui/PlaytestHudSystem.js": 1573180,
+        "/src/ui/StatusPageSystem.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 1572876,
+        "/src/world/RegionalTerritoryExpansion.js": 1048584
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 3.533
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.563
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.595
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.975
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.693
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.689
+        }
+      ],
+      "hostBusy": 0.7261260133337506,
+      "motionLw": 1.6303618420467358
+    },
+    {
+      "workload": "Attached surface",
+      "pass": "diagnostic",
+      "attached": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1054,
+        "hidden": 658,
+        "visibleMeshes": 323,
+        "hiddenMeshes": 522
+      },
+      "frameP50": 90.5,
+      "frameP95": 129.79999923706055,
+      "cpuP50": 51.39999961853027,
+      "gpuP50": 46.016512,
+      "matrixP50": 2.3000001907348633,
+      "registryP50": 29.40000057220459,
+      "transparentP50": 43.80000114440918,
+      "leafProbeP50": 0,
+      "draws": 422,
+      "attempts": 24,
+      "bypassed": 0,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 55
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 55
+        }
+      ],
+      "admitted": 2388.6000003814697,
+      "discarded": 14.100000381469746,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 2097184,
+        "<dependency>": 42552152,
+        "/src/core/SessionTelemetrySystem.js": 524300,
+        "native/unsymbolized": 11537580,
+        "/src/presentation/RenderBudgetSystem.js": 2097200,
+        "/src/input/InputSystem.js": 524304,
+        "/src/player/PlayerMovementController.js": 1048876,
+        "/src/world/RegionalTerritoryVolume.js": 1048584,
+        "/src/player/CoreTopologyResonanceSystem.js": 524320,
+        "/src/world/LiftFieldReadabilitySystem.js": 1572888,
+        "/src/player/CoreEmbodimentSystem.js": 7864540,
+        "/src/visual/MotionSignatureSystem.js": 1048584,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 524292,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 524300,
+        "/src/ecology/EntityLocalMatterCouplingSystem.js": 524316,
+        "/src/guide/GuidePromptSystem.js": 524308,
+        "/src/ui/PlaytestHudSystem.js": 524300,
+        "/src/ui/PlayerInformationModel.js": 524292,
+        "/src/routes/SiltPressureRouteSystem.js": 1572888,
+        "/src/world/RegionalTerritoryExpansion.js": 524292
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 3.466
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.184
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.987
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.347
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.09
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 2.382
+        }
+      ],
+      "hostBusy": 0.6544397393059185,
+      "motionLw": 1.3319301553259106
+    },
+    {
+      "workload": "Attached surface",
+      "pass": "control-2",
+      "attached": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1053,
+        "hidden": 658,
+        "visibleMeshes": 322,
+        "hiddenMeshes": 522
+      },
+      "frameP50": 108.19999980926514,
+      "frameP95": 136.89999961853027,
+      "cpuP50": 55.79999923706055,
+      "gpuP50": 49.455104,
+      "matrixP50": 1.8999996185302734,
+      "registryP50": 37.90000057220459,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 422,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 2510.199999809265,
+      "discarded": 0,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 1572908,
+        "<dependency>": 46739588,
+        "/src/presentation/RenderBudgetSystem.js": 1048600,
+        "/src/core/SystemRegistry.js": 524496,
+        "/src/core/SessionTelemetrySystem.js": 1639156,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524292,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 2097324,
+        "/src/input/DeliberateCommitmentSystem.js": 524304,
+        "/src/player/PlayerMovementController.js": 1572904,
+        "native/unsymbolized": 12585080,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 1572896,
+        "/src/player/CoreSurfaceTruthSystem.js": 1048604,
+        "/src/player/CoreRadialPerformanceSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 1572888,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 524300,
+        "/src/player/CoreEmbodimentSystem.js": 4194468,
+        "/src/visual/MotionSignatureSystem.js": 1572936,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 524300,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/routes/ReturnRegionEngineSystem.js": 524320,
+        "/src/combat/GraveRuptureConsequenceSystem.js": 524300,
+        "/src/routes/Act1RouteContractSystem.js": 524328,
+        "/src/routes/SiltPressureRouteSystem.js": 2097188,
+        "/src/world/RegionalTerritoryExpansion.js": 524292
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 4.021
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.669
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.247
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.999
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.402
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.157
+        }
+      ],
+      "hostBusy": 0.7425697302240513,
+      "motionLw": 1.5069514319668573
+    },
+    {
+      "workload": "Attached surface",
+      "pass": "isolate",
+      "attached": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 657,
+        "visibleMeshes": 322,
+        "hiddenMeshes": 521
+      },
+      "frameP50": 189,
+      "frameP95": 276.19999980926514,
+      "cpuP50": 99.80000019073486,
+      "gpuP50": 84.649984,
+      "matrixP50": 4,
+      "registryP50": 65.59999942779541,
+      "transparentP50": 80.90000247955322,
+      "leafProbeP50": 0,
+      "draws": 422,
+      "attempts": 24,
+      "bypassed": 24,
+      "owners": [
+        {
+          "id": "graveMemoryRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 72
+        },
+        {
+          "id": "vascularRhythmRouteSystem",
+          "calls": 0,
+          "eligibleChecksSkipped": 72
+        }
+      ],
+      "admitted": 3536.300000190735,
+      "discarded": 1437.4000005722046,
+      "allocations": {
+        "/src/camera/CameraReadabilitySystem.js": 524304,
+        "native/unsymbolized": 14828980,
+        "/src/input/InputSystem.js": 1048620,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 2621460,
+        "/src/player/CoreGrowthSystem.js": 524292,
+        "<dependency>": 47267372,
+        "/src/presentation/RenderBudgetSystem.js": 1572884,
+        "/src/core/SessionTelemetrySystem.js": 524304,
+        "/src/morph/LocalCellBoundaryMorphSystem.js": 524300,
+        "/src/debug/DebugAreaJumpSystem.js": 1048600,
+        "/src/input/ControlMap.js": 524328,
+        "/src/player/PlayerMovementController.js": 1048584,
+        "/src/world/RegionalTerritoryVolume.js": 524340,
+        "/src/player/CoreTopologyResonanceSystem.js": 524292,
+        "/src/world/HostContactEcologyContinuationSystem.js": 524292,
+        "/src/world/LiftFieldReadabilitySystem.js": 1572984,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 524292,
+        "/src/player/CoreEmbodimentSystem.js": 3670044,
+        "/src/player/CoreEarnedEvolution.js": 524340,
+        "/src/visual/MotionSignatureSystem.js": 1048584,
+        "/src/visual/VisualComposer.js": 524300,
+        "/src/chemistry/ChemObjectSystem.js": 524292,
+        "/src/targeting/TargetingSystem.js": 524316,
+        "/src/ecology/EntitySystem.js": 524292,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/ecology/OrbiterSystem.js": 524292,
+        "/src/ui/PlaytestHudSystem.js": 524576,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524300,
+        "/src/combat/RuptureConsequenceGrammar.js": 524292,
+        "/src/player/CoreRadialPerformanceSystem.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 3670268,
+        "/src/contact/SiltTrajectoryMemory.js": 524300,
+        "/src/world/RegionalTerritoryExpansion.js": 524316
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 7.068
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 8.939
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.308
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.696
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.124
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 16.424
+        }
+      ],
+      "hostBusy": 0.9762708656811427,
+      "motionLw": 1.4917936905143578
+    },
+    {
+      "workload": "Attached surface",
+      "pass": "control-3",
+      "attached": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1070 Ti (0x00001B82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "activityCells": [
+        "CELL_SILT_PRESSURE_ROUTE_001",
+        "CELL_SILT_PRESSURE_ROUTE_001"
+      ],
+      "mount": [
+        2
+      ],
+      "physicalSurfaces": [],
+      "visible": {
+        "total": 1052,
+        "hidden": 659,
+        "visibleMeshes": 320,
+        "hiddenMeshes": 523
+      },
+      "frameP50": 152.80000019073486,
+      "frameP95": 522.1999998092651,
+      "cpuP50": 82,
+      "gpuP50": 75.754496,
+      "matrixP50": 2.09999942779541,
+      "registryP50": 59.29999923706055,
+      "transparentP50": null,
+      "leafProbeP50": null,
+      "draws": 422,
+      "attempts": 0,
+      "bypassed": 0,
+      "owners": [],
+      "admitted": 3472.2000007629395,
+      "discarded": 1427.399998664856,
+      "allocations": {
+        "/src/core/GameRuntime.js": 1048584,
+        "/src/camera/CameraReadabilitySystem.js": 524300,
+        "/src/player/CoreTendrilSurfaceContactSystem.js": 1048584,
+        "/src/player/CoreEmbodimentSystem.js": 3670228,
+        "<dependency>": 56206928,
+        "native/unsymbolized": 19401772,
+        "/src/presentation/RenderBudgetSystem.js": 3670100,
+        "/src/core/SystemRegistry.js": 524340,
+        "/src/input/InputSystem.js": 524300,
+        "/src/chemistry/LocalChemistryContextSystem.js": 524320,
+        "/src/player/PlayerMovementController.js": 524320,
+        "/src/world/RegionalTerritoryVolume.js": 524340,
+        "/src/player/CoreRadialPerformanceSystem.js": 1572876,
+        "/src/player/CoreTopologyVerbCharacterSystem.js": 524300,
+        "/src/player/CoreVerbEngineCouplingSystem.js": 1048584,
+        "/src/world/LiftFieldReadabilitySystem.js": 1048584,
+        "/src/audio/EventAnchoredHostAudioSystem.js": 524292,
+        "/src/presentation/InteractionCompositionSystem.js": 1048612,
+        "/src/player/CoreGrowthSystem.js": 1572916,
+        "/src/visual/MotionSignatureSystem.js": 524292,
+        "/src/chemistry/ChemObjectSystem.js": 1572900,
+        "/src/ecology/EntityReciprocalMemorySystem.js": 1048600,
+        "/src/ecology/EntityReciprocalBehaviorSystem.js": 2621688,
+        "/src/ecology/EntityEcologicalResidueSystem.js": 524300,
+        "/src/ecology/EntityResidueRecognitionSystem.js": 524484,
+        "/src/ui/PlaytestHudSystem.js": 524576,
+        "/src/combat/GraveRuptureConsequenceSystem.js": 524300,
+        "/src/contact/SiltCompressionContact.js": 524300,
+        "/src/routes/SiltPressureRouteSystem.js": 1048768,
+        "/src/world/RegionalTerritoryExpansion.js": 1572888
+      },
+      "gc": [
+        {
+          "kind": "MinorGC",
+          "ms": 6.588
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 13.697
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 12.386
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 5.021
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 4.037
+        },
+        {
+          "kind": "MinorGC",
+          "ms": 3.605
+        }
+      ],
+      "hostBusy": 0.9978658725501274,
+      "motionLw": 1.7299756252586633
+    }
+  ]
+}

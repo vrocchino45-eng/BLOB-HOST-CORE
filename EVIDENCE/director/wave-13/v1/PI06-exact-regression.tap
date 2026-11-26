@@ -1,0 +1,334 @@
+TAP version 13
+# Subtest: relative sweep rejects approaching near miss, actual overlap, separating motion and exact tangent
+ok 1 - relative sweep rejects approaching near miss, actual overlap, separating motion and exact tangent
+  ---
+  duration_ms: 25.3003
+  type: 'test'
+  ...
+# Subtest: scoped trajectory owner commits both equal participants and records the immediate invariant
+ok 2 - scoped trajectory owner commits both equal participants and records the immediate invariant
+  ---
+  duration_ms: 58.3471
+  type: 'test'
+  ...
+# Subtest: scoped trajectory owner commits both one-to-three participants and records the immediate invariant
+ok 3 - scoped trajectory owner commits both one-to-three participants and records the immediate invariant
+  ---
+  duration_ms: 11.8394
+  type: 'test'
+  ...
+# Subtest: pair participant insert order and equal microstep catch-up produce identical motion and one delivery
+ok 4 - pair participant insert order and equal microstep catch-up produce identical motion and one delivery
+  ---
+  duration_ms: 12.6295
+  type: 'test'
+  ...
+# Subtest: initial overlap, dormant, parked, seated and unrelated identities cannot transfer momentum
+ok 5 - initial overlap, dormant, parked, seated and unrelated identities cannot transfer momentum
+  ---
+  duration_ms: 5.4124
+  type: 'test'
+  ...
+# Subtest: wrong Host, cell, mount, generation, invalid step and unsupported transform fail closed
+ok 6 - wrong Host, cell, mount, generation, invalid step and unsupported transform fail closed
+  ---
+  duration_ms: 3.2945
+  type: 'test'
+  ...
+# Subtest: unsupported impulse speed rejects both results before either changes
+ok 7 - unsupported impulse speed rejects both results before either changes
+  ---
+  duration_ms: 3.5659
+  type: 'test'
+  ...
+# Subtest: native PI03 wins before or inside the tie window and remains authoritative on residual travel
+ok 8 - native PI03 wins before or inside the tie window and remains authoritative on residual travel
+  ---
+  duration_ms: 10.7271
+  type: 'test'
+  ...
+# Subtest: continuous contact stays latched and native separation later permits a genuine new contact
+ok 9 - continuous contact stays latched and native separation later permits a genuine new contact
+  ---
+  duration_ms: 29.1373
+  type: 'test'
+  ...
+# Subtest: disabled and invalid fixture names supply no pair option or gameplay publication
+ok 10 - disabled and invalid fixture names supply no pair option or gameplay publication
+  ---
+  duration_ms: 10.1404
+  type: 'test'
+  ...
+# Subtest: mounted equal fixture measures actual native-drive boundaries and retrieves both grains
+ok 11 - mounted equal fixture measures actual native-drive boundaries and retrieves both grains
+  ---
+  duration_ms: 4034.4869
+  type: 'test'
+  ...
+# Subtest: mounted one-to-three fixture measures actual native-drive boundaries and retrieves both grains
+ok 12 - mounted one-to-three fixture measures actual native-drive boundaries and retrieves both grains
+  ---
+  duration_ms: 4531.8334
+  type: 'test'
+  ...
+# Subtest: mounted corridor near miss delivers no paired or fixed surface effect
+ok 13 - mounted corridor near miss delivers no paired or fixed surface effect
+  ---
+  duration_ms: 3874.2094
+  type: 'test'
+  ...
+# Subtest: ordinary free and fixed-surface traces match the exact admitted IN01 owner
+ok 14 - ordinary free and fixed-surface traces match the exact admitted IN01 owner
+  ---
+  duration_ms: 878.9511
+  type: 'test'
+  ...
+# Subtest: mounted native attraction separates the same release pair and then drives a second measured ingress
+ok 15 - mounted native attraction separates the same release pair and then drives a second measured ingress
+  ---
+  duration_ms: 3336.0603
+  type: 'test'
+  ...
+# Subtest: analytical e0-equal
+ok 16 - analytical e0-equal
+  ---
+  duration_ms: 26.8726
+  type: 'test'
+  ...
+# Subtest: mounted e0-equal records genuine owner response and native retrieval
+ok 17 - mounted e0-equal records genuine owner response and native retrieval
+  ---
+  duration_ms: 3995.0774
+  type: 'test'
+  ...
+# Subtest: analytical e05-equal
+ok 18 - analytical e05-equal
+  ---
+  duration_ms: 2.2446
+  type: 'test'
+  ...
+# Subtest: mounted e05-equal records genuine owner response and native retrieval
+ok 19 - mounted e05-equal records genuine owner response and native retrieval
+  ---
+  duration_ms: 4358.7847
+  type: 'test'
+  ...
+# Subtest: analytical e1-equal
+ok 20 - analytical e1-equal
+  ---
+  duration_ms: 2.8106
+  type: 'test'
+  ...
+# Subtest: mounted e1-equal records genuine owner response and native retrieval
+ok 21 - mounted e1-equal records genuine owner response and native retrieval
+  ---
+  duration_ms: 4408.512
+  type: 'test'
+  ...
+# Subtest: analytical e0-one-to-three
+ok 22 - analytical e0-one-to-three
+  ---
+  duration_ms: 2.0088
+  type: 'test'
+  ...
+# Subtest: mounted e0-one-to-three records genuine owner response and native retrieval
+ok 23 - mounted e0-one-to-three records genuine owner response and native retrieval
+  ---
+  duration_ms: 3103.6773
+  type: 'test'
+  ...
+# Subtest: analytical e05-one-to-three
+ok 24 - analytical e05-one-to-three
+  ---
+  duration_ms: 1.4003
+  type: 'test'
+  ...
+# Subtest: mounted e05-one-to-three records genuine owner response and native retrieval
+ok 25 - mounted e05-one-to-three records genuine owner response and native retrieval
+  ---
+  duration_ms: 2559.0028
+  type: 'test'
+  ...
+# Subtest: analytical e1-one-to-three
+ok 26 - analytical e1-one-to-three
+  ---
+  duration_ms: 0.8816
+  type: 'test'
+  ...
+# Subtest: mounted e1-one-to-three records genuine owner response and native retrieval
+ok 27 - mounted e1-one-to-three records genuine owner response and native retrieval
+  ---
+  duration_ms: 2276.4891
+  type: 'test'
+  ...
+# Subtest: unknown, out-of-range, nonfinite and unapproved restitution inputs reject
+ok 28 - unknown, out-of-range, nonfinite and unapproved restitution inputs reject
+  ---
+  duration_ms: 1.5323
+  type: 'test'
+  ...
+# Subtest: unsupported elastic speed rejects both trajectory outputs and preserves native velocity
+ok 29 - unsupported elastic speed rejects both trajectory outputs and preserves native velocity
+  ---
+  duration_ms: 4.8296
+  type: 'test'
+  ...
+# Subtest: older mount and wrong generation cannot take an elastic impulse
+ok 30 - older mount and wrong generation cannot take an elastic impulse
+  ---
+  duration_ms: 2.714
+  type: 'test'
+  ...
+# Subtest: earlier and tied fixed-surface contact still wins against the elastic response
+ok 31 - earlier and tied fixed-surface contact still wins against the elastic response
+  ---
+  duration_ms: 7.739
+  type: 'test'
+  ...
+# Subtest: mounted restitution near miss does not create pair or fixed-surface events
+ok 32 - mounted restitution near miss does not create pair or fixed-surface events
+  ---
+  duration_ms: 1802.377
+  type: 'test'
+  ...
+# Subtest: the owner suppresses persistent contact and rearms only after measured separation
+ok 33 - the owner suppresses persistent contact and rearms only after measured separation
+  ---
+  duration_ms: 30.4409
+  type: 'test'
+  ...
+# Subtest: mounted intermediate fixture repeats only after measured separation
+ok 34 - mounted intermediate fixture repeats only after measured separation
+  ---
+  duration_ms: 2871.328
+  type: 'test'
+  ...
+# Subtest: 24 declared oblique fixtures match the reference and preserve normal restitution
+ok 35 - 24 declared oblique fixtures match the reference and preserve normal restitution
+  ---
+  duration_ms: 53.3389
+  type: 'test'
+  ...
+# Subtest: invalid admission, nonfinite configuration and degenerate contact fail closed
+ok 36 - invalid admission, nonfinite configuration and degenerate contact fail closed
+  ---
+  duration_ms: 2.8547
+  type: 'test'
+  ...
+# Subtest: head-on friction fixture adds no tangential impulse or loss
+ok 37 - head-on friction fixture adds no tangential impulse or loss
+  ---
+  duration_ms: 1.7052
+  type: 'test'
+  ...
+# Subtest: joint speed-cap rejection leaves both native velocities untouched
+ok 38 - joint speed-cap rejection leaves both native velocities untouched
+  ---
+  duration_ms: 16.3782
+  type: 'test'
+  ...
+# Subtest: invalid step, mount, generation, and fixed surface arbitration retain authority
+ok 39 - invalid step, mount, generation, and fixed surface arbitration retain authority
+  ---
+  duration_ms: 17.173
+  type: 'test'
+  ...
+# Subtest: disabled and unsupported fixtures publish no pair impulse
+ok 40 - disabled and unsupported fixtures publish no pair impulse
+  ---
+  duration_ms: 2.8332
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu0-e05-equal accepts one response and both identities can be retrieved
+ok 41 - mounted pi06:mu0-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 3819.6749
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu0-e05-one-to-three accepts one response and both identities can be retrieved
+ok 42 - mounted pi06:mu0-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 4362.5518
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu01-e05-equal accepts one response and both identities can be retrieved
+ok 43 - mounted pi06:mu01-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 3971.9217
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu01-e05-one-to-three accepts one response and both identities can be retrieved
+ok 44 - mounted pi06:mu01-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 3428.9515
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e05-equal accepts one response and both identities can be retrieved
+ok 45 - mounted pi06:mu03-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2559.2063
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e05-one-to-three accepts one response and both identities can be retrieved
+ok 46 - mounted pi06:mu03-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2162.4666
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu1-e05-equal accepts one response and both identities can be retrieved
+ok 47 - mounted pi06:mu1-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2033.2615
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu1-e05-one-to-three accepts one response and both identities can be retrieved
+ok 48 - mounted pi06:mu1-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2104.3183
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e0-equal accepts one response and both identities can be retrieved
+ok 49 - mounted pi06:mu03-e0-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 4054.9315
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e0-one-to-three accepts one response and both identities can be retrieved
+ok 50 - mounted pi06:mu03-e0-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2215.66
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e1-equal accepts one response and both identities can be retrieved
+ok 51 - mounted pi06:mu03-e1-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2121.3032
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e1-one-to-three accepts one response and both identities can be retrieved
+ok 52 - mounted pi06:mu03-e1-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1621.3878
+  type: 'test'
+  ...
+# Subtest: native mounted near miss produces no contact or receipt
+ok 53 - native mounted near miss produces no contact or receipt
+  ---
+  duration_ms: 1366.9468
+  type: 'test'
+  ...
+# Subtest: the admitted pair rearms only after measured separation with original release identities
+ok 54 - the admitted pair rearms only after measured separation with original release identities
+  ---
+  duration_ms: 15.0156
+  type: 'test'
+  ...
+1..54
+# tests 54
+# suites 0
+# pass 54
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 41214.905

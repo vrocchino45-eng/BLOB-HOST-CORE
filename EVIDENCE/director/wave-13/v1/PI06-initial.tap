@@ -1,0 +1,150 @@
+TAP version 13
+# Subtest: 24 declared oblique fixtures match the reference and preserve normal restitution
+ok 1 - 24 declared oblique fixtures match the reference and preserve normal restitution
+  ---
+  duration_ms: 38.0837
+  type: 'test'
+  ...
+# Subtest: invalid admission, nonfinite configuration and degenerate contact fail closed
+ok 2 - invalid admission, nonfinite configuration and degenerate contact fail closed
+  ---
+  duration_ms: 2.3095
+  type: 'test'
+  ...
+# Subtest: head-on friction fixture adds no tangential impulse or loss
+ok 3 - head-on friction fixture adds no tangential impulse or loss
+  ---
+  duration_ms: 1.5132
+  type: 'test'
+  ...
+# Subtest: joint speed-cap rejection leaves both native velocities untouched
+ok 4 - joint speed-cap rejection leaves both native velocities untouched
+  ---
+  duration_ms: 11.7261
+  type: 'test'
+  ...
+# Subtest: invalid step, mount, generation, and fixed surface arbitration retain authority
+ok 5 - invalid step, mount, generation, and fixed surface arbitration retain authority
+  ---
+  duration_ms: 14.9916
+  type: 'test'
+  ...
+# Subtest: disabled and unsupported fixtures publish no pair impulse
+ok 6 - disabled and unsupported fixtures publish no pair impulse
+  ---
+  duration_ms: 2.3828
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu0-e05-equal accepts one response and both identities can be retrieved
+ok 7 - mounted pi06:mu0-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 2041.0859
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu0-e05-one-to-three accepts one response and both identities can be retrieved
+ok 8 - mounted pi06:mu0-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1467.4204
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu01-e05-equal accepts one response and both identities can be retrieved
+ok 9 - mounted pi06:mu01-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1193.2297
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu01-e05-one-to-three accepts one response and both identities can be retrieved
+ok 10 - mounted pi06:mu01-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1168.8411
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e05-equal accepts one response and both identities can be retrieved
+ok 11 - mounted pi06:mu03-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1193.4898
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e05-one-to-three accepts one response and both identities can be retrieved
+ok 12 - mounted pi06:mu03-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1229.2047
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu1-e05-equal accepts one response and both identities can be retrieved
+ok 13 - mounted pi06:mu1-e05-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1136.3334
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu1-e05-one-to-three accepts one response and both identities can be retrieved
+ok 14 - mounted pi06:mu1-e05-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1318.4178
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e0-equal accepts one response and both identities can be retrieved
+ok 15 - mounted pi06:mu03-e0-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1356.9892
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e0-one-to-three accepts one response and both identities can be retrieved
+ok 16 - mounted pi06:mu03-e0-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1153.7782
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e1-equal accepts one response and both identities can be retrieved
+ok 17 - mounted pi06:mu03-e1-equal accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1161.2871
+  type: 'test'
+  ...
+# Subtest: mounted pi06:mu03-e1-one-to-three accepts one response and both identities can be retrieved
+ok 18 - mounted pi06:mu03-e1-one-to-three accepts one response and both identities can be retrieved
+  ---
+  duration_ms: 1135.3066
+  type: 'test'
+  ...
+# Subtest: native mounted near miss produces no contact or receipt
+ok 19 - native mounted near miss produces no contact or receipt
+  ---
+  duration_ms: 940.157
+  type: 'test'
+  ...
+# Subtest: the admitted pair rearms only after measured separation with original release identities
+not ok 20 - the admitted pair rearms only after measured separation with original release identities
+  ---
+  duration_ms: 25.6275
+  type: 'test'
+  location: 'E:\\BLOB-PARALLEL-DEVELOPMENT-WAVE-13\\pi06\\scripts\\testPI06SiltImpactFriction.mjs:213:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    1 !== 2
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///<local-checkout>)
+    Test.runInAsyncScope (node:async_hooks:228:14)
+    Test.run (node:internal/test_runner/test:1118:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+    Test.postRun (node:internal/test_runner/test:1247:19)
+    Test.run (node:internal/test_runner/test:1175:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:787:7)
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 19
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19758.2779
