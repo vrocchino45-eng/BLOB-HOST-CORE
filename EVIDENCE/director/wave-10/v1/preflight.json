@@ -1,0 +1,94 @@
+{
+  "verdict": "PASS",
+  "baseline": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "protectedConnection61": "26e8cda5e8237252a822cba271849076252da1da",
+  "git01": {
+    "head": "2ced7acdb5a3f6a30629c0a824e97890abcc52b8",
+    "registration": "dd77f2d813b252e2cbb5f88749d2faaa8e230075",
+    "blueprintSHA256": "3267ccd7325d3907daf785a5faf75400d99fd5e6ec39b319cff695b73df29744",
+    "coveredPending": 91,
+    "currentPending": 0,
+    "restoration": "PASS"
+  },
+  "pi04": {
+    "commit": "18c891838a1e8710e32c550b936341e42466cbe1",
+    "changedFiles": [
+      {
+        "path": "scripts/testPI04SiltPairMomentum.mjs",
+        "sha256": "43bcb430c58e922f81eeee735c67e0af85dc5867640dacace638b60b27b84315"
+      },
+      {
+        "path": "src/contact/SiltPairMomentum.js",
+        "sha256": "9be517818bbb97a3e6b36cc7b91a86f6cb1157307bd6dd15cbc060100015de51"
+      },
+      {
+        "path": "src/contact/SiltTrajectoryMemory.js",
+        "sha256": "9274d393fcde3b9c94e121a9995cd8e069b9765855a4358ce182929287af8887"
+      },
+      {
+        "path": "src/contact/siltPairAdmission.json",
+        "sha256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
+      },
+      {
+        "path": "src/core/GameRuntime.js",
+        "sha256": "72b5864492cd14ed9f220dc6a261d4c17297aa3ac35d2be52f8a5b3cf070b4c3"
+      },
+      {
+        "path": "src/main.js",
+        "sha256": "8f1fb40d7c6fe701743d2a99abb91ed30177d4e6b4336a8d049672235040ed97"
+      },
+      {
+        "path": "src/routes/SiltPressureRouteSystem.js",
+        "sha256": "3af3d8ab3c0e93c2a211eb377a8692f3f34a597d15a3efa40d4afc073b83cd9c"
+      }
+    ],
+    "patch": "0b2bcfdcadf00f789fee3341a851fb596835bbe8d22e5f283749dcaf0c9aed1b",
+    "admission": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
+  },
+  "ui03": {
+    "commit": "c68944ae723976273d5f2577c4d6c48d529c7362",
+    "readmission": "133c979aa0fd420eeede40d51df55c7bda668663",
+    "source": [
+      {
+        "path": "scripts/testUI03PlayerInformation.mjs",
+        "sha256": "256e349777fcf30ec386dcb5a0ff222146eeddbf426c12dfa48471aa1564e796"
+      },
+      {
+        "path": "src/ui/PlayerInformationModel.js",
+        "sha256": "ec8aa0c5e1b8bb717bbd2e83567f8b9938c54f7fc35d4417749fd696a28d5ad8"
+      },
+      {
+        "path": "src/ui/PlaytestHudSystem.js",
+        "sha256": "e3716aea76f4bb7b4cec22f9e0aa4d477668130d359fa85778486b30e3db3a9a"
+      }
+    ],
+    "readmissionFiles": [
+      {
+        "path": "BLOB_BOT_SERIES1/director/handoff.mjs",
+        "sha256": "ba0dc385241ae8eb60ffe5425d4b4eefd9eeb28cd589eed759aa6e43f16370e9"
+      },
+      {
+        "path": "BLOB_BOT_SERIES1/director/scenario-contract.mjs",
+        "sha256": "c59bf5b7288eaa73c1d60c7de9fcf97d4cb7d5585062be91a080cfce4fbc4456"
+      },
+      {
+        "path": "BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/balanced.json",
+        "sha256": "a2fa4a5ca91b5cc39f2cd93f8e17a6f77e8dbdc904f86a0d63d252a40e7944db"
+      },
+      {
+        "path": "BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/deep.json",
+        "sha256": "e0ed57857acde2431be660115ce658a2a01e1753d6fff7b81a67a97a474a470b"
+      },
+      {
+        "path": "BLOB_BOT_SERIES1/director/scenarios/ui03-revision-3/membrane.json",
+        "sha256": "954c4c7d77dad65bec2279cdcefea6dbbbe42d20d17f276aec60dbb7fea67ee7"
+      },
+      {
+        "path": "BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs",
+        "sha256": "e97420ebdac7a0fe5de1627361c7d68c723a378900ee83f9196d875d7c3a67d5"
+      }
+    ]
+  },
+  "wave09": "fca9ae3af6bdbd7a2ed26984091251308c0f591b",
+  "existingRemoteRefs": 54
+}

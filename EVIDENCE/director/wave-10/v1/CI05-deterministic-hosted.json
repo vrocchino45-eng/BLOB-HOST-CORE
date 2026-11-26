@@ -1,0 +1,91 @@
+{
+  "branch": "candidate/ci05-in02-i1",
+  "source": "48a57914634ecc4d1c84a7249b1e663df49b8fc2",
+  "workflow": "blob-ci05-deterministic.yml",
+  "run": {
+    "id": 45741265598,
+    "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45741265598",
+    "status": "completed",
+    "conclusion": "failure"
+  },
+  "jobs": [
+    {
+      "name": "node-verification",
+      "conclusion": "failure",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install from the committed lockfile",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run runtime, numerical and pinned Director verification",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Upload verification evidence",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "node-verification",
+      "conclusion": "failure",
+      "title": null,
+      "summary": null,
+      "annotations": [
+        {
+          "path": ".github",
+          "line": 2,
+          "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+          "level": "warning"
+        },
+        {
+          "path": ".github",
+          "line": 142,
+          "message": "Process completed with exit code 1.",
+          "level": "failure"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 15080997980,
+      "filename": "CI05-deterministic-artifact-15080997980.zip",
+      "sha256": "6c0ff57b400a6518ec0d1e690c5a2c62e3daa243de4905b3dbd40e2fb630537f",
+      "bytes": 81301,
+      "url": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45741265598/artifacts/15080997980",
+      "expiresAt": "2026-12-10T02:16:42Z",
+      "access": "GitHub authentication"
+    }
+  ]
+}

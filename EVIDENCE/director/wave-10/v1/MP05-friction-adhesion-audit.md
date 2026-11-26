@@ -1,0 +1,13 @@
+# MP05-A1 · Existing traction, drag and attachment
+
+| Behavior | Source and authority | Present numerical interpretation |
+| --- | --- | --- |
+| Fluid drag and viscosity | `src/player/PlayerMovementController.js`, movement update | Authored base/viscosity coefficients with topology and coasting multipliers. The integration combines dt and caps the exponential exponent, giving an effective per-time damping rate. The viscosity input is a normalized gameplay index. |
+| Surface traction and compliance | `PlayerMovementController` owns accepted pose/velocity. `CoreSurfaceTruthSystem` and `CrawlableSurfaceRegistry` provide geometry and surface traits. | Contact eligibility and normalized adhesion/compliance shape existing behavior. Stabilize applies the existing 1.10 traction multiplier during a surface brace. This is a gait/drive modifier. |
+| Suction and tendril attachment | `PlayerMovementController` consumes authored suction support, planted tendril records and surface truth. | Support count, strength, grace and derived contact normals are eligibility/work variables. This is a mechanical constraint and release process. |
+| Silt grip, cohesion and settling | `SiltPressureRouteSystem`, `SiltLivingMaterialCycle`, `SiltTrajectoryMemory`. | Custody and strut/tether displacement are owner-constrained. B3 resistance is local ecology with mode gates; trajectory recovery and drag are native environmental stages. |
+| Fixed and two-body contact | `SiltFreeMaterialContact` / `SiltPairMomentum` through `SiltTrajectoryMemory`. | PI03 legacy fixed receiver and PI04 pair have arbitration with contact timing. PI04 admits zero tangential impulse and e=0. Sliding resistance due to a tangential contact impulse is outside the accepted model. |
+
+Fluid drag can act without surface contact. Adhesion concerns the ability to hold across a separating load. Tangential friction would depend on a measured normal interaction and a tangential relative speed. Grip changes custody. Cohesion and compliance concern the internal or surface response to load. None of these can be calibrated from a player-facing traction index alone.
+
+A future controlled experiment could reuse the two authenticated Silt identities at one glancing normal event, with matched control for PI04 zero tangential impulse. Freeze one material pair, proxy radii, current frame, load/relative speed bounds and exclusion from the fixed surface; state any admitted tangential law and clamp before altering either participant. Track tangent impulse, total vector momentum, kinetic losses, separation, retrieval, eight Q, and disabled-mode parity. Contact normal and externally applied drive must be measured separately. Begin only after an explicit future law and coefficients are admitted.

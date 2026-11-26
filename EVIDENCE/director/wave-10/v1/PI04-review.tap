@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: relative sweep rejects approaching near miss, actual overlap, separating motion and exact tangent
+ok 1 - relative sweep rejects approaching near miss, actual overlap, separating motion and exact tangent
+  ---
+  duration_ms: 20.7078
+  type: 'test'
+  ...
+# Subtest: scoped trajectory owner commits both equal participants and records the immediate invariant
+ok 2 - scoped trajectory owner commits both equal participants and records the immediate invariant
+  ---
+  duration_ms: 43.1555
+  type: 'test'
+  ...
+# Subtest: scoped trajectory owner commits both one-to-three participants and records the immediate invariant
+ok 3 - scoped trajectory owner commits both one-to-three participants and records the immediate invariant
+  ---
+  duration_ms: 9.0985
+  type: 'test'
+  ...
+# Subtest: pair participant insert order and equal microstep catch-up produce identical motion and one delivery
+ok 4 - pair participant insert order and equal microstep catch-up produce identical motion and one delivery
+  ---
+  duration_ms: 9.3959
+  type: 'test'
+  ...
+# Subtest: initial overlap, dormant, parked, seated and unrelated identities cannot transfer momentum
+ok 5 - initial overlap, dormant, parked, seated and unrelated identities cannot transfer momentum
+  ---
+  duration_ms: 5.8538
+  type: 'test'
+  ...
+# Subtest: wrong Host, cell, mount, generation, invalid step and unsupported transform fail closed
+ok 6 - wrong Host, cell, mount, generation, invalid step and unsupported transform fail closed
+  ---
+  duration_ms: 2.4718
+  type: 'test'
+  ...
+# Subtest: unsupported impulse speed rejects both results before either changes
+ok 7 - unsupported impulse speed rejects both results before either changes
+  ---
+  duration_ms: 2.7554
+  type: 'test'
+  ...
+# Subtest: native PI03 wins before or inside the tie window and remains authoritative on residual travel
+ok 8 - native PI03 wins before or inside the tie window and remains authoritative on residual travel
+  ---
+  duration_ms: 8.4756
+  type: 'test'
+  ...
+# Subtest: continuous contact stays latched and native separation later permits a genuine new contact
+ok 9 - continuous contact stays latched and native separation later permits a genuine new contact
+  ---
+  duration_ms: 32.8197
+  type: 'test'
+  ...
+# Subtest: disabled and invalid fixture names supply no pair option or gameplay publication
+ok 10 - disabled and invalid fixture names supply no pair option or gameplay publication
+  ---
+  duration_ms: 3.4258
+  type: 'test'
+  ...
+# Subtest: mounted equal fixture measures actual native-drive boundaries and retrieves both grains
+ok 11 - mounted equal fixture measures actual native-drive boundaries and retrieves both grains
+  ---
+  duration_ms: 2032.254
+  type: 'test'
+  ...
+# Subtest: mounted one-to-three fixture measures actual native-drive boundaries and retrieves both grains
+ok 12 - mounted one-to-three fixture measures actual native-drive boundaries and retrieves both grains
+  ---
+  duration_ms: 1795.3312
+  type: 'test'
+  ...
+# Subtest: mounted corridor near miss delivers no paired or fixed surface effect
+ok 13 - mounted corridor near miss delivers no paired or fixed surface effect
+  ---
+  duration_ms: 1347.0473
+  type: 'test'
+  ...
+# Subtest: ordinary free and fixed-surface traces match the exact admitted IN01 owner
+ok 14 - ordinary free and fixed-surface traces match the exact admitted IN01 owner
+  ---
+  duration_ms: 244.2292
+  type: 'test'
+  ...
+# Subtest: mounted native attraction separates the same release pair and then drives a second measured ingress
+ok 15 - mounted native attraction separates the same release pair and then drives a second measured ingress
+  ---
+  duration_ms: 1716.5873
+  type: 'test'
+  ...
+# Subtest: Standard startup uses Core coherence in the mounted scar repair path
+ok 16 - Standard startup uses Core coherence in the mounted scar repair path
+  ---
+  duration_ms: 145.8348
+  type: 'test'
+  ...
+# Subtest: The explicit comparison keeps the original repair rate and the trial marker
+ok 17 - The explicit comparison keeps the original repair rate and the trial marker
+  ---
+  duration_ms: 58.3817
+  type: 'test'
+  ...
+# Subtest: Incomplete, stale and inspection samples retain the existing repair guards
+ok 18 - Incomplete, stale and inspection samples retain the existing repair guards
+  ---
+  duration_ms: 20.6588
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9891.0095

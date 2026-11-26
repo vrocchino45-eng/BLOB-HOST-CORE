@@ -1,0 +1,51 @@
+{
+  "verdict": "PASS",
+  "sources": {
+    "A": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "B": "c68944ae723976273d5f2577c4d6c48d529c7362",
+    "C": "18c891838a1e8710e32c550b936341e42466cbe1",
+    "D": "18491dcdd608d5e06868a7da573de106ba25647d"
+  },
+  "measuredOwnerScopes": [
+    "native directed launch",
+    "fixed surface",
+    "Core reserve",
+    "inventory and custody",
+    "receipt lineage",
+    "route progression",
+    "Shelf accepted current, pressure, resistance, reserve and release"
+  ],
+  "measuredPhysicalParity": "exact structured equality across A/B/C/D",
+  "uiProjection": "B and D present accepted Flow, launch and fixed recipient from existing owners. A and C have no UI03 publication.",
+  "browserCases": [
+    {
+      "mode": "equal",
+      "nearMiss": false,
+      "impacts": 1,
+      "retrieved": 2
+    },
+    {
+      "mode": "one-to-three",
+      "nearMiss": false,
+      "impacts": 1,
+      "retrieved": 2
+    },
+    {
+      "mode": "equal",
+      "nearMiss": true,
+      "impacts": 0,
+      "retrieved": 0
+    },
+    {
+      "mode": "disabled",
+      "nearMiss": false,
+      "impacts": 0,
+      "retrieved": 0
+    }
+  ],
+  "integration": {
+    "overlap": [],
+    "initialization": "PI04 experiment is passed as an independent option to the existing Silt trajectory owner. UI03 projects owner state in the existing PlaytestHudSystem update after gameplay publication.",
+    "activation": "PI04 remains off on A/B and on ordinary boots of C/D. Mounted Flow fixture uses its existing separate experimental profile."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "commit": "d2236ace722f9d3449035c0125bc5d493c983934",
+  "branch": "candidate/ui04-i1",
+  "base": "c68944ae723976273d5f2577c4d6c48d529c7362",
+  "tests": {
+    "UI04": 4,
+    "UI03": 5,
+    "F1": 22,
+    "C2ContextualLabels": 14,
+    "total": 45
+  },
+  "browser": "PASS",
+  "patchSHA256": "04fe755616c06558f235ad1a6ca7c04c7afa93fdec7b0c293745ae15c8ef0d1f",
+  "files": [
+    {
+      "path": "scripts/testC2ContextualLabels.mjs",
+      "sha256": "a9bd58627c8196b6e448223ce4438998963464b7b51f3158cca946850d8ac0f1"
+    },
+    {
+      "path": "scripts/testUI04ShelfInformation.mjs",
+      "sha256": "bdde0edecdac0a135e0275192e062c7b3ca3a8580f98e361ae0c59741bcc6b52"
+    },
+    {
+      "path": "src/ui/ContextualWorldLabels.js",
+      "sha256": "7daae77bbf97a5370015dfc88249e882fc0f53ab55e08765987b84ab790c1a9d"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "sha256": "482688f093acb25562c921cd9445ec3b311de647fad064fc708a2370f6940aee"
+    }
+  ],
+  "scope": "Reads same Host/cell/mount/step/action and receiver-confirmed model. Preserves fresh native fallback, interruption, labels, and history. Isolated from IN02."
+}

@@ -1,0 +1,1316 @@
+diff --git a/scripts/testPI04SiltPairMomentum.mjs b/scripts/testPI04SiltPairMomentum.mjs
+new file mode 100644
+index 0000000..f478b52
+--- /dev/null
++++ b/scripts/testPI04SiltPairMomentum.mjs
+@@ -0,0 +1,316 @@
++import assert from 'node:assert/strict';
++import {readFileSync, writeFileSync} from 'node:fs';
++import {registerHooks} from 'node:module';
++import {execFileSync} from 'node:child_process';
++import {test} from 'node:test';
++import {Vector3} from 'three';
++import admission from '../src/contact/siltPairAdmission.json' with {type:'json'};
++import {resolveSiltPairImpact, siltPairIds} from '../src/contact/SiltPairMomentum.js';
++import {SiltTrajectoryMemory} from '../src/contact/SiltTrajectoryMemory.js';
++
++const [A,B]=siltPairIds;
++const scope={hostId:admission.scope.host,cellId:admission.scope.cell,mountSequence:3,mountCount:1,substep:0};
++const stamp=(frame,generation=0)=>({...scope,frame,generation});
++const close=(n,expected)=>assert.ok(Math.abs(n-expected)<=1e-12+1e-12*Math.abs(expected),n+' != '+expected);
++const total=values=>Math.hypot(...values);
++const pairEvents=owner=>owner.snapshot().materialPairExperiment?.contacts??[];
++const setup=(mode='equal', options={})=>{
++  const owner=new SiltTrajectoryMemory({spring:0,drag:0,pairExperiment:mode,...options});
++  const seed=(posA=[0,0,0],posB=[.32,0,0],vA=[1,0,0],vB=[0,0,0])=>{
++    for(const [id,pos,v] of [[A,posA,vA],[B,posB,vB]]){
++      assert.ok(owner.beginHold(id,pos));
++      assert.ok(owner.release(id,pos,{directedPulse:{direction:[1,0,0],displacement:0},freeContactSource:stamp(100)}));
++      // An injected incoming fixture, after genuine release lineage. The owner
++      // alone calculates all resulting velocities, motion and contact history.
++      owner.free.get(id).velocity=[...v];
++    }
++  };
++  const entries=(frame,points=[[0,0,0],[.32,0,0]],surface=null)=>[A,B].map((id,i)=>({
++    id,custody:'environment',phase:'veins',seated:false,nativePoint:points[i],contact:{surface,step:stamp(frame)}
++  }));
++  return {owner,seed,entries};
++};
++function verifyEvent(event) {
++  assert.ok(event);
++  assert.deepEqual(event.actualRecipientIds,[A,B]);
++  assert.equal(event.kind,'accepted-silt-pair');
++  assert.equal(event.inventoryTransferred,false);
++  assert.equal(event.hostReceipt,false);
++  assert.equal(event.progressionCredit,false);
++  assert.notEqual(event.units[0].releaseSequence,event.units[1].releaseSequence);
++  assert.ok(event.contactSeconds>=0&&event.contactSeconds<=event.microstepSeconds);
++  assert.ok(event.kineticEnergyLost>0&&event.kineticEnergyAfter<=event.kineticEnergyBefore);
++  event.momentumAfter.forEach((v,i)=>close(v,event.momentumBefore[i]));
++  const normal=new Vector3(...event.normal);
++  event.units.forEach((u,i)=>{
++    const before=new Vector3(...u.incomingVelocity),after=new Vector3(...u.outgoingVelocity);
++    assert.ok(after.clone().sub(before).cross(normal).length()<1e-12);
++    close(after.clone().sub(before).dot(normal)*u.mass,(i?1:-1)*event.impulse);
++  });
++  const [a,b]=event.units.map(u=>new Vector3(...u.contactPosition));
++  close(a.distanceTo(b),.12);
++}
++
++test('relative sweep rejects approaching near miss, actual overlap, separating motion and exact tangent',()=>{
++  const body=(position,velocity)=>({position,velocity,radius:.06,mass:1});
++  const moving=body([0,0,0],[1,0,0]);
++  for(const b of [body([.25,.14,0],[0,0,0]),body([.1,0,0],[0,0,0]),body([.14,0,0],[2,0,0]),body([.25,.12,0],[0,0,0])]){
++    assert.equal(resolveSiltPairImpact(moving,b,.3),null);
++  }
++  for(const patch of [{radius:0},{mass:NaN},{position:[.25,NaN,0]},{velocity:[Infinity,0,0]},{mass:-1}]){
++    assert.equal(resolveSiltPairImpact(moving,{...body([.25,0,0],[0,0,0]),...patch},.3),null);
++  }
++});
++
++for (const [mode,expected,energy] of [['equal',.5,.25],['one-to-three',.25,.125]]) {
++  test('scoped trajectory owner commits both '+mode+' participants and records the immediate invariant',()=>{
++    const f=setup(mode); f.seed([0,0,0],[.319,0,0]);
++    for(let frame=100;frame<105;frame++) f.owner.advancePair(.05,f.entries(frame),true);
++    const records=pairEvents(f.owner);
++    assert.equal(records.length,1);
++    verifyEvent(records[0]);
++    for(const id of [A,B]) close(f.owner.get(id).velocity[0],expected);
++    close(records[0].kineticEnergyAfter,energy);
++    close(records[0].momentumAfter[0],1);
++  });
++}
++
++test('pair participant insert order and equal microstep catch-up produce identical motion and one delivery',()=>{
++  const batched=setup(),split=setup();batched.seed([0,0,0],[.319,0,0]);split.seed([0,0,0],[.319,0,0]);
++  for(let i=0;i<6;i++){
++    batched.owner.advancePair(.05,batched.entries(100+i),true);
++    split.owner.advancePair(.025,split.entries(100+2*i).reverse(),true);
++    split.owner.advancePair(.025,split.entries(101+2*i).reverse(),true);
++  }
++  const [one]=pairEvents(batched.owner),[two]=pairEvents(split.owner);
++  assert.equal(pairEvents(batched.owner).length,1);assert.equal(pairEvents(split.owner).length,1);
++  for(const id of [A,B]) assert.deepEqual(batched.owner.get(id),split.owner.get(id));
++  for(const key of ['normal','impulse','kineticEnergyAfter','momentumAfter']) assert.deepEqual(one[key],two[key]);
++  assert.equal(split.owner.advancePair(.025,split.entries(111),true),null);
++});
++
++test('initial overlap, dormant, parked, seated and unrelated identities cannot transfer momentum',()=>{
++  const overlap=setup();overlap.seed([0,0,0],[.1,0,0]);
++  overlap.owner.advancePair(.05,overlap.entries(100),true);
++  assert.equal(pairEvents(overlap.owner).length,0);
++  for(const patch of [{phase:'reservoir'},{phase:'parked'},{seated:true},{id:'silt-grain-03'},{custody:'grip'}]){
++    const f=setup();f.seed();
++    const [a,b]=f.entries(100);
++    assert.equal(f.owner.advancePair(.05,[a,{...b,...patch}],true),null);
++    assert.equal(pairEvents(f.owner).length,0);
++  }
++});
++
++test('wrong Host, cell, mount, generation, invalid step and unsupported transform fail closed',()=>{
++  const f=setup();f.seed();
++  for(const bad of [{hostId:'other'},{cellId:'other'},{generation:2},{mountCount:2},{mountSequence:4},{frame:99},{substep:-1}]){
++    const [a,b]=f.entries(100);
++    b.contact.step={...b.contact.step,...bad};
++    assert.equal(f.owner.advancePair(.05,[a,b],true),null);
++  }
++  assert.equal(f.owner.advancePair(.05,f.entries(100),false),null);
++  assert.equal(f.owner.advancePair(.15,f.entries(100),true),null);
++  f.owner.beginHold(B,f.owner.get(B).position);
++  assert.equal(f.owner.advancePair(.05,f.entries(100),true),null);
++  assert.equal(pairEvents(f.owner).length,0);
++});
++
++test('unsupported impulse speed rejects both results before either changes',()=>{
++  const f=setup();f.seed([0,0,0],[.12,0,0],[2.1,0,0],[0,2.1,0]);
++  const rawHit=resolveSiltPairImpact({position:[0,0,0],velocity:[2.1,0,0],mass:1,radius:.06},
++    {position:[.12,0,0],velocity:[0,2.1,0],mass:1,radius:.06},.025);
++  assert.ok(rawHit&&total(rawHit.velocities[1])>2.1);
++  f.owner.advancePair(.025,f.entries(100),true);
++  assert.equal(pairEvents(f.owner).length,0);
++  assert.deepEqual([f.owner.get(A).velocity,f.owner.get(B).velocity],[[2.1,0,0],[0,2.1,0]]);
++});
++
++test('native PI03 wins before or inside the tie window and remains authoritative on residual travel',()=>{
++  for(const [surfaceTime,expectedPair] of [[.019,0],[.020005,0],[.02002,1]]){
++    const f=setup();f.seed([0,0,0],[.14,0,0]);
++    const surface={id:'fixed-shape-fixture',center:[surfaceTime+.5,0,0],radii:[.5,.2,.2]};
++    f.owner.advancePair(.025,f.entries(100,undefined,surface),true);
++    assert.equal(pairEvents(f.owner).length,expectedPair);
++    assert.equal(f.owner.snapshot().freeMaterialContacts?.length,1);
++    assert.equal(f.owner.snapshot().freeMaterialContacts[0].receiverId,surface.id);
++    if(expectedPair) {
++      verifyEvent(pairEvents(f.owner)[0]);
++      assert.equal(f.owner.get(A).velocity[0],0);
++      close(pairEvents(f.owner)[0].units[0].outgoingVelocity[0],.5);
++    }
++  }
++});
++
++test('continuous contact stays latched and native separation later permits a genuine new contact',()=>{
++  const f=setup('one-to-three',{spring:.44,drag:.74});f.seed([0,0,0],[.13,0,0]);
++  f.owner.advancePair(.05,f.entries(100,[[0,0,0],[.13,0,0]]),true);
++  assert.equal(pairEvents(f.owner).length,1);
++  for(let frame=101;frame<108;frame++)f.owner.advancePair(.025,f.entries(frame,[[1,0,0],[-1,0,0]]),true);
++  assert.equal(pairEvents(f.owner).length,1);
++  for(let frame=108;frame<142;frame++)f.owner.advancePair(.025,f.entries(frame,[[-4,0,0],[4,0,0]]),true);
++  assert.ok(f.owner.get(B).position[0]-f.owner.get(A).position[0]>.121);
++  for(let frame=142;frame<260&&pairEvents(f.owner).length===1;frame++)f.owner.advancePair(.025,f.entries(frame,[[4,0,0],[-4,0,0]]),true);
++  const records=pairEvents(f.owner);
++  assert.equal(records.length,2);
++  assert.notEqual(records[0].id,records[1].id);
++  assert.deepEqual(records[0].units.map(u=>u.releaseSequence),records[1].units.map(u=>u.releaseSequence));
++});
++
++test('disabled and invalid fixture names supply no pair option or gameplay publication',()=>{
++  for(const unknown of [null,'__proto__','unsupported']){
++    const f=setup(unknown);f.seed();
++    assert.equal(f.owner.advancePair(.05,f.entries(100),true),null);
++    assert.equal('materialPairExperiment' in f.owner.snapshot(),false);
++    for(const entry of f.entries(100))assert.ok(f.owner.advance(entry.id,.05,entry.nativePoint,null,entry.contact));
++  }
++});
++
++const fixture = new URL('./testPI02DirectedSiltLaunch.mjs', import.meta.url);
++const raw=readFileSync(fixture,'utf8');
++const idx=raw.indexOf("\ntest('keyboard and standard gamepad launch and retrieve");
++assert.ok(idx>0);
++const source=raw.slice(0,idx)
++  .replace('padMode = false, flowExperiment = false','padMode = false, flowExperiment = false, siltPairExperiment = null')
++  .replace('flowExperiment, recipeDataSystem:', 'flowExperiment, siltPairExperiment, recipeDataSystem:');
++const hook=registerHooks({load(url,ctx,next){
++  return url===fixture.href ? {format:'module',shortCircuit:true,
++    source:source+'\nexport {prepare,acquire,charge,commit,releasePulse,receipts};'} : next(url,ctx);
++}});
++let rig;
++try{rig=await import(fixture.href);}finally{hook.deregister();}
++const mounted=[];
++function stagedMounted(t, mode, miss=false){
++  const {game,unit:first}=rig.prepare(t,{padMode:true,siltPairExperiment:mode});
++  const route=game.route, owner=route.siltTrajectory;
++  assert.equal(first.id,A);
++  const release=direction=>{
++    rig.charge(game,new Vector3(...direction));
++    const proof=rig.commit(game);
++    rig.releasePulse(game);
++    game.stabilize(false);
++    return proof;
++  };
++  const releases=[release([0,1,0])];
++  let second=route.livingCycle.units.find(u=>u.id===B);
++  for(let i=0;i<1200&&!['veins','garden_transit','settled'].includes(second.phase);i++)game.step();
++  rig.acquire(game,second);
++  releases.push(release([1,0,0]));
++  assert.equal(releases[1].unitId,B);
++  const baseline=rig.receipts(game);
++  const progression=[route.completed,route.pressureRead,route.ribsReleased,route.safeMatterAbsorbed];
++  const seed=miss?admission.measuredCorridor.miss:admission.measuredCorridor.seed;
++  const initial=[];
++  for(const [id,position,velocity] of [[A,seed.positionA,seed.velocityA],[B,seed.positionB,seed.velocityB]]){
++    const record=owner.free.get(id);
++    assert.equal(route.materialIdentity.get(id).owner,'environment');
++    assert.ok(record?.freeContact?.source);
++    initial.push({id,scope:record.freeContact.source,release:record.freeContact.releaseSequence,position,velocity});
++    record.position=[...position]; record.velocity=[...velocity]; // Staged incoming corridor only.
++  }
++  for(let i=0;i<(miss?34:65)&&(miss||!pairEvents(owner).length);i++)game.step();
++  const events=pairEvents(owner);
++  assert.deepEqual(rig.receipts(game),baseline);
++  assert.deepEqual([route.completed,route.pressureRead,route.ribsReleased,route.safeMatterAbsorbed],progression);
++  assert.equal(route.materialIdentity.totalMass(),8);
++  assert.deepEqual([owner.get(A).position,owner.get(B).position],route.livingMatterMeshes
++    .filter(m=>[A,B].includes(m.unitId)).map(m=>m.body.position.toArray()));
++  const evidence={mode,miss,initial,releases,events,custody:route.materialIdentity.snapshot(),beforeAndAfterReceiptHashEqual:true,
++    creditsAtImpact:baseline.acceptedTotal,progression,staging:'Native control-based releases; observed owner initial positions and velocities staged. No output seeded.'};
++  return {game,route,owner,first,second,release,evidence};
++}
++
++for(const mode of ['equal','one-to-three']){
++  test('mounted '+mode+' fixture measures actual native-drive boundaries and retrieves both grains',t=>{
++    const m=stagedMounted(t,mode);
++    assert.equal(m.evidence.events.length,1);
++    const event=m.evidence.events[0];verifyEvent(event);
++    const reaction=m.owner.get(A);
++    assert.ok(Number.isFinite(reaction.velocity[0]));
++    const oldIds=event.units.map(unit=>unit.releaseSequence);
++    const retrievals=[];
++    for(const [i,unit] of [m.first,m.second].entries()){
++      rig.acquire(m.game,unit);
++      assert.equal(m.owner.get(unit.id),null);
++      assert.equal(m.route.materialIdentity.get(unit.id).owner,'grip');
++      const released=m.release(i===0?[-1,0,0]:[1,0,0]);
++      const fresh=m.owner.free.get(unit.id).freeContact.releaseSequence;
++      assert.notEqual(fresh,oldIds[i]);
++      retrievals.push({id:unit.id,owner:'grip then environment',fresh,release:released});
++    }
++    const HUB='CELL_SIGNAL_CHORUS_NERVE_001';
++    m.game.mount(HUB);m.game.step();
++    const hidden=m.owner.get(A);
++    m.game.steps(8);assert.deepEqual(m.owner.get(A),hidden);
++    m.game.mount(scope.cellId);m.game.steps(4);
++    assert.equal(pairEvents(m.owner).length,1);
++    assert.equal(m.route.materialIdentity.totalMass(),8);
++    mounted.push({...m.evidence,retrievals,remountRetainedHistoricalEvent:true});
++  });
++}
++test('mounted corridor near miss delivers no paired or fixed surface effect',t=>{
++  const m=stagedMounted(t,'equal',true);
++  assert.equal(m.evidence.events.length,0);
++  assert.equal(m.owner.snapshot().freeMaterialContacts,undefined);
++  mounted.push(m.evidence);
++});
++test('ordinary free and fixed-surface traces match the exact admitted IN01 owner',async()=>{
++  const original=execFileSync('git',['--no-optional-locks','show',admission.baseline+':src/contact/SiltTrajectoryMemory.js']);
++  const {SiltTrajectoryMemory: Original}=await import('data:text/javascript;base64,'+original.toString('base64'));
++  const prior=new Original(),current=new SiltTrajectoryMemory();
++  const surface=admission.measuredCorridor.surface;
++  const start=[surface.center[0]-surface.radii[0]-.03,surface.center[1],surface.center[2]];
++  for(const owner of [prior,current]){
++    owner.beginHold(A,start);
++    owner.release(A,start,{directedPulse:{direction:[1,0,0],displacement:.28},freeContactSource:stamp(100)});
++  }
++  for(let i=0;i<80;i++){
++    const dt=i%2?.016:.05;
++    const contact={surface,step:stamp(100+i)};
++    const point=[i>=25&&i<50?-5:1,start[1],start[2]];
++    assert.deepEqual(current.advance(A,dt,point,null,contact),prior.advance(A,dt,point,null,contact));
++    assert.deepEqual(current.snapshot(),prior.snapshot());
++  }
++  assert.ok(prior.snapshot().freeMaterialContacts.length>0);
++});
++
++test('mounted native attraction separates the same release pair and then drives a second measured ingress',t=>{
++  const m=stagedMounted(t,'one-to-three');
++  assert.equal(m.evidence.events.length,1);
++  const receipt=rig.receipts(m.game);
++  const center=m.owner.get(B).position;
++  const copyNative=m.route.copyNativeGrainPosition;
++  const targets=new Map();
++  // A staged attractor path supplies inputs to the existing native forces.
++  // The fixture never rewrites grain motion, contact records or ownership.
++  m.route.copyNativeGrainPosition=function(unit,index,out){
++    return targets.has(unit.id)?out.fromArray(targets.get(unit.id)):copyNative.call(this,unit,index,out);
++  };
++  const point=x=>[center[0]+x,center[1],center[2]];
++  const phases=[];
++  try{
++    targets.set(A,point(-1));targets.set(B,point(1));
++    let gap=0;
++    for(let i=0;i<48;i++){
++      m.game.step(.025);
++      gap=new Vector3(...m.owner.get(A).position).distanceTo(new Vector3(...m.owner.get(B).position));
++    }
++    assert.ok(gap>.121);
++    phases.push({name:'separated',clearance:gap,targets:[...targets]});
++    targets.set(A,point(0));targets.set(B,point(0));
++    for(let i=0;i<260&&pairEvents(m.owner).length===1;i++)m.game.step(.025);
++    const events=pairEvents(m.owner);
++    assert.equal(events.length,2);
++    events.forEach(verifyEvent);
++    assert.notEqual(events[0].id,events[1].id);
++    assert.deepEqual(events[0].units.map(x=>x.releaseSequence),events[1].units.map(x=>x.releaseSequence));
++    assert.deepEqual(rig.receipts(m.game),receipt);
++    assert.equal(m.route.materialIdentity.totalMass(),8);
++    phases.push({name:'recontact',targets:[...targets]});
++    mounted.push({...m.evidence,repeat:true,events,phases});
++  }finally{m.route.copyNativeGrainPosition=copyNative;}
++});
++
++test.after(()=>{
++  const output=process.env.BLOB_PI04_MOUNTED_REPORT;
++  if(output) writeFileSync(output,JSON.stringify({revision:2,admissionRevision:1,numericalRevision:1,mounted},null,2)+'\n');
++});
+diff --git a/scripts/testUI03PlayerInformation.mjs b/scripts/testUI03PlayerInformation.mjs
+new file mode 100644
+index 0000000..7fcb18a
+--- /dev/null
++++ b/scripts/testUI03PlayerInformation.mjs
+@@ -0,0 +1,170 @@
++import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
++import { registerHooks } from 'node:module';
++import { test } from 'node:test';
++import { Vector3 } from 'three';
++import { currentPlayerInformation, projectPlayerInformation } from '../src/ui/PlayerInformationModel.js';
++
++const HOST = 'HOST_ALPHA_WOUNDED_NURSERY';
++const SILT = 'CELL_SILT_PRESSURE_ROUTE_001';
++const HUB = 'CELL_SIGNAL_CHORUS_NERVE_001';
++const fixture = new URL('./testPI02DirectedSiltLaunch.mjs', import.meta.url);
++const code = readFileSync(fixture, 'utf8');
++const hudBinding = 'coreFlowSystem: flow, flowExperiment';
++assert.ok(code.includes(hudBinding));
++const end = code.indexOf("\ntest('keyboard and standard gamepad launch and retrieve");
++assert.ok(end > 0);
++const hook = registerHooks({ load(url, context, next) {
++  return url === fixture.href ? { format: 'module', shortCircuit: true,
++    source: "import {PlaytestHudSystem} from '../src/ui/PlaytestHudSystem.js';\n" + code.slice(0, end).replace(hudBinding,
++      hudBinding + ', playtestHudSystem: {update: PlaytestHudSystem.prototype.update}')
++      + '\nexport {makeGame,prepare,charge,commit,releasePulse,acquire};' } : next(url, context);
++} });
++let rig;
++try { rig = await import(fixture.href); } finally { hook.deregister(); }
++
++test('projection preserves owner bytes and separates unconfirmed candidates and retained history', () => {
++  const step = { hostId: HOST, cellId: SILT, mountSequence: 2, frame: 40, substep: 1 };
++  const stale = { ...step, mountSequence: 1, frame: 39, owner: 'silt:RegionalTerritoryExpansion',
++    targetId: 'silt_porosity_shelf', receiverId: 'silt_porosity_shelf_front', actionSequence: 1,
++    acceptedCurrent01: 0.4, pressure01: 0.2, resistance01: 0.3, after: { imprint: 0.1 } };
++  const input = { stabilizeHeld: true, flowDemand01: 0.4 };
++  const frame = {
++    activeHostId: HOST, activeCellId: SILT, input, frame: 40, runtimeSimulationSubstepIndex: 1,
++    firstSliceRuntimeMount: { mountSequence: 2, activeRuntimeCellId: SILT, activeSystemIds: ['targetingSystem'] },
++    runtimeExecution: { frame: 40, executedSystemIds: ['targetingSystem','coreFlowSystem'] },
++    targeting: { active: true, targetId: 'silt_porosity_shelf', candidateId: 'silt_porosity_shelf' },
++    coreFlow: { step, contactValid: true, ready: true, phase: 'contact', demand01: 0.4,
++      reason: 'contact', actionSequence: 1, result: stale, lastResult: stale },
++    corePerformance: { endurance: { reservePercent: 0, reserve01: 0 }, traits: { stability: 1.1 } },
++    spatialCoreChemistry: { placements: [{ pieceId: 'grip', zoneId: 'deep_core', family: 'silt' }] }
++  };
++  const baseline = structuredClone(frame);
++  const info = projectPlayerInformation(frame);
++  assert.deepEqual(frame, baseline);
++  assert.equal(info.target, null);
++  assert.equal(info.eligibility.flow.geometricContact, true);
++  assert.equal(info.accepted.flow, null);
++  assert.equal(info.history.lastFlowDelivery.step.mountSequence, 1);
++  assert.equal(info.history.lastFlowDelivery.retainedImprintAfter, 0.1);
++  assert.equal(info.core.reservePercent, 0);
++  assert.throws(() => { info.core.placements[0].zone = 'membrane'; }, TypeError);
++  assert.throws(() => { info.history.lastFlowDelivery.step.frame = 40; }, TypeError);
++  frame.playerInformation = info;
++  assert.equal(currentPlayerInformation(frame), info);
++  frame.runtimeSimulationSubstepIndex++;
++  assert.equal(currentPlayerInformation(frame), null);
++});
++
++test('ordinary RT remains Absorb and the Flow publication stays absent', t => {
++  const game = rig.makeGame(t, { padMode: true });
++  game.absorb(0.74);
++  game.step();
++  const model = currentPlayerInformation(game.frame);
++  assert.equal(model.intent.absorb, true);
++  assert.equal(model.intent.flowDemand01, 0);
++  assert.equal(model.eligibility.flow, null);
++  assert.equal(model.accepted.flow, null);
++  assert.equal(model.context.mode, 'world');
++});
++
++test('real Flow publishes only the current receiver-confirmed sample and retains its history', t => {
++  const game = rig.makeGame(t, { padMode: true, flowExperiment: true });
++  const patch = game.route.territoryExpansion.readFlowPatch(game.frame);
++  game.playerRoot.position.copy(patch.center).add(new Vector3(0, 0, 1.18));
++  game.aimAt(game.route.root.worldToLocal(patch.center.clone()).toArray());
++  game.stabilize(true);
++  game.steps(22);
++  assert.equal(game.frame.playerInformation.target.id, 'silt_porosity_shelf');
++  assert.equal(game.frame.playerInformation.accepted.flow, null);
++  game.absorb(0.65);
++  game.steps(40);
++  const model = game.frame.playerInformation;
++  assert.ok(game.frame.coreFlow.result?.acceptedCurrent01 > 0, game.frame.coreFlow.reason);
++  assert.equal(model.accepted.flow.actualRecipient, patch.id);
++  assert.equal(model.accepted.flow.current01, game.frame.coreFlow.result.acceptedCurrent01);
++  assert.equal(model.accepted.flow.pressure01, game.frame.coreFlow.result.pressure01);
++  assert.deepEqual(model.accepted.flow.step, model.context.step);
++  game.absorb(0);
++  game.step();
++  assert.equal(game.frame.playerInformation.accepted.flow, null);
++  assert.ok(game.frame.playerInformation.history.lastFlowDelivery.current01 > 0);
++  game.frame.statusPage = { open: true };
++  game.step();
++  assert.equal(game.frame.playerInformation.context.mode, 'menu');
++  assert.equal(game.frame.playerInformation.target, null);
++  assert.equal(game.frame.playerInformation.accepted.flow, null);
++});
++
++test('material acquisition, launch, actual contact, remount and retrieval keep their distinct truth', t => {
++  const { game, unit } = rig.prepare(t, { padMode: true });
++  const info = () => currentPlayerInformation(game.frame);
++  assert.equal(info().heldMaterial.id, unit.id);
++  game.step();
++  assert.equal(info().heldMaterial.generation, unit.generation);
++  const site = game.route.freeMaterialSurface;
++  const start = new Vector3().fromArray(site.center);
++  start.x -= site.radii[0] + 0.08;
++  const route = game.route;
++  game.playerRoot.position.copy(route.root.localToWorld(start.sub(route.siltGripLocalOffset)));
++  game.steps(10);
++  rig.charge(game, new Vector3(1, 0, 0));
++  const launch = rig.commit(game);
++  assert.equal(info().attempted.launch, true);
++  assert.equal(info().heldMaterial, null);
++  assert.equal(info().accepted.launch.grain, unit.id);
++  assert.equal(info().accepted.launch.actualRecipient, null);
++  assert.equal(info().accepted.launch.sequence, launch.chargeSequence);
++  rig.releasePulse(game);
++  game.stabilize(false);
++  assert.equal(info().accepted.launch, null);
++  let observed;
++  for (let i = 0; i < 60 && !observed; i++) {
++    game.step();
++    observed = info().accepted.freeMaterial[0];
++  }
++  assert.equal(observed?.actualRecipient, site.id);
++  assert.equal(observed.grain, unit.id);
++  assert.deepEqual(observed.step, info().context.step);
++  game.step(1 / 60, 0, 2);
++  game.step(1 / 60, 1, 2);
++  for (const contact of info().accepted.freeMaterial) {
++    assert.notEqual(contact.id, observed.id);
++    assert.deepEqual(contact.step, info().context.step);
++  }
++  const retainedId = info().history.lastFreeMaterialContact.id;
++  game.mount(HUB);
++  game.step();
++  assert.equal(info().heldMaterial, null);
++  assert.equal(info().accepted.freeMaterial.length, 0);
++  assert.equal(info().history.lastFreeMaterialContact.id, retainedId);
++  game.mount(SILT);
++  game.step();
++  for (const contact of info().accepted.freeMaterial) {
++    assert.notEqual(contact.id, retainedId);
++    assert.deepEqual(contact.step, info().context.step);
++    assert.ok(contact.step.mountSequence > observed.step.mountSequence);
++  }
++  rig.acquire(game, unit);
++  assert.equal(info().heldMaterial.id, unit.id);
++  assert.equal(route.materialIdentity.totalMass(), 8);
++});
++
++test('inspection and Core Work suppress live world information while retaining layout', t => {
++  const game = rig.makeGame(t, { padMode: true, flowExperiment: true });
++  game.frame.spatialCoreChemistry = { topology: { id: 'three_way_balance', distribution: '1:1:1' },
++    placements: [{ pieceId: 'test-memory', family: 'grave_memory_retention', zoneId: 'deep_core' }] };
++  game.frame.inspectionCamera = { active: true, coreWorkActive: false };
++  game.step();
++  assert.equal(game.frame.playerInformation.context.mode, 'inspection');
++  game.frame.inspectionCamera.coreWorkActive = true;
++  game.frame.coreWorkManipulation = { selectedPieceId: 'test-memory' };
++  game.step();
++  const info = game.frame.playerInformation;
++  assert.equal(info.context.mode, 'core_work');
++  assert.equal(info.core.distribution, '1:1:1');
++  assert.equal(info.core.selectedPiece, 'test-memory');
++  assert.equal(info.target, null);
++  assert.equal(info.heldMaterial, null);
++  assert.equal(info.accepted.flow, null);
++});
+diff --git a/src/contact/SiltPairMomentum.js b/src/contact/SiltPairMomentum.js
+new file mode 100644
+index 0000000..11975eb
+--- /dev/null
++++ b/src/contact/SiltPairMomentum.js
+@@ -0,0 +1,80 @@
++import admission from './siltPairAdmission.json' with { type: 'json' };
++
++const TOLERANCE = 1e-12;
++const finiteVector = value => Array.isArray(value) && value.length === 3
++  && [0, 1, 2].every(index => Number.isFinite(value[index]));
++const positive = value => Number.isFinite(value) && value > 0;
++const subtract = (a, b) => a.map((value, i) => value - b[i]);
++const add = (a, b) => a.map((value, i) => value + b[i]);
++const scale = (a, factor) => a.map(value => value * factor);
++const dot = (a, b) => a.reduce((sum, value, i) => sum + value * b[i], 0);
++const within = (a, b) => Math.abs(a - b) <= TOLERANCE * (1 + Math.max(Math.abs(a), Math.abs(b)));
++
++export const siltPairIds = Object.freeze([...admission.scope.ids]);
++
++export function siltPairFixture(mode) {
++  if (!Object.hasOwn(admission.massFixturesMr, mode)) return null;
++  return Object.freeze({
++    id: mode, revision: admission.revision, hostId: admission.scope.host, cellId: admission.scope.cell,
++    masses: Object.freeze({ ...admission.massFixturesMr[mode] }), radii: Object.freeze({ ...admission.radiiLw }),
++    phases: Object.freeze([...admission.scope.eligiblePhases]), separationMargin: admission.separationMarginLw,
++    fixedSurfaceWindow: admission.fixedSurfaceExclusionSeconds
++  });
++}
++
++// Geometry and impulse math for the admitted pair. SiltTrajectoryMemory owns
++// eligibility, integration, arbitration, and the atomic application of results.
++export function resolveSiltPairImpact(a, b, seconds) {
++  if (!positive(seconds) || ![a, b].every(body => positive(body?.mass) && positive(body.radius)
++    && finiteVector(body.position) && finiteVector(body.velocity))) return null;
++  const separation = subtract(b.position, a.position);
++  const relative = subtract(b.velocity, a.velocity);
++  const travel = scale(relative, seconds);
++  const radii = a.radius + b.radius;
++  const magnitude = Math.max(radii, ...separation.map(Math.abs), ...travel.map(Math.abs));
++  if (!positive(magnitude)) return null;
++  const p = scale(separation, 1 / magnitude);
++  const d = scale(travel, 1 / magnitude);
++  const radiusSquared = (radii / magnitude) ** 2;
++  if (radiusSquared === 0) return null;
++  const pSquared = dot(p, p);
++  const c = pSquared - radiusSquared;
++  const bTerm = dot(p, d);
++  const aTerm = dot(d, d);
++  const discriminant = bTerm ** 2 - aTerm * c;
++  if (c < 0 || bTerm >= 0 || !positive(aTerm)
++    || !(discriminant > TOLERANCE * Math.max(bTerm ** 2, Math.abs(aTerm * c)))) return null;
++
++  const ingressSeconds = seconds * (c / (-bTerm + Math.sqrt(discriminant)));
++  if (!Number.isFinite(ingressSeconds) || ingressSeconds < 0
++    || (ingressSeconds > seconds && !within(ingressSeconds, seconds))) return null;
++  const time = Math.min(ingressSeconds, seconds);
++  const impactOffset = add(separation, scale(relative, time));
++  const distance = Math.hypot(...impactOffset);
++  if (!positive(distance)) return null;
++  const normal = scale(impactOffset, 1 / distance);
++  const vn = dot(relative, normal);
++  if (!(vn < -TOLERANCE)) return null;
++
++  const largestMass = Math.max(a.mass, b.mass);
++  const ratioA = a.mass / largestMass;
++  const ratioB = b.mass / largestMass;
++  if (!positive(ratioA) || !positive(ratioB)) return null;
++  const deltaA = vn * (ratioB / (ratioA + ratioB));
++  const deltaB = -vn * (ratioA / (ratioA + ratioB));
++  const impulse = -a.mass * deltaA;
++  const velocities = [add(a.velocity, scale(normal, deltaA)), add(b.velocity, scale(normal, deltaB))];
++  const positions = [add(a.position, scale(a.velocity, time)), add(b.position, scale(b.velocity, time))];
++  const momentum = ([va, vb]) => add(scale(va, a.mass), scale(vb, b.mass));
++  const energy = ([va, vb]) => a.mass / 2 * dot(va, va) + b.mass / 2 * dot(vb, vb);
++  const before = [a.velocity, b.velocity];
++  const momentumBefore = momentum(before);
++  const momentumAfter = momentum(velocities);
++  const energyBefore = energy(before);
++  const energyAfter = energy(velocities);
++  if (![...positions, ...velocities, momentumBefore, momentumAfter].every(finiteVector)
++    || ![impulse, energyBefore, energyAfter].every(Number.isFinite)
++    || !momentumAfter.every((value, i) => within(value, momentumBefore[i]))
++    || (energyAfter > energyBefore && !within(energyAfter, energyBefore))) return null;
++  return { time, normal, impulse, positions, velocities, momentumBefore, momentumAfter, energyBefore, energyAfter };
++}
+diff --git a/src/contact/SiltTrajectoryMemory.js b/src/contact/SiltTrajectoryMemory.js
+index 1f71919..6482b63 100644
+--- a/src/contact/SiltTrajectoryMemory.js
++++ b/src/contact/SiltTrajectoryMemory.js
+@@ -1,3 +1,6 @@
++import { resolveSiltPairImpact, siltPairFixture, siltPairIds } from './SiltPairMomentum.js';
++import { HC031W2A4_MAX_STEP_SECONDS } from '../core/BoundedSimulationCatchUp.js';
++
+ /**
+  * LS1D1D2O1 — bounded route-local kinematic history for individual Silt grains.
+  *
+@@ -17,6 +20,7 @@ const roundVec = a => a.map(round);
+ const pulseImpulse = displacement => Math.min(1.35, 0.55 + displacement * 2.1);
+ 
+ const CONTACT_EPSILON = 1e-7;
++const MAX_MICROSTEP_SECONDS = 0.025;
+ const CONTACT_HISTORY_LIMIT = 32;
+ const dot = (a, b) => a.reduce((sum, n, i) => sum + n * b[i], 0);
+ 
+@@ -36,7 +40,7 @@ function sweepIngress(position, move, { center, radii }) {
+ }
+ 
+ export class SiltTrajectoryMemory {
+-  constructor({ maxUnits=8, spring=0.44, drag=0.74, maxSpeed=2.1, maxAcceleration=1.8 }={}) {
++  constructor({ maxUnits=8, spring=0.44, drag=0.74, maxSpeed=2.1, maxAcceleration=1.8, pairExperiment=null }={}) {
+     this.maxUnits=maxUnits;
+     this.spring=spring;
+     this.drag=drag;
+@@ -50,6 +54,9 @@ export class SiltTrajectoryMemory {
+     this.sequence=0;
+     this.lastEvent='none';
+     this.freeContacts = [];
++    this.pairFixture = siltPairFixture(pairExperiment);
++    this.pairLatch = null;
++    this.pairContacts = this.pairFixture ? [] : null;
+   }
+   beginHold(id, position) {
+     if(typeof id!=='string'||!finite3(position)) return false;
+@@ -58,6 +65,7 @@ export class SiltTrajectoryMemory {
+       this.history.set(id,{releases:0,travelDistance:0,maxNativeDeviation:0});
+     }
+     if(this.free.delete(id)) this.reacquisitions++;
++    if (this.pairLatch && siltPairIds.includes(id)) this.clearPairContact();
+     this.held.set(id,{position:[...position],velocity:[0,0,0],pulse:[0,0,0],pulseAge:Infinity});
+     return true;
+   }
+@@ -139,6 +147,143 @@ export class SiltTrajectoryMemory {
+       distance: length(move) * impact.fraction + length(along) };
+   }
+ 
++
++  nativeVelocity(record, nativePoint, resistance, radiusSquared, step) {
++    const delta=subtract(nativePoint,record.position);
++    const accel=limit(subtract(scale(delta,this.spring),scale(record.velocity,this.drag)),this.maxAcceleration);
++    let velocity=limit(vec(record.velocity,scale(accel,step)),this.maxSpeed);
++    if (resistance) {
++      const offset = subtract(record.position, resistance.center);
++      const separationSquared = offset[0] ** 2 + offset[1] ** 2 + offset[2] ** 2;
++      if (separationSquared < radiusSquared) {
++        // Extra drag falls to zero at the boundary. A positive scalar
++        // preserves heading and leaves the native spring and speed cap intact.
++        const rate = resistance.rate * (1 - separationSquared / radiusSquared);
++        velocity = scale(velocity, Math.exp(-rate * step));
++      }
++    }
++    return velocity;
++  }
++
++  clearPairContact() {
++    this.pairLatch = null;
++  }
++
++  pairMember(entry, id) {
++    const record = this.free.get(id);
++    const { contact, phase, custody, seated } = entry ?? {};
++    const step = contact?.step;
++    const source = record?.freeContact?.source;
++    const previous = record?.freeContact?.step;
++    if (entry?.id !== id || !record || this.held.has(id) || seated || custody !== 'environment'
++      || !this.pairFixture.phases.includes(phase) || !finite3(record.position) || !finite3(record.velocity)
++      || !finite3(entry.nativePoint) || !step || !source || !previous
++      || step.hostId !== this.pairFixture.hostId || step.cellId !== this.pairFixture.cellId
++      || !['frame', 'substep', 'mountCount', 'mountSequence', 'generation'].every(k => Number.isSafeInteger(step[k]) && step[k] >= 0)
++      || !['hostId', 'cellId', 'mountCount', 'mountSequence', 'generation'].every(k => step[k] === source[k])) return null;
++    const releaseSequence = record.freeContact.releaseSequence;
++    if (!Number.isSafeInteger(releaseSequence) || releaseSequence < 1) return null;
++    const after = (a, b) => a.frame > b.frame || (a.frame === b.frame && a.substep > b.substep);
++    const releaseStep = record.seconds === 0 && step.frame === source.frame && step.substep === source.substep;
++    if (!releaseStep && (!after(step, source) || !after(step, previous))) return null;
++    const { resistance } = entry;
++    return { ...entry, record, step, source, releaseSequence, mass: this.pairFixture.masses[id],
++      radius: this.pairFixture.radii[id], radiusSquared: resistance ? resistance.radius ** 2 : 0 };
++  }
++
++  advancePair(dt, entries, rigidFrame) {
++    const fixture = this.pairFixture;
++    if (!fixture || rigidFrame !== true || !Number.isFinite(dt) || dt <= 1e-8 || dt > HC031W2A4_MAX_STEP_SECONDS
++      || !Array.isArray(entries) || entries.length !== siltPairIds.length) return null;
++    const members = siltPairIds.map(id => this.pairMember(entries.find(entry => entry.id === id), id));
++    if (members.some(member => !member)) return null;
++    const [a, b] = members;
++    if (!['frame', 'substep', 'mountCount', 'mountSequence'].every(k => a.step[k] === b.step[k])
++      || a.releaseSequence === b.releaseSequence) return null;
++    const key = JSON.stringify([fixture.id, a.step.hostId, a.step.cellId, a.step.mountSequence, a.step.mountCount,
++      ...members.map(member => [member.id, member.step.generation, member.releaseSequence])]);
++    if (this.pairLatch?.key !== key) this.pairLatch = { key, armed: true };
++    for (const member of members) member.record.freeContact.step = member.step;
++
++    let left = dt;
++    let microstep = 0;
++    while (left > 1e-8) {
++      const seconds = Math.min(left, MAX_MICROSTEP_SECONDS);
++      left -= seconds;
++      const native = members.map(member => this.predictPairMember(member, seconds));
++      const separation = length(subtract(native[0].position, native[1].position));
++      if (separation > a.radius + b.radius + fixture.separationMargin) this.pairLatch.armed = true;
++      const candidate = this.pairLatch.armed && resolveSiltPairImpact(native[0], native[1], seconds);
++      const impact = candidate && candidate.velocities.every(v => length(v) <= this.maxSpeed)
++        && !native.some((body, index) => this.fixedSurfacePrecedes(body, members[index].contact.surface, seconds, candidate.time));
++      if (impact) {
++        this.applyPairContact(members, native, candidate, seconds, microstep);
++      } else {
++        for (const [index, member] of members.entries()) {
++          member.record.velocity = native[index].velocity;
++          this.advancePairMember(member, seconds, microstep);
++        }
++      }
++      for (const member of members) member.record.seconds += seconds;
++      microstep++;
++    }
++    return new Map(members.map(member => [member.id, this.finishAdvance(member.id, member.record, member.nativePoint)]));
++  }
++
++  predictPairMember(member, seconds) {
++    const { record, nativePoint, resistance, radiusSquared, mass, radius } = member;
++    return { position: record.position, beforeNativeVelocity: record.velocity, mass, radius,
++      velocity: this.nativeVelocity(record, nativePoint, resistance, radiusSquared, seconds) };
++  }
++
++  fixedSurfacePrecedes(body, surface, seconds, time) {
++    if (!surface) return false;
++    const hit = sweepIngress(body.position, scale(body.velocity, seconds), surface);
++    return Boolean(hit && -dot(body.velocity, hit.normal) > CONTACT_EPSILON
++      && hit.fraction * seconds <= time + this.pairFixture.fixedSurfaceWindow);
++  }
++
++  advancePairMember(member, seconds, microstep, travelBefore = 0) {
++    const { record, contact, step, id } = member;
++    const move = scale(record.velocity, seconds);
++    const fixed = contact.surface ? this.resolveFreeContact(record, id, contact.surface, step, microstep, seconds, move) : null;
++    record.position = fixed?.position ?? vec(record.position, move);
++    this.history.get(id).travelDistance += travelBefore + (fixed?.distance ?? length(move));
++  }
++
++  applyPairContact(members, native, result, seconds, microstep) {
++    // The entire pair was validated before either position or velocity changes.
++    for (const [i, { record }] of members.entries()) {
++      record.position = result.positions[i];
++      record.velocity = result.velocities[i];
++    }
++    const { step, radius } = members[0];
++    this.pairLatch.armed = false;
++    const event = {
++      ...step, microstep, microstepSeconds: seconds, contactSeconds: result.time,
++      fixture: this.pairFixture.id, revision: this.pairFixture.revision,
++      id: [this.pairLatch.key, step.frame, step.substep, microstep].join(':'),
++      kind: 'accepted-silt-pair', actualRecipientIds: members.map(member => member.id),
++      normal: result.normal, point: vec(result.positions[0], scale(result.normal, radius)),
++      impulse: result.impulse, momentumBefore: result.momentumBefore, momentumAfter: result.momentumAfter,
++      kineticEnergyBefore: result.energyBefore, kineticEnergyAfter: result.energyAfter,
++      kineticEnergyLost: Math.max(0, result.energyBefore - result.energyAfter),
++      units: members.map(({ id, step, mass, radius, releaseSequence, source }, i) => ({
++        id, generation: step.generation, releaseSequence, releaseFrame: source.frame, releaseSubstep: source.substep,
++        mass, radius, startingPosition: [...native[i].position], contactPosition: [...result.positions[i]],
++        beforeNativeVelocity: [...native[i].beforeNativeVelocity], incomingVelocity: [...native[i].velocity],
++        outgoingVelocity: [...result.velocities[i]]
++      })),
++      inventoryTransferred: false, progressionCredit: false, hostReceipt: false
++    };
++    this.pairContacts.push(event);
++    if (this.pairContacts.length > CONTACT_HISTORY_LIMIT) this.pairContacts.shift();
++    // Remaining travel keeps the original PI03 owner and native step length.
++    for (const [i, member] of members.entries()) {
++      this.advancePairMember(member, seconds - result.time, microstep, length(native[i].velocity) * result.time);
++    }
++  }
++
+   advance(id,dt,nativePoint,resistance=null,contact=null){
+     const record=this.free.get(id);
+     if(!record||!finite3(nativePoint))return null;
+@@ -166,20 +311,8 @@ export class SiltTrajectoryMemory {
+     let microstep = 0;
+     const radiusSquared = resistance ? resistance.radius ** 2 : 0;
+     while(left>1e-8){
+-      const step=Math.min(left,0.025);left-=step;
+-      const delta=subtract(nativePoint,record.position);
+-      const accel=limit(subtract(scale(delta,this.spring),scale(record.velocity,this.drag)),this.maxAcceleration);
+-      record.velocity=limit(vec(record.velocity,scale(accel,step)),this.maxSpeed);
+-      if (resistance) {
+-        const offset = subtract(record.position, resistance.center);
+-        const separationSquared = offset[0] ** 2 + offset[1] ** 2 + offset[2] ** 2;
+-        if (separationSquared < radiusSquared) {
+-          // Extra drag falls to zero at the boundary. A positive scalar
+-          // preserves heading and leaves the native spring and speed cap intact.
+-          const rate = resistance.rate * (1 - separationSquared / radiusSquared);
+-          record.velocity = scale(record.velocity, Math.exp(-rate * step));
+-        }
+-      }
++      const step=Math.min(left,MAX_MICROSTEP_SECONDS);left-=step;
++      record.velocity = this.nativeVelocity(record, nativePoint, resistance, radiusSquared, step);
+       const stepMove=scale(record.velocity,step);
+       const impact = surface ? this.resolveFreeContact(record, id, surface, contact.step, microstep, step, stepMove) : null;
+       record.position = impact?.position ?? vec(record.position, stepMove);
+@@ -187,6 +320,9 @@ export class SiltTrajectoryMemory {
+       microstep++;
+       record.seconds+=step;
+     }
++    return this.finishAdvance(id, record, nativePoint);
++  }
++  finishAdvance(id, record, nativePoint) {
+     const distance=length(subtract(nativePoint,record.position));
+     record.nativeError=distance;
+     this.history.get(id).maxNativeDeviation=Math.max(distance,this.history.get(id).maxNativeDeviation);
+@@ -204,6 +340,8 @@ export class SiltTrajectoryMemory {
+       releases:this.releases,reacquisitions:this.reacquisitions,sequence:this.sequence,
+       lastEvent:this.lastEvent,
+       ...(this.freeContacts.length ? { freeMaterialContacts: this.freeContacts.slice() } : {}),
++      ...(this.pairFixture ? { materialPairExperiment: { fixture: this.pairFixture.id,
++        revision: this.pairFixture.revision, contacts: this.pairContacts.slice() } } : {}),
+       histories:[...this.history.entries()].map(([unitId,h])=>({unitId,
+         releases:h.releases,travelDistance:round(h.travelDistance),
+         maxNativeDeviation:round(h.maxNativeDeviation)})),
+diff --git a/src/contact/siltPairAdmission.json b/src/contact/siltPairAdmission.json
+new file mode 100644
+index 0000000..37bf034
+--- /dev/null
++++ b/src/contact/siltPairAdmission.json
+@@ -0,0 +1,175 @@
++{
++  "schema": "blob.silt-pair-admission.v1",
++  "revision": 1,
++  "status": "approved-experimental",
++  "authorization": {
++    "workOrder": "BLOB Parallel Development Wave 09, section 3 Team B MP03-P1",
++    "sourceSHA256": "3d57eaa1773e2478832e2af51bc8697bcbd9d54a4bec0dd3d39a381b7cedcb8f",
++    "priorEvidence": "1521d2519226c56ae76c1faf5989523ce22e3a2d",
++    "frozenFrom": [
++      {
++        "file": "MP03-calibration.json",
++        "sha256": "24cc139ea3a721c0aec12223bed7ce6ed990ee8b4f67a3d668d86e323a4ca6c3"
++      },
++      {
++        "file": "NF02-contract.json",
++        "sha256": "6ce077eba5eebb40cee15094c16c26017adebbec8232cb4e4623e2ee2b127df4"
++      }
++    ]
++  },
++  "baseline": "462f1278ea069b41b4c0216335f4bb9363ee38af",
++  "dimensionalContract": {
++    "id": "blob.numerical-contract.v1",
++    "revision": 1,
++    "status": "approved-for-scoped-mechanics",
++    "units": [
++      "Lw",
++      "Ts",
++      "Mr",
++      "Q"
++    ],
++    "SI": {
++      "metersPerLw": null,
++      "kilogramsPerMr": null,
++      "secondsPerTs": 1
++    }
++  },
++  "scope": {
++    "host": "HOST_ALPHA_WOUNDED_NURSERY",
++    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
++    "ids": [
++      "silt-grain-01",
++      "silt-grain-02"
++    ],
++    "requiredFrame": {
++      "position": [
++        0,
++        0,
++        0
++      ],
++      "scale": [
++        1,
++        1,
++        1
++      ],
++      "rotation": [
++        0,
++        0,
++        0,
++        1
++      ]
++    },
++    "environmentOwned": true,
++    "releasePolicy": "Both existing PI02 directed releases must have current Host, cell, mount count and sequence, generation and monotonic step evidence.",
++    "eligiblePhases": [
++      "veins",
++      "garden_transit",
++      "settled",
++      "growing",
++      "mature",
++      "returning"
++    ],
++    "ordinaryActivation": false
++  },
++  "radiiLw": {
++    "silt-grain-01": 0.06,
++    "silt-grain-02": 0.06
++  },
++  "massFixturesMr": {
++    "equal": {
++      "silt-grain-01": 1,
++      "silt-grain-02": 1
++    },
++    "one-to-three": {
++      "silt-grain-01": 1,
++      "silt-grain-02": 3
++    }
++  },
++  "restitution": 0,
++  "tangentialImpulse": 0,
++  "separationMarginLw": 0.001,
++  "fixedSurfaceExclusionSeconds": 0.00001,
++  "nativeLimits": {
++    "speedLwPerSecond": 2.1,
++    "accelerationLwPerSecond2": 1.8,
++    "microstepSeconds": 0.025
++  },
++  "measuredCorridor": {
++    "seed": {
++      "positionA": [
++        2.7238,
++        -0.8497,
++        -12.9267
++      ],
++      "positionB": [
++        3.0438,
++        -0.8497,
++        -12.9267
++      ],
++      "velocityA": [
++        1,
++        0,
++        0
++      ],
++      "velocityB": [
++        0,
++        0,
++        0
++      ],
++      "radiusA": 0.06,
++      "radiusB": 0.06,
++      "seconds": 0.33
++    },
++    "miss": {
++      "positionA": [
++        2.7238,
++        -0.8497,
++        -12.9267
++      ],
++      "positionB": [
++        3.0438,
++        -0.7097,
++        -12.9267
++      ],
++      "velocityA": [
++        1,
++        0,
++        0
++      ],
++      "velocityB": [
++        0,
++        0,
++        0
++      ],
++      "radiusA": 0.06,
++      "radiusB": 0.06,
++      "seconds": 0.33
++    },
++    "clearanceLowerBoundLw": 2.408921945387181,
++    "surface": {
++      "id": "SILT_ENTRY_SEDIMENT_SHELF_D11B",
++      "center": [
++        -0.18,
++        -0.75,
++        -2.65
++      ],
++      "radii": [
++        1.35,
++        0.24,
++        0.95
++      ]
++    },
++    "basis": "Staged measurement and numerical test corridor within the admitted Silt route, not a new gameplay volume."
++  },
++  "accounting": {
++    "ledgerUnit": "Q",
++    "expectedUnits": 8,
++    "impulseMayCreditReceipts": false,
++    "impulseMayCreditProgression": false
++  },
++  "prerequisites": [
++    "exact fixture selected before mount",
++    "pair volumes used only for experimental collision proxies",
++    "finite approaching contact over the same native microstep"
++  ]
++}
+diff --git a/src/core/GameRuntime.js b/src/core/GameRuntime.js
+index 1d8de9a..fb59704 100644
+--- a/src/core/GameRuntime.js
++++ b/src/core/GameRuntime.js
+@@ -117,13 +117,14 @@ import { GatheringGroundAliveSystem } from "../fields/GatheringGroundAliveSystem
+ 
+ export class GameRuntime {
+   constructor({ appRoot, buildId, buildLabel, coreRepairTrial = false, flowExperiment = false,
+-    nearWorldExperiment = false, siltResistanceExperiment = false }) {
++    nearWorldExperiment = false, siltResistanceExperiment = false, siltPairExperiment = null }) {
+     this.appRoot = appRoot;
+     this.buildId = buildId;
+     this.buildLabel = buildLabel;
+     Object.defineProperty(this, 'coreRepairTrial', { value: coreRepairTrial === true, writable: false });
+     this.flowExperiment = flowExperiment === true;
+     this.siltResistanceExperiment = siltResistanceExperiment === true;
++    this.siltPairExperiment = siltPairExperiment;
+     this.nearWorldFraming = nearWorldExperiment === true ? new NearWorldFraming() : null;
+     this.renderCamera = null;
+ 
+@@ -2417,7 +2418,8 @@ export class GameRuntime {
+       frameState: this.frameState,
+       camera: this.camera,
+       flowExperiment: this.flowExperiment,
+-      siltResistanceExperiment: this.siltResistanceExperiment
++      siltResistanceExperiment: this.siltResistanceExperiment,
++      siltPairExperiment: this.siltPairExperiment
+     });
+     if (this.flowExperiment) {
+       const silt = this.siltPressureRouteSystem;
+diff --git a/src/main.js b/src/main.js
+index 3cdf1a1..8cc4bef 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -20,6 +20,7 @@ const runtime = new GameRuntime({
+   flowExperiment: new URLSearchParams(window.location.search).get('flow') === '1',
+   nearWorldExperiment: new URLSearchParams(window.location.search).get('nearWorld') === '1',
+   siltResistanceExperiment: new URLSearchParams(window.location.search).get('b3') === '1',
++  siltPairExperiment: import.meta.env && import.meta.env.DEV ? new URLSearchParams(window.location.search).get('siltPair') : null,
+   buildId: "HC-031W1",
+   buildLabel: "Stabilized Aim + Local Contact Proof"
+ });
+diff --git a/src/routes/SiltPressureRouteSystem.js b/src/routes/SiltPressureRouteSystem.js
+index a392421..642df1a 100644
+--- a/src/routes/SiltPressureRouteSystem.js
++++ b/src/routes/SiltPressureRouteSystem.js
+@@ -1,3 +1,4 @@
++import { siltPairIds } from '../contact/SiltPairMomentum.js';
+ import * as THREE from "three";
+ import { SiltReturnRoundTrip } from "./SiltReturnRoundTrip.js";
+ import { SiltLivingMaterialCycle } from "./SiltLivingMaterialCycle.js";
+@@ -31,7 +32,7 @@ const TETHER_PULSE_DISTANCE = 0.28;
+  */
+ export class SiltPressureRouteSystem {
+   constructor({ recipeDataSystem, scene, playerRoot, frameState, camera, hostConnectionReceiptLedger = null,
+-    flowExperiment = false, siltResistanceExperiment = false }) {
++    flowExperiment = false, siltResistanceExperiment = false, siltPairExperiment = null }) {
+     this.flowExperiment = flowExperiment;
+     this.siltResistanceExperiment = siltResistanceExperiment;
+     if (!recipeDataSystem) throw new Error("[SiltPressureRouteSystem] recipeDataSystem is required.");
+@@ -69,7 +70,7 @@ export class SiltPressureRouteSystem {
+     this.siltPlateSeat = new SiltPlateSeat();
+     // D2O1: independent native-path attraction for deliberately released
+     // unseated units. No new material and no mutation to the LS1B phase clock.
+-    this.siltTrajectory = new SiltTrajectoryMemory();
++    this.siltTrajectory = new SiltTrajectoryMemory({ pairExperiment: siltPairExperiment });
+     this.siltResolvedTrajectories = new Map();
+     // D2P1: read-only evidence for travel between existing Silt cavities.
+     this.siltTrajectoryField = new SiltTrajectoryFieldProbe();
+@@ -262,6 +263,7 @@ export class SiltPressureRouteSystem {
+   }
+ 
+   onRuntimeUnmount(frameState) {
++    if (this.siltTrajectory.pairFixture) this.siltTrajectory.clearPairContact();
+     this.returnRoundTrip.suspend();
+     this.gardenSeep.arrivalAt = null;
+     this.animateGardenSeepBed();
+@@ -1973,8 +1975,12 @@ export class SiltPressureRouteSystem {
+     const resistance = this.selectSiltBudResistance(frameState);
+     const step = this.freeMaterialSurface && (frameState.runtimeSimulationSubstepSeconds ?? dt) === dt
+       ? this.readHeldMotionStep(frameState) : null;
++    if (step && this.siltTrajectory.pairFixture && !siltFlowUnavailableReason(frameState)) {
++      const paired = this.advanceSiltMaterialPair(dt, step, resistance);
++      if (paired) for (const [id, motion] of paired) resolved.set(id, motion);
++    }
+     for (const [index, unit] of this.livingCycle.units.entries()) {
+-      if (!this.siltTrajectory.has(unit.id) || (unit.id === this.siltGrip.heldId && this.siltGrip.position)
++      if (resolved.has(unit.id) || !this.siltTrajectory.has(unit.id) || (unit.id === this.siltGrip.heldId && this.siltGrip.position)
+         || this.siltPlateSeat.isSeated(unit.id)) continue;
+       const nativePoint = this.copyNativeGrainPosition(unit, index, this.livingMatterV).toArray();
+       const contact = step?.hostId && this.materialIdentity.get(unit.id)?.owner === 'environment'
+@@ -1984,6 +1990,25 @@ export class SiltPressureRouteSystem {
+     }
+   }
+ 
++  advanceSiltMaterialPair(dt, step, resistance) {
++    const entries = [];
++    for (const id of siltPairIds) {
++      const index = this.livingCycle.units.findIndex(unit => unit.id === id);
++      if (index < 0 || !this.siltTrajectory.has(id) || this.siltGrip.heldId === id) return null;
++      const unit = this.livingCycle.units[index];
++      entries.push({ id, phase: unit.phase, custody: this.materialIdentity.get(id)?.owner,
++        seated: this.siltPlateSeat.isSeated(id),
++        nativePoint: this.copyNativeGrainPosition(unit, index, this.livingMatterV).toArray(),
++        resistance: resistance?.receiverId === id ? resistance : null,
++        contact: { surface: this.freeMaterialSurface, step: { ...step, generation: unit.generation } } });
++    }
++    this.root.updateWorldMatrix(true, false);
++    const [x, y, z] = this.entryAnchor.toArray();
++    const expected = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1];
++    const rigidFrame = this.root.matrixWorld.elements.every((value, i) => Math.abs(value - expected[i]) <= 1e-10);
++    return this.siltTrajectory.advancePair(dt, entries, rigidFrame);
++  }
++
+   animateLivingMatter() {
+     const cycle = this.livingCycle;
+     if (!cycle || !this.livingMatterGroup) return;
+diff --git a/src/ui/PlayerInformationModel.js b/src/ui/PlayerInformationModel.js
+new file mode 100644
+index 0000000..5185b47
+--- /dev/null
++++ b/src/ui/PlayerInformationModel.js
+@@ -0,0 +1,143 @@
++import { localChemistryTransitionReason } from '../chemistry/LocalChemistryContextSystem.js';
++import { readFlowStep } from '../interaction/SiltFlowContract.js';
++
++const id = value => typeof value === 'string' && value && value !== 'none' ? value : null;
++const number = value => Number.isFinite(value) ? value : null;
++const stampKeys = ['hostId', 'cellId', 'mountSequence', 'frame', 'substep'];
++const sameStep = (a, b) => Boolean(a && b && stampKeys.every(key => a[key] === b[key]));
++
++function observationStep(sample) {
++  return Object.freeze(Object.fromEntries(stampKeys.map(key => [key, sample[key]])));
++}
++
++function contextOf(frame) {
++  const step = readFlowStep(frame);
++  const cameras = [frame.inspectionCamera, frame.tightInspectionCamera];
++  const transition = localChemistryTransitionReason(frame);
++  let mode = 'world';
++  if (frame.statusPage?.open) mode = 'menu';
++  else if (transition) mode = 'transition';
++  else if (cameras.some(camera => camera?.coreWorkActive)) mode = 'core_work';
++  else if (cameras.some(camera => camera?.active)) mode = 'inspection';
++  else if (!step || frame.firstSliceRuntimeMount?.activeRuntimeCellId !== step.cellId) mode = 'unmounted';
++  return Object.freeze({ mode, transition: transition ?? null, step: step && Object.freeze(step),
++    frame: number(frame.frame), substep: frame.runtimeSimulationSubstepIndex ?? 0 });
++}
++
++function ownerRan(frame, name) {
++  const execution = frame.runtimeExecution;
++  return execution?.frame === frame.frame && execution.executedSystemIds?.includes(name);
++}
++
++function targetOf(frame, context) {
++  if (context.mode !== 'world' || !ownerRan(frame, 'targetingSystem')) return null;
++  const aim = frame.targeting;
++  const selected = aim?.relationshipActive ? aim.relationshipTargetId
++    : aim?.attentionActive ? aim.attentionTargetId : null;
++  if (!aim?.active || !id(selected) || aim.targetId !== selected) return null;
++  return Object.freeze({ owner: 'TargetingSystem', id: selected, label: aim.targetLabel ?? selected,
++    phase: aim.relationshipActive ? aim.relationshipPhase : aim.attentionPhase,
++    relationship: Boolean(aim.relationshipActive), attentionSequence: number(aim.attentionSequence),
++    relationshipSequence: aim.relationshipActive ? number(aim.relationshipSequence) : null });
++}
++
++function coreOf(frame, context) {
++  const core = frame.corePerformance;
++  const layout = frame.spatialCoreChemistry;
++  const placements = (layout?.placements ?? []).map(piece => Object.freeze({
++    id: piece.pieceId, family: piece.family, zone: piece.zoneId
++  }));
++  return Object.freeze({ owner: 'CoreRadialPerformanceSystem', reserve01: number(core?.endurance?.reserve01),
++    reservePercent: number(core?.endurance?.reservePercent), stability: number(core?.traits?.stability),
++    phaseCount: number(frame.coreEngine?.phaseCount), topologyId: id(layout?.topology?.id ?? core?.topologyId),
++    distribution: layout?.topology?.distribution ?? core?.distribution ?? null,
++    placements: Object.freeze(placements),
++    selectedPiece: context.mode === 'core_work' ? id(frame.coreWorkManipulation?.selectedPieceId) : null });
++}
++
++function flowDelivery(result) {
++  if (!result || !(result.acceptedCurrent01 > 0)) return null;
++  return Object.freeze({ owner: result.owner, step: observationStep(result),
++    actionSequence: result.actionSequence, intendedTarget: result.targetId, actualRecipient: result.receiverId,
++    current01: result.acceptedCurrent01, pressure01: result.pressure01, resistance01: result.resistance01,
++    retainedImprintAfter: result.after?.imprint ?? null });
++}
++
++function materialLaunch(event) {
++  if (!event) return null;
++  return Object.freeze({ owner: 'SiltPressureRouteSystem', step: observationStep(event), grain: event.unitId,
++    generation: event.generation, sequence: event.chargeSequence, intendedTarget: event.intendedTargetId,
++    actualRecipient: event.actualRecipientId });
++}
++
++function grainContacts(events) {
++  return Object.freeze(events.map(event => Object.freeze({ owner: 'SiltTrajectoryMemory',
++    step: observationStep(event), grain: event.unitId, generation: event.generation, releaseSequence: event.releaseSequence,
++    actualRecipient: event.receiverId, removedInwardSpeed: event.inwardSpeedRemoved, response: event.response,
++    id: event.deduplicationId })));
++}
++
++/** Read-only UI02 view. Scheduling and all action, physics, and history writes stay with their owners. */
++export function projectPlayerInformation(frame) {
++  const context = contextOf(frame);
++  const world = context.mode === 'world';
++  const { step } = context;
++  const input = world ? frame.input ?? {} : {};
++  const verb = world && ownerRan(frame, 'verbCompositionSystem') ? frame.verbComposition : null;
++  const target = targetOf(frame, context);
++  const mount = frame.firstSliceRuntimeMount;
++  const route = frame.siltPressureRoute;
++  const siltMounted = world && mount?.activeSystemIds?.includes('siltPressureRouteSystem')
++    && ownerRan(frame, 'siltPressureRouteSystem') && route?.active;
++  const launch = siltMounted ? route.materialLaunch : null;
++  const heldId = siltMounted ? id(route.siltGrip?.heldId) : null;
++  const custody = heldId && route.materialIdentity?.records?.find(record => record.id === heldId && record.owner === 'grip');
++  const heldMotion = route?.heldMaterialMotion?.acceptedMotion?.current;
++  const generation = heldMotion?.unitId === heldId && sameStep(heldMotion, step) ? number(heldMotion.generation) : null;
++  const flow = world && sameStep(frame.coreFlow?.step, step) ? frame.coreFlow : null;
++  const acceptedFlow = flow?.contactValid && sameStep(flow.result, step)
++    && flow.result.actionSequence === flow.actionSequence && flow.result.targetId === target?.id
++    ? flowDelivery(flow.result) : null;
++  const acceptedLaunch = sameStep(launch?.lastCommitment, step) ? materialLaunch(launch.lastCommitment) : null;
++  // History can remain available on remount, but only inside its original Host.
++  const sameHost = sample => Boolean(step && sample?.hostId === step.hostId);
++  const contactHistory = (route?.siltTrajectory?.freeMaterialContacts ?? []).filter(sameHost);
++  const liveContacts = siltMounted ? contactHistory.filter(event => sameStep(event, step)) : [];
++  const oldFlow = sameHost(frame.coreFlow?.lastResult) ? flowDelivery(frame.coreFlow.lastResult) : null;
++  const oldLaunch = sameHost(route?.materialLaunch?.lastCommitment) ? materialLaunch(route.materialLaunch.lastCommitment) : null;
++  const surface = world && ownerRan(frame, 'coreSurfaceTruthSystem') ? frame.coreSurfaceTruth : null;
++  const host = step && frame.hostCondition?.hostId === step.hostId
++    && frame.hostCondition.sampledAtSeconds === frame.runtimeSeconds ? frame.hostCondition : null;
++  const routeViscosity = world && ownerRan(frame, 'playerMovement') ? number(frame.playerKinematics?.viscosity) : null;
++  return Object.freeze({
++    schemaVersion: 1, context,
++    core: coreOf(frame, context),
++    target,
++    intent: Object.freeze({ owner: 'InputSystem', chord: verb?.chord ?? 'idle',
++      pulse: Boolean(input.pulseHeld || input.pulsePressed), absorb: Boolean(input.absorbHeld),
++      stabilize: Boolean(input.stabilizeHeld), flowDemand01: number(input.flowDemand01) ?? 0 }),
++    attempted: Object.freeze({ pulseEvent: input.pulsePressed ? number(input.pulseEventId) : null,
++      flowAction: flow?.demand01 > 0 ? number(flow.actionSequence) : null,
++      launch: Boolean(launch?.attempted) }),
++    heldMaterial: custody ? Object.freeze({ owner: 'SiltPressureRouteSystem', id: heldId,
++      generation, custody: custody.owner }) : null,
++    eligibility: Object.freeze({
++      flow: flow ? Object.freeze({ ready: flow.ready, reason: flow.reason, geometricContact: flow.contactValid }) : null,
++      launch: launch ? Object.freeze({ ready: launch.ready, reason: launch.rejectionReason }) : null
++    }),
++    accepted: Object.freeze({ flow: acceptedFlow, launch: acceptedLaunch, freeMaterial: grainContacts(liveContacts) }),
++    contact: surface?.valid ? Object.freeze({ owner: 'CoreSurfaceTruthSystem', surface: surface.surfaceId,
++      eligible: surface.mechanicalEligible, attached: Boolean(frame.playerAttachment?.active) }) : null,
++    localEnvironment: Object.freeze({ cell: step?.cellId ?? null, hostCondition: host?.phase ?? null,
++      hostPressure01: number(host?.amplitude), viscosityIndex: routeViscosity }),
++    history: Object.freeze({ lastFlowDelivery: oldFlow, lastDirectedRelease: oldLaunch,
++      lastFreeMaterialContact: grainContacts(contactHistory.slice(-1))[0] ?? null })
++  });
++}
++
++export function currentPlayerInformation(frame) {
++  const model = frame.playerInformation;
++  return model && model.context.frame === frame.frame && model.context.substep === (frame.runtimeSimulationSubstepIndex ?? 0)
++    && model.context.step?.hostId === frame.activeHostId && model.context.step?.cellId === frame.activeCellId
++    && model.context.step?.mountSequence === frame.firstSliceRuntimeMount?.mountSequence ? model : null;
++}
+diff --git a/src/ui/PlaytestHudSystem.js b/src/ui/PlaytestHudSystem.js
+index 7e94796..f1aa027 100644
+--- a/src/ui/PlaytestHudSystem.js
++++ b/src/ui/PlaytestHudSystem.js
+@@ -1,3 +1,4 @@
++import { currentPlayerInformation, projectPlayerInformation } from "./PlayerInformationModel.js";
+ import { readHostLanguage } from '../language/HostLanguageGrammar.js';
+ import { inSiltFlowWorld, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
+ import { HUB_RETURN_BOUNDARY_BY_CELL, readCascadeLabel, readContextualWorldLabel } from './ContextualWorldLabels.js';
+@@ -73,6 +74,7 @@ export class PlaytestHudSystem {
+   }
+ 
+   update(_dt, frameState) {
++    frameState.playerInformation = projectPlayerInformation(frameState);
+     if (!this.el) return;
+ 
+     const debugMode = frameState.debugDisplay?.mode ?? this.config?.defaultDebugMode ?? "hidden";
+@@ -258,6 +260,8 @@ export class PlaytestHudSystem {
+     const hostAudio = frameState.hostAudio ?? {};
+     const coreEngine = frameState.coreEngine ?? {};
+     const corePerformance = frameState.corePerformance ?? {};
++    const reservePercent = currentPlayerInformation(frameState)?.core.reservePercent
++      ?? corePerformance.endurance?.reservePercent ?? 100;
+     const coreSensoryResponse = frameState.coreSensoryResponse ?? {};
+     const interactionComposition = frameState.interactionComposition ?? {};
+     const testPlatform = frameState.debugTestPlatform ?? {};
+@@ -319,7 +323,7 @@ export class PlaytestHudSystem {
+           : "";
+     const pairedDemandRead = describePairedDemand(corePerformance);
+     const performanceRead = corePerformance.active
+-      ? ` / drive ${corePerformance.personality ?? "triadic balance"} · reserve ${corePerformance.endurance?.reservePercent ?? 100}% · boost x${corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1}${activeVerbPhysiology ? ` · ${activeVerbPhysiology}` : ""}${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}`
++      ? ` / drive ${corePerformance.personality ?? "triadic balance"} · reserve ${reservePercent}% · boost x${corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1}${activeVerbPhysiology ? ` · ${activeVerbPhysiology}` : ""}${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}`
+       : "";
+     const stateLabel = inspectionCamera.coreWorkActive
+       ? `Core Work: ${coreWorkManipulation.candidateCount ?? 0} pieces${topology ? ` / ${topology.label} ${topology.distribution}` : ""}${cloudRead}${engineRead}${performanceRead} / ${coreWorkManipulation.held ? "Guide holding" : "selected"} ${coreWorkManipulation.selectedPieceLabel ?? "none"}${selectedChemistry ? ` / ${selectedChemistry.zoneLabel} · ${selectedChemistry.interactionLabel}` : ((coreWorkManipulation.candidateCount ?? 0) > 0 ? ` / depth ${coreWorkManipulation.selectedDepthPercent ?? 0}%` : "")}`
+@@ -530,7 +534,7 @@ export class PlaytestHudSystem {
+       objective,
+       actionHint,
+       primaryInstruction,
+-      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${corePerformance.endurance?.reservePercent ?? 100}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
++      statusLine: `${testPlatformToast}${stateLabel}${!inspectionCamera.coreWorkActive && coreChemistryOutput.active ? ` · Host chemistry ${coreChemistryOutput.dominantMode ?? "active"}${coreChemistryOutput.cloudPatternId && coreChemistryOutput.cloudPatternId !== "none" ? ` / ${coreChemistryOutput.cloudPatternLabel}` : ""}` : ""}${!inspectionCamera.coreWorkActive && coreContactLanguage.active && coreContactLanguage.state !== "suspended" ? ` · Contact ${coreContactLanguage.state}` : ""}${!inspectionCamera.coreWorkActive && playerAttachment.siltZoneId === "membrane" && ((playerAttachment.boundaryProximity ?? 0) > 0.52 || playerAttachment.active || playerAttachment.state === "releasing") ? ` · adhesion ${Math.round((playerAttachment.adhesionStrength ?? 0) * 100)}% / Silt align ${Math.round((playerAttachment.siltSurfaceAlignment ?? 0) * 100)}% / tangent ${(playerAttachment.surfaceTangentSpeed ?? 0).toFixed?.(2) ?? playerAttachment.surfaceTangentSpeed ?? 0} / surface ${playerAttachment.surfaceCoverageLabel ?? "trusted envelope"}` : ""}${returnTraversal.transitionActive ? ` · Return fold ${Math.round((returnTraversal.transitionProgress ?? 0) * 100)}%` : returnTraversal.active && Number.isFinite(returnTraversal.nearestSeamDistance) && returnTraversal.nearestSeamDistance <= 1.35 ? ` · Return seam ${returnTraversal.nearestSeamArmed ? "remembered" : "unsettled"}${returnTraversal.nearestDestinationSignature?.label ? ` / ${returnTraversal.nearestDestinationSignature.label}` : ""}` : ""}${hostAudio.active && !hostAudio.unlocked ? ` · AUDIO LOCKED (${hostAudio.contextState ?? "not_created"})` : hostAudio.active ? ` · Audio ON x${hostAudio.masterGain ?? 0}` : ""}${corePerformance.active && !inspectionCamera.active ? ` · Drive ${corePerformance.personality ?? "balanced"} ${reservePercent}%${pairedDemandRead ? ` · ${pairedDemandRead}` : ""}` : ""}${gatheringDebug}${gatheringLifeDebug} · ${this.shorten(coreGrowth.displayStage ?? "Seed Core", 24)} · Reading: ${this.shorten(targetLabel, 28)}`,
+       auditLine: [auditLine, languageLine].filter(Boolean).join("\n"),
+       flowLine,
+       siltFlowLabelsOpen,
+@@ -624,7 +628,7 @@ export class PlaytestHudSystem {
+       coreEngineDebugCycleCommand: coreEngine.architectureDebugCycleCommand ?? "O",
+       corePerformanceActive: Boolean(corePerformance.active),
+       corePerformancePersonality: corePerformance.personality ?? "forming / neutral",
+-      corePerformanceReservePercent: corePerformance.endurance?.reservePercent ?? 100,
++      corePerformanceReservePercent: reservePercent,
+       corePerformanceBoostAccelerationMultiplier: corePerformance.movementModifiers?.boostAccelerationMultiplier ?? 1,
+       corePerformanceBoostSpeedMultiplier: corePerformance.movementModifiers?.boostSpeedMultiplier ?? 1,
+       coreSensoryActive: Boolean(coreSensoryResponse.active),

@@ -1,0 +1,9 @@
+# MP04-C1 · Mass, volume and density
+
+Define reference volume in Lw³ and experimental density in Mr/Lw³ only when reference mass and volume refer to the same calibrated physical object. Intrinsic density uses constituent solid volume. Bulk density uses the occupied envelope including voids. Porosity is void volume divided by total volume; compaction is a change in bulk packing for a specified material and boundary. For ideal dry homogeneous packing, apparent bulk density equals intrinsic density × (1 − porosity). Wet, composite or field-reactive material needs validated composition, condition, and phase-volume assumptions before reusing that relationship.
+
+Silt Q is inventory, derived from material identity and custody. The PI04 ratios 1:1 and 1:3 Mr are experimental and scoped. Scene centers and visual bounds are measured presentation witnesses; the authored 0.06 Lw spherical proxies define actual contact. Decorative meshes, translucent materials, rendered camera framing and world-to-screen scale cannot be used to assign mass, density or physical volume.
+
+Future alignment contract: pin identity, generation, release sequence, coordinate-frame transform and authoritative physical proxy. Publish measured visible-body bounds and center offset at the same simulation phase, distinguish body from fragment and bud visuals, and record both normal-axis signed clearance and screen projection at authored camera distances. Keep gameplay contact and mesh presentation independently tunable only under a later approved scope. No volume calibration or production geometry change is admitted here.
+
+Use the mounted geometry evidence to compare instant proxy contact with post-microstep rendering. A negative visual clearance indicates geometric overlap along the witness axis. It does not imply that the physical proxy penetrated or that meshes share contact authority.
