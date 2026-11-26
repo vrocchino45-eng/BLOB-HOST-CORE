@@ -1,6 +1,6 @@
 import { currentPlayerInformation, projectPlayerInformation } from "./PlayerInformationModel.js";
 import { readHostLanguage } from '../language/HostLanguageGrammar.js';
-import { inSiltFlowWorld, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
+import { inSiltFlowWorld, readFlowStep, SILT_FLOW_CELL } from '../interaction/SiltFlowContract.js';
 import { HUB_RETURN_BOUNDARY_BY_CELL, readCascadeLabel, readContextualWorldLabel } from './ContextualWorldLabels.js';
 
 const SILT_FLOW_GUIDANCE = {
@@ -18,11 +18,34 @@ const SILT_FLOW_GUIDANCE = {
   invalid_contact: 'Contact unavailable · release and try again'
 };
 
-function describeSiltFlow(flow) {
-  if (flow.result?.acceptedCurrent01 > 0) {
-    const { acceptedCurrent01, pressure01, resistance01, after } = flow.result;
+const flowStepKeys = ['hostId', 'cellId', 'mountSequence', 'frame', 'substep'];
+const sameFlowStep = (a, b) => Boolean(a && b && flowStepKeys.every(key => a[key] === b[key]));
+
+function currentShelfDelivery(frame) {
+  const flow = frame.coreFlow;
+  const result = flow.result;
+  const step = readFlowStep(frame);
+  if (!flow.contactValid || !(result?.acceptedCurrent01 > 0) || !sameFlowStep(flow.step, step)
+    || !sameFlowStep(result, step) || result.actionSequence !== flow.actionSequence) return null;
+
+  const projected = currentPlayerInformation(frame)?.accepted.flow;
+  if (sameFlowStep(projected?.step, step) && projected.actionSequence === result.actionSequence
+    && projected.owner === result.owner && projected.intendedTarget === result.targetId
+    && projected.actualRecipient === result.receiverId) return projected;
+
+  return {
+    current01: result.acceptedCurrent01,
+    pressure01: result.pressure01,
+    resistance01: result.resistance01,
+    retainedImprintAfter: result.after.imprint
+  };
+}
+
+function describeSiltFlow(flow, delivery) {
+  if (delivery) {
+    const { current01, pressure01, resistance01, retainedImprintAfter } = delivery;
     const state = flow.overloaded ? 'Overload · current limited' : 'Current accepted';
-    return `Flow · ${state} ${acceptedCurrent01.toFixed(2)} · pressure ${pressure01.toFixed(2)} · resistance ${resistance01.toFixed(2)} · shelf imprint ${after.imprint.toFixed(2)}`;
+    return `Flow · ${state} ${current01.toFixed(2)} · pressure ${pressure01.toFixed(2)} · resistance ${resistance01.toFixed(2)} · shelf imprint ${retainedImprintAfter.toFixed(2)}`;
   }
   if (flow.phase === 'recovering' || flow.phase === 'retracting') {
     const cause = flow.reason === 'target_changed' ? 'Shelf aim lost' : 'Released';
@@ -301,8 +324,9 @@ export class PlaytestHudSystem {
     const languageRead = readHostLanguage(frameState);
     const siltFlowLabelsOpen = Boolean(frameState.coreFlow && frameState.quickLookInspector?.coreLabelsEnabled
       && frameState.activeCellId === SILT_FLOW_CELL);
-    const flowLine = siltFlowLabelsOpen && inSiltFlowWorld(frameState)
-      ? describeSiltFlow(frameState.coreFlow) : '';
+    const showSiltFlow = siltFlowLabelsOpen && inSiltFlowWorld(frameState);
+    const shelfDelivery = showSiltFlow ? currentShelfDelivery(frameState) : null;
+    const flowLine = showSiltFlow ? describeSiltFlow(frameState.coreFlow, shelfDelivery) : '';
     const languageLine = languageRead?.lines?.join("\n") ?? '';
 
     const selectedChemistry = coreWorkManipulation.selectedChemistry ?? spatialCoreChemistry.selectedPlacement ?? null;
@@ -467,7 +491,7 @@ export class PlaytestHudSystem {
     const contextualLabel = visible ? readContextualWorldLabel(frameState, {
       action: actionHint || objective,
       targetLabel: target.targetLabel && target.targetLabel !== target.targetId ? target.targetLabel : targetLabel,
-      cascade, freshConsequence
+      cascade, freshConsequence, shelfDelivery
     }) : null;
     const primaryInstruction = contextualLabel?.text ?? (actionHint || objective);
     const testPlatformToast = Boolean(testPlatform.active && (testPlatform.elapsedSeconds ?? 999) <= 5.0)

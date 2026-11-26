@@ -119,7 +119,7 @@ function readSiltEnvironmentLabel(silt, mountSequence) {
   return liveArrival ? 'Sediment arrived' : 'Garden imprint retained';
 }
 
-export function readContextualWorldLabel(frame, { action, targetLabel, cascade, freshConsequence }) {
+export function readContextualWorldLabel(frame, { action, targetLabel, cascade, freshConsequence, shelfDelivery }) {
   if (!hasContextualWorldLabels(frame)) return null;
   const { activeCellId: cellId, targeting: target } = frame;
   const boundary = frame.localCellBoundaryMorphById?.[HUB_RETURN_BOUNDARY_BY_CELL[cellId]];
@@ -150,15 +150,17 @@ export function readContextualWorldLabel(frame, { action, targetLabel, cascade, 
     };
   }
   if (blockedFlow) return { tier: 'instruction', text: blockedFlow };
-  if (flow?.overloaded && flow.result?.acceptedCurrent01 > 0) {
+  const acceptedFlow = shelfDelivery === undefined
+    ? (flow?.result?.acceptedCurrent01 > 0 ? flow.result : null) : shelfDelivery;
+  if (flow?.overloaded && acceptedFlow) {
     return { tier: 'instruction', text: 'Shelf overload · current limited' };
   }
 
   if (silt?.siltGrip?.heldId) return {
     tier: 'interaction', text: silt.siltContact?.braced ? 'Silt grain · braced contact' : 'Silt grain · gripped'
   };
-  if (flow?.result?.acceptedCurrent01 > 0) return {
-    tier: 'interaction', text: flow.result.resistance01 > 0
+  if (flow && acceptedFlow) return {
+    tier: 'interaction', text: acceptedFlow.resistance01 > 0
       ? 'Shelf · current accepted, resistance felt' : 'Shelf · current accepted'
   };
   if (flow?.contactValid) return { tier: 'interaction', text: 'Shelf contact · waiting for current' };
