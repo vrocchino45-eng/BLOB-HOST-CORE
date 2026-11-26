@@ -1,0 +1,587 @@
+{
+  "schema": "blob.in03-combined.v1",
+  "revision": 6,
+  "source": {
+    "commit": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+    "fingerprint": "038d165da6015a21379e7dfec688f80a36113da232729039bbf5a791e68b4350",
+    "baseline": "18491dcdd608d5e06868a7da573de106ba25647d",
+    "pi05": "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+    "ui04": "d2236ace722f9d3449035c0125bc5d493c983934"
+  },
+  "toolingRegistration": "CI07-tooling-manifest.json",
+  "previous": {
+    "2": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "3": "133c979aa0fd420eeede40d51df55c7bda668663",
+    "4": "85b2b2732321646d0b9eed9fc159b72b87dff790",
+    "5": "0ce25cb38a303a63bcb86adb3be6c820fcde182f"
+  },
+  "inheritedAdmission": {
+    "repositoryPath": "BLOB_BOT_SERIES1/director/scenarios/pi05-revision-5/admission.json",
+    "sha256": "acbd875a356218c09863b05a3eead238d4f83664ce7ec96037405c0d7969594d"
+  },
+  "nativeInputs": {
+    "release": "same normalized gamepad tape and relative 1/60 Ts admitted steps as revision 5",
+    "clock": "boot frame and native wall samples are observed. Contact comparison aligns relative steps.",
+    "visuals": "native mesh and staged camera unchanged. Shelf includes an independent receiver-confirmed DOM witness."
+  },
+  "expectedEvidence": {
+    "mounted": "one committed event and two retrieved identities per admitted comparison. Preserve material, receipts and progression.",
+    "controls": "ordinary disabled, negative near miss, legacy priority, fixed surface and separation/repeat owner guards.",
+    "shelf": "same-step recipient, current and pressure from the receiver; labels, stale mount, release and fallback checks."
+  },
+  "calibrationSHA256": "9f3c42bc9fc1ab048e91e17d75ef746078d9a120a64e3ce4af1c60b4d7b9ee78",
+  "scenarios": [
+    {
+      "schema": "blob.in03-combined.v1",
+      "revision": 6,
+      "id": "e0-equal",
+      "mode": "pi05:e0-equal",
+      "massFixture": "equal",
+      "restitution": 0,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 402,
+          "simSeconds": 7.883333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 63,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 400,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      },
+      "expectedUI": "same physical owners; separate accepted Shelf cue witness"
+    },
+    {
+      "schema": "blob.in03-combined.v1",
+      "revision": 6,
+      "id": "e05-equal",
+      "mode": "pi05:e05-equal",
+      "massFixture": "equal",
+      "restitution": 0.5,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 402,
+          "simSeconds": 7.883333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 63,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 400,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      },
+      "expectedUI": "same physical owners; separate accepted Shelf cue witness"
+    },
+    {
+      "schema": "blob.in03-combined.v1",
+      "revision": 6,
+      "id": "e1-equal",
+      "mode": "pi05:e1-equal",
+      "massFixture": "equal",
+      "restitution": 1,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      },
+      "expectedUI": "same physical owners; separate accepted Shelf cue witness"
+    },
+    {
+      "schema": "blob.in03-combined.v1",
+      "revision": 6,
+      "id": "e0-one-to-three",
+      "mode": "pi05:e0-one-to-three",
+      "massFixture": "one-to-three",
+      "restitution": 0,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      },
+      "expectedUI": "same physical owners; separate accepted Shelf cue witness"
+    },
+    {
+      "schema": "blob.in03-combined.v1",
+      "revision": 6,
+      "id": "e05-one-to-three",
+      "mode": "pi05:e05-one-to-three",
+      "massFixture": "one-to-three",
+      "restitution": 0.5,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      },
+      "expectedUI": "same physical owners; separate accepted Shelf cue witness"
+    },
+    {
+      "schema": "blob.in03-combined.v1",
+      "revision": 6,
+      "id": "e1-one-to-three",
+      "mode": "pi05:e1-one-to-three",
+      "massFixture": "one-to-three",
+      "restitution": 1,
+      "classification": "staged-engineering",
+      "host": "HOST_ALPHA_WOUNDED_NURSERY",
+      "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+      "ids": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ],
+      "initial": {
+        "positionA": [
+          2.7238,
+          -0.8497,
+          -12.9267
+        ],
+        "positionB": [
+          3.0438,
+          -0.8497,
+          -12.9267
+        ],
+        "velocityA": [
+          1,
+          0,
+          0
+        ],
+        "velocityB": [
+          0,
+          0,
+          0
+        ],
+        "radiusA": 0.06,
+        "radiusB": 0.06,
+        "seconds": 0.33
+      },
+      "expectedContacts": 1,
+      "context": {
+        "corePhase": 3,
+        "coreTopology": "forming_topology",
+        "coreDistribution": "0:0:0",
+        "reserve": 1,
+        "clock": {
+          "frame": 399,
+          "simSeconds": 7.433333333333311,
+          "step": 0.016666666666666666
+        },
+        "camera": [
+          1.195602523403615,
+          -0.3141588961865029,
+          -11.096879690146697
+        ],
+        "mountSequence": 2,
+        "padTape": "Acquire with LT+A. Hold X for 48 steps. Commit with A. Release X and LT."
+      },
+      "grainWitnesses": [
+        {
+          "id": "silt-grain-01",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 60,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 1
+        },
+        {
+          "id": "silt-grain-02",
+          "scope": {
+            "hostId": "HOST_ALPHA_WOUNDED_NURSERY",
+            "cellId": "CELL_SILT_PRESSURE_ROUTE_001",
+            "mountSequence": 2,
+            "mountCount": 1,
+            "frame": 397,
+            "substep": 0,
+            "generation": 0
+          },
+          "releaseSequence": 3
+        }
+      ],
+      "mountedWitness": {
+        "frameId": 570,
+        "mountSequence": 1
+      },
+      "expectedUI": "same physical owners; separate accepted Shelf cue witness"
+    }
+  ]
+}

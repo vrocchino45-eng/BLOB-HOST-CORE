@@ -1,0 +1,127 @@
+{
+  "schema": "blob.in02-verification.v1",
+  "revision": 4,
+  "sources": {
+    "IN01": {
+      "commit": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+      "fingerprint": "be387f952000bf5502337e42887390a3e811bf41af4e64d44744be9e9a7ddd79"
+    },
+    "IN02": {
+      "commit": "18491dcdd608d5e06868a7da573de106ba25647d",
+      "fingerprint": "d83e96ae20f7e3f39cfad2b32cfc1279263bb3dcef2dd9c5cd382f741cc61b09"
+    }
+  },
+  "historicalRevisions": {
+    "2": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+    "3": "133c979aa0fd420eeede40d51df55c7bda668663"
+  },
+  "admissionSHA256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4",
+  "scenarios": [
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "in01-ordinary",
+      "source": "IN01",
+      "mode": "disabled",
+      "expectedContacts": 0,
+      "witness": "ordinary-owner-trace",
+      "classification": "staged-engineering",
+      "pair": []
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "in02-ordinary",
+      "source": "IN02",
+      "mode": "disabled",
+      "expectedContacts": 0,
+      "witness": "ordinary-owner-trace",
+      "classification": "staged-engineering",
+      "pair": []
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "pi04-equal",
+      "source": "IN02",
+      "mode": "equal",
+      "expectedContacts": 1,
+      "witness": "mount",
+      "classification": "staged-engineering",
+      "pair": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ]
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "pi04-one-to-three",
+      "source": "IN02",
+      "mode": "one-to-three",
+      "expectedContacts": 1,
+      "witness": "mount",
+      "classification": "staged-engineering",
+      "pair": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ]
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "pi04-near-miss",
+      "source": "IN02",
+      "mode": "equal",
+      "expectedContacts": 0,
+      "witness": "near-miss",
+      "classification": "staged-engineering",
+      "pair": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ]
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "pi04-repeat",
+      "source": "IN02",
+      "mode": "one-to-three",
+      "expectedContacts": 2,
+      "witness": "repeat-after-separation",
+      "classification": "staged-engineering",
+      "pair": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ]
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "pi04-retrieve-equal",
+      "source": "IN02",
+      "mode": "equal",
+      "expectedContacts": 1,
+      "witness": "two-retrievals",
+      "classification": "staged-engineering",
+      "pair": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ]
+    },
+    {
+      "schema": "blob.in02-verification.v1",
+      "revision": 4,
+      "id": "pi04-retrieve-one-to-three",
+      "source": "IN02",
+      "mode": "one-to-three",
+      "expectedContacts": 1,
+      "witness": "two-retrievals",
+      "classification": "staged-engineering",
+      "pair": [
+        "silt-grain-01",
+        "silt-grain-02"
+      ]
+    }
+  ]
+}

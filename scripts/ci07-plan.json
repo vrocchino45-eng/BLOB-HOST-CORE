@@ -1,0 +1,223 @@
+[
+  {
+    "id": "launch-focused",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testPI02DirectedSiltLaunch.mjs"
+    ],
+    "count": 11
+  },
+  {
+    "id": "pi03-contact",
+    "count": 9,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testPI03FreeMaterialContact.mjs"
+    ]
+  },
+  {
+    "id": "director-compatibility",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/build-compatibility.test.mjs",
+      "BLOB_BOT_SERIES1/director/scenario-contract.test.mjs",
+      "BLOB_BOT_SERIES1/director/frame-mapping.test.mjs"
+    ],
+    "count": 9
+  },
+  {
+    "id": "production-build",
+    "build": true
+  },
+  {
+    "id": "maintained",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "--test-concurrency=2",
+      "scripts/testB5FlowReserveSettlement.mjs",
+      "scripts/testB5GraveCoreFeedback.mjs",
+      "scripts/testC2CascadeVisuals.mjs",
+      "scripts/testC2ContextualLabels.mjs",
+      "scripts/testC63RouteReadiness.mjs",
+      "scripts/testCC01VascularResidualRecovery.mjs",
+      "scripts/testCH01VascularRecovery.mjs",
+      "scripts/testCH02SiltShelfConsequence.mjs",
+      "scripts/testCH03GraveRecoilSettling.mjs",
+      "scripts/testF1SiltFlow.mjs",
+      "scripts/testLocalSiltEcologicalResistance.mjs",
+      "scripts/testLocalSiltSeepExchange.mjs",
+      "scripts/testSiltHeldMotionReporting.mjs",
+      "scripts/testT1ReturnReadout.mjs",
+      "scripts/testWave1CoreEngine.mjs",
+      "scripts/testWave1FeedbackState.mjs",
+      "scripts/testWave1HostResponse.mjs",
+      "scripts/testWave1TargetLifecycle.mjs",
+      "scripts/testWave1VerbInteraction.mjs",
+      "scripts/testWC01VascularCaption.mjs",
+      "scripts/testWC01VascularReadability.mjs"
+    ],
+    "count": 245
+  },
+  {
+    "id": "verifyWave1CoreProfiles",
+    "args": [
+      "scripts/verifyWave1CoreProfiles.mjs"
+    ]
+  },
+  {
+    "id": "checkC63HubRouteAccess",
+    "args": [
+      "scripts/checkC63HubRouteAccess.mjs"
+    ]
+  },
+  {
+    "id": "validateRecipeDataLoad",
+    "args": [
+      "scripts/validateRecipeDataLoad.mjs"
+    ]
+  },
+  {
+    "id": "smokeHC031W1StabilizedAimLocalContact",
+    "args": [
+      "scripts/smokeHC031W1StabilizedAimLocalContact.mjs"
+    ]
+  },
+  {
+    "id": "smokeHC031U21RelationshipIntentLatch",
+    "args": [
+      "scripts/smokeHC031U21RelationshipIntentLatch.mjs"
+    ]
+  },
+  {
+    "id": "validateLS1BLivingSiltMaterialCycle",
+    "args": [
+      "scripts/validateLS1BLivingSiltMaterialCycle.mjs"
+    ]
+  },
+  {
+    "id": "validateHC016QTenderCompanion",
+    "args": [
+      "scripts/validateHC016QTenderCompanion.mjs"
+    ]
+  },
+  {
+    "id": "validateHC031C2FragmentFieldCapture",
+    "args": [
+      "scripts/validateHC031C2FragmentFieldCapture.mjs"
+    ]
+  },
+  {
+    "id": "validateHC031DRuptureConsequence",
+    "args": [
+      "scripts/validateHC031DRuptureConsequence.mjs"
+    ]
+  },
+  {
+    "id": "smokeLS1E1",
+    "args": [
+      "scripts/smokeLS1E1.mjs"
+    ],
+    "exception": "Cannot read properties of undefined (reading 'observe')"
+  },
+  {
+    "id": "smokeLS1E2",
+    "args": [
+      "scripts/smokeLS1E2.mjs"
+    ],
+    "exception": "ERR_UNSUPPORTED_RESOLVE_REQUEST"
+  },
+  {
+    "id": "pi04-runtime",
+    "count": 15,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testPI04SiltPairMomentum.mjs"
+    ]
+  },
+  {
+    "id": "ui03-owner-traces",
+    "count": 5,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testUI03PlayerInformation.mjs"
+    ]
+  },
+  {
+    "id": "director-revision-3",
+    "count": 3,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/ui03-readmission.test.mjs"
+    ]
+  },
+  {
+    "id": "director-revision-4",
+    "count": 5,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/in02-admission.test.mjs"
+    ]
+  },
+  {
+    "id": "conservation-accounting",
+    "count": 4,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/numerics/NF05-conservation.test.mjs"
+    ]
+  },
+  {
+    "id": "nf06-geometry",
+    "count": 8,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/numerics/NF06-geometry.test.mjs"
+    ]
+  },
+  {
+    "id": "pi05-restitution",
+    "count": 19,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testPI05Restitution.mjs"
+    ]
+  },
+  {
+    "id": "director-revision-5",
+    "count": 4,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/pi05-admission.test.mjs"
+    ]
+  },
+  {
+    "id": "ui04-receiver-presentation",
+    "count": 4,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "scripts/testUI04ShelfInformation.mjs"
+    ]
+  },
+  {
+    "id": "director-revision-6",
+    "count": 6,
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "BLOB_BOT_SERIES1/director/in03-admission.test.mjs"
+    ]
+  }
+]
