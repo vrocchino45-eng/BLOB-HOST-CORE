@@ -1,0 +1,127 @@
+{
+  "status": "promoted",
+  "authority": "Wave 13 Director work order, IN03-P1",
+  "branch": "integration/in03-p1",
+  "commit": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "previous": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "tree": "577a1834e8578bf7ca753d1490898f23483dfb9e",
+  "parents": [
+    "e25cb89a7b5f1c90fd162eb0c8649fa56afefac2",
+    "d2236ace722f9d3449035c0125bc5d493c983934"
+  ],
+  "sourceFiles": [
+    {
+      "path": "scripts/testC2ContextualLabels.mjs",
+      "sha256": "a9bd58627c8196b6e448223ce4438998963464b7b51f3158cca946850d8ac0f1"
+    },
+    {
+      "path": "scripts/testPI05Restitution.mjs",
+      "sha256": "21afaa173d7a223542b9c4954055ddfca2e425ad90c17e6d9b067894ffc86f90"
+    },
+    {
+      "path": "scripts/testUI04ShelfInformation.mjs",
+      "sha256": "bdde0edecdac0a135e0275192e062c7b3ca3a8580f98e361ae0c59741bcc6b52"
+    },
+    {
+      "path": "src/contact/SiltPairMomentum.js",
+      "sha256": "9d355dbe724f8f8ff3e3289f082ea43d1b26a3af94a0c35ab84575b434963fe6"
+    },
+    {
+      "path": "src/contact/siltPairRestitutionAdmission.json",
+      "sha256": "9f3c42bc9fc1ab048e91e17d75ef746078d9a120a64e3ce4af1c60b4d7b9ee78"
+    },
+    {
+      "path": "src/contact/SiltTrajectoryMemory.js",
+      "sha256": "5c4dd686568dcfc8a850c070fcdf792ef63c9c576bd5db3ad0389b6360507c0d"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "9efe3b686b1dbe0284d52850800b57008da24cdc070260bbc38acf5e923c55b7"
+    },
+    {
+      "path": "src/ui/ContextualWorldLabels.js",
+      "sha256": "7daae77bbf97a5370015dfc88249e882fc0f53ab55e08765987b84ab790c1a9d"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "sha256": "482688f093acb25562c921cd9445ec3b311de647fad064fc708a2370f6940aee"
+    }
+  ],
+  "patchSHA256": "6f8920119fe47f95bb3254893726d044b884f268d0b54a3d0ca318aade88bef6",
+  "independentReconstruction": true,
+  "qualificationTooling": "cb4b746f4e677e8bc104b9bdd42eb8de4029980f",
+  "toolingExcludedFromGameplayRef": true,
+  "previousEvidence": {
+    "wave11": "28505e4489ec1c270722753f6a2c430eeb6b47f2",
+    "wave11Files": 76,
+    "wave12": "1448ede43b5d650b2c7e2829970d0ef1548a291d",
+    "wave12Files": 69
+  },
+  "ci": {
+    "counts": {
+      "launch-focused": 11,
+      "pi03-contact": 9,
+      "director-compatibility": 9,
+      "maintained": 245,
+      "pi04-runtime": 15,
+      "ui03-owner-traces": 5,
+      "director-revision-3": 3,
+      "director-revision-4": 5,
+      "conservation-accounting": 4,
+      "nf06-geometry": 8,
+      "pi05-restitution": 19,
+      "director-revision-5": 4,
+      "ui04-receiver-presentation": 4,
+      "director-revision-6": 6,
+      "nf02-pi04-analytical": 16
+    },
+    "build": {
+      "matchingFiles": 541,
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "exactCandidateMatches": true,
+      "productionSelectorsCompiledOut": true
+    },
+    "assertions": 18,
+    "supplemental": 9,
+    "hostedDeterministic": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45774060684",
+    "hostedChromium": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45774060676",
+    "exceptions": [
+      [
+        "smokeLS1E1",
+        "Cannot read properties of undefined (reading 'observe')"
+      ],
+      [
+        "smokeLS1E2",
+        "ERR_UNSUPPORTED_RESOLVE_REQUEST"
+      ]
+    ]
+  },
+  "scenario": {
+    "revision": 6,
+    "fingerprint": "038d165da6015a21379e7dfec688f80a36113da232729039bbf5a791e68b4350"
+  },
+  "archiveChecks": {
+    "git01": 91,
+    "ci06": 2,
+    "ci07": 4
+  },
+  "protected": {
+    "connection61": "26e8cda5e8237252a822cba271849076252da1da",
+    "main": "0bf8ec000d5a8ce0b322713a0dca08f52de25050",
+    "archiveFiles": 91
+  },
+  "shelfHarnessReview": "CI07-Shelf-correction-review.json",
+  "authorityHashes": {
+    "strategySHA256": "34ad021eb4bdffa2d4942d96cbd9eac11dbfabd4c008f0bd4b1a58749bf450ef",
+    "rebuildArchiveSHA256": "571dd401832208b2350617b1025626a4facf323ac0be73eb2e2dcca47f44cbd5",
+    "rebuildDocumentSHA256": "ad4a8a9782705a41c4f570b72acd8bdae67070d3052fc83dd63f7181173518d2",
+    "universalCommit": "dd77f2d813b252e2cbb5f88749d2faaa8e230075",
+    "universalSHA256": "3267ccd7325d3907daf785a5faf75400d99fd5e6ec39b319cff695b73df29744",
+    "directorWorkOrderSHA256": "021e1d774a2d387f069941f916e67efdbc402fccc1c43ecb1efce7a0f05bc131",
+    "flowFoundationSHA256": "7f877287fb48499367293e6a0ae8f05f0d75cd6216d2daf93e417a8129912b29",
+    "roadmapSHA256": "b52b0d149913500ceb269f81395bf8d92142171415f8b142f826596364d4e212"
+  }
+}
