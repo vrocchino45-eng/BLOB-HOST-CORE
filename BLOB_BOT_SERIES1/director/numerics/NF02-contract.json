@@ -1,0 +1,154 @@
+{
+  "schema": "blob.numerical-contract.v1",
+  "revision": 1,
+  "status": "proposed",
+  "governingSource": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "mechanicalBases": [
+    "Lw",
+    "Mr",
+    "Ts"
+  ],
+  "exponentOrder": [
+    "length",
+    "mass",
+    "time"
+  ],
+  "inventoryUnit": "Q",
+  "SI": {
+    "metersPerLw": null,
+    "kilogramsPerMr": null,
+    "secondsPerTs": 1
+  },
+  "dimensionVectors": {
+    "length": [
+      1,
+      0,
+      0
+    ],
+    "area": [
+      2,
+      0,
+      0
+    ],
+    "volume": [
+      3,
+      0,
+      0
+    ],
+    "time": [
+      0,
+      0,
+      1
+    ],
+    "mass": [
+      0,
+      1,
+      0
+    ],
+    "density": [
+      -3,
+      1,
+      0
+    ],
+    "velocity": [
+      1,
+      0,
+      -1
+    ],
+    "acceleration": [
+      1,
+      0,
+      -2
+    ],
+    "momentum": [
+      1,
+      1,
+      -1
+    ],
+    "impulse": [
+      1,
+      1,
+      -1
+    ],
+    "force": [
+      1,
+      1,
+      -2
+    ],
+    "angularMomentum": [
+      2,
+      1,
+      -1
+    ],
+    "torque": [
+      2,
+      1,
+      -2
+    ],
+    "energy": [
+      2,
+      1,
+      -2
+    ],
+    "power": [
+      2,
+      1,
+      -3
+    ],
+    "pressure": [
+      -1,
+      1,
+      -2
+    ],
+    "frequency": [
+      0,
+      0,
+      -1
+    ],
+    "linearDamping": [
+      0,
+      0,
+      -1
+    ],
+    "dynamicViscosity": [
+      -1,
+      1,
+      -1
+    ],
+    "frictionCoefficient": [
+      0,
+      0,
+      0
+    ],
+    "restitution": [
+      0,
+      0,
+      0
+    ]
+  },
+  "ownerIndices": [
+    "pressure01",
+    "conductivity01",
+    "resistance01",
+    "reserve01",
+    "viscosityIndex"
+  ],
+  "frames": [
+    "silt-local",
+    "core-local",
+    "world",
+    "camera-view",
+    "clip"
+  ],
+  "timeDomains": [
+    "wall",
+    "simulation",
+    "mounted-ecology",
+    "presentation",
+    "audio"
+  ],
+  "analyticalTolerance": {
+    "absolute": 1e-12,
+    "relative": 1e-12
+  }
+}
