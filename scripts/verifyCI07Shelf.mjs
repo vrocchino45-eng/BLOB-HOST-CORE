@@ -30,26 +30,49 @@ try {
  await page.waitForFunction(()=>window.__UI04_RUNTIME__?.siltPressureRouteSystem?.active,null,{timeout:60000});
  if(!await page.evaluate(()=>window.__UI04_RUNTIME__.frameState.coreGrowth?.debugCoreWorkRetainedAnatomySeeded))await page.keyboard.press('p');
  await page.waitForFunction(()=>window.__UI04_RUNTIME__.frameState.spatialCoreChemistry?.retainedPieceCount===3,null,{timeout:45000});
- await page.evaluate(async scenario=>{
-  const r=window.__UI04_RUNTIME__, f=r.frameState;
-  const {stageShelf}=await import('/BLOB_BOT_SERIES1/director/shelf-stage.mjs');
-  stageShelf(r,scenario);
-  if(f.quickLookInspector?.coreLabelsEnabled!==true&&r.quickLookInspectorSystem)r.quickLookInspectorSystem.open=true;
-  window.__UI04_PAD__.lt=.82;
+ const active=await page.evaluate(async scenario=>{
+   const r=window.__UI04_RUNTIME__, f=r.frameState;
+   const {stageShelf}=await import('/BLOB_BOT_SERIES1/director/shelf-stage.mjs');
+   const pad=window.__UI04_PAD__, trace=[];
+   r.renderer.setAnimationLoop(null);
+   stageShelf(r,scenario);
+   if(f.quickLookInspector?.coreLabelsEnabled!==true&&r.quickLookInspectorSystem)r.quickLookInspectorSystem.open=true;
+   // Run the native tick at the same staged step used by the contact replay.
+   // Supplying the clock sample does not replace the runtime's input or scheduler.
+   const nativeRender=r.renderer.render;
+   r.renderer.render=()=>{}; // Suppress unrecorded GPU submissions only during the staged tape.
+   const getDelta=r.clock.getDelta;
+   r.clock.getDelta=()=>1/60;
+   const tick=()=>{
+     r.tick();
+     trace.push({frame:f.frame,step:f.runtimeSimulationSubstepSeconds,cell:f.activeCellId,
+       target:f.targeting?.targetId,attention:f.targeting?.attentionActive,phase:f.coreFlow?.phase,
+       reason:f.coreFlow?.reason,demand:f.input?.flowDemand01,contact:f.coreFlow?.contactValid,
+       position:r.playerCore.position.toArray(),direction:r.coreEmbodimentSystem.direction.toArray()});
+   };
+   try {
+     tick(); // Allow the neutral device sample before the scored input tape.
+     pad.lt=scenario.input.stabilize;
+     for(let i=0;i<45&&!(f.targeting?.targetId==='silt_porosity_shelf'&&f.targeting?.attentionActive);i++)tick();
+     if(f.targeting?.targetId!=='silt_porosity_shelf'||!f.targeting?.attentionActive)
+       throw Error('Canonical Shelf acquisition absent: '+JSON.stringify(trace.slice(-4)));
+     pad.rt=scenario.input.demand;
+     for(let i=0;i<132&&!(f.coreFlow?.result?.acceptedCurrent01>0);i++)tick();
+     if(!(f.coreFlow?.result?.acceptedCurrent01>0))
+       throw Error('Receiver-confirmed Shelf sample absent: '+JSON.stringify(trace.slice(-4)));
+   } finally {
+     r.clock.getDelta=getDelta;
+     r.renderer.render=nativeRender;
+   }
+   r.renderer.render(r.scene,r.renderCamera??r.camera); // Capture the same accepted native frame.
+   const v=f.playerInformation.accepted.flow,c=f.coreFlow;
+   return {owner:c.result,model:v,text:r.playtestHudSystem.objectiveEl?.textContent??null,frame:f.frame,
+     step:f.runtimeSimulationSubstepIndex,line:f.playtestHud.flowLine,tape:trace};
  },scenario);
- await page.waitForFunction(()=>window.__UI04_RUNTIME__.frameState.targeting?.targetId==='silt_porosity_shelf',null,{timeout:60000});
- await page.evaluate(()=>{window.__UI04_PAD__.rt=.46;});
- await page.waitForFunction(()=>window.__UI04_RUNTIME__.frameState.coreFlow?.result?.acceptedCurrent01>0,null,{timeout:60000});
- const active=await page.evaluate(()=>{
-  const r=window.__UI04_RUNTIME__, f=r.frameState;
-  r.renderer.setAnimationLoop(null);
-  const v=f.playerInformation.accepted.flow,c=f.coreFlow;
-  return {owner:c.result,model:v,text:r.playtestHudSystem.flowEl?.textContent??null,frame:f.frame,line:f.playtestHud.flowLine};
- });
  assert.equal(active.model.actualRecipient,active.owner.receiverId);
  assert.equal(active.model.current01,active.owner.acceptedCurrent01);
  assert.equal(active.model.pressure01,active.owner.pressure01);
- assert.match(active.text,/Current accepted|Overload · current limited/);
+ assert.match(active.text,/current accepted|current limited/i);
  await page.screenshot({path:path.join(out,'UI04-accepted.png')});
  const variations=await page.evaluate(()=>{
   const r=window.__UI04_RUNTIME__,f=r.frameState,h=r.playtestHudSystem;
@@ -70,6 +93,7 @@ try {
  assert.doesNotMatch(variations.oldMount,/Current accepted/);assert.match(variations.released,/Released/);
  assert.deepEqual(errors,[]);
  await fs.writeFile(path.join(out,'UI04-browser.json'),JSON.stringify({verdict:'PASS',chromium:browser.version(),active,variations,
-  scope:'Native accepted receiver and DOM. Interruption/read-model variants applied to presentation-only readback of the same mounted browser frame.'},null,2)+'\n');
+  inputClock:'Injected 1/60 Ts in replay only. Native runtime, registry, input arbitration, targeting, Flow, settlement and HUD.',
+  scope:'Native accepted receiver and contextual primary instruction in the rendered DOM. Interruption/read-model variants applied to presentation-only readback of the same mounted browser frame.'},null,2)+'\n');
  console.log('UI04 mounted Chromium presentation passed');
 }finally{await browser?.close();await server.close();}
