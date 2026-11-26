@@ -1,0 +1,92 @@
+{
+  "status": "promoted",
+  "authority": "Wave 11 Director authorization | IN02-P1",
+  "branch": "integration/in02-p1",
+  "commit": "18491dcdd608d5e06868a7da573de106ba25647d",
+  "previous": "462f1278ea069b41b4c0216335f4bb9363ee38af",
+  "parents": [
+    "18c891838a1e8710e32c550b936341e42466cbe1",
+    "c68944ae723976273d5f2577c4d6c48d529c7362"
+  ],
+  "sourceHashes": [
+    {
+      "path": "scripts/testPI04SiltPairMomentum.mjs",
+      "sha256": "43bcb430c58e922f81eeee735c67e0af85dc5867640dacace638b60b27b84315"
+    },
+    {
+      "path": "scripts/testUI03PlayerInformation.mjs",
+      "sha256": "256e349777fcf30ec386dcb5a0ff222146eeddbf426c12dfa48471aa1564e796"
+    },
+    {
+      "path": "src/contact/siltPairAdmission.json",
+      "sha256": "165ffca84f5c3bb39f792cffe1c771f6c7149b9f43221df5ba98c0f4779053c4"
+    },
+    {
+      "path": "src/contact/SiltPairMomentum.js",
+      "sha256": "9be517818bbb97a3e6b36cc7b91a86f6cb1157307bd6dd15cbc060100015de51"
+    },
+    {
+      "path": "src/contact/SiltTrajectoryMemory.js",
+      "sha256": "9274d393fcde3b9c94e121a9995cd8e069b9765855a4358ce182929287af8887"
+    },
+    {
+      "path": "src/core/GameRuntime.js",
+      "sha256": "72b5864492cd14ed9f220dc6a261d4c17297aa3ac35d2be52f8a5b3cf070b4c3"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "8f1fb40d7c6fe701743d2a99abb91ed30177d4e6b4336a8d049672235040ed97"
+    },
+    {
+      "path": "src/routes/SiltPressureRouteSystem.js",
+      "sha256": "3af3d8ab3c0e93c2a211eb377a8692f3f34a597d15a3efa40d4afc073b83cd9c"
+    },
+    {
+      "path": "src/ui/PlayerInformationModel.js",
+      "sha256": "ec8aa0c5e1b8bb717bbd2e83567f8b9938c54f7fc35d4417749fd696a28d5ad8"
+    },
+    {
+      "path": "src/ui/PlaytestHudSystem.js",
+      "sha256": "e3716aea76f4bb7b4cec22f9e0aa4d477668130d359fa85778486b30e3db3a9a"
+    }
+  ],
+  "patchSHA256": "fdf9c4cb142f91eca98d11e2214b0d469652db21483e06a0be1f09c06ecf638b",
+  "independentPatchTreeMatch": true,
+  "toolingDescendant": "85b2b2732321646d0b9eed9fc159b72b87dff790",
+  "toolingFileCount": 18,
+  "toolingGameplayTreesMatch": true,
+  "ordinaryParity": "exact structured equality across A/B/C/D",
+  "director": {
+    "revision": 4,
+    "scenarios": 8,
+    "fingerprint": "d83e96ae20f7e3f39cfad2b32cfc1279263bb3dcef2dd9c5cd382f741cc61b09"
+  },
+  "sourceEvidence": "c1a2cc3cde583a46ee3f3d135f637f6a60edc716",
+  "sourceEvidenceFilesVerified": 53,
+  "ci": {
+    "counts": {
+      "launch-focused": 11,
+      "pi03-contact": 9,
+      "director-compatibility": 9,
+      "maintained": 245,
+      "pi04-runtime": 15,
+      "ui03-owner-traces": 5,
+      "director-revision-3": 3,
+      "director-revision-4": 5,
+      "conservation-accounting": 4,
+      "nf02-pi04-analytical": 16
+    },
+    "buildMatch": 541,
+    "c01": 18,
+    "hostedDeterministic": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45741733913",
+    "hostedChromium": "https://github.com/vrocchino45-eng/BLOB-HOST-CORE/actions/runs/45741733905"
+  },
+  "protected": {
+    "originalClean": true,
+    "archiveFiles": 91,
+    "connection61": "26e8cda5e8237252a822cba271849076252da1da",
+    "main": "0bf8ec000d5a8ce0b322713a0dca08f52de25050"
+  },
+  "isolatedUI04": "d2236ace722f9d3449035c0125bc5d493c983934",
+  "registeredBlueprint": "dd77f2d813b252e2cbb5f88749d2faaa8e230075"
+}
