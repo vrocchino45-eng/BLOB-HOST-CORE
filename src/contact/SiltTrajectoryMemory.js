@@ -213,7 +213,7 @@ export class SiltTrajectoryMemory {
       const native = members.map(member => this.predictPairMember(member, seconds));
       const separation = length(subtract(native[0].position, native[1].position));
       if (separation > a.radius + b.radius + fixture.separationMargin) this.pairLatch.armed = true;
-      const candidate = this.pairLatch.armed && resolveSiltPairImpact(native[0], native[1], seconds, fixture.restitution);
+      const candidate = this.pairLatch.armed && resolveSiltPairImpact(native[0], native[1], seconds, fixture.restitution, fixture.friction);
       const impact = candidate && candidate.velocities.every(v => length(v) <= this.maxSpeed)
         && !native.some((body, index) => this.fixedSurfacePrecedes(body, members[index].contact.surface, seconds, candidate.time));
       if (impact) {
@@ -264,6 +264,7 @@ export class SiltTrajectoryMemory {
       fixture: this.pairFixture.id, revision: this.pairFixture.revision,
       ...(this.pairFixture.restitution === undefined ? {} : { restitution: this.pairFixture.restitution,
         restitutionAdmissionRevision: this.pairFixture.restitutionAdmissionRevision }),
+      ...(result.friction ? { impactFriction: result.friction, frictionAdmissionRevision: this.pairFixture.frictionAdmissionRevision } : {}),
       id: [this.pairLatch.key, step.frame, step.substep, microstep].join(':'),
       kind: 'accepted-silt-pair', actualRecipientIds: members.map(member => member.id),
       normal: result.normal, point: vec(result.positions[0], scale(result.normal, radius)),

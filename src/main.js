@@ -20,6 +20,7 @@ if (import.meta.env && import.meta.env.DEV) {
   const pair = query.get('siltPair');
   if (pair === 'equal' || pair === 'one-to-three') siltPairExperiment = pair;
   else if (pair === null && query.has('siltRestitution')) siltPairExperiment = 'pi05:' + query.get('siltRestitution');
+  else if (pair === null && query.has('siltFriction')) siltPairExperiment = 'pi06:' + query.get('siltFriction');
 }
 const runtime = new GameRuntime({
   appRoot,

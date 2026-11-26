@@ -1,0 +1,177 @@
+{
+  "schema": "blob.silt-pair-friction-admission.v1",
+  "revision": 1,
+  "status": "admitted-development-only",
+  "governing": "310b827c5a2f446beb33c60545bdf17a9b6e204d",
+  "existingRestitutionRevision": 1,
+  "authorizationSHA256": "021e1d774a2d387f069941f916e67efdbc402fccc1c43ecb1efce7a0f05bc131",
+  "numericalReference": {
+    "evidence": "1448ede43b5d650b2c7e2829970d0ef1548a291d",
+    "path": "EVIDENCE/director/wave-12/v1/PI06-friction-reference.md",
+    "sha256": "24c7f1e5e339418e3f35785fc82dcea03b2e945257240d121f922ef26f7742ba"
+  },
+  "scope": {
+    "host": "HOST_ALPHA_WOUNDED_NURSERY",
+    "cell": "CELL_SILT_PRESSURE_ROUTE_001",
+    "ids": [
+      "silt-grain-01",
+      "silt-grain-02"
+    ],
+    "radiiLw": [
+      0.06,
+      0.06
+    ],
+    "separationMarginLw": 0.001,
+    "fixedSurfaceExclusionSeconds": 0.00001
+  },
+  "measuredCorridor": {
+    "seed": {
+      "positionA": [
+        2.7238,
+        -0.8497,
+        -12.9267
+      ],
+      "positionB": [
+        3.0438,
+        -0.7297,
+        -12.886700000000001
+      ],
+      "velocityA": [
+        1,
+        0.6,
+        0.2
+      ],
+      "velocityB": [
+        0,
+        0,
+        0
+      ],
+      "radiusA": 0.06,
+      "radiusB": 0.06,
+      "seconds": 0.33
+    },
+    "miss": {
+      "positionA": [
+        2.7238,
+        -0.8497,
+        -12.9267
+      ],
+      "positionB": [
+        3.0438,
+        -0.5097,
+        -12.886700000000001
+      ],
+      "velocityA": [
+        1,
+        0.6,
+        0.2
+      ],
+      "velocityB": [
+        0,
+        0,
+        0
+      ],
+      "radiusA": 0.06,
+      "radiusB": 0.06,
+      "seconds": 0.33
+    }
+  },
+  "fixtures": {
+    "pi06:mu0-e0-equal": {
+      "normalFixture": "pi05:e0-equal",
+      "coefficient": 0
+    },
+    "pi06:mu0-e05-equal": {
+      "normalFixture": "pi05:e05-equal",
+      "coefficient": 0
+    },
+    "pi06:mu0-e1-equal": {
+      "normalFixture": "pi05:e1-equal",
+      "coefficient": 0
+    },
+    "pi06:mu0-e0-one-to-three": {
+      "normalFixture": "pi05:e0-one-to-three",
+      "coefficient": 0
+    },
+    "pi06:mu0-e05-one-to-three": {
+      "normalFixture": "pi05:e05-one-to-three",
+      "coefficient": 0
+    },
+    "pi06:mu0-e1-one-to-three": {
+      "normalFixture": "pi05:e1-one-to-three",
+      "coefficient": 0
+    },
+    "pi06:mu01-e0-equal": {
+      "normalFixture": "pi05:e0-equal",
+      "coefficient": 0.1
+    },
+    "pi06:mu01-e05-equal": {
+      "normalFixture": "pi05:e05-equal",
+      "coefficient": 0.1
+    },
+    "pi06:mu01-e1-equal": {
+      "normalFixture": "pi05:e1-equal",
+      "coefficient": 0.1
+    },
+    "pi06:mu01-e0-one-to-three": {
+      "normalFixture": "pi05:e0-one-to-three",
+      "coefficient": 0.1
+    },
+    "pi06:mu01-e05-one-to-three": {
+      "normalFixture": "pi05:e05-one-to-three",
+      "coefficient": 0.1
+    },
+    "pi06:mu01-e1-one-to-three": {
+      "normalFixture": "pi05:e1-one-to-three",
+      "coefficient": 0.1
+    },
+    "pi06:mu03-e0-equal": {
+      "normalFixture": "pi05:e0-equal",
+      "coefficient": 0.3
+    },
+    "pi06:mu03-e05-equal": {
+      "normalFixture": "pi05:e05-equal",
+      "coefficient": 0.3
+    },
+    "pi06:mu03-e1-equal": {
+      "normalFixture": "pi05:e1-equal",
+      "coefficient": 0.3
+    },
+    "pi06:mu03-e0-one-to-three": {
+      "normalFixture": "pi05:e0-one-to-three",
+      "coefficient": 0.3
+    },
+    "pi06:mu03-e05-one-to-three": {
+      "normalFixture": "pi05:e05-one-to-three",
+      "coefficient": 0.3
+    },
+    "pi06:mu03-e1-one-to-three": {
+      "normalFixture": "pi05:e1-one-to-three",
+      "coefficient": 0.3
+    },
+    "pi06:mu1-e0-equal": {
+      "normalFixture": "pi05:e0-equal",
+      "coefficient": 1
+    },
+    "pi06:mu1-e05-equal": {
+      "normalFixture": "pi05:e05-equal",
+      "coefficient": 1
+    },
+    "pi06:mu1-e1-equal": {
+      "normalFixture": "pi05:e1-equal",
+      "coefficient": 1
+    },
+    "pi06:mu1-e0-one-to-three": {
+      "normalFixture": "pi05:e0-one-to-three",
+      "coefficient": 1
+    },
+    "pi06:mu1-e05-one-to-three": {
+      "normalFixture": "pi05:e05-one-to-three",
+      "coefficient": 1
+    },
+    "pi06:mu1-e1-one-to-three": {
+      "normalFixture": "pi05:e1-one-to-three",
+      "coefficient": 1
+    }
+  }
+}
